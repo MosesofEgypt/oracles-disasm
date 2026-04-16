@@ -67,6 +67,25 @@
 	PROTECTION_RING		db ; $3f
 .ende
 
+.ifdef ENABLE_RING_REDUX
+; custom/reworked rings
+.define GOLD_RING			WHIMSICAL_RING
+.define VASUS_RING 			FRIENDSHIP_RING
+.define FAIRYS_RING			PROTECTION_RING
+.define HASTE_RING			SNOWSHOE_RING
+.define HIKERS_RING			QUICKSAND_RING
+.define MYSTIC_SEED_RING	PEGASUS_RING
+.define CURSE_POWER_RING	CURSED_RING
+.define CURSE_ARMOR_RING	DBL_EDGED_RING
+.define ALCHEMY_RING		GOLD_LUCK_RING
+
+.define GREEN_COLOR_RING	RUPEE_RING
+.define RED_COLOR_RING		SLAYERS_RING
+.define BLUE_COLOR_RING		HUNDREDTH_RING
+.define GOLD_COLOR_RING		SIGN_RING
+.define GBOY_COLOR_RING		WHISP_RING
+.endif
+
 
 ; Rings are categorized into tiers when random rings are given.
 .enum 0

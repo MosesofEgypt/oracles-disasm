@@ -1772,6 +1772,34 @@ _mainLoop:
 	sub (BTN_A | BTN_B | BTN_START | BTN_SELECT)
 	jp z,resetGame
 +
+
+.ifdef EXTENDED_RING_BOX
+	; clear the extended box contents if the extra byte at the end
+	; isn't 0x00, as that indicates this code was never run there
+	push hl
+	xor a
+	ld hl,wRingBoxContentsExtClearFlag
+	cp (hl)
+	jr nz,+
+		cpl
+		ld b,$06
+		ld hl,wRingBoxContentsExt
+		call fillMemory
++
+	pop hl
+.endif
+
+.ifdef ENABLE_RING_REDUX
+	; change mode to GBC if wearing ring
+	ld a,GBOY_COLOR_RING
+	call cpActiveRing
+	ld a,$ff	; GBA
+	jr nz,+
+	ld a,$01	; GBC
++
+	ldh (<hGameboyType),a
+.endif
+
 	ld a,$10
 	ldh (<hOamTail),a
 	ld h,>wThreadStateBuffer
