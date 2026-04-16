@@ -76,6 +76,22 @@ parentItemCode_sword:
 	ret z
 	res 5,(hl)
 	ld a,(wSwordLevel)
+
+.ifdef ENABLE_RING_REDUX
+	push de
+	ld d,a
+	ld a,VICTORY_RING
+	call cpActiveRing
+	ld a,d
+	pop de
+	jr nz,+
+		; increment sword by 1 level
+		cp $03
+		jr nc,+
+			inc a
++
+.endif
+
 	cp $02
 	jp nc,@checkCreateSwordBeam
 	ret

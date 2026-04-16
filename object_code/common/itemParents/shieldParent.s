@@ -27,6 +27,20 @@ parentItemCode_shield:
 	; It seems that wUsingShield will get unset from elsewhere each frame, so not
 	; running this code would suffice to stop using the shield
 	ld a,(wShieldLevel)
+.ifdef ENABLE_RING_REDUX
+	push de
+	ld d,a
+	ld a,VICTORY_RING
+	call cpActiveRing
+	ld a,d
+	pop de
+	jr nz,+
+		; increment shield by 1 level
+		cp $03
+		jr nc,+
+			inc a
++
+.endif
 	add $00
 	ld (wUsingShield),a
 	ret

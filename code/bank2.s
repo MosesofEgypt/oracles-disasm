@@ -3765,6 +3765,35 @@ loadEquippedItemSpriteData:
 	jr nz,-
 	ret
 
+.ifdef ENABLE_RING_REDUX
+applyTreasureLevelRingModifier:
+	; backup the treasure amount to the stack and
+	; copy the treasure index into 'a' for comparison
+	push af
+	ld a,b
+
+	cp TREASURE_SHIELD
+	jr z,++
+		cp TREASURE_SWORD
+		jr z,++
+			jr +
+
+++
+	; checkRing
+	ld a,VICTORY_RING
+	call cpActiveRing
+	jr nz,+
+		; increment sword and shield by 1 level
+		pop af
+		cp $03 	; cap to max level
+		ret nc
+		inc a
+		ret
++
+	pop af
+	ret
+.endif
+
 ;;
 ; Redraw the tiles in w4StatusBar for the current equipped items.
 ; (Only deals with the background layer, ie. item count; not the sprites themselves)
@@ -3818,6 +3847,9 @@ drawItemTilesOnStatusBar:
 	; Get the number to display in 'b' (if applicable)
 	ld a,b
 	call checkTreasureObtained
+.ifdef ENABLE_RING_REDUX
+	call applyTreasureLevelRingModifier
+.endif
 	ld b,a
 
 	ld a,c
@@ -5656,7 +5688,15 @@ inventorySubscreen0_drawStoredItems:
 	ld a,(hl)
 	call loadTreasureDisplayData
 	ldi a,(hl)
+.ifdef ENABLE_RING_REDUX
+	push bc
+	ld b,a
 	call checkTreasureObtained
+	call applyTreasureLevelRingModifier
+	pop bc
+.else
+	call checkTreasureObtained
+.endif
 	ldh (<hFF8B),a
 	ldh a,(<hFF8D)
 	ld bc,@itemPositions-2

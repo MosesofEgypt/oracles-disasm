@@ -753,8 +753,31 @@ loadTreasureDisplayData:
 	jr z,+
 
 	ld l,a
+
+.ifdef ENABLE_RING_REDUX
+	ld a,d
+.endif
 	ld h,>wc600Block
 	ld d,(hl)
+
+.ifdef ENABLE_RING_REDUX
+	cp TREASURE_SHIELD
+	jr z,++
+		cp TREASURE_SWORD
+		jr z,++
+			ret
+
+++
+	; checkRing
+	ld a,VICTORY_RING
+	call cpActiveRing
+	jr nz,+
+		; increment sword and shield by 1 level
+		ld a,d
+		cp $03
+		jr nc,+
+			inc d
+.endif
 +
 	ret
 
