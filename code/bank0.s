@@ -8180,9 +8180,9 @@ cpActiveRing:
 ;;
 ; @param	b	The first ring to check for.
 ; @param	c	The second ring to check for.
-; @param[out]	zflag	Set if the currently equipped ring equals 'b'.
-; @param[out]	cflag	Set if the currently equipped ring equals 'c'.
-@eitherRingEquipped:
+; @param[out]	zflag	Set if 'b' is currently an active ring.
+; @param[out]	cflag	Set if 'c' is currently an active ring.
+eitherRingActive:
 	push de
 	push af
 	ld a,b
@@ -8213,7 +8213,7 @@ cpActiveRing:
 ;
 ; @param	a	The ring to remove
 ; 
-@removeRing:
+removeRing:
 	push hl
 	push bc
 	ld b,a

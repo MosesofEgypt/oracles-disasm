@@ -208,7 +208,11 @@ getSpecialObjectGraphicsFrame:
 	ld a,e
 .endif
 
+.ifdef ENABLE_RING_REDUX
+	call remapTransformedSpecialObjectGfx
+.else
 	ld hl,specialObjectGraphicsTable
+.endif
 	rst_addDoubleIndex
 	ldi a,(hl)
 	ld h,(hl)
@@ -449,6 +453,7 @@ func_4553:
 ; Under normal circumstances, this will return 0 (SPECIALOBJECT_LINK).
 ; @param[out] b Special object ID to use, based on the ring Link is wearing
 getTransformedLinkID:
+.ifndef ENABLE_RING_REDUX
 	ld hl,wDisableRingTransformations
 	ld a,(hl)
 	or a
@@ -487,16 +492,198 @@ getTransformedLinkID:
 	ld b,a
 	ret
 ++
+.endif
 	ld b,$00
 	ret
 
 @ringToID:
+.ifndef ENABLE_RING_REDUX
 	.db OCTO_RING		SPECIALOBJECT_LINK_AS_OCTOROK
 	.db MOBLIN_RING		SPECIALOBJECT_LINK_AS_MOBLIN
 	.db LIKE_LIKE_RING	SPECIALOBJECT_LINK_AS_LIKELIKE
 	.db SUBROSIAN_RING	SPECIALOBJECT_LINK_AS_SUBROSIAN
 	.db FIRST_GEN_RING	SPECIALOBJECT_LINK_AS_RETRO
+.endif
 	.db $00
+
+.ifdef ENABLE_RING_REDUX
+remapTransformedSpecialObjectGfx:
+	call @getCanRemapSprite
+	ld a,e
+	ret z
+
+	xor a
+	push bc
+
+	; redirect id to transformed one if ring equipped
+	ld bc,(SUBROSIAN_RING<<8)|FIRST_GEN_RING
+	call eitherRingActive
+
+	; checkSubrosian
+	jr nz,+
+		ld a,$03
+		jr ++
++
+	; checkFirstGen
+	jr nc,+
+		ld a,$04
+		jr ++
++
+	; checkOctorock
+	ld bc,(OCTO_RING<<8)|MOBLIN_RING
+	call eitherRingActive
+
+	jr nz,+
+		ld a,$05
+		jr ++
++
+	; checkMoblin
+	jr nc,+
+		ld a,$06
+		jr ++
++
+	; checkLikeLike
+	ld a,LIKE_LIKE_RING
+	call cpActiveRing
+
+	jr nz,+
+		ld a,$07
+		jr ++
++
+	xor a
+++
+	pop bc
+	or a
+
+	; replace the id if we selected a new one
+	jr nz,+
+		ld a,e
+		ret
+
++
+	; check if link-riding object or not
+	ld b,a
+	ld a,e
+	cp $09
+
+	ld e,b
+	ld a,c
+	ld b,$00
+
+	call  z,@remapTransformLinkRiding
+	call nz,@remapTransformLinkNormal
+
+	; put the index in the range the transformed sprites support
+	and $07
+
+	; setup the registers with the new object id and animation index
+	ld c,a
+	ld a,e
+	ret
+
+@remapTransformLinkRiding:
+	; this is all we need to do to fix this. the first 13 sprites
+	; are for ricky, which throws off the count for the others.
+	inc a
+	cp a
+	ret
+
+@remapTransformLinkNormal:
+	; certain special animations are better to hardcode a sprite
+	cp $04			; stand-facing
+	jr nz,+
+		ld a,$06
+
++
+	; checkLeftFacing
+	cp $1d			; dance-left
+	jr nz,+
+		ld a,$07
+
++
+	; checkRightFacing
+	cp $1e			; dance-right
+	jr nz,+
+		ld a,$05
+
++
+	; handle gale seed having 8 directions
+	cp $10
+	jr c,+
+		cp $18
+		jr nc,+
+			sra a
+
++
+	; handle seed shooter and big sword swing having 8 directions
+	cp $38
+	jr c,+
+		cp $50
+		jr nc,+
+			sra a
+
++
+	ret
+
+@getCanRemapSprite:
+	ld hl,specialObjectGraphicsTable
+
+	; only bother remapping if this is a link special-object
+	or a
+	jr z,+ 				; jump if player-controlled link
+		cp $08
+		jr z,+ 			; jump if cutscene link
+			cp $09
+			jr nz,++	; jump if NOT companion-riding link
+				ld a,c
+				cp $0e
+				; we can remap all the companion riding sprites except rickey.
+				; the remappable indices are those where (0x2e < i < 0x0e)
+				jr c,++
+					cp $2f
+					jr c,+
+++
+			; cantRemap
+			cp a
+			ret
+
++
+	; checkFrame
+	ld a,c
+
+	; if the frame is one that can't be well represented
+	; with a one of the transformed frames, dont substitute
+	cp $08  ; falling in hole 1
+	ret z
+	cp $09  ; falling in hole 2
+	ret z
+	cp $0a  ; falling in hole 3
+	ret z
+	cp $04  ; collapsed
+	ret z
+	cp $32  ; squash thin
+	ret z
+	cp $33  ; squash flat
+	ret z
+
+	; don't remap if swimming while not sidescrolling
+	; (no custom sprites makes it look baaaaad)
+	ld a,(wLinkSwimmingState)
+	or a
+	jr nz,+
+		inc a
+		ret
+
++
+	ld a,(wActiveGroup)
+	cp FIRST_SIDESCROLL_GROUP
+	jr nc,+
+	   xor a
+	   ret
++
+	 or a
+	 ret
+.endif
 
 ;;
 ; Updates Link's damageToApply variable to account for damage-modifying rings.
