@@ -388,6 +388,10 @@ giveTreasure_body:
 	ld l,e
 	call addDecimalToHlRef
 
+.ifdef INCREASED_WALLET_SIZE
+	ld bc,$9999
+	ret nc
+.else
 	; Check for overflow
 	ldi a,(hl)
 	ld h,(hl)
@@ -396,6 +400,7 @@ giveTreasure_body:
 	call compareHlToBc
 	dec a
 	ret nz
+.endif
 
 	ld a,c
 	ld (de),a

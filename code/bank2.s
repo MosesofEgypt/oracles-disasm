@@ -3406,6 +3406,51 @@ updateStatusBar_body:
 
 	ld hl,w4StatusBarTileMap+$2c
 	call correctAddressForExtraHeart
+.ifdef INCREASED_WALLET_SIZE
+	; write an X into the tens place(which may be overwritten below)
+	ld (hl),$1b
+	dec hl
+
+	; only display the thousands and hundreds
+	; digits if the rupee count is over 999
+	ld de,wDisplayedRupees+1
+	ld a,(de)
+	cp $10
+	jr nc,++
+	; revert pointers back so we can overwrite the X
+	inc hl
+	dec de
+++
+	xor a
+	jr +++
+
+@drawRupeeDigit:
+	push af
+	ld a,<wDisplayedRupees+1
+	cp e
+	jr nc,++++
+	pop af
+	ret
+++++
+	pop af
+	ld a,(de)
+	jr z,++++
+	swap a
+	inc de
+++++
+	and $0f
+	add $10
+	ldd (hl),a
+	or a
+	ret
+
++++
+	call @drawRupeeDigit
+	call @drawRupeeDigit
+
+	xor a
+	call @drawRupeeDigit
+.else
 	ld c,$10
 	ld a,(wDisplayedRupees)
 	ld b,a
@@ -3421,6 +3466,7 @@ updateStatusBar_body:
 	and $0f
 	add c
 	ldd (hl),a
+.endif
 +
 	; Update displayed heart count
 	ld hl,wDisplayedHearts
