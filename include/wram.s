@@ -358,7 +358,19 @@ wSavefileString: ; $c5b2
 ; Ages:    "Z21216-0"
 	dsb 8
 
+.ifdef EXTENDED_RING_BOX
+wRingBoxContentsExt: ; $c5ba-$c5be
+	dsb 5
+
+wRingBoxContentsExtClearFlag: ; $c5bf
+; Repurposing this byte to indicate whether to clear the previous 5 bytes.
+; Since they always start at $00, this triggers a one-time overwrite of all 6 bytes with
+; $ff. This ensures the overwrite is done only once, and the ring ids are reset to $ff
+	db
+
+.else
 ; $c5ba-$c5bf unused?
+.endif
 
 .ENDS
 

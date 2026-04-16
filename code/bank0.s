@@ -8104,11 +8104,135 @@ add16BitRefs:
 ; @param	a	The ring to check for.
 ; @param[out]	zflag	Set if the currently equipped ring equals 'a'.
 cpActiveRing:
+.ifdef ENABLE_MULTI_RING
+	cp $ff
+	jr nz,+
+	or a
+	ret
++
 	push hl
+	push bc
+	ld b,$05
+	ld hl,wRingBoxContents
+
+-
+	cp (hl)
+	jr z,+
+		inc l
+		dec b
+		jr nz,-
+
+.ifdef EXTENDED_RING_BOX
+	cp (hl)
+	jr z,+
+		ld b,$05
+		ld hl,wRingBoxContentsExt
+
+-
+	cp (hl)
+	jr z,+
+		inc l
+		dec b
+		jr nz,-
+.endif
+
++
+	pop bc
+	jr z,+
+.else
+	push hl
+.endif
 	ld hl,wActiveRing
++
 	cp (hl)
 	pop hl
 	ret
+
+.ifdef ENABLE_RING_REDUX
+;;
+; @param	b	The first ring to check for.
+; @param	c	The second ring to check for.
+; @param[out]	zflag	Set if the currently equipped ring equals 'b'.
+; @param[out]	cflag	Set if the currently equipped ring equals 'c'.
+@eitherRingEquipped:
+	push de
+	push af
+	ld a,b
+	call cpActiveRing
+	push af
+	ld a,c
+	call cpActiveRing
+
+	jr nz,+
+		pop af
+		scf
+		jr ++
+
+	+
+	pop af
+	scf
+	ccf
+
+	++
+	pop de
+	ld a,d
+	pop de
+	ret
+
+
+;;
+; Removes the specified ring from the players ring list and unequips it
+;
+; @param	a	The ring to remove
+; 
+@removeRing:
+	push hl
+	push bc
+	ld b,a
+	ld hl,wRingsObtained
+	call unsetFlag
+	ld a,b
+
+	ld b,$05
+	; remove from primary ring box
+	ld hl,wRingBoxContents
+
+	-
+	cp (hl)
+	jr nz,+
+		ld (hl),$ff
+	+
+		inc l
+		dec b
+		jr nz,-
+
+.ifdef EXTENDED_RING_BOX
+	ld b,$05
+	; remove from extended ring box
+	ld hl,wRingBoxContentsExt
+
+	-
+	cp (hl)
+	jr nz,+
+		ld (hl),$ff
+	+
+		inc l
+		dec b
+		jr nz,-
+.endif
+
+	; remove from active ring
+	ld hl,(wActiveRing)
+	cp (hl)
+	jr nz,+
+		ld (hl),$ff
+
+	+
+	pop bc
+	pop hl
+	ret
+
+.endif
 
 ;;
 disableActiveRing:
