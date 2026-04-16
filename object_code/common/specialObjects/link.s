@@ -3,6 +3,9 @@
 ;
 ; @param	d	Link object
 specialObjectCode_link:
+.ifdef ENABLE_RING_REDUX
+	call specialObjectSetOamVariables@applyRingPalette
+.endif
 	ld e,<w1Link.state
 	ld a,(de)
 	rst_jumpTable

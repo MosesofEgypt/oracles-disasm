@@ -1,4 +1,7 @@
 specialObjectCode_linkRidingAnimal:
+.ifdef ENABLE_RING_REDUX
+	call specialObjectSetOamVariables@applyRingPalette
+.endif
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable

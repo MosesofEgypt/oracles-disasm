@@ -27,7 +27,77 @@ specialObjectSetOamVariables:
 	; Write flags to SpecialObject.oamFlagsBackup as well
 	dec e
 	ld (de),a
+.ifdef ENABLE_RING_REDUX
+@applyRingPalette:
+	push af
+	push hl
+	push de
+	push bc
+	ld hl,w1Link.oamFlagsBackup
+	; get the backup oam flags in e, and the palette portion in d
+	ldi a,(hl)
+	ld e,a
+	and $07
+	ld d,a
+	push hl
+	ld l,a
+	ld h,$00
+
+	ld bc,(GREEN_COLOR_RING<<8)|$00
+	call @mixRingPalette
+
+	ld bc,(BLUE_COLOR_RING<<8)|$01
+	call @mixRingPalette
+
+	ld bc,(RED_COLOR_RING<<8)|$02
+	call @mixRingPalette
+
+	ld bc,(GOLD_COLOR_RING<<8)|$03
+	call @mixRingPalette
+
+	; if no ring was found, reset palette to normal
+	ld a,h
+	or a
+	jr nz,+
+	ld l,$00
+
++
+	; add the "object palette" flag
+	ld a,l
+	or $08
+	ld d,a
+	pop hl
+
+	; if both link's oam flags are equal, replace them both.
+	; if they're different(i.e. he's flashing), only replace the backup
+	ldd a,(hl)
+	cp e
+	ld a,d
+	ld (hl),a
+	jr nz,+
+	inc l
+	ld (hl),a
+
++
+	pop bc
+	pop de
+	pop hl
+	pop af
 	ret
+
+@mixRingPalette:
+	ld a,b
+	call cpActiveRing
+	ret nz
+	inc h
+	ld a,c
+	cp d
+	ret z
+	ld l,a
+	ret
+.else
+	ret
+.endif
 
 ; 2 bytes for each SpecialObject id: oamTileIndexBase, oamFlags (palette).
 @data:
