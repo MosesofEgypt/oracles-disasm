@@ -3106,6 +3106,18 @@ menuStateFadeIntoMenu:
 	call nz,playSound
 	ld a,$02
 	call setMusicVolume
+.ifdef ENABLE_RING_REDUX
+	ld a,(wRingMenu_mode)
+	bit 7,a
+	jr z,+
+		res 7,a
+		ld (wRingMenu_mode),a
+		; graphics were already saved, so if we're entering the ring menu
+		; from within another menu we don't want to save the graphics again.
+		; avoid this by returning early
+		ret
++
+.endif
 ;;
 saveGraphicsOnEnterMenu_body:
 	ldh a,(<hCameraY)
@@ -4723,6 +4735,12 @@ inventoryMenuState1:
 ++
 	call inventorySubmenu1_drawCursor
 	ld a,(wInventorySubmenu1CursorPos)
+.ifdef EXTENDED_RING_BOX
+	cp $15
+	jr c,+
+		sub $05
++
+.endif
 	call showItemText1
 	jp drawEquippedSpriteForActiveRing
 
@@ -4731,6 +4749,21 @@ inventoryMenuState1:
 ;
 @checkEquipRing:
 	ld a,(wInventorySubmenu1CursorPos)
+.ifdef ENABLE_RING_REDUX
+	; open the ring box menu if clicking it in the menu if
+	; it meets the min level or you're carrying vasu's ring
+	cp $0f
+	jr nz,+
+	ld a,VASUS_RING
+	call cpActiveRing
+	jr z,++
+		ld a,(wRingBoxLevel)
+		cp RING_BOX_PORTAL_LEVEL
+		jr c,+
+++
+		call @openRingBoxMenu
++
+.endif
 	sub $10
 	ret c
 
@@ -4748,6 +4781,15 @@ inventoryMenuState1:
 	ld hl,wActiveRing
 	ld c,(hl)
 	ld l,<wRingBoxContents
+
+.ifdef EXTENDED_RING_BOX
+	cp $05
+	jr c,+
+		ld hl,wRingBoxContentsExt
+		sub $05
++
+.endif
+
 	rst_addAToHl
 	ld a,(hl)
 	cp c
@@ -4760,6 +4802,32 @@ inventoryMenuState1:
 	ld (wActiveRing),a
 	ld a,SND_SELECTITEM
 	jp playSound
+
+.ifdef ENABLE_RING_REDUX
+@openRingBoxMenu:
+	ld a,SND_SELECTITEM
+	call playSound
+	ld a,$01|$80 	; setting high bit to indicate not to save gfx
+	ld (wRingMenu_mode),a
+	xor a
+	ld (wSubmenuState),a
+	ld (wRingMenu.page),a
+	ld a,$04
+	call openMenu
+	; set the camera coords to zero or it messes up text rendering
+	xor a
+	push hl
+	ld hl,(hCameraY)
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ld hl,(wScreenOffsetY)
+	ldi (hl),a
+	ldi (hl),a
+	pop hl
+	ret
+.endif
 
 ;;
 ; Main code for last item screen (essences, heart pieces, s&q option)
@@ -5157,6 +5225,10 @@ inventorySubmenu1CheckDirectionButtons:
 
 ++
 	ld (hl),a
+.ifdef EXTENDED_RING_BOX
+	call inventorySubscreen1_drawTreasures@drawRing
+	call func_02_55b2 ; reload the inventory menu gfx
+.endif
 	ld a,SND_MENU_MOVE
 	jp playSound
 
@@ -5186,12 +5258,21 @@ inventorySubmenu1CheckDirectionButtons:
 ; b1: current position of the cursor (assumed on the ring box row)
 ; b2: position to go to when "down" pressed
 @ringBoxRowPositionMappings:
+.ifdef EXTENDED_RING_BOX
+	.db $0a $0f $00
+	.db $0a $10 $15 $00
+	.db $0b $11 $16 $01
+	.db $0c $12 $17 $02
+	.db $0d $13 $18 $03
+	.db $0e $14 $19 $04
+.else
 	.db $0a $10 $00
 	.db $0b $11 $01
 	.db $0c $12 $02
 	.db $0d $13 $03
 	.db $0e $14 $04
 	.db $0a $0f $00
+.endif
 
 ; Cursor offsets when the corresponding direction button is pressed
 @offsets:
@@ -5320,6 +5401,12 @@ inventorySubscreen0_drawCursor:
 ;;
 inventorySubmenu1_drawCursor:
 	ld a,(wInventorySubmenu1CursorPos)
+.ifdef EXTENDED_RING_BOX
+	cp $15
+	jr c,+
+		sub $05
++
+.endif
 	ld e,a
 	ld hl,@data
 	rst_addAToHl
@@ -5646,6 +5733,78 @@ getSeedTypeInventoryIndex:
 ;;
 ; Draws the "E" on the ring you have equipped.
 drawEquippedSpriteForActiveRing:
+.ifdef EXTENDED_RING_BOX
+	ld a,(wInventorySubmenu1CursorPos)
+
+	cp $10
+	jr c,++
+		cp $15
+		ld hl,@arrowDownSpriteRed
+		jr c,+
+			ld hl,@arrowUpSpriteBlue
++
+		call getRingBoxCapacity
+		cp $06
+		jr c,++
+			ld a,(wFrameCounter)
+			bit 3,a
+			jr z,++
+				ld bc,$7020
+				push hl
+				call addSpritesToOam_withOffset
+				pop hl
+
+				ld c,$99
+				call addSpritesToOam_withOffset
+++
+.endif
+
+.ifdef ENABLE_RING_REDUX
+	call getRingBoxCapacity
+	ret z
+
+	ld hl,(wRingBoxContents)
+
+.ifdef EXTENDED_RING_BOX
+	cp $06
+	jr c,+
+		sub $05
++
+	ld b,a
+	ld c,$00
+
+	ld a,(wInventorySubmenu1CursorPos)
+	sub $15
+	jr c,+
+		ld hl,wRingBoxContentsExt
++
+.endif
+-
+	; checkNextRing
+	ld a,(hl)
+	call cpActiveRing
+	jr z,@foundRing
+--
+	; moveToNextRing
+	inc hl
+	inc c
+	dec b
+	jr nz,-
+		ret
+
+@foundRing
+	push bc
+	push hl
+	ld a,$18
+	call multiplyAByC
+	ld c,l
+	ld b,$00
+	ld hl,@sprite
+	call addSpritesToOam_withOffset
+	pop hl
+	pop bc
+	jr --
+.else
 	call getRingBoxCapacity
 	ret z
 
@@ -5672,10 +5831,21 @@ drawEquippedSpriteForActiveRing:
 	ld b,$00
 	ld hl,@sprite
 	jp addSpritesToOam_withOffset
+.endif
 
 @sprite:
 	.db $01
 	.db $6e $2e $ec $04
+
+.ifdef EXTENDED_RING_BOX
+@arrowUpSpriteBlue
+	.db $01
+	.db $00 $00 $0e $04
+
+@arrowDownSpriteRed
+	.db $01
+	.db $00 $00 $0e $45
+.endif
 
 ;;
 ; Draw all items in wInventoryStorage to their appropriate positions.
@@ -5790,6 +5960,12 @@ inventorySubscreen1_drawTreasures:
 @drawRings:
 	call getRingBoxCapacity
 	ret z
+.ifdef EXTENDED_RING_BOX
+	cp $06
+	jr c,+
+		sub $05
++
+.endif
 
 	ld b,a
 @drawRing:
@@ -5803,6 +5979,15 @@ inventorySubscreen1_drawTreasures:
 	; Get ring index
 	ld a,b
 	ld hl,wRingBoxContents-1
+.ifdef EXTENDED_RING_BOX
+	push af
+	ld a,(wInventorySubmenu1CursorPos)
+	cp $15
+	jr c,+
+		ld hl,wRingBoxContentsExt-1
++
+	pop af
+.endif
 	rst_addAToHl
 	ld a,(hl)
 	cp $ff
@@ -5862,8 +6047,13 @@ inventorySubscreen1_drawTreasures:
 ;   b1: number of tiles to clear horizontally
 @ringBoxClearTiles:
 	.db $81 $12 ; L0
+.ifdef EXTENDED_RING_BOX
+	.db $81+3*(RING_BOX_L1_SIZE+1) $12-3*RING_BOX_L1_WIDTH; L1
+	.db $81+3*(RING_BOX_L2_SIZE+1) $12-3*RING_BOX_L2_WIDTH; L2
+.else
 	.db $87 $0c ; L1
 	.db $8d $06 ; L2
+.endif
 
 ;;
 ; Loading graphics for submenu 2?
@@ -6045,7 +6235,14 @@ getRingBoxCapacity:
 	ret
 
 @ringBoxCapacities:
+.ifdef EXTENDED_RING_BOX
+	.db $00
+	.db RING_BOX_L1_SIZE
+	.db RING_BOX_L2_SIZE
+	.db RING_BOX_L3_SIZE
+.else
 	.db $00 $01 $03 $05
+.endif
 
 ;;
 ; Fills a rectangle with that block tile that separates sections of the inventory menu.
@@ -9979,6 +10176,13 @@ ringMenu_ringList_substate0:
 	; Display text for the ring we're hovering over in the ring box
 	ld a,(wRingMenu.ringBoxCursorIndex)
 	ld hl,wRingBoxContents
+.ifdef EXTENDED_RING_BOX
+	cp $05
+	jr c,+
+		ld hl,wRingBoxContentsExt
+		sub $05
+	+
+.endif
 	rst_addAToHl
 	ld a,(hl)
 	ld (wRingMenu.selectedRing),a
@@ -10115,6 +10319,13 @@ ringMenu_selectedRingFromList:
 +
 	ld a,b
 	ld hl,wRingBoxContents
+.ifdef EXTENDED_RING_BOX
+	cp $05
+	jr c,+
+		ld hl,wRingBoxContentsExt
+		sub $05
+	+
+.endif
 	rst_addAToHl
 	ld (hl),c
 
@@ -10149,6 +10360,17 @@ ringMenu_checkRingIsInBox:
 	dec b
 	jr nz,@nextRing
 
+.ifdef EXTENDED_RING_BOX
+	push af
+	ld a,l
+	cp <wRingBoxContents-1
+	jr nz,+
+		ld hl,wRingBoxContentsExt+4
+		pop af
+		jr @nextRing
++
+	pop af
+.endif
 	pop bc
 	scf
 	ret
@@ -10347,18 +10569,63 @@ ringMenu_checkRingBoxCursorMoved:
 	ret nc
 	ret z
 	ld hl,wRingMenu.ringBoxCursorIndex
+.ifdef EXTENDED_RING_BOX
+	add (hl)
+
+	; if would move to before start, move relative to end
+	cp $80
+	jr c,+
+		ld b,a
+		ld a,e
+		add b
++
+	; if would move past end, move relative to start
+	cp e
+	jr c,+
+		sub e
++
+	; handle edge cases when ring box size isn't at least 5
+	cp e
+	jr c,+
+		ld a,e
+		dec a
++
+	cp $80
+	jr c,+
+		xor a
++
+	ld (hl),a
+
+	push af
+	ld hl,wRingMenu.displayedRingNumberComparator
+	ld a,(hl)
+	cp $ff
+	jr nz,+
+		; force redraw by setting previous value to an invalid index
+		ld (hl),$80
++
+	; redraw
+	call ringMenu_drawRingBoxContents
+	pop af
+.else
 	add (hl)
 	cp e
 	ret nc
 	ld (hl),a
+.endif
 	ld a,SND_MENU_MOVE
 	jp playSound
 
 @directionOffsets:
 	.db $01 ; Right
 	.db $ff ; Left
+.ifdef EXTENDED_RING_BOX
+	.db $fb ; Up
+	.db $05 ; Down
+.else
 	.db $00 ; Up
 	.db $00 ; Down
+.endif
 
 ;;
 ; Draw sprites for the cursor, and arrows indicating you can scroll between pages (if
@@ -10398,6 +10665,9 @@ ringMenu_drawSprites:
 ;;
 ; Draws the "E" for equipped next to the equipped ring in the ring box.
 ringMenu_drawEquippedRingSprite:
+.ifdef ENABLE_MULTI_RING
+	ret
+.else
 	ld a,(wActiveRing)
 	cp $ff
 	ret z
@@ -10407,6 +10677,7 @@ ringMenu_drawEquippedRingSprite:
 	call ringMenu_getSpriteOffsetForRingBoxPosition
 	ld hl,@equippedSprite
 	jp addSpritesToOam_withOffset
+.endif
 
 @equippedSprite:
 	.db $01
@@ -10416,6 +10687,12 @@ ringMenu_drawEquippedRingSprite:
 ; @param[out]	bc	An offset to use for sprites to be drawn on a ring in the ring box
 ringMenu_getSpriteOffsetForRingBoxPosition:
 	ld hl,@offsets
+.ifdef EXTENDED_RING_BOX
+	cp $05
+	jr c,+
+		sub $05
+	+
+.endif
 	rst_addAToHl
 	ld c,(hl)
 	ld b,$00
@@ -10439,16 +10716,54 @@ ringMenu_drawRingBoxCursor:
 	ld a,(wRingMenu.ringBoxCursorIndex)
 	call ringMenu_getSpriteOffsetForRingBoxPosition
 	ld hl,@ringBoxCursor
+.ifndef EXTENDED_RING_BOX
+	call addSpritesToOam_withOffset
+	call getRingBoxCapacity
+	cp $06
+	ret c
+
+	ld a,(wRingBoxCursorIndex)
+	ld hl,@arrowDownSpriteRed
+	cp $05
+
+	jr c,+
+		ld hl,@arrowUpSpriteBlue
++
+	ld bc,$111a
+	push hl
+	call addSpritesToOam_withOffset
+	pop hl
+
+	ld c,$20
+	push hl
+	call addSpritesToOam_withOffset
+	pop hl
+
+	ld c,$26
+
+.endif
 	jp addSpritesToOam_withOffset
 
 @ringBoxCursor:
 	.db $01
 	.db $1e $fc $0e $03
 
+.ifdef EXTENDED_RING_BOX
+@arrowUpSpriteBlue
+	.db $01
+	.db $00 $00 $0e $04
+
+@arrowDownSpriteRed
+	.db $01
+	.db $00 $00 $0e $45
+.endif
+
 ;;
 ; For each ring in the ring box, this draws a sprite (the letter "C") on the corresponding
 ; ring in the ring list.
 ringMenu_drawSpritesForRingsInBox:
+.ifndef REMAP_RING_LIST
+.ifndef EXTENDED_RING_BOX
 	ld a,$05
 @loop:
 	push af
@@ -10483,6 +10798,8 @@ ringMenu_drawSpritesForRingsInBox:
 	pop af
 	dec a
 	jr nz,@loop
+.endif
+.endif
 	ret
 
 @sprite:
@@ -10504,6 +10821,50 @@ ringMenu_calculateNumPagesForUnappraisedRings:
 	ld (wRingMenu.numPages),a
 	ret
 
+.ifdef REMAP_RING_LIST
+;;
+ringMenu_remapSelectedRingIndex:
+	; only remap rings if in the ring box, not the appraisal menu
+	push bc
+	ld c,a
+	ld a,(wRingMenu_mode)
+	or a
+	ld a,c
+	pop bc
+	ret z
+	push hl
+	ld hl,@ringMapTable
+	rst_addAToHl
+	ld a,(hl)
+	pop hl
+	ret
+
+@ringMapTable
+	; page 1
+	.db POWER_RING_L1		POWER_RING_L2		POWER_RING_L3		RED_RING
+	.db GREEN_RING			GREEN_HOLY_RING		RED_HOLY_RING		BLUE_HOLY_RING
+	.db ARMOR_RING_L1		ARMOR_RING_L2		ARMOR_RING_L3		BLUE_RING
+	.db GOLD_RING			GREEN_LUCK_RING		RED_LUCK_RING		BLUE_LUCK_RING
+
+	; page 2
+	.db HEART_RING_L1		RANG_RING_L1		FIST_RING			LIGHT_RING_L1
+	.db ENERGY_RING			SPIN_RING			CHARGE_RING			VICTORY_RING
+	.db HEART_RING_L2		RANG_RING_L2		EXPERTS_RING		LIGHT_RING_L2
+	.db BLAST_RING			PEACE_RING			BOMBPROOF_RING		BOMBERS_RING
+
+	; page 3
+	.db HASTE_RING			ZORA_RING			SWIMMERS_RING		ALCHEMY_RING
+	.db GREEN_JOY_RING		RED_JOY_RING		BLUE_JOY_RING		GOLD_JOY_RING
+	.db HIKERS_RING			MAPLES_RING			DISCOVERY_RING		GASHA_RING
+	.db STEADFAST_RING		MYSTIC_SEED_RING	TOSS_RING			ROCS_RING
+
+	; page 4
+	.db GREEN_COLOR_RING	RED_COLOR_RING		BLUE_COLOR_RING		GOLD_COLOR_RING
+	.db GBOY_COLOR_RING		GBA_NATURE_RING		CURSE_POWER_RING	FAIRYS_RING
+	.db OCTO_RING			LIKE_LIKE_RING		MOBLIN_RING			SUBROSIAN_RING
+	.db FIRST_GEN_RING		GBA_TIME_RING		CURSE_ARMOR_RING	VASUS_RING 
+.endif
+
 ;;
 ringMenu_updateSelectedRingFromList:
 	ld a,(wRingMenu.page)
@@ -10511,6 +10872,9 @@ ringMenu_updateSelectedRingFromList:
 	ld c,a
 	ld a,(wRingMenu.ringListCursorIndex)
 	add c
+.ifdef REMAP_RING_LIST
+	call ringMenu_remapSelectedRingIndex
+.endif
 	ld (wRingMenu.selectedRing),a
 	ret
 
@@ -10550,6 +10914,9 @@ ringMenu_drawRingList:
 	ld c,a
 @nextRing:
 	ld a,c
+.ifdef REMAP_RING_LIST
+	call ringMenu_remapSelectedRingIndex
+.endif
 	ld hl,wRingsObtained
 	call checkFlag
 	call nz,ringMenu_drawRing
@@ -10576,6 +10943,38 @@ ringMenu_drawPageCounter:
 ; Draws the contents of the ring box for the ring list menu
 ringMenu_drawRingBoxContents:
 	ld hl,wRingBoxContents
+.ifdef EXTENDED_RING_BOX
+	ld a,(wRingMenu.ringBoxCursorIndex)
+	cp $05
+	ld a,$11
+	jr c,@nextRing
+		ld hl,wRingBoxContentsExt
+
+@nextRing:
+	push af
+	push hl
+	ld hl,ringMenu_ringPositionList-2
+	rst_addDoubleIndex
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
+	ld bc,$0202
+	ld de,$0007
+	call fillRectangleInTilemap
+	pop hl
+	ldi a,(hl)
+	cp $ff
+	pop bc
+	ld c,a
+	ld a,b
+	jr z,++
+		push af
+		call ringMenu_drawRing
+		pop af
+++
+	inc a
+	cp $16
+.else
 	ld b,$11 ; b = index for ringMenu_drawRing function (cycles from $11-$15)
 
 @nextRing:
@@ -10605,6 +11004,7 @@ ringMenu_drawRingBoxContents:
 	inc b
 	ld a,l
 	cp <wRingBoxContents+5
+.endif
 	jr c,@nextRing
 	ret
 
@@ -10623,6 +11023,20 @@ ringMenu_drawRing:
 	ld d,(hl)
 	ld e,a
 	ld a,c
+
+.ifdef REMAP_RING_LIST
+	ld a,b
+	; if the selected ring is 16 or higher, it's
+	; in the ring box and shouldnt be remapped.
+	; we check $11 instead of $10 because this
+	; code uses one-based indexing.
+	cp $11
+	ld a,c
+	jr nc,+
+		call ringMenu_remapSelectedRingIndex
+	+
+.endif
+
 	call getRingTiles
 	pop hl
 	pop bc
