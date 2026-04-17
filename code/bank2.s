@@ -5226,7 +5226,7 @@ inventorySubmenu1CheckDirectionButtons:
 ++
 	ld (hl),a
 .ifdef EXTENDED_RING_BOX
-	call inventorySubscreen1_drawTreasures@drawRing
+	call inventorySubscreen1_drawTreasures@drawRings
 	call func_02_55b2 ; reload the inventory menu gfx
 .endif
 	ld a,SND_MENU_MOVE
@@ -5739,9 +5739,9 @@ drawEquippedSpriteForActiveRing:
 	cp $10
 	jr c,++
 		cp $15
-		ld hl,@arrowDownSpriteRed
+		ld hl,arrowDownSpriteRed
 		jr c,+
-			ld hl,@arrowUpSpriteBlue
+			ld hl,arrowUpSpriteBlue
 +
 		call getRingBoxCapacity
 		cp $06
@@ -5836,16 +5836,6 @@ drawEquippedSpriteForActiveRing:
 @sprite:
 	.db $01
 	.db $6e $2e $ec $04
-
-.ifdef EXTENDED_RING_BOX
-@arrowUpSpriteBlue
-	.db $01
-	.db $00 $00 $0e $04
-
-@arrowDownSpriteRed
-	.db $01
-	.db $00 $00 $0e $45
-.endif
 
 ;;
 ; Draw all items in wInventoryStorage to their appropriate positions.
@@ -10716,18 +10706,18 @@ ringMenu_drawRingBoxCursor:
 	ld a,(wRingMenu.ringBoxCursorIndex)
 	call ringMenu_getSpriteOffsetForRingBoxPosition
 	ld hl,@ringBoxCursor
-.ifndef EXTENDED_RING_BOX
+.ifdef EXTENDED_RING_BOX
 	call addSpritesToOam_withOffset
 	call getRingBoxCapacity
 	cp $06
 	ret c
 
-	ld a,(wRingBoxCursorIndex)
-	ld hl,@arrowDownSpriteRed
+	ld a,(wRingMenu.ringBoxCursorIndex)
+	ld hl,arrowDownSpriteRed
 	cp $05
 
 	jr c,+
-		ld hl,@arrowUpSpriteBlue
+		ld hl,arrowUpSpriteBlue
 +
 	ld bc,$111a
 	push hl
@@ -10740,23 +10730,12 @@ ringMenu_drawRingBoxCursor:
 	pop hl
 
 	ld c,$26
-
 .endif
 	jp addSpritesToOam_withOffset
 
 @ringBoxCursor:
 	.db $01
 	.db $1e $fc $0e $03
-
-.ifdef EXTENDED_RING_BOX
-@arrowUpSpriteBlue
-	.db $01
-	.db $00 $00 $0e $04
-
-@arrowDownSpriteRed
-	.db $01
-	.db $00 $00 $0e $45
-.endif
 
 ;;
 ; For each ring in the ring box, this draws a sprite (the letter "C") on the corresponding
@@ -11703,6 +11682,16 @@ secretListMenu_getSecretData:
 		.db $00
 
 .endif; ROM_SEASONS
+
+.ifdef EXTENDED_RING_BOX
+arrowUpSpriteBlue
+	.db $01
+	.db $00 $00 $0e $04
+
+arrowDownSpriteRed
+	.db $01
+	.db $00 $00 $0e $45
+.endif
 
 ;;
 ; Runs the fake reset that happens when getting the sign ring in Seasons.
