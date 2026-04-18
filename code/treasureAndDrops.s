@@ -980,54 +980,6 @@ ringTierTable:
 	.db GREEN_RING		RANG_RING_L2
 .endif
 
-.ifdef ENABLE_GASHA_REBALANCE
-; These are tables of flag masks indicating which rings are available
-; in each tier. The bytes can be AND'd with the wRingsObtained flags
-; to quickly determine which rings have/havent been obtained per tier.
-ringTierTableMasks:
-	.dw @tier0
-	.dw @tier1
-	.dw @tier2
-	.dw @tier3
-
-@tier0:
-	.db %00000000
-	.db %00001000
-	.db %01010010
-	.db %00111101
-	.db %00000000
-	.db %00000000
-	.db %00000010
-	.db %10000000
-@tier1:
-	.db %00100100
-	.db %00010000
-	.db %10001001
-	.db %11000000
-	.db %00000101
-	.db %00000010
-	.db %00000000
-	.db %00000000
-@tier2:
-	.db %00010000
-	.db %00100100
-	.db %00000000
-	.db %00000010
-	.db %00111000
-	.db %00000000
-	.db %00000101
-	.db %00010100
-@tier3:
-	.db %00000000
-	.db %10000000
-	.db %00000100
-	.db %00000000
-	.db %10000000
-	.db %01111100
-	.db %00000000
-	.db %00101010
-.endif
-
 itemDropSetTable:
 	.dw itemDropSet0
 	.dw itemDropSet1

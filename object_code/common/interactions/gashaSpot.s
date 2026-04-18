@@ -224,6 +224,68 @@ interactionCodeb6:
 	bit 0,(hl)
 	jr nz,+
 	set 0,(hl)
+.ifdef ENABLE_GASHA_REBALANCE
+	; make the heart piece always spawn if it hasn't yet
+	bit 1,(hl)
+	jr nz,+
+	set 1,(hl)
+	ld b,GASHATREASURE_HEART_PIECE
+	jr @spawnTreasure
++
+
+	ld hl,wGashaSpotKillCounters
+	ld e,Interaction.var03
+	ld a,(de)
+	rst_addAToHl
+
+	; start with the best guaranteed tier ring for the kill count
+	ld b,GASHATREASURE_TIER3_RING
+	ld a,(hl)
+
+	cp a,RING_TIER_3_MAX_KILLS
+	jr c,+
+		dec b
++
+	cp a,RING_TIER_2_MAX_KILLS
+	jr c,+
+		dec b
+		jr ++
++
+	cp a,RING_TIER_2_MIN_KILLS
+	jr c,++
+		call getRandomNumber
+		cp $80
+		jr c,++
+			dec b
+++
+	cp a,RING_TIER_1_MAX_KILLS
+	jr c,+
+		dec b
+		jr ++
++
+	cp a,RING_TIER_1_MIN_KILLS
+	jr c,++
+		call getRandomNumber
+		cp $80
+		jr c,++
+			dec b
+++
+	cp a,RING_TIER_0_MIN_KILLS
+	jr c,+
+		call getRandomNumber
+		cp $80
+		jr c,+
+			dec b
++
+	; ensure we didn't go too low
+	ld a,b
+	or a
+	jr nz,+
+		ld b,GASHATREASURE_TIER0_RING
+
+	; skip straight to decrementing and dropping the item
+	jr @decGashaMaturity
+.else
 	ld b,GASHATREASURE_TIER3_RING
 	jr @spawnTreasure
 +
@@ -288,8 +350,23 @@ interactionCodeb6:
 	inc b
 +
 	set 1,(hl)
+.endif
 
 @decGashaMaturity:
+.ifdef ENABLE_GASHA_REBALANCE
+	; subtract ~25% from wGashaMaturity(we're ignoring the lower byte
+	; and just zeroing it, so the subtraction could be more or less)
+	ld hl,wGashaMaturity+1
+	ld a,(hl)
+	ld e,a
+	srl a
+	srl a
+	ld c,a
+	ld a,e
+	sub c
+	ldd (hl),a
+	ld (hl),$00
+.else
 	ld hl,wGashaMaturity
 	ld a,(hl)
 	sub 200
@@ -303,6 +380,7 @@ interactionCodeb6:
 	xor a
 	ldd (hl),a
 	ld (hl),a
+.endif
 
 @spawnTreasure:
 	; This object, which was previously the nut, will now become the item sprite being
@@ -310,12 +388,17 @@ interactionCodeb6:
 	ld a,b
 	ld e,Interaction.subid
 	ld (de),a
+.ifdef ENABLE_GASHA_REBALANCE
+	cp GASHATREASURE_HEART_PIECE
+	jr z,+
+.else
 	ld hl,@gashaTreasures
 	rst_addDoubleIndex
 	ldi a,(hl)
 	ld c,(hl)
 	cp TREASURE_RING
 	jr nz,+
+.endif
 	call getRandomRingOfGivenTier
 +
 	ld b,a
@@ -360,6 +443,7 @@ interactionCodeb6:
 ; Obtained the item and exited the textbox; wait for link's hearts or rupee
 ; count to update fully, then make the tree disappear
 @state6:
+.ifndef ENABLE_GASHA_REBALANCE
 	ld hl,wNumRupees
 	ld a,(wDisplayedRupees)
 	cp (hl)
@@ -373,7 +457,7 @@ interactionCodeb6:
 	ld a,(wDisplayedHearts)
 	cp (hl)
 	ret nz
-
+.endif
 	ld a,SND_FAIRYCUTSCENE
 	call playSound
 
@@ -603,14 +687,17 @@ interactionCodeb6:
 ; These are values compared with "wGashaMaturity" which set the ranges for gasha prize
 ; "levels". A value of 300 or higher will give you the highest level prizes.
 @gashaMaturityValues:
+.ifndef ENABLE_GASHA_REBALANCE
 	.db 300/2
 	.db 200/2
 	.db 120/2
 	.db  40/2
 	.db   0/2
+.endif
 
 
 @gashaTreasures:
+.ifndef ENABLE_GASHA_REBALANCE
 	.db TREASURE_HEART_PIECE, $01
 	.db TREASURE_RING, RING_TIER_0
 	.db TREASURE_RING, RING_TIER_1
@@ -621,10 +708,12 @@ interactionCodeb6:
 	.db TREASURE_RUPEES, RUPEEVAL_200
 	.db TREASURE_HEART_REFILL, $18
 	.db TREASURE_HEART_REFILL, $14
+.endif
 
 
 ; Each row defines which type of gasha spot each subid is (rank 0 = best).
 @gashaSpotRanks:
+.ifndef ENABLE_GASHA_REBALANCE
 .ifdef ROM_AGES
 	dbrel @rank1Spot ; $00
 	dbrel @rank2Spot ; $01
@@ -660,6 +749,7 @@ interactionCodeb6:
 	dbrel @rank3Spot ; $0e
 	dbrel @rank4Spot ; $0f
 .endif
+.endif
 
 
 ; Each row corresponds to a certain range for "wGashaMaturity". The first row is the most
@@ -669,6 +759,7 @@ interactionCodeb6:
 ; Each row is a "probability distribution" that adds up to 256. Each byte is a weighting
 ; for the corresponding treasure (GASHATREASURE_X).
 
+.ifndef ENABLE_GASHA_REBALANCE
 @rank0Spot: ; Best type of spot
 	.db $5a $40 $26 $00 $00 $1a $0d $0d $0c $00
 	.db $40 $26 $26 $00 $00 $00 $40 $26 $0e $00
@@ -699,6 +790,14 @@ interactionCodeb6:
 	.db $00 $00 $00 $1a $26 $00 $26 $33 $34 $33
 	.db $00 $00 $00 $12 $1a $00 $21 $33 $40 $40
 	.db $00 $00 $00 $0d $0d $00 $0d $40 $4c $4d
+.else
+; retaining the names to increase mod compatibility
+@rank0Spot:
+@rank1Spot:
+@rank2Spot:
+@rank3Spot:
+@rank4Spot:
+.endif
 
 
 ; Each entry consists of a 4x4 block of subtiles (8x8 tiles) to draw while the tree is

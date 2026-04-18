@@ -4986,6 +4986,39 @@ getRandomRingOfGivenTier:
 	ld a,:bank3f.ringTierTable
 	setrombank
 
+.ifdef ENABLE_GASHA_REBALANCE
+	push bc
+	push de
+
+	; put the new-ring-chance into b as a value in the range 0x0F - 0xFF
+	ld a,c
+	or $0f
+	ld b,a
+
+	; put the ring tier into c as a value in the range 0x00 - 0x04
+	ld a,c
+	and a,$07
+	cp $04
+	jr c,+
+		ld a,$04
++
+	ld c,a
+
+	; store the original tier in d for checking if secret tier is accessible
+	ld d,c
+	dec c
+
+	; select a ring based on tier, decrementing it until we're either
+	; not guaranteed to get a new ring, or we find a new ring to get.
+
+
+	; load the selected ring into the output register
+	ld c,e
+
+	pop de
+	pop af
+	ld b,a
+.else
 	ld b,$01
 	ld a,c
 	cp $04
@@ -5004,12 +5037,155 @@ getRandomRingOfGivenTier:
 	ld b,$00
 	add hl,bc
 	ld c,(hl)
-
+.endif
 	pop af
 	setrombank
 
 	ld a,TREASURE_RING
 	ret
+
+.ifdef ENABLE_GASHA_REBALANCE
+@getCanSelectTier4Rings:
+	push bc
+	; to get the highest tier ring, we'll bump from tier0
+	; to tier4 if all other tiers have been collected
+	ld a,d
+	or a
+	jr nz,++
+		; use e as a counter to increment through the bytes
+		ld e,$07
+-
+		ld bc,$0003
+--
+		; get the rings obtained mask byte in b
+		call getRingTierMasks
+		or b
+		ld b,a
+		dec c
+		ld a,c
+		cp $FF
+		jr nz,--
+			; get the rings obtained byte in a
+			call getRingsObtained
+			and b
+			cp b
+			; if the masked obtained rings doesn't equal the
+			; mask, then we don't have all tier 0-3 rings
+			jr nz,++
+				dec e
+				ld a,e
+				cp $ff
+				jr nz,-
+
+	; increment to the secret ring tier
+	ld d,4
+++
+	pop bc
+	ret
+
+@selectUnobtainedRing:
+
+@selectRandomTieredRing:
+	; get the tier table pointer
+	ld a,c
+	ld hl,bank3f.ringTierTable
+	rst_addDoubleIndex
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
+
+	call getRandomNumber
+	; to simplify logic, the random number will only be in the range [0,254]
+	cp $ff
+	ld b,a
+	jr nz,@selectRingByWeight
+		dec b
+
+	; loop through the rings in the tier until one of weighted
+	; offsets is greater than or equal to the random number.
+@selectRingByWeight
+	ldi a,(hl)
+
+	; return if we hit the end of the table somehow
+	cp $ff
+	ret z
+
+	ld e,a
+	ldi a,(hl)
+	cp b
+	ret nc
+	jr @selectRingByWeight
+
+;;
+; @param        e       Byte offset[0-7]
+; @param[out]   a       Rings-obtained byte
+getRingsObtained:
+    ; the masks table has a stride of 8, so we need to
+    ; multiply the tier by 8 to get our starting offset
+	ld a,e
+	ld hl,wRingsObtained
+	rst_addAToHl
+	ld a,(hl)
+	ret
+
+;;
+; @param        c       Ring tier
+; @param        e       Byte offset[0-7]
+; @param[out]   a       Ring tier byte mask
+getRingTierMasks:
+    ; the masks table has a stride of 8, so we need to
+    ; multiply the tier by 8 to get our starting offset
+	ld a,c
+	add a
+	add a
+	add a
+	add e
+	ld hl,@ringTierMaskTable
+	rst_addAToHl
+	ld a,(hl)
+	ret
+
+; These are tables of flag masks indicating which rings are available
+; in each tier. The bytes can be AND'd with the wRingsObtained flags
+; to quickly determine which rings have/havent been obtained per tier.
+@ringTierMaskTable:
+	; tier0
+	.db %00000000
+	.db %00001000
+	.db %01010010
+	.db %00111101
+	.db %00000000
+	.db %00000000
+	.db %00000010
+	.db %10000000
+	; tier1
+	.db %00100100
+	.db %00010000
+	.db %10001001
+	.db %11000000
+	.db %00000101
+	.db %00000010
+	.db %00000000
+	.db %00000000
+	; tier2
+	.db %00010000
+	.db %00100100
+	.db %00000000
+	.db %00000010
+	.db %00111000
+	.db %00000000
+	.db %00000101
+	.db %00010100
+	; tier3
+	.db %00000000
+	.db %10000000
+	.db %00000100
+	.db %00000000
+	.db %10000000
+	.db %01111100
+	.db %00000000
+	.db %00101010
+.endif
 
 ;;
 ; Fills the seed satchel with all seed types that Link currently has.
