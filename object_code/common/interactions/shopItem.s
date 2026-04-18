@@ -441,7 +441,11 @@ shopItemGetTilesForRupeeDisplay:
 shopItemPrices:
 	/* $00 */ .db RUPEEVAL_300
 	/* $01 */ .db RUPEEVAL_010
+.ifdef ENABLE_GASHA_REBALANCE
+	/* $02 */ .db RUPEEVAL_050
+.else
 	/* $02 */ .db RUPEEVAL_300
+.endif
 	/* $03 */ .db RUPEEVAL_030
 	/* $04 */ .db RUPEEVAL_020
 .ifdef ROM_AGES
@@ -449,15 +453,31 @@ shopItemPrices:
 .else
 	/* $05 */ .db RUPEEVAL_200
 .endif
+.ifdef ENABLE_GASHA_REBALANCE
+	/* $06 */ .db RUPEEVAL_050
+.else
 	/* $06 */ .db RUPEEVAL_500
+.endif
 	/* $07 */ .db RUPEEVAL_300
+.ifdef ENABLE_GASHA_REBALANCE
+	/* $08 */ .db RUPEEVAL_050
+.else
 	/* $08 */ .db RUPEEVAL_300
+.endif
 	/* $09 */ .db RUPEEVAL_300
+.ifdef ENABLE_GASHA_REBALANCE
+	/* $0a */ .db RUPEEVAL_050
+.else
 	/* $0a */ .db RUPEEVAL_300
+.endif
 	/* $0b */ .db RUPEEVAL_100
 	/* $0c */ .db RUPEEVAL_010
 	/* $0d */ .db RUPEEVAL_150
+.ifdef ENABLE_GASHA_REBALANCE
+	/* $0e */ .db RUPEEVAL_050
+.else
 	/* $0e */ .db RUPEEVAL_100
+.endif
 	/* $0f */ .db RUPEEVAL_100
 	/* $10 */ .db RUPEEVAL_100
 	/* $11 */ .db RUPEEVAL_050

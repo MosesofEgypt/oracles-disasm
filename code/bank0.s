@@ -1781,10 +1781,14 @@ _mainLoop:
 	ld hl,wRingBoxContentsExtClearFlag
 	cp (hl)
 	jr nz,+
+		; overwrite the rings and flag with $ff
 		cpl
-		ld b,$06
-		ld hl,wRingBoxContentsExt
-		call fillMemory
+		ldd (hl),a
+		ldd (hl),a
+		ldd (hl),a
+		ldd (hl),a
+		ldd (hl),a
+		ldd (hl),a
 +
 	pop hl
 .endif
@@ -8138,6 +8142,18 @@ cpActiveRing:
 	or a
 	ret
 +
+
+.ifdef ROM_SEASONS
+; don't wanna cheat on blaino....
+	push af
+	ld a,(wInBoxingMatch)
+	or a
+	jr z,+
+		pop af
+		ret
++
+	pop af
+.endif
 	push hl
 	push bc
 	ld b,$05

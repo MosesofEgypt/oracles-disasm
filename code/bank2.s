@@ -4767,6 +4767,7 @@ inventoryMenuState1:
 	sub $10
 	ret c
 
+.ifndef ENABLE_MULTI_RING
 .ifdef ROM_SEASONS
 	; Can't equip rings while boxing
 	ld b,a
@@ -4783,11 +4784,8 @@ inventoryMenuState1:
 	ld l,<wRingBoxContents
 
 .ifdef EXTENDED_RING_BOX
-	cp $05
-	jr c,+
-		ld hl,wRingBoxContentsExt
-		sub $05
-+
+	call getRingBoxContents
+	call getRingBoxClippedIndex
 .endif
 
 	rst_addAToHl
@@ -4802,6 +4800,9 @@ inventoryMenuState1:
 	ld (wActiveRing),a
 	ld a,SND_SELECTITEM
 	jp playSound
+.else
+	ret
+.endif
 
 .ifdef ENABLE_RING_REDUX
 @openRingBoxMenu:
@@ -5759,11 +5760,13 @@ drawEquippedSpriteForActiveRing:
 ++
 .endif
 
+.ifdef ENABLE_MULTI_RING
+	; if allowing equip of all carried rings, there's no need to use
+	; an icon indicating which ones are equipped, since they all are
+	ret
 .ifdef ENABLE_RING_REDUX
 	call getRingBoxCapacity
 	ret z
-
-	ld hl,(wRingBoxContents)
 
 .ifdef EXTENDED_RING_BOX
 	cp $06
@@ -5775,9 +5778,9 @@ drawEquippedSpriteForActiveRing:
 
 	ld a,(wInventorySubmenu1CursorPos)
 	sub $15
-	jr c,+
-		ld hl,wRingBoxContentsExt
-+
+	call getRingBoxContents
+.else
+	ld hl,(wRingBoxContents)
 .endif
 -
 	; checkNextRing
@@ -5831,6 +5834,7 @@ drawEquippedSpriteForActiveRing:
 	ld b,$00
 	ld hl,@sprite
 	jp addSpritesToOam_withOffset
+.endif
 .endif
 
 @sprite:
@@ -10167,11 +10171,10 @@ ringMenu_ringList_substate0:
 	ld a,(wRingMenu.ringBoxCursorIndex)
 	ld hl,wRingBoxContents
 .ifdef EXTENDED_RING_BOX
-	cp $05
-	jr c,+
-		ld hl,wRingBoxContentsExt
-		sub $05
-	+
+	call getRingBoxContents
+	call getRingBoxClippedIndex
+.else
+	ld hl,wRingBoxContents
 .endif
 	rst_addAToHl
 	ld a,(hl)
@@ -10308,13 +10311,11 @@ ringMenu_selectedRingFromList:
 	jr z,ringMenu_moveCursorToRingBox
 +
 	ld a,b
-	ld hl,wRingBoxContents
 .ifdef EXTENDED_RING_BOX
-	cp $05
-	jr c,+
-		ld hl,wRingBoxContentsExt
-		sub $05
-	+
+	call getRingBoxContents
+	call getRingBoxClippedIndex
+.else
+	ld hl,wRingBoxContents
 .endif
 	rst_addAToHl
 	ld (hl),c
@@ -10741,19 +10742,34 @@ ringMenu_drawRingBoxCursor:
 ; For each ring in the ring box, this draws a sprite (the letter "C") on the corresponding
 ; ring in the ring list.
 ringMenu_drawSpritesForRingsInBox:
-.ifndef REMAP_RING_LIST
-.ifndef EXTENDED_RING_BOX
+.ifdef EXTENDED_RING_BOX
+	ld a,$0a
+.else
 	ld a,$05
+.endif
 @loop:
 	push af
 
+.ifdef EXTENDED_RING_BOX
+	; tweaking is needed to convert from one-based indexing to zero-based
+	dec a
+	call getRingBoxContents
+	call getRingBoxClippedIndex
+	inc a
+	dec hl
+.else
 	ld hl,wRingBoxContents-1
+.endif
+
 	rst_addAToHl
 	ld a,(wRingMenu.page)
 	swap a
 	ld c,a
 
 	ld a,(hl)
+.ifdef REMAP_RING_LIST
+	call ringMenu_unmapSelectedRingIndex
+.endif
 	cp $ff
 	jr z,@nextRing
 
@@ -10777,8 +10793,6 @@ ringMenu_drawSpritesForRingsInBox:
 	pop af
 	dec a
 	jr nz,@loop
-.endif
-.endif
 	ret
 
 @sprite:
@@ -10802,23 +10816,50 @@ ringMenu_calculateNumPagesForUnappraisedRings:
 
 .ifdef REMAP_RING_LIST
 ;;
-ringMenu_remapSelectedRingIndex:
-	; only remap rings if in the ring box, not the appraisal menu
+ringMenu_isRingList:
 	push bc
 	ld c,a
 	ld a,(wRingMenu_mode)
 	or a
 	ld a,c
 	pop bc
+	ret
+
+ringMenu_remapSelectedRingIndex:
+	; only remap rings if in the ring box, not the appraisal menu
+	call ringMenu_isRingList
 	ret z
 	push hl
-	ld hl,@ringMapTable
+	ld hl,ringMapTable
 	rst_addAToHl
 	ld a,(hl)
 	pop hl
 	ret
 
-@ringMapTable
+ringMenu_unmapSelectedRingIndex:
+	; only remap rings if in the ring box, not the appraisal menu
+	call ringMenu_isRingList
+	ret z
+
+	; linear searches suck, but oh well. im not hardcoding an inverse table
+	push hl
+	push bc
+	ld b,$40
+	ld hl,ringMapTable
+-
+	cp (hl)
+	jr z,+
+		inc hl
+		dec b
+		jr nz,-
++
+	ld a,$40
+	sub b
+	pop bc
+	pop hl
+	ret
+
+ringMapTable
 	; page 1
 	.db POWER_RING_L1		POWER_RING_L2		POWER_RING_L3		RED_RING
 	.db GREEN_RING			GREEN_HOLY_RING		RED_HOLY_RING		BLUE_HOLY_RING
@@ -10921,13 +10962,10 @@ ringMenu_drawPageCounter:
 ;;
 ; Draws the contents of the ring box for the ring list menu
 ringMenu_drawRingBoxContents:
-	ld hl,wRingBoxContents
 .ifdef EXTENDED_RING_BOX
 	ld a,(wRingMenu.ringBoxCursorIndex)
-	cp $05
+	call getRingBoxContents
 	ld a,$11
-	jr c,@nextRing
-		ld hl,wRingBoxContentsExt
 
 @nextRing:
 	push af
@@ -10954,6 +10992,7 @@ ringMenu_drawRingBoxContents:
 	inc a
 	cp $16
 .else
+	ld hl,wRingBoxContents
 	ld b,$11 ; b = index for ringMenu_drawRing function (cycles from $11-$15)
 
 @nextRing:
@@ -11691,6 +11730,19 @@ arrowUpSpriteBlue
 arrowDownSpriteRed
 	.db $01
 	.db $00 $00 $0e $45
+
+getRingBoxContents:
+	ld hl,wRingBoxContents
+	cp $05
+	ret c
+	ld hl,wRingBoxContentsExt
+	ret
+
+getRingBoxClippedIndex:
+	cp $05
+	ret c
+	sub $05
+	ret
 .endif
 
 ;;

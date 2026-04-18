@@ -377,7 +377,11 @@ linkApplyTileTypes:
 	jp linkPullIntoHole
 
 @tileType_ice:
+.ifdef ENABLE_RING_REDUX
+	ld a,HIKERS_RING
+.else
 	ld a,SNOWSHOE_RING
+.endif
 	call cpActiveRing
 	jr z,@notSwimming
 

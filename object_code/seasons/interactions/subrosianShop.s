@@ -86,8 +86,13 @@ interactionCode81:
 	; Byte 3: ore chunk cost
 	.db $01, $00,             $00, $00
 	.db $04, <wNumBombs,      $10, RUPEEVAL_050
+.ifdef ENABLE_GASHA_REBALANCE
+	.db $08, <wNumScentSeeds, $05, RUPEEVAL_030
+	.db $00, <wNumScentSeeds, $05, RUPEEVAL_060
+.else
 	.db $08, <wNumScentSeeds, $20, RUPEEVAL_040
 	.db $00, <wNumScentSeeds, $20, RUPEEVAL_100
+.endif
 	.db $02, <wNumEmberSeeds, $10, RUPEEVAL_020
 	.db $10, $00,             $00, RUPEEVAL_030
 	.db $20, $00,             $00, RUPEEVAL_040

@@ -3806,7 +3806,11 @@ linkState01_sidescroll:
 	jr nz,@notOnIce
 
 @onIce:
+.ifdef ENABLE_RING_REDUX
+	ld a,HIKERS_RING
+.else
 	ld a,SNOWSHOE_RING
+.endif
 	call cpActiveRing
 	jr z,@notOnIce
 
@@ -4428,11 +4432,53 @@ updateLinkSpeed_withParam:
 	; Standard movement: b = $04
 	inc b
 +
+.ifdef ENABLE_RING_REDUX
+	push de
+	push af
+	ld a,HIKERS_RING
+	call cpActiveRing
+	pop de
+	ld a,d
+	pop de
+	jr nz,+
+		; always standard movement if wearing hiker's ring
+		ld b,$04
++
+.endif
 	call checkPegasusSeedCounter
 	jr z,++
 
 	ld e,$03
 ++
+.ifdef ENABLE_RING_REDUX
+	; don't use the ring if link is being force-moved(i.e. during a cutscene)
+	ld a,(wLinkForceState)
+	or a
+	jr nz,++
+		ld a,HASTE_RING
+		call cpActiveRing
+		jr nz,++
+			ld a,b
+			cp $03
+			jr nz,+
+				; upgrade stairs to grass
+				ld b,$02
++
+			cp $02
+			jr nz,+
+				; upgrade grass to normal
+				ld b,$04
++
+			cp $04
+			jr nz,++
+				ld a,e
+				cp $03
+				jr z,++
+					; upgrade normal to pegasus grass
+					ld b,$02
+					ld e,$03
+++
+.endif
 	ld a,e
 	add b
 	add c
