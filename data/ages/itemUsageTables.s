@@ -23,7 +23,7 @@ itemUsageParameterTable:
 	.db $05, <wGameKeysPressed      ; ITEM_SHIELD
 	.db $03, <wGameKeysJustPressed  ; ITEM_PUNCH
 	.db $23, <wGameKeysJustPressed  ; ITEM_BOMB
-ifdef ENABLE_BUGFIXES:
+.ifdef ENABLE_BUGFIXES
 	; we increase the priority slightly to prevent punching while
 	; swinging the cane from creating graphical effect errors
 	.db $13, <wGameKeysJustPressed  ; ITEM_CANE_OF_SOMARIA

@@ -215,10 +215,13 @@ checkItemUsed:
 
 	; Punch if nothing equipped
 @punch:
+.ifndef ENABLE_PUNCH_WITH_ITEM
+	; removing this will allow us to punch if at least one hand is free
 	ld l,<wInventoryB
 	ldi a,(hl)
 	or (hl)
 	ret nz
+.endif
 
 @forcePunch:
 	ld a,ITEM_PUNCH
