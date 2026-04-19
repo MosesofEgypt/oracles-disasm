@@ -2,6 +2,7 @@
 
 groups:
 - group: 0x00
+  data:
   - name: TX_0057
     index: 0x57
     text: |-

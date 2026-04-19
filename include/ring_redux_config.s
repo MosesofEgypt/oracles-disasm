@@ -5,12 +5,24 @@
 ;;
 
 .ifdef ENABLE_REDUX_EXTRAS
+	.ifndef ENABLE_GASHA_REBALANCE
 	.define ENABLE_GASHA_REBALANCE		1
+	.endif
+	.ifndef ENABLE_SECRET_GASHA_RINGS
 ;	.define ENABLE_SECRET_GASHA_RINGS 	1 	; keeping here for documentation
+	.endif
+	.ifndef ENABLE_PUNCH_WITH_ITEM
 	.define ENABLE_PUNCH_WITH_ITEM 		1
+	.endif
+	.ifndef ENABLE_PORTAL_RING_BOX
 	.define ENABLE_PORTAL_RING_BOX		1
+	.endif
+	.ifndef INCREASE_WALLET_SIZE
 	.define INCREASE_WALLET_SIZE		1
+	.endif
+	.ifndef REMAP_RING_LIST
 	.define REMAP_RING_LIST				1
+	.endif
 .endif
 
 .ifdef ENABLE_RING_REDUX

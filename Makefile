@@ -71,6 +71,11 @@ ifneq ($(filter 1, $(ROM_AGES) $(ROM_SEASONS)),)
 # defines for wla-gb
 DEFINES = $(ORACLE_EXTRA_DEFINES) # Can specify this on commandline
 CFLAGS =
+ifdef ORACLE_RING_REDUX
+	ORACLE_REDUX_DEFINES += -D ENABLE_RING_REDUX
+endif
+DEFINES += $(ORACLE_REDUX_DEFINES)
+
 
 ifeq ($(BUILD_VANILLA), true)
 	DEFINES += -D BUILD_VANILLA
@@ -86,10 +91,6 @@ endif
 
 ifdef FORCE_SECTIONS
 	DEFINES += -D FORCE_SECTIONS
-endif
-
-ifdef ORACLE_RING_REDUX
-	DEFINES += -D ENABLE_RING_REDUX
 endif
 
 ifdef ROM_SEASONS
@@ -322,8 +323,13 @@ $(BUILD_DIR)/rooms/room06%.cmp: rooms/$(GAME)/large/room06%.bin | $(BUILD_DIR)/r
 	@dd if=/dev/zero bs=1 count=1 of=$@ 2>/dev/null
 	@cat $< >> $@
 
+# create a temp text.yaml by layering the base with any redux yamls needed
+$(BUILD_DIR)/textLayered.yaml: text/$(GAME)/text.yaml tools/build/layerText.py | $(BUILD_DIR)
+	@echo "Layering yamls..."
+	@$(PYTHON) tools/build/layerText.py $< text/ring_redux text/ring_redux/$(GAME) $@ "$(ORACLE_REDUX_DEFINES)"
+
 # Parse & compress text
-$(BUILD_DIR)/textData.s: text/$(GAME)/text.yaml text/$(GAME)/dict.yaml tools/build/parseText.py | $(BUILD_DIR)
+$(BUILD_DIR)/textData.s: $(BUILD_DIR)/textLayered.yaml text/$(GAME)/dict.yaml tools/build/parseText.py | $(BUILD_DIR)
 	@echo "Compressing text..."
 	@$(PYTHON) tools/build/parseText.py text/$(GAME)/dict.yaml $< $@ $$(($(TEXT_INSERT_ADDRESS)))
 

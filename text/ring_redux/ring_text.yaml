@@ -390,17 +390,17 @@ groups:
   - name: TX_308b
     index: 0x8b
     text: |-
-      Free hand punch\jump(TX_30c2)
+      Free hand punch\jump(0xc2)
 
   - name: TX_308c
     index: 0x8c
     text: |-
-      Blast size/dmg. \up\jump(TX_30c2)
+      Blast size/dmg.\up\jump(0xc2)
 
   - name: TX_308d
     index: 0x8d
     text: |-
-      Boomerang dmg.\up\jump(TX_30c2)
+      Boomerang dmg.\up\jump(0xc2)
 
   - name:
     - TX_308e
@@ -409,7 +409,7 @@ groups:
     - 0x8e
     - 0xb3
     text: |-
-      Invin. time +60%\jump(TX_30c3)
+      Invin. time +60%\jump(0xc3)
 
   - name: TX_308f
     index: 0x8f
@@ -419,7 +419,7 @@ groups:
   - name: TX_3090
     index: 0x90
     text: |-
-      Knockback \down\jump(TX_30c2)
+      Knockback \down\jump(0xc2)
 
   - name: TX_3091
     index: 0x91
@@ -430,88 +430,88 @@ groups:
   - name: TX_3092
     index: 0x92
     text: |-
-      Throw dist. \up\jump(TX_30c2)
+      Throw dist. \up\jump(0xc2)
 
   - name: TX_3093
     index: 0x93
     text: |-
-      \heart recovery \up\jump(TX_30c3)
+      \heart recovery \up\jump(0xc3)
 
   - name: TX_3094
     index: 0x94
     text: |-
-      \heart recovery \up\up\jump(TX_30c3)
+      \heart recovery \up\up\jump(0xc3)
 
   - name: TX_3095
     index: 0x95
     text: |-
-      Swim speed \up\jump(TX_30c2)
+      Swim speed \up\jump(0xc2)
 
   - name: TX_3096
     index: 0x96
     text: |-
-      Charge time -75%\jump(TX_30c2)
+      Charge time -75%\jump(0xc2)
 
   - name: TX_3097
     index: 0x97
     text: |-
-      Swd.beam at \heart-3\jump(TX_30c2)
+      Swd.beam at \heart-3\jump(0xc2)
 
   - name: TX_3098
     index: 0x98
     text: |-
-      Swd.beam at \heart-6\jump(TX_30c2)
+      Swd.beam at \heart-6\jump(0xc2)
 
   - name: TX_3099
     index: 0x99
     text: |-
-      Can set 4 \col(1)Bombs\col(0)\jump(TX_30c2)
+      Can set 4 \col(1)Bombs\col(0)\jump(0xc2)
 
   - name: TX_309a
     index: 0x9a
     text: |-
-      Trap \jump(TX_30c4)
+      Trap \jump(0xc4)
 
   - name: TX_309b
     index: 0x9b
     text: |-
-      Turn Rupees into
-      \col(1)Bombs\col(0) and Seeds
+      Fall \jump(0xc4)
 
   - name: TX_309c
     index: 0x9c
     text: |-
-      Fall \jump(TX_30c4)
+      Turn Rupees into
+      \col(1)Bombs\col(0) and Seeds
 
   - name: TX_309d
     index: 0x9d
     text: |-
-      Spike \jump(TX_30c4)
+      Spike \jump(0xc4)
 
   - name: TX_309e
     index: 0x9e
     text: |-
-      Elec. zap \jump(TX_30c5)
+      Elec. zap \jump(0xc5)
 
   - name: TX_309f
     index: 0x9f
     text: |-
-      Zora fire \jump(TX_30c5)
+      Zora fire \jump(0xc5)
 
   - name: TX_30a0
     index: 0xa0
     text: |-
-      Wisp jinx \jump(TX_30c5)
+      Wisp jinx \jump(0xc5)
 
   - name: TX_30a1
     index: 0xa1
     text: |-
-      Faster movement\jump(TX_30c2)
+      Faster movement\jump(0xc2)
 
   - name: TX_30a2
     index: 0xa2
     text: |-
-      Feather effect \up\jump(TX_30c2)
+      Feather effect \up\jump(0xc2)
 
   - name: TX_30a3
     index: 0xa3
@@ -522,32 +522,32 @@ groups:
   - name: TX_30a4
     index: 0xa4
     text: |-
-      Find x2 Rupees\jump(TX_30c3)
+      Find x2 Rupees\jump(0xc3)
 
   - name: TX_30a5
     index: 0xa5
     text: |-
-      Find x2 Hearts\jump(TX_30c3)
+      Find x2 Hearts\jump(0xc3)
 
   - name: TX_30a6
     index: 0xa6
     text: |-
-      Find x2 Items\jump(TX_30c3)
+      Find x2 Items\jump(0xc3)
 
   - name: TX_30a7
     index: 0xa7
     text: |-
-      Find x2 Ore\jump(TX_30c3)
+      Find x2 Ore\jump(0xc3)
 
   - name: TX_30a8
     index: 0xa8
     text: |-
-      Item discovery \up\jump(TX_30c2)
+      Item discovery \up\jump(0xc2)
 
   - name: TX_30a9
     index: 0xa9
     text: |-
-      Boomerang dmg.\up\up\jump(TX_30c2)
+      Boomerang dmg.\up\up\jump(0xc2)
 
   - name: TX_30aa
     index: 0xaa
@@ -582,17 +582,17 @@ groups:
   - name: TX_30af
     index: 0xaf
     text: |-
-      Dbl. Spin Attack\jump(TX_30c2)
+      Dbl. Spin Attack\jump(0xc2)
 
   - name: TX_30b0
     index: 0xb0
     text: |-
-      Own Bomb is safe\jump(TX_30c2)
+      Own Bomb is safe\jump(0xc2)
 
   - name: TX_30b1
     index: 0xb1
     text: |-
-      Charge fire beam\jump(TX_30c2)
+      Charge fire beam\jump(0xc2)
 
   - name: TX_30b2
     index: 0xb2
@@ -645,17 +645,17 @@ groups:
   - name: TX_30bb
     index: 0xbb
     text: |-
-      Defuse held Bomb\jump(TX_30c2)
+      Defuse held Bomb\jump(0xc2)
 
   - name: TX_30bc
     index: 0xbc
     text: |-
-      Dive forever\jump(TX_30c2)
+      Dive forever\jump(0xc2)
 
   - name: TX_30bd
     index: 0xbd
     text: |-
-      Free hand punch\jump(TX_30c2)
+      Free hand punch\jump(0xc2)
 
   - name: TX_30be
     index: 0xbe

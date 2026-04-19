@@ -11,6 +11,7 @@ groups:
         \opt()OK \opt()No thanks\cmd8(0x0e)
 
 - group: 0x0e
+  data:
   - name: TX_0e0a
     index: 0x0a
     text: |-
@@ -26,6 +27,7 @@ groups:
         \opt()OK \opt()No thanks\cmd8(0x0f)
 
 - group: 0x2b
+  data:
   - name: TX_2b04
     index: 0x04
     text: |-
