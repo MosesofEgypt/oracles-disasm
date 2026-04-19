@@ -55,3 +55,5 @@
 .include "constants/seasons/seasons.s"
 
 .endif
+
+.include "include/ring_redux_config.s"

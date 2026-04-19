@@ -1,0 +1,38 @@
+# See "text/info.txt" for documentation about this file.
+
+groups:
+- group: 0x0d
+  data:
+  - name: TX_0d05
+    index: 0x05
+    text: |-
+      \pos(2)\col(1)Gasha Seed\col(0)
+      50 Rupees each!
+        \opt()OK \opt()No thanks\cmd8(0x0e)
+
+- group: 0x0e
+  - name: TX_0e0a
+    index: 0x0a
+    text: |-
+      \col(1)1 Gasha Seed\col(0)\stop
+       50 Rupees
+        \opt()OK \opt()No thanks\cmd8(0x0f)
+
+  - name: TX_0e22
+    index: 0x22
+    text: |-
+      \col(1)1 Gasha Seed\col(0)\stop
+        50 Rupees
+        \opt()OK \opt()No thanks\cmd8(0x0f)
+
+- group: 0x2b
+  - name: TX_2b04
+    index: 0x04
+    text: |-
+      Silver Seed
+      I'll trade for
+      \col(1)\num1 Ore Chunks\col(0)
+      and
+      \col(1)5 Scent Seeds\col(0).
+      \jump(TX_2b0b)
+    null_terminator: False

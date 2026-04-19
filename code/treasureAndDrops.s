@@ -388,7 +388,7 @@ giveTreasure_body:
 	ld l,e
 	call addDecimalToHlRef
 
-.ifdef INCREASED_WALLET_SIZE
+.ifdef INCREASE_WALLET_SIZE
 	ld bc,$9999
 	ret nc
 .else
@@ -945,7 +945,7 @@ ringTierTable:
 @tier4:
 	; tier4: best-buff/best-utility
 	; NOTE: only available if every other tiered ring was obtained
-.ifdef ENABLE_SECRET_GASHA_RINGS
+.ifndef ENABLE_SECRET_GASHA_RINGS
 	.db GREEN_RING			127	; 1
 	.db GOLD_RING			255	; 1
 	.db $ff					; terminator

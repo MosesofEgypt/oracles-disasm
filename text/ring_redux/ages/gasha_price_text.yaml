@@ -1,0 +1,11 @@
+# See "text/info.txt" for documentation about this file.
+
+groups:
+- group: 0x0d
+  data:
+  - name: TX_0d05
+    index: 0x05
+    text: |-
+      \pos(2)\col(1)Gasha Seed\col(0)
+      50 Rupees each!
+        \opt()OK \opt()No thanks\cmd8(0x0e)

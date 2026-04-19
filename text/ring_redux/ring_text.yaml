@@ -1,0 +1,704 @@
+# See "text/info.txt" for documentation about this file.
+
+groups:
+- group: 0x30
+  data:
+  - name: TX_3040
+    index: 0x40
+    text: |-
+      Vasu's Ring
+
+  - name: TX_3041
+    index: 0x41
+    text: |-
+      Power Ring L-1
+
+  - name: TX_3042
+    index: 0x42
+    text: |-
+      Power Ring L-2
+
+  - name: TX_3043
+    index: 0x43
+    text: |-
+      Power Ring L-3
+
+  - name: TX_3044
+    index: 0x44
+    text: |-
+      Armor Ring L-1
+
+  - name: TX_3045
+    index: 0x45
+    text: |-
+      Armor Ring L-2
+
+  - name: TX_3046
+    index: 0x46
+    text: |-
+      Armor Ring L-3
+
+  - name: TX_3047
+    index: 0x47
+    text: |-
+      Red Ring
+
+  - name: TX_3048
+    index: 0x48
+    text: |-
+      Blue Ring
+
+  - name: TX_3049
+    index: 0x49
+    text: |-
+      Green Ring
+
+  - name: TX_304a
+    index: 0x4a
+    text: |-
+      Red Curse Ring
+
+  - name: TX_304b
+    index: 0x4b
+    text: |-
+      Expert's Ring
+
+  - name: TX_304c
+    index: 0x4c
+    text: |-
+      Blast Ring
+
+  - name: TX_304d
+    index: 0x4d
+    text: |-
+      Rang Ring L-1
+
+  - name: TX_304e
+    index: 0x4e
+    text: |-
+      GBA Time Ring
+
+  - name: TX_304f
+    index: 0x4f
+    text: |-
+      Maple's Ring
+
+  - name: TX_3050
+    index: 0x50
+    text: |-
+      Steadfast Ring
+
+  - name: TX_3051
+    index: 0x51
+    text: |-
+      Mystic Ring
+
+  - name: TX_3052
+    index: 0x52
+    text: |-
+      Toss Ring
+
+  - name: TX_3053
+    index: 0x53
+    text: |-
+      Heart Ring L-1
+
+  - name: TX_3054
+    index: 0x54
+    text: |-
+      Heart Ring L-2
+
+  - name: TX_3055
+    index: 0x55
+    text: |-
+      Swimmer's Ring
+
+  - name: TX_3056
+    index: 0x56
+    text: |-
+      Charge Ring
+
+  - name: TX_3057
+    index: 0x57
+    text: |-
+      Light Ring L-1
+
+  - name: TX_3058
+    index: 0x58
+    text: |-
+      Light Ring L-2
+
+  - name: TX_3059
+    index: 0x59
+    text: |-
+      Bomber's Ring
+
+  - name: TX_305a
+    index: 0x5a
+    text: |-
+      Green Luck Ring
+
+  - name: TX_305b
+    index: 0x5b
+    text: |-
+      Blue Luck Ring
+
+  - name: TX_305c
+    index: 0x5c
+    text: |-
+      Alchemy Ring
+
+  - name: TX_305d
+    index: 0x5d
+    text: |-
+      Red Luck Ring
+
+  - name: TX_305e
+    index: 0x5e
+    text: |-
+      Green Holy Ring
+
+  - name: TX_305f
+    index: 0x5f
+    text: |-
+      Blue Holy Ring
+
+  - name: TX_3060
+    index: 0x60
+    text: |-
+      Red Holy Ring
+
+  - name: TX_3061
+    index: 0x61
+    text: |-
+      Haste Ring
+
+  - name: TX_3062
+    index: 0x62
+    text: |-
+      Roc's Ring
+
+  - name: TX_3063
+    index: 0x63
+    text: |-
+      Hiker's Ring
+
+  - name: TX_3064
+    index: 0x64
+    text: |-
+      Red Joy Ring
+
+  - name: TX_3065
+    index: 0x65
+    text: |-
+      Blue Joy Ring
+
+  - name: TX_3066
+    index: 0x66
+    text: |-
+      Gold Joy Ring
+
+  - name: TX_3067
+    index: 0x67
+    text: |-
+      Green Joy Ring
+
+  - name: TX_3068
+    index: 0x68
+    text: |-
+      Discovery Ring
+
+  - name: TX_3069
+    index: 0x69
+    text: |-
+      Rang Ring L-2
+
+  - name: TX_306a
+    index: 0x6a
+    text: |-
+      Octo Ring
+
+  - name: TX_306b
+    index: 0x6b
+    text: |-
+      Moblin Ring
+
+  - name: TX_306c
+    index: 0x6c
+    text: |-
+      Like Like Ring
+
+  - name: TX_306d
+    index: 0x6d
+    text: |-
+      Subrosian Ring
+
+  - name: TX_306e
+    index: 0x6e
+    text: |-
+      First Gen Ring
+
+  - name: TX_306f
+    index: 0x6f
+    text: |-
+      Spin Ring
+
+  - name: TX_3070
+    index: 0x70
+    text: |-
+      Bombproof Ring
+
+  - name: TX_3071
+    index: 0x71
+    text: |-
+      Energy Ring
+
+  - name: TX_3072
+    index: 0x72
+    text: |-
+      Blue Curse Ring
+
+  - name: TX_3073
+    index: 0x73
+    text: |-
+      GBA Nature Ring
+
+  - name: TX_3074
+    index: 0x74
+    text: |-
+      Slayer's Ring
+
+  - name: TX_3075
+    index: 0x75
+    text: |-
+      Rupee Ring
+
+  - name: TX_3076
+    index: 0x76
+    text: |-
+      Victory Ring
+
+  - name: TX_3077
+    index: 0x77
+    text: |-
+      Sign Ring
+
+  - name: TX_3078
+    index: 0x78
+    text: |-
+      100th Ring
+
+  - name: TX_3079
+    index: 0x79
+    text: |-
+      GB Color Ring
+
+  - name: TX_307a
+    index: 0x7a
+    text: |-
+      Gasha Ring
+
+  - name: TX_307b
+    index: 0x7b
+    text: |-
+      Peace Ring
+
+  - name: TX_307c
+    index: 0x7c
+    text: |-
+      Zora Ring
+
+  - name: TX_307d
+    index: 0x7d
+    text: |-
+      Fist Ring
+
+  - name: TX_307e
+    index: 0x7e
+    text: |-
+      Gold Ring
+
+  - name: TX_307f
+    index: 0x7f
+    text: |-
+      Fairy's Ring
+
+  - name: TX_3080
+    index: 0x80
+    text: |-
+      Press \col(1)Ring Box\col(0)
+      to swap rings
+
+  - name: TX_3081
+    index: 0x81
+    text: |-
+      ATK: \up
+      DEF: \down
+
+  - name: TX_3082
+    index: 0x82
+    text: |-
+      ATK: \up\up
+      DEF: \down
+
+  - name: TX_3083
+    index: 0x83
+    text: |-
+      ATK: \up\up\up
+      DEF: \down
+
+  - name: TX_3084
+    index: 0x84
+    text: |-
+      ATK: \down
+      DEF: \up
+
+  - name: TX_3085
+    index: 0x85
+    text: |-
+      ATK: \down
+      DEF: \up\up
+
+  - name: TX_3086
+    index: 0x86
+    text: |-
+      ATK: \down
+      DEF: \up\up\up
+
+  - name: TX_3087
+    index: 0x87
+    text: |-
+      ATK: +100%
+
+  - name: TX_3088
+    index: 0x88
+    text: |-
+      DEF: +50%
+
+  - name: TX_3089
+    index: 0x89
+    text: |-
+      ATK: +75%
+      DEF: +37%
+
+  - name: TX_308a
+    index: 0x8a
+    text: |-
+      ATK: +100%
+      \heart cap of 4
+
+  - name: TX_308b
+    index: 0x8b
+    text: |-
+      Free hand punch\jump(TX_30c2)
+
+  - name: TX_308c
+    index: 0x8c
+    text: |-
+      Blast size/dmg. \up\jump(TX_30c2)
+
+  - name: TX_308d
+    index: 0x8d
+    text: |-
+      Boomerang dmg.\up\jump(TX_30c2)
+
+  - name:
+    - TX_308e
+    - TX_30b3
+    index:
+    - 0x8e
+    - 0xb3
+    text: |-
+      Invin. time +60%\jump(TX_30c3)
+
+  - name: TX_308f
+    index: 0x8f
+    text: |-
+      Maple meetings \up
+
+  - name: TX_3090
+    index: 0x90
+    text: |-
+      Knockback \down\jump(TX_30c2)
+
+  - name: TX_3091
+    index: 0x91
+    text: |-
+      Mystic seed
+      effect \up
+
+  - name: TX_3092
+    index: 0x92
+    text: |-
+      Throw dist. \up\jump(TX_30c2)
+
+  - name: TX_3093
+    index: 0x93
+    text: |-
+      \heart recovery \up\jump(TX_30c3)
+
+  - name: TX_3094
+    index: 0x94
+    text: |-
+      \heart recovery \up\up\jump(TX_30c3)
+
+  - name: TX_3095
+    index: 0x95
+    text: |-
+      Swim speed \up\jump(TX_30c2)
+
+  - name: TX_3096
+    index: 0x96
+    text: |-
+      Charge time -75%\jump(TX_30c2)
+
+  - name: TX_3097
+    index: 0x97
+    text: |-
+      Swd.beam at \heart-3\jump(TX_30c2)
+
+  - name: TX_3098
+    index: 0x98
+    text: |-
+      Swd.beam at \heart-6\jump(TX_30c2)
+
+  - name: TX_3099
+    index: 0x99
+    text: |-
+      Can set 4 \col(1)Bombs\col(0)\jump(TX_30c2)
+
+  - name: TX_309a
+    index: 0x9a
+    text: |-
+      Trap \jump(TX_30c4)
+
+  - name: TX_309b
+    index: 0x9b
+    text: |-
+      Turn Rupees into
+      \col(1)Bombs\col(0) and Seeds
+
+  - name: TX_309c
+    index: 0x9c
+    text: |-
+      Fall \jump(TX_30c4)
+
+  - name: TX_309d
+    index: 0x9d
+    text: |-
+      Spike \jump(TX_30c4)
+
+  - name: TX_309e
+    index: 0x9e
+    text: |-
+      Elec. zap \jump(TX_30c5)
+
+  - name: TX_309f
+    index: 0x9f
+    text: |-
+      Zora fire \jump(TX_30c5)
+
+  - name: TX_30a0
+    index: 0xa0
+    text: |-
+      Wisp jinx \jump(TX_30c5)
+
+  - name: TX_30a1
+    index: 0xa1
+    text: |-
+      Faster movement\jump(TX_30c2)
+
+  - name: TX_30a2
+    index: 0xa2
+    text: |-
+      Feather effect \up\jump(TX_30c2)
+
+  - name: TX_30a3
+    index: 0xa3
+    text: |-
+      Normal movement
+      on all surfaces
+
+  - name: TX_30a4
+    index: 0xa4
+    text: |-
+      Find x2 Rupees\jump(TX_30c3)
+
+  - name: TX_30a5
+    index: 0xa5
+    text: |-
+      Find x2 Hearts\jump(TX_30c3)
+
+  - name: TX_30a6
+    index: 0xa6
+    text: |-
+      Find x2 Items\jump(TX_30c3)
+
+  - name: TX_30a7
+    index: 0xa7
+    text: |-
+      Find x2 Ore\jump(TX_30c3)
+
+  - name: TX_30a8
+    index: 0xa8
+    text: |-
+      Item discovery \up\jump(TX_30c2)
+
+  - name: TX_30a9
+    index: 0xa9
+    text: |-
+      Boomerang dmg.\up\up\jump(TX_30c2)
+
+  - name: TX_30aa
+    index: 0xaa
+    text: |-
+      Become an
+      Octorok
+
+  - name: TX_30ab
+    index: 0xab
+    text: |-
+      Become a
+      Moblin
+
+  - name: TX_30ac
+    index: 0xac
+    text: |-
+      Become a
+      Like Like
+
+  - name: TX_30ad
+    index: 0xad
+    text: |-
+      Become a
+      Subrosian
+
+  - name: TX_30ae
+    index: 0xae
+    text: |-
+      Become
+      something?
+
+  - name: TX_30af
+    index: 0xaf
+    text: |-
+      Dbl. Spin Attack\jump(TX_30c2)
+
+  - name: TX_30b0
+    index: 0xb0
+    text: |-
+      Own Bomb is safe\jump(TX_30c2)
+
+  - name: TX_30b1
+    index: 0xb1
+    text: |-
+      Charge fire beam\jump(TX_30c2)
+
+  - name: TX_30b2
+    index: 0xb2
+    text: |-
+      Dmg. taken/dealt
+      reduced to \heart/4
+
+  - name: TX_30b4
+    index: 0xb4
+    text: |-
+      1K beasts slain
+      Become Red
+
+  - name: TX_30b5
+    index: 0xb5
+    text: |-
+      10K Rupees found
+      Become Green
+
+  - name: TX_30b6
+    index: 0xb6
+    text: |-
+      Sword & Shield
+      level \up
+
+  - name: TX_30b7
+    index: 0xb7
+    text: |-
+      100 signs broken
+      Become Gold
+
+  - name: TX_30b8
+    index: 0xb8
+    text: |-
+      100 rings found
+      Become Blue
+
+  - name: TX_30b9
+    index: 0xb9
+    text: |-
+      This is now a
+      Game Boy Color!
+
+  - name: TX_30ba
+    index: 0xba
+    text: |-
+      Grow Gasha
+      trees quickly
+
+  - name: TX_30bb
+    index: 0xbb
+    text: |-
+      Defuse held Bomb\jump(TX_30c2)
+
+  - name: TX_30bc
+    index: 0xbc
+    text: |-
+      Dive forever\jump(TX_30c2)
+
+  - name: TX_30bd
+    index: 0xbd
+    text: |-
+      Free hand punch\jump(TX_30c2)
+
+  - name: TX_30be
+    index: 0xbe
+    text: |-
+      ATK: +50% \times2 if
+      DEF: +25% \heart < 4
+
+  - name: TX_30bf
+    index: 0xbf
+    text: |-
+      Revives you
+      but breaks
+
+  - name: TX_30c0
+    index: 0xc0
+    text: ""
+
+  - name: TX_30c1
+    index: 0xc1
+    text: |-
+      \call(0xfd)
+      \call(0xfc)
+
+  - name: TX_30c2
+    index: 0xc2
+    text: |2-
+
+      [secret combos]
+
+  - name: TX_30c3
+    index: 0xc3
+    text: |2-
+
+      Can stack
+
+  - name: TX_30c4
+    index: 0xc4
+    text: |-
+      dmg. -50%
+      30% dodge chance
+
+  - name: TX_30c5
+    index: 0xc5
+    text: |-
+      immune
+      DEF: +25%

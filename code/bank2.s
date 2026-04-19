@@ -3106,7 +3106,7 @@ menuStateFadeIntoMenu:
 	call nz,playSound
 	ld a,$02
 	call setMusicVolume
-.ifdef ENABLE_RING_REDUX
+.ifdef ENABLE_PORTAL_RING_BOX
 	ld a,(wRingMenu_mode)
 	bit 7,a
 	jr z,+
@@ -3418,7 +3418,7 @@ updateStatusBar_body:
 
 	ld hl,w4StatusBarTileMap+$2c
 	call correctAddressForExtraHeart
-.ifdef INCREASED_WALLET_SIZE
+.ifdef INCREASE_WALLET_SIZE
 	; write an X into the tens place(which may be overwritten below)
 	ld (hl),$1b
 	dec hl
@@ -4748,22 +4748,27 @@ inventoryMenuState1:
 ; Pressed A on subscreen 1; check whether to equip a ring
 ;
 @checkEquipRing:
-	ld a,(wInventorySubmenu1CursorPos)
+	; open the ring box menu if clicking the box in the inventory
+	; if it meets the min level, or you're carrying vasu's ring
 .ifdef ENABLE_RING_REDUX
-	; open the ring box menu if clicking it in the menu if
-	; it meets the min level or you're carrying vasu's ring
+	ld a,(wInventorySubmenu1CursorPos)
 	cp $0f
 	jr nz,+
 	ld a,VASUS_RING
 	call cpActiveRing
-	jr z,++
-		ld a,(wRingBoxLevel)
-		cp RING_BOX_PORTAL_LEVEL
-		jr c,+
+	jr nz,++
+		jp @openRingBoxMenu
 ++
-		call @openRingBoxMenu
-+
 .endif
+.ifdef PORTAL_RING_BOX_LEVEL
+	ld a,(wRingBoxLevel)
+	cp PORTAL_RING_BOX_LEVEL
+	jr c,++
+		jp @openRingBoxMenu
+++
+.endif
++
+	ld a,(wInventorySubmenu1CursorPos)
 	sub $10
 	ret c
 
@@ -4804,7 +4809,7 @@ inventoryMenuState1:
 	ret
 .endif
 
-.ifdef ENABLE_RING_REDUX
+.ifdef ENABLE_PORTAL_RING_BOX
 @openRingBoxMenu:
 	ld a,SND_SELECTITEM
 	call playSound
@@ -6041,7 +6046,7 @@ inventorySubscreen1_drawTreasures:
 ;   b1: number of tiles to clear horizontally
 @ringBoxClearTiles:
 	.db $81 $12 ; L0
-.ifdef EXTENDED_RING_BOX
+.ifdef RESIZE_RING_BOX
 	.db $81+3*(RING_BOX_L1_SIZE+1) $12-3*RING_BOX_L1_WIDTH; L1
 	.db $81+3*(RING_BOX_L2_SIZE+1) $12-3*RING_BOX_L2_WIDTH; L2
 .else
@@ -6229,7 +6234,7 @@ getRingBoxCapacity:
 	ret
 
 @ringBoxCapacities:
-.ifdef EXTENDED_RING_BOX
+.ifdef RESIZE_RING_BOX
 	.db $00
 	.db RING_BOX_L1_SIZE
 	.db RING_BOX_L2_SIZE
@@ -10743,7 +10748,7 @@ ringMenu_drawRingBoxCursor:
 ; ring in the ring list.
 ringMenu_drawSpritesForRingsInBox:
 .ifdef EXTENDED_RING_BOX
-	ld a,$0a
+	call getRingBoxCapacity
 .else
 	ld a,$05
 .endif
