@@ -5004,14 +5004,28 @@ getRandomRingOfGivenTier:
 +
 	ld c,a
 
-	; store the original tier in d for checking if secret tier is accessible
+	; store the original tier in 'd' for resetting to it when calculating
 	ld d,c
-	dec c
 
-	; select a ring based on tier, decrementing it until we're either
-	; not guaranteed to get a new ring, or we find a new ring to get.
+	; increment 'd' to the secret tier if all tiers are filled out
+	call @trySelectRingTier4
 
+	; select a random ring if we hit tier 4
+	jr z,+
 
+    ; determine if we can guarantee a new ring
+	call getRandomNumber
+	cp b
+	jr nc,+
+		; try to guarantee a new ring in the current tier, continually 
+		; decrementing the tier until we either find a new ring or fail
+		call @selectUnobtainedRing
+		jr z,++
++
+	; either selected a tier 4 ring, or we failed to guarantee a
+	; new ring, or the chance to guarantee it simply didn't proc
+	call @selectRandomTieredRing
+++
 	; load the selected ring into the output register
 	ld c,e
 
@@ -5045,7 +5059,7 @@ getRandomRingOfGivenTier:
 	ret
 
 .ifdef ENABLE_GASHA_REBALANCE
-@getCanSelectTier4Rings:
+@trySelectRingTier4:
 	push bc
 	; to get the highest tier ring, we'll bump from tier0
 	; to tier4 if all other tiers have been collected
@@ -5078,12 +5092,13 @@ getRandomRingOfGivenTier:
 				jr nz,-
 
 	; increment to the secret ring tier
-	ld d,4
+	ld c,4
+	ld d,c
 ++
+	ld a,d
 	pop bc
+	cp $04
 	ret
-
-@selectUnobtainedRing:
 
 @selectRandomTieredRing:
 	; get the tier table pointer
@@ -5116,12 +5131,127 @@ getRandomRingOfGivenTier:
 	ret nc
 	jr @selectRingByWeight
 
+@selectUnobtainedRing:
+	; loop over each tier until we can guarantee a new ring
+	dec c
+	--
+		inc c
+		; use 'e' as a counter to increment through the bytes
+		xor a
+		ld e,a
+		dec e
+
+		-
+			push bc
+			inc e
+
+			; get the rings obtained mask byte in b
+			call getRingTierMasks
+			ld b,a
+
+			; get the rings obtained byte in a
+			call getRingsObtained
+
+			; if the masked obtained rings byte equals the mask then we have all
+			; rings under this mask. need to increment to checking the next byte
+			and b
+			cp b
+			pop bc
+
+			jr nz,+
+				ld a,e
+				cp $07
+				jr nz,-
+
+		; that was the last byte, so we might have to try another tier
+		ld a,$03
+		cp c
+		jr nc,--
+			; hit the last tier. reset to original tier and select randomly
+			ld c,d
+
+			; unset z-flag to indicate failure
+			or $ff
+			ret
+
+	+
+	; select a new ring by selecting a random byte and bit in the masks to
+	; start with and cycle through them until we find a ring we don't have
+	call getRandomNumber
+	; put the byte offset in 'e'
+	ld e,a
+	dec e
+
+	-
+		; get the rings obtained byte in b
+		inc e
+		ld a,e
+		and $07
+		ld e,a
+		call getRingsObtained
+		ld b,a
+
+		; get the mask for this tier and byte
+		call getRingTierMasks
+
+		; ensure the mask contains a ring we don't have
+		ld a,b
+		and (hl)
+		xor (hl)
+		jr z,-
+
+	; found a byte with an unobtained ring. start with a random
+	; bit and cycle through them until we hit an unobtained ring
+	ld d,$00
+	ld c,(hl)
+
+	; since e will contain the final ring index, we need to multiply
+	; it by 8 to convert it from a byte offset into an index offset
+	ld a,e
+	add a
+	add a
+	add a
+	ld e,a
+	call getRandomNumber
+	and $07
+
+	; select random bit by rotating bytes a random number of times
+	-
+		rrc b
+		rrc c
+		inc d
+		dec a
+		jr nz,-
+
+	-
+		; find the first bit with the mask set and the obtained unset
+		rrc b
+		rrc c
+		inc d
+
+		bit 0,c
+		jr z,-
+
+		bit 0,b
+		jr nz,-
+
+	; we're at a random bit in these bytes, so we need to
+	; make sure we don't increment outside the [0-7] range
+	ld a,d
+	and $07
+	or e
+	ld e,a
+
+	; set z-flag to indicate success
+	xor a
+	ret
+
 ;;
 ; @param        e       Byte offset[0-7]
 ; @param[out]   a       Rings-obtained byte
 getRingsObtained:
-    ; the masks table has a stride of 8, so we need to
-    ; multiply the tier by 8 to get our starting offset
+	; the masks table has a stride of 8, so we need to
+	; multiply the tier by 8 to get our starting offset
 	ld a,e
 	ld hl,wRingsObtained
 	rst_addAToHl
@@ -5133,8 +5263,8 @@ getRingsObtained:
 ; @param        e       Byte offset[0-7]
 ; @param[out]   a       Ring tier byte mask
 getRingTierMasks:
-    ; the masks table has a stride of 8, so we need to
-    ; multiply the tier by 8 to get our starting offset
+	; the masks table has a stride of 8, so we need to
+	; multiply the tier by 8 to get our starting offset
 	ld a,c
 	add a
 	add a

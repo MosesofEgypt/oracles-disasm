@@ -58,6 +58,10 @@
 	.define SPIN_SWING_COUNTER			(4*15 + 1)	; one startup frame, and 4 per spin
 	.define SWORD_BEAM_LIMIT			3			; number of beams onscreen at once
 	.define SUPER_BEAM_DELAY			50			; frames
+
+	.define ALCHEMY_SEED_COST 			RUPEEVAL_002
+	.define ALCHEMY_BOMB_COST 			RUPEEVAL_005
+	.define ALCHEMY_BOMBCHU_COST 		RUPEEVAL_050
 .endif
 
 .ifdef RESIZE_RING_BOX
