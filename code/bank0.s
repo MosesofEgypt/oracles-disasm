@@ -5052,6 +5052,7 @@ getRandomRingOfGivenTier:
 	add hl,bc
 	ld c,(hl)
 .endif
+
 	pop af
 	setrombank
 

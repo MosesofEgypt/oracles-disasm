@@ -540,3 +540,75 @@ updateGrabbedObjectPosition:
 	.db $f4 $00 $f4 $0e $f4 $00 $f4 $f2
 	.db $f2 $00 $f1 $00 $f2 $00 $f1 $00
 	.db $f2 $00 $f2 $00 $f2 $00 $f2 $00
+
+
+.ifdef ENABLE_RING_REDUX
+alchemyRingRestock:
+	; return if link has at least 1 of the item
+	or a
+	ret nz
+
+	; ring must be equipped
+	ld a,ALCHEMY_RING
+	call cpActiveRing
+	jr z,+
+		call clearParentItem
+		xor a
+		ret
+	+
+
+	; check the items type
+	ld e,Item.id
+	ld a,(de)
+
+	; default to expecting the cost will be for a seed
+	ld e,ALCHEMY_SEED_COST
+
+	; check if they're bombs
+	cp ITEM_BOMB
+	jr nz,+
+		ld e,ALCHEMY_BOMB_COST
+	+
+
+	; check if they're bombchu
+	cp ITEM_BOMBCHUS
+	jr nz,+
+		ld e,ALCHEMY_BOMBCHU_COST
+	+
+
+	; check if we have enough rupees
+	ld a,e
+	call cpRupeeValue
+	or a
+	ld a,e
+
+	; if we don't have enough rupees, clear the parent and return
+	jr z,+
+		call clearParentItem
+		xor a
+		ret
+	+
+
+	; if we have that many rupees, remove them and do alchemy
+	call removeRupeeValue
+
+	; set the amount of ammo in "a" to 1
+	ld a,$01
+	push bc
+	ld bc,(GREEN_JOY_RING<<8)|GOLD_JOY_RING
+	call eitherRingActive
+	pop bc
+
+	jr nz,+
+		; double the number if wearing green joy
+		ld a,$02
+	+
+
+	jr nc,+
+		; double the number if wearing gold joy
+		sla a
+	+
+
+	or a
+	ret
+.endif

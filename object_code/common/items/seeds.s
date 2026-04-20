@@ -30,11 +30,34 @@ itemCode24:
 	ld l,Item.var34
 	ld (hl),$03
 
+.ifdef ENABLE_RING_REDUX
+	ld a,MYSTIC_SEED_RING
+	call cpActiveRing
+	jr nz,+
+		; increase bounces to 6
+		ld (hl),$06
+
+		; double scent seed damage
+		ld l,Item.id
+		ld a,(hl)
+		cp ITEM_SCENT_SEED
+		jr nz,+
+			ld l,Item.damage
+			ld a,(hl)
+			add a
+			ld (hl),a
+	+
+.endif
 	; Determine whether the seed came from the satchel, slingshot, or seed shooter
 	ld l,Item.subid
 	ld a,(hl)
+.ifdef ENABLE_RING_REDUX
+	cp SEED_SHOOTER_BASE_ID
+	jr nc,@shooter
+.else
 	cp $63
 	jr z,@shooter
+.endif
 
 	ld b,a
 	call itemUpdateAngle
@@ -93,6 +116,22 @@ itemCode24:
 @slingshot:
 	ld hl,@slingshotAngleTable-1
 	rst_addAToHl
+.ifdef ENABLE_RING_REDUX
+	ld a,MYSTIC_SEED_RING
+	call cpActiveRing
+
+	; increase scent seed damage if wearing ring
+	jr nz,+
+		ld e,Item.id
+		ld a,(de)
+		cp ITEM_SCENT_SEED
+		jr nz,+
+			ld e,Item.damage
+			ld a,(de)
+			add a
+			ld (de),a
+	+
+.endif
 	ld e,Item.angle
 	ld a,(de)
 	add (hl)
@@ -125,7 +164,11 @@ itemCode24:
 	ret
 
 @slingshotAngleTable:
+.ifdef ENABLE_RING_REDUX
+	.db $00 $02 $fe $05 $fb
+.else
 	.db $00 $02 $fe
+.endif
 
 ; Y/X/Z position offsets relative to Link to make seeds appear at (for satchel)
 @satchelPositionOffsets:
@@ -175,8 +218,13 @@ seedItemState1:
 @nonSatchelUpdate:
 	ld e,Item.subid
 	ld a,(de)
+.ifdef ENABLE_RING_REDUX
+	cp SEED_SHOOTER_BASE_ID
+	jr nc,@shooter
+.else
 	cp $63
 	jr z,@shooter
+.endif
 	call slingshotCheckCanPassSolidTile
 	jr +
 @shooter:
@@ -194,8 +242,13 @@ seedItemState1:
 	; they leave the room.
 	ld e,Item.subid
 	ld a,(de)
+.ifdef ENABLE_RING_REDUX
+	cp SEED_SHOOTER_BASE_ID
+	jp nc,objectCheckWithinRoomBoundary
+.else
 	cp $63
 	jp z,objectCheckWithinRoomBoundary
+.endif
 	jp objectCheckWithinScreenBoundary
 
 @satchelUpdate:
@@ -374,6 +427,10 @@ seedItemState1:
 	rst_addDoubleIndex
 
 	ld e,Item.oamFlagsBackup
+.ifdef ENABLE_RING_REDUX
+	push bc
+	ld b,a
+.endif
 	ldi a,(hl)
 	ld (de),a
 	inc e
@@ -385,6 +442,33 @@ seedItemState1:
 	ld e,Item.counter1
 	ld (de),a
 	ld a,(hl)
+.ifdef ENABLE_RING_REDUX
+	ld c,a
+	ld a,b
+	cp $40
+
+	jr nz,+
+		; reduce fire 'burn' time
+		ld c,$1d
+	+
+	; check scent seed
+	cp $4e
+	jr nz,+
+		; increase scent seed 'smell' time
+		ld c,$ff
+	+
+
+	; check ring
+	ld a,MYSTIC_SEED_RING
+	call cpActiveRing
+	jr nz,+
+		; apply modified timers
+		ld a,c
+		ld (de),a
+	+
+	pop bc
+	ld a,(hl)
+.endif
 	jp playSound
 
 ; b0: value for Item.oamFlags and oamFlagsBackup
@@ -879,8 +963,13 @@ func_50f4:
 	; the seed shooter
 	ld e,Item.subid
 	ld a,(de)
+.ifdef ENABLE_RING_REDUX
+	cp SEED_SHOOTER_BASE_ID
+	ret c
+.else
 	cp $63
 	ret nz
+.endif
 
 	ld e,Item.angle
 	ld l,Item.knockbackAngle

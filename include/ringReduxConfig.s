@@ -232,6 +232,10 @@
 ;		We're simply setting up any dependent defines.
 
 .ifdef ENABLE_RING_REDUX
+	.define SEED_SHOOTER_BASE_ID		$40
+.endif
+
+.ifdef ENABLE_RING_REDUX
 	.ifndef ENABLE_PORTAL_RING_BOX
 		; If we want the redux, but don't want a portal box, we at least
 		; allow Vasu's Ring to work as a portal to the ring list.

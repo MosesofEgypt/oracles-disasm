@@ -25,6 +25,12 @@ parentItemCode_bombchu:
 
 	; Must have bombchus
 	ld a,(wNumBombchus)
+.ifdef ENABLE_RING_REDUX
+	call alchemyRingRestock
+	jr z,+
+		ld (wNumBombchus),a
++
+.endif
 	or a
 	jp z,clearParentItem
 
@@ -73,6 +79,12 @@ parentItemCode_bomb:
 	; Try to create a bomb
 	ld a,(wNumBombs)
 	or a
+.ifdef ENABLE_RING_REDUX
+	call alchemyRingRestock
+	jr z,+
+		ld (wNumBombs),a
++
+.endif
 	jp z,clearParentItem
 
 	call parentItemLoadAnimationAndIncState

@@ -458,6 +458,7 @@ interactionCodeb6:
 	cp (hl)
 	ret nz
 .endif
+
 	ld a,SND_FAIRYCUTSCENE
 	call playSound
 

@@ -11,7 +11,11 @@ parentItemCode_slingshot:
 @state0:
 	ld a,(wLinkSwimmingState)
 	ld b,a
+.ifdef ENABLE_RING_REDUX
+	call parentItemCode_shooter@getFiredSeedLimit
+.else
 	ld a,(wIsSeedShooterInUse)
+.endif
 	or b
 	jp nz,clearParentItem
 
@@ -21,6 +25,26 @@ parentItemCode_slingshot:
 	cp $02
 	jr nz,+
 	ld c,$03
+.ifdef ENABLE_RING_REDUX
+	ld a,MYSTIC_SEED_RING
+	call cpActiveRing
+
+    ; reduce how many slots we request based on how many seeds are onscreen
+	jr nz,+
+		; with ring on, want 5 slots
+		ld c,$05
+	+
+	call getNumFreeItemSlots
+	-
+		cp c
+		jr nc,+
+			; decrement twice to ensure we have an even amount on left/right
+			dec c
+			jr z,+
+				dec c
+				jr -
+	+
+.endif
 +
 	call getNumFreeItemSlots
 	cp c
@@ -102,7 +126,11 @@ parentItemCode_shooter:
 
 ; Button released
 
+.ifdef ENABLE_RING_REDUX
+	call @getFiredSeedLimit
+.else
 	ld a,(wIsSeedShooterInUse)
+.endif
 	or a
 	jp nz,clearParentItem
 
@@ -119,7 +147,23 @@ parentItemCode_shooter:
 	ld c,$63 ; CROSSITEMS: Set it to some fixed value explicitly. (01-03 are for slingshot.)
 	push bc
 	ld e,$01
+.ifdef ENABLE_RING_REDUX
+	ld a,(wIsSeedShooterInUse)
+	add SEED_SHOOTER_BASE_ID
+	ld c,a
+	inc c
+	ld e,$00
 	call itemCreateChildWithID
+	jr nc,+
+		pop bc
+		ret z
+		jp clearParentItem
+    +
+	ld l,Item.subid
+	inc (hl)
+.else
+	call itemCreateChildWithID
+.endif
 
 	; Calculate child item's angle?
 	ld e,Item.angle
@@ -163,7 +207,19 @@ parentItemCode_shooter:
 @updateAngleFrom5Bit:
 	rrca
 	rrca
+.ifndef ENABLE_RING_REDUX
 	jr @updateAngle
+.else
+; NOTE: moving this since it's too far away with the added code
+@updateAngle:
+	ld h,d
+	ld l,Item.angle
+	and $07
+	ld (hl),a
+	ld l,Item.counter2
+	ld (hl),$10
+	jr @determineBaseAnimation
+.endif
 
 @checkUpdateAngle:
 	ld a,(wGameKeysJustPressed)
@@ -187,7 +243,7 @@ parentItemCode_shooter:
 	ld a,$01
 +
 	add (hl)
-
+.ifndef ENABLE_RING_REDUX
 @updateAngle:
 	ld h,d
 	ld l,Item.angle
@@ -195,6 +251,9 @@ parentItemCode_shooter:
 	ld (hl),a
 	ld l,Item.counter2
 	ld (hl),$10
+.else
+	jr @updateAngle
+.endif
 
 @determineBaseAnimation:
 .ifdef ROM_AGES
@@ -217,6 +276,24 @@ parentItemCode_shooter:
 	ld (hl),$04
 	ret
 
+@getFiredSeedLimit:
+	ld a,MYSTIC_SEED_RING
+	call cpActiveRing
+	ld a,(wIsSeedShooterInUse)
+
+    ; if the ring is on, we can fire 5 seeds at once
+	jr nz,+
+		sub $05
+		jr ++
+	+
+		; use the lower limit if not on
+		sub $01
+	++
+	; check that we're under the limit
+	ld a,$01
+	ret nc
+	dec a
+	ret
 
 ;;
 ; ITEM_SEED_SATCHEL ($19)
@@ -250,7 +327,12 @@ parentItemCode_satchel:
 	pop bc
 	push bc
 	ld c,$00
+
+.ifdef ENABLE_RING_REDUX
+	ld e,$00
+.else
 	ld e,$01
+.endif
 	call itemCreateChildWithID
 	pop bc
 	jp c,clearParentItem
@@ -296,7 +378,16 @@ clearSelfIfNoSeeds:
 
 	rst_addAToHl
 	ld a,(hl)
+.ifdef ENABLE_RING_REDUX
+	push hl
+	push bc
+	call alchemyRingRestock
+	pop bc
+	pop hl
+	ld (hl),a
+.else
 	or a
+.endif
 	ret nz
 	pop hl
 	jp clearParentItem

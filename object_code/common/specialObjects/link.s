@@ -1503,7 +1503,11 @@ linkState02:
 	ld (wLinkInAir),a
 	ld (wLinkSwimmingState),a
 
+.ifdef ENABLE_RING_REDUX
+	ld a,BLUE_LUCK_RING
+.else
 	ld a,GOLD_LUCK_RING
+.endif
 	call cpActiveRing
 	ld a,$fc
 	jr nz,+
