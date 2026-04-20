@@ -774,6 +774,25 @@ linkUpdateDamageToApplyForRings:
 linkApplyDamage:
 	ld h,d
 	ld l,SpecialObject.damageToApply
+.ifdef ENABLE_RING_REDUX
+	; must be wearing ring ...
+	ld a,STEADFAST_RING
+	call cpActiveRing
+	jr nz,+
+		; using shield ...
+		ld a,(wUsingShield)
+		or a
+		jr z,+
+			; and taking no damage ...
+			ld a,(hl)
+			cp $00
+			jr nz,+
+				; to reduce knockback to 0
+				ld l,SpecialObject.knockbackCounter
+				ld (hl),$00
+				ld l,SpecialObject.damageToApply
+	+
+.endif
 	ld a,(hl)
 	ld (hl),$00
 	or a
@@ -835,6 +854,19 @@ linkApplyDamage:
 	; Replenish health if Link has a potion.
 	ld a,TREASURE_POTION
 	call checkTreasureObtained
+.ifdef ENABLE_RING_REDUX
+	jr c,+++
+		ld a,PROTECTION_RING
+		call cpActiveRing
+		jr nz,+
+			call removeRing
+			scf
+			jr +++
+		+
+		scf
+		ccf
+	+++
+.endif
 	jr nc,@noPotion
 
 	; [wLinkHealth] = [wLinkMaxHealth]
@@ -846,6 +878,9 @@ linkApplyDamage:
 	ld a,$01
 	ld (de),a
 
+.ifdef ENABLE_RING_REDUX
+	jr nc,++
+.endif
 	ld a,TREASURE_POTION
 	call loseTreasure
 	jr ++

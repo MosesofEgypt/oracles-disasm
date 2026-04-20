@@ -201,6 +201,19 @@ itemUpdateExplosion:
 	ld c,(hl)
 	ld l,Item.collisionRadiusY
 	and $1f
+.ifdef ENABLE_RING_REDUX
+	push bc
+	push af
+	ld a,BLAST_RING
+	call cpActiveRing
+	pop bc
+	ld a,b
+	pop bc
+	jr nz,+
+		; radius x2
+		sla a
+	+
+.endif
 	ldi (hl),a
 	ldi (hl),a
 
@@ -229,7 +242,29 @@ bombUpdateExplosion:
 ; @param[out]	zflag	Set if the bomb isn't exploding (not sure if it gets unset on just
 ;			one frame, or all frames after the explosion starts)
 bombUpdateAnimation:
+.ifdef ENABLE_RING_REDUX
+	ld bc,(PEACE_RING<<8)|BOMBERS_RING
+	call eitherRingActive
+	jr nz,+
+	jr nc,+
+		; enable remote bombs
+		call bombResetAnimationAndSetVisiblec1
+		ret
+	+
+.endif
 	call itemAnimate
+.ifdef ENABLE_RING_REDUX
+	ld bc,(BOMBPROOF_RING<<8)|HASTE_RING
+	call eitherRingActive
+	jr nz,+
+	jr nc,+
+		; force immediate explosion
+		ld l,Item.var2f
+		set 4,(hl)
+		rra
+		ret
+	+
+.endif
 	ld e,Item.animParameter
 	ld a,(de)
 	or a
@@ -253,7 +288,7 @@ itemInitializeBombExplosion:
 	ld l,Item.collisionType
 	set 7,(hl)
 
-	; Decrease damage if not using blast ring
+	; Increase damage if using blast ring
 	ld a,BLAST_RING
 	call cpActiveRing
 	jr nz,+
@@ -386,6 +421,9 @@ explosionCheckAndApplyLinkCollision:
 explosionTryToBreakNextTile:
 	ld a,(hl)
 	dec (hl)
+.ifdef ENABLE_RING_REDUX
+	and $0f
+.endif
 	ld l,a
 	add a
 	add l
@@ -446,7 +484,62 @@ explosionTryToBreakNextTile:
 	ret nz
 
 	ld a,BREAKABLETILESOURCE_BOMB
+.ifdef ENABLE_RING_REDUX
+	push hl
+	call tryToBreakTile
+	pop hl
+
+	ld a,TREASURE_SHOVEL
+	call checkTreasureObtained
+	ret nc
+
+	; in order to destroy everything(even after tiles change)
+	; we need to reset the counter once it hits 0xFF so it can
+	; handle the counter states, even if rings change
+	ld h,d
+	ld l,Item.counter1
+
+	ld a,$0f
+	cp (hl)
+	jr nz,+
+		; first cycle stopped, so start the next
+		ld (hl),$2c
+	+
+
+	ld a,$1f
+	cp (hl)
+	jr nz,+
+		; move to end of second cycle
+		ld (hl),$ff
+	+
+
+	; determines the tile offset to use, and handles the counter reset
+	push bc
+	ld bc,(DISCOVERY_RING<<8)|BLAST_RING
+	call eitherRingActive
+	pop bc
+
+	ret nz
+	ret nc
+	ld a,BREAKABLETILESOURCE_SHOVEL
+	push hl
+	call tryToBreakTile
+	pop hl
+
+	ld h,d
+	ld l,Item.counter1
+	ld a,(hl)
+
+	cp $07
+	ret nz
+
+	; hitting 0x07 means the first cycle just started, so move
+	; timer to a value we can recognize the cycle number
+	ld (hl),$1c
+	ret
+.else
 	jp tryToBreakTile
+.endif
 
 ; The following is a list of offsets from the center of the bomb at which to try
 ; destroying tiles.
@@ -456,6 +549,23 @@ explosionTryToBreakNextTile:
 ; b2: offset from x-position
 
 @data:
+.ifdef ENABLE_RING_REDUX
+	; increase the radius slightly so bombs don't need to be
+	; perfectly centered to destroy tiles in a cross pattern
+	.db $f8 $f0 $f0
+	.db $f8 $0f $f0
+	.db $f8 $0f $0f
+	.db $f8 $f0 $0f
+	.db $f4 $00 $f0
+	.db $f4 $0f $00
+	.db $f4 $00 $0f
+	.db $f4 $f0 $00
+	.db $f2 $00 $00
+	.db $fc $00 $e0
+	.db $fc $1f $00
+	.db $fc $00 $1f
+	.db $fc $e0 $00
+.else
 	.db $f8 $f3 $f3
 	.db $f8 $0c $f3
 	.db $f8 $0c $0c
@@ -465,3 +575,4 @@ explosionTryToBreakNextTile:
 	.db $f4 $00 $0c
 	.db $f4 $f3 $00
 	.db $f2 $00 $00
+.endif

@@ -177,6 +177,37 @@ linkApplyDamage_b5:
 ;;
 updateLinkInvincibilityCounter:
 	ld hl,w1Link.invincibilityCounter
+.ifdef ENABLE_RING_REDUX
+	ld a,(hl)
+	or a
+	jr z,++
+		ld bc,(GBA_TIME_RING<<8)|GBA_NATURE_RING
+		call eitherRingActive
+		ld bc,$0705
+		jr z,+
+		jr c,+
+			ld bc,$0000
+		+
+		jr nz,+
+		jr nc,+
+			ld c,$04
+
+		+
+		ld a,b
+		or a
+		jr z,++
+			ld a,(wFrameCounter)
+			and b
+			cp c
+			jr c,++
+				bit 7,a
+				jr z,+
+					dec (hl)
+					ret
+				+
+				inc (hl)
+	++
+.endif
 	ld a,(hl)
 	or a
 	ret z

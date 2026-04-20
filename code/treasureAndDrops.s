@@ -811,6 +811,22 @@ decideItemDrop_body:
 	swap a
 	rrca
 	and $07
+.ifdef ENABLE_RING_REDUX
+	push de
+	push af
+	ld a,DISCOVERY_RING
+	call cpActiveRing
+	pop de
+	ld a,d
+	jr nz,+
+		; increment to the next highest probability table
+		inc a
+		cp $08
+		jr c,+
+			dec a
+	+
+	pop de
+.endif
 	ld hl,itemDropProbabilityTable
 	rst_addDoubleIndex
 	ldi a,(hl)

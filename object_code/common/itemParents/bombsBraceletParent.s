@@ -83,7 +83,29 @@ parentItemCode_bomb:
 	call alchemyRingRestock
 	jr z,+
 		ld (wNumBombs),a
-+
+	+
+
+	push af
+	ld bc,(PEACE_RING<<8)|BOMBERS_RING
+	call eitherRingActive
+	jr nz,+
+	jr nc,+
+		; check if there's a bomb to remote detonate
+		ld c,ITEM_BOMB
+		call findItemWithID
+		jr nz,+
+			ld l,Item.var2f
+			pop af
+
+			; skip if already exploding
+			bit 4,(hl)
+			ret nz
+
+			; set the bit that indicates to explode
+			set 4,(hl)
+			jp clearParentItem
+    +
+	pop af
 .endif
 	jp z,clearParentItem
 
@@ -92,7 +114,11 @@ parentItemCode_bomb:
 	ld a,BOMBERS_RING
 	call cpActiveRing
 	jr nz,+
+.ifdef ENABLE_RING_REDUX
+	ld e,$04
+.else
 	inc e
+.endif
 +
 	call itemCreateChild
 	jp c,clearParentItem
@@ -368,7 +394,18 @@ parentItemCode_bracelet:
 	or a
 	jr nz,++
 
+.ifdef ENABLE_QUICK_ITEM_DROP
+.ifdef ENABLE_RING_REDUX
+	ld a,HASTE_RING
+	call cpActiveRing
 	ld a,(wGameKeysJustPressed)
+	jr nz,+
+.endif
+	ld a,(wGameKeysPressed)
+	+
+.else
+	ld a,(wGameKeysJustPressed)
+.endif
 	and BTN_A|BTN_B
 	ret z
 

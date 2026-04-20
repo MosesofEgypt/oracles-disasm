@@ -14,6 +14,9 @@
 	.ifndef ENABLE_PUNCH_WITH_ITEM
 		.define ENABLE_PUNCH_WITH_ITEM 		1
 	.endif
+	.ifndef ENABLE_QUICK_ITEM_DROP
+		.define ENABLE_QUICK_ITEM_DROP 		1
+	.endif
 	.ifndef ENABLE_PORTAL_RING_BOX
 		.define ENABLE_PORTAL_RING_BOX		1
 	.endif

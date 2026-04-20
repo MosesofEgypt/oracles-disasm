@@ -3583,7 +3583,21 @@ linkUpdateVelocity:
 	or a
 	jr nz,+
 
+.ifdef ENABLE_RING_REDUX
+	ld a,SWIMMERS_RING
+	call cpActiveRing
+	jr nz,++
+		ld a,(wFrameCounter)
+		and $04
+		jr nz,++
+			ld a,(wGameKeysPressed)
+			jr +
+	++
 	ld a,(wGameKeysJustPressed)
+	+
+.else
+	ld a,(wGameKeysJustPressed)
+.endif
 	and (BTN_UP | BTN_RIGHT | BTN_DOWN | BTN_LEFT)
 	jr nz,@directionButtonPressed
 +

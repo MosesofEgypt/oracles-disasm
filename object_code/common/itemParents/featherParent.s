@@ -58,6 +58,18 @@ parentItemCode_feather:
 	ld bc,$fdd0
 +
 	ld hl,w1Link.speedZ
+.ifdef ENABLE_RING_REDUX
+	ld a,ROCS_RING
+	call cpActiveRing
+    ; Jump higher in sidescrolling rooms with rocs ring
+	jr nz,+
+		ld bc,$fd90
+		ld a,(wActiveGroup)
+		cp FIRST_SIDESCROLL_GROUP
+		jr c,+
+			ld bc,$fd00
+	+
+.endif
 	ld (hl),c
 	inc l
 	ld (hl),b
