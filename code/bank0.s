@@ -8368,7 +8368,7 @@ cpActiveRing:
 	pop hl
 	ret
 
-.ifdef ENABLE_RING_REDUX
+.ifdef REDUX_UTIL_FUNCS
 ;;
 ; @param	b	The first ring to check for.
 ; @param	c	The second ring to check for.

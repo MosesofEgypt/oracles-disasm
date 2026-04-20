@@ -208,7 +208,7 @@ getSpecialObjectGraphicsFrame:
 	ld a,e
 .endif
 
-.ifdef ENABLE_RING_REDUX
+.ifdef UNRESTRICTED_TRANSFORMS
 	call remapTransformedSpecialObjectGfx
 .else
 	ld hl,specialObjectGraphicsTable
@@ -453,7 +453,7 @@ func_4553:
 ; Under normal circumstances, this will return 0 (SPECIALOBJECT_LINK).
 ; @param[out] b Special object ID to use, based on the ring Link is wearing
 getTransformedLinkID:
-.ifndef ENABLE_RING_REDUX
+.ifndef UNRESTRICTED_TRANSFORMS
 	ld hl,wDisableRingTransformations
 	ld a,(hl)
 	or a
@@ -497,7 +497,7 @@ getTransformedLinkID:
 	ret
 
 @ringToID:
-.ifndef ENABLE_RING_REDUX
+.ifndef UNRESTRICTED_TRANSFORMS
 	.db OCTO_RING		SPECIALOBJECT_LINK_AS_OCTOROK
 	.db MOBLIN_RING		SPECIALOBJECT_LINK_AS_MOBLIN
 	.db LIKE_LIKE_RING	SPECIALOBJECT_LINK_AS_LIKELIKE
@@ -506,7 +506,7 @@ getTransformedLinkID:
 .endif
 	.db $00
 
-.ifdef ENABLE_RING_REDUX
+.ifdef UNRESTRICTED_TRANSFORMS
 remapTransformedSpecialObjectGfx:
 	call @getCanRemapSprite
 	ld a,e

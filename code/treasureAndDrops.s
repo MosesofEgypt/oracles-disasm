@@ -389,7 +389,7 @@ giveTreasure_body:
 	call addDecimalToHlRef
 
 .ifdef INCREASE_WALLET_SIZE
-	ld bc,$9999
+	ld bc,MAX_WALLET_SIZE
 	ret nc
 .else
 	; Check for overflow
@@ -888,81 +888,25 @@ ringTierTable:
 ; NOTE: comment after b1 indicates the weight that derives the cutoff
 @tier0:
 	; tier0: high-buff/good-utility
-	.db ENERGY_RING			12	; 1
-	.db FAIRYS_RING			51	; 3
-	.db GREEN_LUCK_RING		76	; 2
-	.db RED_LUCK_RING		102	; 2
-	.db BLUE_LUCK_RING		127	; 2
-	.db ALCHEMY_RING		140	; 1
-	.db MYSTIC_SEED_RING	178	; 3
-	.db LIGHT_RING_L2		191	; 1
-	.db CHARGE_RING			204	; 1
-	.db HEART_RING_L2		217	; 1
-	.db EXPERTS_RING		255	; 3
+	TIER0_RINGS_AND_CUTOFFS
 	.db $ff					; terminator
 @tier1:
 	; tier1: mod-buff/high-utility
-	.db POWER_RING_L2		20	; 2
-	.db BLAST_RING			30	; 1
-	.db RANG_RING_L2		81	; 5
-	.db ARMOR_RING_L2		102	; 2
-	.db GREEN_HOLY_RING		122	; 2
-	.db BLUE_HOLY_RING		143	; 2
-	.db RED_HOLY_RING		163	; 2
-	.db ROCS_RING			204	; 4
-	.db HEART_RING_L1		214	; 1
-	.db STEADFAST_RING		245	; 3
-	.db LIGHT_RING_L1		255	; 1
+	TIER1_RINGS_AND_CUTOFFS
 	.db $ff					; terminator
 @tier2:
 	; tier2: bad-buff/mod-utility
-	.db CURSE_POWER_RING	42	; 5
-	.db RANG_RING_L1		76	; 4
-	.db ARMOR_RING_L1		93	; 2
-	.db CURSE_ARMOR_RING	136	; 5
-	.db BOMBERS_RING		144	; 1
-	.db BOMBPROOF_RING		153	; 1
-	.db ZORA_RING			178	; 3
-	.db HIKERS_RING			187	; 1
-	.db GASHA_RING			221	; 4
-	.db RED_JOY_RING		229	; 1
-	.db BLUE_JOY_RING		255	; 3
+	TIER2_RINGS_AND_CUTOFFS
 	.db $ff					; terminator
 @tier3:
 	; tier3: cosmetic/low-utility
-	.db OCTO_RING			32	; 5
-	.db LIKE_LIKE_RING		65	; 5
-	.db MOBLIN_RING			98	; 5
-	.db SUBROSIAN_RING		131	; 5
-	.db FIRST_GEN_RING		144	; 2
-	.db GBOY_COLOR_RING		170	; 4
-	.db PEACE_RING			176	; 1
-	.db FIST_RING			209	; 5
-	.db TOSS_RING			242	; 5
-	.db MAPLES_RING			248	; 1
-	.db GREEN_JOY_RING		255	; 1
+	TIER3_RINGS_AND_CUTOFFS
 	.db $ff					; terminator
 @tier4:
 	; tier4: best-buff/best-utility
 	; NOTE: only available if every other tiered ring was obtained
-.ifndef ENABLE_SECRET_GASHA_RINGS
-	.db GREEN_RING			127	; 1
-	.db GOLD_RING			255	; 1
+	TIER4_RINGS_AND_CUTOFFS
 	.db $ff					; terminator
-.else
-	.db GREEN_RING			76	; 3
-	.db GOLD_RING			153	; 3
-	; these rings are normally obtained with secrets, but
-	; we'll allow them to be obtained via gasha nut if the
-	; player was diligent enough to get every tier 1-4 ring
-	; ages secret
-	.db SPIN_RING			178	; 1
-	.db HASTE_RING			204	; 1
-	; seasons secret
-	.db GOLD_JOY_RING		229	; 1
-	.db SWIMMERS_RING		255	; 1
-	.db $ff					; terminator
-.endif
 .else
 @tier0:
 	.db EXPERTS_RING	CHARGE_RING	FIRST_GEN_RING	BOMBPROOF_RING

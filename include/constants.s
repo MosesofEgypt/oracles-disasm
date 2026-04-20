@@ -56,4 +56,4 @@
 
 .endif
 
-.include "include/ring_redux_config.s"
+.include "include/ringReduxConfig.s"
