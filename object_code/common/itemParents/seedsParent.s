@@ -243,6 +243,7 @@ parentItemCode_shooter:
 	ld a,$01
 +
 	add (hl)
+
 .ifndef ENABLE_RING_REDUX
 @updateAngle:
 	ld h,d
