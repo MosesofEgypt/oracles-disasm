@@ -694,6 +694,119 @@ linkUpdateDamageToApplyForRings:
 	or a
 	ret z
 
+.ifdef ENABLE_RING_REDUX
+	; for each power and armor ring, check if it's equipped and
+	; increase or reduce the damage by the associated amount.
+	call calculateArmorRingModifier
+
+	ld e,a
+	; calculate the multipliers(divisor is 8, so 1.5x will be $0c)
+	ld a,$48
+
+	ld bc,(GREEN_HOLY_RING<<8)|BLUE_HOLY_RING
+	call eitherRingActive
+	ld b,$00
+	jr nz,+
+		ld b,HOLY_RING_DEF_MOD
+	+
+	jr nc,+
+		sub HOLY_RING_DEF_MOD
+	+
+
+	ld bc,(RED_HOLY_RING<<8)|$ff
+	call eitherRingActive
+	jr nc,+
+		sub HOLY_RING_DEF_MOD
+	+
+
+	ld bc,(BLUE_RING<<8)|GREEN_RING
+	call eitherRingActive
+	ld b,$00
+	jr nz,+
+		ld b,BLUE_RING_DEF_MOD
+	+
+	jr nc,+
+		sub GREEN_RING_DEF_MOD
+	+
+
+	sub b
+	ld bc,(CURSE_POWER_RING<<8)|GOLD_RING
+	call eitherRingActive
+	ld b,$00
+	jr nz,+
+		ld b,CURSE_POWER_RING_DEF_MOD
+	+
+	jr nc,+
+		sub GOLD_RING_DEF_MOD
+		ld c,a
+		ld hl,wLinkHealth
+		ld a,(hl)
+		cp GOLD_RING_HEART_CUTOFF
+		ld a,c
+		jr nc,++
+			sub GOLD_RING_DEF_MOD
+		++
+		sub b
+
+	+
+	; capToMinDamage
+	; what we're doing is a bit complicated, but essentially we want
+	; to ensure the minimum damage multiplier is 3/8. math gets a bit
+	; complex when crossing 0, so earlier we added 0x40 to avoid this.
+	; now we need to subtract that $40
+	sub MAX_RING_DEF_MOD+$40
+	jr nc,+
+		ld a,$ff
+	+
+	add MAX_RING_DEF_MOD
+
+	; applyMultipliers
+	call fractionOf8Multiply
+	bit 7,a
+	jr nz,+
+		ld a,$ff
+	+
+
+	; calculate and apply dodge chance
+	; for each luck ring, give a 25% chance to reduce damage taken to 1/4 heart
+	ld e,$01
+
+	; if wearing blue cursed, all damage becomes 1/4 heart
+	call applyCurseArmorDamageCap
+
+	ld bc,(GREEN_LUCK_RING<<8)|BLUE_LUCK_RING
+	call eitherRingActive
+	jr nz,+
+		ld e,$02
+	+
+	jr nc,+
+		inc e
+	+
+	ld bc,(RED_LUCK_RING<<8)|$ff
+	call eitherRingActive
+	jr nz,+
+		inc e
+	+
+
+	ld b,a
+	; checkLuckChance
+	-
+		dec e
+		jr z,++
+
+		call getRandomNumber
+		and $7f
+		cp LUCK_RING_CHANCE
+		jr nc,-
+			; take 0 damage
+			ld b,$00
+
+	++
+	ld a,b
+	ld e,SpecialObject.damageToApply
+	ld (de),a
+	ret
+.else
 	ld b,a
 	ld hl,@ringDamageModifierTable
 	ld a,(wActiveRing)
@@ -766,6 +879,7 @@ linkUpdateDamageToApplyForRings:
 	.db ARMOR_RING_L2 $02
 	.db ARMOR_RING_L3 $03
 	.db $00
+.endif
 
 ;;
 ; Reads w1Link.damageToApply, and reduces Link's health based on this value.
@@ -796,6 +910,24 @@ linkApplyDamage:
 	ld a,(hl)
 	ld (hl),$00
 	or a
+.ifdef ENABLE_RING_REDUX
+	ld b,a
+	jr nz,+
+
+	ld a,CURSE_POWER_RING
+	call cpActiveRing
+	jr nz,+
+		; prevent hardlock due to fairy waiting till link is healed
+		ld a,(wDisabledObjects)
+		or a
+		jr nz,+
+			ld hl,wLinkHealth
+			ld a,CURSE_RING_HEART_CAP
+			sub (hl)
+			jr nc,+
+				ld b,a
+				sla b
+.else
 	jr z,++
 
 	; Protection ring does fixed damage on each hit
@@ -804,6 +936,7 @@ linkApplyDamage:
 	call cpActiveRing
 	jr nz,+
 	ld b,$f8
+.endif
 +
 	; Add the value to w1Link.health. His "real" health variable is at wLinkHealth, so
 	; this appears to be used as part of the calculation to reduce that.

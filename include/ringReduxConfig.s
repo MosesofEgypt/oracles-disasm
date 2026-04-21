@@ -33,34 +33,58 @@
 
 .ifdef ENABLE_RING_REDUX
 	; NOTE: these values are in 1/8 heart increments, so 8 == 1 heart
-	.define RED_RING_ATK_MOD			8
-	.define GREEN_RING_ATK_MOD			6
-	.define GOLD_RING_ATK_MOD			4
-	.define CURSE_RING_ATK_MOD			8
-	.define MAX_ATK_MOD					(8*5)
+		.define RED_RING_ATK_MOD			8
+		.define GREEN_RING_ATK_MOD			6
+		.define GOLD_RING_ATK_MOD			4
+		.define CURSE_POWER_RING_ATK_MOD	8
+		.define MAX_RING_ATK_MOD			(8*5)
 
 	; NOTE: these values are 1/8 increments, so 3 = 37.5% damage reduction
-	.define BLUE_RING_DEF_MOD			4
-	.define GREEN_RING_DEF_MOD			3
-	.define GOLD_RING_DEF_MOD			2
-	.define CURSE_RING_DEF_MOD			0
-	.define HOLY_RING_DEF_MOD			2
-	.define MAX_DEF_MOD					3
-
-	; NOTE: these values are in 1/4 heart increments, so 4 == 1 heart
-	.define GOLD_RING_HEART_MAX			(4*4)
-	.define CURSE_RING_HEART_CAP		(4*4)
+		.define BLUE_RING_DEF_MOD			4
+		.define GREEN_RING_DEF_MOD			3
+		.define GOLD_RING_DEF_MOD			2
+		.define CURSE_POWER_RING_DEF_MOD	0
+		.define HOLY_RING_DEF_MOD			2
+		.define MAX_RING_DEF_MOD			3
 
 	; NOTE: this is the chance in 127 to not take damage, so 38 == 30%
-	.define LUCK_RING_CHANCE			38
+		; Each luck ring gives a separate chance to reduce all damage
+		; taken to nothing. the probabilities for this to occur while
+		; wearing 1 / 2 / 3 rings are the following:
+		;   if each ring == 25% chance  ->  25% / 44% / 58%
+		;   if each ring == 30% chance  ->  30% / 51% / 66%
+		;   if each ring == 33% chance  ->  33% / 55% / 70%
+		;   if each ring == 38% chance  ->  38% / 60% / 76%
+		;   if each ring == 50% chance  ->  50% / 75% / 88%
+		.define LUCK_RING_CHANCE			38
+
+	; NOTE: these values are in 1/4 heart increments, so 4 == 1 heart
+		.define GOLD_RING_HEART_CUTOFF		(4*4)
+		.define CURSE_RING_HEART_CAP		(4*4)
+
+		; this is how much to reduce/increase damage dealt
+		.define POWER_RING_L1_ATK_MOD		1
+		.define POWER_RING_L2_ATK_MOD		2
+		.define POWER_RING_L3_ATK_MOD		3
+		.define ARMOR_RING_L1_ATK_MOD		-1
+		.define ARMOR_RING_L2_ATK_MOD		-1
+		.define ARMOR_RING_L3_ATK_MOD		-1
 
 	; NOTE: these values are in 1/8 heart increments, so 8 == 1 heart
-	.define LIGHT_RING_L1_CUTOFF		(8*3)
-	.define LIGHT_RING_L2_CUTOFF		(8*6)
+		.define LIGHT_RING_L1_CUTOFF		(8*3)
+		.define LIGHT_RING_L2_CUTOFF		(8*6)
 
-	.define SPIN_SWING_COUNTER			(4*15 + 1)	; one startup frame, and 4 per spin
-	.define SWORD_BEAM_LIMIT			3			; number of beams onscreen at once
-	.define SUPER_BEAM_DELAY			50			; frames
+		.define SPIN_SWING_COUNTER			(4*15 + 1)	; one startup frame, and 4 per spin
+		.define SWORD_BEAM_LIMIT			3			; number of beams onscreen at once
+		.define SUPER_BEAM_DELAY			50			; frames
+
+		; this is how much to reduce/increase damage taken
+		.define POWER_RING_L1_DEF_MOD		-2
+		.define POWER_RING_L2_DEF_MOD		-4
+		.define POWER_RING_L3_DEF_MOD		-6
+		.define ARMOR_RING_L1_DEF_MOD		2
+		.define ARMOR_RING_L2_DEF_MOD		4
+		.define ARMOR_RING_L3_DEF_MOD		6
 
 	.define ALCHEMY_SEED_COST 			RUPEEVAL_002
 	.define ALCHEMY_BOMB_COST 			RUPEEVAL_005

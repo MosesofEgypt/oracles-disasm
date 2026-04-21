@@ -339,13 +339,13 @@ groups:
     index: 0x82
     text: |-
       ATK: \up\up
-      DEF: \down
+      DEF: \down\down
 
   - name: TX_3083
     index: 0x83
     text: |-
       ATK: \up\up\up
-      DEF: \down
+      DEF: \down\down\down
 
   - name: TX_3084
     index: 0x84

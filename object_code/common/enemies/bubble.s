@@ -12,7 +12,11 @@ enemyCode15:
 	cp $80|ITEMCOLLISION_LINK
 	jr nz,@normalStatus
 
+.ifdef ENABLE_RING_REDUX
+	ld a,RED_HOLY_RING
+.else
 	ld a,WHISP_RING
+.endif
 	call cpActiveRing
 	jr z,@normalStatus
 

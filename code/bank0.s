@@ -8530,7 +8530,6 @@ eitherRingActive:
 	pop de
 	ret
 
-
 ;;
 ; Removes the specified ring from the players ring list and unequips it
 ;
@@ -8583,6 +8582,110 @@ removeRing:
 	pop hl
 	ret
 
+.endif
+
+.ifdef ENABLE_RING_REDUX
+fractionOf8Multiply:
+	; tuck the full multiplier into c for later
+	ld c,a
+	; copy the fractional-multiples into b for decrementing
+	and $07
+	ld b,a
+	; reset a and add whole-multiples of the damage for each fraction
+	ld a,$00
+
+	; add fractions if there are any
+	jr z,+
+		-
+			add e
+			dec b
+			jr nz,-
+
+		; convert the whole multiples into fractions
+		sra a
+		sra a
+		sra a
+	+
+
+	; put the whole-multiples into b for decrementing
+	ld b,c
+	sra b
+	sra b
+	sra b
+
+	; add the whole multiples
+	-
+		ret z
+		add e
+		dec b
+		jr -
+
+applyCurseArmorDamageCap:
+	; if wearing blue curse, all damage becomes 1/4 heart
+	push af
+	ld a,CURSE_ARMOR_RING
+	call cpActiveRing
+	jr nz,+
+		pop af
+		; do reduced damage of 1/4 heart
+		ld a,$fe
+		ret
+	+
+	pop af
+	ret
+
+calculateArmorRingModifier:
+	push de
+	ld de,calculatePowerRingModifier@armorRingModifiers+5
+	jr calculatePowerRingModifier@calculateRingModifier
+
+calculatePowerRingModifier:
+	push de
+	ld de,@powerRingModifiers+5
+
+@calculateRingModifier:
+	push af
+
+	; for each power and armor ring, check if it's equipped and
+	; increase or reduce the damage by the associated amount.
+	ld bc,$0600
+
+	-
+		ld a,b
+		call cpActiveRing
+		jr nz,+
+			ld a,(de)
+			add c
+			ld c,a
+		+
+
+		; move to next ring
+		dec de
+		dec b
+		jr nz,-
+
+	ld b,c
+	pop af
+	; return the modifier plus the base damage in a
+	add b
+	pop de
+	ret
+
+@armorRingModifiers
+	.db POWER_RING_L1_DEF_MOD
+	.db POWER_RING_L2_DEF_MOD
+	.db POWER_RING_L3_DEF_MOD
+	.db ARMOR_RING_L1_DEF_MOD
+	.db ARMOR_RING_L2_DEF_MOD
+	.db ARMOR_RING_L3_DEF_MOD
+
+@powerRingModifiers
+	.db POWER_RING_L1_ATK_MOD
+	.db POWER_RING_L2_ATK_MOD
+	.db POWER_RING_L3_ATK_MOD
+	.db ARMOR_RING_L1_ATK_MOD
+	.db ARMOR_RING_L2_ATK_MOD
+	.db ARMOR_RING_L3_ATK_MOD
 .endif
 
 ;;

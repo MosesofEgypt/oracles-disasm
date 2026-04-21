@@ -142,6 +142,65 @@ tryBreakTileWithSword:
 itemCalculateSwordDamage:
 	ld e,Item.var3a
 	ld a,(de)
+.ifdef ENABLE_RING_REDUX
+	ld e,a
+	; calculate the multipliers(divisor is 8, so 1.5x will be $0c)
+	ld a,$08
+	ld bc,(RED_RING<<8)|GREEN_RING
+	call eitherRingActive
+	ld b,$00
+	jr nz,+
+		ld b,RED_RING_ATK_MOD
+	+
+	; checkGreen
+	jr nc,+
+		add GREEN_RING_ATK_MOD
+	+
+	; checkCursed
+	add b
+	ld bc,(CURSE_POWER_RING<<8)|GOLD_RING
+	call eitherRingActive
+	ld b,$00
+	jr nz,+
+		ld b,CURSE_POWER_RING_ATK_MOD
+	+
+	; checkGold
+	jr nc,+
+		add GOLD_RING_ATK_MOD
+		ld c,a
+		push hl
+		ld hl,wLinkHealth
+		ld a,(hl)
+		cp GOLD_RING_HEART_CUTOFF
+		pop hl
+		ld a,c
+		jr nz,+
+			; below health threshold, so double effect
+			add GOLD_RING_ATK_MOD
+	+
+	; capToMaxDamage
+	add b
+	cp MAX_RING_ATK_MOD
+	jr c,+
+		ld a,MAX_RING_ATK_MOD
+	+
+	; applyMultipliers
+	call fractionOf8Multiply
+	call calculatePowerRingModifier
+
+	ld e,a
+	ld a,(w1ParentItem2.var3a)
+	; incorporate the modifiers
+	add e
+	bit 7,a
+	jr nz,+
+		ld a,$ff
+	+
+	call applyCurseArmorDamageCap
+	ld e,Item.damage
+	ld (de),a
+	ret
+.else
 	ld b,a
 	ld a,(w1ParentItem2.var3a)
 	or a
@@ -219,7 +278,7 @@ itemCalculateSwordDamage:
 	.db ARMOR_RING_L2	$01
 	.db ARMOR_RING_L3	$01
 	.db $00
-
+.endif
 
 ;;
 ; Makes the given item mimic a tile. Used for switch hooking bushes and pots and stuff,

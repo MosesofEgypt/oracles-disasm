@@ -78,6 +78,7 @@ itemCode05:
 	or a
 	ld a,c
 	ld (de),a
+.ifndef ENABLE_RING_REDUX
 	jr nz,@@setDamage
 
 	; Whimsical ring: usually 1 damage, with a 1/256 chance of doing 12 damage
@@ -91,6 +92,7 @@ itemCode05:
 	ld a,SND_LIGHTNING
 	call playSound
 	ld c,-12
+.endif
 
 @@setDamage:
 	ld e,Item.var3a

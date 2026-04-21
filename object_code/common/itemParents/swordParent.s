@@ -24,6 +24,7 @@ parentItemCode_sword:
 	ld (hl),$00
 	call updateLinkDirectionFromAngle
 
+.ifndef ENABLE_RING_REDUX
 	; If double-edged ring in use, [Item.var3a] = $f8
 	ld a,(wLinkHealth)
 	cp $05
@@ -35,6 +36,7 @@ parentItemCode_sword:
 	ld a,$f8
 	ld (de),a
 ++
+.endif
 	; Initialize child item
 	ld hl,w1WeaponItem.enabled
 	ld a,(hl)
