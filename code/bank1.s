@@ -3532,6 +3532,9 @@ func_5a60:
 
 ;;
 standardGameState:
+.ifdef ENABLE_RING_REDUX
+	call updateSystemType
+.endif
 	ld a,(wLinkDeathTrigger)
 	cp $ff
 	jr nz,+
@@ -3635,6 +3638,14 @@ cutscene00:
 ;
 cutscene01:
 	call func_1613
+.ifdef EXTENDED_RING_BOX
+	call clearExtendedRingBox
+.endif
+.ifdef ENABLE_RING_REDUX
+	ld a,(wOpenedMenuType)
+	or a
+	call z,updateQuickSwapItems
+.endif
 	call updateLinkBeingShocked
 	call updateMenus
 	ret nz
@@ -3717,6 +3728,90 @@ cutscene02:
 	ret
 .endif
 
+
+.ifdef EXTENDED_RING_BOX
+clearExtendedRingBox:
+	; clear the extended box contents if the extra byte at the end
+	; isn't 0x00, as that indicates this code was never run there
+	ld a,(wRingReduxFlags)
+	and $01
+	ret nz
+
+	; set the flag and overwrite the rings with $ff
+	or $01
+	ld (wRingReduxFlags),a
+	ld a,$ff
+	push hl
+	ld hl,wRingBoxContentsExt
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	pop hl
++
+.endif
+
+.ifdef ENABLE_RING_REDUX
+updateSystemType:
+	; change mode to GBC if wearing ring
+	ld a,GBOY_COLOR_RING
+	call cpActiveRing
+	ld a,$ff	; GBA
+	jr nz,+
+		ld a,$01	; GBC
+	+
+	ldh (<hGameboyType),a
+	ret
+
+updateQuickSwapItems:
+	; allow quick swapping if wearing the rings
+	ld a,(HASTE_RING<<8)|STEADFAST_RING
+	call eitherRingActive
+	ret nz
+	ret nc
+
+	ld a,(wKeysPressed)
+	and BTN_SELECT
+	ld a,(wRingReduxFlags)
+
+	; the logic here boils down to the z-flag being set if select is
+	; being pressed and we haven't swapped the items, or vice versa
+	jr nz,+
+		and $02
+		call nz,@swapButtonItems
+
+		jr ++
+	+
+		and $02
+		call z,@swapButtonItems
+
+		; if either A or B were pressed since select was held, store
+		; that to a flag so the map knows not to open when released
+		ld a,(wKeysPressed)
+		and (BTN_A|BTN_B)
+		jr z,++
+			ld a,(wRingReduxFlags)
+			or $04
+			ld (wRingReduxFlags),a
+	++
+	ret
+
+@swapButtonItems
+	; toggle the flag and overwrite the rings with $ff
+	push bc
+	ld a,(wRingReduxFlags)
+	xor $02
+	ld b,a
+	ld a,(wRingReduxFlags)
+	cpl
+	and $02
+	or b
+	pop bc
+	ld (wRingReduxFlags),a
+	jp quickSwapHeldItems
+
+.endif
 
 ;;
 cutscene03:

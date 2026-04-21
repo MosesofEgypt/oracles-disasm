@@ -362,10 +362,11 @@ wSavefileString: ; $c5b2
 wRingBoxContentsExt: ; $c5ba-$c5be
 	dsb 5
 
-wRingBoxContentsExtClearFlag: ; $c5bf
-; Repurposing this byte to indicate whether to clear the previous 5 bytes.
-; Since they always start at $00, this triggers a one-time overwrite of all 6 bytes with
-; $ff. This ensures the overwrite is done only once, and the ring ids are reset to $ff
+wRingReduxFlags: ; $c5bf
+; Repurposing this byte for storing various redux related flags
+; Bit 0: Set if the extended ring box was cleared
+; Bit 1: Set if button items are currently swapped via select
+; Bit 2: Set if select button was pressed without a following A/B press
 	db
 
 .else

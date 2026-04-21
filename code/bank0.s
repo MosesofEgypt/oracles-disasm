@@ -1773,37 +1773,6 @@ _mainLoop:
 	jp z,resetGame
 +
 
-.ifdef EXTENDED_RING_BOX
-	; clear the extended box contents if the extra byte at the end
-	; isn't 0x00, as that indicates this code was never run there
-	push hl
-	xor a
-	ld hl,wRingBoxContentsExtClearFlag
-	cp (hl)
-	jr nz,+
-		; overwrite the rings and flag with $ff
-		cpl
-		ldd (hl),a
-		ldd (hl),a
-		ldd (hl),a
-		ldd (hl),a
-		ldd (hl),a
-		ldd (hl),a
-+
-	pop hl
-.endif
-
-.ifdef ENABLE_RING_REDUX
-	; change mode to GBC if wearing ring
-	ld a,GBOY_COLOR_RING
-	call cpActiveRing
-	ld a,$ff	; GBA
-	jr nz,+
-	ld a,$01	; GBC
-+
-	ldh (<hGameboyType),a
-.endif
-
 	ld a,$10
 	ldh (<hOamTail),a
 	ld h,>wThreadStateBuffer
@@ -8686,6 +8655,26 @@ calculatePowerRingModifier:
 	.db ARMOR_RING_L1_ATK_MOD
 	.db ARMOR_RING_L2_ATK_MOD
 	.db ARMOR_RING_L3_ATK_MOD
+
+quickSwapHeldItems:
+	ldh a,(<hRomBank)
+	push af
+	push bc
+	push de
+	push hl
+	callfrombank0 bank2.quickSwapHeldItems_body
+
+	; run updateStatusBar_body
+	ld a,$01
+	ld (wStatusBarNeedsRefresh),a
+	ld hl,$0100
+	callfrombank0 bank2.runBank2Function
+	pop hl
+	pop de
+	pop bc
+	pop af
+	setrombank
+	ret
 .endif
 
 ;;

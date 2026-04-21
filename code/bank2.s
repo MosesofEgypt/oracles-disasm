@@ -11746,6 +11746,82 @@ getRingBoxClippedIndex:
 	ret
 .endif
 
+.ifdef ENABLE_RING_REDUX
+quickSwapHeldItems_body:
+	ld hl,wInventoryStorage
+	ld de,wInventoryB
+
+	; if either the first or second items are the
+	; biggorons sword, we need to swap both with it
+	ld a,(hl)
+	cp ITEM_BIGGORON_SWORD
+	jp z,@swapToBiggoron
+
+	inc l
+	ld a,(hl)
+	cp ITEM_BIGGORON_SWORD
+	jp z,@swapToBiggoron
+	dec l
+
+	ld a,(de)
+	cp ITEM_BIGGORON_SWORD
+	jp z,@swapFromBiggoron
+
+	call @swapItems
+	inc de
+	inc hl
+
+@swapItems:
+	ld a,(de)
+	ld c,a
+	ld a,(hl)
+	ld (de),a
+	ld (hl),c
+	ret
+
+@swapFromBiggoron:
+	call @swapItems
+	inc de
+	inc hl
+	call @swapItems
+	xor a
+	ld (hl),a
+	ret
+
+@swapToBiggoron:
+	xor a
+	ld (hl),a
+
+	ld a,(wInventoryB)
+	call @putItemInFirstBlankSlot
+
+	ld a,(wInventoryA)
+	call @putItemInFirstBlankSlot
+
+	ld a,ITEM_BIGGORON_SWORD
+	ld (de),a
+	inc e
+	ld (de),a
+	ret
+
+;;
+; @param a Item to put in a blank slot
+@putItemInFirstBlankSlot:
+	or a
+	ret z
+
+	ld c,a
+	ld l,<wInventoryStorage
+-
+	ldi a,(hl)
+	or a
+	jr nz,-
+
+	dec l
+	ld (hl),c
+	ret
+.endif
+
 ;;
 ; Runs the fake reset that happens when getting the sign ring in Seasons.
 runFakeReset:
