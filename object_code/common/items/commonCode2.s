@@ -280,6 +280,7 @@ itemCalculateSwordDamage:
 	.db $00
 .endif
 
+
 ;;
 ; Makes the given item mimic a tile. Used for switch hooking bushes and pots and stuff,
 ; possibly for other things too?
