@@ -126,8 +126,11 @@ checkAndSpawnMaple:
 	ld a,(wActiveRoom)
 	call checkFlag
 	ret nz
-
+.ifdef ENABLE_RING_REDUX
+	ld a,FARMERS_RING
+.else
 	ld a,MAPLES_RING
+.endif
 	call cpActiveRing
 	ld e,30
 	jr nz,+

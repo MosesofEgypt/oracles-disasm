@@ -2949,7 +2949,11 @@ mamamuYanScript:
 	showtextlowindex <TX_0b41
 	wait 30
 
+.ifdef ENABLE_RING_REDUX
+	asm15 giveRingAToLink, FARMERS_RING
+.else
 	asm15 giveRingAToLink, SNOWSHOE_RING
+.endif
 	orroomflag $40
 	wait 30
 

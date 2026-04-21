@@ -81,7 +81,7 @@ groups:
   - name: TX_304f
     index: 0x4f
     text: |-
-      Maple's Ring
+      Quickswap Ring
 
   - name: TX_3050
     index: 0x50
@@ -296,7 +296,7 @@ groups:
   - name: TX_307a
     index: 0x7a
     text: |-
-      Gasha Ring
+      Farmer's Ring
 
   - name: TX_307b
     index: 0x7b
@@ -414,7 +414,8 @@ groups:
   - name: TX_308f
     index: 0x8f
     text: |-
-      Maple meetings \up
+      Select + \abtn/\bbtn
+      swaps equipment
 
   - name: TX_3090
     index: 0x90
@@ -639,8 +640,8 @@ groups:
   - name: TX_30ba
     index: 0xba
     text: |-
-      Grow Gasha
-      trees quickly
+      Maple meetings \up
+      Gasha growth \up
 
   - name: TX_30bb
     index: 0xbb

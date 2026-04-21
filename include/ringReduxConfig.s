@@ -147,7 +147,7 @@
 	; tier0: high-buff/good-utility
 	.macro TIER0_RINGS_AND_CUTOFFS
 		.db ENERGY_RING			12	; 1
-		.db FAIRYS_RING			51	; 3
+		.db QUICKSWAP_RING		51	; 3
 		.db GREEN_LUCK_RING		76	; 2
 		.db RED_LUCK_RING		102	; 2
 		.db BLUE_LUCK_RING		127	; 2
@@ -170,7 +170,7 @@
 		.db RED_HOLY_RING		163	; 2
 		.db ROCS_RING			204	; 4
 		.db HEART_RING_L1		214	; 1
-		.db STEADFAST_RING		245	; 3
+		.db HASTE_RING			245	; 3
 		.db LIGHT_RING_L1		255	; 1
 	.endm
 
@@ -184,7 +184,7 @@
 		.db BOMBPROOF_RING		153	; 1
 		.db ZORA_RING			178	; 3
 		.db HIKERS_RING			187	; 1
-		.db GASHA_RING			221	; 4
+		.db FAIRYS_RING			221	; 4
 		.db RED_JOY_RING		229	; 1
 		.db BLUE_JOY_RING		255	; 3
 	.endm
@@ -200,7 +200,7 @@
 		.db PEACE_RING			176	; 1
 		.db FIST_RING			209	; 5
 		.db TOSS_RING			242	; 5
-		.db MAPLES_RING			248	; 1
+		.db STEADFAST_RING		248	; 1
 		.db GREEN_JOY_RING		255	; 1
 	.endm
 
@@ -215,7 +215,7 @@
 		; player was diligent enough to get every tier 1-4 ring
 		; ages secret
 		.db SPIN_RING			178	; 1
-		.db HASTE_RING			204	; 1
+		.db FARMERS_RING		204	; 1
 		; seasons secret
 		.db CHARGE_RING			229	; 1
 		.db SWIMMERS_RING		255	; 1
@@ -245,7 +245,7 @@
 
 	.define RING_LIST_PG3_UP_LEFT		HASTE_RING			ZORA_RING			SWIMMERS_RING		ALCHEMY_RING
 	.define RING_LIST_PG3_UP_RIGHT		GREEN_JOY_RING		RED_JOY_RING		BLUE_JOY_RING		GOLD_JOY_RING
-	.define RING_LIST_PG3_DOWN_LEFT		HIKERS_RING			MAPLES_RING			DISCOVERY_RING		GASHA_RING
+	.define RING_LIST_PG3_DOWN_LEFT		HIKERS_RING			QUICKSWAP_RING		DISCOVERY_RING		FARMERS_RING
 	.define RING_LIST_PG3_DOWN_RIGHT	STEADFAST_RING		MYSTIC_SEED_RING	TOSS_RING			ROCS_RING
 
 	.define RING_LIST_PG4_UP_LEFT		GREEN_COLOR_RING	RED_COLOR_RING		BLUE_COLOR_RING		GOLD_COLOR_RING
@@ -253,7 +253,6 @@
 	.define RING_LIST_PG4_DOWN_LEFT		OCTO_RING			LIKE_LIKE_RING		MOBLIN_RING			SUBROSIAN_RING
 	.define RING_LIST_PG4_DOWN_RIGHT	FIRST_GEN_RING		GBA_TIME_RING		CURSE_ARMOR_RING	VASUS_RING
 .endif
-
 
 ; NOTE: Code below here is not meant to be treated as configuration.
 ;		We're simply setting up any dependent defines.

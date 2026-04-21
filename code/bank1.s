@@ -3493,6 +3493,9 @@ loadingRoom:
 
 ;;
 func_5a60:
+.ifdef ENABLE_RING_REDUX
+	call updateSystemType
+.endif
 	call clearOam
 	call initializeVramMaps
 	call clearMemoryOnScreenReload
@@ -3532,9 +3535,6 @@ func_5a60:
 
 ;;
 standardGameState:
-.ifdef ENABLE_RING_REDUX
-	call updateSystemType
-.endif
 	ld a,(wLinkDeathTrigger)
 	cp $ff
 	jr nz,+
@@ -3642,9 +3642,7 @@ cutscene01:
 	call clearExtendedRingBox
 .endif
 .ifdef ENABLE_RING_REDUX
-	ld a,(wOpenedMenuType)
-	or a
-	call z,updateQuickSwapItems
+	call updateQuickSwapItems
 .endif
 	call updateLinkBeingShocked
 	call updateMenus
@@ -3734,11 +3732,11 @@ clearExtendedRingBox:
 	; clear the extended box contents if the extra byte at the end
 	; isn't 0x00, as that indicates this code was never run there
 	ld a,(wRingReduxFlags)
-	and $01
+	bit 0,a
 	ret nz
 
 	; set the flag and overwrite the rings with $ff
-	or $01
+	set 0,a
 	ld (wRingReduxFlags),a
 	ld a,$ff
 	push hl
@@ -3765,49 +3763,96 @@ updateSystemType:
 	ret
 
 updateQuickSwapItems:
-	; allow quick swapping if wearing the rings
-	ld bc,(HASTE_RING<<8)|STEADFAST_RING
-	call eitherRingActive
+	ld a,(wOpenedMenuType)
+	or a
+	jr z,+
+		; ensure flags 1 and 2 aren't set so we don't 
+		; get put in an infinite menu open/close loop
+		ld a,(wRingReduxFlags)
+		res 1,a
+		res 2,a
+		ld (wRingReduxFlags),a
+		ret
+	+
+
+	; allow quick swapping if wearing the ring
+	ld a,QUICKSWAP_RING
+	call cpActiveRing
 	ret nz
-	ret nc
 
 	ld a,(wKeysPressed)
-	and BTN_SELECT
+	and (BTN_SELECT|BTN_START)
+	cp BTN_SELECT
 	ld a,(wRingReduxFlags)
 
 	; the logic here boils down to the z-flag being set if select is
 	; being pressed and we haven't swapped the items, or vice versa
-	jr nz,+
-		and $02
-		call nz,@swapButtonItems
+	jr z,+
+		; select not held, or both select and start held
+		bit 1,a
+		jr z,++
+			; reset the flag indicating items were swapped, as below we're
+			; either going to decide to leave them swapped, or swap back
+			ld a,(wRingReduxFlags)
 
+			; before resetting flag 2, we need to check it for A/B being pressed
+			bit 2,a
+
+			res 1,a
+			res 2,a
+			ld (wRingReduxFlags),a
+
+			jr nz,++
+				; A or B wasn't pressed while select was held, so set
+				; select directly for one frame to allow opening menu
+				ld a,(wKeysPressed)
+				set BTN_BIT_SELECT,a
+				ld (wKeysPressed),a
+
+				ld a,(wKeysJustPressed)
+				set BTN_BIT_SELECT,a
+				ld (wKeysJustPressed),a
+
+				; swap the items back since they weren't used
+				call @swapButtonItems
 		jr ++
 	+
-		and $02
+		; just select being held
+		bit 1,a
+
 		call z,@swapButtonItems
 
 		; if either A or B were pressed since select was held, store
-		; that to a flag so the map knows not to open when released
+		; that to a flag so we know not to open the map when released
 		ld a,(wKeysPressed)
 		and (BTN_A|BTN_B)
-		jr z,++
+		jr z,+
 			ld a,(wRingReduxFlags)
-			or $04
+			set 2,a
 			ld (wRingReduxFlags),a
+		+
+
+		; unset select so the menu doesn't open until we allow it
+		ld a,(wKeysPressed)
+		res BTN_BIT_SELECT,a
+		ld (wKeysPressed),a
+
+		ld a,(wKeysJustPressed)
+		res BTN_BIT_SELECT,a
+		ld (wKeysJustPressed),a
 	++
 	ret
 
 @swapButtonItems
 	; toggle the flag and overwrite the rings with $ff
-	push bc
 	ld a,(wRingReduxFlags)
-	xor $02
-	ld b,a
-	ld a,(wRingReduxFlags)
-	cpl
-	and $02
-	or b
-	pop bc
+	bit 1,a
+	jr z,+
+		res 1,a
+		jr ++
+	+
+		set 1,a
+	++
 	ld (wRingReduxFlags),a
 	jp quickSwapHeldItems
 

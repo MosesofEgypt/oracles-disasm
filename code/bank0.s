@@ -250,10 +250,12 @@ begin:
 	ld a,$00
 	jr nz,+
 
+.ifndef ENABLE_RING_REDUX
 	; Check GBA Mode
 	inc a
 	bit 0,b
 	jr z,+
+.endif
 	ld a,$ff
 +
 	ldh (<hGameboyType),a
@@ -9929,7 +9931,11 @@ enemyDie:
 	call incHlRefWithCap
 
 	; Update all gasha kill counters
+.ifdef ENABLE_RING_REDUX
+	ld a,FARMERS_RING
+.else
 	ld a,GASHA_RING
+.endif
 	call cpActiveRing
 	ld a,$ff
 	jr z,+
