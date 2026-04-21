@@ -3766,7 +3766,7 @@ updateSystemType:
 
 updateQuickSwapItems:
 	; allow quick swapping if wearing the rings
-	ld a,(HASTE_RING<<8)|STEADFAST_RING
+	ld bc,(HASTE_RING<<8)|STEADFAST_RING
 	call eitherRingActive
 	ret nz
 	ret nc
