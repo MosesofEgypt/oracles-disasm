@@ -342,6 +342,9 @@ enemyCheckCollisions:
 	ldh a,(<hFF90)
 	rst_addAToHl
 	ld a,(hl)
+.ifdef ENABLE_RING_REDUX
+	call collisionLinkBounce
+.endif
 	rst_jumpTable
 	.dw collisionEffect00
 	.dw collisionEffect01
@@ -1516,3 +1519,69 @@ applyDamageToLink:
 	LINKDMG_34	dsb 4
 	LINKDMG_38	dsb 4
 .ENDE
+
+
+.ifdef ENABLE_RING_REDUX
+collisionLinkBounce:
+	; TODO: make a table of part/enemy ids you cant bounce off(i.e. fireballs)
+	; TODO: make a table of enemy ids you cant stun with the bounce(i.e. bosses)
+	; TODO: make it possible to downstab if attacking while in air.
+	;       need to ensure it doesn't get abused by chaining downstabs on bosses
+
+	; only bounce if link is in the air, the collision effect
+	; is specifically COLLISIONEFFECT_DAMAGE_LINK, and link is
+	; wearing the rings. we don't want to consider other damage
+	; types, as they're rare and the situations they're use
+	; in don't warrant link being able to bounce off safely
+
+	; @check that Link is in the air and falling
+	push bc
+	push af
+	ld a,(wLinkInAir)
+	and $0f
+
+	; check that link is fully in the air
+	cp $02
+	pop bc
+	ld a,b
+	pop bc
+	ret nz
+
+	; check the rings are equipped
+	push bc
+	ld bc,(STEADFAST_RING<<8)|ROCS_RING
+	call eitherRingActive
+	pop bc
+	ret nz
+	ret nc
+
+	; convert collisions that would damage link into an extra jump
+	push bc
+	push hl
+	ld bc,$fd90
+	ld a,(wActiveGroup)
+	cp FIRST_SIDESCROLL_GROUP
+	jr c,+
+		; Jump higher in sidescrolling rooms
+		ld bc,$fd00
+	+
+	ld hl,w1Link.speedZ
+	ld (hl),c
+	inc l
+	ld (hl),b
+	pop hl
+	pop bc
+
+	; change collision type
+	ld a,EXPERTS_RING
+	call cpActiveRing
+
+	; experts ring causes a stun, not just a bump
+	ld a,COLLISIONEFFECT_STUN
+	ret z
+
+	ld a,SND_JUMP
+	call playSound
+	ld a,COLLISIONEFFECT_BUMP
+	ret
+.endif

@@ -32,11 +32,21 @@ parentItemCode_feather:
 	call isLinkInHole
 	jr c,@deleteParent
 
+.ifdef ENABLE_RING_REDUX
+	call getCanUseItemsInWater
+	jr nz,@deleteParent
+
+	; Check wMagnetGloveState as well
+	ld a,(wMagnetGloveState)
+	or a
+	jr nz,@deleteParent
+.else
 	ld hl,wLinkSwimmingState
 	ldi a,(hl)
 	; Check wMagnetGloveState as well
 	or (hl)
 	jr nz,@deleteParent
+.endif
 
 	ld a,(wLinkInAir)
 	add a

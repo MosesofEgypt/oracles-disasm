@@ -113,6 +113,14 @@ checkUseItems:
 .ifdef ROM_AGES
 	bit TILESETFLAG_BIT_UNDERWATER,a
 	jr z,@normal
+.ifdef ENABLE_RING_REDUX
+	push bc
+	ld bc,(SWIMMERS_RING<<8)|ZORA_RING
+	call eitherRingActive
+	pop bc
+	jr nz,@underwater
+	jr c,@normal
+.endif
 
 	; When underwater, only check the A button
 @underwater:
@@ -123,8 +131,12 @@ checkUseItems:
 
 	; When in the overworld, only check buttons if not swimming
 @normal:
+.ifdef ENABLE_RING_REDUX
+	call getCanUseItemsInWater
+.else
 	ld a,(wLinkSwimmingState)
 	or a
+.endif
 	jr z,@checkAB
 	jr @updateParentItems
 
@@ -449,3 +461,52 @@ clearParentItemH:
 	call clearParentItem
 	pop de
 	ret
+
+
+.ifdef ENABLE_RING_REDUX
+getCanUseItemsInWater:
+	; don't need to check if not swimming
+	ld a,(wLinkSwimmingState)
+	or a
+	ret z
+
+	; only allow item usage if currently underwater
+	and $80
+	jr nz,+
+		rra
+		ret
+	+
+
+	push bc
+	ld b,0
+	ld a,SWIMMERS_RING
+	call cpActiveRing
+	jr nz,+
+		inc b
+	+
+
+	ld a,ZORA_RING
+	call cpActiveRing
+	jr nz,+
+		inc b
+	+
+
+	ld a,ROCS_RING
+	call cpActiveRing
+	jr nz,+
+		inc b
+	+
+
+	ld a,TREASURE_MERMAID_SUIT
+	call checkTreasureObtained
+	jr nc,+
+		inc b
+	+
+
+	ld a,b
+	pop bc
+	cp $02
+	ret c
+	xor a
+	ret
+.endif
