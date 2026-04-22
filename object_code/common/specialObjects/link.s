@@ -2975,6 +2975,33 @@ func_5631:
 ; @param	wTmpcec0	Offsets of Link's movement, to be added to wHeartRingCounter.
 updateHeartRingCounter:
 	ld e,a
+.ifdef ENABLE_RING_REDUX
+	ld bc,(HEART_RING_L2<<8)|HEART_RING_L1
+	call eitherRingActive
+	ld bc,$0210
+	jr z,+
+		ld c,$08
+		jr nc,@clearCounter
+	+
+
+	; heartLevel2Or3
+	jr c,+
+		inc b
+	+
+
+	; check rings
+	; NOTE: only doubling ONCE if either ring is worn, as the code that
+	; 		handles health refills will double if both rings are worn.
+	push bc
+	ld bc,(BLUE_JOY_RING<<8)|GOLD_JOY_RING
+	call eitherRingActive
+	pop bc
+	jr z,+
+	jr nc,++
+	+
+		sla c
+	++
+.else
 	ld a,(wActiveRing)
 
 	; b = number of steps (divided by $100, in pixels) until you get a heart refill.
@@ -2987,6 +3014,7 @@ updateHeartRingCounter:
 	cp HEART_RING_L2
 	jr nz,@clearCounter
 	ldbc $03,$10
+.endif
 
 @heartRingEquipped:
 	ld a,e

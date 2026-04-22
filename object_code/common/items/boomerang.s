@@ -43,6 +43,38 @@ itemCode06:
 	ld l,Item.counter1
 	ld (hl),c
 
+.ifdef ENABLE_RING_REDUX
+	ld a,TOSS_RING
+	call cpActiveRing
+	jr z,+
+		ld a,HASTE_RING
+		call cpActiveRing
+		jr nz,++
+	+
+	ld bc,(RANG_RING_L2<<8)|RANG_RING_L1
+	call eitherRingActive
+	jr z,+
+	jr c,+
+	jr ++
+	+
+		ld l,Item.speed
+		ld (hl),SPEED_300
+		ld l,Item.counter1
+		ld (hl),$78
+	++
+
+	ld bc,(RANG_RING_L2<<8)|RANG_RING_L1
+	call eitherRingActive
+	ld c,-1
+	jr nz,+
+		ld c,-4
+		jr c,+
+			ld c,-2
+		jr +++
+	+
+	jr nc,++
+	+++
+.else
 	ld c,-1
 	ld a,RANG_RING_L1
 	call cpActiveRing
@@ -53,6 +85,7 @@ itemCode06:
 	jr nz,++
 	ld c,-2
 +
+.endif
 	; One of the rang rings are equipped; damage output increased (value of 'c')
 	ld l,Item.damage
 	ld a,(hl)
@@ -86,9 +119,22 @@ itemCode06:
 	ld e,Item.var34
 	ld a,(de)
 	call objectNudgeAngleTowards
-
+.ifdef ENABLE_RING_REDUX
+	push bc
+	ld bc,(RANG_RING_L2<<8)|RANG_RING_L1
+	call eitherRingActive
+	pop bc
+	jr nz,+
+	jr nc,+
+		rra
+		jr ++
+	+
+		call itemDecCounter1
+	++
+.else
 	; Decrement counter until boomerang must return
 	call itemDecCounter1
+.endif
 	jr nz,@updateSpeedAndAnimation
 
 ; Decide on the angle to change to, then go to the next state
@@ -121,6 +167,9 @@ itemCode06:
 	jr @nextState
 
 @hitWall:
+.ifdef ENABLE_RING_REDUX
+	call @infiniteBoomerangControl
+.else
 	call objectCreateClinkInteraction
 
 	; Reverse direction
@@ -129,6 +178,7 @@ itemCode06:
 	ld a,(hl)
 	xor $10
 	ld (hl),a
+.endif
 
 @nextState:
 	ld l,Item.state
@@ -204,6 +254,66 @@ itemCode06:
 	call nz,playSound
 
 	jp itemAnimate
+
+.ifdef ENABLE_RING_REDUX
+@infiniteBoomerangControl
+	ld e,Item.counter2
+	ld a,(de)
+	or a
+	jr z,+
+		dec a
+	+
+	ld (de),a
+
+	; if the parent was deleted, return
+	push hl
+	ld h,d
+	ld l,Item.relatedObj1
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
+	ld a,(hl)
+	cp $00
+	pop hl
+	ret z
+
+	; if boomerang has already changed angle, wait a couple
+	; frames before it's allowed to try changing again
+	ld a,(de)
+	or a
+	jr nz,+
+		; setup a timer so the clink doesn't happen too often
+		ld a,5
+		ld (de),a
+
+		call objectCreateClinkInteraction
+		ld h,d
+		ld l,Item.angle
+		ld a,(hl)
+		xor $10
+		ld (hl),a
+
+	+
+	; if this isn't the magic boomerang, return when wall is struck
+	ld e,Item.subid
+	ld a,(de)
+	or a
+	ret z
+
+	; this is the magic boomerang, so if both rang rings are equipped
+	; then it can continue flying as long as the button is held, even
+	; after hitting a solid tile.
+	push bc
+	ld bc,(RANG_RING_L2<<8)|RANG_RING_L1
+	call eitherRingActive
+	pop bc
+	ret nz
+	ret nc
+
+    ; intentional stack manipulation to jump out of parent call
+	pop af
+	jp @updateSpeedAndAnimation
+.endif
 
 magicBoomerangTryToBreakTile:
 	ld e,Item.subid

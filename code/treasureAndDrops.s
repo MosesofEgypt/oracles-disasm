@@ -330,6 +330,20 @@ giveTreasure_body:
 	; Check if we're adding to wLinkHealth
 	ld a,<wLinkHealth
 	cp e
+.ifdef ENABLE_RING_REDUX
+	jr nz,+
+		ld a,GOLD_JOY_RING
+		call cpActiveRing
+		jr nz,+
+			ld a,BLUE_JOY_RING
+			call cpActiveRing
+			jr nz,+
+				ld a,c
+				add a
+				ld c,a
+		xor a
+	+
+.endif
 	ldi a,(hl)
 	jr nz,+
 
@@ -366,6 +380,26 @@ giveTreasure_body:
 	ld a,c
 	call getRupeeValue
 
+.ifdef ENABLE_RING_REDUX
+	ld a,GOLD_JOY_RING
+	call cpActiveRing
+	jr nz,+
+		ld a,e
+		cp <wNumRupees
+		ld a,RED_JOY_RING
+		jr z,+++
+			ld a,GREEN_JOY_RING
+		+++
+		call cpActiveRing
+		jr nz,+
+			; double the item value
+			ld h,b
+			ld l,c
+			add hl,bc
+			ld b,h
+			ld c,l
+	+
+.endif
 	; Check whether to add this to wTotalRupeesCollected
 	ld a,e
 	cp <wNumRupees
