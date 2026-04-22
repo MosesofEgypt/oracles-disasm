@@ -319,18 +319,21 @@ itemCode06:
 
 magicBoomerangTryToBreakTile:
 .ifdef ENABLE_RING_REDUX
-	; if wearing all 4 rings, the boomerang just eats dirt up
+	; if wearing these rings, the boomerang just eats dirt up
 	push bc
 	ld bc,(TOSS_RING<<8)|DISCOVERY_RING
 	call eitherRingActive
-	pop bc
 	jr nz,+
 	jr nc,+
-	call checkBothRangRingsEquipped
-	jr nc,+
-		ld a,BREAKABLETILESOURCE_SHOVEL
-		call itemTryToBreakTile
+		ld bc,(RANG_RING_L2<<8)|RANG_RING_L1
+		call eitherRingActive
+		jr c,++
+		jr nz,+
+		++
+			ld a,BREAKABLETILESOURCE_SHOVEL
+			call itemTryToBreakTile
 	+
+	pop bc
 .endif
 
 	ld e,Item.subid
