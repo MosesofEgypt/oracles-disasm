@@ -104,6 +104,15 @@ itemCode06:
 	ld e,Item.var2a
 	ld a,(de)
 	or a
+.ifdef ENABLE_RING_REDUX
+	jr z,+
+		; if both rings equipped, keep flying even after hitting an enemy
+		call checkBothRangRingsEquipped
+		jr nc,@returnToLink
+		xor a
+		ld (de),a
+	+
+.endif
 	jr nz,@returnToLink
 
 	call objectCheckTileCollision_allowHoles
@@ -113,6 +122,15 @@ itemCode06:
 
 @noCollision:
 	call objectCheckWithinRoomBoundary
+.ifdef ENABLE_RING_REDUX
+	jr c,+
+		call checkBoomerangParentStillValid
+		jr z,@returnToLink
+
+		call checkBothRangRingsEquipped
+		jp c,@hitWall
+	+
+.endif
 	jr nc,@returnToLink
 
 	; Nudge angle toward a certain value. (Is this for the magical boomerang?)
@@ -120,21 +138,15 @@ itemCode06:
 	ld a,(de)
 	call objectNudgeAngleTowards
 .ifdef ENABLE_RING_REDUX
-	push bc
-	ld bc,(RANG_RING_L2<<8)|RANG_RING_L1
-	call eitherRingActive
-	pop bc
-	jr nz,+
+	call checkBothRangRingsEquipped
 	jr nc,+
-		rra
-		jr ++
+		; if both rings are equipped, only decrement if the parent is gone
+		call checkBoomerangParentStillValid
+		jp nz,@updateSpeedAndAnimation
 	+
-		call itemDecCounter1
-	++
-.else
+.endif
 	; Decrement counter until boomerang must return
 	call itemDecCounter1
-.endif
 	jr nz,@updateSpeedAndAnimation
 
 ; Decide on the angle to change to, then go to the next state
@@ -266,15 +278,7 @@ itemCode06:
 	ld (de),a
 
 	; if the parent was deleted, return
-	push hl
-	ld h,d
-	ld l,Item.relatedObj1
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
-	ld a,(hl)
-	cp $00
-	pop hl
+	call checkBoomerangParentStillValid
 	ret z
 
 	; if boomerang has already changed angle, wait a couple
@@ -286,7 +290,9 @@ itemCode06:
 		ld a,5
 		ld (de),a
 
-		call objectCreateClinkInteraction
+		call objectCheckWithinRoomBoundary
+		; don't clink if it's returning because it hit the screen edge
+		call c,objectCreateClinkInteraction
 		ld h,d
 		ld l,Item.angle
 		ld a,(hl)
@@ -303,11 +309,7 @@ itemCode06:
 	; this is the magic boomerang, so if both rang rings are equipped
 	; then it can continue flying as long as the button is held, even
 	; after hitting a solid tile.
-	push bc
-	ld bc,(RANG_RING_L2<<8)|RANG_RING_L1
-	call eitherRingActive
-	pop bc
-	ret nz
+	call checkBothRangRingsEquipped
 	ret nc
 
     ; intentional stack manipulation to jump out of parent call
@@ -316,6 +318,21 @@ itemCode06:
 .endif
 
 magicBoomerangTryToBreakTile:
+.ifdef ENABLE_RING_REDUX
+	; if wearing all 4 rings, the boomerang just eats dirt up
+	push bc
+	ld bc,(TOSS_RING<<8)|DISCOVERY_RING
+	call eitherRingActive
+	pop bc
+	jr nz,+
+	jr nc,+
+	call checkBothRangRingsEquipped
+	jr nc,+
+		ld a,BREAKABLETILESOURCE_SHOVEL
+		call itemTryToBreakTile
+	+
+.endif
+
 	ld e,Item.subid
 	ld a,(de)
 	or a
@@ -347,3 +364,31 @@ itemCheckWithinRangeOfLink:
 	add c
 	cp b
 	ret
+
+.ifdef ENABLE_RING_REDUX
+;;
+; @param[out]	cflag	Set if both rang rings are equipped
+checkBothRangRingsEquipped:
+	push bc
+	ld bc,(RANG_RING_L2<<8)|RANG_RING_L1
+	call eitherRingActive
+	pop bc
+	ret nc
+	ret z
+	ccf
+	ret
+
+;;
+; @param[out]	zflag	Set if the parent is null
+checkBoomerangParentStillValid:
+	push hl
+	ld h,d
+	ld l,Item.relatedObj1
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
+	ld a,(hl)
+	cp $00
+	pop hl
+	ret
+.endif
