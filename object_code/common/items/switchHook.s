@@ -129,6 +129,13 @@ itemCode0a:
 
 	; Depending on the switch hook's level, set speed (b) and # frames to extend (c)
 	ldbc SPEED_200,$29
+.ifdef ENABLE_RING_REDUX
+	ld a,HASTE_RING
+	call cpActiveRing
+	jr nz,+
+		ldbc SPEED_300,$1c ; goes 1 pixel further, but whatever
+	+
+.endif
 	ld a,(wSwitchHookLevel)
 	dec a
 	jr z,+

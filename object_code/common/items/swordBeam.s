@@ -13,6 +13,20 @@ itemCode27:
 	call applyOffsetTableHL
 	call itemLoadAttributesAndGraphics
 	call itemIncState
+.ifdef ENABLE_RING_REDUX
+	; if ring equipped, set damage relative to sword level
+	ld a,VICTORY_RING
+	call cpActiveRing
+	jr z,+
+		ld a,(wSwordLevel)
+		cp $03
+		jr nc,+
+			inc a
+		+
+		ld l,Item.damage
+		ld (hl),a
+	+
+.endif
 
 	ld l,Item.speed
 	ld (hl),SPEED_300
@@ -39,8 +53,18 @@ itemCode27:
 	.db $00 $f3 $00 ; DIR_LEFT
 
 @state1:
+.ifdef ENABLE_RING_REDUX
+	; if ring equipped, ignore that we might've hit an enemy
+	ld a,VICTORY_RING
+	call cpActiveRing
+	jr z,+
+		call itemUpdateDamageToApply
+		jr nz,@collision
+	+
+.else
 	call itemUpdateDamageToApply
 	jr nz,@collision
+.endif
 
 	; No collision with an object?
 

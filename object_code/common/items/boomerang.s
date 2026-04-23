@@ -328,7 +328,10 @@ magicBoomerangTryToBreakTile:
 		ld bc,(RANG_RING_L2<<8)|RANG_RING_L1
 		call eitherRingActive
 		jr c,++
-		jr nz,+
+		jr z,++
+		ld a,TREASURE_SHOVEL
+		call checkTreasureObtained
+		jr nc,+
 		++
 			ld a,BREAKABLETILESOURCE_SHOVEL
 			call itemTryToBreakTile

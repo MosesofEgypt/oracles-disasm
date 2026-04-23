@@ -616,8 +616,8 @@ groups:
   - name: TX_30b6
     index: 0xb6
     text: |-
-      Sword & Shield
-      level \up
+      Sword, Shield,
+      and Beam level \up
 
   - name: TX_30b7
     index: 0xb7
