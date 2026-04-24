@@ -183,7 +183,18 @@ parentItemCode_sword:
 	jr nz,+
 
 	call @createSwordBeam
+.ifdef ENABLE_RING_REDUX
+	ld bc,(ENERGY_RING<<8)|CHARGE_RING
+	call eitherRingActive
+	jp nz,@triggerSwordPoke
+	jp nc,@triggerSwordPoke
+		ld h,d
+		ld l,Item.counter1
+		ld (hl),SUPER_BEAM_DELAY
+		ret
+.else
 	jp @triggerSwordPoke
+.endif
 +
 	ld l,Item.state
 	inc (hl)
@@ -242,7 +253,31 @@ parentItemCode_sword:
 	ld l,Item.var3a
 	sla (hl)
 
+.ifdef ENABLE_RING_REDUX
+	ld hl,wLinkSwimmingState
+	ld a,(hl)
+	or (hl)
+	jr nz,+
+		push bc
+		ld bc,(CHARGE_RING<<8)|SPIN_RING
+		call eitherRingActive
+		pop bc
+		ld h,d
+		ld l,Item.var2f
+		ld (hl),$00
+		jr nz,+
+		jr nc,+
+			; mark this as a super spin using an unused variable
+			ld (hl),$01
+			ld l,Item.counter1
+			ld (hl),SPIN_SWING_COUNTER
+			jr ++
+	+
 	call itemDisableLinkMovement
+	++
+.else
+	call itemDisableLinkMovement
+.endif
 
 	ld a,SND_SWORDSPIN
 	jp playSound
@@ -259,6 +294,68 @@ parentItemCode_sword:
 	res 7,(hl)
 	ld l,Item.counter1
 	dec (hl)
+.ifdef ENABLE_RING_REDUX
+	ld l,Item.var2f
+	ld a,$01
+	cp (hl)
+	ld l,Item.counter1
+	jr z,+
+		; not hurricane spin
+		ld a,(hl)
+		or a
+		jr ++
+	+
+
+	; play sword swish
+	ld a,(hl)
+	and $03
+	jr nz,+
+		push hl
+		ld a,SND_SWORDSPIN
+		call playSound
+		pop hl
+	+
+
+	.ifdef INDEFINITE_HURRICANE_SPIN
+		push hl
+		call parentItemCheckButtonPressed
+		pop hl
+		jr z,+
+			ld a,(hl)
+			cp a,$01
+			jr nz,+
+				; add another spin to the count while button is held
+				add $04
+				ld (hl),a
+		+
+	.endif
+
+	; cleanup
+	ld a,(hl)
+	or a
+	jr nz,++
+		ld a,$05
+		ld (w1WeaponItem.state),a
+		call @deleteSelf
+
+	; make link dizzy when spin finishes
+	ld a,SND_LINK_DEAD
+	call playSound
+	push hl
+	ld hl,wLinkForceState
+	ld a,LINK_STATE_COLLAPSED
+	ldi (hl),a
+	ld a,$00
+	ldi (hl),a
+	ld hl,w1Link.counter1
+	ld (hl),$01
+	pop hl
+
+	ld a,(hl)
+	or a
+
+	++
+.endif
 	ret nz
 
 	ld a,$05
@@ -342,6 +439,20 @@ parentItemCode_sword:
 	jp specialObjectSetAnimationWithLinkData
 
 @checkCreateSwordBeam:
+.ifdef ENABLE_RING_REDUX
+	ld bc,(LIGHT_RING_L2<<8)|LIGHT_RING_L1
+	call eitherRingActive
+	jr nz,+
+		ld c,LIGHT_RING_L2_CUTOFF
+		jr c,@createSwordBeam
+	+
+	; lightLevel0or1
+	jr z,+
+		ld c,LIGHT_RING_L1_CUTOFF
+		jr c,+
+			ld c,$00
+	+
+.else
 	ld c,$08
 	ld a,LIGHT_RING_L1
 	call cpActiveRing
@@ -352,6 +463,7 @@ parentItemCode_sword:
 	jr z,++
 	ld c,$00
 ++
+.endif
 	ld hl,wLinkHealth
 	ldi a,(hl)
 	add c
@@ -359,8 +471,25 @@ parentItemCode_sword:
 	ret c
 
 @createSwordBeam:
+.ifdef ENABLE_RING_REDUX
+	ld e,$01
+	ld a,ENERGY_RING
+	call cpActiveRing
+	jr nz,+
+		ld bc,(LIGHT_RING_L2<<8)|LIGHT_RING_L1
+		call eitherRingActive
+		jr z,++
+		jr c,++
+			jr +
+		++
+			; increase beam limit
+			ld e,SWORD_BEAM_LIMIT
+	+
+	ldbc ITEM_SWORD_BEAM,$00
+.else
 	ldbc ITEM_SWORD_BEAM,$00
 	ld e,$01
+.endif
 	call getFreeItemSlotWithObjectCap
 	ret c
 

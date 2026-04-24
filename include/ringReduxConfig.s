@@ -89,6 +89,9 @@
 	.define ALCHEMY_SEED_COST 			RUPEEVAL_002
 	.define ALCHEMY_BOMB_COST 			RUPEEVAL_005
 	.define ALCHEMY_BOMBCHU_COST 		RUPEEVAL_050
+
+	; NOTE: if this is defined, the hurricane spin lasts until you release the button
+;	.define INDEFINITE_HURRICANE_SPIN	1
 .endif
 
 .ifdef RESIZE_RING_BOX
