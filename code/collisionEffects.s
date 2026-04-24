@@ -235,7 +235,66 @@ enemyCheckCollisions:
 	ld e,a
 	call checkObjectsCollidedFromVariables
 	ld hl,w1Link
+
+.ifdef ENABLE_RING_REDUX
+	jr nc,@checkHitLink
+
+	; Don't interact with if invincible
+	ldh a,(<hActiveObjectType)
+	add <Object.invincibilityCounter
+	ld e,a
+	ld a,(de)
+	or a
+	ret nz
+
+	; if wearing both rings, the shield can deal damage based on link's speed
+	ld bc,(STEADFAST_RING<<8)|HASTE_RING
+	call eitherRingActive
+	jp nz,@handleCollision
+	jp nc,@handleCollision
+
+	; reference for link's speeds
+	; 20: walking up stairs
+	; 30: walking in grass(stairs w/ haste)
+	; 40: walking normally(grass w/ haste)
+	; 45: walking normally(w/ haste)
+	; 60: pegasus seed max speed
+	ld a,(w1Link.speed)
+	ld b,$00
+	-
+		cp 30
+		jr c,++
+		inc b
+		sub 30
+		jr -
+	++
+	xor a
+	cp b
+	jp z,@handleCollision
+
+	ld a,(w1Link.damage)	; backup
+	push af
+
+	; calculate the damage and store in w1Link.damage
+	ld a,(wUsingShield)
+	ld c,a
+	xor a
+	sub b
+	sub c
+	ld (w1Link.damage),a
+
+	; change the collision type to using the sword
+	ldh a,(<hFF90)
+	add $03
+	ldh (<hFF90),a
+
+	call @handleCollision
+	pop af
+	ld (w1Link.damage),a	; restore
+	ret
+.else
 	jp c,@handleCollision
+.endif
 
 	; Not using shield (or shield is ineffective)
 @checkHitLink:
