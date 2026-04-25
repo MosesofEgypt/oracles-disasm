@@ -184,7 +184,7 @@ parentItemCode_sword:
 
 	call @createSwordBeam
 .ifdef ENABLE_RING_REDUX
-	ld bc,(ENERGY_RING<<8)|CHARGE_RING
+	ldbc ENERGY_RING, CHARGE_RING
 	call eitherRingActive
 	jp nz,@triggerSwordPoke
 	jp nc,@triggerSwordPoke
@@ -259,7 +259,7 @@ parentItemCode_sword:
 	or (hl)
 	jr nz,+
 		push bc
-		ld bc,(CHARGE_RING<<8)|SPIN_RING
+		ldbc CHARGE_RING, SPIN_RING
 		call eitherRingActive
 		pop bc
 		ld h,d
@@ -440,7 +440,7 @@ parentItemCode_sword:
 
 @checkCreateSwordBeam:
 .ifdef ENABLE_RING_REDUX
-	ld bc,(LIGHT_RING_L2<<8)|LIGHT_RING_L1
+	ldbc LIGHT_RING_L2, LIGHT_RING_L1
 	call eitherRingActive
 	jr nz,+
 		ld c,LIGHT_RING_L2_CUTOFF
@@ -476,7 +476,7 @@ parentItemCode_sword:
 	ld a,ENERGY_RING
 	call cpActiveRing
 	jr nz,+
-		ld bc,(LIGHT_RING_L2<<8)|LIGHT_RING_L1
+		ldbc LIGHT_RING_L2, LIGHT_RING_L1
 		call eitherRingActive
 		jr z,++
 		jr c,++

@@ -516,7 +516,7 @@ remapTransformedSpecialObjectGfx:
 	push bc
 
 	; redirect id to transformed one if ring equipped
-	ld bc,(SUBROSIAN_RING<<8)|FIRST_GEN_RING
+	ldbc SUBROSIAN_RING, FIRST_GEN_RING
 	call eitherRingActive
 
 	; checkSubrosian
@@ -530,7 +530,7 @@ remapTransformedSpecialObjectGfx:
 		jr ++
 +
 	; checkOctorock
-	ld bc,(OCTO_RING<<8)|MOBLIN_RING
+	ldbc OCTO_RING, MOBLIN_RING
 	call eitherRingActive
 
 	jr nz,+
@@ -703,7 +703,7 @@ linkUpdateDamageToApplyForRings:
 	; calculate the multipliers(divisor is 8, so 1.5x will be $0c)
 	ld a,$48
 
-	ld bc,(GREEN_HOLY_RING<<8)|BLUE_HOLY_RING
+	ldbc GREEN_HOLY_RING, BLUE_HOLY_RING
 	call eitherRingActive
 	ld b,$00
 	jr nz,+
@@ -713,13 +713,13 @@ linkUpdateDamageToApplyForRings:
 		sub HOLY_RING_DEF_MOD
 	+
 
-	ld bc,(RED_HOLY_RING<<8)|$ff
+	ldbc RED_HOLY_RING, $ff
 	call eitherRingActive
 	jr nc,+
 		sub HOLY_RING_DEF_MOD
 	+
 
-	ld bc,(BLUE_RING<<8)|GREEN_RING
+	ldbc BLUE_RING, GREEN_RING
 	call eitherRingActive
 	ld b,$00
 	jr nz,+
@@ -730,7 +730,7 @@ linkUpdateDamageToApplyForRings:
 	+
 
 	sub b
-	ld bc,(CURSE_POWER_RING<<8)|GOLD_RING
+	ldbc CURSE_POWER_RING, GOLD_RING
 	call eitherRingActive
 	ld b,$00
 	jr nz,+
@@ -774,7 +774,7 @@ linkUpdateDamageToApplyForRings:
 	; if wearing blue cursed, all damage becomes 1/4 heart
 	call applyCurseArmorDamageCap
 
-	ld bc,(GREEN_LUCK_RING<<8)|BLUE_LUCK_RING
+	ldbc GREEN_LUCK_RING, BLUE_LUCK_RING
 	call eitherRingActive
 	jr nz,+
 		ld e,$02
@@ -782,7 +782,7 @@ linkUpdateDamageToApplyForRings:
 	jr nc,+
 		inc e
 	+
-	ld bc,(RED_LUCK_RING<<8)|$ff
+	ldbc RED_LUCK_RING, $ff
 	call eitherRingActive
 	jr nz,+
 		inc e

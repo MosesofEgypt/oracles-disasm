@@ -2976,9 +2976,9 @@ func_5631:
 updateHeartRingCounter:
 	ld e,a
 .ifdef ENABLE_RING_REDUX
-	ld bc,(HEART_RING_L2<<8)|HEART_RING_L1
+	ldbc HEART_RING_L2, HEART_RING_L1
 	call eitherRingActive
-	ld bc,$0210
+	ldbc $02, $10
 	jr z,+
 		ld c,$08
 		jr nc,@clearCounter
@@ -2993,7 +2993,7 @@ updateHeartRingCounter:
 	; NOTE: only doubling ONCE if either ring is worn, as the code that
 	; 		handles health refills will double if both rings are worn.
 	push bc
-	ld bc,(BLUE_JOY_RING<<8)|GOLD_JOY_RING
+	ldbc BLUE_JOY_RING, GOLD_JOY_RING
 	call eitherRingActive
 	pop bc
 	jr z,+

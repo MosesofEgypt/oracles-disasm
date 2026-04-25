@@ -115,7 +115,7 @@ checkUseItems:
 	jr z,@normal
 .ifdef ENABLE_RING_REDUX
 	push bc
-	ld bc,(SWIMMERS_RING<<8)|ZORA_RING
+	ldbc SWIMMERS_RING, ZORA_RING
 	call eitherRingActive
 	pop bc
 	jr nz,@underwater
@@ -220,15 +220,17 @@ checkItemUsed:
 
 	; Nothing equipped; return unless Link is wearing a punching ring
 .ifdef ENABLE_RING_REDUX
-	ld a,EXPERTS_RING
-	call cpActiveRing
+	ldbc EXPERTS_RING,FIST_RING
+	call eitherRingActive
+	jr z,@punch
+	ret nc
 .else
 	ld a,(wActiveRing)
 	cp EXPERTS_RING
-.endif
 	jr z,@punch
 	cp FIST_RING
 	ret nz
+.endif
 
 	; Punch if nothing equipped
 @punch:

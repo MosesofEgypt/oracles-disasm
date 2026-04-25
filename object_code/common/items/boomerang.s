@@ -51,7 +51,7 @@ itemCode06:
 		call cpActiveRing
 		jr nz,++
 	+
-	ld bc,(RANG_RING_L2<<8)|RANG_RING_L1
+	ldbc RANG_RING_L2, RANG_RING_L1
 	call eitherRingActive
 	jr z,+
 	jr c,+
@@ -63,7 +63,7 @@ itemCode06:
 		ld (hl),$78
 	++
 
-	ld bc,(RANG_RING_L2<<8)|RANG_RING_L1
+	ldbc RANG_RING_L2, RANG_RING_L1
 	call eitherRingActive
 	ld c,-1
 	jr nz,+
@@ -321,11 +321,11 @@ magicBoomerangTryToBreakTile:
 .ifdef ENABLE_RING_REDUX
 	; if wearing these rings, the boomerang just eats dirt up
 	push bc
-	ld bc,(TOSS_RING<<8)|DISCOVERY_RING
+	ldbc TOSS_RING, DISCOVERY_RING
 	call eitherRingActive
 	jr nz,+
 	jr nc,+
-		ld bc,(RANG_RING_L2<<8)|RANG_RING_L1
+		ldbc RANG_RING_L2, RANG_RING_L1
 		call eitherRingActive
 		jr c,++
 		jr z,++
@@ -376,7 +376,7 @@ itemCheckWithinRangeOfLink:
 ; @param[out]	cflag	Set if both rang rings are equipped
 checkBothRangRingsEquipped:
 	push bc
-	ld bc,(RANG_RING_L2<<8)|RANG_RING_L1
+	ldbc RANG_RING_L2, RANG_RING_L1
 	call eitherRingActive
 	pop bc
 	ret nc

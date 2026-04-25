@@ -595,7 +595,7 @@ alchemyRingRestock:
 	; set the amount of ammo in "a" to 1
 	ld a,$01
 	push bc
-	ld bc,(GREEN_JOY_RING<<8)|GOLD_JOY_RING
+	ldbc GREEN_JOY_RING, GOLD_JOY_RING
 	call eitherRingActive
 	pop bc
 

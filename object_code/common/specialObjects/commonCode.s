@@ -43,16 +43,16 @@ specialObjectSetOamVariables:
 	ld l,a
 	ld h,$00
 
-	ld bc,(GREEN_COLOR_RING<<8)|$00
+	ldbc GREEN_COLOR_RING, $00
 	call @mixRingPalette
 
-	ld bc,(BLUE_COLOR_RING<<8)|$01
+	ldbc BLUE_COLOR_RING, $01
 	call @mixRingPalette
 
-	ld bc,(RED_COLOR_RING<<8)|$02
+	ldbc RED_COLOR_RING, $02
 	call @mixRingPalette
 
-	ld bc,(GOLD_COLOR_RING<<8)|$03
+	ldbc GOLD_COLOR_RING, $03
 	call @mixRingPalette
 
 	; if no ring was found, reset palette to normal
@@ -181,12 +181,12 @@ updateLinkInvincibilityCounter:
 	ld a,(hl)
 	or a
 	jr z,++
-		ld bc,(GBA_TIME_RING<<8)|GBA_NATURE_RING
+		ldbc GBA_TIME_RING, GBA_NATURE_RING
 		call eitherRingActive
-		ld bc,$0705
+		ldbc $07, $05
 		jr z,+
 		jr c,+
-			ld bc,$0000
+			ldbc $00, $00
 		+
 		jr nz,+
 		jr nc,+

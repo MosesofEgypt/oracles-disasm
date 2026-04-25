@@ -25,7 +25,13 @@ groups:
       You got a
       \col(1)L-3 Ring Box\col(0)!
       It can hold
-      ten \col(1)rings\col(0)!
+      all \col(1)rings\col(0)
+      your rings!
+      Select the
+      \col(1)Ring Box\col(0) in
+      your inventory
+      to swap rings
+      at any time.
 - group: 0x09
   data:
   - name: TX_091d
@@ -46,5 +52,7 @@ groups:
     index: 0x1f
     text: |-
       L-3 Ring Box
-      Holds ten
+      Holds all
       seed rings.
+      Select to
+      swap rings.

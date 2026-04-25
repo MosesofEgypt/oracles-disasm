@@ -63,6 +63,7 @@
 		.define CURSE_RING_HEART_CAP		(4*4)
 
 		; this is how much to reduce/increase damage dealt
+		; NOTE: lower values == higher damage
 		.define POWER_RING_L1_ATK_MOD		-1
 		.define POWER_RING_L2_ATK_MOD		-2
 		.define POWER_RING_L3_ATK_MOD		-3
@@ -79,6 +80,7 @@
 		.define SUPER_BEAM_DELAY			60			; frames
 
 		; this is how much to reduce/increase damage taken
+		; NOTE: lower values == higher damage
 		.define POWER_RING_L1_DEF_MOD		-2
 		.define POWER_RING_L2_DEF_MOD		-4
 		.define POWER_RING_L3_DEF_MOD		-6

@@ -248,7 +248,7 @@ enemyCheckCollisions:
 	ret nz
 
 	; if wearing both rings, the shield can deal damage based on link's speed
-	ld bc,(STEADFAST_RING<<8)|HASTE_RING
+	ldbc STEADFAST_RING,HASTE_RING
 	call eitherRingActive
 	jp nz,@handleCollision
 	jp nc,@handleCollision
@@ -1608,7 +1608,7 @@ collisionLinkBounce:
 
 	; check the rings are equipped
 	push bc
-	ld bc,(STEADFAST_RING<<8)|ROCS_RING
+	ldbc STEADFAST_RING,ROCS_RING
 	call eitherRingActive
 	pop bc
 	ret nz
@@ -1617,12 +1617,12 @@ collisionLinkBounce:
 	; convert collisions that would damage link into an extra jump
 	push bc
 	push hl
-	ld bc,$fd90
+	ldbc $fd, $90
 	ld a,(wActiveGroup)
 	cp FIRST_SIDESCROLL_GROUP
 	jr c,+
 		; Jump higher in sidescrolling rooms
-		ld bc,$fd00
+		ldbc $fd, $00
 	+
 	ld hl,w1Link.speedZ
 	ld (hl),c

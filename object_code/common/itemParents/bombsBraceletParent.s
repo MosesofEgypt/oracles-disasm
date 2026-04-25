@@ -86,7 +86,7 @@ parentItemCode_bomb:
 	+
 
 	push af
-	ld bc,(PEACE_RING<<8)|BOMBERS_RING
+	ldbc PEACE_RING, BOMBERS_RING
 	call eitherRingActive
 	jr nz,+
 	jr nc,+

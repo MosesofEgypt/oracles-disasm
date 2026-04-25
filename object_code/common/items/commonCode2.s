@@ -146,7 +146,7 @@ itemCalculateSwordDamage:
 	ld e,a
 	; calculate the multipliers(divisor is 8, so 1.5x will be $0c)
 	ld a,$08
-	ld bc,(RED_RING<<8)|GREEN_RING
+	ldbc RED_RING, GREEN_RING
 	call eitherRingActive
 	ld b,$00
 	jr nz,+
@@ -158,7 +158,7 @@ itemCalculateSwordDamage:
 	+
 	; checkCursed
 	add b
-	ld bc,(CURSE_POWER_RING<<8)|GOLD_RING
+	ldbc CURSE_POWER_RING, GOLD_RING
 	call eitherRingActive
 	ld b,$00
 	jr nz,+

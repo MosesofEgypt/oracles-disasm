@@ -243,7 +243,7 @@ bombUpdateExplosion:
 ;			one frame, or all frames after the explosion starts)
 bombUpdateAnimation:
 .ifdef ENABLE_RING_REDUX
-	ld bc,(PEACE_RING<<8)|BOMBERS_RING
+	ldbc PEACE_RING, BOMBERS_RING
 	call eitherRingActive
 	jr nz,+
 	jr nc,+
@@ -254,7 +254,7 @@ bombUpdateAnimation:
 .endif
 	call itemAnimate
 .ifdef ENABLE_RING_REDUX
-	ld bc,(BOMBPROOF_RING<<8)|HASTE_RING
+	ldbc BOMBPROOF_RING, HASTE_RING
 	call eitherRingActive
 	jr nz,+
 	jr nc,+
@@ -515,7 +515,7 @@ explosionTryToBreakNextTile:
 
 	; determines the tile offset to use, and handles the counter reset
 	push bc
-	ld bc,(DISCOVERY_RING<<8)|BLAST_RING
+	ldbc DISCOVERY_RING, BLAST_RING
 	call eitherRingActive
 	pop bc
 
