@@ -219,8 +219,13 @@ checkItemUsed:
 .endif
 
 	; Nothing equipped; return unless Link is wearing a punching ring
+.ifdef ENABLE_RING_REDUX
+	ld a,EXPERTS_RING
+	call cpActiveRing
+.else
 	ld a,(wActiveRing)
 	cp EXPERTS_RING
+.endif
 	jr z,@punch
 	cp FIST_RING
 	ret nz

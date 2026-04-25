@@ -66,8 +66,13 @@ parentItemCode_punch:
 	call itemCreateChild
 
 	; Check for fist ring (weak punch) or expert's ring (strong punch)
+.ifdef ENABLE_RING_REDUX
+	ld a,EXPERTS_RING
+	call cpActiveRing
+.else
 	ld a,(wActiveRing)
 	cp EXPERTS_RING
+.endif
 
 .ifdef ROM_SEASONS
 	ret nz

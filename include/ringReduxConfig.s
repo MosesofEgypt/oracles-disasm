@@ -75,8 +75,8 @@
 		.define LIGHT_RING_L2_CUTOFF		(8*6)
 
 		.define SPIN_SWING_COUNTER			(4*15 + 1)	; one startup frame, and 4 per spin
-		.define SWORD_BEAM_LIMIT			3			; number of beams onscreen at once
-		.define SUPER_BEAM_DELAY			50			; frames
+		.define SWORD_BEAM_LIMIT			2			; number of beams onscreen at once
+		.define SUPER_BEAM_DELAY			60			; frames
 
 		; this is how much to reduce/increase damage taken
 		.define POWER_RING_L1_DEF_MOD		-2

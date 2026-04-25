@@ -3731,13 +3731,13 @@ cutscene02:
 clearExtendedRingBox:
 	; clear the extended box contents if the extra byte at the end
 	; isn't 0x00, as that indicates this code was never run there
-	ld a,(wRingReduxFlags)
-	bit 0,a
+	ld a,(wRingReduxFlagsExt)
+	bit 5,a
 	ret nz
 
 	; set the flag and overwrite the rings with $ff
-	set 0,a
-	ld (wRingReduxFlags),a
+	set 5,a
+	ld (wRingReduxFlagsExt),a
 	ld a,$ff
 	push hl
 	ld hl,wRingBoxContentsExt
@@ -3766,12 +3766,12 @@ updateQuickSwapItems:
 	ld a,(wOpenedMenuType)
 	or a
 	jr z,+
-		; ensure flags 1 and 2 aren't set so we don't 
+		; ensure flags 6 and 7 aren't set so we don't 
 		; get put in an infinite menu open/close loop
-		ld a,(wRingReduxFlags)
-		res 1,a
-		res 2,a
-		ld (wRingReduxFlags),a
+		ld a,(wRingReduxFlagsExt)
+		res 6,a
+		res 7,a
+		ld (wRingReduxFlagsExt),a
 		ret
 	+
 
@@ -3783,24 +3783,24 @@ updateQuickSwapItems:
 	ld a,(wKeysPressed)
 	and (BTN_SELECT|BTN_START)
 	cp BTN_SELECT
-	ld a,(wRingReduxFlags)
+	ld a,(wRingReduxFlagsExt)
 
 	; the logic here boils down to the z-flag being set if select is
 	; being pressed and we haven't swapped the items, or vice versa
 	jr z,+
 		; select not held, or both select and start held
-		bit 1,a
+		bit 6,a
 		jr z,++
 			; reset the flag indicating items were swapped, as below we're
 			; either going to decide to leave them swapped, or swap back
-			ld a,(wRingReduxFlags)
+			ld a,(wRingReduxFlagsExt)
 
-			; before resetting flag 2, we need to check it for A/B being pressed
-			bit 2,a
+			; before resetting flag 7, we need to check it for A/B being pressed
+			bit 7,a
 
-			res 1,a
-			res 2,a
-			ld (wRingReduxFlags),a
+			res 6,a
+			res 7,a
+			ld (wRingReduxFlagsExt),a
 
 			jr nz,++
 				; A or B wasn't pressed while select was held, so set
@@ -3818,7 +3818,7 @@ updateQuickSwapItems:
 		jr ++
 	+
 		; just select being held
-		bit 1,a
+		bit 6,a
 
 		call z,@swapButtonItems
 
@@ -3827,9 +3827,9 @@ updateQuickSwapItems:
 		ld a,(wKeysPressed)
 		and (BTN_A|BTN_B)
 		jr z,+
-			ld a,(wRingReduxFlags)
-			set 2,a
-			ld (wRingReduxFlags),a
+			ld a,(wRingReduxFlagsExt)
+			set 7,a
+			ld (wRingReduxFlagsExt),a
 		+
 
 		; unset select so the menu doesn't open until we allow it
@@ -3845,15 +3845,15 @@ updateQuickSwapItems:
 
 @swapButtonItems
 	; toggle the flag and overwrite the rings with $ff
-	ld a,(wRingReduxFlags)
-	bit 1,a
+	ld a,(wRingReduxFlagsExt)
+	bit 6,a
 	jr z,+
-		res 1,a
+		res 6,a
 		jr ++
 	+
-		set 1,a
+		set 6,a
 	++
-	ld (wRingReduxFlags),a
+	ld (wRingReduxFlagsExt),a
 	jp quickSwapHeldItems
 
 .endif

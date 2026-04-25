@@ -362,11 +362,12 @@ wSavefileString: ; $c5b2
 wRingBoxContentsExt: ; $c5ba-$c5be
 	dsb 5
 
-wRingReduxFlags: ; $c5bf
+wRingReduxFlagsExt: ; $c5bf
 ; Repurposing this byte for storing various redux related flags
-; Bit 0: Set if the extended ring box was cleared
-; Bit 1: Set if button items are currently swapped via select
-; Bit 2: Set if select button was pressed without a following A/B press
+; Bits 0-4: Set if the associated ring in the box is disabled
+; Bit 5: 	Set if the extended ring box was cleared
+; Bit 6: 	Set if button items are currently swapped via select
+; Bit 7: 	Set if select button was pressed without a following A/B press
 	db
 
 .else
@@ -777,9 +778,17 @@ wUnusedc6c4:
 
 wRingBoxContents: ; $c6c6/$c6c0
 	dsb 5
+.ifdef ENABLE_RING_REDUX_ASDF
+wRingReduxFlags: ; $c5bf
+; Repurposing this byte for storing various redux related flags
+; Bits 0-4: Set if the associated ring in the box is disabled
+; Bit 5:	Set if all rings should be disabled until link is enabled
+	db
+.else
 wActiveRing: ; $c6cb/$c6c5
 ; When bit 6 is set, the ring is disabled?
 	db
+.endif
 wRingBoxLevel: ; $c6cc/$c6c6
 	db
 wNumUnappraisedRingsBcd: ; $c6cd
