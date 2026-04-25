@@ -63,12 +63,12 @@
 		.define CURSE_RING_HEART_CAP		(4*4)
 
 		; this is how much to reduce/increase damage dealt
-		.define POWER_RING_L1_ATK_MOD		1
-		.define POWER_RING_L2_ATK_MOD		2
-		.define POWER_RING_L3_ATK_MOD		3
-		.define ARMOR_RING_L1_ATK_MOD		-1
-		.define ARMOR_RING_L2_ATK_MOD		-1
-		.define ARMOR_RING_L3_ATK_MOD		-1
+		.define POWER_RING_L1_ATK_MOD		-1
+		.define POWER_RING_L2_ATK_MOD		-2
+		.define POWER_RING_L3_ATK_MOD		-3
+		.define ARMOR_RING_L1_ATK_MOD		1
+		.define ARMOR_RING_L2_ATK_MOD		1
+		.define ARMOR_RING_L3_ATK_MOD		1
 
 	; NOTE: these values are in 1/8 heart increments, so 8 == 1 heart
 		.define LIGHT_RING_L1_CUTOFF		(8*3)

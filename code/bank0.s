@@ -8417,46 +8417,49 @@ cpActiveRing:
 .ifdef ENABLE_MULTI_RING
 	cp $ff
 	jr nz,+
-	or a
-	ret
-+
+		or a
+		ret
+	+
 
-.ifdef ROM_SEASONS
-; don't wanna cheat on blaino....
+	.ifdef ROM_SEASONS
+	; don't wanna cheat on blaino....
 	push af
 	ld a,(wInBoxingMatch)
 	or a
 	jr z,+
 		pop af
 		ret
-+
+	+
 	pop af
-.endif
+	.endif
+
 	push hl
 	push bc
 	ld b,$05
 	ld hl,wRingBoxContents
 
--
-	cp (hl)
-	jr z,+
+	-
+		cp (hl)
+		jr z,+
 		inc l
 		dec b
 		jr nz,-
 
-.ifdef EXTENDED_RING_BOX
-	cp (hl)
-	jr z,+
-		ld b,$05
-		ld hl,wRingBoxContentsExt
+	.ifdef EXTENDED_RING_BOX
+		cp (hl)
+		jr z,+
+			ld b,$05
+			ld hl,wRingBoxContentsExt
 
--
-	cp (hl)
-	jr z,+
-		inc l
-		dec b
-		jr nz,-
-.endif
+		-
+			cp (hl)
+			jr z,+
+			inc l
+			dec b
+			jr nz,-
+	.endif
+	; all checks failed. repoint to end of ring box
+	dec l
 
 +
 	pop bc
@@ -8578,17 +8581,16 @@ fractionOf8Multiply:
 		sra a
 	+
 
-	; put the whole-multiples into b for decrementing
-	ld b,c
-	sra b
-	sra b
-	sra b
+	; convert c to whole increments of 8
+	sra c
+	sra c
+	sra c
 
 	; add the whole multiples
 	-
 		ret z
 		add e
-		dec b
+		dec c
 		jr -
 
 applyCurseArmorDamageCap:

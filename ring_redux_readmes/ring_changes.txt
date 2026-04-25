@@ -234,4 +234,4 @@ Modified rings:
         Upgrades your sword and shield level.
           1 -> 2   and 2 -> 3
           Does not go past Master Sword
-        Causes sword beams to penetrate enemies and deal damage relative to your sword's level
+        Causes sword beams to penetrate enemies and deal 50% more damage

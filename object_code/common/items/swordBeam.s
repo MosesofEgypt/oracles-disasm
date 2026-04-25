@@ -14,16 +14,15 @@ itemCode27:
 	call itemLoadAttributesAndGraphics
 	call itemIncState
 .ifdef ENABLE_RING_REDUX
-	; if ring equipped, set damage relative to sword level
+	; if ring equipped, increase beam damage 50%
 	ld a,VICTORY_RING
 	call cpActiveRing
-	jr z,+
-		ld a,(wSwordLevel)
-		cp $03
-		jr nc,+
-			inc a
-		+
+	jr nz,+
 		ld l,Item.damage
+		ld a,(hl)
+		ld c,a
+		sra a
+		add c
 		ld (hl),a
 	+
 .endif
