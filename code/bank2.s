@@ -1042,7 +1042,7 @@ func_02_465c:
 +
 	ld a,$ff
 	ld (wLastSecretInputLength),a
-	ldbc 4, $80
+	ldbc 4,$80
 ++
 	ld a,b
 	ld (wFileSelect.textInputMaxCursorPos),a
@@ -5765,10 +5765,6 @@ drawEquippedSpriteForActiveRing:
 ++
 .endif
 
-.ifdef ENABLE_MULTI_RING
-	; if allowing equip of all carried rings, there's no need to use
-	; an icon indicating which ones are equipped, since they all are
-	ret
 .ifdef ENABLE_RING_REDUX
 	call getRingBoxCapacity
 	ret z
@@ -5782,7 +5778,10 @@ drawEquippedSpriteForActiveRing:
 	ld c,$00
 
 	ld a,(wInventorySubmenu1CursorPos)
-	sub $15
+	sub $10
+	jr nc,+
+		xor a
+	+
 	call getRingBoxContents
 .else
 	ld hl,(wRingBoxContents)
@@ -5839,7 +5838,6 @@ drawEquippedSpriteForActiveRing:
 	ld b,$00
 	ld hl,@sprite
 	jp addSpritesToOam_withOffset
-.endif
 .endif
 
 @sprite:

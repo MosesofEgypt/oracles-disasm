@@ -69,6 +69,45 @@ parentItemCode_punch:
 .ifdef ENABLE_RING_REDUX
 	ld a,EXPERTS_RING
 	call cpActiveRing
+	jr nz,+++
+		push af
+		push hl
+
+		ld a,TREASURE_SLINGSHOT
+		call checkTreasureObtained
+		jr c,+
+			ld a,TREASURE_SHOOTER
+			call checkTreasureObtained
+		+
+
+		jr nc,+
+			ld a,ENERGY_RING
+			call cpActiveRing
+			jr nz,+
+				ld e,Item.relatedObj2+1
+				ld a,>w1Link
+				ld (de),a
+
+				; NOTE: the subid in seasons dictates which side-angle the
+				;       seed is meant to shoot from. 0-4 make it veer off
+				;       either slightly or heavily right/left, while 5 makes
+				;       it shoot straight ahead. link's dir is accounted for
+				ldbc ITEM_EMBER_SEED,$65
+				ld e,SWORD_BEAM_LIMIT
+				call itemCreateChildWithID
+				jr c,+
+					ld a,(w1Link.direction)
+					add a
+					add a
+					add a
+					ld l,Item.angle
+					ld (hl),a
+					ld l,Item.var37
+					ld (hl),$01
+		+
+		pop hl
+		pop af
+	+++
 .else
 	ld a,(wActiveRing)
 	cp EXPERTS_RING

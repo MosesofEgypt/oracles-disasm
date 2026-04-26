@@ -152,7 +152,7 @@ itemCode24:
 		ld a,$01
 		ld (de),a
 		; change the gfx to a fireball
-		call @initState3
+		call seedItemState1@initState3
 		; change the state back to 1 so things continue as normal
 		ld e,Item.state
 		ld a,$01

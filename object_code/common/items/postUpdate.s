@@ -216,12 +216,24 @@ itemSetPositionInSwordArc:
 ;
 ; @param	hl	Pointer to data for collision radii and position offsets
 itemInitializeFromLinkPosition:
+.ifdef ENABLE_BUGFIXES
+	; The vanilla game's code tries to increase the punch object's radius
+	; if wearing EXPERTS_RING, but this code was resetting it each frame.
+	; This bugfix allows the size increase to persist.
+	ld e,Item.id
+	ld a,(de)
+	cp ITEM_PUNCH
+	jr z,+
+.endif
 	ld e,Item.collisionRadiusY
 	ldi a,(hl)
 	ld (de),a
 	inc e
 	ldi a,(hl)
 	ld (de),a
+.ifdef ENABLE_BUGFIXES
+	+
+.endif
 
 	; Y
 .ifdef ROM_AGES

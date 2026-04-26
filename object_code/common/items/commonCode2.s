@@ -4,7 +4,102 @@ tryBreakTileWithExpertsRing:
 	add a
 	ld c,a
 	ld a,BREAKABLETILESOURCE_EXPERTS_RING
+.ifdef ENABLE_RING_REDUX
+	call @breakTileHelper
+
+	push bc
+	ldbc EXPERTS_RING,FIST_RING
+	call eitherRingActive
+	pop bc
+
+	; do a super punch only with both rings
+	ret nc
+	ret nz
+
+	; create an explosion effect
+	push bc
+	ldbc INTERAC_PUFF,$80
+	call objectCreateInteraction
+	jr nz,+
+		; move the explosions coordinates to in front of object
+		ld c,h
+		ld a,(w1Link.direction)
+		add a
+
+		; copy offsets for explosion into b and a
+		push hl
+		ld hl,tryBreakTileWithSword@linkOffsets
+		rst_addDoubleIndex
+		ld b,(hl)
+		inc l
+		ld a,(hl)
+
+		; point back to the interaction
+		ld h,c
+		ld l,Interaction.xh
+		; add the its x coordinate to the offset and update xh with it
+		add a,(hl)
+		ldd (hl),a
+		dec l
+		; add the its y coordinate to the offset and update yh with it
+		ld a,b
+		add a,(hl)
+		ld (hl),a
+		pop hl
+	+
+	pop bc
+
+	; break rocks with your bare hands if you've obtained bombs
+	ld a,TREASURE_BOMBS
+	call checkTreasureObtained
+	jr nc,+
+		ld a,BREAKABLETILESOURCE_BOMB
+		call @breakTileHelper
+	+
+
+	; break pots and rocks if you've obtained the bracelet
+	ld a,TREASURE_BRACELET
+	call checkTreasureObtained
+	jr nc,+
+		ld a,BREAKABLETILESOURCE_SWORD_L2
+		call @breakTileHelper
+
+		ld a,BREAKABLETILESOURCE_BRACELET
+		call @breakTileHelper
+	+
+
+	; destroy the ground and clear dirt if you've obtained the shovel
+	ld a,TREASURE_SHOVEL
+	call checkTreasureObtained
+	jr nz,+
+	.ifdef ROM_AGES
+		; no destroying dirt while deep underwater
+		ld a,(wActiveCollisions)
+		cp 4
+		jr z,+
+	.endif
+
+		ld a,BREAKABLETILESOURCE_SHOVEL
+		call @breakTileHelper
+	+
+
+	; cut down trees if you've obtained ember seeds
+	ld a,TREASURE_EMBER_SEEDS
+	call checkTreasureObtained
+	jr nc,+
+		ld a,BREAKABLETILESOURCE_EMBER_SEED
+		call @breakTileHelper
+	+
+	ret
+
+@breakTileHelper
+	push bc
+	call tryBreakTileWithSword
+	pop bc
+	ret
+.else
 	jr tryBreakTileWithSword
+.endif
 
 ;;
 ; Same as below function, except this checks the sword's level to decide on the

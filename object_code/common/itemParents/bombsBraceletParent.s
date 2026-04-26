@@ -236,8 +236,10 @@ parentItemCode_bracelet:
 	ld a,(w1Link.direction)
 	or $80
 	ld (wBraceletGrabbingNothing),a
+.ifdef ENABLE_RING_REDUX
+	jr @tryPunching
+.endif
 	ret
-
 
 ; State 1: grabbing a wall
 @state1:
@@ -303,6 +305,34 @@ parentItemCode_bracelet:
 @beginPickupAndSetAnimation:
 	ld a,LINK_ANIM_MODE_LIFT_4
 	call specialObjectSetAnimationWithLinkData
+
+.ifdef ENABLE_RING_REDUX
+@tryPunching:
+	push bc
+	ldbc EXPERTS_RING,FIST_RING
+	call eitherRingActive
+	jr c,+
+	jr z,+
+		pop bc
+		ret
+	+
+
+	; make sure the button was just pressed so we can't rapid-fire punch
+	ld e,Item.var03
+	ld a,(de)
+	ld b,a
+	ld a,(wGameKeysJustPressed)
+	cp b
+	pop bc
+	ret nz
+
+	; not grabbing anything, so act as if link is unequipped and try punching.
+	; change the item type to punch and run the item code for it
+	ld a,ITEM_PUNCH
+	ld e,Item.id
+	ld (de),a
+	jp parentItemCode_punch
+.endif
 
 @beginPickup:
 	call itemDisableLinkMovement
