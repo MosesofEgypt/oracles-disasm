@@ -164,6 +164,15 @@ parentItemCode_punch:
 ; This is state 1 for: the punch, rod of seasons, biggoron's sword, and fool's ore.
 @state1:
 	; Wait for the animation to finish, then delete the item
+.ifdef ENABLE_RING_REDUX
+	call isHasteRingEquipped
+	jr nz,+
+		ld e,Item.animParameter
+		ld a,(de)
+		rlca
+		call nc,specialObjectAnimate_optimized
+	+
+.endif
 	ld e,Item.animParameter
 	ld a,(de)
 	rlca

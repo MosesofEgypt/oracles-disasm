@@ -112,14 +112,17 @@ New rings:
         If you have less than 4 hearts, these double to 100% and -50%.
 
     Haste Ring:
-        Movement and various action speeds increased.
-        Works by bumping the movement speed on the current tile to the next fastest.
+        Bumps movement speed on the current tile to the next fastest.
             Speed-on-stairs -> Speed-on-grass
             Speed-on-vines  -> Speed-on-grass
             Speed-on-ladder -> Speed-on-grass
             Speed-on-grass  -> Normal-speed
             Normal-speed    -> Pegasus-speed-on-grass
-        Increases switch hook l-1 speed to l-2 speed(length remains the same)
+        Increases switch hook L-1 speed to L-2 speed(length remains the same)
+        Doubles sword/rod/cane/biggoron swing speed
+        Doubles shovel/seed satchel/slingshot usage speed
+        Doubles seed shooter turning speed
+        Doubles speed of playing harp(song audio may get cut off early)
         Enables automatically dropping or throwing objects on the first frame.
             To do this, keep the button held when the pickup animation finishes.
 
@@ -129,7 +132,7 @@ New rings:
     Fairy's Ring:
         Revives you if you die, but breaks and is removed from your ring list.
         Only activates if you die without a potion.
-        Replacement rings can be gotten as a tier 0 drop.
+        Replacement rings can be gotten as a gasha drop.
 
     Hiker's Ring:
         Movement unaffected by ice/quicksand.

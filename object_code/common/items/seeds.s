@@ -448,7 +448,6 @@ seedItemState1:
 
 	ld e,Item.oamFlagsBackup
 .ifdef ENABLE_RING_REDUX
-	push bc
 	ld b,a
 .endif
 	ldi a,(hl)
@@ -461,7 +460,6 @@ seedItemState1:
 	ldi a,(hl)
 	ld e,Item.counter1
 	ld (de),a
-	ld a,(hl)
 .ifdef ENABLE_RING_REDUX
 	ld c,a
 	ld a,b
@@ -486,9 +484,8 @@ seedItemState1:
 		ld a,c
 		ld (de),a
 	+
-	pop bc
-	ld a,(hl)
 .endif
+	ld a,(hl)
 	jp playSound
 
 ; b0: value for Item.oamFlags and oamFlagsBackup
@@ -514,8 +511,9 @@ seedItemDelete:
 	or a
 	ld e,Item.subid
 	ld a,(de)
-	jr z,@delete
+	jr z,+
 		ld a,$00
+	+
 .else
 	ld e,Item.subid
 	ld a,(de)

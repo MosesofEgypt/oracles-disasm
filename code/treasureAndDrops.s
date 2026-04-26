@@ -339,7 +339,8 @@ giveTreasure_body:
 			call cpActiveRing
 			jr nz,+
 				ld a,c
-				add a
+				sra a
+				add c
 				ld c,a
 		xor a
 	+

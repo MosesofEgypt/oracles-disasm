@@ -8410,6 +8410,11 @@ add16BitRefs:
 	ld (de),a
 	ret
 
+.ifdef ENABLE_RING_REDUX
+isHasteRingEquipped:
+	ld a,HASTE_RING
+.endif
+
 ;;
 ; @param	a	The ring to check for.
 ; @param[out]	zflag	Set if the currently equipped ring equals 'a'.

@@ -599,14 +599,19 @@ alchemyRingRestock:
 	call eitherRingActive
 	pop bc
 
-	jr nz,+
-		; double the number if wearing green joy
-		ld a,$02
-	+
+	jr nz,++
+		; increase the number if wearing green joy
+		jr nc,+
+			; increase the number if wearing gold joy
+			inc a
+		+
+		inc a
+		jr +
+	++
 
 	jr nc,+
-		; double the number if wearing gold joy
-		sla a
+		; increase the number if wearing gold joy
+		inc a
 	+
 
 	or a

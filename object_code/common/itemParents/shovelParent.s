@@ -15,6 +15,10 @@ parentItemCode_shovel:
 
 @state1:
 	call specialObjectAnimate_optimized
+.ifdef ENABLE_RING_REDUX
+	call isHasteRingEquipped
+	call z,specialObjectAnimate_optimized
+.endif
 	ld e,Item.animParameter
 	ld a,(de)
 	bit 7,a

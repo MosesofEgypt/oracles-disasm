@@ -47,8 +47,7 @@ itemCode06:
 	ld a,TOSS_RING
 	call cpActiveRing
 	jr z,+
-		ld a,HASTE_RING
-		call cpActiveRing
+		call isHasteRingEquipped
 		jr nz,++
 	+
 	ldbc RANG_RING_L2, RANG_RING_L1
@@ -63,8 +62,6 @@ itemCode06:
 		ld (hl),$78
 	++
 
-	ldbc RANG_RING_L2, RANG_RING_L1
-	call eitherRingActive
 	ld c,-1
 	jr nz,+
 		ld c,-4
@@ -140,6 +137,11 @@ itemCode06:
 .ifdef ENABLE_RING_REDUX
 	call checkBothRangRingsEquipped
 	jr nc,+
+		; better turning if both equipped
+		ld e,Item.var34
+		ld a,(de)
+		call objectNudgeAngleTowards
+
 		; if both rings are equipped, only decrement if the parent is gone
 		call checkBoomerangParentStillValid
 		jp nz,@updateSpeedAndAnimation

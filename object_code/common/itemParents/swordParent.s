@@ -57,6 +57,10 @@ parentItemCode_sword:
 	jp c,@label_4c8b
 
 	call specialObjectAnimate_optimized
+.ifdef ENABLE_RING_REDUX
+	call isHasteRingEquipped
+	call z,specialObjectAnimate_optimized
+.endif
 	ld h,d
 	ld e,Item.animParameter
 	ld a,(de)

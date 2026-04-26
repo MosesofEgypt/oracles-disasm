@@ -7,10 +7,11 @@ some collision properties.
 Combo Effects:
     1:  Super Boomerang:
         Both levels of boomerang won't return when hitting pickups or enemies.
-        The Magic Boomerang can be controlled as long as the button is held down.
+        The Magic Boomerang can be controlled as long as the button is held
+        down, and has a tighter turning radius.
 
     2:  Max speed Boomerang:
-        The boomerang will move across the screen as fast as an object is allowed to move.
+        The boomerang will move across the screen as fast as a sword beam.
 
     3:  Remote Bombs:
         Bombs don't explode until you press the bomb button again.
@@ -25,11 +26,11 @@ Combo Effects:
 
     6:  Joyful Alchemy:
         Double the number of ammo created by the Alchemy ring.
-        Wearing both Green Joy and Gold Joy will quadruple the amount.
+        Wearing both Green Joy and Gold Joy will triple the amount.
 
     7:  Joyful Recovery:
         Double the number of hearts recovered by the Heart rings.
-        Wearing both Blue Joy and Gold Joy will quadruple the amount.
+        Wearing both Blue Joy and Gold Joy will triple the amount.
 
     8:  Dolphin Link:
         Enables use of most items while swimming in shallow water(including the feather).
@@ -62,7 +63,7 @@ Combo Effects:
         Hold charged sword to continually fire sword beams.
 
     15: Become the Beamos:
-        Up to 3 sword beams on screen at once.
+        Up to 2 sword beams on screen at once.
 
     16: Diggerang:
         Boomerang will dig any tiles it crosses.
@@ -104,6 +105,5 @@ Combo Requirements:
     13: Spin Ring   + Charge Ring
     14: Energy Ring + Charge Ring
     15: Energy Ring + Light Ring L-1 or L-2
-    16: Toss Ring  + Discovery Ring + Rang Ring L-1 or
-        Toss Ring  + Discovery Ring + Rang Ring L-2
+    16: Toss Ring  + Discovery Ring + Rang Ring L-1 or L-2
     17: Haste Ring + Steadfast Ring

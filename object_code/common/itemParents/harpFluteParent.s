@@ -64,6 +64,10 @@ parentItemCode_harp:
 	pop de
 ++
 	call specialObjectAnimate_optimized
+.ifdef ENABLE_RING_REDUX
+	call isHasteRingEquipped
+	call z,specialObjectAnimate_optimized
+.endif
 	call @getSelectedSongAddr
 
 	ld a,$ff

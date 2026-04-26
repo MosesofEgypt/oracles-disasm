@@ -4506,8 +4506,7 @@ updateLinkSpeed_withParam:
 	ld a,(wLinkForceState)
 	or a
 	jr nz,++
-		ld a,HASTE_RING
-		call cpActiveRing
+		call isHasteRingEquipped
 		jr nz,++
 			ld a,b
 			cp $03

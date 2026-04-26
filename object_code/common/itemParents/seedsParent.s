@@ -122,7 +122,15 @@ parentItemCode_shooter:
 	ld a,$01
 	call clearSelfIfNoSeeds
 	call parentItemCheckButtonPressed
+.ifdef ENABLE_RING_REDUX
+	jr z,+
+		call isHasteRingEquipped
+		call z,@checkUpdateAngle
+		jp @checkUpdateAngle
+	+
+.else
 	jr nz,@checkUpdateAngle
+.endif
 
 ; Button released
 
@@ -329,10 +337,13 @@ parentItemCode_satchel:
 	push bc
 	ld c,$00
 
-.ifdef ENABLE_RING_REDUX
-	ld e,$00
-.else
 	ld e,$01
+.ifdef ENABLE_RING_REDUX
+	ld a,MYSTIC_SEED_RING
+	call cpActiveRing
+	jr nz,+
+		ld e,$00
+	+
 .endif
 	call itemCreateChildWithID
 	pop bc
@@ -400,5 +411,14 @@ parentItemGenericState1:
 	ld e,Item.animParameter
 	ld a,(de)
 	rlca
+.ifdef ENABLE_RING_REDUX
+	jr c,+
+		call isHasteRingEquipped
+		call z,specialObjectAnimate_optimized
+		ld e,Item.animParameter
+		ld a,(de)
+		rlca
+	+
+.endif
 	jp nc,specialObjectAnimate_optimized
 	jp clearParentItem

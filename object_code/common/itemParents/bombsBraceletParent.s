@@ -241,6 +241,7 @@ parentItemCode_bracelet:
 .endif
 	ret
 
+
 ; State 1: grabbing a wall
 @state1:
 	call @deleteAndRetIfSwimmingOrGrabState0
@@ -307,6 +308,8 @@ parentItemCode_bracelet:
 	call specialObjectSetAnimationWithLinkData
 
 .ifdef ENABLE_RING_REDUX
+	jr @beginPickup
+
 @tryPunching:
 	push bc
 	ldbc EXPERTS_RING,FIST_RING
@@ -426,8 +429,7 @@ parentItemCode_bracelet:
 
 .ifdef ENABLE_QUICK_ITEM_DROP
 .ifdef ENABLE_RING_REDUX
-	ld a,HASTE_RING
-	call cpActiveRing
+	call isHasteRingEquipped
 	ld a,(wGameKeysJustPressed)
 	jr nz,+
 .endif
