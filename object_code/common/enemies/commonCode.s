@@ -1053,6 +1053,16 @@ ecom_seasonsFunc_4446:
 	push af
 	call objectGetAngleTowardLink
 	ld c,a
+.ifdef MAGNET_GLOVES_CAN_PUSH_ENEMIES
+	ld a,(wMagnetGloveState)
+	bit 1,a
+	jr z,+
+		ld a,c
+		add $10
+		and $1f
+		ld c,a
+	+
+.endif
 	ld b,SPEED_80
 	call ecom_applyGivenVelocity
 

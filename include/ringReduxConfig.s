@@ -6,28 +6,33 @@
 
 .ifdef ENABLE_REDUX_EXTRAS
 	.ifndef ENABLE_GASHA_REBALANCE
-		.define ENABLE_GASHA_REBALANCE		1
+		.define ENABLE_GASHA_REBALANCE			1
 	.endif
 	.ifndef ENABLE_SECRET_GASHA_RINGS
-;		.define ENABLE_SECRET_GASHA_RINGS 	1 	; keeping here for documentation
+;		.define ENABLE_SECRET_GASHA_RINGS 		1 	; keeping here for documentation
 	.endif
 	.ifndef ENABLE_PUNCH_WITH_ITEM
-		.define ENABLE_PUNCH_WITH_ITEM 		1
+		.define ENABLE_PUNCH_WITH_ITEM 			1
 	.endif
 	.ifndef ENABLE_QUICK_ITEM_DROP
-		.define ENABLE_QUICK_ITEM_DROP 		1
+		.define ENABLE_QUICK_ITEM_DROP 			1
 	.endif
 	.ifndef ENABLE_PORTAL_RING_BOX
-		.define ENABLE_PORTAL_RING_BOX		1
+		.define ENABLE_PORTAL_RING_BOX			1
 	.endif
 	.ifndef INCREASE_WALLET_SIZE
-		.define INCREASE_WALLET_SIZE		1
+		.define INCREASE_WALLET_SIZE			1
 	.endif
 	.ifndef REMAP_RING_LIST
-		.define REMAP_RING_LIST				1
+		.define REMAP_RING_LIST					1
 	.endif
 	.ifndef UNRESTRICTED_TRANSFORMS
-		.define UNRESTRICTED_TRANSFORMS		1
+		.define UNRESTRICTED_TRANSFORMS			1
+	.endif
+	.ifndef MAGNET_GLOVES_CAN_PUSH_ENEMIES
+		; normally the magnet gloves are restricted to pulling enemies, but
+		; being able to push them away is a nice feature sometimes.
+		.define MAGNET_GLOVES_CAN_PUSH_ENEMIES	1
 	.endif
 .endif
 

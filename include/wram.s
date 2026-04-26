@@ -2001,6 +2001,9 @@ wLinkSwimmingState: ; $cc5d/$cc78
 wMagnetGloveState: ; $cc5e/$cc79
 ; Bit 6: Set while latched onto something (ignore holes, etc).
 ; Bit 1: Set based on glove's polarity.
+;   0: Polarity set to S
+;   1: Polarity set to N
+; Bit 0: Set if magnetism is ON
 	db
 
 wLinkUsingItem1: ; $cc5f/$cc7a
