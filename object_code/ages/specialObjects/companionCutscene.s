@@ -163,8 +163,12 @@ rickyCutscene_state1:
 	inc l
 	ld (hl),$1e
 
+.ifdef ENABLE_MULTI_RING
+	call disableActiveRing
+.else
 	ld hl,wActiveRing
 	ld (hl),$ff
+.endif
 	ld a,$81
 	ld (wLinkInAir),a
 	ld hl,w1Link.speed

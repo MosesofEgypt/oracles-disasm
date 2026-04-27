@@ -1039,8 +1039,12 @@ endgameCutsceneHandler_0f:
 @@substate0:
 	ld a,$01
 	ld (de),a
+.ifdef ENABLE_MULTI_RING
+	call disableActiveRing
+.else
 	ld hl,wActiveRing
 	ld (hl),$ff
+.endif
 	xor a
 	ldh (<hActiveObjectType),a
 	ld de,$d000

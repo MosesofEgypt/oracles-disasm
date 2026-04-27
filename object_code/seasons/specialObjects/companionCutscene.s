@@ -193,8 +193,12 @@ rickyState1:
 	ld (hl),30
 	dec l
 	inc (hl)
+.ifdef ENABLE_MULTI_RING
+	call disableActiveRing
+.else
 	ld hl,wActiveRing
 	ld (hl),$ff
+.endif
 	ld a,$81
 	ld ($cc77),a
 	ld hl,w1Link.speed

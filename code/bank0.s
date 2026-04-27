@@ -8426,27 +8426,40 @@ cpActiveRing:
 		ret
 	+
 
-	.ifdef ROM_SEASONS
-	; don't wanna cheat on blaino....
-	push af
-	ld a,(wInBoxingMatch)
-	or a
-	jr z,+
-		pop af
-		ret
-	+
-	pop af
-	.endif
-
 	push hl
 	push bc
+
+	.ifdef ROM_SEASONS
+		; don't wanna cheat on blaino....
+		ld hl,wInBoxingMatch
+		ld c,(hl)
+		bit 0,c
+		jr nz,@done
+	.endif
+
+	ld hl,wRingReduxFlags
+	ld c,(hl)
+	cp FIST_RING
+	jr nz,+
+		; if flags indicate to, we force the first ring active
+		bit 5,c
+		jr z,+
+			; force first ring to be equipped
+			xor a
+			jr @done
+	+
+
+	; treat all rings as inactive if forced to
+	bit 6,c
+	jr nz,@done
+
 	ld b,$05
 	ld hl,wRingBoxContents
-
 	-
 		cp (hl)
 		jr z,+
 		inc l
+		sra c
 		dec b
 		jr nz,-
 
@@ -8454,27 +8467,33 @@ cpActiveRing:
 		cp (hl)
 		jr z,+
 			ld b,$05
+			ld hl,wRingReduxFlagsExt
+			ld c,(hl)
 			ld hl,wRingBoxContentsExt
 
 		-
 			cp (hl)
 			jr z,+
 			inc l
+			sra c
 			dec b
 			jr nz,-
 	.endif
-	; all checks failed. repoint to end of ring box
-	dec l
 
+	; all checks failed. clear z flag and return
+	rrca
+	jr @done
 +
+	; found the ring. determine if it's equipped
+	bit 0,c
+@done
 	pop bc
-	jr z,+
 .else
 	push hl
-.endif
 	ld hl,wActiveRing
 +
 	cp (hl)
+.endif
 	pop hl
 	ret
 
@@ -8550,6 +8569,7 @@ removeRing:
 		jr nz,-
 .endif
 
+.ifndef ENABLE_MULTI_RING
 	; remove from active ring
 	ld hl,(wActiveRing)
 	cp (hl)
@@ -8557,6 +8577,7 @@ removeRing:
 		ld (hl),$ff
 
 	+
+.endif
 	pop bc
 	pop hl
 	ret
@@ -8689,7 +8710,11 @@ quickSwapHeldItems:
 ;;
 disableActiveRing:
 	push hl
+.ifdef ENABLE_MULTI_RING
+	ld hl,wRingReduxFlags
+.else
 	ld hl,wActiveRing
+.endif
 	set 6,(hl)
 	pop hl
 	ret
@@ -8697,10 +8722,14 @@ disableActiveRing:
 ;;
 enableActiveRing:
 	push hl
+.ifdef ENABLE_MULTI_RING
+	ld hl,wRingReduxFlags
+.else
 	ld hl,wActiveRing
 	ld a,(hl)
 	cp $ff
 	jr z,+
+.endif
 	res 6,(hl)
 +
 	pop hl

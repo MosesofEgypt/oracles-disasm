@@ -916,8 +916,12 @@ endgameCutsceneHandler_0f_stage0_body:
 @state0:
 	ld a,$01
 	ld (de),a
+.ifdef ENABLE_MULTI_RING
+	call disableActiveRing
+.else
 	ld hl,wActiveRing
 	ld (hl),$ff
+.endif
 	xor a
 	ldh (<hActiveObjectType),a
 	ld de,$d000
@@ -1529,8 +1533,12 @@ endgameCutsceneHandler_0a_stage1:
 	ld l,<wInventoryB
 	ldi (hl),a
 	ld (hl),a ; [wInventoryA]
+.ifdef ENABLE_MULTI_RING
+	call disableActiveRing
+.else
 	ld l,<wActiveRing
 	ld (hl),$ff
+.endif
 ++
 	jp fadeoutToWhite
 

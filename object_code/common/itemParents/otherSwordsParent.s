@@ -66,24 +66,55 @@ parentItemCode_punch:
 	call itemCreateChild
 
 	; Check for fist ring (weak punch) or expert's ring (strong punch)
-.ifdef ENABLE_RING_REDUX
+.ifdef ENABLE_MULTI_RING
 	ld a,EXPERTS_RING
 	call cpActiveRing
-	jr nz,+++
-		push af
-		push hl
+.else
+	ld a,(wActiveRing)
+	cp EXPERTS_RING
+.endif
 
-		ld a,TREASURE_SLINGSHOT
-		call checkTreasureObtained
-		jr c,+
-			ld a,TREASURE_SHOOTER
-			call checkTreasureObtained
+.ifdef ENABLE_RING_REDUX
+	push af
+	jr nz,+++
+		ld a,ENERGY_RING
+		call cpActiveRing
+		jr z,+
+			jr +++
 		+
 
+		; figure out the heart cutoff for firing
+		ldbc LIGHT_RING_L2, LIGHT_RING_L1
+		call eitherRingActive
+		ld c,$00
+		jr nz,+
+			jr c,++
+			ld c,LIGHT_RING_L2_CUTOFF
+		+
 		jr nc,+
-			ld a,ENERGY_RING
-			call cpActiveRing
-			jr nz,+
+			ld c,LIGHT_RING_L1_CUTOFF
+		+
+
+		; check we have enough hearts to fire
+		push hl
+		ld hl,wLinkHealth
+		ldi a,(hl) ; load 'a' with wLinkHealth and move hl to wLinkMaxHealth
+		add c
+		cp (hl)
+		pop hl
+
+		jr c,+++
+			++
+
+			ld a,TREASURE_SLINGSHOT
+			call checkTreasureObtained
+			jr c,+
+				ld a,TREASURE_SHOOTER
+				call checkTreasureObtained
+			+
+
+			push hl
+			jr nc,+
 				ld e,Item.relatedObj2+1
 				ld a,>w1Link
 				ld (de),a
@@ -104,13 +135,10 @@ parentItemCode_punch:
 					ld (hl),a
 					ld l,Item.var37
 					ld (hl),$01
-		+
-		pop hl
-		pop af
+			+
+			pop hl
 	+++
-.else
-	ld a,(wActiveRing)
-	cp EXPERTS_RING
+	pop af
 .endif
 
 .ifdef ROM_SEASONS

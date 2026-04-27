@@ -778,12 +778,12 @@ wUnusedc6c4:
 
 wRingBoxContents: ; $c6c6/$c6c0
 	dsb 5
-.ifdef ENABLE_RING_REDUX_ASDF
-wRingReduxFlags: ; $c5bf
+.ifdef ENABLE_MULTI_RING
+wRingReduxFlags: ; $c6cb/$c6c5
 ; Repurposing this byte for storing various redux related flags
 ; Bits 0-4: Set if the associated ring in the box is disabled
-; Bit 5:	Set if all rings should be disabled temporarily*
-; Bit 6:	Set if FIST_RING should be treated as equipped temporarily*
+; Bit 5:	Set if FIST_RING should be treated as equipped temporarily*
+; Bit 6:	Set if all rings should be disabled temporarily*
 ; * temporarily means till player control is enabled and you are not boxing
 	db
 .else

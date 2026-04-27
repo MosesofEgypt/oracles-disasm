@@ -446,15 +446,14 @@ parentItemCode_sword:
 .ifdef ENABLE_RING_REDUX
 	ldbc LIGHT_RING_L2, LIGHT_RING_L1
 	call eitherRingActive
+	ld c,$00
 	jr nz,+
 		ld c,LIGHT_RING_L2_CUTOFF
 		jr c,@createSwordBeam
 	+
 	; lightLevel0or1
-	jr z,+
+	jr nc,+
 		ld c,LIGHT_RING_L1_CUTOFF
-		jr c,+
-			ld c,$00
 	+
 .else
 	ld c,$08

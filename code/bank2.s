@@ -4772,7 +4772,6 @@ inventoryMenuState1:
 	sub $10
 	ret c
 
-.ifndef ENABLE_MULTI_RING
 .ifdef ROM_SEASONS
 	; Can't equip rings while boxing
 	ld b,a
@@ -4784,15 +4783,61 @@ inventoryMenuState1:
 	ld a,b
 .endif
 
+.ifdef ENABLE_MULTI_RING
+	.ifndef EXTENDED_RING_BOX
+		ld hl,wRingBoxContents
+	.endif
+.else
 	ld hl,wActiveRing
 	ld c,(hl)
 	ld l,<wRingBoxContents
+.endif
 
 .ifdef EXTENDED_RING_BOX
 	call getRingBoxContents
 	call getRingBoxClippedIndex
 .endif
 
+.ifdef ENABLE_MULTI_RING
+	; get the ring in the box
+	push af
+	push hl
+	rst_addAToHl
+	ld c,(hl)
+	pop hl
+
+	; check if there is even a ring here
+	ld a,c
+	cp $ff
+	jr nz,+
+		; no ring here. don't even make click sfx
+		pop af
+		ret
+	+
+
+	; get the enabled/disabled flags
+	ld a,$05
+	rst_addAToHl
+	ld c,(hl)
+	pop af
+
+	; generate the flag mask for the box position
+	ld b,$01
+	inc a
+	-
+		dec a
+		jr z,+
+		sla b
+		jr -
+	+
+
+	; toggle the flag
+	ld a,c
+	xor b
+
+	; replace the flags
+	ld (hl),a
+.else
 	rst_addAToHl
 	ld a,(hl)
 	cp c
@@ -4803,11 +4848,9 @@ inventoryMenuState1:
 	ld a,$ff
 +
 	ld (wActiveRing),a
+.endif
 	ld a,SND_SELECTITEM
 	jp playSound
-.else
-	ret
-.endif
 
 .ifdef ENABLE_PORTAL_RING_BOX
 @openRingBoxMenu:
@@ -5765,7 +5808,7 @@ drawEquippedSpriteForActiveRing:
 ++
 .endif
 
-.ifdef ENABLE_RING_REDUX
+.ifdef ENABLE_MULTI_RING
 	call getRingBoxCapacity
 	ret z
 
@@ -10205,6 +10248,7 @@ ringMenu_ringList_substate0:
 	ret
 
 @bPressed:
+.ifndef ENABLE_MULTI_RING
 	; Deactivate active ring if it was put away
 	ld a,(wActiveRing)
 	call ringMenu_checkRingIsInBox
@@ -10212,6 +10256,7 @@ ringMenu_ringList_substate0:
 	ld a,$ff
 	ld (wActiveRing),a
 +
+.endif
 	; Exit the ring menu
 	xor a
 	ld (wTextIsActive),a

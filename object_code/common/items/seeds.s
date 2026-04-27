@@ -211,6 +211,15 @@ itemCode24:
 ;;
 ; State 1: seed moving
 seedItemState1:
+.ifdef ENABLE_RING_REDUX
+	ld e,Item.var37
+	ld a,(de)
+	or a
+	jr z,+
+		ld a,BREAKABLETILESOURCE_SWORD_L1
+		call itemTryToBreakTile
+	+
+.endif
 	call itemUpdateDamageToApply
 .ifdef ROM_AGES
 	jr z,@noCollision
@@ -322,6 +331,17 @@ seedItemState1:
 
 ; Behaviour on collision with enemy; again slightly different
 @seedCollidedWithEnemy:
+.ifdef ENABLE_RING_REDUX
+	ld a,VICTORY_RING
+	call cpActiveRing
+	jr nz,+
+		; allow hadouken to pierce enemies with victory ring
+		ld e,Item.var37
+		ld a,(de)
+		or a
+		jp nz,@noCollision
+	+
+.endif
 	call itemAnimate
 	ld e,Item.collisionType
 	xor a
@@ -458,33 +478,48 @@ seedItemState1:
 	ldi a,(hl)
 	ld (de),a
 	ldi a,(hl)
-	ld e,Item.counter1
-	ld (de),a
 .ifdef ENABLE_RING_REDUX
 	ld c,a
-	ld a,b
-	cp $40
-
-	jr nz,+
-		; reduce fire 'burn' time
-		ld c,$1d
-	+
-	; check scent seed
-	cp $4e
-	jr nz,+
-		; increase scent seed 'smell' time
-		ld c,$ff
-	+
 
 	; check ring
 	ld a,MYSTIC_SEED_RING
 	call cpActiveRing
-	jr nz,+
-		; apply modified timers
-		ld a,c
+	jr nz,++
+		ld a,b
+		cp $40
+
+		; modify timers
+		jr nz,+
+			; reduce fire 'burn' time
+			ld c,$1d
+		+
+		; check scent seed
+		cp $4e
+		jr nz,+
+			; increase scent seed 'smell' time
+			ld c,$ff
+		+
+	++
+
+	ld e,Item.var37
+	ld a,(de)
+	or a
+	jr z,+
+		; 'instant' burn time for hadouken fireballs
+		ld c,$0f
+
+		; make it blue
+		ld e,Item.oamFlags
+		ld a,$09
+		ld (de),a
+		dec e
 		ld (de),a
 	+
+
+	ld a,c
 .endif
+	ld e,Item.counter1
+	ld (de),a
 	ld a,(hl)
 	jp playSound
 

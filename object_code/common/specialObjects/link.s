@@ -3598,7 +3598,7 @@ linkUpdateVelocity:
 @mermaidSuit:
 	ld c,$98
 	call updateLinkSpeed_withParam
-.ifdef ENABLE_RING_REDUX
+.ifdef ENABLE_MULTI_RING
 	ld a,SWIMMERS_RING
 	call cpActiveRing
 .else

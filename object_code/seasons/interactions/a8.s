@@ -82,8 +82,13 @@ interactionCodea8:
 @thing5:
 	ld a,d
 	ld (wLinkObjectIndex),a
+.ifdef ENABLE_MULTI_RING
+	ld hl,wRingReduxFlags
+	set 5,(hl)
+.else
 	ld hl,wActiveRing
 	ld (hl),FIST_RING
+.endif
 	xor a
 	ld l,<wInventoryB
 	ldi (hl),a

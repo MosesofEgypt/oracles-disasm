@@ -27,6 +27,11 @@
 		.define REMAP_RING_LIST					1
 	.endif
 	.ifndef UNRESTRICTED_TRANSFORMS
+		; normally the transforms swap link with a different SpecialObject
+		; which has a very limited set of actions it can perform, and is
+		; prevented from using any items. we remove this restriction by
+		; never swapping link out, and instead remapping his sprites on
+		; a case-by-case basis for each action he may be performing.
 		.define UNRESTRICTED_TRANSFORMS			1
 	.endif
 	.ifndef MAGNET_GLOVES_CAN_PUSH_ENEMIES
@@ -66,6 +71,8 @@
 	; NOTE: these values are in 1/4 heart increments, so 4 == 1 heart
 		.define GOLD_RING_HEART_CUTOFF		(4*4)
 		.define CURSE_RING_HEART_CAP		(4*4)
+		.define LIGHT_RING_L1_CUTOFF		(4*3)
+		.define LIGHT_RING_L2_CUTOFF		(4*6)
 
 		; this is how much to reduce/increase damage dealt
 		; NOTE: lower values == higher damage
@@ -77,9 +84,6 @@
 		.define ARMOR_RING_L3_ATK_MOD		1
 
 	; NOTE: these values are in 1/8 heart increments, so 8 == 1 heart
-		.define LIGHT_RING_L1_CUTOFF		(8*3)
-		.define LIGHT_RING_L2_CUTOFF		(8*6)
-
 		.define SPIN_SWING_COUNTER			(4*15 + 1)	; one startup frame, and 4 per spin
 		.define SWORD_BEAM_LIMIT			2			; number of beams onscreen at once
 		.define SUPER_BEAM_DELAY			60			; frames
@@ -269,9 +273,7 @@
 
 .ifdef ENABLE_RING_REDUX
 	.define SEED_SHOOTER_BASE_ID		$40
-.endif
 
-.ifdef ENABLE_RING_REDUX
 	.ifndef ENABLE_PORTAL_RING_BOX
 		; If we want the redux, but don't want a portal box, we at least
 		; allow Vasu's Ring to work as a portal to the ring list.
@@ -282,11 +284,16 @@
 		; necessary for basically all ring combos
 		.define REDUX_UTIL_FUNCS		1
 	.endif
+
+	.ifndef ENABLE_MULTI_RING
+		; necessary for so many things(combos, effect stacking, etc)
+		.define ENABLE_MULTI_RING	1
+	.endif
 .endif
 
 .ifdef ENABLE_MULTI_RING
 	.ifndef UNRESTRICTED_TRANSFORMS
-		; necessary if all rings can be equipped at once
+		; necessary if multiple rings can be equipped at once
 		.define UNRESTRICTED_TRANSFORMS	1
 	.endif
 .endif

@@ -54,6 +54,7 @@ Combo Effects:
 
     12: Hadouken:
         Punching shoots a fireball that burns enemies on contact.
+        Has the same heart requirements as shooting a sword beam.
         NOTE: Must have acquired the Slingshot or Seed Shooter.
 
     13: Hurricane Spin:

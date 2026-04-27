@@ -3496,6 +3496,9 @@ func_5a60:
 .ifdef ENABLE_RING_REDUX
 	call updateSystemType
 .endif
+.ifdef ENABLE_MULTI_RING
+	call updateRingForceDisabledStatus
+.endif
 	call clearOam
 	call initializeVramMaps
 	call clearMemoryOnScreenReload
@@ -3748,6 +3751,19 @@ clearExtendedRingBox:
 	ldi (hl),a
 	pop hl
 +
+.endif
+
+.ifdef ENABLE_MULTI_RING
+updateRingForceDisabledStatus:
+	; if the player can open the menu, then rings shouldn't be disabled.
+	ld a,(wMenuDisabled)
+	or a
+	ret nz
+
+	ld a,(wRingReduxFlags)
+	res 6,a
+	ld (wRingReduxFlags),a
+	ret
 .endif
 
 .ifdef ENABLE_RING_REDUX
