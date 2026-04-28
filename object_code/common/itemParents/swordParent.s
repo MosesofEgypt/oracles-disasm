@@ -84,18 +84,7 @@ parentItemCode_sword:
 	ld a,(wSwordLevel)
 
 .ifdef ENABLE_RING_REDUX
-	push de
-	ld d,a
-	ld a,VICTORY_RING
-	call cpActiveRing
-	ld a,d
-	pop de
-	jr nz,+
-		; increment sword by 1 level
-		cp $03
-		jr nc,+
-			inc a
-+
+	call victoryRingIncLevel
 .endif
 
 	cp $02
@@ -188,10 +177,8 @@ parentItemCode_sword:
 
 	call @createSwordBeam
 .ifdef ENABLE_RING_REDUX
-	ldbc ENERGY_RING, CHARGE_RING
-	call eitherRingActive
+	call swordBeamosComboActive
 	jp nz,@triggerSwordPoke
-	jp nc,@triggerSwordPoke
 		ld h,d
 		ld l,Item.counter1
 		ld (hl),SUPER_BEAM_DELAY
@@ -262,15 +249,11 @@ parentItemCode_sword:
 	ld a,(hl)
 	or (hl)
 	jr nz,+
-		push bc
-		ldbc CHARGE_RING, SPIN_RING
-		call eitherRingActive
-		pop bc
+		call hurricaneSpinComboActive
 		ld h,d
 		ld l,Item.var2f
 		ld (hl),$00
 		jr nz,+
-		jr nc,+
 			; mark this as a super spin using an unused variable
 			ld (hl),$01
 			ld l,Item.counter1
@@ -444,17 +427,8 @@ parentItemCode_sword:
 
 @checkCreateSwordBeam:
 .ifdef ENABLE_RING_REDUX
-	ldbc LIGHT_RING_L2, LIGHT_RING_L1
-	call eitherRingActive
-	ld c,$00
-	jr nz,+
-		ld c,LIGHT_RING_L2_CUTOFF
-		jr c,@createSwordBeam
-	+
-	; lightLevel0or1
-	jr nc,+
-		ld c,LIGHT_RING_L1_CUTOFF
-	+
+	; figure out the heart cutoff for firing
+	call swordBeamHeartCutoff
 .else
 	ld c,$08
 	ld a,LIGHT_RING_L1
@@ -479,7 +453,7 @@ parentItemCode_sword:
 	ld a,ENERGY_RING
 	call cpActiveRing
 	jr nz,+
-		ldbc LIGHT_RING_L2, LIGHT_RING_L1
+		ldbc LIGHT_RING_L2,LIGHT_RING_L1
 		call eitherRingActive
 		jr z,++
 		jr c,++

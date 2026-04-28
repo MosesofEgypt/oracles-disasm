@@ -243,10 +243,8 @@ bombUpdateExplosion:
 ;			one frame, or all frames after the explosion starts)
 bombUpdateAnimation:
 .ifdef ENABLE_RING_REDUX
-	ldbc PEACE_RING, BOMBERS_RING
-	call eitherRingActive
+	call remoteBombComboActive
 	jr nz,+
-	jr nc,+
 		; enable remote bombs
 		call bombResetAnimationAndSetVisiblec1
 		ret
@@ -254,10 +252,8 @@ bombUpdateAnimation:
 .endif
 	call itemAnimate
 .ifdef ENABLE_RING_REDUX
-	ldbc BOMBPROOF_RING, HASTE_RING
-	call eitherRingActive
+	call instantBombComboActive
 	jr nz,+
-	jr nc,+
 		; force immediate explosion
 		ld l,Item.var2f
 		set 4,(hl)
@@ -514,13 +510,9 @@ explosionTryToBreakNextTile:
 	+
 
 	; determines the tile offset to use, and handles the counter reset
-	push bc
-	ldbc DISCOVERY_RING, BLAST_RING
-	call eitherRingActive
-	pop bc
+	call miningBombComboActive
 
 	ret nz
-	ret nc
 	ld a,BREAKABLETILESOURCE_SHOVEL
 	push hl
 	call tryToBreakTile

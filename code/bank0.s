@@ -8410,11 +8410,6 @@ add16BitRefs:
 	ld (de),a
 	ret
 
-.ifdef ENABLE_RING_REDUX
-isHasteRingEquipped:
-	ld a,HASTE_RING
-.endif
-
 ;;
 ; @param	a	The ring to check for.
 ; @param[out]	zflag	Set if the currently equipped ring equals 'a'.
@@ -8526,6 +8521,130 @@ eitherRingActive:
 	pop de
 	ld a,d
 	pop de
+	ret
+
+;;
+; @param	b	The first ring to check for.
+; @param	c	The second ring to check for.
+; @param[out]	zflag	Set if both 'b' and 'c' rings are active.
+bothRingsActive:
+	call eitherRingActive
+	ret nz
+	ret c
+	rra
+	ret
+
+isHasteRingEquipped:
+	push de
+	ld d,a
+	ld a,HASTE_RING
+	call cpActiveRing
+	ld a,d
+	pop de
+	ret
+
+remoteBombComboActive:
+	ldbc PEACE_RING,BOMBERS_RING
+	jr bothRingsActive
+
+instantBombComboActive:
+	ldbc BOMBPROOF_RING,HASTE_RING
+	jr bothRingsActive
+
+enemyPogoComboActive:
+	ldbc STEADFAST_RING,HASTE_RING
+	jr bothRingsActive
+
+underwaterItemsComboActive:
+	ldbc SWIMMERS_RING,ZORA_RING
+	jr bothRingsActive
+
+superBoomerangComboActive:
+	ldbc RANG_RING_L1,RANG_RING_L2
+	jr bothRingsActive
+
+diggerangComboActive:
+	ldbc TOSS_RING,DISCOVERY_RING
+	jr bothRingsActive
+
+swordBeamosComboActive:
+	ldbc ENERGY_RING,CHARGE_RING
+	jr bothRingsActive
+
+hurricaneSpinComboActive:
+	push bc
+	ldbc SPIN_RING,CHARGE_RING
+	call bothRingsActive
+	pop bc
+	ret
+
+miningBombComboActive:
+	push bc
+	ldbc DISCOVERY_RING,BLAST_RING
+	call bothRingsActive
+	pop bc
+	ret
+
+kempoMasterComboActive:
+	push bc
+	ldbc EXPERTS_RING,FIST_RING
+	call bothRingsActive
+	pop bc
+	ret
+
+bonkMasterComboActive:
+	push de
+	ld d,a
+	ld a,TOSS_RING
+	call cpActiveRing
+	jr nz,+
+		push bc
+		ldbc EXPERTS_RING,FIST_RING
+		call eitherRingActive
+		pop bc
+		jr nc,++
+			xor a
+		++
+	+
+	ld a,d
+	pop de
+	ret
+
+tripleHeartJoyComboActive:
+	push bc
+	ldbc BLUE_JOY_RING,GOLD_JOY_RING
+	call bothRingsActive
+	pop bc
+	ret
+
+victoryRingIncLevel:
+	push de
+	ld d,a
+	ld a,VICTORY_RING
+	call cpActiveRing
+	ld a,d
+	pop de
+	ret nz
+	; increment level by 1
+	cp $03
+	ret nc
+	inc a
+	ret
+
+swordBeamHeartCutoff:
+	ldbc LIGHT_RING_L2,LIGHT_RING_L1
+	call eitherRingActive
+	ld c,$00
+	jr nz,+
+		jr nc,++
+			ld c,$40
+			ret
+		++
+		ld c,LIGHT_RING_L2_CUTOFF
+	+
+	jr nc,+
+		ld c,LIGHT_RING_L1_CUTOFF
+	+
 	ret
 
 ;;

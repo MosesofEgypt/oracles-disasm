@@ -50,15 +50,7 @@ itemCode05:
 	ld a,(wSwordLevel)
 
 .ifdef ENABLE_RING_REDUX
-	ld a,VICTORY_RING
-	call cpActiveRing
-	ld a,(wSwordLevel)
-	jr nz,+
-		; increment sword by 1 level
-		cp $03
-		jr nc,+
-			inc a
-+
+	call victoryRingIncLevel
 .endif
 
 	ld hl,@swordLevelData-2

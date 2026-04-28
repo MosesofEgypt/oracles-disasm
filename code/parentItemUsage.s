@@ -115,11 +115,9 @@ checkUseItems:
 	jr z,@normal
 .ifdef ENABLE_RING_REDUX
 	push bc
-	ldbc SWIMMERS_RING, ZORA_RING
-	call eitherRingActive
+	call underwaterItemsComboActive
 	pop bc
-	jr nz,@underwater
-	jr c,@normal
+	jr z,@normal
 .endif
 
 	; When underwater, only check the A button

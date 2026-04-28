@@ -248,10 +248,8 @@ enemyCheckCollisions:
 	ret nz
 
 	; if wearing both rings, the shield can deal damage based on link's speed
-	ldbc STEADFAST_RING,HASTE_RING
-	call eitherRingActive
+	call enemyPogoComboActive
 	jp nz,@handleCollision
-	jp nc,@handleCollision
 
 	; reference for link's speeds
 	; 20: walking up stairs

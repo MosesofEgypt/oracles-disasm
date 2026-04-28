@@ -2992,15 +2992,10 @@ updateHeartRingCounter:
 	; check rings
 	; NOTE: only doubling ONCE if either ring is worn, as the code that
 	; 		handles health refills will double if both rings are worn.
-	push bc
-	ldbc BLUE_JOY_RING, GOLD_JOY_RING
-	call eitherRingActive
-	pop bc
+	call tripleHeartJoyComboActive
 	jr z,+
-	jr nc,++
-	+
 		sla c
-	++
+	+
 .else
 	ld a,(wActiveRing)
 

@@ -8,12 +8,10 @@ tryBreakTileWithExpertsRing:
 	call @breakTileHelper
 
 	push bc
-	ldbc EXPERTS_RING,FIST_RING
-	call eitherRingActive
+	call kempoMasterComboActive
 	pop bc
 
 	; do a super punch only with both rings
-	ret nc
 	ret nz
 
 	; create an explosion effect
@@ -112,18 +110,7 @@ tryBreakTileWithSword_calculateLevel:
 	ld a,(wSwordLevel)
 
 .ifdef ENABLE_RING_REDUX
-	push de
-	ld d,a
-	ld a,VICTORY_RING
-	call cpActiveRing
-	ld a,d
-	pop de
-	jr nz,+
-		; increment sword by 1 level
-		cp $03
-		jr nc,+
-			inc a
-+
+	call victoryRingIncLevel
 .endif
 
 	cp $01

@@ -52,6 +52,10 @@ parentItemCode_bomb:
 	.dw parentItemCode_bracelet@state2
 	.dw parentItemCode_bracelet@state3
 	.dw parentItemCode_bracelet@state4
+.ifdef ENABLE_RING_REDUX
+	.dw parentItemCode_bracelet@state6
+	.dw parentItemCode_bracelet@state6
+.endif
 
 @state0:
 .ifdef ROM_AGES
@@ -86,10 +90,8 @@ parentItemCode_bomb:
 	+
 
 	push af
-	ldbc PEACE_RING, BOMBERS_RING
-	call eitherRingActive
+	call remoteBombComboActive
 	jr nz,+
-	jr nc,+
 		; check if there's a bomb to remote detonate
 		ld c,ITEM_BOMB
 		call findItemWithID
@@ -197,6 +199,9 @@ parentItemCode_bracelet:
 	.dw @state3
 	.dw @state4
 	.dw @state5
+.ifdef ENABLE_RING_REDUX
+	.dw @state6
+.endif
 
 ; State 0: not grabbing anything
 @state0:
@@ -312,9 +317,7 @@ parentItemCode_bracelet:
 
 @tryPunching:
 	push bc
-	ldbc EXPERTS_RING,FIST_RING
-	call eitherRingActive
-	jr c,+
+	call kempoMasterComboActive
 	jr z,+
 		pop bc
 		ret
@@ -440,6 +443,69 @@ parentItemCode_bracelet:
 .endif
 	and BTN_A|BTN_B
 	ret z
+.ifdef ENABLE_RING_REDUX
+	; get the opposite button of the one this item is assigned
+	; to and use it to determine if we smack with the item
+	ld c,a
+	ld h,d
+	ld l,Item.var03
+	ld a,(hl)
+	xor $03
+	and c
+	jr z,+
+		; only smack if the button was JUST pressed
+		ld c,a
+		ld a,(wGameKeysJustPressed)
+		and c
+		ret z
+
+		call bonkMasterComboActive
+		jr nz,+
+			ld l,Item.state
+			ld (hl),$06
+
+			ld a,(wLinkAngle)
+			rlca
+			jr c,+++
+				ld a,(w1Link.direction)
+				swap a
+				rrca
+			+++
+			ld l,Item.angle
+			ld (hl),a
+
+			ld l,Item.animCounter
+			ld (hl),$12
+			xor a
+			inc l
+			ld (hl),a
+
+			; Enable collisions on the throwable
+			call getHeldObject
+			ld l,Item.collisionType
+			set 7,(hl)
+
+			; set the collision radius
+			ld l,Item.collisionRadiusY
+			ld a,$08
+			ldi (hl),a
+			ldi (hl),a
+
+			; disable link movement
+			call itemDisableLinkTurning
+			call itemDisableLinkMovement
+
+			; unsetting this will prevent updateGrabbedObjectPosition from including
+			; link's animation in the objects position(it's meant for bobbing up/down)
+			ld hl,wLinkGrabState
+			res 0,(hl)
+
+			; these are both really good, so it's hard to choose
+			;ld a,SND_SCENT_SEED
+			ld a,SND_SEEDSHOOTER
+			jp playSound
+	+
+.endif
 
 	call updateLinkDirectionFromAngle
 ++
@@ -613,3 +679,124 @@ parentItemCode_bracelet:
 	ld a,LINK_ANIM_MODE_LIFT_2
 	jp z,specialObjectSetAnimationWithLinkData
 	jp specialObjectAnimate_optimized
+
+.ifdef ENABLE_RING_REDUX
+@state6:
+	ld h,d
+	ld l,Item.animParameter
+	bit 7,(hl)
+	jr nz,+
+		dec l ; decrement animCounter
+		dec (hl)
+		ld a,(hl)
+		jr z,++
+			call isHasteRingEquipped
+			jr nz,++
+				dec (hl)
+		++
+
+		jr nz,++
+			inc l ; move back to animParameter
+			set 7,(hl)
+		++
+
+		push hl
+		ld hl,@swingAnimStates
+		rst_addAToHl
+		ld a,(hl)
+		ld c,a
+		pop hl
+
+		; use links throwing sprite
+		ld l,Item.var31
+		ld (hl),$b0
+		ld l,Item.var3f
+		ld (hl),$0f
+
+		; get the object(if it's still valid)
+		call getHeldObject
+		jr nz,++
+			ld h,d
+			ld l,Item.state
+			ld (hl),$00
+			jr @@enable
+		++
+
+		ld l,Item.oamFlags
+		bit 7,a
+		jr z,++
+			set 6,(hl)
+			jr +++
+		++
+			res 6,(hl)
+		+++
+
+		and $7f
+		ld (wLinkGrabState2),a
+		ret
+	+
+	; reset to holding state and anim
+	ld l,Item.state
+	ld (hl),$03
+
+	; reset links sprite
+	ld l,Item.var32
+	ld (hl),$5c
+	ld l,Item.var3f
+	ld (hl),$00
+
+	; get the object(if it's still valid)
+	call getHeldObject
+	jr z,@@enable
+		; object is still valid. disable collisions
+		ld l,Item.collisionType
+		res 7,(hl)
+
+		; reenable this if necessary so the object bobs while link moves
+		ld hl,wLinkGrabState
+		ld a,$82
+		cp (hl)
+		jr nz,+
+			set 0,(hl)
+		+
+	@@enable:
+
+	call itemEnableLinkTurning
+	jp itemEnableLinkMovement
+	ret
+
+; Bit 7:    If set, vertically mirror object
+; Bits 4-6: Weight of object(affects position)
+; Bits 0-3: Low nibble to write to wLinkGrabState2
+@swingAnimStates:
+	.db $08 $08 $08
+	.db $04 $04 $04
+	.db $04 $84 $84
+	.db $80 $80 $90
+	.db $90 $90 $94
+	.db $94 $14 $14
+
+getHeldObject:
+	push de
+	ld d,a
+	ld l,Item.var37
+	xor a
+	or (hl)
+	jr z,+
+		ld hl,w1ReservedItemC
+		ld a,d
+		pop de
+		ret
+	+
+	; get the object held by w1Link
+	ld hl,w1Link.relatedObj2+1
+	ldd a,(hl)
+	ld l,(hl)
+	ld h,a
+	; test that the object is enabled
+	xor a
+	or (hl)
+	ld a,d
+	pop de
+	ret
+.endif

@@ -84,16 +84,7 @@ parentItemCode_punch:
 		+
 
 		; figure out the heart cutoff for firing
-		ldbc LIGHT_RING_L2, LIGHT_RING_L1
-		call eitherRingActive
-		ld c,$00
-		jr nz,+
-			jr c,++
-			ld c,LIGHT_RING_L2_CUTOFF
-		+
-		jr nc,+
-			ld c,LIGHT_RING_L1_CUTOFF
-		+
+		call swordBeamHeartCutoff
 
 		; check we have enough hearts to fire
 		push hl

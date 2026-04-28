@@ -74,6 +74,10 @@ Combo Effects:
         Shield can be used as a weapon to tackle enemies.
         Damage dealt increases with shield level and your speed.
 
+    18: Bonk Master:
+        Held items can be used to bonk enemies.
+        Press the button that the item was not picked up with to bonk.
+
 
 
 DO NOT LOOK PAST THIS LINE IF YOU WANT TO FIGURE THE COMBOS OUT FOR YOURSELF
@@ -108,3 +112,5 @@ Combo Requirements:
     15: Energy Ring + Light Ring L-1 or L-2
     16: Toss Ring  + Discovery Ring + Rang Ring L-1 or L-2
     17: Haste Ring + Steadfast Ring
+    18: Toss Ring  + Fist Ring or
+        Toss Ring  + Expert's Ring

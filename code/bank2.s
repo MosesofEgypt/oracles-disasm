@@ -3788,22 +3788,12 @@ applyTreasureLevelRingModifier:
 	jr z,++
 		cp TREASURE_SWORD
 		jr z,++
-			jr +
-
-++
-	; checkRing
-	ld a,VICTORY_RING
-	call cpActiveRing
-	jr nz,+
-		; increment sword and shield by 1 level
-		pop af
-		cp $03 	; cap to max level
-		ret nc
-		inc a
-		ret
-+
+			pop af
+			ret
+	++
 	pop af
-	ret
+
+	jp victoryRingIncLevel
 .endif
 
 ;;

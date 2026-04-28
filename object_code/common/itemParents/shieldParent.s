@@ -28,18 +28,7 @@ parentItemCode_shield:
 	; running this code would suffice to stop using the shield
 	ld a,(wShieldLevel)
 .ifdef ENABLE_RING_REDUX
-	push de
-	ld d,a
-	ld a,VICTORY_RING
-	call cpActiveRing
-	ld a,d
-	pop de
-	jr nz,+
-		; increment shield by 1 level
-		cp $03
-		jr nc,+
-			inc a
-+
+	call victoryRingIncLevel
 .endif
 	add $00
 	ld (wUsingShield),a

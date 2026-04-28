@@ -803,15 +803,9 @@ loadTreasureDisplayData:
 			ret
 
 ++
-	; checkRing
-	ld a,VICTORY_RING
-	call cpActiveRing
-	jr nz,+
-		; increment sword and shield by 1 level
-		ld a,d
-		cp $03
-		jr nc,+
-			inc d
+	ld a,d
+	call victoryRingIncLevel
+	ld d,a
 .endif
 +
 	ret

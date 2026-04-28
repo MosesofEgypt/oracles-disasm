@@ -104,8 +104,8 @@ itemCode06:
 .ifdef ENABLE_RING_REDUX
 	jr z,+
 		; if both rings equipped, keep flying even after hitting an enemy
-		call checkBothRangRingsEquipped
-		jr nc,@returnToLink
+		call superBoomerangComboActive
+		jr nz,@returnToLink
 		xor a
 		ld (de),a
 	+
@@ -124,8 +124,8 @@ itemCode06:
 		call checkBoomerangParentStillValid
 		jr z,@returnToLink
 
-		call checkBothRangRingsEquipped
-		jp c,@hitWall
+		call superBoomerangComboActive
+		jp z,@hitWall
 	+
 .endif
 	jr nc,@returnToLink
@@ -135,8 +135,8 @@ itemCode06:
 	ld a,(de)
 	call objectNudgeAngleTowards
 .ifdef ENABLE_RING_REDUX
-	call checkBothRangRingsEquipped
-	jr nc,+
+	call superBoomerangComboActive
+	jr nz,+
 		; better turning if both equipped
 		ld e,Item.var34
 		ld a,(de)
@@ -311,8 +311,8 @@ itemCode06:
 	; this is the magic boomerang, so if both rang rings are equipped
 	; then it can continue flying as long as the button is held, even
 	; after hitting a solid tile.
-	call checkBothRangRingsEquipped
-	ret nc
+	call superBoomerangComboActive
+	ret nz
 
     ; intentional stack manipulation to jump out of parent call
 	pop af
@@ -323,10 +323,8 @@ magicBoomerangTryToBreakTile:
 .ifdef ENABLE_RING_REDUX
 	; if wearing these rings, the boomerang just eats dirt up
 	push bc
-	ldbc TOSS_RING, DISCOVERY_RING
-	call eitherRingActive
+	call diggerangComboActive
 	jr nz,+
-	jr nc,+
 		ldbc RANG_RING_L2, RANG_RING_L1
 		call eitherRingActive
 		jr c,++
@@ -374,18 +372,6 @@ itemCheckWithinRangeOfLink:
 	ret
 
 .ifdef ENABLE_RING_REDUX
-;;
-; @param[out]	cflag	Set if both rang rings are equipped
-checkBothRangRingsEquipped:
-	push bc
-	ldbc RANG_RING_L2, RANG_RING_L1
-	call eitherRingActive
-	pop bc
-	ret nc
-	ret z
-	ccf
-	ret
-
 ;;
 ; @param[out]	zflag	Set if the parent is null
 checkBoomerangParentStillValid:
