@@ -157,6 +157,7 @@
 	; The following are the rings that drop per tier, followed by 
 	; cutoffs for the chance to drop. the comment after the cutoff
 	; is the weight that the above cutoffs were derived from.
+	; NOTE: IF YOU CHANGE THE RINGS LISTED, YOU MUST UPDATE @ringTierMaskTable
 
 	; tier0: high-buff/good-utility
 	.macro TIER0_RINGS_AND_CUTOFFS

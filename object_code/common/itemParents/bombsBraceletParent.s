@@ -317,7 +317,7 @@ parentItemCode_bracelet:
 
 @tryPunching:
 	push bc
-	call kempoMasterComboActive
+	call kenpoMasterComboActive
 	jr z,+
 		pop bc
 		ret
@@ -452,21 +452,28 @@ parentItemCode_bracelet:
 	ld a,(hl)
 	xor $03
 	and c
-	jr z,+
+	jr z,+++
 		; only smack if the button was JUST pressed
 		ld c,a
 		ld a,(wGameKeysJustPressed)
 		and c
 		ret z
 
-		call bonkMasterComboActive
+		call judoMasterComboActive
 		jr nz,+++
+			call getHeldObject
 			; don't swing if the object doesn't have a damage value
 			xor a
 			ld l,Item.damage
 			cp (hl)
 			jr z,+++
 
+			; store so it doesn't need to be retrieved again
+			push bc
+			ld b,h
+			ld c,l
+
+			ld h,d
 			ld l,Item.state
 			ld (hl),$06
 
@@ -486,8 +493,12 @@ parentItemCode_bracelet:
 			inc l
 			ld (hl),a
 
+			; retrieve the held object
+			ld h,b
+			ld l,c
+			pop bc
+
 			; Enable collisions on the throwable
-			call getHeldObject
 			ld l,Item.collisionType
 			set 7,(hl)
 

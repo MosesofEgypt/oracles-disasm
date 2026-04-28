@@ -5252,41 +5252,41 @@ getRingTierMasks:
 ; to quickly determine which rings have/havent been obtained per tier.
 @ringTierMaskTable:
 	; tier0
-	.db %00000000
-	.db %00001000
-	.db %01010010
-	.db %00111101
-	.db %00000000
-	.db %00000000
-	.db %00000010
-	.db %10000000
+	dbrev %00000000
+	dbrev %00010001
+	dbrev %01001000
+	dbrev %10111100
+	dbrev %00000010
+	dbrev %00000000
+	dbrev %01000000
+	dbrev %00000000
 	; tier1
-	.db %00100100
-	.db %00010000
-	.db %10001001
-	.db %11000000
-	.db %00000101
-	.db %00000010
-	.db %00000000
-	.db %00000000
+	dbrev %00100100
+	dbrev %00001000
+	dbrev %00010001
+	dbrev %00000011
+	dbrev %11100000
+	dbrev %01000000
+	dbrev %00000000
+	dbrev %00000000
 	; tier2
-	.db %00010000
-	.db %00100100
-	.db %00000000
-	.db %00000010
-	.db %00111000
-	.db %00000000
-	.db %00000101
-	.db %00010100
+	dbrev %00001000
+	dbrev %00100100
+	dbrev %00000000
+	dbrev %01000101
+	dbrev %00010000
+	dbrev %00000000
+	dbrev %10100000
+	dbrev %00001001
 	; tier3
-	.db %00000000
-	.db %10000000
-	.db %00000100
-	.db %00000000
-	.db %10000000
-	.db %01111100
-	.db %00000000
-	.db %00101010
+	dbrev %00000000
+	dbrev %00000000
+	dbrev %10100000
+	dbrev %00000000
+	dbrev %00000001
+	dbrev %00111110
+	dbrev %00000000
+	dbrev %01010100
 .endif
 
 ;;
@@ -8531,7 +8531,17 @@ bothRingsActive:
 	call eitherRingActive
 	ret nz
 	ret c
-	rra
+	push bc
+	ld b,a
+	or $01
+	ld a,b
+	pop bc
+	;rra
+	ret
+
+bothRingsActiveAndPopBC:
+	call bothRingsActive
+	pop bc
 	ret
 
 isHasteRingEquipped:
@@ -8574,46 +8584,39 @@ swordBeamosComboActive:
 hurricaneSpinComboActive:
 	push bc
 	ldbc SPIN_RING,CHARGE_RING
-	call bothRingsActive
-	pop bc
-	ret
+	jr bothRingsActiveAndPopBC
 
 miningBombComboActive:
 	push bc
 	ldbc DISCOVERY_RING,BLAST_RING
-	call bothRingsActive
-	pop bc
-	ret
+	jr bothRingsActiveAndPopBC
 
-kempoMasterComboActive:
+kenpoMasterComboActive:
 	push bc
 	ldbc EXPERTS_RING,FIST_RING
-	call bothRingsActive
-	pop bc
-	ret
-
-bonkMasterComboActive:
-	push de
-	ld d,a
-	ld a,TOSS_RING
-	call cpActiveRing
-	jr nz,+
-		push bc
-		ldbc EXPERTS_RING,FIST_RING
-		call eitherRingActive
-		pop bc
-		jr nc,++
-			xor a
-		++
-	+
-	ld a,d
-	pop de
-	ret
+	jr bothRingsActiveAndPopBC
 
 tripleHeartJoyComboActive:
 	push bc
 	ldbc BLUE_JOY_RING,GOLD_JOY_RING
-	call bothRingsActive
+	jr bothRingsActiveAndPopBC
+
+judoMasterComboActive:
+	push bc
+	ldbc EXPERTS_RING,TOSS_RING
+	jr bothRingsActiveAndPopBC
+
+; @param	a	Enemy id to check
+; @param[out]	zflag set if the enemy CANNOT be picked up/thrown
+isValidTargetForJudo:
+	push bc
+	ld c,a
+	ldh a,(<hRomBank)
+	ld b,a
+	callfrombank0 bank10.isValidTargetForJudo_body
+	ld a,b
+	setrombank
+	ld a,c
 	pop bc
 	ret
 
@@ -11613,6 +11616,18 @@ updateEnemy:
 .endif
 
 ++
+.ifdef ENABLE_RING_REDUX
+	call isValidTargetForJudo
+	jr z,+
+		call judoMasterComboActive
+		jr nz,+
+		push af
+		push hl
+		call objectAddToGrabbableObjectBuffer
+		pop hl
+		pop af
+	+
+.endif
 	; hl = enemyCodeTable + a*2
 	add a
 	add <enemyCodeTable

@@ -32,18 +32,18 @@ Combo Effects:
         Double the number of hearts recovered by the Heart rings.
         Wearing both Blue Joy and Gold Joy will triple the amount.
 
-    8:  Dolphin Link:
+    8:  Dolphin:
         Enables use of most items while swimming in shallow water(including the feather).
         Also enables use of items in slot B while underwater(does not prevent you from surfacing).
         Link must first dive so he appears as a shadow(prevents players from jumping whirlpools).
 
-    9:  Acrobat Link:
+    9:  Acrobat:
         Landing on an enemy causes Link to vault off them into the air.
 
-    10: Expert Acrobat Link:
+    10: Expert Acrobat:
         Landing on an enemy causes Link to vault off them into the air, while stunning them.
 
-    11: Kenpo Master Link:
+    11: Kenpo Master:
         Allows Link to destroy various types of tiles with his fists.
         Enables much of the game to be traversed without pausing to swap items.
         NOTE: Must have acquired specific items to destroy specific tiles.
@@ -74,7 +74,7 @@ Combo Effects:
         Shield can be used as a weapon to tackle enemies.
         Damage dealt increases with shield level and your speed.
 
-    18: Bonk Master:
+    18: Judo Master:
         Held items can be used to bonk enemies.
         Press the button that the item was not picked up with to bonk.
 
@@ -112,5 +112,4 @@ Combo Requirements:
     15: Energy Ring + Light Ring L-1 or L-2
     16: Toss Ring  + Discovery Ring + Rang Ring L-1 or L-2
     17: Haste Ring + Steadfast Ring
-    18: Toss Ring  + Fist Ring or
-        Toss Ring  + Expert's Ring
+    18: Toss Ring  + Expert's Ring

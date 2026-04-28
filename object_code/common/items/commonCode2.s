@@ -8,7 +8,7 @@ tryBreakTileWithExpertsRing:
 	call @breakTileHelper
 
 	push bc
-	call kempoMasterComboActive
+	call kenpoMasterComboActive
 	pop bc
 
 	; do a super punch only with both rings

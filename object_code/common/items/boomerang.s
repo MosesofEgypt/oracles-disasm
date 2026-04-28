@@ -134,6 +134,7 @@ itemCode06:
 	ld e,Item.var34
 	ld a,(de)
 	call objectNudgeAngleTowards
+
 .ifdef ENABLE_RING_REDUX
 	call superBoomerangComboActive
 	jr nz,+
