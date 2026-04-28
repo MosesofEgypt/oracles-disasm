@@ -460,17 +460,23 @@ parentItemCode_bracelet:
 		ret z
 
 		call bonkMasterComboActive
-		jr nz,+
+		jr nz,+++
+			; don't swing if the object doesn't have a damage value
+			xor a
+			ld l,Item.damage
+			cp (hl)
+			jr z,+++
+
 			ld l,Item.state
 			ld (hl),$06
 
 			ld a,(wLinkAngle)
 			rlca
-			jr c,+++
+			jr c,+
 				ld a,(w1Link.direction)
 				swap a
 				rrca
-			+++
+			+
 			ld l,Item.angle
 			ld (hl),a
 
@@ -504,7 +510,7 @@ parentItemCode_bracelet:
 			;ld a,SND_SCENT_SEED
 			ld a,SND_SEEDSHOOTER
 			jp playSound
-	+
+	+++
 .endif
 
 	call updateLinkDirectionFromAngle
