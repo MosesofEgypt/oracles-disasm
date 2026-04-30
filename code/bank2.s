@@ -5244,6 +5244,36 @@ inventorySubmenu1CheckDirectionButtons:
 	add c
 	cp d
 	jr nc,@leftOrRight
+.ifdef EXTENDED_RING_BOX
+	push bc
+	push af
+	ld a,c
+	cp $01
+	pop bc
+	ld a,b
+	pop bc
+
+	jr nz,+
+		; right was pressed. if the new position would be
+		; ring slot 6, skip to the first treasure instead
+		cp $15
+		jr nz,++
+			xor a
+	+
+		; left was pressed. if the new position would be
+		; ring slot 5, skip to the ring box instead
+		cp $14
+		jr nz,+
+			ld a,$0f
+		+
+
+		; however, if the new position would be ring
+		; slot 10, skip to the ring slot 5 instead
+		cp $19
+		jr nz,+
+			ld a,$14
+	+
+.endif
 	jr ++
 
 @upOrDown:

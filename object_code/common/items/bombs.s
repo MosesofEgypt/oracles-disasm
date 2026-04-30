@@ -1,6 +1,37 @@
 ;;
 ; ITEM_BOMB
 itemCode03:
+.ifdef ENABLE_RING_REDUX
+	; if the bomb hit something, set the bit to force an immediate explosion
+	ld h,d
+	ld l,Item.var2a
+	bit 0,(hl)
+	jr z,+
+		; ensure this bomb is what link is holding
+		ld hl,w1Link.relatedObj2
+		ldi a,(hl)
+		ld h,(hl)
+		ld l,a
+
+		or a
+		jr nz,+
+		ld a,h
+		cp d
+		jr nz,+
+			ld h,d
+			ld l,Item.var2f
+			set 4,(hl)
+			call dropLinkHeldItem
+
+			; this doesn't seem to get cleared and prevents
+			; picking up other stuff, so clear it
+			ld hl,w1Link.relatedObj2
+			xor a
+			ldi (hl),a
+			ld (hl),a
+	+
+.endif
+
 	ld e,Item.var2f
 	ld a,(de)
 	bit 5,a

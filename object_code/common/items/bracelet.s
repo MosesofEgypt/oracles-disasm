@@ -5,6 +5,29 @@
 ;
 ; ITEM_BRACELET
 itemCode16:
+.ifdef ENABLE_RING_REDUX
+	; if the item hit something, immediately break it if it's breakable
+	ld h,d
+	ld l,Item.var2a
+	bit 0,(hl)
+	jr z,+
+		call braceletCheckBreakable
+		jr z,+
+			ld e,Item.state
+			ld a,(de)
+			cp $03
+			; don't drop if already dropped
+			jr z,+
+				call @throwItem
+				call dropLinkHeldItem
+				; this doesn't seem to get cleared and prevents
+				; picking up other stuff, so clear it
+				ld hl,w1Link.relatedObj2
+				xor a
+				ldi (hl),a
+				ld (hl),a
+	+
+.endif
 	ld e,Item.state
 	ld a,(de)
 	rst_jumpTable

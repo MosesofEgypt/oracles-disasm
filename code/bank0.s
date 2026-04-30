@@ -10025,6 +10025,11 @@ enemyStandardUpdate:
 
 .ifdef ENABLE_RING_REDUX
 animateEnemyShakingWhileHeld:
+	; only animate enemies shaking
+	ldh a,(<hActiveObjectType)
+	cp $80
+	ret nz
+
 	; we want the enemy in the center for every other
 	; frame to make the movement feel smoother
 	ld a,(wFrameCounter)
