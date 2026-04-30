@@ -33,7 +33,11 @@ enemyCode3a:
 	rst_jumpTable
 	.dw waterTektite_state_uninitialized
 	.dw waterTektike_state_stub
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw waterTektike_state_stub
+.endif
 	.dw waterTektike_state_stub
 	.dw waterTektike_state_stub
 	.dw ecom_blownByGaleSeedState

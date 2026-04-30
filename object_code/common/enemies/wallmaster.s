@@ -63,7 +63,11 @@ enemyCode28:
 	rst_jumpTable
 	.dw wallmaster_state_uninitialized
 	.dw wallmaster_state1
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw wallmaster_state_stub
+.endif
 	.dw wallmaster_state_stub
 	.dw wallmaster_state_stub
 	.dw wallmaster_state_galeSeed

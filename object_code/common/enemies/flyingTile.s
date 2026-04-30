@@ -16,7 +16,11 @@ enemyCode52:
 	rst_jumpTable
 	.dw flyingTile_state_uninitialized
 	.dw flyingTile_state_spawner
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw flyingTile_state_stub
+.endif
 	.dw flyingTile_state_stub
 	.dw flyingTile_state_stub
 	.dw flyingTile_state_stub

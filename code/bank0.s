@@ -4958,51 +4958,7 @@ getRandomRingOfGivenTier:
 	setrombank
 
 .ifdef ENABLE_GASHA_REBALANCE
-	push bc
-	push de
-
-	; put the new-ring-chance into b as a value in the range 0x0F - 0xFF
-	ld a,c
-	or $0f
-	ld b,a
-
-	; put the ring tier into c as a value in the range 0x00 - 0x04
-	ld a,c
-	and a,$07
-	cp $04
-	jr c,+
-		ld a,$04
-+
-	ld c,a
-
-	; store the original tier in 'd' for resetting to it when calculating
-	ld d,c
-
-	; increment 'd' to the secret tier if all tiers are filled out
-	call @trySelectRingTier4
-
-	; select a random ring if we hit tier 4
-	jr z,+
-
-    ; determine if we can guarantee a new ring
-	call getRandomNumber
-	cp b
-	jr nc,+
-		; try to guarantee a new ring in the current tier, continually 
-		; decrementing the tier until we either find a new ring or fail
-		call @selectUnobtainedRing
-		jr z,++
-+
-	; either selected a tier 4 ring, or we failed to guarantee a
-	; new ring, or the chance to guarantee it simply didn't proc
-	call @selectRandomTieredRing
-++
-	; load the selected ring into the output register
-	ld c,e
-
-	pop de
-	pop af
-	ld b,a
+	call bank3f.getRandomRingOfGivenTier_body
 .else
 	ld b,$01
 	ld a,c
@@ -5030,264 +4986,6 @@ getRandomRingOfGivenTier:
 	ld a,TREASURE_RING
 	ret
 
-.ifdef ENABLE_GASHA_REBALANCE
-@trySelectRingTier4:
-	push bc
-	; to get the highest tier ring, we'll bump from tier0
-	; to tier4 if all other tiers have been collected
-	ld a,d
-	or a
-	jr nz,++
-		; use e as a counter to increment through the bytes
-		ld e,$07
--
-		ld bc,$0003
---
-		; get the rings obtained mask byte in b
-		call getRingTierMasks
-		or b
-		ld b,a
-		dec c
-		ld a,c
-		cp $FF
-		jr nz,--
-			; get the rings obtained byte in a
-			call getRingsObtained
-			and b
-			cp b
-			; if the masked obtained rings doesn't equal the
-			; mask, then we don't have all tier 0-3 rings
-			jr nz,++
-				dec e
-				ld a,e
-				cp $ff
-				jr nz,-
-
-	; increment to the secret ring tier
-	ld c,4
-	ld d,c
-++
-	ld a,d
-	pop bc
-	cp $04
-	ret
-
-@selectRandomTieredRing:
-	; get the tier table pointer
-	ld a,c
-	ld hl,bank3f.ringTierTable
-	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
-
-	call getRandomNumber
-	; to simplify logic, the random number will only be in the range [0,254]
-	cp $ff
-	ld b,a
-	jr nz,@selectRingByWeight
-		dec b
-
-	; loop through the rings in the tier until one of weighted
-	; offsets is greater than or equal to the random number.
-@selectRingByWeight
-	ldi a,(hl)
-
-	; return if we hit the end of the table somehow
-	cp $ff
-	ret z
-
-	ld e,a
-	ldi a,(hl)
-	cp b
-	ret nc
-	jr @selectRingByWeight
-
-@selectUnobtainedRing:
-	; loop over each tier until we can guarantee a new ring
-	dec c
-	--
-		inc c
-		; use 'e' as a counter to increment through the bytes
-		xor a
-		ld e,a
-		dec e
-
-		-
-			push bc
-			inc e
-
-			; get the rings obtained mask byte in b
-			call getRingTierMasks
-			ld b,a
-
-			; get the rings obtained byte in a
-			call getRingsObtained
-
-			; if the masked obtained rings byte equals the mask then we have all
-			; rings under this mask. need to increment to checking the next byte
-			and b
-			cp b
-			pop bc
-
-			jr nz,+
-				ld a,e
-				cp $07
-				jr nz,-
-
-		; that was the last byte, so we might have to try another tier
-		ld a,$03
-		cp c
-		jr nc,--
-			; hit the last tier. reset to original tier and select randomly
-			ld c,d
-
-			; unset z-flag to indicate failure
-			or $ff
-			ret
-
-	+
-	; select a new ring by selecting a random byte and bit in the masks to
-	; start with and cycle through them until we find a ring we don't have
-	call getRandomNumber
-	; put the byte offset in 'e'
-	ld e,a
-	dec e
-
-	-
-		; get the rings obtained byte in b
-		inc e
-		ld a,e
-		and $07
-		ld e,a
-		call getRingsObtained
-		ld b,a
-
-		; get the mask for this tier and byte
-		call getRingTierMasks
-
-		; ensure the mask contains a ring we don't have
-		ld a,b
-		and (hl)
-		xor (hl)
-		jr z,-
-
-	; found a byte with an unobtained ring. start with a random
-	; bit and cycle through them until we hit an unobtained ring
-	ld d,$00
-	ld c,(hl)
-
-	; since e will contain the final ring index, we need to multiply
-	; it by 8 to convert it from a byte offset into an index offset
-	ld a,e
-	add a
-	add a
-	add a
-	ld e,a
-	call getRandomNumber
-	and $07
-
-	; select random bit by rotating bytes a random number of times
-	-
-		rrc b
-		rrc c
-		inc d
-		dec a
-		jr nz,-
-
-	-
-		; find the first bit with the mask set and the obtained unset
-		rrc b
-		rrc c
-		inc d
-
-		bit 0,c
-		jr z,-
-
-		bit 0,b
-		jr nz,-
-
-	; we're at a random bit in these bytes, so we need to
-	; make sure we don't increment outside the [0-7] range
-	ld a,d
-	and $07
-	or e
-	ld e,a
-
-	; set z-flag to indicate success
-	xor a
-	ret
-
-;;
-; @param        e       Byte offset[0-7]
-; @param[out]   a       Rings-obtained byte
-getRingsObtained:
-	; the masks table has a stride of 8, so we need to
-	; multiply the tier by 8 to get our starting offset
-	ld a,e
-	ld hl,wRingsObtained
-	rst_addAToHl
-	ld a,(hl)
-	ret
-
-;;
-; @param        c       Ring tier
-; @param        e       Byte offset[0-7]
-; @param[out]   a       Ring tier byte mask
-getRingTierMasks:
-	; the masks table has a stride of 8, so we need to
-	; multiply the tier by 8 to get our starting offset
-	ld a,c
-	add a
-	add a
-	add a
-	add e
-	ld hl,@ringTierMaskTable
-	rst_addAToHl
-	ld a,(hl)
-	ret
-
-; These are tables of flag masks indicating which rings are available
-; in each tier. The bytes can be AND'd with the wRingsObtained flags
-; to quickly determine which rings have/havent been obtained per tier.
-@ringTierMaskTable:
-	; tier0
-	dbrev %00000000
-	dbrev %00010001
-	dbrev %01001000
-	dbrev %10111100
-	dbrev %00000010
-	dbrev %00000000
-	dbrev %01000000
-	dbrev %00000000
-	; tier1
-	dbrev %00100100
-	dbrev %00001000
-	dbrev %00010001
-	dbrev %00000011
-	dbrev %11100000
-	dbrev %01000000
-	dbrev %00000000
-	dbrev %00000000
-	; tier2
-	dbrev %00001000
-	dbrev %00100100
-	dbrev %00000000
-	dbrev %01000101
-	dbrev %00010000
-	dbrev %00000000
-	dbrev %10100000
-	dbrev %00001001
-	; tier3
-	dbrev %00000000
-	dbrev %00000000
-	dbrev %10100000
-	dbrev %00000000
-	dbrev %00000001
-	dbrev %00111110
-	dbrev %00000000
-	dbrev %01010100
-.endif
 
 ;;
 ; Fills the seed satchel with all seed types that Link currently has.
@@ -8436,10 +8134,10 @@ cpActiveRing:
 	ld c,(hl)
 	cp FIST_RING
 	jr nz,+
-		; if flags indicate to, we force the first ring active
+		; if flags indicate to, we force the fist ring active
 		bit 5,c
 		jr z,+
-			; force first ring to be equipped
+			; force fist ring to be equipped
 			xor a
 			jr @done
 	+
@@ -8524,6 +8222,93 @@ eitherRingActive:
 	ret
 
 ;;
+; Removes the specified ring from the players ring list and unequips it
+;
+; @param	a	The ring to remove
+;
+removeRing:
+	push hl
+	push bc
+	ld b,a
+	ld hl,wRingsObtained
+	call unsetFlag
+	ld a,b
+
+	; remove from primary ring box
+	ld hl,wRingBoxContents
+	call @removeRingLoop
+
+.ifdef EXTENDED_RING_BOX
+	; remove from extended ring box
+	ld hl,wRingBoxContentsExt
+	call @removeRingLoop
+.endif
+
+.ifndef ENABLE_MULTI_RING
+	; remove from active ring
+	ld hl,(wActiveRing)
+	cp (hl)
+	jr nz,+
+		ld (hl),$ff
+	+
+.endif
+	pop bc
+	pop hl
+	ret
+
+@removeRingLoop:
+	ld b,$05
+	-
+		cp (hl)
+		jr nz,+
+			ld (hl),$ff
+		+
+		inc l
+		dec b
+		jr nz,-
+	ret
+
+.endif
+
+.ifdef ENABLE_RING_REDUX
+; @param	a	Enemy id to check
+; @param[out]	zflag set if the enemy CANNOT be picked up/thrown
+isValidTargetForJudo:
+	push hl
+	push af
+	ld hl,@judoTargets
+	call checkFlag
+	pop hl
+	ld a,h
+	pop hl
+	ret
+
+; these are bitmasks for which enemies can be picked up with a ring combo
+@judoTargets:
+	; 0x00-0x07: OCTOROK, BOOMERANG_MOBLIN, LEEVER, ARROW_MOBLIN
+	; 0x08-0x0f:
+	; 0x10-0x17: ROPE, GIBDO
+	; 0x18-0x1f: BUZZBLOB, SAND_CRAB, SPINY_BEETLE, IRON_MASK, ARMOS, PIRANHA
+	; 0x20-0x27: MASKED_MOBLIN, ARROW_DARKNUT, ARROW_SHROUDED_STALFOS, POLS_VOICE, LIKE_LIKE, GOPONGA_FLOWER
+	; 0x28-0x2f: WALLMASTER
+	; 0x30-0x37: TEKTITE, STALFOS, KEESE, ZOL, FLOORMASTER, CUCCO, BUTTERFLY
+	; 0x38-0x3f: FIRE_KEESE, WATER_TEKTITE, PEAHAT, SWORD_MOBLIN
+	; 0x40-0x47: WIZZROBE, CROW, GEL
+	; 0x48-0x4f: SWORD_DARKNUT, SWORD_SHROUDED_STALFOS, SWORD_MASKED_MOBLIN, BALL_AND_CHAIN_SOLDIER, BLUE_CROW, HARDHAT_BEETLE, ARM_MIMIC
+	; 0x50-0x57: BEETLE, FLYING_TILE
+	dbrev %00000000 %01111000 ; 0x00-0x0f
+	dbrev %10100000 %10111110 ; 0x10-0x1f
+	dbrev %11111100 %10000000 ; 0x20-0x2f
+	dbrev %11101111 %01100110 ; 0x30-0x3f
+	dbrev %11010000 %11111110 ; 0x40-0x4f
+	dbrev %01100000 %00000000 ; 0x50-0x5f
+
+bothRingsActiveAndPopBC:
+	call bothRingsActive
+	pop bc
+	ret
+
+;;
 ; @param	b	The first ring to check for.
 ; @param	c	The second ring to check for.
 ; @param[out]	zflag	Set if both 'b' and 'c' rings are active.
@@ -8539,11 +8324,6 @@ bothRingsActive:
 	;rra
 	ret
 
-bothRingsActiveAndPopBC:
-	call bothRingsActive
-	pop bc
-	ret
-
 isHasteRingEquipped:
 	push de
 	ld d,a
@@ -8551,6 +8331,13 @@ isHasteRingEquipped:
 	call cpActiveRing
 	ld a,d
 	pop de
+	ret
+
+alchemyJoyComboActive:
+	push bc
+	ldbc BLUE_JOY_RING,GOLD_JOY_RING
+	call eitherRingActive
+	pop bc
 	ret
 
 remoteBombComboActive:
@@ -8561,13 +8348,14 @@ instantBombComboActive:
 	ldbc BOMBPROOF_RING,HASTE_RING
 	jr bothRingsActive
 
-enemyPogoComboActive:
+smashingBoardComboActive:
 	ldbc STEADFAST_RING,HASTE_RING
 	jr bothRingsActive
 
 underwaterItemsComboActive:
+	push bc
 	ldbc SWIMMERS_RING,ZORA_RING
-	jr bothRingsActive
+	jr bothRingsActiveAndPopBC
 
 superBoomerangComboActive:
 	ldbc RANG_RING_L1,RANG_RING_L2
@@ -8580,6 +8368,11 @@ diggerangComboActive:
 swordBeamosComboActive:
 	ldbc ENERGY_RING,CHARGE_RING
 	jr bothRingsActive
+
+enemyPogoComboActive:
+	push bc
+	ldbc STEADFAST_RING,ROCS_RING
+	jp bothRingsActiveAndPopBC
 
 hurricaneSpinComboActive:
 	push bc
@@ -8606,18 +8399,18 @@ judoMasterComboActive:
 	ldbc EXPERTS_RING,TOSS_RING
 	jr bothRingsActiveAndPopBC
 
-; @param	a	Enemy id to check
-; @param[out]	zflag set if the enemy CANNOT be picked up/thrown
-isValidTargetForJudo:
+beamosComboActive:
+	ld a,ENERGY_RING
+	call cpActiveRing
+	ret nz
+
 	push bc
-	ld c,a
-	ldh a,(<hRomBank)
-	ld b,a
-	callfrombank0 bank10.isValidTargetForJudo_body
-	ld a,b
-	setrombank
-	ld a,c
+	ldbc LIGHT_RING_L2,LIGHT_RING_L1
+	call eitherRingActive
 	pop bc
+	ret z
+	ret nc
+	xor a
 	ret
 
 victoryRingIncLevel:
@@ -8645,68 +8438,10 @@ swordBeamHeartCutoff:
 		++
 		ld c,LIGHT_RING_L2_CUTOFF
 	+
-	jr nc,+
-		ld c,LIGHT_RING_L1_CUTOFF
-	+
+	ret nc
+	ld c,LIGHT_RING_L1_CUTOFF
 	ret
 
-;;
-; Removes the specified ring from the players ring list and unequips it
-;
-; @param	a	The ring to remove
-; 
-removeRing:
-	push hl
-	push bc
-	ld b,a
-	ld hl,wRingsObtained
-	call unsetFlag
-	ld a,b
-
-	ld b,$05
-	; remove from primary ring box
-	ld hl,wRingBoxContents
-
-	-
-	cp (hl)
-	jr nz,+
-		ld (hl),$ff
-	+
-		inc l
-		dec b
-		jr nz,-
-
-.ifdef EXTENDED_RING_BOX
-	ld b,$05
-	; remove from extended ring box
-	ld hl,wRingBoxContentsExt
-
-	-
-	cp (hl)
-	jr nz,+
-		ld (hl),$ff
-	+
-		inc l
-		dec b
-		jr nz,-
-.endif
-
-.ifndef ENABLE_MULTI_RING
-	; remove from active ring
-	ld hl,(wActiveRing)
-	cp (hl)
-	jr nz,+
-		ld (hl),$ff
-
-	+
-.endif
-	pop bc
-	pop hl
-	ret
-
-.endif
-
-.ifdef ENABLE_RING_REDUX
 fractionOf8Multiply:
 	; tuck the full multiplier into c for later
 	ld c,a
@@ -10259,6 +9994,10 @@ enemyStandardUpdate:
 
 	ld l,Enemy.state
 	ld a,(hl)
+.ifdef ENABLE_RING_REDUX
+	cp $02
+	jr z,@ret02
+.endif
 	cp $08
 	jr c,@reachedGround
 
@@ -10283,6 +10022,46 @@ enemyStandardUpdate:
 @ret02:
 	ld c,$02
 	ret
+
+.ifdef ENABLE_RING_REDUX
+animateEnemyShakingWhileHeld:
+	; we want the enemy in the center for every other
+	; frame to make the movement feel smoother
+	ld a,(wFrameCounter)
+	rrca
+	ret nc
+
+	; make the enemy shake back and forth, but increase
+	; shake distance as the timer gets closer to 0
+	push bc
+	ld b,$02
+	ld l,Enemy.stunCounter
+	ld a,(hl)
+	-
+		sub 30
+		jr c,+
+		dec b
+		jr nz,-
+	+
+	ld a,b
+	or a
+	jr z,++
+		ld a,(wFrameCounter)
+		and $02
+		jr z,+
+			xor a
+			sub b
+			ld b,a
+		+
+		ld a,b
+
+		ld l,Enemy.xh
+		add (hl)
+		ld (hl),a
+	++
+	pop bc
+	ret
+.endif
 
 ;;
 partAnimate:
@@ -10997,6 +10776,13 @@ dropLinkHeldItem:
 	ld a,$03
 	ld (hl),a
 
+.ifdef ENABLE_RING_REDUX
+	; do not reset the angle if dropping an enemy
+	ld a,l
+	and $c0
+	cp $80
+	jr z,@end
+.endif
 	ld a,l
 	add Object.angle-Object.substate
 	ld l,a
@@ -11645,6 +11431,15 @@ updateEnemy:
 .endif
 	ld a,c
 	or a
+.ifdef ENABLE_RING_REDUX
+	jr z,+
+		; if enemy is in held state, treat it like it's normal
+		ld e,Enemy.state
+		ld a,(de)
+		cp a,ENEMYSTATE_GRABBED
+		ld a,c
+	+
+.endif
 	jp hl
 
 .include "data/enemyCodeTable.s"

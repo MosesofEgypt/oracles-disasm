@@ -76,6 +76,7 @@ Combo Effects:
 
     18: Judo Master:
         Held items can be used to bonk enemies.
+        Most enemies can be picked up and thrown.
         Press the button that the item was not picked up with to bonk.
 
 

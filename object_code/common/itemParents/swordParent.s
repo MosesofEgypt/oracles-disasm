@@ -449,18 +449,10 @@ parentItemCode_sword:
 
 @createSwordBeam:
 .ifdef ENABLE_RING_REDUX
+	call beamosComboActive
 	ld e,$01
-	ld a,ENERGY_RING
-	call cpActiveRing
 	jr nz,+
-		ldbc LIGHT_RING_L2,LIGHT_RING_L1
-		call eitherRingActive
-		jr z,++
-		jr c,++
-			jr +
-		++
-			; increase beam limit
-			ld e,SWORD_BEAM_LIMIT
+		ld e,SWORD_BEAM_LIMIT
 	+
 	ldbc ITEM_SWORD_BEAM,$00
 .else

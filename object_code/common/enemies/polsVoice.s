@@ -22,7 +22,11 @@ enemyCode23:
 	rst_jumpTable
 	.dw polsVoice_state_uninitialized
 	.dw polsVoice_state_stub
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw polsVoice_state_stub
+.endif
 	.dw polsVoice_state_stub
 	.dw polsVoice_state_stub
 	.dw ecom_blownByGaleSeedState

@@ -85,7 +85,11 @@ enemyCode24:
 	rst_jumpTable
 	.dw likelike_state_uninitialized
 	.dw likelike_state_stub
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw likelike_state_stub
+.endif
 	.dw likelike_state_switchHook
 	.dw likelike_state_stub
 	.dw likelike_state_galeSeed

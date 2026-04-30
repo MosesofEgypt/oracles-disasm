@@ -24,7 +24,11 @@ enemyCode4b:
 	rst_jumpTable
 	.dw ballAndChain_state_uninitialized
 	.dw ballAndChain_state_stub
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw ballAndChain_state_stub
+.endif
 	.dw ballAndChain_state_switchHook
 	.dw ballAndChain_state_stub
 	.dw ballAndChain_state_stub

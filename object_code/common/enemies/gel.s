@@ -25,7 +25,11 @@ enemyCode43:
 	rst_jumpTable
 	.dw gel_state_uninitialized
 	.dw gel_state_stub
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw gel_state_stub
+.endif
 	.dw gel_state_stub
 	.dw gel_state_stub
 	.dw ecom_blownByGaleSeedState

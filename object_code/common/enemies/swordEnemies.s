@@ -40,7 +40,11 @@ enemyCode4a:
 	rst_jumpTable
 	.dw swordEnemy_state_uninitialized
 	.dw swordEnemy_state_stub
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw swordEnemy_state_stub
+.endif
 	.dw swordEnemy_state_switchHook
 	.dw swordEnemy_state_scentSeed
 	.dw ecom_blownByGaleSeedState
@@ -212,7 +216,11 @@ enemyCode48:
 	rst_jumpTable
 	.dw swordDarknut_state_uninitialized
 	.dw swordEnemy_state_stub
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw swordEnemy_state_stub
+.endif
 	.dw swordEnemy_state_switchHook
 	.dw swordEnemy_state_stub
 	.dw swordEnemy_state_stub

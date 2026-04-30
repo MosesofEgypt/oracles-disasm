@@ -61,7 +61,11 @@ enemyCode18:
 	rst_jumpTable
 	.dw buzzblob_state_uninitialized
 	.dw buzzblob_state_stub
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw buzzblob_state_stub
+.endif
 	.dw buzzblob_state_stub
 	.dw buzzblob_state_scentSeed
 	.dw ecom_blownByGaleSeedState

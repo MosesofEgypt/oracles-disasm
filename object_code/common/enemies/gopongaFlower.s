@@ -18,7 +18,11 @@ enemyCode25:
 	rst_jumpTable
 	.dw @state_uninitialized
 	.dw @state_stub
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw @state_stub
+.endif
 	.dw @state_stub
 	.dw @state_stub
 	.dw @state_stub

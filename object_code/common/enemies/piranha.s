@@ -43,7 +43,11 @@ enemyCode1e:
 	rst_jumpTable
 	.dw fish_state_uninitialized
 	.dw fish_state_stub
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw fish_state_stub
+.endif
 	.dw fish_state_stub
 	.dw fish_state_stub
 	.dw ecom_blownByGaleSeedState

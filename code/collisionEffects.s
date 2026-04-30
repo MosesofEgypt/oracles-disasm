@@ -248,7 +248,7 @@ enemyCheckCollisions:
 	ret nz
 
 	; if wearing both rings, the shield can deal damage based on link's speed
-	call enemyPogoComboActive
+	call smashingBoardComboActive
 	jp nz,@handleCollision
 
 	; reference for link's speeds
@@ -1605,16 +1605,12 @@ collisionLinkBounce:
 	ret nz
 
 	; check the rings are equipped
-	push bc
-	ldbc STEADFAST_RING,ROCS_RING
-	call eitherRingActive
-	pop bc
+	call enemyPogoComboActive
 	ret nz
-	ret nc
 
 	; convert collisions that would damage link into an extra jump
-	push bc
 	push hl
+	push bc
 	ldbc $fd, $90
 	ld a,(wActiveGroup)
 	cp FIRST_SIDESCROLL_GROUP
@@ -1626,16 +1622,25 @@ collisionLinkBounce:
 	ld (hl),c
 	inc l
 	ld (hl),b
-	pop hl
 	pop bc
 
-	; change collision type
-	ld a,EXPERTS_RING
-	call cpActiveRing
+	ld h,d
+	ld a,e
+	and $80
+	ld l,a
+	inc l
+	ld a,(hl)
+	pop hl
+	call isValidTargetForJudo
+	jr z,+
+		; change collision type
+		ld a,EXPERTS_RING
+		call cpActiveRing
 
-	; experts ring causes a stun, not just a bump
-	ld a,COLLISIONEFFECT_STUN
-	ret z
+		; experts ring causes a stun, not just a bump
+		ld a,COLLISIONEFFECT_STUN
+		ret z
+	+
 
 	ld a,SND_JUMP
 	call playSound

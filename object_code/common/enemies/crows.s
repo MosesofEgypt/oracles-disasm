@@ -23,7 +23,11 @@ enemyCode4c:
 	rst_jumpTable
 	.dw crow_state_uninitialized
 	.dw crow_state_stub
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw crow_state_stub
+.endif
 	.dw crow_state_stub
 	.dw crow_state_stub
 	.dw ecom_blownByGaleSeedState

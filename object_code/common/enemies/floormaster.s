@@ -74,7 +74,11 @@ enemyCode35:
 	rst_jumpTable
 	.dw floormaster_state_uninitialized
 	.dw floormaster_state1
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw floormaster_state_stub
+.endif
 	.dw floormaster_state_stub
 	.dw floormaster_state_stub
 	.dw floormaster_state_galeSeed

@@ -7,6 +7,9 @@ enemyCode37:
 	rst_jumpTable
 	.dw @state0
 	.dw @state1
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.endif
 
 @state0:
 .ifdef ROM_SEASONS

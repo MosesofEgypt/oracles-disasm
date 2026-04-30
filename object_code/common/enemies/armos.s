@@ -42,7 +42,11 @@ enemyCode1d:
 	rst_jumpTable
 	.dw armos_uninitialized
 	.dw armos_state1
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw armos_state_stub
+.endif
 	.dw armos_state_switchHook
 	.dw armos_state_stub
 	.dw armos_state_stub

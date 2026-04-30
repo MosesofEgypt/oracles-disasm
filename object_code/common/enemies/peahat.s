@@ -20,7 +20,11 @@ enemyCode3e:
 	rst_jumpTable
 	.dw peahat_state_uninitialized
 	.dw peahet_state_stub
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw peahet_state_stub
+.endif
 	.dw peahet_state_stub
 	.dw peahet_state_stub
 	.dw ecom_blownByGaleSeedState

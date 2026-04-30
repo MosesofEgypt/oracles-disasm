@@ -33,7 +33,11 @@ enemyCode1c:
 	rst_jumpTable
 	.dw ironMask_state_uninitialized
 	.dw ironMask_state_stub
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw ironMask_state_stub
+.endif
 	.dw ironMask_state_switchHook
 	.dw ironMask_state_stub
 	.dw ecom_blownByGaleSeedState

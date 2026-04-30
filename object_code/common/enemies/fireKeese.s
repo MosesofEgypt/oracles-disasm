@@ -61,7 +61,11 @@ enemyCode39:
 	rst_jumpTable
 	.dw fireKeese_state_uninitialized
 	.dw fireKeese_state_stub
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw fireKeese_state_stub
+.endif
 	.dw fireKeese_state_stub
 	.dw fireKeese_state_stub
 	.dw ecom_blownByGaleSeedState

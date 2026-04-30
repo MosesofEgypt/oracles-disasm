@@ -43,7 +43,11 @@ enemyCode40:
 	rst_jumpTable
 	.dw wizzrobe_state_uninitialized
 	.dw wizzrobe_state_stub
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw wizzrobe_state_stub
+.endif
 	.dw wizzrobe_state_switchHook
 	.dw wizzrobe_state_stub
 	.dw ecom_blownByGaleSeedState

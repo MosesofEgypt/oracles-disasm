@@ -18,7 +18,11 @@ enemyCode31:
 	rst_jumpTable
 	.dw stalfos_state_uninitialized
 	.dw stalfos_state_stub
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw stalfos_state_stub
+.endif
 	.dw stalfos_state_switchHook
 	.dw stalfos_state_stub
 	.dw ecom_blownByGaleSeedState

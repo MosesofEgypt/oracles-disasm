@@ -36,7 +36,11 @@ enemyCode09:
 	rst_jumpTable
 	.dw octorok_state_uninitialized
 	.dw octorok_state_stub
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw octorok_state_stub
+.endif
 	.dw octorok_state_latchedBySwitchHook
 	.dw octorok_state_followingScentSeed
 	.dw ecom_blownByGaleSeedState

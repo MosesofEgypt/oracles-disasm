@@ -22,7 +22,11 @@ enemyCode4e:
 	rst_jumpTable
 	.dw armMimic_uninitialized
 	.dw armMimic_state_stub
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw armMimic_state_stub
+.endif
 	.dw armMimic_state_switchHook
 	.dw armMimic_state_stub
 	.dw ecom_blownByGaleSeedState

@@ -497,7 +497,11 @@ updateGrabbedObjectPosition:
 	ld a,(de)
 	add b
 	ldi (hl),a
+.ifdef ENABLE_RING_REDUX
+	jp animateEnemyShakingWhileHeld
+.else
 	ret
+.endif
 
 
 ; Each 2 bytes are Z/X offsets relative to Link where an object should be placed.
@@ -551,11 +555,7 @@ alchemyRingRestock:
 	; ring must be equipped
 	ld a,ALCHEMY_RING
 	call cpActiveRing
-	jr z,+
-		call clearParentItem
-		xor a
-		ret
-	+
+	jr nz,@clearAndReturn
 
 	; check the items type
 	ld e,Item.id
@@ -583,32 +583,18 @@ alchemyRingRestock:
 	ld a,e
 
 	; if we don't have enough rupees, clear the parent and return
-	jr z,+
-		call clearParentItem
-		xor a
-		ret
-	+
+	jr nz,@clearAndReturn
 
 	; if we have that many rupees, remove them and do alchemy
 	call removeRupeeValue
 
 	; set the amount of ammo in "a" to 1
 	ld a,$01
-	push bc
-	ldbc GREEN_JOY_RING, GOLD_JOY_RING
-	call eitherRingActive
-	pop bc
-
-	jr nz,++
+	call alchemyJoyComboActive
+	jr nz,+
 		; increase the number if wearing green joy
-		jr nc,+
-			; increase the number if wearing gold joy
-			inc a
-		+
 		inc a
-		jr +
-	++
-
+	+
 	jr nc,+
 		; increase the number if wearing gold joy
 		inc a
@@ -616,4 +602,10 @@ alchemyRingRestock:
 
 	or a
 	ret
+
+@clearAndReturn:
+	call clearParentItem
+	xor a
+	ret
+
 .endif

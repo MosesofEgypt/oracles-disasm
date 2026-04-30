@@ -19,7 +19,11 @@ enemyCode32:
 	rst_jumpTable
 	.dw keese_state_uninitialized
 	.dw keese_state_stub
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw keese_state_stub
+.endif
 	.dw keese_state_stub
 	.dw keese_state_stub
 	.dw ecom_blownByGaleSeedState

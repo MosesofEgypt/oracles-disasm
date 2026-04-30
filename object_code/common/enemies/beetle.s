@@ -63,7 +63,11 @@ enemyCode51:
 	rst_jumpTable
 	.dw beetle_state_uninitialized
 	.dw beetle_state_spawner
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw beetle_state_stub
+.endif
 	.dw beetle_state_switchHook
 	.dw beetle_state_stub
 	.dw beetle_state_galeSeed

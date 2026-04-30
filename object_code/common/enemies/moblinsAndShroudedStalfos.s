@@ -34,7 +34,11 @@ enemyCode22:
 	rst_jumpTable
 	.dw moblin_state_uninitialized
 	.dw moblin_state_stub
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw moblin_state_stub
+.endif
 	.dw moblin_state_switchHook
 	.dw moblin_state_scentSeed
 	.dw ecom_blownByGaleSeedState

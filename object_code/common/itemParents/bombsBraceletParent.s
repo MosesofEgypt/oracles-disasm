@@ -462,12 +462,15 @@ parentItemCode_bracelet:
 		call judoMasterComboActive
 		jr nz,+++
 			call getHeldObject
-			; don't swing if the object doesn't have a damage value
-			xor a
+			; don't swing if this isn't an item
+			ld a,l
+			and $c0
+			jr nz,+++
+			; don't swing if the item doesn't have a damage value
 			ld l,Item.damage
+			xor a
 			cp (hl)
 			jr z,+++
-
 			; store so it doesn't need to be retrieved again
 			push bc
 			ld b,h
@@ -501,12 +504,13 @@ parentItemCode_bracelet:
 			; Enable collisions on the throwable
 			ld l,Item.collisionType
 			set 7,(hl)
+			inc l
+			inc l
 
 			; set the collision radius
-			ld l,Item.collisionRadiusY
 			ld a,$08
 			ldi (hl),a
-			ldi (hl),a
+			ld (hl),a
 
 			; disable link movement
 			call itemDisableLinkTurning
@@ -631,6 +635,24 @@ parentItemCode_bracelet:
 
 ;;
 @deleteAndRetIfSwimmingOrGrabState0:
+.ifdef ENABLE_RING_REDUX
+	; if the held object is gone, also drop
+	call getHeldObject
+	jp nz,++
+		xor a
+		cp h
+		; only clear if the pointer is valid
+		jr z,++
+			; clear the object's x, y, and z values, as it appears they
+			; arent always cleared, causing objects to float if reloaded
+			ld a,l
+			add Object.y
+			ld l,a
+			ld b,$06
+			call clearMemory
+			jr +
+	++
+.endif
 	ld a,(wLinkSwimmingState)
 	or a
 	jr nz,+
@@ -738,7 +760,6 @@ parentItemCode_bracelet:
 			ld (hl),$00
 			jr @@enable
 		++
-
 		ld l,Item.oamFlags
 		bit 7,a
 		jr z,++
@@ -795,6 +816,7 @@ parentItemCode_bracelet:
 
 getHeldObject:
 	push de
+	ld h,d
 	ld d,a
 	ld l,Item.var37
 	xor a

@@ -42,7 +42,11 @@ enemyCode0b:
 	rst_jumpTable
 	.dw @state_uninitialized
 	.dw @state_stub
+.ifdef ENABLE_RING_REDUX
+	.dw ecom_stateHeld
+.else
 	.dw @state_stub
+.endif
 	.dw @state_switchHook
 	.dw @state_stub
 	.dw ecom_blownByGaleSeedState
