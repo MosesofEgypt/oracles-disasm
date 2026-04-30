@@ -18,7 +18,6 @@ itemCode16:
 			cp $03
 			; don't drop if already dropped
 			jr z,+
-				call @throwItem
 				call dropLinkHeldItem
 				; this doesn't seem to get cleared and prevents
 				; picking up other stuff, so clear it
