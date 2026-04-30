@@ -545,6 +545,15 @@ parentItemCode_bracelet:
 	ld h,b
 	ld (hl),$02
 
+.ifdef ENABLE_RING_REDUX
+	ld a,l
+	and $c0
+	jr z,+
+		ld l,Enemy.invincibilityCounter
+		ld (hl),$d8 ; make enemy invincible so they don't take damage till hitting ground
+	+
+.endif
+
 	; If it was a tile that was picked up, don't create any new objects
 	ld e,Item.var37
 	ld a,(de)

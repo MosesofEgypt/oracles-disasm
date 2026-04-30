@@ -1260,7 +1260,7 @@ ecom_held_substate0_struggle:
 	ld l,Enemy.enabled ; reset flag so enemy doesn't persist across screens
 	res 1,(hl)
 	ld l,Enemy.stunCounter
-	ld (hl),$96 ; have enemy stunned for 5 seconds
+	ld (hl),4*30+2 ; have enemy stunned for 4 seconds
 	jp ecom_incSubstate
 
 ecom_held_substate1_struggling:

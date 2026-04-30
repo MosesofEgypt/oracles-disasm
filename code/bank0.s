@@ -10038,7 +10038,7 @@ animateEnemyShakingWhileHeld:
 	ld l,Enemy.stunCounter
 	ld a,(hl)
 	-
-		sub 30
+		sub 45
 		jr c,+
 		dec b
 		jr nz,-
