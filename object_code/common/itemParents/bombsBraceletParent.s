@@ -446,12 +446,7 @@ parentItemCode_bracelet:
 .ifdef ENABLE_RING_REDUX
 	; get the opposite button of the one this item is assigned
 	; to and use it to determine if we smack with the item
-	ld c,a
-	ld h,d
-	ld l,Item.var03
-	ld a,(hl)
-	xor $03
-	and c
+	call wasOppositeItemButtonPressed
 	jr z,+++
 		; only smack if the button was JUST pressed
 		ld c,a
@@ -461,21 +456,6 @@ parentItemCode_bracelet:
 
 		call judoMasterComboActive
 		jr nz,+++
-			call getHeldObject
-			; don't swing if this isn't an item
-			ld a,l
-			and $c0
-			jr nz,+++
-			; don't swing if the item doesn't have a damage value
-			ld l,Item.damage
-			xor a
-			cp (hl)
-			jr z,+++
-			; store so it doesn't need to be retrieved again
-			push bc
-			ld b,h
-			ld c,l
-
 			ld h,d
 			ld l,Item.state
 			ld (hl),$06
@@ -491,18 +471,18 @@ parentItemCode_bracelet:
 			ld (hl),a
 
 			ld l,Item.animCounter
-			ld (hl),$12
+			ld (hl),$11
 			xor a
 			inc l
 			ld (hl),a
 
 			; retrieve the held object
-			ld h,b
-			ld l,c
-			pop bc
+			call getHeldObject
 
 			; Enable collisions on the throwable
-			ld l,Item.collisionType
+			ld a,l
+			add Object.collisionType-Object.enabled
+			ld l,a
 			set 7,(hl)
 			inc l
 			inc l
@@ -526,6 +506,7 @@ parentItemCode_bracelet:
 			ld a,SND_SEEDSHOOTER
 			jp playSound
 	+++
+@forceThrow:
 .endif
 
 	call updateLinkDirectionFromAngle
@@ -550,7 +531,18 @@ parentItemCode_bracelet:
 	and $c0
 	jr z,+
 		ld l,Enemy.invincibilityCounter
-		ld (hl),$d8 ; make enemy invincible so they don't take damage till hitting ground
+		push hl
+		ld h,d
+		ld l,Item.substate
+		xor a
+		or (hl)
+		ld a,$d8 ; long throw timer
+		jr z,++
+			ld a,$e8 ; short throw timer
+		++
+		pop hl
+		; make enemy invincible so they don't take damage till hitting ground
+		ld (hl),a
 	+
 .endif
 
@@ -736,24 +728,17 @@ parentItemCode_bracelet:
 	jr nz,+
 		dec l ; decrement animCounter
 		dec (hl)
-		ld a,(hl)
 		jr z,++
 			call isHasteRingEquipped
 			jr nz,++
 				dec (hl)
 		++
+		ld a,(hl)
 
 		jr nz,++
 			inc l ; move back to animParameter
 			set 7,(hl)
 		++
-
-		push hl
-		ld hl,@swingAnimStates
-		rst_addAToHl
-		ld a,(hl)
-		ld c,a
-		pop hl
 
 		; use links throwing sprite
 		ld l,Item.var31
@@ -761,24 +746,63 @@ parentItemCode_bracelet:
 		ld l,Item.var3f
 		ld (hl),$0f
 
-		; get the object(if it's still valid)
+		; if this isn't an item, do an underhand throw instead of swinging
 		call getHeldObject
-		jr nz,++
-			ld h,d
-			ld l,Item.state
-			ld (hl),$00
-			jr @@enable
-		++
-		ld l,Item.oamFlags
-		bit 7,a
 		jr z,++
-			set 6,(hl)
+			ld c,a
+			ld a,l
+			and $c0
+			ld a,c
+			jr z,+++
+				; invert frame order
+				ld a,17
+				sub c
 			jr +++
 		++
-			res 6,(hl)
+			; delete object if it's no longer valid
+			ld h,d
+			ld a,l
+			add Object.state-Object.enabled
+			ld l,a
+			ld (hl),$00
+			jr @@enable
 		+++
 
-		and $7f
+		push hl
+		ld hl,@swingAnimStates
+		rst_addAToHl
+		ld a,(hl)
+		pop hl
+
+		; if this isn't an item, release it on the
+		; frame it gets closest to the ground
+		bit 7,l
+		jr nz,++
+			bit 6,l
+			jr z,++++
+			++
+				bit 6,a
+				jr z,+++
+				ld h,d
+				ld l,Item.state
+				ld (hl),$03
+				inc l
+				; NOTE: the substate indicates to indicate to use a shorter 
+				;		invincibility timer since the enemy will bounce less
+				ld (hl),$01
+				jp @forceThrow
+
+		++++
+			ld l,Item.oamFlags
+			bit 7,a
+			jr z,++
+				set 6,(hl)
+				jr +++
+			++
+				res 6,(hl)
+		+++
+
+		and $3f
 		ld (wLinkGrabState2),a
 		ret
 	+
@@ -806,45 +830,21 @@ parentItemCode_bracelet:
 		jr nz,+
 			set 0,(hl)
 		+
-	@@enable:
 
+@@enable:
 	call itemEnableLinkTurning
 	jp itemEnableLinkMovement
-	ret
 
-; Bit 7:    If set, vertically mirror object
-; Bits 4-6: Weight of object(affects position)
+; Bit 7:    If set, vertically mirror the item
+; Bit 6:    If set, non-item objects are released on this frame
+; Bits 4-5: Weight of object(affects position)
 ; Bits 0-3: Low nibble to write to wLinkGrabState2
 @swingAnimStates:
 	.db $08 $08 $08
 	.db $04 $04 $04
 	.db $04 $84 $84
-	.db $80 $80 $90
-	.db $90 $90 $94
+	.db $80 $c0 $d0
+	.db $d0 $90 $94
 	.db $94 $14 $14
 
-getHeldObject:
-	push de
-	ld h,d
-	ld d,a
-	ld l,Item.var37
-	xor a
-	or (hl)
-	jr z,+
-		ld hl,w1ReservedItemC
-		ld a,d
-		pop de
-		ret
-	+
-	; get the object held by w1Link
-	ld hl,w1Link.relatedObj2+1
-	ldd a,(hl)
-	ld l,(hl)
-	ld h,a
-	; test that the object is enabled
-	xor a
-	or (hl)
-	ld a,d
-	pop de
-	ret
 .endif

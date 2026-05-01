@@ -8271,6 +8271,43 @@ removeRing:
 .endif
 
 .ifdef ENABLE_RING_REDUX
+wasOppositeItemButtonPressed:
+	; get the opposite button of the one this item is assigned
+	; to and use it to determine if we smack with the item
+	ld c,a
+	ld h,d
+	ld l,Item.var03
+	ld a,(hl)
+	xor $03
+	; AND it with the keys pressed byte to find if it was pressed
+	and c
+	ret
+
+getHeldObject:
+	push de
+	ld h,d
+	ld d,a
+	ld l,Item.var37
+	xor a
+	or (hl)
+	jr z,+
+		ld hl,w1ReservedItemC
+		ld a,d
+		pop de
+		ret
+	+
+	; get the object held by w1Link
+	ld hl,w1Link.relatedObj2+1
+	ldd a,(hl)
+	ld l,(hl)
+	ld h,a
+	; test that the object is enabled
+	xor a
+	or (hl)
+	ld a,d
+	pop de
+	ret
+
 ; @param	hl	Object to check
 ; @param[out]	zflag set if the enemy CANNOT be pogo'd on
 isValidTargetForPogo:
