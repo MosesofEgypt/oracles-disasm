@@ -42,6 +42,11 @@ initializeFile:
 	ld b,$06
 	ld a,$ff
 	call fillMemory
+.ifdef ENABLE_MULTI_RING
+	; set the flags to 0
+	ld hl,wRingReduxFlags
+	ld (hl),$00
+.endif
 
 	; If hero game, give victory ring
 	ld a,c
