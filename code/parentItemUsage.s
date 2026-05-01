@@ -485,36 +485,5 @@ getCanUseItemsInWater:
 		ret
 	+
 
-	push bc
-	ld b,0
-	ld a,SWIMMERS_RING
-	call cpActiveRing
-	jr nz,+
-		inc b
-	+
-
-	ld a,ZORA_RING
-	call cpActiveRing
-	jr nz,+
-		inc b
-	+
-
-	ld a,ROCS_RING
-	call cpActiveRing
-	jr nz,+
-		inc b
-	+
-
-	ld a,TREASURE_MERMAID_SUIT
-	call checkTreasureObtained
-	jr nc,+
-		inc b
-	+
-
-	ld a,b
-	pop bc
-	cp $02
-	ret c
-	xor a
-	ret
+	jp dolphinComboActive
 .endif

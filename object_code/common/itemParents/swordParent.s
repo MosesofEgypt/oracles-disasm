@@ -177,7 +177,7 @@ parentItemCode_sword:
 
 	call @createSwordBeam
 .ifdef ENABLE_RING_REDUX
-	call swordBeamosComboActive
+	call swordShmupComboActive
 	jp nz,@triggerSwordPoke
 		ld h,d
 		ld l,Item.counter1

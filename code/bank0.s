@@ -8375,21 +8375,21 @@ isValidTargetForJudo:
 
 ; these are bitmasks for which enemies can be picked up with a ring combo
 @judoTargets:
-	; 0x00-0x07: OCTOROK, BOOMERANG_MOBLIN, LEEVER, ARROW_MOBLIN
+	; 0x00-0x07: OCTOROK, BOOMERANG_MOBLIN, ARROW_MOBLIN
 	; 0x08-0x0f:
 	; 0x10-0x17: ROPE, GIBDO
 	; 0x18-0x1f: BUZZBLOB, SAND_CRAB, SPINY_BEETLE, IRON_MASK, ARMOS, PIRANHA
 	; 0x20-0x27: MASKED_MOBLIN, ARROW_DARKNUT, ARROW_SHROUDED_STALFOS, POLS_VOICE, LIKE_LIKE, GOPONGA_FLOWER
 	; 0x28-0x2f: WALLMASTER
-	; 0x30-0x37: TEKTITE, STALFOS, KEESE, ZOL, FLOORMASTER, CUCCO, BUTTERFLY
+	; 0x30-0x37: TEKTITE, STALFOS, KEESE, ZOL, FLOORMASTER, BUTTERFLY
 	; 0x38-0x3f: FIRE_KEESE, WATER_TEKTITE, PEAHAT, SWORD_MOBLIN
 	; 0x40-0x47: WIZZROBE, CROW, GEL
 	; 0x48-0x4f: SWORD_DARKNUT, SWORD_SHROUDED_STALFOS, SWORD_MASKED_MOBLIN, BALL_AND_CHAIN_SOLDIER, BLUE_CROW, HARDHAT_BEETLE, ARM_MIMIC
 	; 0x50-0x57: BEETLE, FLYING_TILE
-	dbrev %00000000 %01111000 ; 0x00-0x0f
+	dbrev %00000000 %01101000 ; 0x00-0x0f
 	dbrev %10100000 %10111110 ; 0x10-0x1f
 	dbrev %11111100 %10000000 ; 0x20-0x2f
-	dbrev %11101111 %01100110 ; 0x30-0x3f
+	dbrev %11101101 %01100110 ; 0x30-0x3f
 	dbrev %11010000 %11111110 ; 0x40-0x4f
 	dbrev %01100000 %00000000 ; 0x50-0x5f
 
@@ -8399,11 +8399,6 @@ isValidTarget_helper:
 	pop hl
 	ld a,h
 	pop hl
-	ret
-
-bothRingsActiveAndPopBC:
-	call bothRingsActive
-	pop bc
 	ret
 
 ;;
@@ -8416,10 +8411,9 @@ bothRingsActive:
 	ret c
 	push bc
 	ld b,a
-	or $01
 	ld a,b
 	pop bc
-	;rra
+	rra
 	ret
 
 isHasteRingEquipped:
@@ -8431,12 +8425,9 @@ isHasteRingEquipped:
 	pop de
 	ret
 
-alchemyJoyComboActive:
-	push bc
-	ldbc BLUE_JOY_RING,GOLD_JOY_RING
-	call eitherRingActive
-	pop bc
-	ret
+lightningBoomerangComboActive:
+	ldbc RANG_RING_L1,RANG_RING_L2
+	jr bothRingsActive
 
 remoteBombComboActive:
 	ldbc PEACE_RING,BOMBERS_RING
@@ -8446,40 +8437,77 @@ instantBombComboActive:
 	ldbc BOMBPROOF_RING,HASTE_RING
 	jr bothRingsActive
 
+swordShmupComboActive:
+	ldbc ENERGY_RING,CHARGE_RING
+	jr bothRingsActive
+
 smashingBoardComboActive:
 	ldbc STEADFAST_RING,HASTE_RING
 	jr bothRingsActive
+
+bothRingsActiveAndPopBC:
+	call bothRingsActive
+	pop bc
+	ret
+
+eitherRingActiveAndPopBC:
+	call eitherRingActive
+	pop bc
+	ret
+
+miningBombComboActive:
+	push bc
+	ldbc DISCOVERY_RING,BLAST_RING
+	jr bothRingsActiveAndPopBC
+
+alchemyJoyComboActive:
+	push bc
+	ldbc BLUE_JOY_RING,GOLD_JOY_RING
+	jr eitherRingActiveAndPopBC
+
+tripleHeartJoyComboActive:
+	push bc
+	ldbc BLUE_JOY_RING,GOLD_JOY_RING
+	jr bothRingsActiveAndPopBC
+
+dolphinComboActive:
+	push bc
+	ldbc SWIMMERS_RING,ZORA_RING
+	call eitherRingActive
+	ld b,0
+	jr nz,+
+		inc b
+	+
+	jr nc,+
+		inc b
+	+
+
+	ld a,ROCS_RING
+	call cpActiveRing
+	jr nz,+
+		inc b
+	+
+
+	ld a,TREASURE_MERMAID_SUIT
+	call checkTreasureObtained
+	jr nc,+
+		inc b
+	+
+	ld a,b
+	pop bc
+	cp $02
+	ret c
+	xor a
+	ret
 
 underwaterItemsComboActive:
 	push bc
 	ldbc SWIMMERS_RING,ZORA_RING
 	jr bothRingsActiveAndPopBC
 
-superBoomerangComboActive:
-	ldbc RANG_RING_L1,RANG_RING_L2
-	jr bothRingsActive
-
-diggerangComboActive:
-	ldbc TOSS_RING,DISCOVERY_RING
-	jr bothRingsActive
-
-swordBeamosComboActive:
-	ldbc ENERGY_RING,CHARGE_RING
-	jr bothRingsActive
-
 enemyPogoComboActive:
 	push bc
 	ldbc STEADFAST_RING,ROCS_RING
-	jp bothRingsActiveAndPopBC
-
-hurricaneSpinComboActive:
-	push bc
-	ldbc SPIN_RING,CHARGE_RING
-	jr bothRingsActiveAndPopBC
-
-miningBombComboActive:
-	push bc
-	ldbc DISCOVERY_RING,BLAST_RING
 	jr bothRingsActiveAndPopBC
 
 kenpoMasterComboActive:
@@ -8487,9 +8515,14 @@ kenpoMasterComboActive:
 	ldbc EXPERTS_RING,FIST_RING
 	jr bothRingsActiveAndPopBC
 
-tripleHeartJoyComboActive:
+hadoukenComboActive:
 	push bc
-	ldbc BLUE_JOY_RING,GOLD_JOY_RING
+	ldbc EXPERTS_RING,ENERGY_RING
+	jr bothRingsActiveAndPopBC
+
+hurricaneSpinComboActive:
+	push bc
+	ldbc SPIN_RING,CHARGE_RING
 	jr bothRingsActiveAndPopBC
 
 judoMasterComboActive:
@@ -8506,10 +8539,35 @@ beamosComboActive:
 	ldbc LIGHT_RING_L2,LIGHT_RING_L1
 	call eitherRingActive
 	pop bc
+	jr getZflagAndCflagSet
+
+eitherRangRingEquipped:
+	push bc
+	ldbc RANG_RING_L2,RANG_RING_L1
+	jr eitherRingActiveAndPopBC
+
+superBoomerangComboActive:
+	ld a,TOSS_RING
+	call cpActiveRing
+	jr z,+
+		call isHasteRingEquipped
+		ret nz
+	+
+@zIfEither
+	call eitherRangRingEquipped
+getZflagAndCflagSet:
 	ret z
 	ret nc
 	xor a
 	ret
+
+diggerangComboActive:
+	push bc
+	ldbc TOSS_RING,DISCOVERY_RING
+	call bothRingsActive
+	pop bc
+	ret nz
+	jr superBoomerangComboActive@zIfEither
 
 victoryRingIncLevel:
 	push de

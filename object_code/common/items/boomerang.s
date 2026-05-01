@@ -44,25 +44,8 @@ itemCode06:
 	ld (hl),c
 
 .ifdef ENABLE_RING_REDUX
-	ld a,TOSS_RING
-	call cpActiveRing
-	jr z,+
-		call isHasteRingEquipped
-		jr nz,++
-	+
-	ldbc RANG_RING_L2, RANG_RING_L1
-	call eitherRingActive
-	jr z,+
-	jr c,+
-	jr ++
-	+
-		ld l,Item.speed
-		ld (hl),SPEED_300
-		ld l,Item.counter1
-		ld (hl),$78
-	++
+	call eitherRangRingEquipped
 
-	ld c,-1
 	jr nz,+
 		ld c,-4
 		jr c,+
@@ -70,7 +53,16 @@ itemCode06:
 		jr +++
 	+
 	jr nc,++
+		ld c,-1
 	+++
+
+	call lightningBoomerangComboActive
+	jr nz,+
+		ld l,Item.speed
+		ld (hl),SPEED_300
+		ld l,Item.counter1
+		ld (hl),$78
+	+
 .else
 	ld c,-1
 	ld a,RANG_RING_L1
@@ -323,21 +315,14 @@ itemCode06:
 magicBoomerangTryToBreakTile:
 .ifdef ENABLE_RING_REDUX
 	; if wearing these rings, the boomerang just eats dirt up
-	push bc
 	call diggerangComboActive
 	jr nz,+
-		ldbc RANG_RING_L2, RANG_RING_L1
-		call eitherRingActive
-		jr c,++
-		jr z,++
 		ld a,TREASURE_SHOVEL
 		call checkTreasureObtained
 		jr nc,+
-		++
 			ld a,BREAKABLETILESOURCE_SHOVEL
 			call itemTryToBreakTile
 	+
-	pop bc
 .endif
 
 	ld e,Item.subid

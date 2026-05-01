@@ -76,13 +76,8 @@ parentItemCode_punch:
 
 .ifdef ENABLE_RING_REDUX
 	push af
+	call hadoukenComboActive
 	jr nz,+++
-		ld a,ENERGY_RING
-		call cpActiveRing
-		jr z,+
-			jr +++
-		+
-
 		; figure out the heart cutoff for firing
 		call swordBeamHeartCutoff
 
