@@ -9,7 +9,7 @@ groups:
       You got a
       \col(1)L-1 Ring Box\col(0)!
       It can hold
-      three \col(1)ring\col(0)!
+      three \col(1)rings\col(0)!
 
   - name: TX_0058
     index: 0x58
@@ -39,7 +39,7 @@ groups:
     text: |-
       L-1 Ring Box
       Holds three
-      seed ring.
+      seed rings.
 
   - name: TX_091e
     index: 0x1e
