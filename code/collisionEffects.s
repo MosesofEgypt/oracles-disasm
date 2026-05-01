@@ -1608,6 +1608,10 @@ collisionLinkBounce:
 	call enemyPogoComboActive
 	ret nz
 
+	; ensure this is something link can pogo safely on
+	call isValidTargetForPogo
+	ret z
+
 	; convert collisions that would damage link into an extra jump
 	push hl
 	push bc
@@ -1626,20 +1630,23 @@ collisionLinkBounce:
 
 	ld h,d
 	ld a,e
-	and $80
-	ld l,a
-	inc l
+	and $c0
+	cp Enemy.start
+	ld l,Enemy.id
 	ld a,(hl)
 	pop hl
-	call isValidTargetForJudo
-	jr z,+
-		; change collision type
-		ld a,EXPERTS_RING
-		call cpActiveRing
 
-		; experts ring causes a stun, not just a bump
-		ld a,COLLISIONEFFECT_STUN
-		ret z
+	jr nz,+
+		; only judo stun if enemy
+		call isValidTargetForJudo
+		jr z,+
+			; change collision type
+			ld a,EXPERTS_RING
+			call cpActiveRing
+
+			; experts ring causes a stun, not just a bump
+			ld a,COLLISIONEFFECT_STUN
+			ret z
 	+
 
 	ld a,SND_JUMP

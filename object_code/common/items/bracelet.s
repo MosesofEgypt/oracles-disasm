@@ -163,6 +163,20 @@ itemCode16:
 	ld a,(de)
 	or a
 	ret nz
+.ifdef ENABLE_RING_REDUX
+	; if object is an enemy and they touched a hazard, we need to
+	; delete the bracelet object and leave the enemy to its fate
+	ld a,Object.var3f
+	call objectGetRelatedObject2Var
+	ld a,l
+	and $c0
+	cp $80
+	jr nz,+
+		ld a,(hl)
+		and $0f
+		jp nz,itemDelete
+	+
+.endif
 	ld a,Object.yh
 	call objectGetRelatedObject2Var
 	jp objectCopyPosition

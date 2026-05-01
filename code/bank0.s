@@ -8271,17 +8271,70 @@ removeRing:
 .endif
 
 .ifdef ENABLE_RING_REDUX
-; @param	a	Enemy id to check
-; @param[out]	zflag set if the enemy CANNOT be picked up/thrown
-isValidTargetForJudo:
+; @param	hl	Object to check
+; @param[out]	zflag set if the enemy CANNOT be pogo'd on
+isValidTargetForPogo:
 	push hl
 	push af
-	ld hl,@judoTargets
-	call checkFlag
+	ld h,d
+	ld a,e
+	and $c0
+	ld l,a
+	cp $80
+	jr nz,+
+		; this is an enemy. check if judo works
+		inc l
+		ld a,(hl)
+		call isValidTargetForJudo
+		jr ++
+	+
+
+	cp $c0
+	jr nz,+
+		; this is a part
+		inc l
+		ld a,(hl)
+		call isValidTargetForJudo
+		jr ++
+	+
+	xor a
+	++
 	pop hl
 	ld a,h
 	pop hl
 	ret
+
+; these are bitmasks for which parts can be pogo'd on with a ring combo
+@pogoTargets:
+	; 0x00-0x07:
+	; 0x08-0x0f:
+	; 0x10-0x17:
+	; 0x18-0x1f: OCTOROK_PROJECTILE, ENEMY_ARROW, STALFOS_BONE, ENEMY_SWORD, DEKU_SCRUB_PROJECTILE
+	; 0x20-0x27: MOBLIN_BOOMERANG
+	; 0x28-0x2f: SPIKED_BALL
+	; 0x30-0x37: SUBTERROR_DIRT(ages), RAMROCK_GLOVE_FORM_ARM(ages)
+	; 0x38-0x3f: PART_38(seasons), BLUE_STALFOS_PROJECTILE(ages)
+	; 0x40-0x47: PART_47(seasons)
+	; 0x48-0x4f: PART_DIN_CRYSTAL(seasons)
+	; 0x50-0x57: GANON_TRIDENT
+	dbrev %00000000 %00000000 ; 0x00-0x0f
+	dbrev %00000000 %10101110 ; 0x10-0x1f
+	dbrev %01000000 %00100000 ; 0x20-0x2f
+.ifdef ROM_AGES
+	dbrev %00100100 %00000100 ; 0x30-0x3f
+	dbrev %00000000 %00000000 ; 0x40-0x4f
+.else
+	dbrev %00000000 %10000000 ; 0x30-0x3f
+	dbrev %00000001 %00000001 ; 0x40-0x4f
+.endif
+	dbrev %10000000 %00000000 ; 0x50-0x5f
+
+; @param	a	Enemy id to check
+; @param[out]	zflag set if the enemy CANNOT be picked up/thrown
+isValidTargetForJudo:
+	push hl
+	ld hl,@judoTargets
+	jr isValidTarget_helper
 
 ; these are bitmasks for which enemies can be picked up with a ring combo
 @judoTargets:
@@ -8302,6 +8355,14 @@ isValidTargetForJudo:
 	dbrev %11101111 %01100110 ; 0x30-0x3f
 	dbrev %11010000 %11111110 ; 0x40-0x4f
 	dbrev %01100000 %00000000 ; 0x50-0x5f
+
+isValidTarget_helper:
+	push af
+	call checkFlag
+	pop hl
+	ld a,h
+	pop hl
+	ret
 
 bothRingsActiveAndPopBC:
 	call bothRingsActive
@@ -10026,7 +10087,8 @@ enemyStandardUpdate:
 .ifdef ENABLE_RING_REDUX
 animateEnemyShakingWhileHeld:
 	; only animate enemies shaking
-	ldh a,(<hActiveObjectType)
+	ld a,l
+	and $c0
 	cp $80
 	ret nz
 
@@ -10038,10 +10100,17 @@ animateEnemyShakingWhileHeld:
 
 	; make the enemy shake back and forth, but increase
 	; shake distance as the timer gets closer to 0
-	push bc
-	ld b,$02
 	ld l,Enemy.stunCounter
 	ld a,(hl)
+	or a
+	; so, it appears that the vine sprout is an enemy, which causes
+	; it to vibrate uncontrollably since it's stun counter is 0.
+	; for this edge case(and any others idk of), we solving it by
+	; not vibrating if the stun counter is 0. makes sense anyway
+	ret z
+
+	push bc
+	ld b,$02
 	-
 		sub 45
 		jr c,+
