@@ -8157,6 +8157,7 @@ cpActiveRing:
 		jr nz,-
 
 	.ifdef EXTENDED_RING_BOX
+		dec l
 		cp (hl)
 		jr z,+
 			ld b,$05

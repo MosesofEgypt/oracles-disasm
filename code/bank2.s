@@ -4746,16 +4746,12 @@ inventoryMenuState1:
 	jr nz,+
 	ld a,VASUS_RING
 	call cpActiveRing
-	jr nz,++
-		jp @openRingBoxMenu
-++
+	jp z,@openRingBoxMenu
 .endif
 .ifdef PORTAL_RING_BOX_LEVEL
 	ld a,(wRingBoxLevel)
 	cp PORTAL_RING_BOX_LEVEL
-	jr c,++
-		jp @openRingBoxMenu
-++
+	jp nc,@openRingBoxMenu
 .endif
 +
 	ld a,(wInventorySubmenu1CursorPos)
