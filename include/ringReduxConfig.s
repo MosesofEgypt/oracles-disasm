@@ -231,10 +231,13 @@
 .endif
 
 .ifdef REMAP_RING_LIST
+	; If defined, also remaps the index numbers of each ring
+	.define REMAP_RING_LIST_NUMBERS		1
+
 	; NOTE: If you want to rearrange where the rings show up in the list, do so here.
 	;		HOWEVER, make sure you do not mess with the structure. These defines MUST
-	;		contain at 64 items, MUST NOT contain duplicates, and there MUST be a
-	;		define for each quadrant of each page(so, 16 defines in total).
+	;		contain exactly 64 items, MUST NOT contain duplicates, and there MUST be
+	;		a define for each quadrant of each page(so, 16 defines in total).
 	.define RING_LIST_PG1_UP_LEFT		POWER_RING_L1		POWER_RING_L2		POWER_RING_L3		RED_RING
 	.define RING_LIST_PG1_UP_RIGHT		GREEN_RING			GREEN_HOLY_RING		RED_HOLY_RING		BLUE_HOLY_RING
 	.define RING_LIST_PG1_DOWN_LEFT		ARMOR_RING_L1		ARMOR_RING_L2		ARMOR_RING_L3		BLUE_RING
@@ -256,6 +259,8 @@
 	.define RING_LIST_PG4_DOWN_RIGHT	FIRST_GEN_RING		GBA_TIME_RING		CURSE_ARMOR_RING	VASUS_RING
 .endif
 
+
+
 ; NOTE: Code below here is not meant to be treated as configuration.
 ;		We're simply setting up any dependent defines.
 
@@ -276,6 +281,11 @@
 	.ifndef ENABLE_MULTI_RING
 		; necessary for so many things(combos, effect stacking, etc)
 		.define ENABLE_MULTI_RING	1
+	.endif
+
+	.ifndef ENABLE_PUNCH_WITH_ITEM
+		; the text for the rings indicate this is possible, so we're forcing it on
+		.define ENABLE_PUNCH_WITH_ITEM 			1
 	.endif
 .endif
 

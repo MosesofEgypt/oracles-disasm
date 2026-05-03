@@ -10960,6 +10960,7 @@ ringMenu_unmapSelectedRingIndex:
 	call ringMenu_isRingList
 	ret z
 
+ringMenu_forceUnmapSelectedRingIndex:
 	; linear searches suck, but oh well. im not hardcoding an inverse table
 	push hl
 	push bc
@@ -11369,6 +11370,9 @@ ringMenu_updateDisplayedRingNumberWithGivenComparator:
 
 	; If no ring is selected, print two dashes
 	ld a,(wRingMenu.selectedRing)
+.ifdef REMAP_RING_LIST_NUMBERS
+	call ringMenu_forceUnmapSelectedRingIndex
+.endif
 	inc a
 	jr z,@noRing
 
