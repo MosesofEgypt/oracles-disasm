@@ -8411,10 +8411,11 @@ bothRingsActive:
 	ret nz
 	ret c
 	push bc
-	ld b,a
+	push af
+	or $01
+	pop bc
 	ld a,b
 	pop bc
-	rra
 	ret
 
 isHasteRingEquipped:
