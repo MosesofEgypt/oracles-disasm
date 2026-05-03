@@ -106,10 +106,9 @@
 .endif
 
 .ifdef RESIZE_RING_BOX
-	; NOTE: These are the sizes of each level of ring box. Level 5 should be
-	;		at least 5 rings, as the UI code expects to clear all the tiles
-	;		for it. Also, do not go over 10 rings for extended box sizes, nor
-	;		5 rings for non-extended box sizes.
+	; NOTE: These are the sizes of each level of ring box.
+	;		Do not go over 5 rings for non-extended box
+	;		sizes, nor 10 rings for extended box sizes.
 	.ifdef EXTENDED_RING_BOX
 		.define RING_BOX_L1_SIZE		3
 		.define RING_BOX_L2_SIZE		5
@@ -118,18 +117,6 @@
 		.define RING_BOX_L1_SIZE		2
 		.define RING_BOX_L2_SIZE		4
 		.define RING_BOX_L3_SIZE		5
-	.endif
-
-	; NOTE: These value should be the same as the sizes above, but they
-	;		MUST be clipped to be 5 or less. They're used to determine
-	;		how many tiles to clear in the inventory, so any higher and
-	;		you'll start to get graphical bugs.
-	.ifdef EXTENDED_RING_BOX
-		.define RING_BOX_L1_WIDTH		3
-		.define RING_BOX_L2_WIDTH		5
-	.else
-		.define RING_BOX_L1_WIDTH		2
-		.define RING_BOX_L2_WIDTH		4
 	.endif
 .endif
 

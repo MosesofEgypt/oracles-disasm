@@ -5263,11 +5263,15 @@ inventorySubmenu1CheckDirectionButtons:
 			ld a,$0f
 		+
 
-		; however, if the new position would be ring
-		; slot 10, skip to the ring slot 5 instead
-		cp $19
+		; however, if the new position would be the last slot
+		; on the second page, skip to the ring slot 5 instead
+		ld b,d
+		dec b
+		cp b
 		jr nz,+
-			ld a,$14
+			cp $15
+			jr c,+
+				ld a,$14
 	+
 .endif
 	jr ++
@@ -5819,20 +5823,24 @@ drawEquippedSpriteForActiveRing:
 				call addSpritesToOam_withOffset
 				pop hl
 
-				ld c,$99
+				call inventorySubscreen1_getRingBoxWidth
+				; multiply by 24, add 1, and add the base $20
+				add a ; x2
+				add a ; x4
+				add a ; x8
+				ld c,a
+				add c ; x16
+				add c ; x24
+				add $21
+				ld c,a
 				call addSpritesToOam_withOffset
 ++
 .endif
 
 .ifdef ENABLE_MULTI_RING
-	call getRingBoxCapacity
-	ret z
-
 .ifdef EXTENDED_RING_BOX
-	cp $06
-	jr c,+
-		sub $05
-+
+	call inventorySubscreen1_getRingBoxWidth
+	ret z
 	ld b,a
 	ld c,$00
 
@@ -5843,6 +5851,8 @@ drawEquippedSpriteForActiveRing:
 	+
 	call getRingBoxContents
 .else
+	call getRingBoxCapacity
+	ret z
 	ld hl,(wRingBoxContents)
 .endif
 -
@@ -6001,6 +6011,31 @@ inventorySubscreen1_drawTreasures:
 @undrawRingBox:
 	; Clear away some tiles based on ring box level
 	ld a,(wRingBoxLevel)
+.ifdef RESIZE_RING_BOX
+	.ifdef EXTENDED_RING_BOX
+		call inventorySubscreen1_getRingBoxWidth
+	.else
+		call getRingBoxCapacity
+	.endif
+	cp 5
+	jr z,@drawRings
+	or a
+	jr z,+
+		inc a
+		ld b,a
+		add b
+		add b
+	+
+	ld b,a
+	ld a,$12
+	sub b
+	ld c,a
+	ld a,b
+	ld hl,w4TileMap+$181
+	add l
+	ld l,a
+	ld b,$03
+.else
 	cp $03
 	jr z,@drawRings
 
@@ -6011,16 +6046,16 @@ inventorySubscreen1_drawTreasures:
 	ld b,$03
 	ld l,a
 	ld h,>w4TileMap+1
+.endif
 	call fillRectangleInTileMapWithMenuBlock
 
 @drawRings:
+.ifdef EXTENDED_RING_BOX
+	call inventorySubscreen1_getRingBoxWidth
+	ret z
+.else
 	call getRingBoxCapacity
 	ret z
-.ifdef EXTENDED_RING_BOX
-	cp $06
-	jr c,+
-		sub $05
-+
 .endif
 
 	ld b,a
@@ -6102,13 +6137,32 @@ inventorySubscreen1_drawTreasures:
 ;   b0: position to start at (w4TileMap+$100+X)
 ;   b1: number of tiles to clear horizontally
 @ringBoxClearTiles:
+.ifndef RESIZE_RING_BOX
 	.db $81 $12 ; L0
-.ifdef RESIZE_RING_BOX
-	.db $81+3*(RING_BOX_L1_SIZE+1) $12-3*RING_BOX_L1_WIDTH; L1
-	.db $81+3*(RING_BOX_L2_SIZE+1) $12-3*RING_BOX_L2_WIDTH; L2
-.else
 	.db $87 $0c ; L1
 	.db $8d $06 ; L2
+.endif
+
+.ifdef EXTENDED_RING_BOX
+inventorySubscreen1_getRingBoxWidth:
+	call getRingBoxCapacity
+	ret z
+	cp 6
+	ret c
+
+	push bc
+	push af
+	ld a,(wInventorySubmenu1CursorPos)
+	cp $15
+	pop bc
+	ld a,b
+	pop bc
+	jr nc,+
+		; first page of two. always 5 rings
+		ld a,$0a
+	+
+	sub $05
+	ret
 .endif
 
 ;;
@@ -10893,6 +10947,7 @@ ringMenu_remapSelectedRingIndex:
 	; only remap rings if in the ring box, not the appraisal menu
 	call ringMenu_isRingList
 	ret z
+ringMenu_forceRemapSelectedRingIndex:
 	push hl
 	ld hl,ringMapTable
 	rst_addAToHl
@@ -11019,10 +11074,111 @@ ringMenu_drawPageCounter:
 	ld (hl),a
 	ret
 
+.ifdef RESIZE_RING_BOX
+ringMenu_drawRingBoxArea:
+	push bc
+	push de
+	push hl
+
+	; figure out how many slots we have
+	call getRingBoxCapacity
+	ld b,a
+
+	ld a,(wRingMenu.ringBoxCursorIndex)
+	cp 5
+	ld a,b
+	jr c,+
+		; second row. clip size by 5
+		sub 5
+	+
+		; first row
+		cp 6
+		jr c,++
+			ld a,5
+	++
+	; calculate how many tiles to fill(1+3*(slot_count-2))
+	dec a
+	dec a
+	ld b,a
+	add b
+	add b
+	inc a
+	push af
+
+	; clear existing tiles
+	ld hl,w4TileMap+$204 	; ring box top-left corner
+	ldbc $02,$14 			; height/width
+	ldde $00,$07 			; tile index/flags
+	push hl
+	call fillRectangleInTilemap
+	pop hl
+
+	; draw the outer-left brackets
+	xor a
+	call @drawOutsideBracket
+
+	; draw the inside brackets
+	pop af
+	bit 7,a
+	jr nz,+
+		inc hl
+		inc hl
+
+		ld b,$02 		; height
+		ld c,a			; width
+		ldde $07,$07 	; tile index/flags
+		push hl
+		call fillRectangleInTilemap
+		pop hl
+
+		; vertically mirror top row
+		set 2,h		; move to flags
+		-
+			set 6,(hl)	; set vertical-mirror
+			inc hl
+			dec c
+			jr nz,-
+
+		res 2,h		; move back to tiles
+	+
+
+	inc hl
+	inc hl
+
+	; draw the outer-right brackets
+	ld a,$20
+	call @drawOutsideBracket
+
+	pop hl
+	pop de
+	pop bc
+	ret
+
+@drawOutsideBracket:
+	or $07 			; flags
+	; draw the outer-left brackets
+	ldbc $02,$01 	; height/width
+	ld d,$06 		; tile index
+	ld e,a
+	push hl
+	call fillRectangleInTilemap
+	pop hl
+
+	; vertically mirror top row
+	set 2,h		; move to flags
+	set 6,(hl)	; set vertical-mirror
+	res 2,h		; move back to tiles
+	inc hl		; move to the next tile
+	ret
+.endif
+
 ;;
 ; Draws the contents of the ring box for the ring list menu
 ringMenu_drawRingBoxContents:
 .ifdef EXTENDED_RING_BOX
+.ifdef RESIZE_RING_BOX
+	call ringMenu_drawRingBoxArea
+.endif
 	ld a,(wRingMenu.ringBoxCursorIndex)
 	call getRingBoxContents
 	ld a,$11

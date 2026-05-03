@@ -3538,6 +3538,12 @@ func_5a60:
 
 ;;
 standardGameState:
+.ifdef ENABLE_RING_REDUX
+	call updateSystemType
+.endif
+.ifdef ENABLE_MULTI_RING
+	call updateRingForceDisabledStatus
+.endif
 	ld a,(wLinkDeathTrigger)
 	cp $ff
 	jr nz,+
