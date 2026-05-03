@@ -797,6 +797,11 @@ wRingBoxLevel: ; $c6cc/$c6c6
 	; 		indicate the ring box size. If bit 3 of the lower nibble
 	; 		is set, the upper nibble is used as the box size.
 	;		This allows for two different ways to handle box upgrades.
+	; NOTE: It is VERY tempting to try and expand the max size of the
+	;		box to 15 rings, but there's just no contiguous block of
+	;		5 or 6 bytes to store the rings being held. There are some
+	;		bytes here or there, but the logic to handle swapping them
+	;		would be complicated and messy.
 	db
 wNumUnappraisedRingsBcd: ; $c6cd
 	db
