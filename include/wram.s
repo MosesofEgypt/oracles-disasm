@@ -792,6 +792,11 @@ wActiveRing: ; $c6cb/$c6c5
 	db
 .endif
 wRingBoxLevel: ; $c6cc/$c6c6
+	; NOTE: This byte has had its usage expanded for the ring redux.
+	; 		Since levels are limited to 0-3, the upper nibble can now
+	; 		indicate the ring box size. If bit 3 of the lower nibble
+	; 		is set, the upper nibble is used as the box size.
+	;		This allows for two different ways to handle box upgrades.
 	db
 wNumUnappraisedRingsBcd: ; $c6cd
 	db

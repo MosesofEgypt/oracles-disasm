@@ -36,7 +36,11 @@ shopItemState0:
 	call checkTreasureObtained
 	jr nc,++
 
+.ifdef RESIZE_RING_BOX
+	call getRingBoxLevel
+.else
 	ld a,(wRingBoxLevel)
+.endif
 	dec a
 	jr z,++
 	ld a,$14

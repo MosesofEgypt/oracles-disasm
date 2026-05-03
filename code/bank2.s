@@ -4749,7 +4749,7 @@ inventoryMenuState1:
 	jp z,@openRingBoxMenu
 .endif
 .ifdef PORTAL_RING_BOX_LEVEL
-	ld a,(wRingBoxLevel)
+	call getRingBoxLevel
 	cp PORTAL_RING_BOX_LEVEL
 	jp nc,@openRingBoxMenu
 .endif
@@ -5250,27 +5250,36 @@ inventorySubmenu1CheckDirectionButtons:
 	pop bc
 
 	jr nz,+
-		; right was pressed. if the new position would be
-		; ring slot 6, skip to the first treasure instead
+		; right was pressed.
+
 		cp $15
 		jr nz,++
+			; new position wouldn't be start of the next
+			; page, so skip to the first treasure instead
 			xor a
 	+
-		; left was pressed. if the new position would be
-		; ring slot 5, skip to the ring box instead
+		; left was pressed
 		cp $14
 		jr nz,+
-			ld a,$0f
+			; new position would be last slot of first page
+			ld b,a
+			ld a,(hl)
+			or a
+			ld a,b
+			; if not moving from first treasure, skip to ring box
+			jr z,+
+				ld a,$0f
 		+
 
-		; however, if the new position would be the last slot
-		; on the second page, skip to the ring slot 5 instead
 		ld b,d
 		dec b
 		cp b
 		jr nz,+
+			; trying to move to the last selectable slot
 			cp $15
 			jr c,+
+				; new position would be on the second
+				; page, so skip to ring slot 5 instead
 				ld a,$14
 	+
 .endif
@@ -6010,8 +6019,8 @@ inventorySubscreen1_drawTreasures:
 
 @undrawRingBox:
 	; Clear away some tiles based on ring box level
-	ld a,(wRingBoxLevel)
 .ifdef RESIZE_RING_BOX
+	call getRingBoxLevel
 	.ifdef EXTENDED_RING_BOX
 		call inventorySubscreen1_getRingBoxWidth
 	.else
@@ -6036,6 +6045,7 @@ inventorySubscreen1_drawTreasures:
 	ld l,a
 	ld b,$03
 .else
+	ld a,(wRingBoxLevel)
 	cp $03
 	jr z,@drawRings
 
@@ -6104,7 +6114,11 @@ inventorySubscreen1_drawTreasures:
 	jr nz,@drawRing
 
 	; Set text and icon for ring box based on level
+.ifdef RESIZE_RING_BOX
+	call getRingBoxLevel
+.else
 	ld a,(wRingBoxLevel)
+.endif
 	add <TX_091d-1
 	ld (w4SubscreenTextIndices+$f),a
 	ld de,w4TileMap+$182
@@ -6335,6 +6349,30 @@ itemSubmenu2TextIndices:
 ;;
 ; @param[out] a Capacity of ring box.
 getRingBoxCapacity:
+.ifdef RESIZE_RING_BOX
+	ld a,(wRingBoxLevel)
+	bit 3,a
+	jr z,+
+		ld a,(wRingBoxLevel)
+		swap a
+		jr ++
+	+
+		push hl
+		and $0f
+		ld hl,@ringBoxCapacities
+		rst_addAToHl
+		ld a,(hl)
+		pop hl
+	++
+	and $0f
+	ret
+
+@ringBoxCapacities:
+	.db $00
+	.db RING_BOX_L1_SIZE
+	.db RING_BOX_L2_SIZE
+	.db RING_BOX_L3_SIZE
+.else
 	push hl
 	ld a,(wRingBoxLevel)
 	ld hl,@ringBoxCapacities
@@ -6345,12 +6383,6 @@ getRingBoxCapacity:
 	ret
 
 @ringBoxCapacities:
-.ifdef RESIZE_RING_BOX
-	.db $00
-	.db RING_BOX_L1_SIZE
-	.db RING_BOX_L2_SIZE
-	.db RING_BOX_L3_SIZE
-.else
 	.db $00 $01 $03 $05
 .endif
 
@@ -9979,7 +10011,11 @@ ringMenu_drawRingBox:
 	jr nz,++
 
 	; Draw appropriate slots for rings
+.ifdef RESIZE_RING_BOX
+	call getRingBoxLevel
+.else
 	ld a,(wRingBoxLevel)
+.endif
 	inc a
 	call mapMenu_performTileSubstitutions
 
@@ -10972,9 +11008,12 @@ ringMenu_forceUnmapSelectedRingIndex:
 		inc hl
 		dec b
 		jr nz,-
+	ld a,$ff 	; fallback
+	jr ++
 +
 	ld a,$40
 	sub b
+++
 	pop bc
 	pop hl
 	ret
@@ -11322,7 +11361,11 @@ getRingTiles:
 	cp $fe
 	ld a,$40
 	jr nz,+
+.ifdef RESIZE_RING_BOX
+	call getRingBoxLevel
+.else
 	ld a,(wRingBoxLevel)
+.endif
 	add $40
 	jr +
 +

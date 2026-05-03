@@ -237,7 +237,11 @@ interactiond9_state2:
 	.dw @ringBoxUpgrade
 
 @ringBoxUpgrade:
+.ifdef RESIZE_RING_BOX
+	call getRingBoxLevel
+.else
 	ld a,(wRingBoxLevel)
+.endif
 	and $03
 	ld hl,@ringBoxSubids
 	rst_addAToHl

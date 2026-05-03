@@ -8541,7 +8541,7 @@ beamosComboActive:
 	ldbc LIGHT_RING_L2,LIGHT_RING_L1
 	call eitherRingActive
 	pop bc
-	jr getZflagAndCflagSet
+	jr getZflagOrCflagSet
 
 eitherRangRingEquipped:
 	push bc
@@ -8557,7 +8557,7 @@ superBoomerangComboActive:
 	+
 @zIfEither
 	call eitherRangRingEquipped
-getZflagAndCflagSet:
+getZflagOrCflagSet:
 	ret z
 	ret nc
 	xor a
@@ -8719,6 +8719,14 @@ quickSwapHeldItems:
 	pop bc
 	pop af
 	setrombank
+	ret
+.endif
+
+
+.ifdef RESIZE_RING_BOX
+getRingBoxLevel:
+	ld a,(wRingBoxLevel)
+	and $07
 	ret
 .endif
 

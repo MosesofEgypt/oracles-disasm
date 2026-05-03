@@ -7829,7 +7829,11 @@ symmetryNpc_getUpgradeCapacityForText:
 	jr ++
 
 @haveRingBox:
+.ifdef RESIZE_RING_BOX
+	call getRingBoxLevel
+.else
 	ld a,(wRingBoxLevel)
+.endif
 	dec a
 	ld c,$03
 	jr z,++
