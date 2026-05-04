@@ -104,6 +104,9 @@
 .MACRO rst_derefHl
 	rst $20
 .ENDM
+.MACRO rst_setrombank
+	rst $28
+.ENDM
 
 ; ==================================================================================================
 ; Directive macros

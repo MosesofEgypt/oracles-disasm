@@ -11,7 +11,7 @@ objectLoadMovementScript:
 	callfrombank0 bank0d.objectLoadMovementScript_body
 .endif
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -24,7 +24,7 @@ objectRunMovementScript:
 	callfrombank0 bank0d.objectRunMovementScript_body
 .endif
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -52,7 +52,7 @@ endgameCutsceneHandler:
 	push af
 	callfrombank0 bank3Cutscenes.endgameCutsceneHandler_body
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -60,13 +60,13 @@ getEntryFromObjectTable1:
 	ldh a,(<hRomBank)
 	push af
 	ld a, :objectData.objectTable1
-	setrombank
+	rst_setrombank
 	ld a,b
 	ld hl, objectData.objectTable1
 	rst_addDoubleIndex
 	rst_derefHl
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -75,7 +75,7 @@ fileSelect_redrawDecorations:
 	push af
 	callfrombank0 bank2.fileSelect_redrawDecorationsAndSetWramBank4
 	pop af
-	setrombank
+	rst_setrombank
 	xor a
 	ld ($ff00+R_SVBK),a
 	ret
@@ -96,7 +96,7 @@ disableLcdAndLoadRoom:
 	push af
 	callfrombank0 bank3Cutscenes.disableLcdAndLoadRoom_body
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -108,7 +108,7 @@ playWaveSoundAtRandomIntervals:
 	push af
 	callfrombank0 cutscenesBank10.agesFunc_10_7298@playWaveSoundAtRandomIntervals_body
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 .endif
@@ -124,10 +124,10 @@ addSpritesFromBankToOam_withOffset:
 	ldh a,(<hRomBank)
 	push af
 	ld a,e
-	setrombank
+	rst_setrombank
 	call addSpritesToOam_withOffset
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 
@@ -142,10 +142,10 @@ addSpritesFromBankToOam:
 	ldh a,(<hRomBank)
 	push af
 	ld a,e
-	setrombank
+	rst_setrombank
 	call addSpritesToOam
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 .endif

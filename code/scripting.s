@@ -540,7 +540,7 @@ scriptCmd_loadSprite:
 	call interactionSetAnimation
 	pop hl
 	ld a,:scriptCmd_loadSprite
-	setrombank
+	rst_setrombank
 	ret
 
 scriptCmd_8a:

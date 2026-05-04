@@ -2625,7 +2625,7 @@ clearDungeonLayout:
 ;;
 findActiveRoomInDungeonLayoutWithPointlessBankSwitch:
 	ld a,:CADDR
-	setrombank
+	rst_setrombank
 .endif
 
 ;;

@@ -373,7 +373,7 @@ loadDinsTroupeTileChanges:
 @done:
 	pop bc
 	ld a,b
-	setrombank
+	rst_setrombank
 	ld a,c
 	ld ($ff00+R_SVBK),a
 	ld a,TREE_GFXH_02

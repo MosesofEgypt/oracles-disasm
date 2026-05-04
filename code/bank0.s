@@ -37,6 +37,11 @@
 	ld l,a
 	ret
 
+.ORGA $0028
+; rst_setrombank
+	setrombank
+	ret
+
 .ORGA $0038
 ; Not used as rst $38
 	nop
@@ -1023,14 +1028,14 @@ loadPaletteHeader:
 	ld a,$02
 	ld ($ff00+R_SVBK),a
 	ld a,:bank1Moveable.paletteHeaderTable
-	setrombank
+	rst_setrombank
 	ld a,l
 	ld hl,bank1Moveable.paletteHeaderTable
 	rst_addDoubleIndex
 	rst_derefHl
 ---
 	ld a,:bank1Moveable.paletteHeaderTable
-	setrombank
+	rst_setrombank
 
 	; b: how many palettes to load
 	ld a,(hl)
@@ -1097,7 +1102,7 @@ loadPaletteHeader:
 
 	; Set bank, begin copying
 	ld a,:paletteDataStart
-	setrombank
+	rst_setrombank
 --
 	ld c,$08
 -
@@ -1113,7 +1118,7 @@ loadPaletteHeader:
 
 	pop bc
 	ld a,b
-	setrombank
+	rst_setrombank
 	ld a,c
 	ld ($ff00+R_SVBK),a
 	pop de
@@ -1172,7 +1177,7 @@ queueDmaTransfer:
 	push hl
 	ld a,c
 	ld ($ff00+R_SVBK),a
-	setrombank
+	rst_setrombank
 	pop de
 	ld hl, HDMA1
 	ld (hl),d
@@ -1189,7 +1194,7 @@ queueDmaTransfer:
 	pop af
 	ld ($ff00+R_SVBK),a
 	pop af
-	setrombank
+	rst_setrombank
 	xor a
 	ret
 
@@ -1204,7 +1209,7 @@ loadUncompressedGfxHeader:
 	ld b,a
 	push bc
 	ld a,:bank1Moveable.uncmpGfxHeaderTable
-	setrombank
+	rst_setrombank
 	ld a,e
 	ld hl,bank1Moveable.uncmpGfxHeaderTable
 	rst_addDoubleIndex
@@ -1231,7 +1236,7 @@ loadUncompressedGfxHeader:
 	pop hl
 	call queueDmaTransfer
 	ld a,:bank1Moveable.uncmpGfxHeaderTable
-	setrombank
+	rst_setrombank
 	ldh a,(<hFF90)
 	ld l,a
 	ldh a,(<hFF91)
@@ -1242,7 +1247,7 @@ loadUncompressedGfxHeader:
 
 	pop bc
 	ld a,b
-	setrombank
+	rst_setrombank
 	ld a,c
 	ld ($ff00+R_SVBK),a
 	ret
@@ -1257,7 +1262,7 @@ loadGfxHeader:
 	ld b,a
 	push bc
 	ld a,:bank1Moveable.gfxHeaderTable
-	setrombank
+	rst_setrombank
 	ld a,e
 	ld hl,bank1Moveable.gfxHeaderTable
 	rst_addDoubleIndex
@@ -1284,7 +1289,7 @@ loadGfxHeader:
 	pop hl
 	call decompressGraphics
 	ld a,:bank1Moveable.gfxHeaderTable
-	setrombank
+	rst_setrombank
 	ldh a,(<hFF90)
 	ld l,a
 	ldh a,(<hFF91)
@@ -1295,7 +1300,7 @@ loadGfxHeader:
 
 	pop bc
 	ld a,b
-	setrombank
+	rst_setrombank
 	ld a,c
 	ld ($ff00+R_SVBK),a
 	ret
@@ -1316,7 +1321,7 @@ decompressGraphics:
 	ld e,a
 	ld a,c
 	and $3f
-	setrombank
+	rst_setrombank
 	inc b
 	ld a,c
 	and $c0
@@ -1518,7 +1523,7 @@ _adjustHLSequential:
 	ld h,$40
 	ldh a,(<hRomBank)
 	inc a
-	setrombank
+	rst_setrombank
 +
 	ld a,b
 	or c
@@ -1534,7 +1539,7 @@ readByteSequential:
 	ld h,$40
 	ldh a,(<hRomBank)
 	inc a
-	setrombank
+	rst_setrombank
 	pop af
 	ret
 
@@ -1668,7 +1673,7 @@ resumeThreadNextFrameAndSaveBank:
 	ld a,b
 	call resumeThreadInAFrames
 	ld a,c
-	setrombank
+	rst_setrombank
 	pop bc
 	ret
 
@@ -1924,7 +1929,7 @@ eraseFile:
 	callfrombank0 fileManagement.fileManagementFunction
 	ld c,a
 	pop af
-	setrombank
+	rst_setrombank
 	ld a,c
 	ret
 
@@ -2557,11 +2562,11 @@ _startSound:
 	ld a,:audio.b39_initSound
 	ldh (<hSoundDataBaseBank),a
 	ldh (<hSoundDataBaseBank2),a
-	setrombank
+	rst_setrombank
 	call jpBc
 	call enableTimer
 	pop af
-	setrombank
+	rst_setrombank
 	pop de
 	ret
 
@@ -2772,7 +2777,7 @@ drawAllSpritesUnconditionally:
 ++
 	; Update the puddle animation
 	ld a,:terrainEffects.puddleAnimationFrames
-	setrombank
+	rst_setrombank
 
 	; Every 16 frames, the animation changes
 	ld a,(wFrameCounter)
@@ -2897,7 +2902,7 @@ drawAllSpritesUnconditionally:
 .endif
 
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -2932,7 +2937,7 @@ drawAllSpritesUnconditionally:
 	rlca
 	rlca
 	add BASE_OAM_DATA_BANK
-	setrombank
+	rst_setrombank
 	set 6,h
 	res 7,h
 
@@ -3027,7 +3032,7 @@ drawAllSpritesUnconditionally:
 ; @param hFF8D X-position to draw at
 func_0eda:
 	ld a,:terrainEffects.shadowAnimation
-	setrombank
+	rst_setrombank
 
 	; Get the end of used OAM, get how many sprites are to be drawn, check
 	; if there's enough space
@@ -3529,7 +3534,7 @@ getChestData:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:chestData.chestDataGroupTable
-	setrombank
+	rst_setrombank
 	ld a,(wActiveGroup)
 	ld hl,chestData.chestDataGroupTable
 	rst_addDoubleIndex
@@ -3560,7 +3565,7 @@ getChestData:
 
 @end:
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -3787,7 +3792,7 @@ interactWithTileBeforeLink:
 	callfrombank0 bank6.interactWithTileBeforeLink
 	rl c
 	pop af
-	setrombank
+	rst_setrombank
 	srl c
 	ret
 
@@ -3797,11 +3802,11 @@ showInfoTextForRoller:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:bank6.showInfoTextForTile
-	setrombank
+	rst_setrombank
 	ld a,$09
 	call bank6.showInfoTextForTile
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -3816,7 +3821,7 @@ updateCamera:
 	call          bank1.updateGfxRegs2Scroll
 	call          bank1.updateScreenShake
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -3826,7 +3831,7 @@ resetCamera:
 	callfrombank0 bank1.calculateCameraPosition
 	call          bank1.updateGfxRegs2Scroll
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -3858,7 +3863,7 @@ reloadTileMap:
 	callfrombank0 bank1.setScreenTransitionState02
 	call          bank1.updateGfxRegs2Scroll
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -3899,7 +3904,7 @@ func_131f:
 	;ld (wLoadedTilesetIndex),a
 
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -3935,7 +3940,7 @@ func_1383:
 	ld ($cd05),a
 	ld ($cd06),a
 	ld a,$01
-	setrombank
+	rst_setrombank
 	call bank1.func_49c9
 	call bank1.setObjectsEnabledTo2
 	call loadScreenMusic
@@ -3947,7 +3952,7 @@ func_1383:
 	call generateVramTilesWithRoomChanges
 	pop bc
 	ld a,b
-	setrombank
+	rst_setrombank
 	ld a,c
 	ld ($ff00+R_SVBK),a
 	pop de
@@ -3969,13 +3974,13 @@ initWaveScrollValues:
 	ld b,a
 	push bc
 	ld a,:bank1.initWaveScrollValues_body
-	setrombank
+	rst_setrombank
 	ldh a,(<hFF93)
 	ld c,a
 	call bank1.initWaveScrollValues_body
 	pop bc
 	ld a,b
-	setrombank
+	rst_setrombank
 	ld a,c
 	ld ($ff00+R_SVBK),a
 	ret
@@ -3993,13 +3998,13 @@ loadBigBufferScrollValues:
 	ld b,a
 	push bc
 	ld a,:bank1.loadBigBufferScrollValues_body
-	setrombank
+	rst_setrombank
 	ldh a,(<hFF93)
 	ld b,a
 	call bank1.loadBigBufferScrollValues_body
 	pop bc
 	ld a,b
-	setrombank
+	rst_setrombank
 	ld a,c
 	ld ($ff00+R_SVBK),a
 	ret
@@ -4021,7 +4026,7 @@ func_13c6:
 	call extractColorComponents
 	pop de
 	pop af
-	setrombank
+	rst_setrombank
 	xor a
 	ld ($ff00+R_SVBK),a
 	jp startFadeBetweenTwoPalettes
@@ -4036,7 +4041,7 @@ extractColorComponents:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:paletteDataStart
-	setrombank
+	rst_setrombank
 	ld b,$30
 --
 	ld c,(hl)
@@ -4066,7 +4071,7 @@ extractColorComponents:
 	jr nz,--
 
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -4580,7 +4585,7 @@ interactionInitGraphics:
 	callfrombank0 bank3f.interactionLoadGraphics
 	ld c,a
 	pop af
-	setrombank
+	rst_setrombank
 	ld a,c
 	jp interactionSetAnimation
 
@@ -4597,7 +4602,7 @@ refreshObjectGfx:
 	xor a
 	ld (wLoadedTreeGfxIndex),a
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -4606,7 +4611,7 @@ reloadObjectGfx:
 	push af
 	callfrombank0 bank3f.reloadObjectGfx
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -4620,7 +4625,7 @@ loadObjectGfxHeaderToSlot4:
 	push af
 	callfrombank0 bank3f.loadObjectGfxHeaderToSlot4_body
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -4631,7 +4636,7 @@ loadTreeGfx:
 	push af
 	callfrombank0 bank3f.loadTreeGfx_body
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -4642,7 +4647,7 @@ loadWeaponGfx:
 	push af
 	callfrombank0 bank3f.loadWeaponGfx
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -4690,7 +4695,7 @@ loadObjectGfx2:
 	ld a,$01
 	ld ($ff00+R_SVBK),a
 	ld a,BANK_3f
-	setrombank
+	rst_setrombank
 	ld b,$1f
 	jp queueDmaTransfer
 
@@ -4708,7 +4713,7 @@ loadObjectGfx2:
 	ld a,$01
 	ld ($ff00+R_SVBK),a
 	ld a,BANK_3f
-	setrombank
+	rst_setrombank
 	ret
 .endif
 
@@ -4722,7 +4727,7 @@ loadTreasureDisplayData:
 	push af
 	callfrombank0 bank3f.loadTreasureDisplayData
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -4735,7 +4740,7 @@ decideItemDrop:
 	push af
 	callfrombank0 bank3f.decideItemDrop_body
 	pop af
-	setrombank
+	rst_setrombank
 	ld a,c
 	cp $ff
 	ret
@@ -4750,11 +4755,11 @@ checkItemDropAvailable:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:bank3f.checkItemDropAvailable_body
-	setrombank
+	rst_setrombank
 	ld a,c
 	call bank3f.checkItemDropAvailable_body
 	pop af
-	setrombank
+	rst_setrombank
 	ld a,c
 	cp $ff
 	ret
@@ -4769,7 +4774,7 @@ giveTreasure:
 	push af
 	callfrombank0 bank3f.giveTreasure_body
 	pop af
-	setrombank
+	rst_setrombank
 	ld a,b
 	or a
 	ret
@@ -4782,7 +4787,7 @@ loseTreasure:
 	push af
 	callfrombank0 bank3f.loseTreasure_body
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -4799,7 +4804,7 @@ checkTreasureObtained:
 	push af
 	callfrombank0 bank3f.checkTreasureObtained_body
 	pop af
-	setrombank
+	rst_setrombank
 	ld a,l
 	srl h
 ++
@@ -4946,7 +4951,7 @@ getRandomRingOfGivenTier:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:bank3f.ringTierTable
-	setrombank
+	rst_setrombank
 
 .ifdef ENABLE_GASHA_REBALANCE
 	call bank3f.getRandomRingOfGivenTier_body
@@ -4970,7 +4975,7 @@ getRandomRingOfGivenTier:
 .endif
 
 	pop af
-	setrombank
+	rst_setrombank
 
 	ld a,TREASURE_RING
 	ret
@@ -5020,7 +5025,7 @@ makeActiveObjectFollowLink:
 	push af
 	callfrombank0 bank1.makeActiveObjectFollowLink
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -5146,11 +5151,11 @@ retrieveTextCharacter:
 	add hl,bc
 	pop bc
 	ld a,:gfx_font
-	setrombank
+	rst_setrombank
 	call @func_18fd
 
 	ld a,BANK_3f
-	setrombank
+	rst_setrombank
 
 	xor a
 	ld (w7TextGfxSource),a
@@ -5241,11 +5246,11 @@ retrieveTextCharacter:
 readByteFromW7ActiveBank:
 	push bc
 	ld a,(w7ActiveBank)
-	setrombank
+	rst_setrombank
 	ld b,(hl)
 
 	ld a,BANK_3f
-	setrombank
+	rst_setrombank
 
 	ld a,b
 	pop bc
@@ -5270,12 +5275,12 @@ readByteFromW7TextTableBank:
 	set 6,h
 	inc a
 +
-	setrombank
+	rst_setrombank
 	ldi a,(hl)
 	ldh (<hFF8B),a
 
 	pop af
-	setrombank
+	rst_setrombank
 	ldh a,(<hFF8B)
 	ret
 
@@ -5398,7 +5403,7 @@ copyTextCharacterGfx:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:gfx_font
-	setrombank
+	rst_setrombank
 	ld a,(wFileSelect.fontXor)
 	ld c,a
 	ld b,$10
@@ -5413,7 +5418,7 @@ copyTextCharacterGfx:
 	jr nz,-
 
 	pop af
-	setrombank
+	rst_setrombank
 	pop bc
 	pop hl
 	ret
@@ -5446,7 +5451,7 @@ secretFunctionCaller:
 	push af
 	callfrombank0 bank3.secretFunctionCaller_body
 	pop af
-	setrombank
+	rst_setrombank
 	ld a,b
 	or a
 	ret
@@ -5482,7 +5487,7 @@ updateMenus:
 	callfrombank0 bank2.b2_updateMenus
 	pop bc
 	ld a,b
-	setrombank
+	rst_setrombank
 	ld a,c
 	ld ($ff00+R_SVBK),a
 	ld a,(wOpenedMenuType)
@@ -5531,11 +5536,11 @@ copyBytesFromBank:
 	ldh a,(<hRomBank)
 	push af
 	ld a,b
-	setrombank
+	rst_setrombank
 	ld b,c
 	call copyMemory
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -5593,7 +5598,7 @@ copyW4PaletteDataToW2TilesetBgPalettes:
 	callfrombank0 bank2.runBank2Function
 	pop bc
 	ld a,b
-	setrombank
+	rst_setrombank
 	ld a,c
 	ld ($ff00+R_SVBK),a
 	ret
@@ -5606,7 +5611,7 @@ getRoomDungeonProperties:
 	ldh a,(<hRomBank)
 	push af
 	ld a, :bank1.dungeonRoomPropertiesGroupTable
-	setrombank
+	rst_setrombank
 	ld a,(wActiveGroup)
 	and $01
 	ld hl, bank1.dungeonRoomPropertiesGroupTable
@@ -5616,7 +5621,7 @@ getRoomDungeonProperties:
 	rst_addAToHl
 	ld b,(hl)
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -5624,12 +5629,12 @@ copy8BytesFromRingMapToCec0:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:map_rings
-	setrombank
+	rst_setrombank
 	ld de,wTmpcec0
 	ld b,$08
 	call copyMemory
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -6409,7 +6414,7 @@ checkEnemyAndPartCollisionsIfTextInactive:
 	push af
 	callfrombank0 bank7.checkEnemyAndPartCollisions
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -7065,7 +7070,7 @@ getPositionOffsetForVelocity:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:bank3.objectSpeedTable
-	setrombank
+	rst_setrombank
 
 	; Get Y values
 	ld bc,wTmpcec0
@@ -7087,7 +7092,7 @@ getPositionOffsetForVelocity:
 	ld (bc),a
 
 	pop af
-	setrombank
+	rst_setrombank
 
 	ld hl,wTmpcec0
 	or h
@@ -7928,7 +7933,7 @@ updateLinkPositionGivenVelocity:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:bank5.specialObjectUpdatePositionGivenVelocity
-	setrombank
+	rst_setrombank
 
 	; Update Link's position
 	push de
@@ -7939,7 +7944,7 @@ updateLinkPositionGivenVelocity:
 	pop de
 
 	pop af
-	setrombank
+	rst_setrombank
 	scf
 	ret
 
@@ -8635,7 +8640,7 @@ quickSwapHeldItems:
 	pop de
 	pop bc
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 .endif
 
@@ -8919,7 +8924,7 @@ _interactionActuallyRunScript:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:mainScripts.runScriptCommand
-	setrombank
+	rst_setrombank
 --
 	ld a,(hl)
 	or a
@@ -8929,12 +8934,12 @@ _interactionActuallyRunScript:
 	jr c,--
 
 	pop af
-	setrombank
+	rst_setrombank
 	xor a
 	ret
 ++
 	pop af
-	setrombank
+	rst_setrombank
 	scf
 	ret
 
@@ -9040,7 +9045,7 @@ scriptCmd_asmCallWithParam:
 	ldh a,(<hRomBank)
 	push af
 	ld a,d
-	setrombank
+	rst_setrombank
 	push hl
 	ld hl,_scriptCmd_asmRetFunc
 	push hl
@@ -9055,7 +9060,7 @@ scriptCmd_asmCallWithParam:
 _scriptCmd_asmRetFunc:
 	pop hl
 	pop af
-	setrombank
+	rst_setrombank
 	ldh a,(<hActiveObject)
 	ld d,a
 	scf
@@ -9167,14 +9172,14 @@ scriptCmd_loadScript:
 	ldh a,(<hRomBank)
 	push af
 	ld a,e
-	setrombank
+	rst_setrombank
 	ld h,b
 	ld l,c
 	ld de,wBigBuffer
 	ld b,$00
 	call copyMemory
 	pop af
-	setrombank
+	rst_setrombank
 	ldh a,(<hActiveObject)
 	ld d,a
 	ld hl,wBigBuffer
@@ -9191,7 +9196,7 @@ interactionAnimate:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:interactionAnimationTable
-	setrombank
+	rst_setrombank
 	ld l,Interaction.animPointer
 	jr _interactionNextAnimationFrame
 
@@ -9204,7 +9209,7 @@ interactionSetAnimation:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:interactionAnimationTable
-	setrombank
+	rst_setrombank
 	ld e,Interaction.id
 	ld a,(de)
 	ld hl,interactionAnimationTable
@@ -9270,7 +9275,7 @@ _interactionNextAnimationFrame:
 	ld (de),a
 
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -9642,7 +9647,7 @@ objectOscillateZ:
 	push af
 	callfrombank0 commonInteractions2.objectOscillateZ_body
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -9710,11 +9715,11 @@ objectCreateExclamationMark:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:commonInteractions5.objectCreateExclamationMark_body
-	setrombank
+	rst_setrombank
 	ldh a,(<hFF8B)
 	call commonInteractions5.objectCreateExclamationMark_body
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -9741,7 +9746,7 @@ objectCreateFloatingMusicNote:
 	push af
 	callfrombank0 commonInteractions5.objectCreateFloatingImage
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -9754,7 +9759,7 @@ enemyAnimate:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:enemyAnimationTable
-	setrombank
+	rst_setrombank
 	ld l,Enemy.animPointer
 	jr _enemyNextAnimationFrame
 
@@ -9768,7 +9773,7 @@ enemySetAnimation:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:enemyAnimationTable
-	setrombank
+	rst_setrombank
 	ld e,Enemy.id
 	ld a,(de)
 	ld hl,enemyAnimationTable
@@ -9830,7 +9835,7 @@ _enemyNextAnimationFrame:
 	ld (de),a
 
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -10144,7 +10149,7 @@ partAnimate:
 	dec (hl)
 	ret nz
 	ld a,:partAnimationTable
-	setrombank
+	rst_setrombank
 	ld l,Part.animPointer
 	jr _partNextAnimationFrame
 
@@ -10154,7 +10159,7 @@ partSetAnimation:
 	ld c,a
 	ld b,$00
 	ld a,:partAnimationTable
-	setrombank
+	rst_setrombank
 	ld e,$c1
 	ld a,(de)
 	ld hl,partAnimationTable
@@ -10219,7 +10224,7 @@ _partNextAnimationFrame:
 	ld (de),a
 
 	ld a,PART_BANK
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -10233,7 +10238,7 @@ createEnergySwirlGoingIn:
 	push af
 	callfrombank0 partCode.createEnergySwirlGoingIn_body
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -10247,7 +10252,7 @@ createEnergySwirlGoingOut:
 	push af
 	callfrombank0 partCode.createEnergySwirlGoingOut_body
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -10337,7 +10342,7 @@ getSimulatedInput:
 	push af
 	ld hl,wSimulatedInputBank
 	ldi a,(hl)
-	setrombank
+	rst_setrombank
 	rst_derefHl
 
 	ldi a,(hl)
@@ -10357,7 +10362,7 @@ getSimulatedInput:
 	ld (wSimulatedInputValue),a
 ++
 	pop af
-	setrombank
+	rst_setrombank
 
 	ld a,l
 	ld (wSimulatedInputAddressL),a
@@ -10451,7 +10456,7 @@ linkApplyDamage:
 	ld d,>w1Link
 	callfrombank0 bank5.linkApplyDamage_b5
 	pop af
-	setrombank
+	rst_setrombank
 	pop de
 	ret
 
@@ -10503,11 +10508,11 @@ specialObjectAnimate:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:bank6.specialObjectNextAnimationFrame
-	setrombank
+	rst_setrombank
 	ld l,SpecialObject.animPointer
 	call bank6.specialObjectNextAnimationFrame
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -10523,7 +10528,7 @@ specialObjectSetAnimation:
 	push af
 	callfrombank0 bank6.specialObjectSetAnimation_body
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -10532,7 +10537,7 @@ loadLinkAndCompanionAnimationFrame:
 	push af
 	callfrombank0 bank6.loadLinkAndCompanionAnimationFrame_body
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -10757,7 +10762,7 @@ tryToBreakTile:
 	callfrombank0 bank6.tryToBreakTile_body
 	rl e
 	pop af
-	setrombank
+	rst_setrombank
 	rr e
 	ret
 
@@ -10788,7 +10793,7 @@ checkUseItems:
 	push af
 	callfrombank0 bank6.functionCaller
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -11042,7 +11047,7 @@ intro_cinematic:
 	call          updateInteractionsAndDrawAllSprites
 
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -11059,7 +11064,7 @@ func_2d48:
 .else
 	ld a,:bank3Cutscenes.data_5951
 .endif
-	setrombank
+	rst_setrombank
 	ld a,b
 .ifdef ROM_AGES
 	ld hl,bank3f.data_5951
@@ -11070,7 +11075,7 @@ func_2d48:
 	ld b,(hl)
 
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -11080,7 +11085,7 @@ clearFadingPalettes:
 	push af
 	callfrombank0 bank3Cutscenes.clearFadingPalettes_body
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -11101,7 +11106,7 @@ flashScreen:
 	dec b
 +
 	pop af
-	setrombank
+	rst_setrombank
 	ld a,b
 	or a
 	ret
@@ -11113,7 +11118,7 @@ specialObjectCode_companionCutscene:
 	push af
 	callfrombank0 bank6.specialObjectCode_companionCutscene
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -11125,7 +11130,7 @@ specialObjectCode_linkInCutscene:
 	push af
 	callfrombank0 bank6.specialObjectCode_linkInCutscene
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 .else ; ROM_AGES
@@ -11143,7 +11148,7 @@ loadDungeonLayout:
 	push af
 	callfrombank0 bank1.loadDungeonLayout_b01
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -11169,7 +11174,7 @@ getThisRoomDungeonProperties:
 	ldh a,(<hRomBank)
 	push af
 	ld a, :bank1.dungeonRoomPropertiesGroupTable
-	setrombank
+	rst_setrombank
 	ld a,(wActiveGroup)
 	sub $04
 	and $01
@@ -11183,7 +11188,7 @@ getThisRoomDungeonProperties:
 	ld a,(hl)
 	ld (wDungeonRoomProperties),a
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -11480,7 +11485,7 @@ updateEnemy:
 	; Seasons sets the rom bank here instead of later, for no particular reason...?
 	ld e,a
 	ld a,b
-	setrombank
+	rst_setrombank
 	ld a,e
 .endif
 
@@ -11508,7 +11513,7 @@ updateEnemy:
 	rst_derefHl
 .ifdef ROM_AGES
 	ld a,b
-	setrombank
+	rst_setrombank
 .endif
 	ld a,c
 	or a
@@ -11557,7 +11562,7 @@ initializeRoom:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:roomInitialization.checkAndSpawnMaple
-	setrombank
+	rst_setrombank
 
 	call checkSpawnTimeportalInteraction
 
@@ -11570,7 +11575,7 @@ initializeRoom:
 	call nz,roomInitialization.checkAndSpawnMaple
 
 	ld a,:objectData.parseObjectData
-	setrombank
+	rst_setrombank
 	ld a,(wcc05)
 	bit 0,a
 	call nz,objectData.parseObjectData
@@ -11590,7 +11595,7 @@ initializeRoom:
 	callfrombank0 staticObjects.parseStaticObjects
 
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 
@@ -11600,14 +11605,14 @@ parseGivenObjectData:
 	ldh a,(<hRomBank)
 	push af
 	ld a, :objectData.parseGivenObjectData
-	setrombank
+	rst_setrombank
 	push de
 	ld d,h
 	ld e,l
 	call objectData.parseGivenObjectData
 	pop de
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -11616,12 +11621,12 @@ loadStaticObjects:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:staticObjects.loadStaticObjects_body
-	setrombank
+	rst_setrombank
 	push de
 	call staticObjects.loadStaticObjects_body
 	pop de
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -11838,7 +11843,7 @@ checkSpawnTimeportalInteraction:
 	callfrombank0 roomInitialization.functionCaller
 	rl c
 	pop af
-	setrombank
+	rst_setrombank
 	srl c
 	ret
 
@@ -12239,7 +12244,7 @@ updateAnimationsAfterCutscene:
 	push af
 	callfrombank0 animationAndUniqueGfxData.updateAnimations
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 .endif
 
@@ -12250,7 +12255,7 @@ loadScreenMusic:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:bank4Data1.musicAssignmentGroupTable
-	setrombank
+	rst_setrombank
 
 	ld a,(wActiveGroup)
 	ld hl,bank4Data1.musicAssignmentGroupTable
@@ -12275,7 +12280,7 @@ loadScreenMusic:
 	ld (wLoadingRoomPack),a
 ++
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 .else; ROM_SEASONS
@@ -12291,7 +12296,7 @@ loadScreenMusic:
 	ld (wLoadingRoomPack),a
 ++
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 .endif
 
@@ -12307,7 +12312,7 @@ applyWarpDest:
 .endif
 
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 
@@ -12335,7 +12340,7 @@ dismountCompanionAndSetRememberedPositionToScreenCenter:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:bank5.companionDismount
-	setrombank
+	rst_setrombank
 
 	ld de,w1Companion
 	ld a,e
@@ -12354,7 +12359,7 @@ dismountCompanionAndSetRememberedPositionToScreenCenter:
 	ld (wRememberedCompanionX),a
 
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 .ifdef ROM_SEASONS
@@ -12364,18 +12369,18 @@ seasonsFunc_331b:
 	push af
 	callfrombank0 bank0f.seasonsFunc_0f_6f75
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 seasonsFunc_332f:
 	ldh a,(<hRomBank)
 	push af
 	ld a,$0f
-	setrombank
+	rst_setrombank
 	call bank0f.seasonsFunc_0f_704d
 	call bank0f.seasonsFunc_0f_7182
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 flameOfDestructionsCutsceneCaller:
@@ -12383,7 +12388,7 @@ flameOfDestructionsCutsceneCaller:
 	push af
 	callfrombank0 bank3Cutscenes.flameOfDestructionCutsceneBody
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 zeldaAndVillagersCutsceneCaller:
@@ -12391,7 +12396,7 @@ zeldaAndVillagersCutsceneCaller:
 	push af
 	callfrombank0 bank3Cutscenes.zeldaAndVillagersCutsceneBody
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 zeldaKidnappedCutsceneCaller:
@@ -12399,7 +12404,7 @@ zeldaKidnappedCutsceneCaller:
 	push af
 	callfrombank0 bank3Cutscenes.zeldaKidnappedCutsceneBody
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 .endif
@@ -12419,13 +12424,13 @@ updateAllObjects:
 
 	; Call func_410d if Link is riding something
 	ld a,:bank5.func_410d
-	setrombank
+	rst_setrombank
 	ld a,(wLinkObjectIndex)
 	rrca
 	call c,bank5.func_410d
 
 	ld a,:bank6.updateGrabbedObjectPosition
-	setrombank
+	rst_setrombank
 	ld a,(wLinkGrabState)
 	rlca
 	call c,bank6.updateGrabbedObjectPosition
@@ -12441,7 +12446,7 @@ updateAllObjects:
 	xor a
 	ld (wc4b6),a
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -12454,7 +12459,7 @@ updateSpecialObjectsAndInteractions:
 	xor a
 	ld (wc4b6),a
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -12466,7 +12471,7 @@ updateInteractionsAndDrawAllSprites:
 	xor a
 	ld (wc4b6),a
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -12490,7 +12495,7 @@ func_3539:
 	xor a
 	ld (wc4b6),a
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 .ifdef ROM_SEASONS
@@ -12507,7 +12512,7 @@ seasonsFunc_34a0:
 	callfrombank0 bank0f.seasonsFunc_0f_7159
 
 	ld a,:bank6.updateGrabbedObjectPosition
-	setrombank
+	rst_setrombank
 	ld a,(wLinkGrabState)
 	rlca
 	call c,bank6.updateGrabbedObjectPosition
@@ -12521,7 +12526,7 @@ seasonsFunc_34a0:
 	ld (wc4b6),a
 
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 .endif
@@ -12672,13 +12677,13 @@ getEntryFromObjectTable2:
 	ldh a,(<hRomBank)
 	push af
 	ld a, :objectData.objectTable2
-	setrombank
+	rst_setrombank
 	ld a,b
 	ld hl, objectData.objectTable2
 	rst_addDoubleIndex
 	rst_derefHl
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 .else ; ROM_SEASONS
@@ -12689,7 +12694,7 @@ multiIntroCutsceneCaller:
 	push af
 	callfrombank0 bank3Cutscenes.multiIntroCutsceneHandler
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 
@@ -12724,7 +12729,7 @@ seasonsFunc_35cc:
 	callfrombank0 bank1.paletteThread_calculateFadingPalettes
 	pop bc
 	ld a,b
-	setrombank
+	rst_setrombank
 	ld a,c
 	ld ($ff00+R_SVBK),a
 	ret
@@ -12734,7 +12739,7 @@ func_35ec:
 	push af
 	callfrombank0 bank1.paletteFadeHandler08@seasonsFunc_01_5816
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 .endif
@@ -12748,7 +12753,7 @@ loadAnimationData:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:animationAndUniqueGfxData.animationGroupTable
-	setrombank
+	rst_setrombank
 	ld a,b
 	ld hl,animationAndUniqueGfxData.animationGroupTable
 	rst_addDoubleIndex
@@ -12766,7 +12771,7 @@ loadAnimationData:
 	call @helper
 	pop de
 	pop af
-	setrombank
+	rst_setrombank
 	xor a
 	ld (wAnimationQueueHead),a
 	ld (wAnimationQueueTail),a
@@ -12797,7 +12802,7 @@ roomTileChangesAfterLoad02:
 	push af
 	callfrombank0 seasonsInteractionsBank09.roomTileChangesAfterLoad02_body
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 .endif
@@ -12814,14 +12819,14 @@ getIndexOfGashaSpotInRoom:
 	push af
 
 	ld a,:roomGfxChanges.getIndexOfGashaSpotInRoom_body
-	setrombank
+	rst_setrombank
 	ld a,c
 	call roomGfxChanges.getIndexOfGashaSpotInRoom_body
 
 	push af
 	pop bc
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 
@@ -12901,7 +12906,7 @@ loadTilesetLayout:
 
 	; Copy tile mapping data
 	ld a,c
-	setrombank
+	rst_setrombank
 	ld de,w3TileMappingData
 	ld bc,$0800
 	call copyMemoryBc
@@ -12925,7 +12930,7 @@ loadTilesetLayout:
 ; @param[out]	c	Bank of data
 ; @param[out]	hl	Address of data
 lookupExpandedTilesetTable:
-	setrombank
+	rst_setrombank
 	ld a,(wTilesetIndex)
 	and $7f
 	ld b,a
@@ -12996,7 +13001,7 @@ loadTilesetGraphics:
 	ld (wLoadedTilesetAnimation),a
 
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -13094,7 +13099,7 @@ loadTilesetGfx:
 	ld (wLoadedTilesetIndex),a
 
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -13106,7 +13111,7 @@ loadTilesetData:
 	callab        bank2.updateTilesetFlagsForIndoorRoomInAltWorld
 
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -13143,7 +13148,7 @@ loadTilesetAndRoomLayout:
 	xor a
 	ld ($ff00+R_SVBK),a
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 .ifdef ROM_SEASONS
@@ -13182,7 +13187,7 @@ loadRoomLayout:
 	ld b,(LARGE_ROOM_HEIGHT+1)*16
 	call clearMemory
 	ld a,:roomLayouts.roomLayoutGroupTable
-	setrombank
+	rst_setrombank
 	call @getLayoutGroup
 	add a
 	add a
@@ -13200,7 +13205,7 @@ loadRoomLayout:
 	ldh (<hFF8C),a
 	rst_derefHl
 	ldh a,(<hFF8C)
-	setrombank
+	rst_setrombank
 
 	; HACK-BASE: Subtract $4000 from "base" offset for pointers, to make arithmetic simpler
 	; later. This is part of a change needed to allow a single group of rooms to cumulatively
@@ -13300,7 +13305,7 @@ loadRoomLayout:
 	;ld bc,$1000
 	;add hl,bc
 	ldh a,(<hFF8D)
-	setrombank
+	rst_setrombank
 
 	ld a,(wLoadingRoom)
 	rst_addDoubleIndex
@@ -13316,7 +13321,7 @@ loadRoomLayout:
 ;;
 @loadSmallRoomLayout:
 	ldh a,(<hFF8D)
-	setrombank
+	rst_setrombank
 	ldh a,(<hFF8E)
 	ld l,a
 	ldh a,(<hFF8F)
@@ -13484,7 +13489,7 @@ loadRoomLayout:
 	add $40
 	ld h,a
 	ld a,e
-	setrombank
+	rst_setrombank
 	ld b,LARGE_ROOM_HEIGHT*16
 	ld d,c ; >wRoomCollisions or >wRoomLayout
 	ld e,$00
@@ -13521,7 +13526,7 @@ generateVramTilesWithRoomChanges:
 
 	pop bc
 	ld a,b
-	setrombank
+	rst_setrombank
 	ld a,c
 	ld ($ff00+R_SVBK),a
 	ret
@@ -13661,13 +13666,13 @@ setInterleavedTile:
 	push bc
 
 	ld a,:tilesets.setInterleavedTile_body
-	setrombank
+	rst_setrombank
 	ld a,e
 	call tilesets.setInterleavedTile_body
 
 	pop bc
 	ld a,b
-	setrombank
+	rst_setrombank
 	ld a,c
 	ld ($ff00+R_SVBK),a
 	pop de
@@ -13697,7 +13702,7 @@ checkRoomPackAfterWarp:
 	push af
 	callfrombank0 bank1.checkRoomPackAfterWarp_body
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 .endif
@@ -13850,7 +13855,7 @@ updateInteraction:
 
 @cnt:
 	ld a,b
-	setrombank
+	rst_setrombank
 	ld a,(de)
 	ld hl,interactionCodeTable
 	rst_addDoubleIndex
@@ -13876,7 +13881,7 @@ checkGotMakuSeedDidNotSeeZeldaKidnapped:
 	push af
 	pop bc
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 .else ; ROM_AGES
@@ -13899,7 +13904,7 @@ checkObjectIsCloseToPosition:
 	inc b
 +
 	pop af
-	setrombank
+	rst_setrombank
 
 	ld a,b
 	or a
@@ -13920,7 +13925,7 @@ checkNpcShouldExistAtGameStage:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:agesInteractionsBank09.checkNpcShouldExistAtGameStage_body
-	setrombank
+	rst_setrombank
 	ldh a,(<hFF8B)
 	call agesInteractionsBank09.checkNpcShouldExistAtGameStage_body
 	ld c,$00
@@ -13928,7 +13933,7 @@ checkNpcShouldExistAtGameStage:
 	inc c
 +
 	pop af
-	setrombank
+	rst_setrombank
 	ld a,c
 	or a
 	ret
@@ -13964,7 +13969,7 @@ interactionRunSimpleScript:
 	ldh a,(<hRomBank)
 	push af
 	ld a,SIMPLE_SCRIPT_BANK
-	setrombank
+	rst_setrombank
 
 	ld h,d
 	ld l,Interaction.scriptPtr
@@ -13978,13 +13983,13 @@ interactionRunSimpleScript:
 
 	call interactionSetSimpleScript
 	pop af
-	setrombank
+	rst_setrombank
 	xor a
 	ret
 
 @scriptEnd:
 	pop af
-	setrombank
+	rst_setrombank
 	scf
 	ret
 
@@ -14131,13 +14136,13 @@ getWildTokayObjectDataIndex:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:objectData.wildTokayObjectTable
-	setrombank
+	rst_setrombank
 	ld a,b
 	ld hl,objectData.wildTokayObjectTable
 	rst_addDoubleIndex
 	rst_derefHl
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -14215,7 +14220,7 @@ checkIfHoronVillageNPCShouldBeSeen:
 	dec c
 +
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -14226,7 +14231,7 @@ setMakuTreeStageAndMapText:
 	callfrombank0 seasonsInteractionsBank09.makuTree_setAppropriateStage
 	callfrombank0 scriptHelp.makuTree_setMapTextBasedOnStage
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -14236,7 +14241,7 @@ getSunkenCityNPCVisibleSubId_caller:
 	push af
 	callfrombank0 seasonsInteractionsBank08.getSunkenCityNPCVisibleSubId@main
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -14248,7 +14253,7 @@ setUpCharactersAfterMoblinKeepDestroyed:
 	call seasonsInteractionsBank0a.moblinKeepScene_spawnKingMoblin
 	call seasonsInteractionsBank0a.moblinKeepScene_spawn2MoblinsAfterKeepDestroyed
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 .endif ; ROM_SEASONS
@@ -14268,7 +14273,7 @@ interactionFunc_3e6d:
 .else
 	ld a,:data_4556
 .endif
-	setrombank
+	rst_setrombank
 
 	ld a,e
 .ifdef ROM_AGES
@@ -14280,7 +14285,7 @@ interactionFunc_3e6d:
 	rst_derefHl
 	call addSpritesToOam_withOffset
 	pop af
-	setrombank
+	rst_setrombank
 	pop de
 	ret
 
@@ -14291,13 +14296,13 @@ getLinkedHerosCaveSideEntranceRoom:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:(bank4.warpSource7653+2)
-	setrombank
+	rst_setrombank
 	ld hl,bank4.warpSource7653+2
 	ld a,(hl)
 	; ROOM_SEASONS_552
 	ld (wWarpDestRoom),a
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 .endif
@@ -14364,7 +14369,7 @@ copy256BytesFromBank:
 	ld a,e
 	ld ($ff00+R_SVBK),a
 	ld a,c
-	setrombank
+	rst_setrombank
 	ld e,$00
 	ld b,$00
 	jp copyMemory
@@ -14375,7 +14380,7 @@ func_3ed0:
 	push af
 	callfrombank0 bank3Cutscenes.func_03_7841
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 ;;
@@ -14384,7 +14389,7 @@ func_3ee4:
 	push af
 	callfrombank0 bank3Cutscenes.func_03_7849
 	pop af
-	setrombank
+	rst_setrombank
 	ret
 
 .endif
