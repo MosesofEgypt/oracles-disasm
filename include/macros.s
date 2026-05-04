@@ -65,13 +65,11 @@
 .MACRO callfrombank0
 	.IF NARGS == 1
 		ld a,:\1
-		ldh (<hRomBank),a
-		ld ($2222),a
+		rst $28
 		call \1
 	.ELSE
 		ld a,\1
-		ldh (<hRomBank),a
-		ld ($2222),a
+		rst $28
 		call \2
 	.ENDIF
 .ENDM
@@ -80,13 +78,11 @@
 .MACRO jpfrombank0
 	.IF NARGS == 1
 		ld a,:\1
-		ldh (<hRomBank),a
-		ld ($2222),a
+		rst $28
 		jp \1
 	.ELSE
 		ld a,\1
-		ldh (<hRomBank),a
-		ld ($2222),a
+		rst $28
 		jp \2
 	.ENDIF
 .ENDM
