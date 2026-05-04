@@ -4,6 +4,21 @@
 ;		Most changes here will require editing the related text strings.
 ;;
 
+.ifdef ENABLE_FULL_REDUX
+	.ifndef ENABLE_REDUX_EXTRAS
+		.define ENABLE_REDUX_EXTRAS			1
+	.endif
+	.ifndef ENABLE_RING_REDUX
+		.define ENABLE_RING_REDUX			1
+	.endif
+	.ifndef RESIZE_RING_BOX
+		.define RESIZE_RING_BOX				1
+	.endif
+	.ifndef EXTENDED_RING_BOX
+		.define EXTENDED_RING_BOX			1
+	.endif
+.endif
+
 .ifdef ENABLE_REDUX_EXTRAS
 	.ifndef ENABLE_GASHA_REBALANCE
 		.define ENABLE_GASHA_REBALANCE			1

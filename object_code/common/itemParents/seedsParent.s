@@ -285,6 +285,7 @@ parentItemCode_shooter:
 	ld (hl),$04
 	ret
 
+.ifdef ENABLE_RING_REDUX
 @getFiredSeedLimit:
 	ld a,MYSTIC_SEED_RING
 	call cpActiveRing
@@ -303,6 +304,7 @@ parentItemCode_shooter:
 	ret nc
 	dec a
 	ret
+.endif
 
 ;;
 ; ITEM_SEED_SATCHEL ($19)

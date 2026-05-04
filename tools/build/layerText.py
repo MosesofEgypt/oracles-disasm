@@ -25,13 +25,21 @@ defines        = [
 
 yaml_layers = [baseYaml]
 
-if "ENABLE_REDUX_EXTRAS" in defines or "ENABLE_GASHA_REBALANCE" in defines:
+if "ENABLE_FULL_REDUX" in defines:
+    defines.append("RESIZE_RING_BOX")
+    defines.append("ENABLE_RING_REDUX")
+    defines.append("ENABLE_REDUX_EXTRAS")
+
+if "ENABLE_REDUX_EXTRAS" in defines:
+    defines.append("ENABLE_GASHA_REBALANCE")
+
+if "ENABLE_GASHA_REBALANCE" in defines:
     yaml_layers.append(os.path.join(gameYamlsDir, "gasha_price_text.yaml"))
 
-if "RESIZE_RING_BOX":
+if "RESIZE_RING_BOX" in defines:
     yaml_layers.append(os.path.join(yamlsDir, "ring_box_text.yaml"))
 
-if "ENABLE_RING_REDUX":
+if "ENABLE_RING_REDUX" in defines:
     yaml_layers.append(os.path.join(yamlsDir, "ring_text.yaml"))
 
 layered_data = None
