@@ -10481,6 +10481,8 @@ ringMenu_moveCursorToRingBox:
 ringMenu_checkRingIsInBox:
 	push bc
 	ld hl,wRingBoxContents+4
+	ld c,$00
+@checkRings
 	ld b,$05
 @nextRing:
 	cp (hl)
@@ -10496,7 +10498,8 @@ ringMenu_checkRingIsInBox:
 	jr nz,+
 		ld hl,wRingBoxContentsExt+4
 		pop af
-		jr @nextRing
+		ld c,$05
+		jr @checkRings
 +
 	pop af
 .endif
@@ -10507,6 +10510,7 @@ ringMenu_checkRingIsInBox:
 @foundRing:
 	dec b
 	ld a,b
+	add c
 	pop bc
 	ret
 
@@ -10795,6 +10799,33 @@ ringMenu_drawSprites:
 ; Draws the "E" for equipped next to the equipped ring in the ring box.
 ringMenu_drawEquippedRingSprite:
 .ifdef ENABLE_MULTI_RING
+	ld hl,wRingBoxContents+4
+.ifdef EXTENDED_RING_BOX
+	ld a,(wRingMenu.ringBoxCursorIndex)
+	cp $05
+	jr c,+
+		ld hl,wRingBoxContentsExt+4
+	+
+.endif
+	push bc
+	ld b,$05
+	-
+		ldd a,(hl)
+		push hl
+		call cpActiveRing
+		jr nz,+
+			ld a,b
+			dec a
+			push bc
+			call ringMenu_getSpriteOffsetForRingBoxPosition
+			ld hl,@equippedSprite
+			call addSpritesToOam_withOffset
+			pop bc
+		+
+		pop hl
+		dec b
+		jr nz,-
+	pop bc
 	ret
 .else
 	ld a,(wActiveRing)
@@ -10802,6 +10833,9 @@ ringMenu_drawEquippedRingSprite:
 	ret z
 	call ringMenu_checkRingIsInBox
 	ret c
+.ifdef EXTENDED_RING_BOX
+	call getRingBoxClippedIndex
+.endif
 
 	call ringMenu_getSpriteOffsetForRingBoxPosition
 	ld hl,@equippedSprite
