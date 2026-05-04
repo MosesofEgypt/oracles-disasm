@@ -618,9 +618,7 @@ ret:
 seasonsFunc_06_6d78:
 	ld hl,seasonsTable_06_6da8
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call seasonsFunc_06_6da0
 	ld b,a
 	rst_addAToHl

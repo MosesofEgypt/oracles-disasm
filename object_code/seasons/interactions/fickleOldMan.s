@@ -17,9 +17,7 @@ interactionCode80:
 	ld (de),a
 	ld hl,@table_7717
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	jp objectSetVisible82
 @state1:

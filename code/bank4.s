@@ -105,9 +105,7 @@ applyWarpDest_b04:
 
 	ld hl,warpDestTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,(wWarpDestRoom)
 	ld b,a
 	ld a,(wc6e5)
@@ -118,9 +116,7 @@ applyWarpDest_b04:
 label_04_032:
 	ld hl,warpDestTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,(wWarpDestRoom)
 label_04_033:
 	ld c,a
@@ -201,9 +197,7 @@ findWarpSourceAndDest:
 	ld a,(wActiveGroup)
 	ld hl,warpSourcesTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,(wActiveRoom)
 	ld b,a
 
@@ -247,9 +241,7 @@ findWarpSourceAndDest:
 
 	; Retrieve YX in b, search "PointedWarps" for the correct YX position.
 	inc hl
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ldh a,(<hFF8D)
 	ld b,a
 	jr @nextWarpSource
@@ -340,9 +332,7 @@ findScreenEdgeWarpSource:
 	ld a,(wActiveGroup)
 	ld hl,warpSourcesTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,(wActiveRoom)
 	ld c,a
 
@@ -371,9 +361,7 @@ findScreenEdgeWarpSource:
 	cp c
 	jr nz,@skipRemainingBytes
 
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jr @nextWarpSource
 
 @foundWarpSource:

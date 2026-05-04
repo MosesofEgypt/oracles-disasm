@@ -1674,18 +1674,14 @@ applyPaletteFadeTransitionData:
 	ld ($ff00+R_SVBK),a
 
 	push hl
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld de,w2ColorComponentBuffer1
 	call extractColorComponents
 
 	pop hl
 	inc hl
 	inc hl
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld de,w2ColorComponentBuffer2
 	call extractColorComponents
 
@@ -1742,9 +1738,7 @@ getPaletteFadeTransitionData:
 	ld a,b
 	ld hl,paletteTransitionIndexData
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,(wActiveRoom)
 	ld b,a
 --
@@ -1783,9 +1777,7 @@ applyPaletteFadeTransitionData:
 	rst_addAToHl
 	ld a,(wRoomStateModifier)
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld de,w2ColorComponentBuffer1
 	call extractColorComponents
 
@@ -1798,9 +1790,7 @@ applyPaletteFadeTransitionData:
 	rst_addAToHl
 	ld a,(wRoomStateModifier)
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld de,w2ColorComponentBuffer2
 	call extractColorComponents
 
@@ -2577,9 +2567,7 @@ loadDungeonLayout_b01:
 	ld a,(wDungeonIndex)
 	ld hl, dungeonDataTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld b,$08
 	ld de, wDungeonMapData
 -

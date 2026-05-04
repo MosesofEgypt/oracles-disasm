@@ -33,9 +33,7 @@ interactionCodeb8:
 	ld a,(de)
 	ld hl,table_7432
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	ld a,>TX_3a00
 	call interactionSetHighTextIndex

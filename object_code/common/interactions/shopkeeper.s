@@ -179,9 +179,7 @@ shopkeeperState1:
 	ld a,(de)
 	ld hl,shopkeeperTheftPreventionScriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jp shopkeeperLoadScript
 
 @setNormalCollisionRadii:

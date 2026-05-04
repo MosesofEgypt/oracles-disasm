@@ -279,9 +279,7 @@ forestFairy_subid01:
 	dec a
 	ld hl,forestFairyDiscoveredScriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 
 	call interactionInitGraphics

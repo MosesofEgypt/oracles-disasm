@@ -1174,9 +1174,7 @@ ganon_updateTeleportAnimationComingIn:
 ganon_finishAttack:
 	ld h,d
 	ld l,Enemy.var35
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ldi a,(hl)
 	or a
 	jr z,ganon_decideNextMove
@@ -1211,9 +1209,7 @@ ganon_decideNextMove:
 	add c
 	ld hl,@stateTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ldi a,(hl)
 	jr label_10_135
 

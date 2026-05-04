@@ -1009,9 +1009,7 @@ twinrova_subid1_updateTargetPosition:
 	dec e
 	ld a,(de) ; [var33]
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	ld a,b
 	rst_addDoubleIndex

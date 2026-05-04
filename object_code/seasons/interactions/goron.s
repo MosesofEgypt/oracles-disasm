@@ -53,9 +53,7 @@ interactionCode3b:
 	ld e,$42
 	ld a,(de)
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 @state1:
 	ld e,$43

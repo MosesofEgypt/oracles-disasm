@@ -75,9 +75,7 @@ partCode33:
 	ld l,$c3
 	ld a,(hl)
 	ld l,$d8
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	and (hl)
 	ret z
 	jr @func_64f2
@@ -110,9 +108,7 @@ partCode33:
 	ld l,$c3
 	ld c,(hl)
 	ld l,$d8
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,(hl)
 	and c
 	ld c,a

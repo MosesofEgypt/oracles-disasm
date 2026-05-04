@@ -119,9 +119,7 @@ checkAndSpawnMaple:
 +
 	ld hl,maplePresentLocationsTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 @startCheck:
 	ld a,(wActiveRoom)
 	call checkFlag

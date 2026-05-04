@@ -88,9 +88,7 @@ interactionCode41:
 	ld a,(de)
 	ld hl,table_6cbf
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	jp interactionRunScript
 @state1:

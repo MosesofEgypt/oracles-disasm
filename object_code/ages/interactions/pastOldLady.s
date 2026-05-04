@@ -35,9 +35,7 @@ interactionCode45:
 
 	ld hl,@subid1ScriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 
 	ld a,>TX_1800
@@ -64,9 +62,7 @@ interactionCode45:
 	ld a,(de)
 	ld hl,@scriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	jp interactionIncState
 

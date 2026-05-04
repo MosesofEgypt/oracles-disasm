@@ -270,9 +270,7 @@ func_5af7:
 	ld h,d
 	ld l,$58
 	ld e,l
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ldi a,(hl)
 	or a
 	ret z

@@ -140,9 +140,7 @@ loadAngleAndCounterPreset:
 	ld a,b
 	ld hl,presetInteractionAnglesAndCounters
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	ld e,Interaction.counter2
 	ld a,(de)
@@ -413,9 +411,7 @@ twinrova_loadScript:
 	ld a,(de)
 	ld hl,@scriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jp interactionSetScript
 
 @scriptTable:

@@ -156,9 +156,7 @@ rosaSubId1:
 	ld a,(de)
 	ld hl,table_6931
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	ld e,$6d
 	ld a,$08
@@ -448,15 +446,11 @@ strangeBrothersSubId2:
 	dec a
 	ld hl,@table_6a92
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld e,$43
 	ld a,(de)
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	call interactionRunScript
 	call interactionRunScript

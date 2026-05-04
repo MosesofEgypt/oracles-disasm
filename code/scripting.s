@@ -1124,9 +1124,7 @@ scriptCmd_checkFlagSet:
 	inc hl
 	ldi a,(hl)
 	ld b,a
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,b
 	call checkFlag
 	pop hl

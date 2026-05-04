@@ -15,9 +15,7 @@ loadTilesetData_body:
 	ld a,(wActiveGroup)
 	ld hl,roomTilesetsGroupTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,(wActiveRoom)
 	rst_addAToHl
 	ld a,(hl)
@@ -35,9 +33,7 @@ loadTilesetData_body:
 	inc a
 	jr nz,@gotTilesetData
 	inc hl
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,(wRoomStateModifier)
 	call multiplyABy8
 	add hl,bc

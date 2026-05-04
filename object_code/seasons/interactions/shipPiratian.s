@@ -47,9 +47,7 @@ piratian_state0:
 	ld a,b
 	ld hl,table_6f4b
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	call objectSetVisiblec2
 	call interactionRunScript
@@ -65,9 +63,7 @@ piratianCaptain_state0:
 	ld a,(de)
 	ld hl,table_6f81
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	call objectSetVisiblec2
 	ld a,>TX_4e00

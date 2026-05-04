@@ -52,9 +52,7 @@ interactionCode44:
 	ld a,b
 	ld hl,lynnaMan2ScriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	call @initGraphicsAndIncState
 
@@ -81,9 +79,7 @@ interactionCode44:
 ++
 	ld hl,pastHoboScriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	call @initGraphicsAndIncState
 
@@ -105,9 +101,7 @@ interactionCode44:
 	ld a,(de)
 	ld hl,miscMan2ScriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	jp interactionIncState
 
@@ -214,9 +208,7 @@ unusedFunc5598:
 	ld a,b
 	ld hl,lynnaMan2ScriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	jp interactionIncState
 
@@ -231,18 +223,14 @@ unusedFunc5598:
 checkNpcShouldExistAtGameStage_body:
 	ld hl,@table
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	ld e,Interaction.subid
 	ld a,(de)
 	sub c
 	rst_addDoubleIndex
 
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 --
 	ldi a,(hl)
 	cp b

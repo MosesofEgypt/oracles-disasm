@@ -303,9 +303,7 @@ sygerSubId01:
 	and $01
 	ld hl,table_55ab
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld e,$89
 	ldi a,(hl)
 	ld (de),a

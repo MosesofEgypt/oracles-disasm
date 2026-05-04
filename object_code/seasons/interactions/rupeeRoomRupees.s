@@ -50,9 +50,7 @@ interactionCode1d:
 	sub (hl)
 	ld b,a
 	ld l,Interaction.var31
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,b
 	swap a
 	and $0f

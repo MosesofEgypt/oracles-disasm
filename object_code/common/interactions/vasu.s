@@ -133,9 +133,7 @@ interactionCode89:
 	add c
 	ld hl,@scriptTable
 	rst_addAToHl
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 @setScriptAndGotoState4:
 	call interactionSetScript

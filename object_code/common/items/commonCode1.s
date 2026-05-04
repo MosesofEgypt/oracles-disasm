@@ -99,16 +99,12 @@ itemSetAnimation:
 	ld a,(de)
 	ld hl,itemAnimationTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	add hl,bc
 
 ;;
 itemNextAnimationFrame:
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	; Byte 0: how many frames to hold it (or $ff to loop)
 	ldi a,(hl)
@@ -147,9 +143,7 @@ itemNextAnimationFrame:
 	ld a,(de)
 	ld hl,itemOamDataTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	add hl,bc
 
 	; Set the address of the oam data
@@ -665,9 +659,7 @@ checkTileIsPassableFromDirection:
 	ld a,(wActiveCollisions)
 	ld hl,itemPassableCliffTilesTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	; If the value retrieved from angleTable was odd, allow the item to pass
 	; through 2 directions

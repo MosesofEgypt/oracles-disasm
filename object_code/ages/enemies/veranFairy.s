@@ -265,9 +265,7 @@ veranFairy_state2:
 
 	ld hl,veranFairy_movementPatternTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld e,Enemy.var33
 	ldi a,(hl)
 	ld (de),a
@@ -312,9 +310,7 @@ veranFairy_state3:
 	; Get next target position
 	ld h,d
 	ld l,Enemy.var31
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ldi a,(hl)
 	or a
 	jr nz,++

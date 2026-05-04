@@ -87,9 +87,7 @@ applyStandardTileSubstitutions:
 @locFunc:
 	ld a,(wActiveGroup)
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld e,l
 	ld d,h
 	jr replaceTiles

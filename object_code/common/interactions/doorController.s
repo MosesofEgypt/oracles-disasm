@@ -50,9 +50,7 @@ interactionCode1e:
 	ld a,(de)
 	ld hl,@scriptSubidTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	call @func_47e5
 

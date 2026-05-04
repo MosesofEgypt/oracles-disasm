@@ -117,9 +117,7 @@ loadStaticObjects_body:
 	ld a,(wDungeonIndex)
 	ld hl,staticDungeonObjects
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld de,wStaticObjects
 @next:
 	ldi a,(hl)

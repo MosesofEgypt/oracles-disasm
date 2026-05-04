@@ -1122,9 +1122,7 @@ linkCutscene_updateAngleOnPath:
 	ld a,(de)
 	ld hl,@paths
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	ld e,SpecialObject.var3d
 	ld a,(de)

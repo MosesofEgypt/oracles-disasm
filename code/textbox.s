@@ -789,9 +789,7 @@ inventoryTextCode:
 	ld (hl),$ff
 
 	ld l,<w7TextAddress
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jp @drawSpace
 
 ;;
@@ -840,9 +838,7 @@ initTextboxStuff:
 	ld a,(wTextboxPosition)
 	ld hl,@textboxPositions
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	push hl
 	add e
 	ld l,a
@@ -992,9 +988,7 @@ getTextAddress:
 	rst_addDoubleIndex
 	ldi a,(hl)
 	ld e,a
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,(wTextIndexH)
 	cp TEXT_OFFSET_SPLIT_INDEX
 	jr c,+
@@ -1005,9 +999,7 @@ getTextAddress:
 	rst_addDoubleIndex
 	ldi a,(hl)
 	ld e,a
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 +
 	ld a,e
 	add $04
@@ -1157,9 +1149,7 @@ drawLineOfText:
 	ld (hl),$ff
 	ld l,<w7TextAddress
 	push hl
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	push hl
 	call clearTextGfxBuffer
 	call clearLineTextBuffer
@@ -1772,9 +1762,7 @@ label_3f_160:
 ;;
 readNextTextByte:
 	ld l,<w7TextAddress
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call readByteFromW7ActiveBankAndIncHl
 
 ;;
@@ -1783,9 +1771,7 @@ readNextTextByte:
 getExtraTextIndex:
 	ld hl,extraTextIndices
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ldi a,(hl)
 	ld c,a
 	ldi a,(hl)
@@ -2095,9 +2081,7 @@ doInventoryTextFirstPass:
 	ld l,<w7ActiveBank
 	ldi a,(hl)
 	ldh (<hFF8A),a
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	push hl
 	ld e,$00
 --
@@ -2245,9 +2229,7 @@ doInventoryTextFirstPass:
 	push hl
 	ld hl,nameAddressTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 --
 	ldi a,(hl)
 	or a
@@ -2296,9 +2278,7 @@ shiftTextGfxBufferLeft:
 	jr nz,--
 
 	ld hl,w7TextAddress
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ret
 
 ;;
@@ -2891,9 +2871,7 @@ handleTextControlCode:
 	push hl
 	ld hl,nameAddressTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 --
 	ldi a,(hl)
 	or a

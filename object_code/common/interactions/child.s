@@ -28,9 +28,7 @@ interactionCode35:
 	ld a,(de)
 	ld hl,childScriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 
 	ld e,Interaction.var03

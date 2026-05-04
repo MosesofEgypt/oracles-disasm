@@ -99,9 +99,7 @@ interactionCode48:
 	call interactionDecCounter1
 	ret nz
 	ld l,$78
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,(hl)
 	inc a
 	jp z,interactionDelete

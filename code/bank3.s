@@ -277,9 +277,7 @@ encodeSecretData:
 	push bc
 	ld hl,secretDataToEncodeTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	ldi a,(hl)
 	ld c,a
@@ -396,9 +394,7 @@ unpackSecret:
 @unpack:
 	ld hl,secretDataToEncodeTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	ldi a,(hl)
 	ld b,a

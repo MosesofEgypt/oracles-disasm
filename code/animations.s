@@ -103,9 +103,7 @@ updateAnimationDataPointer:
 	; Load hl with a pointer to the animationData structure
 	push hl
 	inc hl
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	; e = animation gfx index
 	ld e,(hl)

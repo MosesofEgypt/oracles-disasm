@@ -65,9 +65,7 @@ updateTilesetFlagsForIndoorRoomInAltWorld:
 
 	ld hl,roomsInAltWorldTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,(wActiveRoom)
 	call checkFlag
 	ret z
@@ -91,9 +89,7 @@ updateTilesetFlagsForIndoorRoomInAltWorld:
 copyTextCharactersFromSecretTextTable:
 	ld hl,secretTextTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 ;;
 copyTextCharactersFromHlUntilNull:
@@ -2048,9 +2044,7 @@ fileSelectDrawAcornCursor:
 	ld a,(wFileSelect.cursorOffset)
 	ld hl,@table
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ldi a,(hl)
 	ld e,a
 	ldi a,(hl)
@@ -3390,9 +3384,7 @@ updateStatusBar_body:
 	ld b,(hl)
 	ld c,a
 	ld hl,wDisplayedRupees
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call compareHlToBc
 	jr z,@updateRupeeDisplay
 
@@ -5521,9 +5513,7 @@ inventorySubmenu1_drawCursor:
 	ld a,d
 	ld hl,@spritesTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jp addSpritesToOam_withOffset
 
 @data:
@@ -5648,9 +5638,7 @@ func_02_5a35:
 	ld a,(wInventory.cbb8)
 	ld hl,table_5ae5-4
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,d
 	rst_addAToHl
 	ld c,(hl)
@@ -5769,9 +5757,7 @@ func_02_5afc:
 	ld a,(wInventory.cbb8)
 	ld hl,table_5ae5-4
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,c
 	rst_addAToHl
 	ld a,(hl)
@@ -6203,9 +6189,7 @@ inventorySubscreen2_drawTreasures:
 	ld a,b
 	ld hl,itemSubmenu2EssencePositions-2
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld bc,$0202
 	ld de,$0007
 	call fillRectangleInTilemap
@@ -11228,9 +11212,7 @@ ringMenu_drawRingBoxContents:
 	push hl
 	ld hl,ringMenu_ringPositionList-2
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld bc,$0202
 	ld de,$0007
 	call fillRectangleInTilemap
@@ -11262,9 +11244,7 @@ ringMenu_drawRingBoxContents:
 	ld a,b
 	ld hl,ringMenu_ringPositionList-2
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ldbc $02,$02
 	ldde $00,$07
 	call fillRectangleInTilemap

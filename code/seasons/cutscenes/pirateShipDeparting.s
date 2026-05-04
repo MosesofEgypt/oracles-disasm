@@ -477,9 +477,7 @@ seasonsFunc_03_6a9d:
 	and $03
 	ld hl,seasonsTable_03_6b1a
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,($cbb8)
 	and $07
 	rst_addDoubleIndex
@@ -502,9 +500,7 @@ seasonsFunc_03_6aca:
 	ld a,($cbbe)
 	ld hl,seasonsTable_03_6b1a
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld de,$d9c0
 	push hl
 	call seasonsFunc_03_6b22

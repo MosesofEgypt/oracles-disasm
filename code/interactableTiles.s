@@ -165,9 +165,7 @@ nextToSignTile:
 	ld a,(wActiveGroup)
 	ld hl,signTextGroupTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,(wActiveRoom)
 	ld b,a
 	ldh a,(<hFF8D)

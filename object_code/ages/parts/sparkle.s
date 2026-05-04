@@ -28,9 +28,7 @@ partCode26:
 	ld a,(de)
 	ld c,a
 	ld l,$d2
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	add hl,bc
 	ld a,l
 	ld (de),a

@@ -16,9 +16,7 @@ zelda_state0:
 	ld b,a
 	ld hl,table_6ea3
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	ld a,b
 	or a

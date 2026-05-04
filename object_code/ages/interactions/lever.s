@@ -429,9 +429,7 @@ interactionCode61:
 	; Read address in var32/var33; set new value to 'b' and return old value as 'a'.
 	ld b,a
 	inc l
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,(hl)
 	ld (hl),b
 	ret

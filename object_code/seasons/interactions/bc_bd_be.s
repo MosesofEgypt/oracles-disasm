@@ -83,15 +83,11 @@ func_7867:
 	sub $ba
 	ld hl,ba_to_beScripts
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld e,$42
 	ld a,(de)
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	call objectSetVisible81
 	jp interactionIncState

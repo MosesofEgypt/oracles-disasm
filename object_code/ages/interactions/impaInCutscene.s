@@ -75,9 +75,7 @@ interactionCode31:
 	ld a,(de)
 	ld hl,impaScriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jp interactionSetScript
 
 @init2:

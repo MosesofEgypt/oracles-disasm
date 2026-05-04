@@ -17,9 +17,7 @@ interactionLoadTreasureData:
 	jr z,+
 
 	inc hl
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld e,Interaction.var03
 	ld a,(de)
 	jr --

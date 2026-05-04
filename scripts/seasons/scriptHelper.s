@@ -2087,9 +2087,7 @@ trampoline_bounce:
 	inc hl
 	jr -
 trampoline_foundRoom:
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	push hl
 	ldh a,(<hFF8D)
 	rst_addDoubleIndex

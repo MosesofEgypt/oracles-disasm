@@ -74,9 +74,7 @@ interactionCode5b:
 	ld a,(de)
 	ld hl,@scriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jp interactionSetScript
 
 ;;
@@ -99,9 +97,7 @@ interactionCode5b:
 
 	ld hl,@objectReactionTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,($cfd9)
 	ld e,a
 	call lookupKey

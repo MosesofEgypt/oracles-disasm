@@ -52,9 +52,7 @@ interactionCode96:
 	ld a,(de)
 	ld hl,table_57dc
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	ld e,$43
 	ld a,(de)
@@ -299,9 +297,7 @@ func_57ba:
 	adc $00
 	pop hl
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jp interactionSetScript
 table_57d0:
 	.dw mainScripts.script73f3

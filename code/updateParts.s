@@ -71,9 +71,7 @@ func_11_5e8a:
 	adc >partCodeTable
 	ld h,a
 
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	ld a,c
 	or a

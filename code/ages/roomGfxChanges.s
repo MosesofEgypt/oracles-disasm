@@ -348,9 +348,7 @@ roomTileChangesAfterLoad01:
 	ld a,(wActiveGroup)
 	ld hl,treeGfxLocationsTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,(wActiveRoom)
 	ld b,a
 --
@@ -376,9 +374,7 @@ roomTileChangesAfterLoad01:
 	; Draw the tile mapping
 	ld hl,treeTilesTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld bc,$0304
 	call drawRectangleToVramTiles_withParameters
 
@@ -586,9 +582,7 @@ copyRectangleFromTmpGfxBuffer:
 	ld e,a
 	ldi a,(hl)
 	ld d,a
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 @nextRow:
 	push bc

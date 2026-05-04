@@ -61,9 +61,7 @@ interactionCode8d:
 	ld e,$42
 	ld a,(de)
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 @state1:
 	call interactionRunScript

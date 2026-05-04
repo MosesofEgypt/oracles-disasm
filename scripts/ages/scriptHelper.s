@@ -293,9 +293,7 @@ shootingGallery_cpScore:
 	ld b,(hl)
 	ld c,a
 	ld hl,wTextNumberSubstitution
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call compareHlToBc
 	inc a
 	jr nz,+

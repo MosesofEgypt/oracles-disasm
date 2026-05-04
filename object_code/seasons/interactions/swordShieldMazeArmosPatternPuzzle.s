@@ -31,9 +31,7 @@ interactionCode67:
 	ld (de),a
 	ld hl,@table_571f
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	call interactionIncState
 	ld a,$81
@@ -80,9 +78,7 @@ interactionCode67:
 	ld a,(de)
 	ld hl,@table_579a
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld e,$78
 	ld a,(de)
 	rst_addAToHl

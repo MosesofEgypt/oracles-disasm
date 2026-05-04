@@ -76,9 +76,7 @@ interactionCode83:
 	adc $00
 	ldd (hl),a
 	ld bc,$ffa0
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call compareHlToBc
 	ret c
 	jp interactionIncSubstate

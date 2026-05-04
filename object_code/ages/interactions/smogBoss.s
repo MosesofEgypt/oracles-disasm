@@ -141,9 +141,7 @@ interactionCode33:
 
 	; Retrieve pointer to tile replacement data
 	ld l,Interaction.var18
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	ld a,(hl)
 	or a

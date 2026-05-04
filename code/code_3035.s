@@ -64,9 +64,7 @@ getEntryFromObjectTable1:
 	ld a,b
 	ld hl, objectData.objectTable1
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	pop af
 	setrombank
 	ret

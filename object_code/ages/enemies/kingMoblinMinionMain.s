@@ -271,9 +271,7 @@ blackTower_getMovingFlamesNextTileCoords:
 	ld a,(de)
 	ld hl,@table
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld e,$c7
 	ld a,(de)
 	rst_addAToHl

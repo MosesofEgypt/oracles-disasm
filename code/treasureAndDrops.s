@@ -428,9 +428,7 @@ giveTreasure_body:
 	ret nc
 .else
 	; Check for overflow
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld bc,$0999
 	call compareHlToBc
 	dec a
@@ -731,9 +729,7 @@ loadTreasureDisplayData:
 	ld a,e
 	ld hl,treasureDisplayData2
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	pop bc
 	add hl,bc
 
@@ -858,9 +854,7 @@ decideItemDrop_body:
 .endif
 	ld hl,itemDropProbabilityTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call getRandomNumber
 	and $3f
 	call checkFlag
@@ -870,9 +864,7 @@ decideItemDrop_body:
 	and $1f
 	ld hl,itemDropSetTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call getRandomNumber
 	and $1f
 	rst_addAToHl
@@ -1014,9 +1006,7 @@ getRandomRingOfGivenTier_body:
 	ld a,c
 	ld hl,ringTierTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	call getRandomNumber
 	; to simplify logic, the random number will only be in the range [0,254]

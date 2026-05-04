@@ -89,9 +89,7 @@ interactionCode95:
 
 	; Go to substate 2 (stop doing anything) if the ball's Z speed has gone too low
 	ld bc,$ff80
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call compareHlToBc
 	ret c
 	jp interactionIncSubstate

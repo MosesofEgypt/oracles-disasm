@@ -39,9 +39,7 @@ interactionCode76:
 	ld a,c
 	ld hl,table_7483
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	ld a,c
 	ld hl,table_7495
@@ -77,9 +75,7 @@ interactionCode76:
 	ld a,c
 	ld hl,table_7477
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	ld e,Interaction.subid
 	ld a,(de)
@@ -156,9 +152,7 @@ func_742a:
 	and $1f
 	ld hl,table_747d
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jp interactionSetScript
 func_743e:
 	xor a

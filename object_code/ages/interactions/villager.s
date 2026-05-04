@@ -73,9 +73,7 @@ interactionCode3a:
 	ld a,b
 	ld hl,@subid03ScriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jp interactionSetScript
 
 @initSubid04:
@@ -93,9 +91,7 @@ interactionCode3a:
 	ld a,b
 	ld hl,@subid4And5ScriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jp interactionSetScript
 
 @initSubid06:
@@ -109,9 +105,7 @@ interactionCode3a:
 	ld a,b
 	ld hl,@subid6And7ScriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jp interactionSetScript
 
 @initSubid08:
@@ -128,9 +122,7 @@ interactionCode3a:
 	sub $04
 	ld hl,@subid08ScriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jp interactionSetScript
 
 @initSubid0a:
@@ -460,9 +452,7 @@ interactionCode3a:
 	ld a,(de)
 	ld hl,@scriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jp interactionSetScript
 
 

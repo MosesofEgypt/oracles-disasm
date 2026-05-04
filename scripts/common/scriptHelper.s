@@ -304,17 +304,13 @@ movingPlatform_loadScript:
 	ld a,b
 	ld hl,movingPlatform_scriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 @loadScript:
 	ld e,Interaction.var32
 	ld a,(de)
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jr movingPlatform_setScript
 
 movingPlatform_runScript:

@@ -24,9 +24,7 @@ interactionCode42:
 	ld a,(hl)
 	ld hl,table_6d14
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	ld a,$02
 	call interactionSetAnimation

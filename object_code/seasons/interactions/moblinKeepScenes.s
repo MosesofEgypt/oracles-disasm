@@ -16,9 +16,7 @@ interactionCodeab:
 	ld a,(de)
 	ld hl,moblinKeepScene_scriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	ld e,$42
 	ld a,(de)

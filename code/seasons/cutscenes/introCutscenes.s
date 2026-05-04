@@ -129,9 +129,7 @@ cutscene06Func2:
 	ld hl,$cbb3
 	call decHlRef16WithCap
 	jr z,+
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld bc,$00f0
 	call compareHlToBc
 	ret nc
@@ -283,9 +281,7 @@ cutsceneDinDancing_loadListOfTiles:
 	ld a,b
 	ld hl,@tileListTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld b,(hl)
 	inc hl
 -
@@ -1010,9 +1006,7 @@ seasonsFunc_03_7a3b:
 	ld (hl),a
 	ld hl,seasonsTable_03_7a5e
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld b,h
 	ld c,l
 	ld hl,$de90

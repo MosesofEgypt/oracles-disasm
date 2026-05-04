@@ -15,9 +15,7 @@ interactionCode86:
 	ld b,a
 	ld h,d
 	ld l,$62
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,b
 	rst_addAToHl
 	ld e,$62
@@ -66,9 +64,7 @@ func_7cb3:
 	and $7f
 	ld hl,table_7cd8
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld e,Interaction.subid
 	ld a,(de)
 	rst_addDoubleIndex

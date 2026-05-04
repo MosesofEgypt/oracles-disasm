@@ -11,9 +11,7 @@ interactionCodec4:
 +
 	ld hl,zeldaVillagersRoom_interactionsTableLookup
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld b,(hl)
 	inc l
 	push de

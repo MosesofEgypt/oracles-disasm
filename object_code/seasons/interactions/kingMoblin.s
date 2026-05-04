@@ -44,9 +44,7 @@ interactionCode95:
 	adc $00
 	ld hl,table_55bf
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	call getFreeInteractionSlot
 	jr nz,+

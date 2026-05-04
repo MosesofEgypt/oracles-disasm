@@ -91,9 +91,7 @@ interactionCode9a:
 	dec a
 	ld hl,table_5a5e
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	push de
 	ld b,(hl)
 	inc hl
@@ -321,9 +319,7 @@ func_5a82:
 	ret nz
 	ld hl,table_5ac4
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	; counter2
 	inc e
 	ld a,(de)

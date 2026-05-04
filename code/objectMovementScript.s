@@ -8,9 +8,7 @@ objectLoadMovementScript_body:
 	ld e,a
 	ld a,(de)
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	ld a,e
 	add Object.speed-Object.subid
@@ -62,9 +60,7 @@ objectRunMovementScript_body:
 
 @cmd00_jump:
 	pop hl
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jr @nextOp
 
 

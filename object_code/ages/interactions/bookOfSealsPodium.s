@@ -121,9 +121,7 @@ interactionCodeb4:
 	ret nz
 	ld (hl),$02 ; [counter1]
 	ld l,Interaction.scriptPtr
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	ldi a,(hl)
 	or a

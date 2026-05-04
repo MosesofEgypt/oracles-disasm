@@ -73,15 +73,11 @@ miscNPC_state0:
 	sub $24
 	ld hl,miscNPC_scriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld e,$42
 	ld a,(de)
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	ld e,$41
 	ld a,(de)
@@ -235,18 +231,14 @@ checkHoronVillageNPCShouldBeSeen_body:
 	ld a,b
 	ld hl,conditionalHoronNPCLookupTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	push hl
 	call checkNPCStage
 	pop hl
 	ld e,$42
 	ld a,(de)
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 -
 	ldi a,(hl)
 	or a

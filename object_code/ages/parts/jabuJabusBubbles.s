@@ -80,9 +80,7 @@ partCode16:
 	ld c,a
 	ld l,$cc
 	ld e,l
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	add hl,bc
 	ld a,l
 	ld (de),a

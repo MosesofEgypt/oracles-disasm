@@ -64,9 +64,7 @@ interactionCode88:
 	and $03
 	ld hl,seasonsTable_09_7f2b
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jp seasonsFunc_09_7f01
 +
 	ld e,$70

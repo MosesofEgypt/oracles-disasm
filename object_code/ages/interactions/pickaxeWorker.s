@@ -80,9 +80,7 @@ interactionCode57:
 	dec a
 	ld hl,@subid1And2ScriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jp interactionSetScript
 
 @label_09_221:
@@ -183,9 +181,7 @@ interactionCode57:
 	ld a,$02
 	ld hl,@subid1And2ScriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	jp fadeinFromWhite
 
@@ -221,9 +217,7 @@ interactionCode57:
 	ld a,$03
 	ld hl,@subid1And2ScriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jp interactionSetScript
 
 
@@ -242,9 +236,7 @@ interactionCode57:
 	ld a,(de)
 	ld hl,@scriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	jp interactionIncState
 

@@ -30,6 +30,13 @@
 	pop bc
 	ret
 
+.ORGA $0020
+; rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
+	ret
+
 .ORGA $0038
 ; Not used as rst $38
 	nop
@@ -1020,9 +1027,7 @@ loadPaletteHeader:
 	ld a,l
 	ld hl,bank1Moveable.paletteHeaderTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 ---
 	ld a,:bank1Moveable.paletteHeaderTable
 	setrombank
@@ -1203,9 +1208,7 @@ loadUncompressedGfxHeader:
 	ld a,e
 	ld hl,bank1Moveable.uncmpGfxHeaderTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 --
 	ldi a,(hl)
 	ld c,a
@@ -1258,9 +1261,7 @@ loadGfxHeader:
 	ld a,e
 	ld hl,bank1Moveable.gfxHeaderTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 --
 	ldi a,(hl)
 	ld c,a
@@ -1838,9 +1839,7 @@ _countdownToRunThread:
 	ld a,$03
 	ldi (hl),a
 	inc l
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld sp,hl
 	pop bc
 	pop de
@@ -2925,9 +2924,7 @@ drawAllSpritesUnconditionally:
 	ldh (<hFF8E),a
 
 	; Object.oamDataAddress
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	; Get address, bank of animation frame data
 	ld a,h
@@ -3187,9 +3184,7 @@ _drawObjectTerrainEffects:
 @walkingInPuddle:
 	inc e
 	ld hl,wPuddleAnimationPointer
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jr @grassOrWater
 
 @walkingInGrass:
@@ -3538,9 +3533,7 @@ getChestData:
 	ld a,(wActiveGroup)
 	ld hl,chestData.chestDataGroupTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,(wActiveRoom)
 	ld b,a
 -
@@ -4832,9 +4825,7 @@ cpRupeeValue:
 	ld hl,wNumRupees
 ++
 	call getRupeeValue
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call compareHlToBc
 	inc a
 	jr nz,+
@@ -4968,9 +4959,7 @@ getRandomRingOfGivenTier:
 +
 	ld hl,bank3f.ringTierTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	call getRandomNumber
 	and b
@@ -5153,9 +5142,7 @@ retrieveTextCharacter:
 	ld a,(w7TextGfxSource)
 	ld hl,@data
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	add hl,bc
 	pop bc
 	ld a,:gfx_font
@@ -5624,9 +5611,7 @@ getRoomDungeonProperties:
 	and $01
 	ld hl, bank1.dungeonRoomPropertiesGroupTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,b
 	rst_addAToHl
 	ld b,(hl)
@@ -6442,9 +6427,7 @@ findRoomSpecificData:
 	ld e,a
 	ld a,(wActiveGroup)
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 ;;
 ; Returns the "value" of a "key" E. hl points to a "dictionary" structure with
 ; the following format:
@@ -6474,9 +6457,7 @@ findByteInGroupTable:
 	ld e,a
 	ld a,(wActiveGroup)
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 ;;
 ; Search through zero-terminated list of bytes at hl, return when one equals e.
@@ -6509,9 +6490,7 @@ lookupCollisionTable:
 lookupCollisionTable_paramE:
 	ld a,(wActiveCollisions)
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jr lookupKey
 
 ;;
@@ -6525,9 +6504,7 @@ findByteInCollisionTable:
 findByteInCollisionTable_paramE:
 	ld a,(wActiveCollisions)
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jr findByteAtHl
 
 ;;
@@ -8298,10 +8275,8 @@ getHeldObject:
 		ret
 	+
 	; get the object held by w1Link
-	ld hl,w1Link.relatedObj2+1
-	ldd a,(hl)
-	ld l,(hl)
-	ld h,a
+	ld hl,w1Link.relatedObj2
+	rst_derefHl
 	; test that the object is enabled
 	xor a
 	or (hl)
@@ -9026,9 +9001,7 @@ interactionRunScript:
 +
 	ld h,d
 	ld l,Interaction.scriptPtr
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call _interactionActuallyRunScript
 	jr c,+
 
@@ -9141,9 +9114,7 @@ scriptFunc_jump:
 	ld h,>wBigBuffer
 	ret
 ++
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ldh a,(<hActiveObject)
 	ld d,a
 	xor a
@@ -9160,9 +9131,7 @@ scriptFunc_jump_scf:
 scriptFunc_jump:
 	xor a
 ++
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ldh a,(<hActiveObject)
 	ld d,a
 	ret
@@ -9240,16 +9209,12 @@ interactionSetAnimation:
 	ld a,(de)
 	ld hl,interactionAnimationTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	add hl,bc
 
 ;;
 _interactionNextAnimationFrame:
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	; Byte 0: how many frames to hold it (or $ff to loop)
 	ldi a,(hl)
@@ -9291,9 +9256,7 @@ _interactionNextAnimationFrame:
 	ld a,(de)
 	ld hl,interactionOamDataTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	add hl,bc
 
 	; Set the address of the oam data
@@ -9646,9 +9609,7 @@ interactionFunc_278b:
 interactionGetMiniScript:
 	ld h,d
 	ld l,Interaction.scriptPtr
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ret
 
 ;;
@@ -9812,16 +9773,12 @@ enemySetAnimation:
 	ld a,(de)
 	ld hl,enemyAnimationTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	add hl,bc
 
 ;;
 _enemyNextAnimationFrame:
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	; Byte 0: how many frames to hold it (or $ff to loop)
 	ldi a,(hl)
@@ -9860,9 +9817,7 @@ _enemyNextAnimationFrame:
 	ld a,(de)
 	ld hl,enemyOamDataTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	add hl,bc
 
 	; Set the address of the oam data
@@ -9918,9 +9873,7 @@ enemyDie:
 
 	ld l,<wTotalEnemiesKilled
 	call incHlRef16WithCap
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld bc,1000
 	call compareHlToBc
 	rlca
@@ -10206,18 +10159,14 @@ partSetAnimation:
 	ld a,(de)
 	ld hl,partAnimationTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	add hl,bc
 
 ;;
 ; Note: this sets the ROM bank to $11 before returning.
 ;
 _partNextAnimationFrame:
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	; Byte 0: how many frames to hold it (or $ff to loop)
 	ldi a,(hl)
@@ -10256,9 +10205,7 @@ _partNextAnimationFrame:
 	ld a,(de)
 	ld hl,partOamDataTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	add hl,bc
 
 	; Set the address of the oam data
@@ -10391,9 +10338,7 @@ getSimulatedInput:
 	ld hl,wSimulatedInputBank
 	ldi a,(hl)
 	setrombank
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	ldi a,(hl)
 	ld (wSimulatedInputCounter),a
@@ -11230,9 +11175,7 @@ getThisRoomDungeonProperties:
 	and $01
 	ld hl, bank1.dungeonRoomPropertiesGroupTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,(wActiveRoom)
 	ld b,$00
 	ld c,a
@@ -11562,9 +11505,7 @@ updateEnemy:
 	adc >enemyCodeTable
 	ld h,a
 
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 .ifdef ROM_AGES
 	ld a,b
 	setrombank
@@ -12314,9 +12255,7 @@ loadScreenMusic:
 	ld a,(wActiveGroup)
 	ld hl,bank4Data1.musicAssignmentGroupTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,(wActiveRoom)
 	rst_addAToHl
 	ldi a,(hl)
@@ -12737,9 +12676,7 @@ getEntryFromObjectTable2:
 	ld a,b
 	ld hl, objectData.objectTable2
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	pop af
 	setrombank
 	ret
@@ -12815,9 +12752,7 @@ loadAnimationData:
 	ld a,b
 	ld hl,animationAndUniqueGfxData.animationGroupTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ldi a,(hl)
 	ld (wAnimationState),a
 	push de
@@ -12840,9 +12775,7 @@ loadAnimationData:
 ;;
 @helper:
 	push hl
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ldi a,(hl)
 	ld (de),a
 	inc de
@@ -13265,9 +13198,7 @@ loadRoomLayout:
 	ldh (<hFF8F),a
 	ldi a,(hl)
 	ldh (<hFF8C),a
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ldh a,(<hFF8C)
 	setrombank
 
@@ -13373,9 +13304,7 @@ loadRoomLayout:
 
 	ld a,(wLoadingRoom)
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	pop bc
 	add hl,bc
@@ -13925,9 +13854,7 @@ updateInteraction:
 	ld a,(de)
 	ld hl,interactionCodeTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jp hl
 
 .include "data/interactionCodeTable.s"
@@ -14041,9 +13968,7 @@ interactionRunSimpleScript:
 
 	ld h,d
 	ld l,Interaction.scriptPtr
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 --
 	ld a,(hl)
 	or a
@@ -14210,9 +14135,7 @@ getWildTokayObjectDataIndex:
 	ld a,b
 	ld hl,objectData.wildTokayObjectTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	pop af
 	setrombank
 	ret
@@ -14354,9 +14277,7 @@ interactionFunc_3e6d:
 	ld hl,data_4556
 .endif
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call addSpritesToOam_withOffset
 	pop af
 	setrombank

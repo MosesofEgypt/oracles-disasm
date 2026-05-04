@@ -114,9 +114,7 @@ mapleState0:
 
 	ld hl,mapleShadowPathsTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	ld e,SpecialObject.var3a
 	ldi a,(hl)
@@ -238,9 +236,7 @@ mapleState2:
 	rst_addDoubleIndex
 
 	ld e,SpecialObject.yh
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	ldi a,(hl)
 	ld (de),a
@@ -272,9 +268,7 @@ mapleState2:
 ; @param[out]	zflag	z if we've reached the end of the "angle data".
 mapleDecideNextAngle:
 	ld hl,w1Companion.relatedObj2
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	ld e,SpecialObject.var3d
 	ldi a,(hl)
@@ -1369,9 +1363,7 @@ mapleSpawnItemDrops:
 	ld a,(de)
 	ld hl,maple_itemDropDistributionTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call getRandomIndexFromProbabilityDistribution
 
 	ld a,b

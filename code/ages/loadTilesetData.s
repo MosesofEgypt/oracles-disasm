@@ -11,9 +11,7 @@ loadTilesetData_body:
 
 	ld hl,roomTilesetsGroupTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,(wActiveRoom)
 	rst_addAToHl
 	ld a,(hl)

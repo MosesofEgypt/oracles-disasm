@@ -21,15 +21,11 @@ interactionCode23:
 	ld (de),a
 	ld hl,table_56a5
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,b
 	and $0f
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	ld e,$7e
 	ld a,(wc6e5)

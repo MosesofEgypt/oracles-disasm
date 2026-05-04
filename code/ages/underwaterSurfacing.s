@@ -4,9 +4,7 @@ checkLinkCanSurface_isUnderwater:
 	ld a,(wActiveGroup)
 	ld hl, underWaterSurfaceTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,(wActiveRoom)
 	ld b,a
 -
@@ -19,9 +17,7 @@ checkLinkCanSurface_isUnderwater:
 	inc hl
 	jr -
 +
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,(wTilesetFlags)
 	and $01
 	jr z, +

@@ -85,9 +85,7 @@ shootingGalleryNpc:
 	add (hl)
 	ld hl,shootingGalleryScriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jp interactionSetScript
 
 ;;
@@ -237,9 +235,7 @@ shootingGalleryGame:
 @setScript:
 	ld hl,shootingGalleryHitScriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	call interactionIncState
 

@@ -795,9 +795,7 @@ interaction6b_loadScript:
 	ld a,(de)
 	ld hl,interaction6b_scriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	jp interactionIncState
 

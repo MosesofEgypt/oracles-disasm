@@ -37,9 +37,7 @@ interactionCode30:
 	ld a,(de)
 	ld hl,table_607f
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	call interactionRunScript
 	call interactionRunScript

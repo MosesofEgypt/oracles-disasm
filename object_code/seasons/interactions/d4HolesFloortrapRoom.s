@@ -75,9 +75,7 @@ d4floorTrapRoom_storeAddressOfFirstHoleTilePosition:
 d4floorTrapRoom_storeNextHoleTileAddressIntoHL:
 	ld h,d
 	ld l,$58
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ret
 d4floorTrapRoom_storeIncrementedAddressOfNextHoleTile:
 	ld e,$58

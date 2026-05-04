@@ -48,9 +48,7 @@ interactionCode51:
 	ld a,(de)
 	ld hl,table_7acb
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld e,$58
 	ld a,l
 	ld (de),a
@@ -61,9 +59,7 @@ interactionCode51:
 func_7a9a:
 	ld h,d
 	ld l,$58
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ldi a,(hl)
 	cp $ff
 	jr nz,+

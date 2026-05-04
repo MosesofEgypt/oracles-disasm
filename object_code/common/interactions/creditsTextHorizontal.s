@@ -28,9 +28,7 @@ interactionCodeae:
 	ld a,(hl)
 	ld hl,horizontalCreditsText_scriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call creditsTextHorizontal_6559
 
 	ld e,Interaction.subid
@@ -298,9 +296,7 @@ creditsTextHorizontal_6537:
 ;;
 creditsTextHorizontal_6554:
 	ld l,Interaction.scriptPtr
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 ;;
 ; @param	hl	Script pointer

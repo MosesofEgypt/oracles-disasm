@@ -162,9 +162,7 @@ seasonsFunc_0c_68fa:
 	ld a,(de)
 	ld hl,seasonsTable_0c_694c
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld e,Enemy.var30
 -
 	push hl

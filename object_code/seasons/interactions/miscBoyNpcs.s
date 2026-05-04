@@ -85,15 +85,11 @@ interactionCode3e:
 	ld a,(de)
 	ld hl,table_6ac9
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld e,$42
 	ld a,(de)
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	call interactionRunScript
 	jp objectSetVisible82

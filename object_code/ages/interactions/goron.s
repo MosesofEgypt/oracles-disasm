@@ -76,9 +76,7 @@ goronSubid00:
 	xor a
 	ld hl,goronDanceScriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 
 
@@ -304,9 +302,7 @@ goronSubid00:
 	ld a,$01
 	ld hl,goronDanceScriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 
 @@runScript:
@@ -360,9 +356,7 @@ goronSubid00:
 	ld a,$02
 	ld hl,goronDanceScriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 
 @state4Substate1:
@@ -887,9 +881,7 @@ goronDance_getNextMove:
 	ld a,(wTmpcfc0.goronDance.danceLevel)
 	ld hl,goronDance_sequenceData
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,(wTmpcfc0.goronDance.dancePattern)
 	swap a
 	ld b,a
@@ -1130,9 +1122,7 @@ goron_loadScript:
 	ld a,(de)
 	ld hl,goron_scriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	jp interactionIncState
 
@@ -1143,15 +1133,11 @@ goron_loadScriptFromTable:
 	ld a,(de)
 	ld hl,goron_scriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	inc e
 	ld a,(de)
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	jp interactionIncState
 

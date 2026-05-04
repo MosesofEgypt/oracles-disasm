@@ -54,9 +54,7 @@ interactionCode3d:
 	ld a,(de)
 	ld hl,oldLadyScriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jp interactionSetScript
 
 @initSubid2:

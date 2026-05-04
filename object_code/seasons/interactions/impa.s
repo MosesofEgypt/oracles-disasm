@@ -88,9 +88,7 @@ interactionCode9d:
 @@func_5dd5:
 	ld hl,table_5ec8
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 @@setScript:
 	jp interactionSetScript
 @@subid4:

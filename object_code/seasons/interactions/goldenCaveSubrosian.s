@@ -21,9 +21,7 @@ interactionCodecc:
 	jr z,+
 	ld hl,seasonsTable_0f_7dc7
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jr @setScript
 +
 	ld a,GLOBALFLAG_DONE_SUBROSIAN_SECRET

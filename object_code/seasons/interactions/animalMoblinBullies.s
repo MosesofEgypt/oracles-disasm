@@ -55,9 +55,7 @@ interactionCode73:
 	call @func_71ac
 	ld hl,@table_71cd
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	jr @func_70f3
 @func_70c1:
@@ -85,9 +83,7 @@ interactionCode73:
 	call @func_71ac
 	ld hl,@table_71d9
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 @func_70f3:
 	call interactionAnimateAsNpc
@@ -132,9 +128,7 @@ interactionCode73:
 	ld a,(de)
 	ld hl,@table_71d3
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jp interactionSetScript
 @dimitriState2:
 	call @func_71c0

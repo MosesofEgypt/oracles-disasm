@@ -24,9 +24,7 @@ initializeFile:
 	; Initialize data differently based on whether it's a linked or hero game
 	ld hl,initialFileVariablesTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call initializeFileVariables
 
 	; Clear unappraised rings

@@ -176,9 +176,7 @@ func_5293:
 	ld d,(hl)
 	ld e,a
 	inc hl
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ldh a,(<hFF8B)
 	ld c,a
 	ld b,$00

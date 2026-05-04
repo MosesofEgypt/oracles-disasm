@@ -138,9 +138,7 @@ interactionCode81:
 	ld a,(de)
 	ld hl,table_7994
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jp interactionSetScript
 @state2:
 	call interactionAnimateAsNpc

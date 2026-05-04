@@ -332,9 +332,7 @@ interactionCode9a:
 	and $0f
 	ld hl,@scriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jp interactionSetScript
 
 @scriptTable:

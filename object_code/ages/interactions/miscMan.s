@@ -44,9 +44,7 @@ interactionCode41:
 
 	ld hl,@scriptTable+2
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 
 	ld a,>TX_2600
@@ -72,9 +70,7 @@ interactionCode41:
 	ld a,(de)
 	ld hl,@scriptTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	jp interactionIncState
 

@@ -34,18 +34,14 @@ specialObjectSetAnimation_body:
 label_06_032:
 	ld hl,specialObjectAnimationTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	add hl,bc
 
 ;;
 ; @param	d	Object
 ; @param	hl	Address of pointer to animation data
 specialObjectNextAnimationFrame:
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	; Check for loop
 	ldi a,(hl)
@@ -214,9 +210,7 @@ getSpecialObjectGraphicsFrame:
 	ld hl,specialObjectGraphicsTable
 .endif
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	add hl,bc
 	add hl,bc
 	add hl,bc
@@ -230,9 +224,7 @@ getSpecialObjectGraphicsFrame:
 	ld a,e
 	ld hl,specialObjectOamDataTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	add hl,bc
 	ld e,<w1Link.oamDataAddress
 	ldi a,(hl)
@@ -244,9 +236,7 @@ getSpecialObjectGraphicsFrame:
 
 	; Bytes 1-2: address of graphics
 	pop hl
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	or h
 	ret z
 

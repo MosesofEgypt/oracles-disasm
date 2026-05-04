@@ -65,9 +65,7 @@ flyingTile_state_spawner:
 	ld a,(de)
 	ld hl,flyingTile_layoutData
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	ld e,Enemy.var03
 	ldi a,(hl)
@@ -93,9 +91,7 @@ flyingTile_state_spawner:
 
 	; Retrieve address in flyingTile_layoutData
 	ld l,Enemy.var30
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 
 	; Get next position to spawn tile at
 	ldi a,(hl)

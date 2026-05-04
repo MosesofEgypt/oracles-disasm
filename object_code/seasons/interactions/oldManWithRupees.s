@@ -13,9 +13,7 @@ interactionCode99:
 	ld a,(de)
 	ld hl,table_587b
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call interactionSetScript
 	ld h,d
 	ld l,$4b

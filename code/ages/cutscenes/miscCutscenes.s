@@ -370,9 +370,7 @@ nayruSingingCutsceneHandler:
 	ld hl,wTmpcbb3
 	call decHlRef16WithCap
 	jr z,+
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld bc,$00f0
 	call compareHlToBc
 	ret nc

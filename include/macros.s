@@ -101,6 +101,9 @@
 .MACRO rst_addDoubleIndex
 	rst $18
 .ENDM
+.MACRO rst_derefHl
+	rst $20
+.ENDM
 
 ; ==================================================================================================
 ; Directive macros

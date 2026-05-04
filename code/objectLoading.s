@@ -27,9 +27,7 @@ parseObjectData:
 	ld a,(wActiveGroup)
 	ld hl,objectDataGroupTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld a,(wActiveRoom)
 	ld e,a
 	ld d,$00

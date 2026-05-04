@@ -1575,9 +1575,7 @@ flashScreen_body:
 	ld b,(hl)
 	ld hl,screenFlashingData
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ld c,$00
 --
 	ld a,(hl)
