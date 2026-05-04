@@ -1269,6 +1269,10 @@ ecom_held_substate1_struggling:
 	ld a,(hl)
 	cp $02 ; drop and release with 2 frames left
 	ret nc
-	jp dropLinkHeldItem
+	call dropLinkHeldItem
+	ld h,d
+	ld l,Enemy.substate
+	ld (hl),$03
+	ret
 
 .endif

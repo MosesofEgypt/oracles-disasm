@@ -8309,70 +8309,12 @@ getHeldObject:
 	pop de
 	ret
 
-; @param	hl	Object to check
-; @param[out]	zflag set if the enemy CANNOT be pogo'd on
-isValidTargetForPogo:
-	push hl
-	push af
-	ld h,d
-	ld a,e
-	and $c0
-	ld l,a
-	cp $80
-	jr nz,+
-		; this is an enemy. check if judo works
-		inc l
-		ld a,(hl)
-		call isValidTargetForJudo
-		jr ++
-	+
-
-	cp $c0
-	jr nz,+
-		; this is a part
-		inc l
-		ld a,(hl)
-		call isValidTargetForJudo
-		jr ++
-	+
-	xor a
-	++
-	pop hl
-	ld a,h
-	pop hl
-	ret
-
-; these are bitmasks for which parts can be pogo'd on with a ring combo
-@pogoTargets:
-	; 0x00-0x07:
-	; 0x08-0x0f:
-	; 0x10-0x17:
-	; 0x18-0x1f: OCTOROK_PROJECTILE, ENEMY_ARROW, STALFOS_BONE, ENEMY_SWORD, DEKU_SCRUB_PROJECTILE
-	; 0x20-0x27: MOBLIN_BOOMERANG
-	; 0x28-0x2f: SPIKED_BALL
-	; 0x30-0x37: SUBTERROR_DIRT(ages), RAMROCK_GLOVE_FORM_ARM(ages)
-	; 0x38-0x3f: PART_38(seasons), BLUE_STALFOS_PROJECTILE(ages)
-	; 0x40-0x47: PART_47(seasons)
-	; 0x48-0x4f: PART_DIN_CRYSTAL(seasons)
-	; 0x50-0x57: GANON_TRIDENT
-	dbrev %00000000 %00000000 ; 0x00-0x0f
-	dbrev %00000000 %10101110 ; 0x10-0x1f
-	dbrev %01000000 %00100000 ; 0x20-0x2f
-.ifdef ROM_AGES
-	dbrev %00100100 %00000100 ; 0x30-0x3f
-	dbrev %00000000 %00000000 ; 0x40-0x4f
-.else
-	dbrev %00000000 %10000000 ; 0x30-0x3f
-	dbrev %00000001 %00000001 ; 0x40-0x4f
-.endif
-	dbrev %10000000 %00000000 ; 0x50-0x5f
-
 ; @param	a	Enemy id to check
 ; @param[out]	zflag set if the enemy CANNOT be picked up/thrown
 isValidTargetForJudo:
 	push hl
 	ld hl,@judoTargets
-	jr isValidTarget_helper
+	jr @isValidTarget
 
 ; these are bitmasks for which enemies can be picked up with a ring combo
 @judoTargets:
@@ -8394,7 +8336,7 @@ isValidTargetForJudo:
 	dbrev %11010000 %11111110 ; 0x40-0x4f
 	dbrev %01100000 %00000000 ; 0x50-0x5f
 
-isValidTarget_helper:
+@isValidTarget:
 	push af
 	call checkFlag
 	pop hl
@@ -10932,17 +10874,31 @@ dropLinkHeldItem:
 	or a
 	jr nz,@end
 
+.ifndef ENABLE_RING_REDUX
 	; Check that 2 <= [wLinkGrabState]&7 < 4
 	ld a,(wLinkGrabState)
 	and $07
 	sub $02
 	cp $02
 	jr nc,@end
+.endif
 
 	; Get the object Link is holding in hl
 	ld hl,w1Link.relatedObj2
+.ifdef ENABLE_RING_REDUX
+	; get the object and clear the ref
+	push bc
+	xor a
+	ld b,(hl)
+	ldi (hl),a
+	ld a,(hl)
+	ld (hl),$00
+	ld h,b
+	pop bc
+.else
 	ldi a,(hl)
 	ld h,(hl)
+.endif
 	add Object.state
 	ld l,a
 
@@ -10956,11 +10912,16 @@ dropLinkHeldItem:
 	ld (hl),a
 
 .ifdef ENABLE_RING_REDUX
-	; do not reset the angle if dropping an enemy
 	ld a,l
 	and $c0
 	cp $80
-	jr z,@end
+	jr nz,+
+		; reset flag so enemy doesn't persist across screens
+		ld l,Enemy.enabled
+		res 1,(hl)
+		; skip resetting angle if dropping an enemy
+		jr @end
+	+
 .endif
 	ld a,l
 	add Object.angle-Object.substate

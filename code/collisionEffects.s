@@ -1653,4 +1653,63 @@ collisionLinkBounce:
 	call playSound
 	ld a,COLLISIONEFFECT_BUMP
 	ret
+
+; @param	hl	Object to check
+; @param[out]	zflag set if the enemy CANNOT be pogo'd on
+isValidTargetForPogo:
+	push hl
+	push af
+	ld h,d
+	ld a,e
+	and $c0
+	ld l,a
+
+	cp $80
+	set 0,l ; move to the id
+	jr nz,+
+		; this is an enemy. check if judo works
+		ld a,(hl)
+		call isValidTargetForJudo
+		jr ++
+	+
+
+	cp $c0
+	jr nz,+
+		; this is a part
+		ld a,(hl)
+		ld hl,@pogoTargets
+		call isValidTargetForJudo@isValidTarget
+		jr ++
+	+
+	xor a
+	++
+	pop hl
+	ld a,h
+	pop hl
+	ret
+
+; these are bitmasks for which parts can be pogo'd on with a ring combo
+@pogoTargets:
+	; 0x00-0x07:
+	; 0x08-0x0f:
+	; 0x10-0x17:
+	; 0x18-0x1f: OCTOROK_PROJECTILE, ENEMY_ARROW, STALFOS_BONE, ENEMY_SWORD, DEKU_SCRUB_PROJECTILE
+	; 0x20-0x27: MOBLIN_BOOMERANG
+	; 0x28-0x2f: SPIKED_BALL
+	; 0x30-0x37: SUBTERROR_DIRT(ages), RAMROCK_GLOVE_FORM_ARM(ages)
+	; 0x38-0x3f: PART_38(seasons), BLUE_STALFOS_PROJECTILE(ages)
+	; 0x40-0x47: PART_47(seasons)
+	; 0x48-0x4f: PART_DIN_CRYSTAL(seasons)
+	; 0x50-0x57: GANON_TRIDENT
+	dbrev %00000000 %00000000 ; 0x00-0x0f
+	dbrev %00000000 %10101110 ; 0x10-0x1f
+	dbrev %01000000 %00100000 ; 0x20-0x2f
+.ifdef ROM_AGES
+	dbrev %00100100 %00000100 ; 0x30-0x3f
+	dbrev %00000000 %00000000 ; 0x40-0x4f
+.else
+	dbrev %00000000 %10000000 ; 0x30-0x3f
+	dbrev %00000001 %00000001 ; 0x40-0x4f
+.endif
+	dbrev %10000000 %00000000 ; 0x50-0x5f
 .endif

@@ -13,18 +13,23 @@ itemCode16:
 	jr z,+
 		call braceletCheckBreakable
 		jr z,+
-			ld e,Item.state
-			ld a,(de)
-			cp $03
+			ld l,Item.state
+			ld a,$03
+			cp (hl)
 			; don't drop if already dropped
 			jr z,+
-				call dropLinkHeldItem
+				; move to state 3(thrown)
+				ld (hl),a
 				; this doesn't seem to get cleared and prevents
 				; picking up other stuff, so clear it
 				ld hl,w1Link.relatedObj2
 				xor a
 				ldi (hl),a
 				ld (hl),a
+				ld hl,wLinkGrabState
+				; null out wLinkGrabState and wLinkGrabState2
+				ldi (hl),a
+				ldi (hl),a
 	+
 .endif
 	ld e,Item.state

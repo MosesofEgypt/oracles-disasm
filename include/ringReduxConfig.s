@@ -225,7 +225,6 @@
 		.db GREEN_RING			127	; 1
 		.db GOLD_RING			255	; 1
 		.endif
-		.db $ff						; terminator
 	.endm
 
 .endif

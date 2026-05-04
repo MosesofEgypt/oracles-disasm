@@ -471,7 +471,7 @@ parentItemCode_bracelet:
 			ld (hl),a
 
 			ld l,Item.animCounter
-			ld (hl),$11
+			ld (hl),$0f
 			xor a
 			inc l
 			ld (hl),a
@@ -755,7 +755,7 @@ parentItemCode_bracelet:
 			ld a,c
 			jr z,+++
 				; invert frame order
-				ld a,17
+				ld a,15
 				sub c
 			jr +++
 		++
@@ -787,8 +787,8 @@ parentItemCode_bracelet:
 				ld l,Item.state
 				ld (hl),$03
 				inc l
-				; NOTE: the substate indicates to indicate to use a shorter 
-				;		invincibility timer since the enemy will bounce less
+				; NOTE: substate indicates to use a short invincibility
+				;		timer since the enemy will bounce less
 				ld (hl),$01
 				jp @forceThrow
 
@@ -818,18 +818,19 @@ parentItemCode_bracelet:
 
 	; get the object(if it's still valid)
 	call getHeldObject
-	jr z,@@enable
-		; object is still valid. disable collisions
+
+	; object is still valid. disable collisions
+	jr z,+
 		ld l,Item.collisionType
 		res 7,(hl)
 
-		; reenable this if necessary so the object bobs while link moves
+		; set low bit if necessary so object bobs while link moves
 		ld hl,wLinkGrabState
-		ld a,$82
-		cp (hl)
-		jr nz,+
+		xor a
+		or (hl)
+		jr z,+
 			set 0,(hl)
-		+
+	+
 
 @@enable:
 	call itemEnableLinkTurning
@@ -840,11 +841,11 @@ parentItemCode_bracelet:
 ; Bits 4-5: Weight of object(affects position)
 ; Bits 0-3: Low nibble to write to wLinkGrabState2
 @swingAnimStates:
-	.db $08 $08 $08
+	.db $08 $08
 	.db $04 $04 $04
 	.db $04 $84 $84
-	.db $80 $c0 $d0
+	.db $80 $80 $d0
 	.db $d0 $90 $94
-	.db $94 $14 $14
+	.db $94 $14
 
 .endif
