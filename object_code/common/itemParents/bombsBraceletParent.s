@@ -534,7 +534,7 @@ parentItemCode_bracelet:
 		ld l,Item.substate
 		xor a
 		or (hl)
-		ld a,$d8 ; long throw timer
+		ld a,$da ; long throw timer
 		jr z,++
 			ld a,$e8 ; short throw timer
 		++
