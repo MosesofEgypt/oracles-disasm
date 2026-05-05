@@ -26,10 +26,16 @@ itemCode16:
 				xor a
 				ldi (hl),a
 				ld (hl),a
-				ld hl,wLinkGrabState
+				ld hl,wLinkGrabState2
+				; move the grabstate to the item as var38
+				ld e,Item.var38
+				ld a,(hl)
+				ld (de),a
+				xor a
 				; null out wLinkGrabState and wLinkGrabState2
-				ldi (hl),a
-				ldi (hl),a
+				ldd (hl),a
+				ldd (hl),a
+				jp @throwItem
 	+
 .endif
 	ld e,Item.state

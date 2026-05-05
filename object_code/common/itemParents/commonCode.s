@@ -299,6 +299,18 @@ itemDisableLinkMovement:
 	ld (hl),a
 	ret
 
+itemDisableLinkMovementAndTurning:
+	call itemDisableLinkMovement
+
+;;
+; @param d Parent item to add to wLinkTurningDisabled
+itemDisableLinkTurning:
+	call itemIndexToBit
+	ld hl,wLinkTurningDisabled
+	or (hl)
+	ld (hl),a
+	ret
+
 ;;
 ; @param d Parent item to clear from wLinkImmobilized
 itemEnableLinkMovement:
@@ -309,14 +321,8 @@ itemEnableLinkMovement:
 	ld (hl),a
 	ret
 
-;;
-; @param d Parent item to add to wLinkTurningDisabled
-itemDisableLinkTurning:
-	call itemIndexToBit
-	ld hl,wLinkTurningDisabled
-	or (hl)
-	ld (hl),a
-	ret
+itemEnableLinkMovementAndTurning:
+	call itemEnableLinkMovement
 
 ;;
 ; @param d Parent item to clear from wLinkTurningDisabled
@@ -454,6 +460,77 @@ updateGrabbedObjectPosition:
 	ldh (<hActiveObjectType),a
 	ld a,d
 	ldh (<hActiveObject),a
+.ifdef ENABLE_RING_REDUX
+	ld hl,w1Link.var03
+	ld a,(hl)
+	or a
+	jr z,+
+		ld b,a
+		; clear it
+		xor a
+		ld (hl),a
+	+
+	ld a,$03
+	and b
+	jr z,+
+		; special item swing animation
+		add a
+		add a
+		sub 4 ; there is no frame 0
+		ld c,a
+
+		; copy w1Link position to object
+		call getHeldObject
+		call objectCopyPosition
+
+		; store this for updating the position
+		dec hl
+		push hl
+
+		; figure out which direction link is facing(0-3)
+		ld e,<w1Link.direction
+		ld a,(de)
+		ld b,a
+
+		; get the position offset to use
+		ld a,c
+		ld hl,@swungObjectPositions
+		rst_addAToHl
+
+		; load de with the object's position values we'll be updating
+		pop de
+
+		; add offset to zh
+		call @addOffset
+
+		bit 1,b
+		jr z,+++
+			inc l
+		+++
+
+		; add offset to xh
+		bit 0,b
+		jr z,++
+			inc l
+			jr @addOffset
+		++
+
+		dec e
+		dec e
+		; add offset to yh
+@addOffset
+	ld a,(de)
+	add (hl)
+	ld (de),a
+
+	; move to next component
+	inc l
+	dec e
+	dec e
+	ret
+
++
+.endif
 
 	; If the lift animation is finished, use the animParameter to help determine which
 	; frame data to use
@@ -547,6 +624,12 @@ updateGrabbedObjectPosition:
 
 
 .ifdef ENABLE_RING_REDUX
+; follows similar usage as liftedObjectPositions, but instead is:
+;	 Z, -Y, +X/-Y, -X
+@swungObjectPositions:
+	.db $fe $f7 $09 $f7; Frame 1 (on ground, closeby)
+	.db $ff $f1 $0f $f1; Frame 2 (hit target)
+
 alchemyRingRestock:
 	; return if link has at least 1 of the item
 	or a

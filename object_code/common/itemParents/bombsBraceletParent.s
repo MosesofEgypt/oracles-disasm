@@ -341,8 +341,7 @@ parentItemCode_bracelet:
 .endif
 
 @beginPickup:
-	call itemDisableLinkMovement
-	call itemDisableLinkTurning
+	call itemDisableLinkMovementAndTurning
 	ld a,$c2
 	ld (wLinkGrabState),a
 	xor a
@@ -412,8 +411,7 @@ parentItemCode_bracelet:
 	; Re-enable link collisions & movement
 	ld hl,w1Link.collisionType
 	set 7,(hl)
-	call itemEnableLinkTurning
-	jp itemEnableLinkMovement
+	jp itemEnableLinkMovementAndTurning
 
 
 ; State 3: holding the object
@@ -460,16 +458,6 @@ parentItemCode_bracelet:
 			ld l,Item.state
 			ld (hl),$06
 
-			ld a,(wLinkAngle)
-			rlca
-			jr c,+
-				ld a,(w1Link.direction)
-				swap a
-				rrca
-			+
-			ld l,Item.angle
-			ld (hl),a
-
 			ld l,Item.animCounter
 			ld (hl),$0f
 			xor a
@@ -492,9 +480,19 @@ parentItemCode_bracelet:
 			ldi (hl),a
 			ld (hl),a
 
+			ld a,l
+			add Object.direction-Object.collisionRadiusX
+			ld l,a
+			ld a,(w1Link.direction)
+			ld (hl),a
+			; update the angle
+			ldi a,(hl)
+			swap a
+			rrca
+			ldd (hl),a
+
 			; disable link movement
-			call itemDisableLinkTurning
-			call itemDisableLinkMovement
+			call itemDisableLinkMovementAndTurning
 
 			; unsetting this will prevent updateGrabbedObjectPosition from including
 			; link's animation in the objects position(it's meant for bobbing up/down)
@@ -619,8 +617,7 @@ parentItemCode_bracelet:
 +
 	ld a,c
 	call specialObjectSetAnimationWithLinkData
-	call itemDisableLinkMovement
-	call itemDisableLinkTurning
+	call itemDisableLinkMovementAndTurning
 	ld a,SND_THROW
 	jp playSound
 
@@ -754,7 +751,7 @@ parentItemCode_bracelet:
 			and $c0
 			ld a,c
 			jr z,+++
-				; invert frame order
+				; invert frame order for throwing non-items
 				ld a,15
 				sub c
 			jr +++
@@ -765,13 +762,20 @@ parentItemCode_bracelet:
 			add Object.state-Object.enabled
 			ld l,a
 			ld (hl),$00
-			jr @@enable
+			jp itemEnableLinkMovementAndTurning
 		+++
 
 		push hl
 		ld hl,@swingAnimStates
 		rst_addAToHl
 		ld a,(hl)
+
+		; load links var03 with the custom grab state to override with
+		ld hl,w1Link.var03
+		push af
+		and $3f
+		ld (hl),a
+		pop af
 		pop hl
 
 		; if this isn't an item, release it on the
@@ -782,7 +786,7 @@ parentItemCode_bracelet:
 			jr z,++++
 			++
 				bit 6,a
-				jr z,+++
+				jr z,++
 				ld h,d
 				ld l,Item.state
 				ld (hl),$03
@@ -795,15 +799,10 @@ parentItemCode_bracelet:
 		++++
 			ld l,Item.oamFlags
 			bit 7,a
+			res 6,(hl)
 			jr z,++
 				set 6,(hl)
-				jr +++
-			++
-				res 6,(hl)
-		+++
-
-		and $3f
-		ld (wLinkGrabState2),a
+		++
 		ret
 	+
 	; reset to holding state and anim
@@ -813,8 +812,9 @@ parentItemCode_bracelet:
 	; reset links sprite
 	ld l,Item.var32
 	ld (hl),$5c
+	xor a
 	ld l,Item.var3f
-	ld (hl),$00
+	ld (hl),a
 
 	; get the object(if it's still valid)
 	call getHeldObject
@@ -831,21 +831,17 @@ parentItemCode_bracelet:
 		jr z,+
 			set 0,(hl)
 	+
-
-@@enable:
-	call itemEnableLinkTurning
-	jp itemEnableLinkMovement
+	jp itemEnableLinkMovementAndTurning
 
 ; Bit 7:    If set, vertically mirror the item
 ; Bit 6:    If set, non-item objects are released on this frame
 ; Bits 4-5: Weight of object(affects position)
-; Bits 0-3: Low nibble to write to wLinkGrabState2
+; Bits 0-3: Low nibble to use as wLinkGrabState2
 @swingAnimStates:
 	.db $08 $08
 	.db $04 $04 $04
 	.db $04 $84 $84
-	.db $80 $80 $d0
-	.db $d0 $90 $94
+	.db $81 $81 $c2
+	.db $c2 $82 $94
 	.db $94 $14
-
 .endif
