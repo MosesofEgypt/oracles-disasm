@@ -221,9 +221,6 @@ interactionCodeb6:
 @state5:
 	; Check if this is the first gasha nut harvested ever
 	ld hl,wGashaSpotFlags
-	bit 0,(hl)
-	jr nz,+
-	set 0,(hl)
 .ifdef ENABLE_GASHA_REBALANCE
 	; make the heart piece always spawn if it hasn't yet
 	bit 1,(hl)
@@ -278,14 +275,19 @@ interactionCodeb6:
 			dec b
 +
 	; ensure we didn't go too low
-	ld a,b
-	or a
-	jr nz,+
+	xor a
+	cp b
+	; ensure it can't go below tier0
+	jr c,+
 		ld b,GASHATREASURE_TIER0_RING
+	+
 
 	; skip straight to decrementing and dropping the item
 	jr @decGashaMaturity
 .else
+	bit 0,(hl)
+	jr nz,+
+	set 0,(hl)
 	ld b,GASHATREASURE_TIER3_RING
 	jr @spawnTreasure
 +
@@ -391,6 +393,21 @@ interactionCodeb6:
 .ifdef ENABLE_GASHA_REBALANCE
 	cp GASHATREASURE_HEART_PIECE
 	jr z,+
+	; convert ring tier from GASHATREASURE into TREASURE
+	dec a
+	ld b,a
+	ld hl,wGashaMaturity+1
+	ld a,(hl)
+	; use the lower 4 bits of the high byte of gasha
+	; maturity as the chance to guarantee a new ring
+	cp $10
+	jr c,+
+		ld a,$0F
+	+
+	and $0F
+	swap a
+	or a,b
+	ld c,a
 .else
 	ld hl,@gashaTreasures
 	rst_addDoubleIndex

@@ -966,32 +966,49 @@ getRandomRingOfGivenTier_body:
 	; to tier4 if all other tiers have been collected
 	ld a,d
 	or a
-	jr nz,++
-		; use e as a counter to increment through the bytes
-		ld e,$07
--
-		ld bc,$0003
---
-		; get the rings obtained mask byte in b
-		call getRingTierMasks
-		or b
-		ld b,a
-		dec c
-		ld a,c
-		cp $FF
-		jr nz,--
-			; get the rings obtained byte in a
-			call getRingsObtained
-			and b
-			cp b
-			; if the masked obtained rings doesn't equal the
-			; mask, then we don't have all tier 0-3 rings
-			jr nz,++
-				dec e
-				ld a,e
-				cp $ff
-				jr nz,-
 
+	jr nz,++
+		; get the rings obtained pointer in de
+		call getRingsObtained
+		ld d,h
+		ld e,a
+
+		; get the ring tier masks pointer in hl
+		call getRingTierMasks
+		inc hl
+
+		; c is the current tier we're checking
+		ld c,$04
+		-
+			dec c
+			jr z,+++	; checked all bytes successfully
+
+			; b is the current mask byte we're checking
+			ld b,$08
+
+			; reset to end of rings obtained array
+			ld a,e
+			add $08
+			ld e,a
+			--
+				dec b
+				jr z,-		; current tier checked. go to next
+
+				; get rings obtained byte in a
+				dec de
+				ld a,(de)
+
+				; mask it with the mask byte
+				dec hl
+				and (hl)
+				; if the mask equals the masked obtained, we've got em all
+				cp (hl)
+
+				jr z,--
+
+				; otherwise we are missing some and need to jump out
+				jr ++
++++
 	; increment to the secret ring tier
 	ld c,4
 	ld d,c
