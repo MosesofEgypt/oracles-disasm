@@ -27,7 +27,10 @@
 ;		.define ENABLE_SECRET_GASHA_RINGS 		1 	; keeping here for documentation
 	.endif
 	.ifndef ENABLE_PUNCH_WITH_ITEM
-		.define ENABLE_PUNCH_WITH_ITEM 			1
+		.define ENABLE_PUNCH_WITH_ITEM			1
+	.endif
+	.ifndef MORE_RUPEE_TYPES
+		.define MORE_RUPEE_TYPES				1 
 	.endif
 	.ifndef ENABLE_QUICK_ITEM_DROP
 		.define ENABLE_QUICK_ITEM_DROP 			1

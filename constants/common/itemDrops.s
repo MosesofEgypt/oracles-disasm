@@ -12,8 +12,13 @@
 	ITEM_DROP_PEGASUS_SEEDS           db ; $07
 	ITEM_DROP_GALE_SEEDS              db ; $08
 	ITEM_DROP_MYSTERY_SEEDS           db ; $09
+.ifdef MORE_RUPEE_TYPES
+	ITEM_DROP_10_RUPEES               db ; $0a
+	ITEM_DROP_50_RUPEES               db ; $0b
+.else
 	ITEM_DROP_0a                      db ; $0a
 	ITEM_DROP_0b                      db ; $0b
+.endif
 	ITEM_DROP_1_ORE_CHUNK             db ; $0c
 	ITEM_DROP_10_ORE_CHUNKS           db ; $0d
 	ITEM_DROP_50_ORE_CHUNKS           db ; $0e

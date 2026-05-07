@@ -1324,8 +1324,13 @@ itemDropAvailabilityTable:
 	.db (<wObtainedTreasureFlags+TREASURE_PEGASUS_SEEDS/8), 1<<(TREASURE_PEGASUS_SEEDS&7)
 	.db (<wObtainedTreasureFlags+TREASURE_GALE_SEEDS/8)   , 1<<(TREASURE_GALE_SEEDS&7)
 	.db (<wObtainedTreasureFlags+TREASURE_MYSTERY_SEEDS/8), 1<<(TREASURE_MYSTERY_SEEDS&7)
+.ifdef MORE_RUPEE_TYPES
+	.db <wc608, $ff				; ITEM_DROP_10_RUPEE
+	.db <wc608, $ff				; ITEM_DROP_50_RUPEES
+.else
 	.db <wLinkNameNullTerminator, $00	; ITEM_DROP_0a
 	.db <wLinkNameNullTerminator, $00	; ITEM_DROP_0b
+.endif
 .ifdef ROM_AGES
 	.db <wLinkNameNullTerminator, $00	; ITEM_DROP_1_ORE_CHUNK
 	.db <wLinkNameNullTerminator, $00	; ITEM_DROP_10_ORE_CHUNKS
