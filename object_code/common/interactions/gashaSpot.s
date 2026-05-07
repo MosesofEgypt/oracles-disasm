@@ -393,21 +393,23 @@ interactionCodeb6:
 .ifdef ENABLE_GASHA_REBALANCE
 	cp GASHATREASURE_HEART_PIECE
 	jr z,+
-	; convert ring tier from GASHATREASURE into TREASURE
-	dec a
-	ld b,a
-	ld hl,wGashaMaturity+1
-	ld a,(hl)
-	; use the lower 4 bits of the high byte of gasha
-	; maturity as the chance to guarantee a new ring
-	cp $10
-	jr c,+
-		ld a,$0F
+		; convert ring tier from GASHATREASURE into TREASURE
+		dec a
+		ld b,a
+		ld hl,wGashaMaturity+1
+		ld a,(hl)
+		; use the lower 4 bits of the high byte of gasha
+		; maturity as the chance to guarantee a new ring
+		cp $10
+		jr c,++
+			ld a,$0F
+		++
+		and $0F
+		swap a
+		or a,b
+		ld c,a
+		call getRandomRingOfGivenTier
 	+
-	and $0F
-	swap a
-	or a,b
-	ld c,a
 .else
 	ld hl,@gashaTreasures
 	rst_addDoubleIndex
@@ -415,10 +417,9 @@ interactionCodeb6:
 	ld c,(hl)
 	cp TREASURE_RING
 	jr nz,+
-.endif
 	call getRandomRingOfGivenTier
 +
-	ld b,a
+.endif
 	call giveTreasure
 
 	; Set Link's animation

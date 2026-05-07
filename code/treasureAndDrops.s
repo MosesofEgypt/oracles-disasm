@@ -908,7 +908,7 @@ checkItemDropAvailable_body:
 ;;
 ; Gets a random ring of the given tier ('c').
 ;
-; @param	c	Ring tier
+; @param		c	Ring tier
 ; @param[out]	c	Randomly chosen ring from the given tier (to be passed to
 ;			"giveTreasure")
 getRandomRingOfGivenTier_body:
@@ -926,7 +926,7 @@ getRandomRingOfGivenTier_body:
 	cp $04
 	jr c,+
 		ld a,$04
-+
+	+
 	ld c,a
 
 	; store the original tier in 'd' for resetting to it when calculating
@@ -936,88 +936,59 @@ getRandomRingOfGivenTier_body:
 	; keep bank0 as free as possible for other use cases
 
 	; increment 'd' to the secret tier if all tiers are filled out
-	call @trySelectRingTier4
+	call @canSelectRingTier4
 
 	; select a random ring if we hit tier 4
 	jr z,+
-
-    ; determine if we can guarantee a new ring
-	call getRandomNumber
-	cp b
-	jr nc,+
-		; try to guarantee a new ring in the current tier, continually 
-		; decrementing the tier until we either find a new ring or fail
-		call @selectUnobtainedRing
-		jr z,++
-+
-	; either selected a tier 4 ring, or we failed to guarantee a
-	; new ring, or the chance to guarantee it simply didn't proc
-	call @selectRandomTieredRing
-++
+		; determine if we can guarantee a new ring
+		call getRandomNumber
+		cp b
+		jr nc,+
+			; try to guarantee a new ring in the current tier, continually 
+			; decrementing the tier until we either find a new ring or fail
+			call @selectUnobtainedRing
+			jr z,++
+	+
+		; either selected a tier 4 ring, or we failed to guarantee a
+		; new ring, or the chance to guarantee it simply didn't proc
+		call @selectRandomTieredRing
+	++
 	pop bc
 	; load the selected ring into the output register
 	ld c,e
 	pop de
 	ret
 
-@trySelectRingTier4:
+;;
+; @param        d       Max ring tier being considered
+; @param[out]   zflag   Set if tier 4 should be selected
+@canSelectRingTier4:
 	push bc
 	; to get the highest tier ring, we'll bump from tier0
 	; to tier4 if all other tiers have been collected
 	ld a,d
 	or a
 
-	jr nz,++
-		; get the rings obtained pointer in de
-		call getRingsObtained
-		ld d,h
-		ld e,a
-
-		; get the ring tier masks pointer in hl
-		call getRingTierMasks
-		inc hl
-
-		; c is the current tier we're checking
-		ld c,$04
+	jr nz,+
+		; c is the current tier we're checking +1
+		ld c,$03
 		-
+			call @isTierCleared
+			jr nz,+	; tier not completed
 			dec c
-			jr z,+++	; checked all bytes successfully
+			jr nz,-	; more tiers to check
+				; increment to the secret ring tier
+				ld d,4
+	+
+		ld a,d
+		pop bc
+		ld c,d
+		cp $04
+		ret
 
-			; b is the current mask byte we're checking
-			ld b,$08
-
-			; reset to end of rings obtained array
-			ld a,e
-			add $08
-			ld e,a
-			--
-				dec b
-				jr z,-		; current tier checked. go to next
-
-				; get rings obtained byte in a
-				dec de
-				ld a,(de)
-
-				; mask it with the mask byte
-				dec hl
-				and (hl)
-				; if the mask equals the masked obtained, we've got em all
-				cp (hl)
-
-				jr z,--
-
-				; otherwise we are missing some and need to jump out
-				jr ++
-+++
-	; increment to the secret ring tier
-	ld c,4
-	ld d,c
-++
-	ld a,d
-	pop bc
-	cp $04
-	ret
-
+;;
+; @param        c       Ring tier to select from
+; @param[out]   e       ID of the selected ring
 @selectRandomTieredRing:
 	; get the tier table pointer
 	ld a,c
@@ -1048,65 +1019,46 @@ getRandomRingOfGivenTier_body:
 	ret nc
 	jr @selectRingByWeight
 
+;;
+; @param        d       Max ring tier being considered
+; @param[out]   e       ID of the selected ring
+; @param[out]   zflag   Set if an unobtained ring was selected
 @selectUnobtainedRing:
 	; loop over each tier until we can guarantee a new ring
-	dec c
+	push de
+	ld c,d
+	ld a,$04
 	--
-		inc c
-		; use 'e' as a counter to increment through the bytes
-		xor a
-		ld e,a
-		dec e
-
-		-
-			push bc
-			inc e
-
-			; get the rings obtained mask byte in b
-			call getRingTierMasks
-			ld b,a
-
-			; get the rings obtained byte in a
-			call getRingsObtained
-
-			; if the masked obtained rings byte equals the mask then we have all
-			; rings under this mask. need to increment to checking the next byte
-			and b
-			cp b
-			pop bc
-
-			jr nz,+
-				ld a,e
-				cp $07
-				jr nz,-
-
-		; that was the last byte, so we might have to try another tier
-		ld a,$03
 		cp c
-		jr nc,--
-			; hit the last tier. reset to original tier and select randomly
-			ld c,d
+		; if we hit the last tier, reset to original and select randomly
+		jr z,@retFailure
 
-			; unset z-flag to indicate failure
-			or $ff
-			ret
+		call @isTierCleared
+		jr nz,+	; tier not cleared, so try to get ring from it
+			; try another tier
+			inc c
+			jr --
+		+
 
-	+
 	; select a new ring by selecting a random byte and bit in the masks to
 	; start with and cycle through them until we find a ring we don't have
 	call getRandomNumber
 	; put the byte offset in 'e'
 	ld e,a
-	dec e
-
+	ld d,$09
 	-
+		; prevent infinite loops
+		dec d
+		jr z,@retFailure
+
 		; get the rings obtained byte in b
 		inc e
 		ld a,e
 		and $07
 		ld e,a
-		call getRingsObtained
-		ld b,a
+		ld hl,wRingsObtained
+		rst_addAToHl
+		ld b,(hl)
 
 		; get the mask for this tier and byte
 		call getRingTierMasks
@@ -1119,12 +1071,14 @@ getRandomRingOfGivenTier_body:
 
 	; found a byte with an unobtained ring. start with a random
 	; bit and cycle through them until we hit an unobtained ring
-	ld d,$00
+	xor a
+	ld d,a
+	; store the tier mask byte in c
 	ld c,(hl)
 
-	; since e will contain the final ring index, we need to multiply
-	; it by 8 to convert it from a byte offset into an index offset
-	ld a,e
+	; e will contain the final ring index, so we need to multiply the
+	; base by 8 to convert from a byte offset into an index offset
+	add e
 	add a
 	add a
 	add a
@@ -1157,22 +1111,65 @@ getRandomRingOfGivenTier_body:
 	ld a,d
 	and $07
 	or e
+	pop de
 	ld e,a
 
 	; set z-flag to indicate success
 	xor a
 	ret
 
+@retFailure
+	pop de
+	; reset to original tier and select randomly
+	ld c,d
+	; unset z-flag to indicate failure
+	ld a,$01
+	or a
+	ret
+
 ;;
-; @param        e       Byte offset[0-7]
-; @param[out]   a       Rings-obtained byte
-getRingsObtained:
-	; the masks table has a stride of 8, so we need to
-	; multiply the tier by 8 to get our starting offset
-	ld a,e
-	ld hl,wRingsObtained
-	rst_addAToHl
-	ld a,(hl)
+; @param        c       Ring tier to check
+; @param[out]   zflag   Set if tier is cleared
+@isTierCleared
+	push bc
+	push de
+	push af
+	; c is the current tier we're checking +1
+	inc c
+	; get the pointer to the end of the ring tier masks in hl
+	ld e,$00
+	call getRingTierMasks
+
+	; b is the current mask byte we're checking +1
+	ld b,$08
+
+	; get the pointer to the end of the rings obtained in de
+	ld de,wRingsObtained+8
+	--
+
+		; get rings obtained byte in a
+		dec de
+		ld a,(de)
+
+		; mask it with the mask byte
+		dec hl
+		and (hl)
+
+		; we've obtained all rings for this byte
+		; if the mask equals the masked obtained
+		cp (hl)
+		jr z,+
+			; otherwise we are missing some
+			or $01
+			jr ++
+		+
+		dec b
+		jr nz,--	; hit end of tier
+	++
+	pop de
+	ld a,d
+	pop de
+	pop bc
 	ret
 
 ;;
@@ -1326,7 +1323,7 @@ itemDropAvailabilityTable:
 	.db (<wObtainedTreasureFlags+TREASURE_MYSTERY_SEEDS/8), 1<<(TREASURE_MYSTERY_SEEDS&7)
 .ifdef MORE_RUPEE_TYPES
 	.db <wc608, $ff				; ITEM_DROP_10_RUPEE
-	.db <wc608, $ff				; ITEM_DROP_50_RUPEES
+	.db <wc608, $ff				; ITEM_DROP_20_RUPEES
 .else
 	.db <wLinkNameNullTerminator, $00	; ITEM_DROP_0a
 	.db <wLinkNameNullTerminator, $00	; ITEM_DROP_0b
@@ -1404,10 +1401,17 @@ itemDropSet0:
 	.db $01 $01 $01 $01 $01 $01 $01 $01
 
 itemDropSet1:
+.ifdef MORE_RUPEE_TYPES
+	.db $01 $01 $01 $01 $01 $01 $01 $01
+	.db $01 $01 $01 $02 $02 $02 $02 $02
+	.db $02 $02 $02 $03 $03 $0a $0b $00
+	.db $06 $06 $06 $06 $05 $05 $09 $05
+.else
 	.db $01 $01 $01 $01 $01 $01 $01 $01
 	.db $01 $01 $01 $01 $02 $02 $02 $02
 	.db $02 $02 $02 $03 $03 $00 $01 $02
 	.db $06 $06 $06 $06 $05 $05 $09 $05
+.endif
 
 itemDropSet2:
 	.db $01 $01 $01 $01 $01 $01 $01 $01
@@ -1416,10 +1420,17 @@ itemDropSet2:
 	.db $06 $06 $07 $07 $08 $08 $09 $05
 
 itemDropSet3:
+.ifdef MORE_RUPEE_TYPES
+	.db $0f $0f $0f $01 $01 $01 $01 $01
+	.db $01 $01 $01 $01 $02 $02 $0a $0a
+	.db $02 $02 $02 $02 $02 $02 $0a $0a
+	.db $02 $03 $03 $03 $0b $0b $00 $00
+.else
 	.db $0f $0f $0f $01 $01 $01 $01 $01
 	.db $01 $01 $01 $01 $02 $02 $02 $02
 	.db $02 $02 $02 $02 $02 $02 $02 $01
 	.db $02 $03 $03 $03 $03 $02 $00 $00
+.endif
 
 itemDropSet4:
 	.db $04 $04 $04 $04 $04 $04 $04 $04
@@ -1434,58 +1445,121 @@ itemDropSet5:
 	.db $09 $09 $09 $05 $06 $07 $08 $09
 
 itemDropSet6:
+.ifdef MORE_RUPEE_TYPES
+	.db $01 $01 $01 $01 $01 $01 $01 $01
+	.db $01 $02 $02 $02 $02 $02 $02 $02
+	.db $02 $03 $03 $0a $0a $0b $04 $04
+	.db $04 $04 $04 $04 $04 $04 $04 $00
+.else
 	.db $01 $01 $01 $01 $01 $01 $01 $01
 	.db $01 $01 $02 $02 $02 $02 $02 $02
 	.db $02 $02 $02 $03 $03 $00 $04 $04
 	.db $04 $04 $04 $04 $04 $04 $04 $04
+.endif
 
 itemDropSet7:
+.ifdef MORE_RUPEE_TYPES
+	.db $01 $01 $01 $01 $01 $01 $02 $02
+	.db $02 $03 $03 $03 $03 $0a $0b $00
+	.db $04 $04 $04 $04 $04 $04 $04 $04
+	.db $09 $08 $07 $07 $06 $06 $05 $05
+.else
 	.db $01 $01 $01 $01 $01 $01 $01 $02
 	.db $02 $02 $02 $03 $03 $03 $03 $00
 	.db $04 $04 $04 $04 $04 $04 $04 $04
 	.db $09 $08 $07 $07 $06 $06 $05 $05
+.endif
 
 itemDropSet8:
+.ifdef MORE_RUPEE_TYPES
+	.db $01 $01 $01 $01 $01 $01 $01 $01
+	.db $01 $01 $01 $01 $02 $02 $02 $02
+	.db $03 $03 $0a $0b $00 $04 $04 $04
+	.db $04 $09 $08 $07 $06 $05 $05 $07
+.else
 	.db $01 $01 $01 $01 $01 $01 $01 $01
 	.db $01 $01 $01 $01 $01 $01 $02 $02
 	.db $02 $02 $03 $03 $00 $04 $04 $04
 	.db $04 $09 $08 $07 $06 $05 $05 $07
+.endif
 
 itemDropSet9:
+.ifdef MORE_RUPEE_TYPES
+	.db $0f $0f $01 $01 $01 $01 $01 $01
+	.db $01 $01 $02 $02 $02 $02 $02 $02
+	.db $02 $02 $03 $03 $00 $0a $0a $0b
+	.db $06 $06 $06 $06 $05 $05 $09 $09
+.else
 	.db $0f $0f $01 $01 $01 $01 $01 $01
 	.db $01 $01 $01 $01 $02 $02 $02 $02
 	.db $02 $02 $02 $03 $03 $00 $01 $02
 	.db $06 $06 $06 $06 $05 $05 $09 $09
+.endif
 
 itemDropSetA:
+.ifdef MORE_RUPEE_TYPES
+	.db $01 $01 $01 $01 $01 $01 $02 $02
+	.db $02 $02 $03 $03 $0a $0b $00 $04
+	.db $04 $04 $04 $04 $04 $04 $04 $04
+	.db $04 $09 $08 $07 $07 $06 $05 $06
+.else
 	.db $01 $01 $01 $01 $01 $01 $02 $02
 	.db $02 $02 $02 $03 $03 $03 $00 $04
 	.db $04 $04 $04 $04 $04 $04 $04 $04
 	.db $04 $09 $08 $07 $07 $06 $05 $06
+.endif
 
 itemDropSetB:
+.ifdef MORE_RUPEE_TYPES
+	.db $01 $01 $01 $02 $02 $02 $02 $03
+	.db $03 $03 $0a $0b $00 $04 $04 $04
+	.db $04 $09 $09 $08 $08 $08 $07 $07
+	.db $07 $06 $06 $06 $09 $05 $05 $05
+.else
 	.db $01 $01 $01 $01 $02 $02 $02 $02
 	.db $02 $03 $03 $03 $00 $04 $04 $04
 	.db $04 $09 $09 $08 $08 $08 $07 $07
 	.db $07 $06 $06 $06 $09 $05 $05 $05
+.endif
 
 itemDropSetC:
+.ifdef MORE_RUPEE_TYPES
+	.db $01 $01 $01 $01 $02 $02 $02 $02
+	.db $02 $03 $03 $03 $03 $0a $0a $0b
+	.db $04 $04 $04 $04 $04 $04 $04 $04
+	.db $04 $04 $04 $04 $04 $04 $04 $04
+.else
 	.db $01 $01 $01 $01 $02 $02 $02 $02
 	.db $02 $02 $03 $03 $03 $03 $03 $03
 	.db $04 $04 $04 $04 $04 $04 $04 $04
 	.db $04 $04 $04 $04 $04 $04 $04 $04
+.endif
 
 itemDropSetD:
+.ifdef MORE_RUPEE_TYPES
+	.db $02 $02 $02 $02 $02 $02 $02 $02
+	.db $03 $03 $03 $03 $03 $0a $0a $0b
+	.db $09 $09 $08 $08 $08 $07 $07 $07
+	.db $06 $06 $06 $05 $05 $05 $09 $05
+.else
 	.db $02 $02 $02 $02 $02 $02 $02 $02
 	.db $02 $02 $03 $03 $03 $03 $03 $03
 	.db $09 $09 $08 $08 $08 $07 $07 $07
 	.db $06 $06 $06 $05 $05 $05 $09 $05
+.endif
 
 itemDropSetE:
+.ifdef MORE_RUPEE_TYPES
+	.db $01 $01 $01 $01 $01 $01 $01 $01
+	.db $01 $01 $01 $01 $01 $01 $02 $02
+	.db $02 $02 $02 $02 $02 $02 $02 $02
+	.db $02 $03 $03 $03 $0a $0a $0b $0b
+.else
 	.db $01 $01 $01 $01 $01 $01 $01 $01
 	.db $01 $01 $01 $01 $01 $01 $01 $02
 	.db $01 $02 $02 $02 $02 $02 $02 $02
 	.db $02 $02 $02 $02 $03 $03 $03 $03
+.endif
 
 itemDropSetF:
 	.db $00 $00 $00 $00 $00 $00 $00 $00

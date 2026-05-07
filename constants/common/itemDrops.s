@@ -14,7 +14,7 @@
 	ITEM_DROP_MYSTERY_SEEDS           db ; $09
 .ifdef MORE_RUPEE_TYPES
 	ITEM_DROP_10_RUPEES               db ; $0a
-	ITEM_DROP_50_RUPEES               db ; $0b
+	ITEM_DROP_20_RUPEES               db ; $0b
 .else
 	ITEM_DROP_0a                      db ; $0a
 	ITEM_DROP_0b                      db ; $0b
