@@ -720,11 +720,11 @@ linkUpdateDamageToApplyForRings:
 	+
 
 	sub b
-	ldbc CURSE_POWER_RING, GOLD_RING
+	ldbc CURSED_RED_RING, GOLD_RING
 	call eitherRingActive
 	ld b,$00
 	jr nz,+
-		ld b,CURSE_POWER_RING_DEF_MOD
+		ld b,CURSED_RED_RING_DEF_MOD
 	+
 	jr nc,+
 		sub GOLD_RING_DEF_MOD
@@ -904,7 +904,7 @@ linkApplyDamage:
 	ld b,a
 	jr nz,+
 
-	ld a,CURSE_POWER_RING
+	ld a,CURSED_RED_RING
 	call cpActiveRing
 	jr nz,+
 		; prevent hardlock due to fairy waiting till link is healed

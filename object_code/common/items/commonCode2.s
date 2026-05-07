@@ -240,11 +240,11 @@ itemCalculateSwordDamage:
 	+
 	; checkCursed
 	add b
-	ldbc CURSE_POWER_RING, GOLD_RING
+	ldbc CURSED_RED_RING, GOLD_RING
 	call eitherRingActive
 	ld b,$00
 	jr nz,+
-		ld b,CURSE_POWER_RING_ATK_MOD
+		ld b,CURSED_RED_RING_ATK_MOD
 	+
 	; checkGold
 	jr nc,+

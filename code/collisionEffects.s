@@ -1104,6 +1104,16 @@ killEnemyOrPart:
 collisionEffect36:
 	ld h,d
 	ldh a,(<hActiveObjectType)
+.ifdef ENABLE_RING_REDUX
+	; convert elec shocks on items into regular attacks
+	ld a,b ; load object upper byte address into a
+	cp >w1Link
+		jr z,+
+		ld a,GREEN_HOLY_RING
+		call cpActiveRing
+		jp z,collisionEffect09
+	+
+.endif
 	add Object.var2a
 	ld l,a
 	ld (hl),$80|ITEMCOLLISION_ELECTRIC_SHOCK

@@ -8559,7 +8559,7 @@ fractionOf8Multiply:
 applyCurseArmorDamageCap:
 	; if wearing blue curse, all damage becomes 1/4 heart
 	push af
-	ld a,CURSE_ARMOR_RING
+	ld a,CURSED_BLUE_RING
 	call cpActiveRing
 	jr nz,+
 		pop af
