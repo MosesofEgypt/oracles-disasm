@@ -3533,8 +3533,10 @@ updateStatusBar_body:
 	xor a
 	ld ($ff00+R_SVBK),a
 	ld a,(wcbe8)
+.ifndef ONE_HANDED_BIGGORON_SWORD
 	bit 7,a
 	jr nz,@biggoronSword
+.endif
 
 	; Update item sprites
 	ld e,$10
@@ -3600,11 +3602,13 @@ updateStatusBar_body:
 	ldi (hl),a
 	ret
 
+.ifndef ONE_HANDED_BIGGORON_SWORD
 @biggoronSword:
 	ld hl,wOam
 	ld de,@oamData
 	ld b,$10
 	jp copyMemoryReverse
+.endif
 
 @oamData:
 	.db $10 $18 $78 $0b ; B Item
@@ -3633,10 +3637,12 @@ correctAddressForExtraHeart:
 loadEquippedItemGfx:
 	call loadStatusBarMap
 
+.ifndef ONE_HANDED_BIGGORON_SWORD
 	; Return if biggoron sword is equipped
 	ld a,(wcbe8)
 	rlca
 	ret c
+.endif
 
 	ld a,(wInventoryB)
 	ld de,wBItemTreasure
@@ -3795,10 +3801,12 @@ applyTreasureLevelRingModifier:
 ; Note: returns with wram bank 4 loaded.
 ;
 drawItemTilesOnStatusBar:
+.ifndef ONE_HANDED_BIGGORON_SWORD
 	; Return if biggoron's sword equipped
 	ld a,(wcbe8)
 	bit 7,a
 	ret nz
+.endif
 
 	ld a,$04
 	ld ($ff00+R_SVBK),a
@@ -4338,12 +4346,14 @@ loadStatusBarMap:
 	jr c,+
 	inc c
 +
+.ifndef ONE_HANDED_BIGGORON_SWORD
 	; Check if biggoron's sword equipped
 	ld a,(wInventoryB)
 	cp ITEM_BIGGORON_SWORD
 	jr nz,+
 	set 7,c
 +
+.endif
 	ld hl,wStatusBarNeedsRefresh
 	ldd a,(hl)
 	rrca
@@ -4362,9 +4372,11 @@ loadStatusBarMap:
 	ld hl,wBItemTreasure
 	ld b,$0a
 	call clearMemory
+.ifndef ONE_HANDED_BIGGORON_SWORD
 	bit 7,c
 	ld a,GFXH_HUD_LAYOUT_BIGGORON_SWORD
 	jr nz,+
+.endif
 
 	; Load one of:
 	; - GFXH_HUD_LAYOUT_NORMAL (<14 hearts)
@@ -4647,15 +4659,18 @@ inventoryMenuState1:
 	ld a,(wInventorySubmenu0CursorPos)
 	add <wInventoryStorage
 	ld l,a
+.ifndef ONE_HANDED_BIGGORON_SWORD
 	ld b,ITEM_BIGGORON_SWORD
 	ld a,(hl)
 	cp b
 	jr z,@@equipBiggoron
+.endif
 
 	ld a,(de)
 	cp b
 	jr nz,@@swapItems
 
+.ifndef ONE_HANDED_BIGGORON_SWORD
 @@unequipBiggoron:
 	ld c,l
 	ld l,<wInventoryB
@@ -4665,6 +4680,7 @@ inventoryMenuState1:
 	ld l,c
 	ld a,b
 	ld (de),a
+.endif
 @@swapItems:
 	ld a,(de)
 	ld c,a
@@ -4673,6 +4689,7 @@ inventoryMenuState1:
 	ld (hl),c
 	ret
 
+.ifndef ONE_HANDED_BIGGORON_SWORD
 @@equipBiggoron:
 	ld (hl),$00
 	call @@swapItems
@@ -4685,6 +4702,7 @@ inventoryMenuState1:
 	inc l
 	ld (hl),b
 	ret
+.endif
 
 ;;
 ; @param a Item to put in a blank slot
@@ -12027,6 +12045,7 @@ quickSwapHeldItems_body:
 	ld hl,wInventoryStorage
 	ld de,wInventoryB
 
+.ifndef ONE_HANDED_BIGGORON_SWORD
 	; if either the first or second items are the
 	; biggorons sword, we need to swap both with it
 	ld a,(hl)
@@ -12042,7 +12061,7 @@ quickSwapHeldItems_body:
 	ld a,(de)
 	cp ITEM_BIGGORON_SWORD
 	jp z,@swapFromBiggoron
-
+.endif
 	call @swapItems
 	inc de
 	inc hl
@@ -12055,6 +12074,7 @@ quickSwapHeldItems_body:
 	ld (hl),c
 	ret
 
+.ifndef ONE_HANDED_BIGGORON_SWORD
 @swapFromBiggoron:
 	call @swapItems
 	inc de
@@ -12079,6 +12099,7 @@ quickSwapHeldItems_body:
 	inc e
 	ld (de),a
 	ret
+.endif
 
 ;;
 ; @param a Item to put in a blank slot

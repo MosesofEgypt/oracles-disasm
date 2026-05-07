@@ -29,6 +29,9 @@
 	.ifndef ENABLE_PUNCH_WITH_ITEM
 		.define ENABLE_PUNCH_WITH_ITEM			1
 	.endif
+	.ifndef ONE_HANDED_BIGGORON_SWORD
+		.define ONE_HANDED_BIGGORON_SWORD		1 	; keeping here for documentation
+	.endif
 	.ifndef MORE_RUPEE_TYPES
 		.define MORE_RUPEE_TYPES				1 
 	.endif
