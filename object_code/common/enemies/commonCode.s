@@ -1264,8 +1264,21 @@ ecom_held_substate0_struggle:
 	jp ecom_incSubstate
 
 ecom_held_substate1_struggling:
+	ld a,(wLinkGrabState)
+	or a
 	ld h,d
 	ld l,Enemy.stunCounter
+	jr nz,+
+		ld a,(w1ReservedItemC.enabled)
+		or a
+		jr nz,+
+			; if enemy not held and there's no bracelet
+			; object, reduce stun to almost instant release
+			ld a,(hl)
+			cp $03
+			jr c,+
+				ld (hl),$03
+	+
 	ld a,(hl)
 	cp $02 ; drop and release with 2 frames left
 	ret nc

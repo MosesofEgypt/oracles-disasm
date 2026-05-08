@@ -5,39 +5,6 @@
 ;
 ; ITEM_BRACELET
 itemCode16:
-.ifdef ENABLE_RING_REDUX
-	; if the item hit something, immediately break it if it's breakable
-	ld h,d
-	ld l,Item.var2a
-	bit 0,(hl)
-	jr z,+
-		call braceletCheckBreakable
-		jr z,+
-			ld l,Item.state
-			ld a,$03
-			cp (hl)
-			; don't drop if already dropped
-			jr z,+
-				; move to state 3(thrown)
-				ld (hl),a
-				; this doesn't seem to get cleared and prevents
-				; picking up other stuff, so clear it
-				ld hl,w1Link.relatedObj2
-				xor a
-				ldi (hl),a
-				ld (hl),a
-				ld hl,wLinkGrabState2
-				; move the grabstate to the item as var38
-				ld e,Item.var38
-				ld a,(hl)
-				ld (de),a
-				xor a
-				; null out wLinkGrabState and wLinkGrabState2
-				ldd (hl),a
-				ldd (hl),a
-				jp @throwItem
-	+
-.endif
 	ld e,Item.state
 	ld a,(de)
 	rst_jumpTable
@@ -69,6 +36,24 @@ itemCode16:
 @state1:
 @state2:
 	ld h,d
+.ifdef ENABLE_RING_REDUX
+	; if link isn't holding something, we shouldn't be in a held state
+	ld a,(wLinkGrabState)
+	or a
+	jr nz,+
+		ld l,Item.substate
+		or (hl)
+		; dont drop if about to drop anyway
+		call z,@forceDrop
+		jr ++
+	+
+		; if the item hit something, immediately break it if it's breakable
+		ld l,Item.var2a
+		bit 0,(hl)
+		call nz,braceletCheckBreakable
+		call nz,@forceDrop
+	++
+.endif
 	ld l,Item.substate
 	ld a,(hl)
 	or a
@@ -85,6 +70,39 @@ itemCode16:
 	set 7,(hl)
 
 	jr @throwItem
+
+.ifdef ENABLE_RING_REDUX
+@forceDrop
+	; move substate to thrown
+	ld l,Item.substate
+	ld (hl),$01
+	; this doesn't seem to get cleared and prevents
+	; picking up other stuff, so clear it
+	ld hl,w1Link.relatedObj2
+	xor a
+	ldi (hl),a
+	ld (hl),a
+	ld hl,wLinkGrabState2
+	; move the grabstate to the item as var38
+	ld e,Item.var38
+	ld a,(hl)
+	ld (de),a
+	xor a
+	; null out wLinkGrabState and wLinkGrabState2
+	ldd (hl),a
+	ldd (hl),a
+	; null out direction
+	cpl
+	ld h,d
+	ld l,Object.direction
+	ld (hl),a
+	; update the angle
+	ldi a,(hl)
+	swap a
+	rrca
+	ldd (hl),a
+	ret
+.endif
 
 
 ; When a bracelet object is created that doesn't come from a tile on the ground, it is

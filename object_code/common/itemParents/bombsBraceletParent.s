@@ -467,29 +467,30 @@ parentItemCode_bracelet:
 			; retrieve the held object
 			call getHeldObject
 
-			; Enable collisions on the throwable
+			; if this isn't an item, don't do any of this
 			ld a,l
-			add Object.collisionType-Object.enabled
-			ld l,a
-			set 7,(hl)
-			inc l
-			inc l
+			or a
+			jr nz,+
+				; Enable collisions on the throwable
+				ld l,Object.collisionType
+				set 7,(hl)
+				inc l
+				inc l
 
-			; set the collision radius
-			ld a,$08
-			ldi (hl),a
-			ld (hl),a
+				; set the collision radius
+				ld a,$08
+				ldi (hl),a
+				ld (hl),a
 
-			ld a,l
-			add Object.direction-Object.collisionRadiusX
-			ld l,a
-			ld a,(w1Link.direction)
-			ld (hl),a
-			; update the angle
-			ldi a,(hl)
-			swap a
-			rrca
-			ldd (hl),a
+				ld l,Object.direction
+				ld a,(w1Link.direction)
+				ld (hl),a
+				; update the angle
+				ldi a,(hl)
+				swap a
+				rrca
+				ldd (hl),a
+			+
 
 			; disable link movement
 			call itemDisableLinkMovementAndTurning
