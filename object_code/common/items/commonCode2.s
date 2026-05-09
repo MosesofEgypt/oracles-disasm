@@ -72,8 +72,7 @@ tryBreakTileWithExpertsRing:
 	jr nz,+
 	.ifdef ROM_AGES
 		; no destroying dirt while deep underwater
-		ld a,(wActiveCollisions)
-		cp 4
+		call isDeepUnderwater
 		jr z,+
 	.endif
 

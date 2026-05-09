@@ -1207,19 +1207,19 @@ getRingTierMasks:
 	dbrev %00001000
 	dbrev %00010001
 	dbrev %00000011
-	dbrev %11100000
+	dbrev %11000000
 	dbrev %01000000
 	dbrev %00000000
-	dbrev %00000000
+	dbrev %00000001
 	; tier2
 	dbrev %00001000
 	dbrev %00100100
 	dbrev %00000000
-	dbrev %01000101
-	dbrev %00010000
+	dbrev %01100000
+	dbrev %00011100
 	dbrev %00000000
 	dbrev %10100000
-	dbrev %00001001
+	dbrev %00000001
 	; tier3
 	dbrev %00000000
 	dbrev %00000000

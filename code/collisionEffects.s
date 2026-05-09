@@ -1103,17 +1103,26 @@ killEnemyOrPart:
 ; COLLISIONEFFECT_ELECTRIC_SHOCK
 collisionEffect36:
 	ld h,d
-	ldh a,(<hActiveObjectType)
 .ifdef ENABLE_RING_REDUX
 	; convert elec shocks on items into regular attacks
 	ld a,b ; load object upper byte address into a
 	cp >w1Link
-		jr z,+
+	jr z,+
 		ld a,GREEN_HOLY_RING
 		call cpActiveRing
 		jp z,collisionEffect09
 	+
+	; check if azuchu
+	push hl
+	ld h,b
+	ld l,$01
+	ld a,(hl)
+	cp ITEM_AZUCHU
+	pop hl
+	; if azuchu, convert to regular attack
+	jp z,collisionEffect09
 .endif
+	ldh a,(<hActiveObjectType)
 	add Object.var2a
 	ld l,a
 	ld (hl),$80|ITEMCOLLISION_ELECTRIC_SHOCK

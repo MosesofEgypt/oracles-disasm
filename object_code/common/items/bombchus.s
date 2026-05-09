@@ -2,6 +2,11 @@
 ;;
 ; ITEM_AZUCHU
 itemCode10:
+	; if link is disabled, don't process anything
+	ld a,(wDisabledObjects)
+	bit 0,a
+	ret nz
+
 	call itemCode0d@itemCode0d_noExplosion
 
 	ld e,Item.substate
@@ -143,6 +148,16 @@ itemCode10:
 
 	; revert to slow speed
 	ld a,SPEED_80
+	.ifdef ROM_AGES
+	.ifdef ENABLE_RING_REDUX
+		; slower movement while deep underwater
+		call isDeepUnderwater
+		jr nz,+
+			ld a,SPEED_40
+		+
+	.endif
+	.endif
+
 	ld l,Item.speed
 	ldi (hl),a
 	ld  (hl),a
@@ -314,6 +329,16 @@ itemCode0d:
 	ld l,Item.speedTmp
 	ld (hl),SPEED_80
 
+	.ifdef ROM_AGES
+	.ifdef ENABLE_RING_REDUX
+		; slower movement while deep underwater
+		call isDeepUnderwater
+		jr nz,+
+			ld (hl),SPEED_40
+		+
+	.endif
+	.endif
+
 	ld l,Item.counter1
 	ld (hl),$10
 
@@ -341,6 +366,10 @@ itemCode0d:
 	ld (hl),$ff
 
 	call bombchuSetAnimationFromAngle
+.ifdef ENABLE_RING_REDUX
+	call isAzuchu
+	ret z
+.endif
 	jp bombchuSetPositionInFrontOfLink
 
 
@@ -914,11 +943,18 @@ bombchuCheckForEnemyTarget:
 			ldi a,(hl)
 			or a
 			jr z,+
-				; check it's a collectable
+				; check it's an item drop
 				ld a,(hl)
 				cp PART_ITEM_DROP
 				jr z,@foundTarget
-					; TODO: check that azuchu collided with part
+
+				; check it's an item drop from maple
+				cp PART_ITEM_FROM_MAPLE
+				jr z,@foundTarget
+
+				; check it's an item drop from maple
+				cp PART_ITEM_FROM_MAPLE_2
+				jr z,@foundTarget
 	+
 .endif
 	ld l,Enemy.enabled
@@ -977,6 +1013,11 @@ bombchuCheckForEnemyTarget:
 	ld (hl),$0c
 	ld l,Item.speedTmp
 	ld (hl),SPEED_1c0
+	; slower movement while deep underwater
+	call isDeepUnderwater
+	jr nz,+
+		ld (hl),SPEED_100
+	+
 
 	; Increment state
 	ld l,Item.state

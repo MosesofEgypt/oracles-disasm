@@ -191,7 +191,7 @@
 		.db GREEN_HOLY_RING		122	; 2
 		.db BLUE_HOLY_RING		143	; 2
 		.db RED_HOLY_RING		163	; 2
-		.db AZUCHU_RING			204	; 4
+		.db FAIRYS_RING			204	; 4	; yes this is in the tiers twice
 		.db HEART_RING_L1		214	; 1
 		.db HASTE_RING			245	; 3
 		.db LIGHT_RING_L1		255	; 1
@@ -207,7 +207,7 @@
 		.db BOMBPROOF_RING		153	; 1
 		.db ROCS_RING			178	; 3
 		.db HIKERS_RING			187	; 1
-		.db FAIRYS_RING			221	; 4
+		.db FAIRYS_RING			221	; 4	; yes this is in the tiers twice
 		.db RED_JOY_RING		229	; 1
 		.db BLUE_JOY_RING		255	; 3
 	.endm
@@ -231,20 +231,22 @@
 	; NOTE: only available if every other tiered ring was obtained
 	.macro TIER4_RINGS_AND_CUTOFFS
 		.ifdef ENABLE_SECRET_GASHA_RINGS
-		.db GREEN_RING			76	; 3
-		.db GOLD_RING			153	; 3
+		.db GREEN_RING			80	; 5
+		.db GOLD_RING			160	; 5
+		.db AZUCHU_RING			191	; 2
 		; these rings are normally obtained with secrets, but
 		; we'll allow them to be obtained via gasha nut if the
 		; player was diligent enough to get every tier 1-4 ring
 		; ages secret
-		.db SPIN_RING			178	; 1
-		.db FARMERS_RING		204	; 1
+		.db SPIN_RING			207	; 1
+		.db FARMERS_RING		223	; 1
 		; seasons secret
-		.db CHARGE_RING			229	; 1
+		.db CHARGE_RING			239	; 1
 		.db ZORA_SCALE_RING		255	; 1
 		.else
-		.db GREEN_RING			127	; 1
-		.db GOLD_RING			255	; 1
+		.db GREEN_RING			109	; 3
+		.db GOLD_RING			219	; 3
+		.db AZUCHU_RING			255	; 1
 		.endif
 	.endm
 

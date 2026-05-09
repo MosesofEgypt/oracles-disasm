@@ -8260,6 +8260,26 @@ spawnAzuchu:
 	and $0f
 	ret nz
 
+	; don't spawn if swimming or in the air
+	ld a,(wLinkSwimmingState)
+	ld l,a
+	; swimming is fine if sidescrolling though
+	ld a,(wTilesetFlags)
+	and TILESETFLAG_SIDESCROLL
+	ld a,l
+	jr z,+
+		xor a
+	+
+
+	ld hl,(wLinkInAir)
+	or (hl)
+	ret nz
+
+	; don't spawn if not regular link object(i.e. riding raft/companion)
+	ld a,(wLinkObjectIndex)
+	cp >w1Link
+	ret nz
+
 	; backup relatedObject2 of link since it's gonna get overwritten
 	ld hl,w1Link.relatedObj2
 	ld e,(hl)
@@ -8299,6 +8319,16 @@ spawnAzuchu:
 	ld (hl),d
 	dec l
 	ld (hl),e
+	ret
+
+isDeepUnderwater:
+	push bc
+	push af
+	ld a,(wActiveCollisions)
+	cp 4
+	pop bc
+	ld a,b
+	pop bc
 	ret
 
 wasOppositeItemButtonPressed:
