@@ -40,16 +40,13 @@ Combo Effects:
         Enables use of most items while swimming in shallow water(including the feather).
         Link must first dive so he appears as a shadow(prevents players from jumping whirlpools).
 
-    10: Underwater Items:
-        Enables use of items in slot B while underwater(does not prevent you from surfacing).
-
-    11: Acrobat:
+    10: Acrobat:
         Landing on an enemy causes Link to vault off them into the air.
 
-    12: Expert Acrobat:
+    11: Expert Acrobat:
         Landing on an enemy causes Link to vault off them into the air, while stunning them.
 
-    13: Kenpo Master:
+    12: Kenpo Master:
         Allows Link to destroy various types of tiles with his fists.
         Enables much of the game to be traversed without pausing to swap items.
         NOTE: Must have acquired specific items to destroy specific tiles.
@@ -58,25 +55,25 @@ Combo Effects:
             Dirt mound    - Shovel
             Cracked walls - Bombs
 
-    14: Hadouken:
+    13: Hadouken:
         Punching shoots a fireball that burns enemies on contact.
         Has the same heart requirements as shooting a sword beam.
         NOTE: Must have acquired the Slingshot or Seed Shooter.
 
-    15: Hurricane Spin:
+    14: Hurricane Spin:
         Spin-attack 15 times while being able to move, but get dizzy once it ends.
 
-    16: Enter the SHMUP:
+    15: Enter the SHMUP:
         Hold charged sword to continually fire sword beams.
 
-    17: Become the Beamos:
+    16: Become the Beamos:
         Up to 2 sword beams on screen at once.
 
-    18: Smashing Board:
+    17: Smashing Board:
         Shield can be used as a weapon to tackle enemies.
         Damage dealt increases with shield level and your speed.
 
-    19: Judo Master:
+    18: Judo Master:
         Held items can be used to bonk enemies.
         Most enemies can be picked up and thrown.
         Press the button that the item was not picked up with to bonk.
@@ -98,18 +95,16 @@ Combo Requirements:
     6:  Blast Ring + Discovery Ring
     7:  Green and/or Gold Joy Ring + Alchemy Ring
     8:  Blue  and/or Gold Joy Ring + Heart Ring L-1 and/or L-2
-    9:  Swimmer's Ring + Zora Ring
-    10: Any combination of two of the following:
-        Swimmer's Ring
+    9:  Any combination of two of the following:
+        Zora Scale Ring
         Mermaid Suit
         Roc's Ring
-        Zora Ring
-    11: Roc's Ring + Steadfast Ring
-    12: Acrobat Combo + Expert's Ring
-    13: Expert's Ring + Fist Ring
-    14: Expert's Ring + Energy Ring
-    15: Spin Ring   + Charge Ring
-    16: Energy Ring + Charge Ring
-    17: Energy Ring + Light Ring L-1 or L-2
-    18: Haste Ring + Steadfast Ring
-    19: Toss Ring  + Expert's Ring
+    10: Roc's Ring + Steadfast Ring
+    11: Acrobat Combo + Expert's Ring
+    12: Expert's Ring + Fist Ring
+    13: Expert's Ring + Energy Ring
+    14: Spin Ring   + Charge Ring
+    15: Energy Ring + Charge Ring
+    16: Energy Ring + Light Ring L-1 or L-2
+    17: Haste Ring + Steadfast Ring
+    18: Toss Ring  + Expert's Ring

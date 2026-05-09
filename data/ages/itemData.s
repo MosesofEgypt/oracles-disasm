@@ -22,7 +22,11 @@ itemData:
 	.db $00 $2c $0d ; $0d: ITEM_BOMBCHUS
 	.db $00 $00 $00 ; $0e: ITEM_FLUTE
 	.db $00 $52 $08 ; $0f: ITEM_SHOOTER
+.ifdef ENABLE_RING_REDUX
+	.db $00 $2c $0c ; $10: ITEM_AZUCHU
+.else
 	.db $00 $00 $00 ; $10: ITEM_10
+.endif
 	.db $00 $00 $00 ; $11: ITEM_HARP
 	.db $00 $00 $00 ; $12: ITEM_12
 	.db $00 $52 $09 ; $13: ITEM_SLINGSHOT

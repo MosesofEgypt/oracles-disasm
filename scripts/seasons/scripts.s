@@ -8024,7 +8024,11 @@ masterDiverScript_swimmingChallengeDone:
 @finishedInTime:
 	wait 40
 	showtextlowindex <TX_4c39
+.ifdef ENABLE_RING_REDUX
+	asm15 scriptHelp.linkedScript_giveRing, ZORA_SCALE_RING
+.else
 	asm15 scriptHelp.linkedScript_giveRing, SWIMMERS_RING
+.endif
 	setcounter1 $02
 	setglobalflag GLOBALFLAG_DONE_DIVER_SECRET
 -

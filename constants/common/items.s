@@ -28,7 +28,11 @@
 	ITEM_BOMBCHUS			db ; 0x0d
 	ITEM_FLUTE			db ; 0x0e
 	ITEM_SHOOTER			db ; 0x0f
+.ifdef ENABLE_RING_REDUX
+	ITEM_AZUCHU				db ; 0x10
+.else
 	ITEM_10				db ; 0x10
+.endif
 	ITEM_HARP			db ; 0x11
 	ITEM_12				db ; 0x12
 	ITEM_SLINGSHOT			db ; 0x13

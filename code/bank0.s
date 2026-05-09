@@ -8254,6 +8254,53 @@ removeRing:
 .endif
 
 .ifdef ENABLE_RING_REDUX
+spawnAzuchu:
+	; only run every few frames to prevent interaction lag
+	ld a,(wFrameCounter)
+	and $0f
+	ret nz
+
+	; backup relatedObject2 of link since it's gonna get overwritten
+	ld hl,w1Link.relatedObj2
+	ld e,(hl)
+	inc l
+	ld d,(hl)
+	push de
+	push hl
+
+	; must point to w1Link
+	ld (hl),>w1Link
+
+	; create azuchu if not exists
+	ldbc ITEM_AZUCHU,$01
+	ldde >w1Link,$01
+
+	ldh a,(<hRomBank)
+	push af
+	callfrombank0 bank6.itemCreateChildWithID
+	jr nc,+
+		pop af
+		rst_setrombank
+		jr ++
+	+
+		pop af
+		rst_setrombank
+
+		; clear parent
+		xor a
+		ld l,Item.relatedObj1
+		ldi (hl),a
+		ld  (hl),a
+	++
+
+	; restore link child object
+	pop hl
+	pop de
+	ld (hl),d
+	dec l
+	ld (hl),e
+	ret
+
 wasOppositeItemButtonPressed:
 	; get the opposite button of the one this item is assigned
 	; to and use it to determine if we smack with the item
@@ -8396,19 +8443,13 @@ tripleHeartJoyComboActive:
 
 dolphinComboActive:
 	push bc
-	ldbc SWIMMERS_RING,ZORA_RING
+	ldbc ZORA_SCALE_RING,ROCS_RING
 	call eitherRingActive
 	ld b,0
 	jr nz,+
 		inc b
 	+
 	jr nc,+
-		inc b
-	+
-
-	ld a,ROCS_RING
-	call cpActiveRing
-	jr nz,+
 		inc b
 	+
 
@@ -8423,11 +8464,6 @@ dolphinComboActive:
 	ret c
 	xor a
 	ret
-
-underwaterItemsComboActive:
-	push bc
-	ldbc SWIMMERS_RING,ZORA_RING
-	jr bothRingsActiveAndPopBC
 
 enemyPogoComboActive:
 	push bc
@@ -8520,6 +8556,14 @@ swordBeamHeartCutoff:
 	+
 	ret nc
 	ld c,LIGHT_RING_L1_CUTOFF
+	ret
+
+getBombLimit:
+	ld e,$01
+	ld a,BOMBERS_RING
+	call cpActiveRing
+	ret nz
+	ld e,$04
 	ret
 
 fractionOf8Multiply:

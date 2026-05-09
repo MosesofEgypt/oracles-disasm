@@ -83,7 +83,11 @@ updateItems:
 	.dw itemCode0d ; 0x0d
 	.dw itemDelete ; 0x0e
 	.dw itemCode0f ; 0x0f
+.ifdef ENABLE_RING_REDUX
+	.dw itemCode10 ; 0x10
+.else
 	.dw itemDelete ; 0x10
+.endif
 	.dw itemDelete ; 0x11
 	.dw itemDelete ; 0x12
 	.dw itemCode13 ; 0x13

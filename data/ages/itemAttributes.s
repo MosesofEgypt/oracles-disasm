@@ -23,7 +23,11 @@ itemAttributes:
 	.db $18 $00 $fc $00 ; $0d: ITEM_BOMBCHUS
 	.db $12 $00 $00 $00 ; $0e: ITEM_FLUTE
 	.db $12 $00 $00 $00 ; $0f: ITEM_SHOOTER
+.ifdef ENABLE_RING_REDUX
+	.db $04 $00 $ff $00 ; $0d: ITEM_AZUCHU
+.else
 	.db $12 $00 $00 $00 ; $10: ITEM_10
+.endif
 	.db $12 $00 $00 $00 ; $11: ITEM_HARP
 	.db $12 $00 $00 $00 ; $12: ITEM_12
 	.db $12 $00 $00 $00 ; $13: ITEM_SLINGSHOT

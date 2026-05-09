@@ -3269,7 +3269,11 @@ linkUpdateDrowning:
 ;;
 ; Sets Link's speed, speedTmp, var12, and var35 variables.
 linkSetSwimmingSpeed:
+.ifdef ENABLE_RING_REDUX
+	ld a,ZORA_SCALE_RING
+.else
 	ld a,SWIMMERS_RING
+.endif
 	call cpActiveRing
 	ld a,SPEED_e0
 	jr z,+
@@ -3294,7 +3298,11 @@ linkSetSwimmingSpeed:
 ; Sets the speedTmp variable in the same way as the above function, but doesn't touch any
 ; other variables.
 linkSetSwimmingSpeedTmp:
+.ifdef ENABLE_RING_REDUX
+	ld a,ZORA_SCALE_RING
+.else
 	ld a,SWIMMERS_RING
+.endif
 	call cpActiveRing
 	ld a,SPEED_e0
 	jr z,+
@@ -3430,7 +3438,11 @@ linkUpdateDiving:
 	bit BTN_BIT_B,a
 	jr nz,@pressedB
 
+.ifdef ENABLE_RING_REDUX
+	ld a,ZORA_SCALE_RING
+.else
 	ld a,ZORA_RING
+.endif
 	call cpActiveRing
 	ret z
 
@@ -3594,11 +3606,19 @@ linkUpdateVelocity:
 	ld c,$98
 	call updateLinkSpeed_withParam
 .ifdef ENABLE_MULTI_RING
+.ifdef ENABLE_RING_REDUX
+	ld a,ZORA_SCALE_RING
+.else
 	ld a,SWIMMERS_RING
+.endif
 	call cpActiveRing
 .else
 	ld a,(wActiveRing)
+.ifdef ENABLE_RING_REDUX
+	cp ZORA_SCALE_RING
+.else
 	cp SWIMMERS_RING
+.endif
 .endif
 	jr nz,+
 
@@ -3612,7 +3632,7 @@ linkUpdateVelocity:
 	jr nz,+
 
 .ifdef ENABLE_RING_REDUX
-	ld a,SWIMMERS_RING
+	ld a,ZORA_SCALE_RING
 	call cpActiveRing
 	jr nz,++
 		ld a,(wFrameCounter)

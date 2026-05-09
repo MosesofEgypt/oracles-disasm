@@ -114,7 +114,8 @@ checkUseItems:
 	bit TILESETFLAG_BIT_UNDERWATER,a
 	jr z,@normal
 .ifdef ENABLE_RING_REDUX
-	call underwaterItemsComboActive
+	ld a,SWIMMERS_RING
+	call cpActiveRing
 	jr z,@normal
 .endif
 

@@ -22,7 +22,11 @@ itemUsageParameterTable:
 	.db $02, <wGameKeysJustPressed   ; ITEM_BOMBCHUS
 	.db $05, <wGameKeysJustPressed   ; ITEM_FLUTE
 	.db $43, <wGameKeysJustPressed   ; ITEM_SHOOTER
+.ifdef ENABLE_RING_REDUX
+	.db $02, <wGameKeysJustPressed   ; ITEM_AZUCHU
+.else
 	.db $00, <wGameKeysJustPressed   ; ITEM_10
+.endif
 	.db $05, <wGameKeysJustPressed   ; ITEM_HARP
 	.db $00, <wGameKeysJustPressed   ; ITEM_12
 	.db $43, <wGameKeysJustPressed   ; ITEM_SLINGSHOT
@@ -57,7 +61,11 @@ linkItemAnimationTable:
 	.db $30, LINK_ANIM_MODE_21      ; ITEM_BOMBCHUS
 	.db $70, LINK_ANIM_MODE_FLUTE   ; ITEM_FLUTE
 	.db $c6, LINK_ANIM_MODE_21      ; ITEM_SHOOTER
+.ifdef ENABLE_RING_REDUX
+	.db $30, LINK_ANIM_MODE_21      ; ITEM_AZUCHU
+.else
 	.db $80, LINK_ANIM_MODE_NONE    ; ITEM_10
+.endif
 	.db $70, LINK_ANIM_MODE_HARP_2  ; ITEM_HARP
 	.db $80, LINK_ANIM_MODE_NONE    ; ITEM_12
 	.db $c6, LINK_ANIM_MODE_21      ; ITEM_SLINGSHOT

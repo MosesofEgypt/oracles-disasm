@@ -37,7 +37,11 @@ parentItemCode_bombchu:
 	call parentItemLoadAnimationAndIncState
 
 	; Create a bombchu if there isn't one on the screen already
+.ifdef ENABLE_RING_REDUX
+	call getBombLimit
+.else
 	ld e,$01
+.endif
 	jp itemCreateChildAndDeleteOnFailure
 
 ;;
@@ -112,16 +116,17 @@ parentItemCode_bomb:
 	jp z,clearParentItem
 
 	call parentItemLoadAnimationAndIncState
+
+.ifdef ENABLE_RING_REDUX
+	call getBombLimit
+.else
 	ld e,$01
 	ld a,BOMBERS_RING
 	call cpActiveRing
 	jr nz,+
-.ifdef ENABLE_RING_REDUX
-	ld e,$04
-.else
 	inc e
-.endif
 +
+.endif
 	call itemCreateChild
 	jp c,clearParentItem
 

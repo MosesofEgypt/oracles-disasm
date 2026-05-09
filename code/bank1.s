@@ -3482,6 +3482,7 @@ loadingRoom:
 ;;
 func_5a60:
 .ifdef ENABLE_RING_REDUX
+	call updateAzuchu
 	call updateSystemType
 .endif
 .ifdef ENABLE_MULTI_RING
@@ -3527,6 +3528,7 @@ func_5a60:
 ;;
 standardGameState:
 .ifdef ENABLE_RING_REDUX
+	call updateAzuchu
 	call updateSystemType
 .endif
 .ifdef ENABLE_MULTI_RING
@@ -3771,6 +3773,13 @@ updateSystemType:
 	+
 	ldh (<hGameboyType),a
 	ret
+
+updateAzuchu:
+	; determine if wearing ring
+	ld a,AZUCHU_RING
+	call cpActiveRing
+	ret nz
+	jp spawnAzuchu
 
 updateQuickSwapItems:
 	ld a,(wOpenedMenuType)

@@ -125,6 +125,9 @@ item27Animations:
 item06Animations:
 	.dw itemAnimation1e7c5
 item0dAnimations:
+.ifdef ENABLE_RING_REDUX
+item10Animations:
+.endif
 	.dw itemAnimation1e7d3
 	.dw itemAnimation1e7db
 	.dw itemAnimation1e7e3
@@ -150,7 +153,9 @@ item1aAnimations:
 	.dw itemAnimation1e8b9
 item09Animations:
 item0eAnimations:
+.ifndef ENABLE_RING_REDUX
 item10Animations:
+.endif
 item11Animations:
 item12Animations:
 item14Animations:
@@ -381,6 +386,9 @@ item06OamDataPointers: ; 0x1e8da
 	.dw itemOamData4cfa2
 	.dw itemOamData4cf41
 
+.ifdef ENABLE_RING_REDUX
+item10OamDataPointers: ; 0x1e992
+.endif
 item0dOamDataPointers: ; 0x1e8e2
 	.dw itemOamData4cf5a
 	.dw itemOamData4cf5f
@@ -505,7 +513,9 @@ item1aOamDataPointers: ; 0x1e988
 
 item09OamDataPointers: ; 0x1e992
 item0eOamDataPointers: ; 0x1e992
+.ifndef ENABLE_RING_REDUX
 item10OamDataPointers: ; 0x1e992
+.endif
 item12OamDataPointers: ; 0x1e992
 item14OamDataPointers: ; 0x1e992
 item15OamDataPointers: ; 0x1e992

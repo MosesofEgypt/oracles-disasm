@@ -105,11 +105,17 @@ Removed rings:
     Maple's Ring:
         Converted into Quickswap Ring.
 
+    Swimmer's Ring:
+        Upgraded into Zora Scale Ring
+
+    Zora Ring:
+        Converted into Azuchu's Ring
+
 
 New rings:
     Gold Ring:
         Gives +50% sword damage and -25% damage taken.
-        If you have less than 4 hearts, these double to 100% and -50%.
+        If you have less than 4 hearts, these double to +100% and -50%.
 
     Haste Ring:
         Bumps movement speed on the current tile to the next fastest.
@@ -125,6 +131,10 @@ New rings:
         Doubles speed of playing harp(song audio may get cut off early)
         Enables automatically dropping or throwing objects on the first frame.
             To do this, keep the button held when the pickup animation finishes.
+
+    Azuchu's Ring:
+        Summons a baby bombchu named Azuchu to fight by your side.
+        She cannot explode, but she makes up for it with her rapid tackles and tenacity. She will also pick up any items that were dropped.
 
     Vasu's Ring:
         Open the ring list from anywhere by clicking the Ring Box in your inventory.
@@ -147,6 +157,11 @@ New rings:
 
     Farmer's Ring:
         Combines the effects of the Gasha Ring and Maple's Ring.
+
+    Zora Scale Ring:
+        Swimming with Mermaid suit no longer requires tapping button(auto-mashing).
+        Enables use of items in slot B while underwater(does not prevent you from surfacing).
+        Dive underwater forever.
 
     Quickswap Ring:
         Enables swapping your A/B items with the first 2 in your inventory.
@@ -211,9 +226,6 @@ Modified rings:
 
     Bomber's Ring:
         Up to 4 bombs can be set at once.
-
-    Swimmer's Ring:
-        Swimming with Mermaid suit no longer requires tapping button(auto-mashing).
 
     Green/Blue/Red Luck Ring:
         Provides a 30% chance to reduce damage from a hit to 0.

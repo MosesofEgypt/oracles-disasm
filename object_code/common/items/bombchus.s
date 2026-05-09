@@ -1,3 +1,242 @@
+.ifdef ENABLE_RING_REDUX
+;;
+; ITEM_AZUCHU
+itemCode10:
+	call itemCode0d@itemCode0d_noExplosion
+
+	ld e,Item.substate
+	ld a,(de)
+	rst_jumpTable
+	.dw @azuchuState0	; init
+	.dw @azuchuState1	; follow link
+	.dw @azuchuState2	; follow enemy
+
+@azuchuState0	; init
+	ld h,d
+	ld l,Item.substate
+	inc (hl)
+	call @targetLink
+	; make a poof effect for spawning azuchu
+	jp objectCreatePuff
+
+@azuchuState1	; follow link
+	ld h,d
+	ld l,Item.state
+	ld a,(hl)
+	or a
+	ret z ; return if still in init phase
+
+	call @isTopdown
+	jr z,+
+		; sidescroll
+		add $01
+	+
+
+	; check if in the "target found" state
+	cp $03
+	jr c,+
+		; target found
+		ld l,Item.substate
+		inc (hl)
+
+		call @resetFocusTimer
+		ret
+	+
+
+	call @updateFocus
+	call @targetLink
+
+	; still searching, so just happily hop around link
+	ld a,(wFrameCounter)
+	and $07
+	jr nz,++
+		call @isTopdown
+		jr nz,+
+			call bombchuUpdateAngle_topDown
+			jr ++
+		+
+		; can't get this to work yet. azuchu just goes all over the place
+		;call bombchuUpdateAngle_sidescrolling
+	++
+	; apply speed every frame to keep up with link
+	call objectApplySpeed
+	jr @hop
+
+@azuchuState2	; follow enemy
+	ld h,d
+	; ensure azuchu is collidable
+	ld l,Item.collisionType
+	set 7,(hl)
+	inc l
+	inc l
+
+	; set collision radius
+	ld a,$06
+	ldi (hl),a
+	ld (hl),a
+
+	; check if target is invalid
+	xor a
+	call objectGetRelatedObject2Var
+	xor a
+	or (hl)
+	jr z,+
+	; make sure the pointer is valid
+	ld a,h
+	or a
+	jr z,+
+		; target is valid. happily hop away
+		call @updateFocus
+		jr @hop
+	+
+
+	; target lost. move back to previous substate
+	ld h,d
+	ld l,Item.substate
+	dec (hl)
+
+	call @forceResetFocus 
+	jr @targetLink
+
+@resetFocusTimer
+	; use counter2 as a timer to ensure azuchu 
+	; doesn't stay focused on one target too long
+	ld h,d
+	ld l,Item.counter2
+	ld (hl),$80 ; roughly 4 seconds
+	ret
+
+@updateFocus
+	; if the counter hits 0, lose the target and try finding another
+	ld h,d
+	ld l,Item.counter2
+	dec (hl)
+	ret nz
+
+@forceResetFocus
+	call @isTopdown
+	jr z,@tdResetFocus
+
+@ssResetFocus
+	; reset being on a ceiling
+	xor a
+	ld l,Item.var34
+	ld (hl),a
+
+	; reset angle and direction to upright
+	ld l,Item.angle
+	set 4,(hl)
+	call bombchuSetAnimationFromAngle
+
+@tdResetFocus
+	ld h,d
+	; disable collision
+	ld l,Item.collisionType
+	res 7,(hl)
+	inc l
+	inc l
+
+	; set collision radius
+	ld a,$18
+	ldi (hl),a
+	ld (hl),a
+
+	; revert to slow speed
+	ld a,SPEED_80
+	ld l,Item.speed
+	ldi (hl),a
+	ld  (hl),a
+
+	; move back to searching for target
+	ld l,Item.state
+	ld (hl),$01
+
+	; remove target
+	xor a
+	ld l,Item.relatedObj2
+	ldi (hl),a
+	ld  (hl),a
+	xor a	; set z flag
+	ret
+
+@targetLink
+	; change target to link
+	ld l,Item.relatedObj2
+	ld (hl),<w1Link
+	inc hl
+	ld (hl),>w1Link
+	ret
+
+@isTopdown
+	push bc
+	push af
+	ld a,(wTilesetFlags)
+	and TILESETFLAG_SIDESCROLL
+	pop bc
+	ld a,b
+	pop bc
+	ret
+
+@hop
+	; jump every few frames if on ground
+	ld a,(wFrameCounter)
+	and $1f
+	ret nz
+
+	call @isTopdown
+	jr z,@tdHop
+
+@ssHop
+	; sidescroll needs different check for being on ground
+	ld h,d
+
+	; check that we're not on a ceiling
+	ld l,Item.var34
+	ld a,(hl)
+	or a
+	ret nz
+
+	; check if the y-position is the same as last frame.
+	ld l,Item.yh
+	ld a,(hl)
+
+	; if the y values match, then we're on the ground and can hop
+	; we store the previous frame's yH in var03 in side-scroll
+	ld l,Item.var03
+	cp (hl)
+	ld (hl),a
+	ret nz
+
+	; unset bit indicating we're on a wall
+	ld l,Item.var32
+	res 0,(hl)
+
+	; reset angle and direction to upright
+	ld l,Item.angle
+	set 3,(hl)
+	call bombchuSetAnimationFromAngle
+
+	; jump higher in sidescroll areas
+	ld l,Item.speedZ+1
+	ld (hl),$fe
+	dec l
+	ld (hl),$00
+	ret
+
+@tdHop
+	ld h,d
+	ld l,Item.zh
+	bit 7,(hl)
+	ret nz
+
+	ld l,Item.speedZ+1
+	ld (hl),$fe
+	dec l
+	ld (hl),$80
+	ret
+
+.endif
+
 ;;
 ; ITEM_BOMBCHUS
 itemCode0d:
@@ -8,6 +247,9 @@ itemCode0d:
 	ld a,(de)
 	cp $ff
 	jp nc,itemUpdateExplosion
+.ifdef ENABLE_RING_REDUX
+@itemCode0d_noExplosion
+.endif
 
 	call objectCheckWithinRoomBoundary
 	jp nc,itemDelete
@@ -54,7 +296,12 @@ itemCode0d:
 
 @tdState0:
 	call itemLoadAttributesAndGraphics
+.ifdef ENABLE_RING_REDUX
+	call isAzuchu
+	call nz,decNumBombchus
+.else
 	call decNumBombchus
+.endif
 
 	ld h,d
 	ld l,Item.state
@@ -138,7 +385,14 @@ itemCode0d:
 ; State 4: Dashing toward target
 @tdState4:
 	call bombchuCheckCollidedWithTarget
+.ifdef ENABLE_RING_REDUX
+	jr nc,+
+		call isAzuchu
+		jp nz,bombchuClearCounter2AndInitializeExplosion
+	+
+.else
 	jp c,bombchuClearCounter2AndInitializeExplosion
+.endif
 
 	call bombchuUpdateVelocity
 	call itemUpdateConveyorBelt
@@ -190,8 +444,15 @@ itemCode0d:
 
 ; State 3: Chase after target
 @ssState3:
-	call bombchuCheckCollidedWithTarget
+call bombchuCheckCollidedWithTarget
+.ifdef ENABLE_RING_REDUX
+	jr nc,+
+		call isAzuchu
+		jp nz,bombchuClearCounter2AndInitializeExplosion
+	+
+.else
 	jp c,bombchuClearCounter2AndInitializeExplosion
+.endif
 	call bombchuUpdateVelocityAndClimbing_sidescroll
 	jr @ssAnimate
 
@@ -432,7 +693,12 @@ bombchuUpdateAngle_topDown:
 	ld a,Object.yh
 	call objectGetRelatedObject2Var
 	ld b,(hl)
+.ifdef ENABLE_RING_REDUX
+	inc l
+	inc l
+.else
 	ld l,Enemy.xh
+.endif
 	ld c,(hl)
 	call objectGetRelativeAngle
 
@@ -499,7 +765,12 @@ bombchuUpdateAngle_sidescrolling:
 	ld a,Object.yh
 	call objectGetRelatedObject2Var
 	ld b,(hl)
+.ifdef ENABLE_RING_REDUX
+	inc l
+	inc l
+.else
 	ld l,Enemy.xh
+.endif
 	ld c,(hl)
 	call objectGetRelativeAngle
 
@@ -631,6 +902,25 @@ bombchuCheckForEnemyTarget:
 	ld e,Item.var30
 	ld a,(de)
 	ld h,a
+.ifdef ENABLE_RING_REDUX
+	call isAzuchu
+	jr nz,+
+		; Check it's visible
+		ld l,Part.visible
+		bit 7,(hl)
+		jr z,+
+			; check parts next to see if there's an item to grab
+			ld l,Part.enabled
+			ldi a,(hl)
+			or a
+			jr z,+
+				; check it's a collectable
+				ld a,(hl)
+				cp PART_ITEM_DROP
+				jr z,@foundTarget
+					; TODO: check that azuchu collided with part
+	+
+.endif
 	ld l,Enemy.enabled
 	ld a,(hl)
 	or a
@@ -656,11 +946,25 @@ bombchuCheckForEnemyTarget:
 	jr nc,@nextTarget
 
 	; Valid target established; set relatedObj2 to the target
+.ifdef ENABLE_RING_REDUX
+@foundTarget
+	ld a,h
+	ld h,d
+	push bc
+	ld b,l
+	ld l,Item.relatedObj2+1
+	ldd (hl),a
+	ld a,b
+	pop bc
+	and $c0
+	ld (hl),a
+.else
 	ld a,h
 	ld h,d
 	ld l,Item.relatedObj2+1
 	ldd (hl),a
 	ld (hl),Enemy.enabled
+.endif
 
 	; Stop using collision radius as vision radius
 	ld l,Item.collisionRadiusY
@@ -722,3 +1026,16 @@ bombchuCheckForEnemyTarget:
 	ret
 
 .include {"{GAME_DATA_DIR}/bombchuTargets.s"}
+
+.ifdef ENABLE_RING_REDUX
+isAzuchu:
+	push de
+	push af
+	ld e,Item.id
+	ld a,(de)
+	cp $10
+	pop de
+	ld a,d
+	pop de
+	ret
+.endif

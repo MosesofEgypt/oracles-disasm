@@ -111,7 +111,7 @@ groups:
   - name: TX_3055
     index: 0x55
     text: |-
-      Swimmer's Ring
+      Zora Scale Ring
 
   - name: TX_3056
     index: 0x56
@@ -306,7 +306,7 @@ groups:
   - name: TX_307c
     index: 0x7c
     text: |-
-      Zora Ring
+      Azuchu's Ring
 
   - name: TX_307d
     index: 0x7d
@@ -446,7 +446,7 @@ groups:
   - name: TX_3095
     index: 0x95
     text: |-
-      Swim speed \up\jump(0xc2)
+      Swim like a Zora\jump(0xc2)
 
   - name: TX_3096
     index: 0x96
@@ -651,7 +651,8 @@ groups:
   - name: TX_30bc
     index: 0xbc
     text: |-
-      Dive forever\jump(0xc2)
+      Summons the baby
+      bombchu, Azuchu!
 
   - name: TX_30bd
     index: 0xbd
