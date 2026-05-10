@@ -8280,6 +8280,10 @@ spawnAzuchu:
 	cp >w1Link
 	ret nz
 
+	ld a,(wLinkRidingObject)
+	or a
+	ret nz
+
 	; backup relatedObject2 of link since it's gonna get overwritten
 	ld hl,w1Link.relatedObj2
 	ld e,(hl)
@@ -10898,14 +10902,12 @@ dropLinkHeldItem:
 	or a
 	jr nz,@end
 
-.ifndef ENABLE_RING_REDUX
 	; Check that 2 <= [wLinkGrabState]&7 < 4
 	ld a,(wLinkGrabState)
 	and $07
 	sub $02
 	cp $02
 	jr nc,@end
-.endif
 
 	; Get the object Link is holding in hl
 	ld hl,w1Link.relatedObj2
@@ -10917,7 +10919,8 @@ dropLinkHeldItem:
 	ldi (hl),a
 	ld a,(hl)
 	ld (hl),$00
-	ld h,b
+	ld h,a
+	ld a,b
 	pop bc
 .else
 	ldi a,(hl)

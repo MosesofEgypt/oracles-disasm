@@ -22,7 +22,8 @@ itemCode10:
 	inc (hl)
 	call @targetLink
 	; make a poof effect for spawning azuchu
-	jp objectCreatePuff
+	ldbc INTERAC_PUFF,$80 ; don't make poof sound
+	jp objectCreateInteraction
 
 @azuchuState1	; follow link
 	ld h,d

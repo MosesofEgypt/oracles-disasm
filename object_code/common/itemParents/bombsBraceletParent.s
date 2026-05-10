@@ -641,6 +641,7 @@ parentItemCode_bracelet:
 @deleteAndRetIfSwimmingOrGrabState0:
 .ifdef ENABLE_RING_REDUX
 	; if the held object is gone, also drop
+	push hl
 	call getHeldObject
 	jp nz,++
 		xor a
@@ -656,6 +657,7 @@ parentItemCode_bracelet:
 			call clearMemory
 			jr +
 	++
+	pop hl
 .endif
 	ld a,(wLinkSwimmingState)
 	or a
