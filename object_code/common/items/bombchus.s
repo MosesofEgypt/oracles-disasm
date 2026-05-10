@@ -150,13 +150,11 @@ itemCode10:
 	; revert to slow speed
 	ld a,SPEED_80
 	.ifdef ROM_AGES
-	.ifdef ENABLE_RING_REDUX
 		; slower movement while deep underwater
 		call isDeepUnderwater
 		jr nz,+
 			ld a,SPEED_40
 		+
-	.endif
 	.endif
 
 	ld l,Item.speed
