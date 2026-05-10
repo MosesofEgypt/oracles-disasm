@@ -392,12 +392,15 @@ interactionCodeb6:
 	ld (de),a
 .ifdef ENABLE_GASHA_REBALANCE
 	cp GASHATREASURE_HEART_PIECE
+	ld a,TREASURE_HEART_PIECE
+	ld c,$01 ; 1 piece of heart
 	jr z,+
-		; convert ring tier from GASHATREASURE into TREASURE
+		; convert ring tier from GASHATREASURE into RING_TIER
 		dec a
 		ld b,a
 		ld hl,wGashaMaturity+1
 		ld a,(hl)
+
 		; use the lower 4 bits of the high byte of gasha
 		; maturity as the chance to guarantee a new ring
 		cp $10
@@ -419,6 +422,7 @@ interactionCodeb6:
 	jr nz,+
 	call getRandomRingOfGivenTier
 +
+	ld b,a
 .endif
 	call giveTreasure
 
