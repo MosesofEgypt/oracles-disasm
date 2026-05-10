@@ -47,6 +47,13 @@
 	.ifndef REMAP_RING_LIST
 		.define REMAP_RING_LIST					1
 	.endif
+	.ifndef PORTAL_RING_BOX_LEVEL
+		; If your ring box is at least this level, you'll be able to open the
+		; ring list without needing Vasu's Ring to be equipped. If you want
+		; to stick with a 5-ring box, you could have level 3 be a portal box
+		; NOTE: Setting to a value other than 0, 1, 2, or 3 won't do anything.
+		.define PORTAL_RING_BOX_LEVEL			3
+	.endif
 	.ifndef UNRESTRICTED_TRANSFORMS
 		; normally the transforms swap link with a different SpecialObject
 		; which has a very limited set of actions it can perform, and is
@@ -146,11 +153,10 @@
 	.define MAX_WALLET_SIZE 			$9999
 .endif
 
-.ifdef ENABLE_PORTAL_RING_BOX
-	; If your ring box is at least this level, you'll be able to open the
-	; ring list without needing Vasu's Ring to be equipped. If you want
-	; to stick with a 5-ring box, you could have level 3 be a portal box
-	.define PORTAL_RING_BOX_LEVEL		3
+.ifdef PORTAL_RING_BOX_LEVEL
+.ifndef ENABLE_PORTAL_RING_BOX
+	.define ENABLE_PORTAL_RING_BOX		1
+.endif
 .endif
 
 .ifdef ENABLE_GASHA_REBALANCE
