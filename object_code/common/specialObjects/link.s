@@ -4521,6 +4521,11 @@ updateLinkSpeed_withParam:
 	ld a,(wLinkForceState)
 	or a
 	jr nz,++
+
+	; same goes for if he's being given simulated input
+	ld a,(wUseSimulatedInput)
+	cp $01
+	jr z,++
 		call isHasteRingEquipped
 		jr nz,++
 			ld a,b
