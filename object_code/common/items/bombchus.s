@@ -933,27 +933,23 @@ bombchuCheckForEnemyTarget:
 .ifdef ENABLE_RING_REDUX
 	call isAzuchu
 	jr nz,+
-		; Check it's visible
-		ld l,Part.visible
-		bit 7,(hl)
+		; check parts next to see if there's an item to grab
+		ld l,Part.enabled
+		ldi a,(hl)
+		or a
 		jr z,+
-			; check parts next to see if there's an item to grab
-			ld l,Part.enabled
-			ldi a,(hl)
-			or a
-			jr z,+
-				; check it's an item drop
-				ld a,(hl)
-				cp PART_ITEM_DROP
-				jr z,@foundTarget
+			; check it's an item drop
+			ld a,(hl)
+			cp PART_ITEM_DROP
+			jr z,@foundTarget
 
-				; check it's an item drop from maple
-				cp PART_ITEM_FROM_MAPLE
-				jr z,@foundTarget
+			; check it's an item drop from maple
+			cp PART_ITEM_FROM_MAPLE
+			jr z,@foundTarget
 
-				; check it's an item drop from maple
-				cp PART_ITEM_FROM_MAPLE_2
-				jr z,@foundTarget
+			; check it's an item drop from maple
+			cp PART_ITEM_FROM_MAPLE_2
+			jr z,@foundTarget
 	+
 .endif
 	ld l,Enemy.enabled
