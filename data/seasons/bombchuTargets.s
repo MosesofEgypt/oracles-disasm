@@ -12,10 +12,11 @@ bombchuTargets:
 	; added:
 	;	wallmaster
 	;	cucco
+	;	fire keese
 	;	crow
 	;	blue crow
 	;	flying tile
 	;	seeds on tree
-	.db $00 $3f $87 $5d $37 $31 $77 $7f
-	.db $eb $ff $06 $60 $00 $00 $01 $00
+	.db $00 $3f $87 $5d $37 $31 $77 $7e
+	.db $eb $ff $06 $44 $00 $00 $01 $00
 .endif

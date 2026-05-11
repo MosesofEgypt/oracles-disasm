@@ -5,20 +5,21 @@ bombchuTargets:
 .ifdef ENABLE_RING_REDUX
 	; azuchu targets
 	; removed:
+	;	eyesoar child
 	;	spiked beetle
 	;	armos
 	;	pols voice
-	;	eyesoar child
 	;	ambi guard
-	;	enemy candle
+	;	candle
 	; added:
 	;	wallmaster
 	;	cucco
+	;	fire keese
 	;	crow
 	;	blue crow
 	;	flying tile
 	;	seeds on tree
 	;	harmless hardhat beetle
-	.db $00 $bf $85 $dd $37 $31 $77 $ff
-	.db $af $ff $06 $68 $10 $00 $00 $00
+	.db $00 $bf $85 $dd $37 $31 $77 $fe
+	.db $af $ff $06 $44 $10 $00 $00 $00
 .endif
