@@ -498,62 +498,59 @@ getTransformedLinkID:
 
 .ifdef UNRESTRICTED_TRANSFORMS
 remapTransformedSpecialObjectGfx:
+	ld hl,specialObjectGraphicsTable
+	; redirect id to transformed one if ring equipped
+	; checkSubrosian
+	ld a,SUBROSIAN_RING
+	call cpActiveRing
+	jr nz,+
+		ld a,$03
+		jr ++
+	+
+	; checkFirstGen
+	ld a,FIRST_GEN_RING
+	call cpActiveRing
+	jr nz,+
+		ld a,$04
+		jr ++
+	+
+	; checkOctorock
+	ld a,OCTO_RING
+	call cpActiveRing
+	jr nz,+
+		ld a,$05
+		jr ++
+	+
+	; checkMoblin
+	ld a,MOBLIN_RING
+	call cpActiveRing
+	jr nz,+
+		ld a,$06
+		jr ++
+	+
+	; checkLikeLike
+	ld a,LIKE_LIKE_RING
+	call cpActiveRing
+	jr nz,+
+		ld a,$07
+		jr ++
+	+
+	; no ring equipped. return
+	ld a,e
+	ret
+	++
+
+	; store the decided on transform type
+	ld b,a
+
+	; if the sprite can be remapped, replace
+	; the id if we selected a new one
+	ld a,e
 	call @getCanRemapSprite
 	ld a,e
 	ret z
 
-	xor a
-	push bc
-
-	; redirect id to transformed one if ring equipped
-	ldbc SUBROSIAN_RING, FIRST_GEN_RING
-	call eitherRingActive
-
-	; checkSubrosian
-	jr nz,+
-		ld a,$03
-		jr ++
-+
-	; checkFirstGen
-	jr nc,+
-		ld a,$04
-		jr ++
-+
-	; checkOctorock
-	ldbc OCTO_RING, MOBLIN_RING
-	call eitherRingActive
-
-	jr nz,+
-		ld a,$05
-		jr ++
-+
-	; checkMoblin
-	jr nc,+
-		ld a,$06
-		jr ++
-+
-	; checkLikeLike
-	ld a,LIKE_LIKE_RING
-	call cpActiveRing
-
-	jr nz,+
-		ld a,$07
-		jr ++
-+
-	xor a
-++
-	pop bc
-	or a
-
-	; replace the id if we selected a new one
-	jr nz,+
-		ld a,e
-		ret
-
-+
 	; check if link-riding object or not
-	ld b,a
-	ld a,e
 	cp $09
 
 	ld e,b
@@ -616,8 +613,6 @@ remapTransformedSpecialObjectGfx:
 	ret
 
 @getCanRemapSprite:
-	ld hl,specialObjectGraphicsTable
-
 	; only bother remapping if this is a link special-object
 	or a
 	jr z,+ 				; jump if player-controlled link
