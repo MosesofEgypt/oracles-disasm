@@ -258,7 +258,7 @@ partCode01:
 	.db TREASURE_MYSTERY_SEEDS, $00,            $05, $0a ; ITEM_DROP_MYSTERY_SEEDS
 .ifdef MORE_RUPEE_TYPES
 	.db TREASURE_RUPEES,        RED_JOY_RING,   RUPEEVAL_10, RUPEEVAL_20  ; ITEM_DROP_10_RUPEES
-	.db TREASURE_RUPEES,        RED_JOY_RING,   RUPEEVAL_20, RUPEEVAL_40  ; ITEM_DROP_20_RUPEES
+	.db TREASURE_RUPEES,        RED_JOY_RING,   RUPEEVAL_30, RUPEEVAL_60  ; ITEM_DROP_30_RUPEES
 .else
 	.db $00,                    $00,            $00, $00 ; ITEM_DROP_0a
 	.db $00,                    $00,            $00, $00 ; ITEM_DROP_0b
@@ -304,7 +304,7 @@ itemDrop_initGfx:
 	.db $1a $00 ; ITEM_DROP_MYSTERY_SEEDS
 .ifdef MORE_RUPEE_TYPES
 	.db $04 $03 ; ITEM_DROP_10_RUPEES
-	.db $06 $04 ; ITEM_DROP_20_RUPEES
+	.db $06 $04 ; ITEM_DROP_30_RUPEES
 .else
 	.db $1c $00 ; ITEM_DROP_0a
 	.db $1e $00 ; ITEM_DROP_0b

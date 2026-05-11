@@ -1323,7 +1323,7 @@ itemDropAvailabilityTable:
 	.db (<wObtainedTreasureFlags+TREASURE_MYSTERY_SEEDS/8), 1<<(TREASURE_MYSTERY_SEEDS&7)
 .ifdef MORE_RUPEE_TYPES
 	.db <wc608, $ff				; ITEM_DROP_10_RUPEE
-	.db <wc608, $ff				; ITEM_DROP_20_RUPEES
+	.db <wc608, $ff				; ITEM_DROP_30_RUPEES
 .else
 	.db <wLinkNameNullTerminator, $00	; ITEM_DROP_0a
 	.db <wLinkNameNullTerminator, $00	; ITEM_DROP_0b
@@ -1422,9 +1422,9 @@ itemDropSet2:
 itemDropSet3:
 .ifdef MORE_RUPEE_TYPES
 	.db $0f $0f $0f $01 $01 $01 $01 $01
-	.db $01 $01 $01 $01 $02 $02 $0a $0a
+	.db $01 $01 $01 $01 $02 $02 $02 $0a
 	.db $02 $02 $02 $02 $02 $02 $0a $0a
-	.db $02 $03 $03 $03 $0b $0b $00 $00
+	.db $02 $03 $03 $03 $03 $0b $00 $00
 .else
 	.db $0f $0f $0f $01 $01 $01 $01 $01
 	.db $01 $01 $01 $01 $02 $02 $02 $02
@@ -1553,7 +1553,7 @@ itemDropSetE:
 	.db $01 $01 $01 $01 $01 $01 $01 $01
 	.db $01 $01 $01 $01 $01 $01 $02 $02
 	.db $02 $02 $02 $02 $02 $02 $02 $02
-	.db $02 $03 $03 $03 $0a $0a $0b $0b
+	.db $02 $03 $03 $03 $03 $0a $0a $0b
 .else
 	.db $01 $01 $01 $01 $01 $01 $01 $01
 	.db $01 $01 $01 $01 $01 $01 $01 $02
