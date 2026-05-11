@@ -20,7 +20,11 @@ enemyCode5a:
 	; Locate tree
 	ld a,TILEINDEX_MYSTICAL_TREE_TL
 	call findTileInRoom
+.ifdef ENABLE_RING_REDUX
+	jp nz,enemyDelete
+.else
 	jp nz,interactionDelete ; BUG: Wrong function call! (see below)
+.endif
 
 	; Move to that position
 	ld c,l
@@ -35,7 +39,11 @@ enemyCode5a:
 	and $0f
 	ld hl,wSeedTreeRefilledBitset
 	call checkFlag
+.ifdef ENABLE_RING_REDUX
+	jp z,enemyDelete
+.else
 	jp z,interactionDelete
+.endif
 
 	; BUG: Above function call is wrong! Should be "enemyDelete"!
 	; If a seed tree's seeds are exhausted, instead of deleting this object, it will
