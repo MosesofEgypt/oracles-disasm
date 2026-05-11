@@ -933,23 +933,27 @@ bombchuCheckForEnemyTarget:
 .ifdef ENABLE_RING_REDUX
 	call isAzuchu
 	jr nz,+
-		; check parts next to see if there's an item to grab
-		ld l,Part.enabled
-		ldi a,(hl)
-		or a
+		; Check it's visible
+		ld l,Part.visible
+		bit 7,(hl)
 		jr z,+
-			; check it's an item drop
-			ld a,(hl)
-			cp PART_ITEM_DROP
-			jr z,@foundTarget
+			; check parts next to see if there's an item to grab
+			ld l,Part.enabled
+			ldi a,(hl)
+			or a
+			jr z,+
+				; check it's an item drop
+				ld a,(hl)
+				cp PART_ITEM_DROP
+				jr z,@foundTarget
 
-			; check it's an item drop from maple
-			cp PART_ITEM_FROM_MAPLE
-			jr z,@foundTarget
+				; check it's an item drop from maple
+				cp PART_ITEM_FROM_MAPLE
+				jr z,@foundTarget
 
-			; check it's an item drop from maple
-			cp PART_ITEM_FROM_MAPLE_2
-			jr z,@foundTarget
+				; check it's an item drop from maple
+				cp PART_ITEM_FROM_MAPLE_2
+				jr z,@foundTarget
 	+
 .endif
 	ld l,Enemy.enabled
@@ -957,10 +961,19 @@ bombchuCheckForEnemyTarget:
 	or a
 	jr z,@nextTarget
 
+.ifdef ENABLE_RING_REDUX
+	; azuchu doesn't need to SEE the enemy, she can SMELL THEM
+	; (also lets her attack seeds on a tree to collect them)
+	call isAzuchu
+	jr z,+
+.endif
 	; Check it's visible
 	ld l,Enemy.visible
 	bit 7,(hl)
 	jr z,@nextTarget
+.ifdef ENABLE_RING_REDUX
+	+
+.endif
 
 	; Check it's a valid target (see data/bombchuTargets.s)
 	ld l,Enemy.id
