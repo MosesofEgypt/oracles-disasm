@@ -971,6 +971,16 @@ bombchuCheckForEnemyTarget:
 	ld a,(hl)
 	push hl
 	ld hl,bombchuTargets
+.ifdef ENABLE_RING_REDUX
+	call isAzuchu
+	push af
+	jr nz,+
+		; move to azuchu targets array
+		ld a,$80
+		rst_addAToHl
+	+
+	pop af
+.endif
 	call checkFlag
 	pop hl
 	jr z,@nextTarget
