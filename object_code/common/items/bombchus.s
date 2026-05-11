@@ -64,8 +64,6 @@ itemCode10:
 		; can't get this to work yet. azuchu just goes all over the place
 		;call bombchuUpdateAngle_sidescrolling
 	++
-	; apply speed every frame to keep up with link
-	call objectApplySpeed
 	jr @hop
 
 @azuchuState2	; follow enemy
@@ -148,12 +146,12 @@ itemCode10:
 	ld (hl),a
 
 	; revert to slow speed
-	ld a,SPEED_80
+	ld a,SPEED_160
 	.ifdef ROM_AGES
 		; slower movement while deep underwater
 		call isDeepUnderwater
 		jr nz,+
-			ld a,SPEED_40
+			ld a,SPEED_80
 		+
 	.endif
 
@@ -327,9 +325,13 @@ itemCode0d:
 
 	ld l,Item.speedTmp
 	ld (hl),SPEED_80
+	.ifdef ENABLE_RING_REDUX
+	call isAzuchu
+	jr nz,+
+		ld (hl),SPEED_160
+	+
 
 	.ifdef ROM_AGES
-	.ifdef ENABLE_RING_REDUX
 		; slower movement while deep underwater
 		call isDeepUnderwater
 		jr nz,+
@@ -933,16 +935,17 @@ bombchuCheckForEnemyTarget:
 .ifdef ENABLE_RING_REDUX
 	call isAzuchu
 	jr nz,+
-		; Check it's visible
-		ld l,Part.visible
-		bit 7,(hl)
+		; check parts next to see if there's an item to grab
+		ld l,Part.enabled
+		ld a,(hl)
+		or a
 		jr z,+
-			; check parts next to see if there's an item to grab
-			ld l,Part.enabled
-			ldi a,(hl)
-			or a
+			; Check it's visible
+			ld l,Part.visible
+			bit 7,(hl)
 			jr z,+
 				; check it's an item drop
+				ld l,Part.id
 				ld a,(hl)
 				cp PART_ITEM_DROP
 				jr z,@foundTarget
@@ -985,7 +988,7 @@ bombchuCheckForEnemyTarget:
 	push af
 	jr nz,+
 		; move to azuchu targets array
-		ld a,$80
+		ld a,$10
 		rst_addAToHl
 	+
 	pop af
@@ -1031,11 +1034,13 @@ bombchuCheckForEnemyTarget:
 	ld (hl),$0c
 	ld l,Item.speedTmp
 	ld (hl),SPEED_1c0
+.ifdef ENABLE_RING_REDUX
 	; slower movement while deep underwater
 	call isDeepUnderwater
 	jr nz,+
 		ld (hl),SPEED_100
 	+
+.endif
 
 	; Increment state
 	ld l,Item.state

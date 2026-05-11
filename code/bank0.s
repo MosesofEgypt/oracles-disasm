@@ -875,6 +875,99 @@ clearMemory:
 ; @param	b	# of bytes to fill
 ; @param	hl	Memory to fill
 fillMemory:
+.ifdef EXPERIMENTAL_FAST_MEMFILL
+	bit 0,b
+	jr z,+
+		ldi (hl),a
+	+
+	bit 1,b
+	jr z,+
+		ldi (hl),a
+		ldi (hl),a
+	+
+	bit 2,b
+	jr z,+
+		ldi (hl),a
+		ldi (hl),a
+		ldi (hl),a
+		ldi (hl),a
+	+
+
+	srl b
+	srl b
+	srl b
+	inc b
+	jr +
+	-
+		ldi (hl),a
+		ldi (hl),a
+		ldi (hl),a
+		ldi (hl),a
+		ldi (hl),a
+		ldi (hl),a
+		ldi (hl),a
+		ldi (hl),a
+		+
+		dec b
+		jr nz,-
+	ret
+
+;;
+; @param	a	Value to fill memory with
+; @param	bc	# of bytes to fill
+; @param	hl	Memory to fill
+fillMemoryBc:
+	ld e,b
+	ld b,c
+	call fillMemory
+
+	push af
+	ld a,e
+	and $0f
+	ld c,a
+	swap c
+
+	ld a,e
+	and $f0
+	ld b,a
+	swap b
+	pop af
+
+	inc bc
+	ld e,a
+	jr +
+	-
+		ld a,e
+		ldi (hl),a
+		ldi (hl),a
+		ldi (hl),a
+		ldi (hl),a
+		ldi (hl),a
+		ldi (hl),a
+		ldi (hl),a
+		ldi (hl),a
+		ldi (hl),a
+		ldi (hl),a
+		ldi (hl),a
+		ldi (hl),a
+		ldi (hl),a
+		ldi (hl),a
+		ldi (hl),a
+		ldi (hl),a
+		+
+		dec bc
+		ld a,c
+		or b
+		jr nz,-
+	ret
+
+;;
+; @param	bc	# of bytes to clear
+; @param	hl	Memory to clear
+clearMemoryBc:
+	xor a
+	jr fillMemoryBc
+.else
 	ldi (hl),a
 	dec b
 	jr nz,fillMemory
@@ -900,6 +993,7 @@ fillMemoryBc:
 	or b
 	jr nz,-
 	ret
+.endif
 
 ;;
 ; @param	b	# of bytes to copy
