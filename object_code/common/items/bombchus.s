@@ -14,10 +14,19 @@ itemCode10:
 	rst_jumpTable
 	.dw @azuchuState0	; init
 	.dw @azuchuState1	; follow link
-	.dw @azuchuState2	; follow enemy
+	.dw @azuchuState2	; start following enemy
+	.dw @azuchuState3	; follow enemy
 
 @azuchuState0	; init
+	; prevent azuchu from initializing until enabled.
+	; this is to prevent recurring poof effects when
+	; she falls in a hole and is waiting to respawn.
 	ld h,d
+	ld l,Item.enabled
+	ld a,(hl)
+	or a
+	ret z
+
 	ld l,Item.substate
 	inc (hl)
 	call @targetLink
@@ -29,8 +38,6 @@ itemCode10:
 	ld h,d
 	ld l,Item.state
 	ld a,(hl)
-	or a
-	ret z ; return if still in init phase
 
 	call @isTopdown
 	jr z,+
@@ -55,18 +62,18 @@ itemCode10:
 	; still searching, so just happily hop around link
 	ld a,(wFrameCounter)
 	and $07
-	jr nz,++
-		call @isTopdown
-		jr nz,+
-			call bombchuUpdateAngle_topDown
-			jr ++
-		+
-		; can't get this to work yet. azuchu just goes all over the place
-		;call bombchuUpdateAngle_sidescrolling
-	++
+	ret nz
+
+	call @isTopdown
+	jr nz,+
+		call bombchuUpdateAngle_topDown
+		jr @hop
+	+
+	; can't get this to work yet. azuchu just goes all over the place
+	;call bombchuUpdateAngle_sidescrolling
 	jr @hop
 
-@azuchuState2	; follow enemy
+@azuchuState2	; start following enemy
 	ld h,d
 	; ensure azuchu is collidable
 	ld l,Item.collisionType
@@ -78,25 +85,29 @@ itemCode10:
 	ld a,$06
 	ldi (hl),a
 	ld (hl),a
+	call itemIncSubstate
 
+@azuchuState3	; follow enemy
+	ld h,d
 	; check if target is invalid
 	xor a
 	call objectGetRelatedObject2Var
 	xor a
 	or (hl)
 	jr z,+
-	; make sure the pointer is valid
-	ld a,h
-	or a
-	jr z,+
-		; target is valid. happily hop away
-		call @updateFocus
-		jr @hop
+		; pointer is valid
+		ld a,h
+		or a
+		jr z,+
+			; target is valid. happily hop away
+			call @updateFocus
+			jr @hop
 	+
 
 	; target lost. move back to previous substate
 	ld h,d
 	ld l,Item.substate
+	dec (hl)
 	dec (hl)
 
 	call @forceResetFocus 
@@ -391,6 +402,10 @@ itemCode0d:
 	ret z
 ++
 	call bombchuUpdateSpeed
+.ifdef ENABLE_RING_REDUX
+	call isAzuchu
+	jp z,itemAnimate
+.endif
 	call itemUpdateConveyorBelt
 
 @animate:
@@ -402,6 +417,9 @@ itemCode0d:
 	ld h,d
 	ld l,Item.counter1
 	dec (hl)
+.ifdef ENABLE_RING_REDUX
+	call nz,isAzuchu
+.endif
 	jp nz,itemUpdateConveyorBelt
 
 	; Set counter
@@ -414,15 +432,15 @@ itemCode0d:
 
 ; State 4: Dashing toward target
 @tdState4:
-	call bombchuCheckCollidedWithTarget
 .ifdef ENABLE_RING_REDUX
-	jr nc,+
-		call isAzuchu
-		jp nz,bombchuClearCounter2AndInitializeExplosion
+	call isAzuchu
+	jr nz,+
+		call bombchuUpdateVelocity
+		jr @animate
 	+
-.else
-	jp c,bombchuClearCounter2AndInitializeExplosion
 .endif
+	call bombchuCheckCollidedWithTarget
+	jp c,bombchuClearCounter2AndInitializeExplosion
 
 	call bombchuUpdateVelocity
 	call itemUpdateConveyorBelt
@@ -474,14 +492,14 @@ itemCode0d:
 
 ; State 3: Chase after target
 @ssState3:
-call bombchuCheckCollidedWithTarget
 .ifdef ENABLE_RING_REDUX
-	jr nc,+
-		call isAzuchu
-		jp nz,bombchuClearCounter2AndInitializeExplosion
-	+
-.else
+	call isAzuchu
+	jr z,+
+.endif
+	call bombchuCheckCollidedWithTarget
 	jp c,bombchuClearCounter2AndInitializeExplosion
+.ifdef ENABLE_RING_REDUX
+	+
 .endif
 	call bombchuUpdateVelocityAndClimbing_sidescroll
 	jr @ssAnimate
