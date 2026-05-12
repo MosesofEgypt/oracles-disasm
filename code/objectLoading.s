@@ -16,8 +16,8 @@ parseObjectData:
 	ld (wNumEnemies),a
 	ld ($cfc0),a
 	ld hl,wTmpcec0
-	ld b,$20
-	call clearMemory
+	ld b,$02
+	call clearMemory16ByteBlocks
 	call addRoomToEnemiesKilledList
 	call generateRandomBuffer
 

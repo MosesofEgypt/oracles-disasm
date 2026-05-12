@@ -2071,8 +2071,8 @@ clearObjectsWithEnabled2_hlpr:
 	jr nz,+
 
 	push hl
-	ld b,$40
-	call clearMemory
+	ld b,$04
+	call clearMemory16ByteBlocks
 	pop hl
 +
 	inc h
@@ -2458,8 +2458,8 @@ cutscene15:
 
 	; Clear all objects except Link
 	ld hl,$d040
-	ld bc,$e000-$d040
-	call clearMemoryBc
+	ld bc,$0e00-$0d04
+	call clearMemoryBc16ByteBlocks
 
 	call clearScreenVariables
 	call clearMemoryOnScreenReload
@@ -2617,8 +2617,8 @@ loadDungeonLayout_b01:
 ;;
 clearDungeonLayout:
 	ld hl,w2DungeonLayout
-	ld bc,$0200
-	jp clearMemoryBc
+	ld bc,$0020
+	jp clearMemoryBc16ByteBlocks
 
 
 .ifdef ROM_AGES
@@ -3962,8 +3962,8 @@ func_5c18:
 	bit 1,(hl)
 	jr nz,++
 
-	ld b,$40
-	call clearMemory
+	ld b,$04
+	call clearMemory16ByteBlocks
 	ld a,LINK_OBJECT_INDEX
 	ld (wLinkObjectIndex),a
 ++

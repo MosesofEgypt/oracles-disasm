@@ -75,8 +75,8 @@ updateSpecialObjects:
 	dec (hl)
 +
 	ld hl,wGrabbableObjectBuffer
-	ld b,$10
-	jp clearMemory
+	ld b,$01
+	jp clearMemory16ByteBlocks
 
 ;;
 ; @param hl Object to update (w1Link or w1Companion)

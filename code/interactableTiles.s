@@ -95,8 +95,8 @@ nextToChestTile:
 	ret nz
 
 	ld hl,w1ReservedInteraction0
-	ld b,$40
-	call clearMemory
+	ld b,$04
+	call clearMemory16ByteBlocks
 
 	; Check for overridden chest contents?
 	ld a,(wChestContentsOverride)

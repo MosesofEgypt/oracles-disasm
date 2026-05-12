@@ -2885,8 +2885,8 @@ hideStatusBar_body:
 	call fillMemory
 
 	ld hl,w4StatusBarTileMap
-	ld b,$40
-	call clearMemory
+	ld b,$04
+	call clearMemory16ByteBlocks
 
 	xor a
 	ld (wStatusBarNeedsRefresh),a
@@ -4522,8 +4522,8 @@ func_02_55a8:
 ; Load graphics for subscreens?
 func_02_55b2:
 	ld hl,w4SubscreenTextIndices
-	ld b,$20
-	call clearMemory
+	ld b,$02
+	call clearMemory16ByteBlocks
 	xor a
 	call showItemText2
 	ld hl,func_02_55a8
@@ -4895,8 +4895,8 @@ inventoryMenuState1:
 	ld a,SND_SELECTITEM
 	call playSound
 	ld hl,wTmpcbb3
-	ld b,$10
-	jp clearMemory
+	ld b,$01
+	jp clearMemory16ByteBlocks
 
 +
 	call inventorySubmenu2CheckDirectionButtons
@@ -11708,9 +11708,9 @@ secretListMenu_state0:
 @clearVramBank:
 	ld ($ff00+R_VBK),a
 	ld hl,$8000
-	ld bc,$1000
+	ld bc,$0100
 	ld a,$ff
-	jp fillMemoryBc
+	jp fillMemoryBc16ByteBlocks
 
 ;;
 ; State 1: processing input
@@ -11821,8 +11821,8 @@ secretListMenu_printSecret:
 	push af
 
 	ld hl,w7d800
-	ld bc,$0300
-	call clearMemoryBc
+	ld bc,$0030
+	call clearMemoryBc16ByteBlocks
 
 	ld hl,w7SecretText1
 	ld b,$c*2

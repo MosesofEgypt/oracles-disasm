@@ -41,8 +41,8 @@ parentItemCode_sword:
 	ld hl,w1WeaponItem.enabled
 	ld a,(hl)
 	or a
-	ld b,$40
-	call nz,clearMemory
+	ld b,$04
+	call nz,clearMemory16ByteBlocks
 	ld h,d
 	ld l,Item.enabled
 	set 7,(hl)

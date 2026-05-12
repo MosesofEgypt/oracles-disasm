@@ -1035,9 +1035,9 @@ seasonsFunc_03_7a6b:
 	ld a,$01
 	ld ($ff00+R_VBK),a
 	ld hl,$9800
-	ld bc,$0400
+	ld bc,$0040
 	ldh a,(<hFF8B)
-	call fillMemoryBc
+	call fillMemoryBc16ByteBlocks
 	xor a
 	ld ($ff00+R_VBK),a
 	ld hl,$9800
@@ -1054,9 +1054,9 @@ seasonsFunc_03_7a88:
 	ld bc,$0240
 	call clearMemoryBc
 	ld hl,$d400
-	ld bc,$0240
+	ld bc,$0024
 	ldh a,(<hFF8B)
-	call fillMemoryBc
+	call fillMemoryBc16ByteBlocks
 	pop af
 	ld ($ff00+R_SVBK),a
 	ret
@@ -1460,9 +1460,9 @@ seasonsFunc_03_7db8:
 	ld bc,$0240
 	call clearMemoryBc
 	ld hl,$dc00
-	ld bc,$0240
+	ld bc,$0024
 	ld a,$02
-	call fillMemoryBc
+	call fillMemoryBc16ByteBlocks
 	pop af
 	ld ($ff00+R_SVBK),a
 	ret

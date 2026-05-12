@@ -875,99 +875,6 @@ clearMemory:
 ; @param	b	# of bytes to fill
 ; @param	hl	Memory to fill
 fillMemory:
-.ifdef EXPERIMENTAL_FAST_MEMFILL
-	bit 0,b
-	jr z,+
-		ldi (hl),a
-	+
-	bit 1,b
-	jr z,+
-		ldi (hl),a
-		ldi (hl),a
-	+
-	bit 2,b
-	jr z,+
-		ldi (hl),a
-		ldi (hl),a
-		ldi (hl),a
-		ldi (hl),a
-	+
-
-	srl b
-	srl b
-	srl b
-	inc b
-	jr +
-	-
-		ldi (hl),a
-		ldi (hl),a
-		ldi (hl),a
-		ldi (hl),a
-		ldi (hl),a
-		ldi (hl),a
-		ldi (hl),a
-		ldi (hl),a
-		+
-		dec b
-		jr nz,-
-	ret
-
-;;
-; @param	a	Value to fill memory with
-; @param	bc	# of bytes to fill
-; @param	hl	Memory to fill
-fillMemoryBc:
-	ld e,b
-	ld b,c
-	call fillMemory
-
-	push af
-	ld a,e
-	and $0f
-	ld c,a
-	swap c
-
-	ld a,e
-	and $f0
-	ld b,a
-	swap b
-	pop af
-
-	inc bc
-	ld e,a
-	jr +
-	-
-		ld a,e
-		ldi (hl),a
-		ldi (hl),a
-		ldi (hl),a
-		ldi (hl),a
-		ldi (hl),a
-		ldi (hl),a
-		ldi (hl),a
-		ldi (hl),a
-		ldi (hl),a
-		ldi (hl),a
-		ldi (hl),a
-		ldi (hl),a
-		ldi (hl),a
-		ldi (hl),a
-		ldi (hl),a
-		ldi (hl),a
-		+
-		dec bc
-		ld a,c
-		or b
-		jr nz,-
-	ret
-
-;;
-; @param	bc	# of bytes to clear
-; @param	hl	Memory to clear
-clearMemoryBc:
-	xor a
-	jr fillMemoryBc
-.else
 	ldi (hl),a
 	dec b
 	jr nz,fillMemory
@@ -993,7 +900,64 @@ fillMemoryBc:
 	or b
 	jr nz,-
 	ret
-.endif
+
+;;
+; @param	b	# of blocks of 16 bytes to fill
+; @param	hl	Memory to clear
+clearMemory16ByteBlocks:
+	xor a
+
+;;
+; @param	a	Value to fill memory with
+; @param	b	# of blocks of 16 bytes to fill
+; @param	hl	Memory to fill
+fillMemory16ByteBlocks:
+	-
+		call fill16ByteBlockHelper
+		dec b
+		jr nz,-
+	ret
+
+fill16ByteBlockHelper:
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ret
+
+;;
+; @param	bc	# of blocks of 16 bytes to fill
+; @param	hl	Memory to clear
+clearMemoryBc16ByteBlocks:
+	xor a
+
+;;
+; @param	a	Value to fill memory with
+; @param	bc	# of blocks of 16 bytes to fill
+; @param	hl	Memory to fill
+fillMemoryBc16ByteBlocks:
+	-
+		ld e,a
+		ld a,c
+		or b
+		ret z
+		ld a,e
+		call fill16ByteBlockHelper
+		dec bc
+		jr -
+	ret
 
 ;;
 ; @param	b	# of bytes to copy
@@ -1068,13 +1032,13 @@ clearVram:
 	ld a,$01
 	ld ($ff00+R_VBK),a
 	ld hl,$8000
-	ld bc,$2000
-	call clearMemoryBc
+	ld bc,$0200
+	call clearMemoryBc16ByteBlocks
 	xor a
 	ld ($ff00+R_VBK),a
 	ld hl,$8000
-	ld bc,$2000
-	jr clearMemoryBc
+	ld bc,$0200
+	jr clearMemoryBc16ByteBlocks
 
 ;;
 initializeVramMaps:
@@ -1085,14 +1049,14 @@ initializeVramMap0:
 	ld a,$01
 	ld ($ff00+R_VBK),a
 	ld hl,$9800
-	ld bc,$0400
+	ld bc,$0040
 	ld a,$80
-	call fillMemoryBc
+	call fillMemoryBc16ByteBlocks
 	xor a
 	ld ($ff00+R_VBK),a
 	ld hl,$9800
-	ld bc,$0400
-	jr clearMemoryBc
+	ld bc,$0040
+	jr clearMemoryBc16ByteBlocks
 
 ;;
 initializeVramMap1:
@@ -1100,14 +1064,14 @@ initializeVramMap1:
 	ld a,$01
 	ld ($ff00+R_VBK),a
 	ld hl,$9c00
-	ld bc,$0400
+	ld bc,$0040
 	ld a,$80
-	call fillMemoryBc
+	call fillMemoryBc16ByteBlocks
 	xor a
 	ld ($ff00+R_VBK),a
 	ld hl,$9c00
-	ld bc,$0400
-	jp clearMemoryBc
+	ld bc,$0040
+	jp clearMemoryBc16ByteBlocks
 
 ;;
 ; @param	a	Palette header to load (see data/[ages|seasons]/paletteHeaders.s)
@@ -5460,8 +5424,8 @@ clearAllItemsAndPutLinkOnGround:
 
 @notSomariaBlock:
 	ld l,e
-	ld b,$40
-	call clearMemory
+	ld b,$04
+	call clearMemory16ByteBlocks
 ++
 	inc d
 	ld a,d
@@ -12645,8 +12609,8 @@ clearWramBank1:
 	xor a
 	ld ($ff00+R_SVBK),a
 	ld hl,$d000
-	ld bc,$1000
-	jp clearMemoryBc
+	ld bc,$0100
+	jp clearMemoryBc16ByteBlocks
 
 ;;
 ; Clear $30 bytes of ram related to information about the current screen, as
@@ -12667,21 +12631,21 @@ clearScreenVariables:
 ;;
 clearLinkObject:
 	ld hl,w1Link
-	ld b,$40
-	jp clearMemory
+	ld b,$04
+	jp clearMemory16ByteBlocks
 
 ;;
 clearReservedInteraction0:
 	ld hl,w1ReservedInteraction0
-	ld b,$40
-	call clearMemory
+	ld b,$04
+	call clearMemory16ByteBlocks
 
 ;;
 ; Unused?
 clearReservedInteraction1:
 	ld hl,w1ReservedInteraction1
-	ld b,$40
-	jp clearMemory
+	ld b,$04
+	jp clearMemory16ByteBlocks
 
 ;;
 ; Clear all interactions except wReservedInteraction0 and wReservedInteraction1.
@@ -12695,8 +12659,8 @@ clearDynamicInteractions:
 .else
 	ld l,Interaction.start
 .endif
-	ld b,$40
-	call clearMemory
+	ld b,$04
+	call clearMemory16ByteBlocks
 	inc d
 	ld a,d
 	cp $e0
@@ -12713,8 +12677,8 @@ clearItems:
 .else
 	ld l,Item.start
 .endif
-	ld b,$40
-	call clearMemory
+	ld b,$04
+	call clearMemory16ByteBlocks
 	inc d
 	ld a,d
 	cp $e0
@@ -12731,8 +12695,8 @@ clearEnemies:
 .else
 	ld l,Enemy.start
 .endif
-	ld b,$40
-	call clearMemory
+	ld b,$04
+	call clearMemory16ByteBlocks
 	inc d
 	ld a,d
 	cp $e0
@@ -12749,8 +12713,8 @@ clearParts:
 .else
 	ld l,Part.start
 .endif
-	ld b,$40
-	call clearMemory
+	ld b,$04
+	call clearMemory16ByteBlocks
 	inc d
 	ld a,d
 	cp $e0

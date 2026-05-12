@@ -1769,9 +1769,9 @@ func_6e9a:
 	ld a,$01
 	ld ($ff00+R_VBK),a
 	ld hl,$9800
-	ld bc,$0400
+	ld bc,$0040
 	ldh a,(<hFF8B)
-	call fillMemoryBc
+	call fillMemoryBc16ByteBlocks
 	xor a
 	ld ($ff00+R_VBK),a
 	ld hl,$9800
@@ -1790,9 +1790,9 @@ func_6eb7:
 	call clearMemoryBc
 	
 	ld hl,w3VramAttributes
-	ld bc,$0240
+	ld bc,$0024
 	ld a,$02
-	call fillMemoryBc
+	call fillMemoryBc16ByteBlocks
 	
 	pop af
 	ld ($ff00+R_SVBK),a
@@ -1808,9 +1808,9 @@ func_6ed6:
 	ld bc,$0240
 	call clearMemoryBc
 	ld hl,$d400
-	ld bc,$0240
+	ld bc,$0024
 	ldh a,(<hFF8B)
-	call fillMemoryBc
+	call fillMemoryBc16ByteBlocks
 	pop af
 	ld ($ff00+R_SVBK),a
 	ret

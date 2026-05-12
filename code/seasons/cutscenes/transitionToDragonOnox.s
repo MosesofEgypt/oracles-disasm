@@ -166,9 +166,9 @@ seasonsFunc_0f_704d:
 	ld a,$01
 	ld ($ff00+R_VBK),a
 	ld hl,$9800
-	ld bc,$0400
+	ld bc,$0040
 	ld a,$0d
-	call fillMemoryBc
+	call fillMemoryBc16ByteBlocks
 
 	ld hl,$9f60
 	ld b,$40
@@ -197,9 +197,9 @@ seasonsFunc_0f_70b4_swapGraphics:
 	ld a,$01
 	ld ($ff00+R_VBK),a
 	ld hl,$9800
-	ld bc,$0400
+	ld bc,$0040
 	ld a,$0d
-	call fillMemoryBc
+	call fillMemoryBc16ByteBlocks
 
 	ld hl,$9f20
 	ld b,$a0
@@ -213,9 +213,9 @@ seasonsFunc_0f_70b4_swapGraphics:
 	call clearMemoryBc
 
 	ld hl,w3TileMappingIndices
-	ld bc,$02c0
+	ld bc,$002c
 	ld a,$0d
-	call fillMemoryBc
+	call fillMemoryBc16ByteBlocks
 
 	ld a,GFXH_DRAGON_ONOX
 	call loadGfxHeader
