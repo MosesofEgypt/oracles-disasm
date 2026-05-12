@@ -486,60 +486,39 @@ getTransformedLinkID:
 	ld b,$00
 	ret
 
-@ringToID:
-.ifndef UNRESTRICTED_TRANSFORMS
-	.db OCTO_RING		SPECIALOBJECT_LINK_AS_OCTOROK
-	.db MOBLIN_RING		SPECIALOBJECT_LINK_AS_MOBLIN
-	.db LIKE_LIKE_RING	SPECIALOBJECT_LINK_AS_LIKELIKE
-	.db SUBROSIAN_RING	SPECIALOBJECT_LINK_AS_SUBROSIAN
-	.db FIRST_GEN_RING	SPECIALOBJECT_LINK_AS_RETRO
-.endif
-	.db $00
-
 .ifdef UNRESTRICTED_TRANSFORMS
 remapTransformedSpecialObjectGfx:
 	ld hl,specialObjectGraphicsTable
-	; redirect id to transformed one if ring equipped
-	; checkSubrosian
-	ld a,SUBROSIAN_RING
-	call cpActiveRing
-	jr nz,+
-		ld a,$03
-		jr ++
-	+
-	; checkFirstGen
-	ld a,FIRST_GEN_RING
-	call cpActiveRing
-	jr nz,+
-		ld a,$04
-		jr ++
-	+
-	; checkOctorock
-	ld a,OCTO_RING
-	call cpActiveRing
-	jr nz,+
-		ld a,$05
-		jr ++
-	+
-	; checkMoblin
-	ld a,MOBLIN_RING
-	call cpActiveRing
-	jr nz,+
-		ld a,$06
-		jr ++
-	+
-	; checkLikeLike
-	ld a,LIKE_LIKE_RING
-	call cpActiveRing
-	jr nz,+
-		ld a,$07
-		jr ++
-	+
-	; no ring equipped. return
-	ld a,e
-	ret
-	++
 
+	; NOTE: this optimization only works because the ring
+	;		ids were happen to lie in the same byte
+	ld a,(wEquippedRingFlags+5)
+	or $7c
+	cp $ff
+
+	; if any rings are equipped, the above won't be zero
+	jr nz,+
+		ld a,e
+		ret
+	+
+
+	; figure out which ring is equipped
+	push hl
+	ld hl,@ringToID
+	-
+		ldi a,(hl)
+		or a
+		jr nz,+
+			; no ring equipped. return
+			ld a,e
+			pop hl
+			ret
+		+
+		call cpActiveRing
+		ldi a,(hl)
+		jr nz,-
+
+	pop hl
 	; store the decided on transform type
 	ld b,a
 
@@ -669,6 +648,14 @@ remapTransformedSpecialObjectGfx:
 	 or a
 	 ret
 .endif
+
+@ringToID:
+	.db OCTO_RING		SPECIALOBJECT_LINK_AS_OCTOROK
+	.db MOBLIN_RING		SPECIALOBJECT_LINK_AS_MOBLIN
+	.db LIKE_LIKE_RING	SPECIALOBJECT_LINK_AS_LIKELIKE
+	.db SUBROSIAN_RING	SPECIALOBJECT_LINK_AS_SUBROSIAN
+	.db FIRST_GEN_RING	SPECIALOBJECT_LINK_AS_RETRO
+	.db $00
 
 ;;
 ; Updates Link's damageToApply variable to account for damage-modifying rings.

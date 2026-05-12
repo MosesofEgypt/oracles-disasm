@@ -60,6 +60,19 @@ Ring Stacking:
             Ganon (Contact?) = 16 base damage
                 Total = max(1, (16 - 1)*max(0.375, (1 - 0.25 - 0.375))) = 5.625 = 5 damage
 
+    Color variations:
+        The color rings can be combined to produce an extra 6 colors for 10 total.
+        You can combine any two to get a mixed color, though you must enable interframe
+        blending(or be playing on real hardware) to see the effect.
+
+        The green, red, blue, and gold color rings can be combined to produce the following:
+            blue + green = teal
+            blue + red   = purple
+            blue + gold  = sage
+            gold + green = lime
+            gold + red   = orange
+            red  + green = brown
+
 
 Removed rings:
     Whimsical Ring:
