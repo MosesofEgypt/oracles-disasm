@@ -85,7 +85,11 @@ itemCode10:
 	ld a,$06
 	ldi (hl),a
 	ld (hl),a
-	call itemIncSubstate
+
+	; move to following enemy
+	ld l,Item.substate
+	inc (hl)
+	ret
 
 @azuchuState3	; follow enemy
 	ld h,d
@@ -104,11 +108,10 @@ itemCode10:
 			jr @hop
 	+
 
-	; target lost. move back to previous substate
+	; target lost. move back to following link
 	ld h,d
 	ld l,Item.substate
-	dec (hl)
-	dec (hl)
+	ld (hl),$01
 
 	call @forceResetFocus 
 	jr @targetLink
