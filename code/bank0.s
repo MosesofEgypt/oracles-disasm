@@ -10184,7 +10184,7 @@ animateEnemyShakingWhileHeld:
 	or a
 	; so, it appears that the vine sprout is an enemy, which causes
 	; it to vibrate uncontrollably since it's stun counter is 0.
-	; for this edge case(and any others idk of), we solving it by
+	; for this edge case(and any others idk of), we solve it by
 	; not vibrating if the stun counter is 0. makes sense anyway
 	ret z
 

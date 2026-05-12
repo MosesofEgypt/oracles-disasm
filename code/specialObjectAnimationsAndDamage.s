@@ -961,7 +961,7 @@ linkApplyDamage:
 	call checkTreasureObtained
 .ifdef ENABLE_RING_REDUX
 	jr c,+++
-		ld a,PROTECTION_RING
+		ld a,FAIRYS_RING
 		call cpActiveRing
 		jr nz,+
 			call removeRing

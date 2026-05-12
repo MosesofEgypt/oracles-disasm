@@ -3415,7 +3415,7 @@ updateStatusBar_body:
 	ld (hl),$1b
 	dec hl
 
-	; only display the thousands and hundreds
+	; display only the thousands and hundreds
 	; digits if the rupee count is over 999
 	ld de,wDisplayedRupees+1
 	ld a,(de)
@@ -10323,7 +10323,6 @@ ringMenu_ringList_substate0:
 +
 	; Display text for the ring we're hovering over in the ring box
 	ld a,(wRingMenu.ringBoxCursorIndex)
-	ld hl,wRingBoxContents
 .ifdef EXTENDED_RING_BOX
 	call getRingBoxContents
 	call getRingBoxClippedIndex
@@ -10499,8 +10498,10 @@ ringMenu_moveCursorToRingBox:
 ringMenu_checkRingIsInBox:
 	push bc
 	ld hl,wRingBoxContents+4
+.ifdef EXTENDED_RING_BOX
 	ld c,$00
 @checkRings
+.endif
 	ld b,$05
 @nextRing:
 	cp (hl)
@@ -10528,7 +10529,9 @@ ringMenu_checkRingIsInBox:
 @foundRing:
 	dec b
 	ld a,b
+.ifdef EXTENDED_RING_BOX
 	add c
+.endif
 	pop bc
 	ret
 

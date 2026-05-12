@@ -69,7 +69,9 @@ fake_copyRectangleFromVramTilesToAddress:
 	ld e,a
 	ldi a,(hl)
 	ld d,a
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 
 @nextRow:
 	push bc
