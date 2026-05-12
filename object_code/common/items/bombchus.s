@@ -14,8 +14,7 @@ itemCode10:
 	rst_jumpTable
 	.dw @azuchuState0	; init
 	.dw @azuchuState1	; follow link
-	.dw @azuchuState2	; start following enemy
-	.dw @azuchuState3	; follow enemy
+	.dw @azuchuState2	; follow enemy
 
 @azuchuState0	; init
 	; prevent azuchu from initializing until enabled.
@@ -73,7 +72,7 @@ itemCode10:
 	;call bombchuUpdateAngle_sidescrolling
 	jr @hop
 
-@azuchuState2	; start following enemy
+@azuchuState2	; follow enemy
 	ld h,d
 	; ensure azuchu is collidable
 	ld l,Item.collisionType
@@ -86,13 +85,6 @@ itemCode10:
 	ldi (hl),a
 	ld (hl),a
 
-	; move to following enemy
-	ld l,Item.substate
-	inc (hl)
-	ret
-
-@azuchuState3	; follow enemy
-	ld h,d
 	; check if target is invalid
 	xor a
 	call objectGetRelatedObject2Var
