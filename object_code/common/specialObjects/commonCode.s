@@ -183,16 +183,15 @@ updateLinkInvincibilityCounter:
 	jr z,++
 		ldbc GBA_TIME_RING, GBA_NATURE_RING
 		call eitherRingActive
-		ldbc $07, $05
+		ldbc $07,$05
 		jr z,+
-		jr c,+
-			ldbc $00, $00
+			jr nc,++
 		+
 		jr nz,+
 		jr nc,+
 			ld c,$04
-
 		+
+
 		ld a,b
 		or a
 		jr z,++

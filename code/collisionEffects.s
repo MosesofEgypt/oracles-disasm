@@ -1599,25 +1599,28 @@ applyDamageToLink:
 
 .ifdef ENABLE_RING_REDUX
 collisionLinkBounce:
-	; TODO: make a table of part/enemy ids you cant bounce off(i.e. fireballs)
-	; TODO: make a table of enemy ids you cant stun with the bounce(i.e. bosses)
-	; TODO: make it possible to downstab if attacking while in air.
-	;       need to ensure it doesn't get abused by chaining downstabs on bosses
-
 	; only bounce if link is in the air, the collision effect
 	; is specifically COLLISIONEFFECT_DAMAGE_LINK, and link is
 	; wearing the rings. we don't want to consider other damage
 	; types, as they're rare and the situations they're use
 	; in don't warrant link being able to bounce off safely
-
-	; @check that Link is in the air and falling
 	push bc
 	push af
+	; make sure this is link
+	ld a,b
+	cp >w1Link
+	jr nz,+
+		ld a,c
+		cp <w1Link
+		jr nz,+
+
+	; @check that Link is in the air and falling
 	ld a,(wLinkInAir)
 	and $0f
 
 	; check that link is fully in the air
 	cp $02
+	+
 	pop bc
 	ld a,b
 	pop bc

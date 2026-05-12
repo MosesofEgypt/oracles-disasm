@@ -3728,8 +3728,8 @@ cutscene02:
 
 .ifdef EXTENDED_RING_BOX
 clearExtendedRingBox:
-	; clear the extended box contents if the extra byte at the end
-	; isn't 0x00, as that indicates this code was never run there
+	; clear the extended box contents if the
+	; flag indicates this code was never run
 	ld a,(wRingReduxFlagsExt)
 	bit 5,a
 	ret nz
@@ -3830,7 +3830,7 @@ updateQuickSwapItems:
 	ld a,(wOpenedMenuType)
 	or a
 	jr z,+
-		; ensure flags 6 and 7 aren't set so we don't 
+		; ensure flags 6 and 7 aren't set so we don't
 		; get put in an infinite menu open/close loop
 		ld a,(wRingReduxFlagsExt)
 		res 6,a

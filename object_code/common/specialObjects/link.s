@@ -4499,17 +4499,14 @@ updateLinkSpeed_withParam:
 	inc b
 +
 .ifdef ENABLE_RING_REDUX
-	push de
 	push af
 	ld a,HIKERS_RING
 	call cpActiveRing
-	pop de
-	ld a,d
-	pop de
 	jr nz,+
 		; always standard movement if wearing hiker's ring
 		ld b,$04
-+
+	+
+	pop af
 .endif
 	call checkPegasusSeedCounter
 	jr z,++
@@ -4533,12 +4530,12 @@ updateLinkSpeed_withParam:
 			jr nz,+
 				; upgrade stairs to grass
 				ld b,$02
-+
+			+
 			cp $02
 			jr nz,+
 				; upgrade grass to normal
 				ld b,$04
-+
+			+
 			cp $04
 			jr nz,++
 				ld a,e
