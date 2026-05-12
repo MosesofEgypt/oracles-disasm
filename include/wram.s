@@ -335,7 +335,15 @@ wObjectsToDraw: ; $c500
 ; Must be aligned to $100 bytes.
 	dsb $80
 
+.ifdef ENABLE_MULTI_RING
+wEquippedRingFlags: ; $c580-$c587
+	; one bit for each ring to indicate if it's equipped this frame or not
+	dsb $08
+
+; $c588-$c5af unused?
+.else
 ; $c580-$c5af unused?
+.endif
 
 .ENDS
 

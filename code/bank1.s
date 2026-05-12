@@ -3481,12 +3481,12 @@ loadingRoom:
 
 ;;
 func_5a60:
+.ifdef ENABLE_MULTI_RING
+	call updateRingEquipStatuses
+.endif
 .ifdef ENABLE_RING_REDUX
 	call updateAzuchu
 	call updateSystemType
-.endif
-.ifdef ENABLE_MULTI_RING
-	call updateRingForceDisabledStatus
 .endif
 	call clearOam
 	call initializeVramMaps
@@ -3527,12 +3527,12 @@ func_5a60:
 
 ;;
 standardGameState:
+.ifdef ENABLE_MULTI_RING
+	call updateRingEquipStatuses
+.endif
 .ifdef ENABLE_RING_REDUX
 	call updateAzuchu
 	call updateSystemType
-.endif
-.ifdef ENABLE_MULTI_RING
-	call updateRingForceDisabledStatus
 .endif
 	ld a,(wLinkDeathTrigger)
 	cp $ff
@@ -3750,15 +3750,60 @@ clearExtendedRingBox:
 .endif
 
 .ifdef ENABLE_MULTI_RING
-updateRingForceDisabledStatus:
+updateRingEquipStatuses:
+	ld hl,wEquippedRingFlags
+	ld a,$ff
+	ld b,$08
+	call fillMemory
+
 	; if the player can open the menu, then rings shouldn't be disabled.
 	ld a,(wMenuDisabled)
 	or a
 	ret nz
 
+	; if all rings are counted as disabled, don't unset any flags
 	ld a,(wRingReduxFlags)
-	res 6,a
-	ld (wRingReduxFlags),a
+	bit 6,a
+	ret nz
+
+	; if the flag indicates it, force FIST_RING equipped
+	bit 5,a
+	ld a,FIST_RING
+	call z,unsetFlag
+
+	.ifdef ROM_SEASONS
+	; don't wanna cheat on blaino....
+	ld a,(wInBoxingMatch)
+	or a
+	ret nz
+	.endif
+
+	ld de,wRingBoxContents
+	ld a,(wRingReduxFlags)
+	ld c,a
+	call @unsetFlags
+
+	.ifdef EXTENDED_RING_BOX
+		ld de,wRingBoxContentsExt
+		ld a,(wRingReduxFlagsExt)
+		ld c,a
+		call @unsetFlags
+	.endif
+
+	ret
+
+@unsetFlags
+	ld b,$05
+	ld hl,wEquippedRingFlags
+	-
+		ld a,(de)
+		; if flag is unset, ring is equipped
+		bit 0,c
+		call z,unsetFlag
+		inc e
+		sra c
+		dec b
+		jr nz,-
 	ret
 .endif
 
@@ -3834,7 +3879,7 @@ updateQuickSwapItems:
 
 				; swap the items back since they weren't used
 				call @swapButtonItems
-		jr ++
+				jr ++
 	+
 		; just select being held
 		bit 6,a

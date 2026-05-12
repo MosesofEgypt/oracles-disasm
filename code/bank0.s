@@ -8194,74 +8194,12 @@ cpActiveRing:
 		or a
 		ret
 	+
-
 	push hl
-	push bc
-
-	.ifdef ROM_SEASONS
-		; don't wanna cheat on blaino....
-		ld hl,wInBoxingMatch
-		ld c,(hl)
-		bit 0,c
-		jr nz,@done
-	.endif
-
-	ld hl,wRingReduxFlags
-	ld c,(hl)
-	cp FIST_RING
-	jr nz,+
-		; if flags indicate to, we force the fist ring active
-		bit 5,c
-		jr z,+
-			; force fist ring to be equipped
-			xor a
-			jr @done
-	+
-
-	; treat all rings as inactive if forced to
-	bit 6,c
-	jr nz,@done
-
-	ld b,$05
-	ld hl,wRingBoxContents
-	-
-		cp (hl)
-		jr z,+
-		inc l
-		sra c
-		dec b
-		jr nz,-
-
-	.ifdef EXTENDED_RING_BOX
-		dec l
-		cp (hl)
-		jr z,+
-			ld b,$05
-			ld hl,wRingReduxFlagsExt
-			ld c,(hl)
-			ld hl,wRingBoxContentsExt
-
-		-
-			cp (hl)
-			jr z,+
-			inc l
-			sra c
-			dec b
-			jr nz,-
-	.endif
-
-	; all checks failed. clear z flag and return
-	rrca
-	jr @done
-+
-	; found the ring. determine if it's equipped
-	bit 0,c
-@done
-	pop bc
+	ld hl,wEquippedRingFlags
+	call checkFlag
 .else
 	push hl
 	ld hl,wActiveRing
-+
 	cp (hl)
 .endif
 	pop hl
@@ -8349,7 +8287,7 @@ removeRing:
 
 .ifdef ENABLE_RING_REDUX
 spawnAzuchu:
-	; only run every few frames to prevent interaction lag
+	; only run every few frames to prevent lag
 	ld a,(wFrameCounter)
 	and $0f
 	ret nz
