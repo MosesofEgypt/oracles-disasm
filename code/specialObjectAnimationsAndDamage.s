@@ -520,6 +520,7 @@ remapTransformedSpecialObjectGfx:
 
 	pop hl
 	; store the decided on transform type
+	push bc
 	ld b,a
 
 	; if the sprite can be remapped, replace
@@ -527,13 +528,17 @@ remapTransformedSpecialObjectGfx:
 	ld a,e
 	call @getCanRemapSprite
 	ld a,e
-	ret z
+	jr nz,+
+		pop bc
+		ret
+	+
 
 	; check if link-riding object or not
 	cp $09
 
 	ld e,b
 	ld a,c
+	pop bc
 	ld b,$00
 
 	call  z,@remapTransformLinkRiding
