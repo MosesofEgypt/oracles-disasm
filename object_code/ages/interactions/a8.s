@@ -72,7 +72,6 @@ interactionCodea8:
 .ifdef ENABLE_MULTI_RING
 	ld hl,wRingReduxFlags
 	set 5,(hl)
-	ld h,>wActiveRing
 .else
 	ld hl,wActiveRing
 	ld (hl),FIST_RING
