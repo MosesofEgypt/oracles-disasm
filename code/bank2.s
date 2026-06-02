@@ -5855,7 +5855,6 @@ drawEquippedSpriteForActiveRing:
 	call inventorySubscreen1_getRingBoxWidth
 	ret z
 	ld b,a
-	ld c,$00
 
 	ld a,(wInventorySubmenu1CursorPos)
 	sub $10
@@ -5866,10 +5865,11 @@ drawEquippedSpriteForActiveRing:
 .else
 	call getRingBoxCapacity
 	ret z
+
 	ld b,a
-	ld c,$00
-	ld hl,(wRingBoxContents)
+	ld hl,wRingBoxContents
 .endif
+	ld c,$00
 -
 	; checkNextRing
 	ld a,(hl)
@@ -5896,6 +5896,22 @@ drawEquippedSpriteForActiveRing:
 	pop bc
 	jr --
 .else
+.ifdef EXTENDED_RING_BOX
+	call inventorySubscreen1_getRingBoxWidth
+	ret z
+	ld b,a
+
+	ld a,(wInventorySubmenu1CursorPos)
+	sub $10
+	jr nc,+
+		xor a
+	+
+	call getRingBoxContents
+
+	ld a,(wActiveRing)
+	cp $ff
+	ret z
+.else
 	call getRingBoxCapacity
 	ret z
 
@@ -5905,6 +5921,7 @@ drawEquippedSpriteForActiveRing:
 	ret z
 
 	ld hl,wRingBoxContents
+.endif
 	ld c,$00
 -
 	cp (hl)
@@ -10857,6 +10874,22 @@ ringMenu_drawEquippedRingSprite:
 	call ringMenu_checkRingIsInBox
 	ret c
 .ifdef EXTENDED_RING_BOX
+	cp $05
+
+	push af
+	ld a,(wRingMenu.ringBoxCursorIndex)
+	cp $05
+
+	jr c,+
+		; viewing second row. return if equipped ring is on first
+		pop af
+		ret c
+		jr ++
+	+
+		; viewing first row. return if equipped ring is on second
+		pop af
+		ret nc
+	++
 	call getRingBoxClippedIndex
 .endif
 
