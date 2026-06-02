@@ -5866,6 +5866,8 @@ drawEquippedSpriteForActiveRing:
 .else
 	call getRingBoxCapacity
 	ret z
+	ld b,a
+	ld c,$00
 	ld hl,(wRingBoxContents)
 .endif
 -

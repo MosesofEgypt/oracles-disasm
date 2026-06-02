@@ -369,7 +369,11 @@ wSavefileString: ; $c5b2
 .ifdef EXTENDED_RING_BOX
 wRingBoxContentsExt: ; $c5ba-$c5be
 	dsb 5
+.else
+; $c5ba-$c5be unused?
+.endif
 
+.ifdef ENABLE_RING_REDUX
 wRingReduxFlagsExt: ; $c5bf
 ; Repurposing this byte for storing various redux related flags
 ; Bits 0-4: Set if the associated ring in the box is disabled
@@ -379,7 +383,7 @@ wRingReduxFlagsExt: ; $c5bf
 	db
 
 .else
-; $c5ba-$c5bf unused?
+; $c5bf unused?
 .endif
 
 .ENDS
