@@ -332,17 +332,12 @@ giveTreasure_body:
 	cp e
 .ifdef ENABLE_RING_REDUX
 	jr nz,+
-		ld a,GOLD_JOY_RING
-		call cpActiveRing
+		call tripleHeartJoyComboActive
 		jr nz,+
-			ld a,BLUE_JOY_RING
-			call cpActiveRing
-			jr nz,+
-				ld a,c
-				sra a
-				add c
-				ld c,a
-		xor a
+			ld a,c
+			sra a
+			add c
+			ld c,a
 	+
 .endif
 	ldi a,(hl)

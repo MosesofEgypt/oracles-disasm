@@ -8151,17 +8151,20 @@ add16BitRefs:
 ;;
 ; @param	a	The ring to check for.
 ; @param[out]	zflag	Set if the currently equipped ring equals 'a'.
-cpActiveRing:
+cpActiveRingCheckFF:
 .ifdef ENABLE_MULTI_RING
 	cp $ff
 	jr nz,+
 		or a
 		ret
 	+
+cpActiveRing:
+	; determine if the flag is set
 	push hl
 	ld hl,wEquippedRingFlags
-	call checkFlag
+	call optimizedFlagCheck
 .else
+cpActiveRing:
 	push hl
 	ld hl,wActiveRing
 	cp (hl)
@@ -8198,6 +8201,31 @@ eitherRingActive:
 	pop de
 	ld a,d
 	pop de
+	ret
+
+;;
+; @param	a	Flag to check
+; @param	hl	Start address of flags
+; @param[out]	a	AND result
+; @param[out]	zflag	Set if the flag is not set.
+optimizedFlagCheck:
+	push bc
+	ld b,a
+	srl a
+	srl a
+	srl a
+	add l
+	ld l,a
+	ld a,(hl)
+	ld c,a		; the byte containing the flags
+	ld a,b
+	and $07 	; the bit offset within the byte
+	ld hl,bitTable
+	add l
+	ld l,a
+	ld a,(hl) 	; the flag mask
+	and c		; get whether the flag is set or not
+	pop bc
 	ret
 
 ;;
@@ -8371,7 +8399,14 @@ getHeldObject:
 isValidTargetForJudo:
 	push hl
 	ld hl,@judoTargets
-	jr @isValidTarget
+
+@isValidTarget:
+	push af
+	call optimizedFlagCheck
+	pop hl
+	ld a,h
+	pop hl
+	ret
 
 ; these are bitmasks for which enemies can be picked up with a ring combo
 @judoTargets:
@@ -8393,28 +8428,20 @@ isValidTargetForJudo:
 	dbrev %11010000 %11111110 ; 0x40-0x4f
 	dbrev %01100000 %00000000 ; 0x50-0x5f
 
-@isValidTarget:
-	push af
-	call checkFlag
-	pop hl
-	ld a,h
-	pop hl
-	ret
-
 ;;
 ; @param	b	The first ring to check for.
 ; @param	c	The second ring to check for.
 ; @param[out]	zflag	Set if both 'b' and 'c' rings are active.
 bothRingsActive:
-	call eitherRingActive
-	ret nz
-	ret c
-	push bc
 	push af
-	or $01
+	ld a,b
+	call cpActiveRing
+	jr nz,+
+		ld a,c
+		call cpActiveRing
+	+
 	pop bc
 	ld a,b
-	pop bc
 	ret
 
 isHasteRingEquipped:
@@ -8446,20 +8473,29 @@ smashingBoardComboActive:
 	ldbc STEADFAST_RING,HASTE_RING
 	jr bothRingsActive
 
-bothRingsActiveAndPopBC:
-	call bothRingsActive
-	pop bc
-	ret
-
 eitherRingActiveAndPopBC:
 	call eitherRingActive
 	pop bc
 	ret
 
 miningBombComboActive:
+	push de
+	ld d,a
+	ld hl,wRingComboCacheFlags
+	xor a
+	call checkFlag
+	ld a,d
+	pop de
+	ret
+
+cacheMiningBombComboActive:
 	push bc
 	ldbc DISCOVERY_RING,BLAST_RING
-	jr bothRingsActiveAndPopBC
+	call bothRingsActive
+	ld b,$00
+	call updateRingComboFlag
+	pop bc
+	ret
 
 alchemyJoyComboActive:
 	push bc
@@ -8469,7 +8505,9 @@ alchemyJoyComboActive:
 tripleHeartJoyComboActive:
 	push bc
 	ldbc BLUE_JOY_RING,GOLD_JOY_RING
-	jr bothRingsActiveAndPopBC
+	call bothRingsActive
+	pop bc
+	ret
 
 dolphinComboActive:
 	push bc
@@ -8498,27 +8536,49 @@ dolphinComboActive:
 enemyPogoComboActive:
 	push bc
 	ldbc STEADFAST_RING,ROCS_RING
-	jr bothRingsActiveAndPopBC
+	call bothRingsActive
+	pop bc
+	ret
 
 kenpoMasterComboActive:
 	push bc
 	ldbc EXPERTS_RING,FIST_RING
-	jr bothRingsActiveAndPopBC
+	call bothRingsActive
+	pop bc
+	ret
 
 hadoukenComboActive:
 	push bc
 	ldbc EXPERTS_RING,ENERGY_RING
-	jr bothRingsActiveAndPopBC
+	call bothRingsActive
+	pop bc
+	ret
 
 hurricaneSpinComboActive:
 	push bc
 	ldbc SPIN_RING,CHARGE_RING
-	jr bothRingsActiveAndPopBC
+	call bothRingsActive
+	pop bc
+	ret
 
 judoMasterComboActive:
+	push de
+	ld d,a
+	ld hl,wRingComboCacheFlags
+	ld a,$01
+	call checkFlag
+	ld a,d
+	pop de
+	ret
+
+cacheJudoMasterComboActive:
 	push bc
 	ldbc EXPERTS_RING,TOSS_RING
-	jr bothRingsActiveAndPopBC
+	call bothRingsActive
+	ld b,$01
+	call updateRingComboFlag
+	pop bc
+	ret
 
 beamosComboActive:
 	ld a,ENERGY_RING
@@ -8534,13 +8594,14 @@ beamosComboActive:
 eitherRangRingEquipped:
 	push bc
 	ldbc RANG_RING_L2,RANG_RING_L1
-	jr eitherRingActiveAndPopBC
+	jp eitherRingActiveAndPopBC
 
 superBoomerangComboActive:
 	ld a,TOSS_RING
 	call cpActiveRing
 	jr z,+
-		call isHasteRingEquipped
+		ld a,HASTE_RING
+		call cpActiveRing
 		ret nz
 	+
 @zIfEither
@@ -8715,6 +8776,19 @@ quickSwapHeldItems:
 	pop bc
 	pop af
 	rst_setrombank
+	ret
+
+updateRingComboFlag:
+	push hl
+	ld a,b
+	ld hl,wRingComboCacheFlags
+	jr z,+
+		call z,setFlag
+		jr ++
+	+
+		call z,unsetFlag
+	++
+	pop hl
 	ret
 .endif
 
@@ -11564,15 +11638,15 @@ updateEnemy:
 
 ++
 .ifdef ENABLE_RING_REDUX
-	call isValidTargetForJudo
-	jr z,+
-		call judoMasterComboActive
-		jr nz,+
-		push af
-		push hl
-		call objectAddToGrabbableObjectBuffer
-		pop hl
-		pop af
+	call judoMasterComboActive
+	jr nz,+
+		call isValidTargetForJudo
+		jr z,+
+			push af
+			push hl
+			call objectAddToGrabbableObjectBuffer
+			pop hl
+			pop af
 	+
 .endif
 	; hl = enemyCodeTable + a*2
@@ -11583,7 +11657,9 @@ updateEnemy:
 	adc >enemyCodeTable
 	ld h,a
 
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 .ifdef ROM_AGES
 	ld a,b
 	rst_setrombank

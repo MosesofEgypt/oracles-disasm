@@ -1,7 +1,4 @@
 specialObjectCode_linkRidingAnimal:
-.ifdef ENABLE_RING_REDUX
-	call specialObjectSetOamVariables@applyRingPalette
-.endif
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable
@@ -12,6 +9,12 @@ specialObjectCode_linkRidingAnimal:
 	call dropLinkHeldItem
 	call clearAllParentItems
 	call specialObjectSetOamVariables
+.ifdef ENABLE_RING_REDUX
+	ld a,(w1Link.oamFlags)
+	ld (wLinkOrigOamPalette),a
+	ld a,$ff
+	ld (wColorRingFlags),a
+.endif
 
 	ld h,d
 	ld l,SpecialObject.state
@@ -34,6 +37,9 @@ specialObjectCode_linkRidingAnimal:
 	jp objectCreateInteractionWithSubid00
 
 @state1:
+.ifdef ENABLE_RING_REDUX
+	call specialObjectCode_link@applyRingPalette
+.endif
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz

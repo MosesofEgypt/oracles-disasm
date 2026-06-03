@@ -3481,13 +3481,6 @@ loadingRoom:
 
 ;;
 func_5a60:
-.ifdef ENABLE_MULTI_RING
-	call updateRingEquipStatuses
-.endif
-.ifdef ENABLE_RING_REDUX
-	call updateAzuchu
-	call updateSystemType
-.endif
 	call clearOam
 	call initializeVramMaps
 	call clearMemoryOnScreenReload
@@ -3533,6 +3526,7 @@ standardGameState:
 .ifdef ENABLE_RING_REDUX
 	call updateAzuchu
 	call updateSystemType
+	call updateColorRingPalettes
 .endif
 	ld a,(wLinkDeathTrigger)
 	cp $ff
@@ -3751,20 +3745,22 @@ clearExtendedRingBox:
 
 .ifdef ENABLE_MULTI_RING
 updateRingEquipStatuses:
-	ld hl,wEquippedRingFlags
 	ld a,$ff
+	ld (wRingComboCacheFlags),a
+
+	ld hl,wEquippedRingFlags
 	ld b,$08
 	call fillMemory
 
-	; if the player can open the menu, then rings shouldn't be disabled.
+	; if the player can open the menu, then rings shouldn't be force-disabled.
 	ld a,(wMenuDisabled)
 	or a
-	ret nz
-
-	; if all rings are counted as disabled, don't unset any flags
-	ld a,(wRingReduxFlags)
-	bit 6,a
-	ret nz
+	jr nz,+
+		; if all rings are counted as disabled, don't unset any flags
+		ld a,(wRingReduxFlags)
+		bit 6,a
+		ret nz
+	+
 
 	; if the flag indicates it, force FIST_RING equipped
 	bit 5,a
@@ -3790,6 +3786,11 @@ updateRingEquipStatuses:
 		call @unsetFlags
 	.endif
 
+	; these combos can get checked multiple times a
+	; frame, so we cache them for quicker processing
+	call cacheJudoMasterComboActive
+	call cacheMiningBombComboActive
+
 	ret
 
 @unsetFlags
@@ -3808,6 +3809,76 @@ updateRingEquipStatuses:
 .endif
 
 .ifdef ENABLE_RING_REDUX
+updateColorRingPalettes:
+	; get the flags specifying the color rings that are equipped
+	ld hl,wEquippedRingFlags+6
+	ldi a,(hl)	; get the flag bits for 3 of the 4 color rings
+	and $b0		; mask
+	ld b,a
+	ld a,(hl) 	; get the last ring flag
+	and $01		; mask
+	or b		; mix to get flags for all 4 color rings in the same byte
+
+	; see if they've changed since last frame
+	ld hl,wColorRingFlags
+	cp (hl)
+	ret z
+
+	; rings changed. update the palettes
+	ld b,a		; store flags for color checking
+	ld (hl),a	; store the new ring flags
+
+	ld hl,wRingColorPaletteA
+	; initialize with link's original palette
+	ld a,(wLinkOrigOamPalette)
+	ld (hl),a
+
+	; check colors in the order green, blue, red, gold
+	ld a,$08	; initialize the oam flags
+	ld c,$02	; using c to indicate how many palettes can still be stored
+
+	bit 5,b
+	jr nz,+
+		; green
+		ldi (hl),a
+		dec c
+	+
+	inc a
+
+	bit 0,b
+	jr nz,+
+		; blue
+		ldi (hl),a
+		dec c
+		ret z
+	+
+	inc a
+
+	bit 4,b
+	jr nz,+
+		; red
+		ldi (hl),a
+		dec c
+		ret z
+	+
+	inc a
+
+	bit 7,b
+	jr nz,+
+		; gold
+		ldi (hl),a
+		dec c
+		ret z
+	+
+
+	; we can only get to this point if less than 2 rings are equipped
+	; in either case we just need to copy the first color to the second
+	ld hl,wRingColorPaletteA
+	ld a,(hl)
+	inc l
+	ld (hl),a
+	ret
+
 updateSystemType:
 	; change mode to GBC if wearing ring
 	ld a,GBOY_COLOR_RING

@@ -204,10 +204,9 @@ getSpecialObjectGraphicsFrame:
 	ld a,e
 .endif
 
+	ld hl,specialObjectGraphicsTable
 .ifdef UNRESTRICTED_TRANSFORMS
 	call remapTransformedSpecialObjectGfx
-.else
-	ld hl,specialObjectGraphicsTable
 .endif
 	rst_addDoubleIndex
 	rst_derefHl
@@ -488,8 +487,6 @@ getTransformedLinkID:
 
 .ifdef UNRESTRICTED_TRANSFORMS
 remapTransformedSpecialObjectGfx:
-	ld hl,specialObjectGraphicsTable
-
 	; NOTE: this optimization only works because the ring
 	;		ids were happen to lie in the same byte
 	ld a,(wEquippedRingFlags+5)
@@ -556,7 +553,7 @@ remapTransformedSpecialObjectGfx:
 	; this is all we need to do to fix this. the first 13 sprites
 	; are for ricky, which throws off the count for the others.
 	inc a
-	cp a
+	cp a	; NOTE: doing this so remapTransformLinkNormal doesn't get called
 	ret
 
 @remapTransformLinkNormal:
@@ -564,18 +561,21 @@ remapTransformedSpecialObjectGfx:
 	cp $04			; stand-facing
 	jr nz,+
 		ld a,$06
+		ret
 
 +
 	; checkLeftFacing
 	cp $1d			; dance-left
 	jr nz,+
 		ld a,$07
+		ret
 
 +
 	; checkRightFacing
 	cp $1e			; dance-right
 	jr nz,+
 		ld a,$05
+		ret
 
 +
 	; handle gale seed having 8 directions
@@ -584,16 +584,16 @@ remapTransformedSpecialObjectGfx:
 		cp $18
 		jr nc,+
 			sra a
+			ret
 
 +
 	; handle seed shooter and big sword swing having 8 directions
 	cp $38
-	jr c,+
-		cp $50
-		jr nc,+
-			sra a
+	ret c
 
-+
+	cp $50
+	ret nc
+	sra a
 	ret
 
 @getCanRemapSprite:
@@ -622,18 +622,20 @@ remapTransformedSpecialObjectGfx:
 
 	; if the frame is one that can't be well represented
 	; with a one of the transformed frames, dont substitute
-	cp $08  ; falling in hole 1
-	ret z
-	cp $09  ; falling in hole 2
-	ret z
-	cp $0a  ; falling in hole 3
-	ret z
 	cp $04  ; collapsed
 	ret z
-	cp $32  ; squash thin
+	cp $08  ; falling in hole 1
 	ret z
-	cp $33  ; squash flat
-	ret z
+	jr c,+
+		cp $09  ; falling in hole 2
+		ret z
+		cp $0a  ; falling in hole 3
+		ret z
+		cp $32  ; squash thin
+		ret z
+		cp $33  ; squash flat
+		ret z
+	+
 
 	; don't remap if swimming while not sidescrolling
 	; (no custom sprites makes it look baaaaad)

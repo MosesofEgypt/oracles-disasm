@@ -27,77 +27,7 @@ specialObjectSetOamVariables:
 	; Write flags to SpecialObject.oamFlagsBackup as well
 	dec e
 	ld (de),a
-.ifdef ENABLE_RING_REDUX
-@applyRingPalette:
-	push af
-	push hl
-	push de
-	push bc
-	ld hl,w1Link.oamFlagsBackup
-	; get the backup oam flags in e, and the palette portion in d
-	ldi a,(hl)
-	ld e,a
-	and $07
-	ld d,a
-	push hl
-	ld l,a
-	ld h,$00
-
-	ldbc GREEN_COLOR_RING, $00
-	call @mixRingPalette
-
-	ldbc BLUE_COLOR_RING, $01
-	call @mixRingPalette
-
-	ldbc RED_COLOR_RING, $02
-	call @mixRingPalette
-
-	ldbc GOLD_COLOR_RING, $03
-	call @mixRingPalette
-
-	; if no ring was found, reset palette to normal
-	ld a,h
-	or a
-	jr nz,+
-	ld l,$00
-
-+
-	; add the "object palette" flag
-	ld a,l
-	or $08
-	ld d,a
-	pop hl
-
-	; if both link's oam flags are equal, replace them both.
-	; if they're different(i.e. he's flashing), only replace the backup
-	ldd a,(hl)
-	cp e
-	ld a,d
-	ld (hl),a
-	jr nz,+
-	inc l
-	ld (hl),a
-
-+
-	pop bc
-	pop de
-	pop hl
-	pop af
 	ret
-
-@mixRingPalette:
-	ld a,b
-	call cpActiveRing
-	ret nz
-	inc h
-	ld a,c
-	cp d
-	ret z
-	ld l,a
-	ret
-.else
-	ret
-.endif
 
 ; 2 bytes for each SpecialObject id: oamTileIndexBase, oamFlags (palette).
 @data:
@@ -187,23 +117,23 @@ updateLinkInvincibilityCounter:
 		jr z,+
 			jr nc,++
 		+
-		jr nz,+
 		jr nc,+
-			ld c,$04
+			dec c
 		+
 
-		ld a,b
-		or a
-		jr z,++
-			ld a,(wFrameCounter)
-			and b
-			cp c
-			jr c,++
-				bit 7,a
-				jr z,+
-					dec (hl)
-					ret
-				+
+		ld a,(wFrameCounter)
+		and b
+		cp c
+		jr c,++
+			bit 7,a
+			jr z,+
+				cp $80
+				jr z,++ 	; if the number is already max negative, don't decrement
+				dec (hl)
+				jr ++
+			+
+				cp $7f
+				jr z,++ 	; if the number is already max positive, don't increment
 				inc (hl)
 	++
 .endif

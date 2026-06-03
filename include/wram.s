@@ -340,10 +340,29 @@ wEquippedRingFlags: ; $c580-$c587
 	; one bit for each ring to indicate if it's equipped this frame or not
 	dsb $08
 
-; $c588-$c5af unused?
-.else
-; $c580-$c5af unused?
+wRingComboCacheFlags: ; $c588
+	; one bit for each cachable combo to indicate if it's active or not
+	db
 .endif
+
+.ifdef ENABLE_RING_REDUX
+wLinkOrigOamPalette: ; $c589
+	db
+
+wRingColorPaletteA: ; $c58a
+	; first color palette to toggle between
+	db
+
+wRingColorPaletteB: ; $c58b
+	; second color palette to toggle between
+	db
+
+wColorRingFlags: ; $c58c
+	; the wEquippedRingFlags from the previous frame for the color rings
+	db
+.endif
+
+; $c580-$c5af unused? (unless using ENABLE_MULTI_RING or ENABLE_RING_REDUX)
 
 .ENDS
 

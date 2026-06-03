@@ -4,7 +4,7 @@
 ; @param	d	Link object
 specialObjectCode_link:
 .ifdef ENABLE_RING_REDUX
-	call specialObjectSetOamVariables@applyRingPalette
+	call @applyRingPalette
 .endif
 	ld e,<w1Link.state
 	ld a,(de)
@@ -31,11 +31,46 @@ specialObjectCode_link:
 	.dw linkState13
 	.dw linkState14
 
+.ifdef ENABLE_RING_REDUX
+@applyRingPalette:
+	; determine which palette to use this frame
+	ld hl,wRingColorPaletteA
+	ld a,(wFrameCounter)
+	and $01
+	rst_addAToHl
+	ld a,(hl)
+
+	; if both link's oam flags are equal, replace them both.
+	; if they're different(i.e. he's flashing), only replace the backup
+	ld hl,w1Link.oamFlags
+	push de
+	ld e,a
+	ldd a,(hl)
+	cp (hl)
+	ld a,e
+	pop de
+
+	; replace the oamFlagsBackup
+	ld (hl),a
+	ret nz
+
+	; replace the oamFlags
+	inc l
+	ld (hl),a
+	ret
+.endif
+
 ;;
 ; LINK_STATE_00
 linkState00:
 	call clearAllParentItems
 	call specialObjectSetOamVariables
+.ifdef ENABLE_RING_REDUX
+	ld a,(w1Link.oamFlags)
+	ld (wLinkOrigOamPalette),a
+	ld a,$ff
+	ld (wColorRingFlags),a
+.endif
 	ld a,LINK_ANIM_MODE_WALK
 	call specialObjectSetAnimation
 
@@ -4498,56 +4533,43 @@ updateLinkSpeed_withParam:
 	; Standard movement: b = $04
 	inc b
 +
-.ifdef ENABLE_RING_REDUX
-	push af
-	ld a,HIKERS_RING
-	call cpActiveRing
-	jr nz,+
-		; always standard movement if wearing hiker's ring
-		ld b,$04
-	+
-	pop af
-.endif
 	call checkPegasusSeedCounter
 	jr z,++
 
 	ld e,$03
 ++
 .ifdef ENABLE_RING_REDUX
-	; don't use the ring if link is being force-moved(i.e. during a cutscene)
+	; don't use the rings if link is being force-moved(i.e. during a cutscene)
 	ld a,(wLinkForceState)
 	or a
 	jr nz,++
-
-	; same goes for if he's being given simulated input
-	ld a,(wUseSimulatedInput)
-	cp $01
-	jr z,++
-		call isHasteRingEquipped
-		jr nz,++
-			ld a,b
-			cp $03
+		; same goes for if he's being given simulated input
+		ld a,(wUseSimulatedInput)
+		cp $01
+		jr z,++
+			ld a,HIKERS_RING
+			call cpActiveRing
 			jr nz,+
-				; upgrade stairs to grass
-				ld b,$02
-			+
-			cp $02
-			jr nz,+
-				; upgrade grass to normal
+				; always standard movement if wearing hiker's ring
 				ld b,$04
 			+
-			cp $04
+
+			call isHasteRingEquipped
 			jr nz,++
 				ld a,e
-				cp $03
-				jr z,++
-					; upgrade normal to pegasus grass
-					ld b,$02
-					ld e,$03
-++
-.endif
+				add b
+				ld hl,@hasteSpeedUpgradeTable
+				rst_addAToHl
+				ld a,(hl)
+				jr +
+	++
+		ld a,e
+		add b
+	+
+.else
 	ld a,e
 	add b
+.endif
 	add c
 	and $7f
 	ld hl,@data
@@ -4566,6 +4588,14 @@ updateLinkSpeed_withParam:
 	.db $00 $06 $28 $28 $28 $3c $3c $3c
 	.db $14 $03 $1e $14 $28 $2d $1e $3c
 	.db $00 $05 $2d $2d $2d $2d $2d $2d
+
+.ifdef ENABLE_RING_REDUX
+@hasteSpeedUpgradeTable:
+	.db $00 	$01			; not sure????
+	; 	grass 	stairs 	normal
+	.db $04 	$02 	$05	; walking speeds
+	.db $07 	$05 	$07	; pegasus speeds
+.endif
 
 ;;
 ; Updates Link's speed and updates his position if he's experiencing knockback.

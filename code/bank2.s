@@ -5873,7 +5873,7 @@ drawEquippedSpriteForActiveRing:
 -
 	; checkNextRing
 	ld a,(hl)
-	call cpActiveRing
+	call cpActiveRingCheckFF
 	jr z,@foundRing
 --
 	; moveToNextRing
@@ -10852,7 +10852,7 @@ ringMenu_drawEquippedRingSprite:
 	-
 		ldd a,(hl)
 		push hl
-		call cpActiveRing
+		call cpActiveRingCheckFF
 		jr nz,+
 			ld a,b
 			dec a
