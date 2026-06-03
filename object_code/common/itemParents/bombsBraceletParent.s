@@ -321,11 +321,10 @@ parentItemCode_bracelet:
 	jr @beginPickup
 
 @tryPunching:
-	push bc
-	call kenpoMasterComboActive
+	ldbc EXPERTS_RING,FIST_RING
+	call eitherRingActive
 	jr z,+
-		pop bc
-		ret
+		ret nc
 	+
 
 	; make sure the button was just pressed so we can't rapid-fire punch
@@ -334,7 +333,6 @@ parentItemCode_bracelet:
 	ld b,a
 	ld a,(wGameKeysJustPressed)
 	cp b
-	pop bc
 	ret nz
 
 	; not grabbing anything, so act as if link is unequipped and try punching.

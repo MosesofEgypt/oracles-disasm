@@ -3744,6 +3744,10 @@ clearExtendedRingBox:
 .endif
 
 .ifdef ENABLE_MULTI_RING
+;;
+; Handles caching all ring related flags for the current frame, as
+; they typically need to be checked multiple times each frame.
+;
 updateRingEquipStatuses:
 	ld a,$ff
 	ld (wRingComboCacheFlags),a

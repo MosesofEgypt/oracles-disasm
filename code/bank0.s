@@ -8204,6 +8204,7 @@ eitherRingActive:
 	ret
 
 ;;
+;
 ; @param	a	Flag to check
 ; @param	hl	Start address of flags
 ; @param[out]	a	AND result
@@ -8284,17 +8285,14 @@ spawnAzuchu:
 	and $0f
 	ret nz
 
+.ifdef ROM_AGES
+	; don't spawn if deep underwater
+	call isDeepUnderwater
+	ret z
+.endif
+
 	; don't spawn if swimming or in the air
 	ld a,(wLinkSwimmingState)
-	ld l,a
-	; swimming is fine if sidescrolling though
-	ld a,(wTilesetFlags)
-	and TILESETFLAG_SIDESCROLL
-	ld a,l
-	jr z,+
-		xor a
-	+
-
 	ld hl,(wLinkInAir)
 	or (hl)
 	ret nz
@@ -8479,23 +8477,20 @@ eitherRingActiveAndPopBC:
 	ret
 
 miningBombComboActive:
-	push de
-	ld d,a
-	ld hl,wRingComboCacheFlags
+	ldh (<hFFBD),a	; store temporarily for restoring later
 	xor a
-	call checkFlag
-	ld a,d
-	pop de
-	ret
+	jp getRingComboFlag
 
 cacheMiningBombComboActive:
 	push bc
 	ldbc DISCOVERY_RING,BLAST_RING
 	call bothRingsActive
-	ld b,$00
-	call updateRingComboFlag
 	pop bc
-	ret
+	ret nz
+
+	ldh (<hFFBD),a	; store temporarily for restoring later
+	xor a
+	jp setRingComboFlag
 
 alchemyJoyComboActive:
 	push bc
@@ -8562,23 +8557,20 @@ hurricaneSpinComboActive:
 	ret
 
 judoMasterComboActive:
-	push de
-	ld d,a
-	ld hl,wRingComboCacheFlags
+	ldh (<hFFBD),a	; store temporarily for restoring later
 	ld a,$01
-	call checkFlag
-	ld a,d
-	pop de
-	ret
+	jp getRingComboFlag
 
 cacheJudoMasterComboActive:
 	push bc
 	ldbc EXPERTS_RING,TOSS_RING
 	call bothRingsActive
-	ld b,$01
-	call updateRingComboFlag
 	pop bc
-	ret
+	ret nz
+
+	ldh (<hFFBD),a	; store temporarily for restoring later
+	ld a,$01
+	jp setRingComboFlag
 
 beamosComboActive:
 	ld a,ENERGY_RING
@@ -8778,17 +8770,20 @@ quickSwapHeldItems:
 	rst_setrombank
 	ret
 
-updateRingComboFlag:
+setRingComboFlag:
 	push hl
-	ld a,b
 	ld hl,wRingComboCacheFlags
-	jr z,+
-		call z,setFlag
-		jr ++
-	+
-		call z,unsetFlag
-	++
+	call unsetFlag
 	pop hl
+	ldh a,(<hFFBD)	; restore a from temp var
+	ret
+
+getRingComboFlag:
+	push hl
+	ld hl,wRingComboCacheFlags
+	call optimizedFlagCheck
+	pop hl
+	ldh a,(<hFFBD)	; restore a from temp var
 	ret
 .endif
 
