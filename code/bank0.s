@@ -8351,15 +8351,15 @@ spawnAzuchu:
 	ld (hl),e
 	ret
 
+.ifdef ROM_AGES
 isDeepUnderwater:
-	push bc
-	push af
-	ld a,(wActiveCollisions)
-	cp 4
-	pop bc
-	ld a,b
-	pop bc
+	ldh (<hFFBD),a	; store temporarily for restoring later
+	ld a,(wTilesetFlags)
+	cpl
+	and TILESETFLAG_UNDERWATER
+	ldh a,(<hFFBD)	; restore a from temp var
 	ret
+.endif
 
 wasOppositeItemButtonPressed:
 	; get the opposite button of the one this item is assigned
