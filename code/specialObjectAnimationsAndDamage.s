@@ -34,14 +34,18 @@ specialObjectSetAnimation_body:
 label_06_032:
 	ld hl,specialObjectAnimationTable
 	rst_addDoubleIndex
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 	add hl,bc
 
 ;;
 ; @param	d	Object
 ; @param	hl	Address of pointer to animation data
 specialObjectNextAnimationFrame:
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 
 	; Check for loop
 	ldi a,(hl)

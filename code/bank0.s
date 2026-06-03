@@ -1581,7 +1581,7 @@ _adjustHLSequential:
 	ld h,$40
 	ldh a,(<hRomBank)
 	inc a
-	rst_setrombank
+	setrombank
 +
 	ld a,b
 	or c
@@ -1597,7 +1597,7 @@ readByteSequential:
 	ld h,$40
 	ldh a,(<hRomBank)
 	inc a
-	rst_setrombank
+	setrombank
 	pop af
 	ret
 
@@ -5304,11 +5304,11 @@ retrieveTextCharacter:
 readByteFromW7ActiveBank:
 	push bc
 	ld a,(w7ActiveBank)
-	rst_setrombank
+	setrombank
 	ld b,(hl)
 
 	ld a,BANK_3f
-	rst_setrombank
+	setrombank
 
 	ld a,b
 	pop bc
@@ -5333,12 +5333,12 @@ readByteFromW7TextTableBank:
 	set 6,h
 	inc a
 +
-	rst_setrombank
+	setrombank
 	ldi a,(hl)
 	ldh (<hFF8B),a
 
 	pop af
-	rst_setrombank
+	setrombank
 	ldh a,(<hFF8B)
 	ret
 
@@ -6553,7 +6553,9 @@ lookupCollisionTable:
 lookupCollisionTable_paramE:
 	ld a,(wActiveCollisions)
 	rst_addDoubleIndex
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 	jr lookupKey
 
 ;;
@@ -6567,7 +6569,9 @@ findByteInCollisionTable:
 findByteInCollisionTable_paramE:
 	ld a,(wActiveCollisions)
 	rst_addDoubleIndex
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 	jr findByteAtHl
 
 ;;
@@ -9279,7 +9283,9 @@ scriptFunc_jump_scf:
 scriptFunc_jump:
 	xor a
 ++
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 	ldh a,(<hActiveObject)
 	ld d,a
 	ret
@@ -9916,12 +9922,14 @@ enemySetAnimation:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:enemyAnimationTable
-	rst_setrombank
+	setrombank
 	ld e,Enemy.id
 	ld a,(de)
 	ld hl,enemyAnimationTable
 	rst_addDoubleIndex
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 	add hl,bc
 
 ;;
@@ -10302,12 +10310,14 @@ partSetAnimation:
 	ld c,a
 	ld b,$00
 	ld a,:partAnimationTable
-	rst_setrombank
+	setrombank
 	ld e,$c1
 	ld a,(de)
 	ld hl,partAnimationTable
 	rst_addDoubleIndex
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 	add hl,bc
 
 ;;
