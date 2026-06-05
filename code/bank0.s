@@ -2330,6 +2330,11 @@ lcdInterrupt:
 +
 	ld ($ff00+R_SCY),a
 ++
+	push hl
+	ld hl,wOptimizeScreenWaveEffect
+	bit 0,(hl)
+	pop hl
+	jr z,++
 	-
 		; interrupt on the next line that has a different value
 		cp (hl)

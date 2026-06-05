@@ -20,7 +20,11 @@ checkInitUnderwaterWaves:
 checkUpdateUnderwaterWaves:
 	ld a,(wTilesetFlags)
 	and TILESETFLAG_UNDERWATER
+	; disable optimization unless this is actually the water wave
+	ld hl,(wOptimizeScreenWaveEffect)
+	ld (hl),$00
 	ret z
+	inc (hl)
 
 	ld a,:w2WaveScrollValues
 	ld ($ff00+R_SVBK),a

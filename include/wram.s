@@ -335,6 +335,16 @@ wObjectsToDraw: ; $c500
 ; Must be aligned to $100 bytes.
 	dsb $80
 
+wOptimizeScreenWaveEffect: ; $c580
+	; If 0, the regular behavior of setting an interrupt each line will be
+	; used when applying the screen wave raster effect.
+	; If 1, the interrupt will only be set on the next line with a different
+	; value for the wave offset.
+	; For effects with repeated wave offsets, setting this to 1 can greatly
+	; improve framerate. Set to 0 otherwise, as the optimization will waste
+	; CPU cycles trying to determine if the offset is repeated
+	db
+
 .ifdef ENABLE_MULTI_RING
 wEquippedRingFlags: ; $c580-$c587
 	; one bit for each ring to indicate if it's equipped this frame or not
