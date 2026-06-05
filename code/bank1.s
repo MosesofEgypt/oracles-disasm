@@ -3749,12 +3749,7 @@ clearExtendedRingBox:
 ; they typically need to be checked multiple times each frame.
 ;
 updateRingEquipStatuses:
-	ld a,$ff
-	ld (wRingComboCacheFlags),a
-
-	ld hl,wEquippedRingFlags
-	ld b,$08
-	call fillMemory
+	call clearRingEquipStatuses
 
 	; if the player can open the menu, then rings shouldn't be force-disabled.
 	ld a,(wMenuDisabled)

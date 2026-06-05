@@ -153,6 +153,13 @@ itemCode10:
 
 	; revert to slow speed
 	ld a,SPEED_160
+	.ifdef ROM_AGES
+		; slower movement while deep underwater
+		call isDeepUnderwater
+		jr nz,+
+			ld a,SPEED_80
+		+
+	.endif
 
 	ld l,Item.speed
 	ldi (hl),a
@@ -329,6 +336,14 @@ itemCode0d:
 	jr nz,+
 		ld (hl),SPEED_160
 	+
+
+	.ifdef ROM_AGES
+		; slower movement while deep underwater
+		call isDeepUnderwater
+		jr nz,+
+			ld (hl),SPEED_40
+		+
+	.endif
 	.endif
 
 	ld l,Item.counter1
@@ -1031,6 +1046,16 @@ bombchuCheckForEnemyTarget:
 	ld l,Item.counter1
 	ld (hl),$0c
 	ld l,Item.speedTmp
+	ld (hl),SPEED_1c0
+.ifdef ENABLE_RING_REDUX
+.ifdef ROM_AGES
+	; slower movement while deep underwater
+	call isDeepUnderwater
+	jr nz,+
+		ld (hl),SPEED_100
+	+
+.endif
+.endif
 
 	; Increment state
 	ld l,Item.state

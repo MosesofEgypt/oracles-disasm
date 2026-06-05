@@ -66,6 +66,10 @@ init:
 	ei
 	callab bank2.checkDisplayDmgModeScreen
 
+.ifdef ENABLE_MULTI_RING
+	call clearRingEquipStatuses
+.endif
+
 	jp startGame
 
 ;;

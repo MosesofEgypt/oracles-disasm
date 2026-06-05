@@ -2330,6 +2330,16 @@ lcdInterrupt:
 +
 	ld ($ff00+R_SCY),a
 ++
+	-
+		; interrupt on the next line that has a different value
+		cp (hl)
+		jr nz,++
+			; same value, so check next line
+			inc l
+			jr nz,-
+			jr +
+	++
+
 	ld a,l
 	cp $90
 	jr nc,+
@@ -8176,6 +8186,16 @@ cpActiveRing:
 	pop hl
 	ret
 
+.ifdef ENABLE_MULTI_RING
+clearRingEquipStatuses:
+	ld a,$ff
+	ld (wRingComboCacheFlags),a
+
+	ld hl,wEquippedRingFlags
+	ld b,$08
+	jp fillMemory
+.endif
+
 .ifdef REDUX_UTIL_FUNCS
 ;;
 ; @param	b	The first ring to check for.
@@ -8289,14 +8309,18 @@ spawnAzuchu:
 	and $0f
 	ret nz
 
-.ifdef ROM_AGES
-	; don't spawn if deep underwater
-	call isDeepUnderwater
-	ret z
-.endif
-
 	; don't spawn if swimming or in the air
 	ld a,(wLinkSwimmingState)
+	ld l,a
+
+	; swimming is fine if sidescrolling though
+	ld a,(wTilesetFlags)
+	and TILESETFLAG_SIDESCROLL
+	ld a,l
+	jr z,+
+		xor a
+	+
+
 	ld hl,(wLinkInAir)
 	or (hl)
 	ret nz
