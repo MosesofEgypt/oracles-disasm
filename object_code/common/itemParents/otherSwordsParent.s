@@ -179,12 +179,17 @@ parentItemCode_punch:
 @state1:
 	; Wait for the animation to finish, then delete the item
 .ifdef ENABLE_RING_REDUX
-	call isHasteRingEquipped
-	jr nz,+
-		ld e,Item.animParameter
-		ld a,(de)
-		rlca
-		call nc,specialObjectAnimate_optimized
+	; do NOT speed up rod of seasons, as it breaks the season changing
+	ld e,Item.id
+	ld a,(de)
+	cp ITEM_ROD_OF_SEASONS
+	jr z,+
+		call isHasteRingEquipped
+		jr nz,+
+			ld e,Item.animParameter
+			ld a,(de)
+			rlca
+			call nc,specialObjectAnimate_optimized
 	+
 .endif
 	ld e,Item.animParameter
