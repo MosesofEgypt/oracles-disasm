@@ -3754,12 +3754,15 @@ updateRingEquipStatuses:
 	; if the player can open the menu, then rings shouldn't be force-disabled.
 	ld a,(wMenuDisabled)
 	or a
-	jr nz,+
+	ld hl,(wRingReduxFlags)
+	jr z,+
 		; if all rings are counted as disabled, don't unset any flags
-		ld a,(wRingReduxFlags)
-		bit 6,a
+		bit 6,(hl)
 		ret nz
 	+
+
+	; player can open the menu, so remove the force-disable flag
+	res 6,(hl)
 
 	; if the flag indicates it, force FIST_RING equipped
 	bit 5,a
