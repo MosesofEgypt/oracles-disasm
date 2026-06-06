@@ -8,6 +8,7 @@ bombchuTargets:
 	;	spiked beetle
 	;	armos
 	;	pols voice
+	;	goponga flower
 	;	boss facade
 	; added:
 	;	wallmaster
@@ -17,6 +18,6 @@ bombchuTargets:
 	;	blue crow
 	;	flying tile
 	;	seeds on tree
-	.db $00 $3f $87 $5d $37 $31 $77 $7e
+	.db $00 $3f $87 $5d $17 $31 $77 $7e
 	.db $eb $ff $06 $44 $00 $00 $01 $00
 .endif
