@@ -331,6 +331,7 @@ giveTreasure_body:
 	ld a,<wLinkHealth
 	cp e
 .ifdef ENABLE_RING_REDUX
+	push af
 	jr nz,+
 		call tripleHeartJoyComboActive
 		jr nz,+
@@ -339,6 +340,7 @@ giveTreasure_body:
 			add c
 			ld c,a
 	+
+	pop af
 .endif
 	ldi a,(hl)
 	jr nz,+
@@ -353,6 +355,15 @@ giveTreasure_body:
 	jp playSound
 +
 	add c
+.ifdef ENABLE_DOUBLE_HEART_CAP
+	bit 7,a
+	jr z,+
+		; if the high bit is set, this tried to overflow.
+		; instead, we're going to set to the max allowed of $80
+		ld a,$80
+	+
+.endif
+
 	ld (de),a
 	jr ++
 

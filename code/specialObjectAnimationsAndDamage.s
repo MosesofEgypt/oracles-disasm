@@ -907,6 +907,7 @@ linkApplyDamage:
 			ld hl,wLinkHealth
 			ld a,CURSE_RING_HEART_CAP
 			sub (hl)
+			ld h,d
 			jr nc,+
 				ld b,a
 				sla b

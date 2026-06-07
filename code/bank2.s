@@ -4108,6 +4108,17 @@ inGameDrawHeartDisplay:
 ; @param hl Tile buffer to write to
 ; @param hFF8B
 drawHeartDisplay:
+.ifdef ENABLE_DOUBLE_HEART_CAP
+	; if the heart count is over 16, we render so that each
+	; container now represents eighths instead of fourths
+	cp $41
+	jr c,+
+		inc a
+		srl a
+		inc c
+		srl c
+	+
+.endif
 	; e = hearts per row (7 normally, 8 if you have 15+ hearts)
 	ld e,$07
 	cp 14*4+1
