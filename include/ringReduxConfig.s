@@ -35,9 +35,6 @@
 	.ifndef MORE_RUPEE_TYPES
 		.define MORE_RUPEE_TYPES				1 
 	.endif
-	.ifndef ENABLE_DOUBLE_HEART_CAP
-		.define ENABLE_DOUBLE_HEART_CAP			1
-	.endif
 	.ifndef ENABLE_QUICK_ITEM_DROP
 		.define ENABLE_QUICK_ITEM_DROP 			1
 	.endif

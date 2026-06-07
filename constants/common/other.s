@@ -10,8 +10,15 @@
 .define SCREEN_WIDTH		$0a
 .define SCREEN_HEIGHT		$08
 
+; here for reference
+;.define ENABLE_DOUBLE_HEART_CAP			1
+
 ; Amount used for heart refills (great fairy)
+.ifdef ENABLE_DOUBLE_HEART_CAP
+.define MAX_LINK_HEALTH		$80
+.else
 .define MAX_LINK_HEALTH		$40
+.endif
 
 ; Overworld size
 .ifdef ROM_AGES

@@ -4109,15 +4109,74 @@ inGameDrawHeartDisplay:
 ; @param hFF8B
 drawHeartDisplay:
 .ifdef ENABLE_DOUBLE_HEART_CAP
-	; if the heart count is over 16, we render so that each
-	; container now represents eighths instead of fourths
-	cp $41
-	jr c,+
-		inc a
-		srl a
-		inc c
-		srl c
+	; if the rendered heart count is over 16, we loop back over to
+	; to start and render the next hearts over top of the previous
+
+	; clamp the displayed heart container count at 16
+	bit 7,a
+	jr z,+
+		set 6,a
 	+
+	bit 6,a
+	jr z,+
+		ld a,$40
+	+
+
+	push hl
+	push af
+	push de
+
+	; setup the offset for the heart tile replacement
+	ldh a,(<hFF8B)
+	ld e,$90
+	bit 0,a
+	jr z,+
+		inc e
+	+
+
+	; if heart count is max, set displayed count to the max
+	; value($40) with the high bit set as a flat to swap the gfx
+	bit 7,c
+	jr z,+
+		ld c,$c0
+	+
+
+	; if the displayed amount would be higher than 16, clip it
+	bit 6,c
+	jr z,+
+		ld a,c
+		and $3f
+		ldh a,(<hFF8B)
+		jr z,+
+			set 7,c
+			res 6,c
+	+
+
+	; default to the empty heart tile gfx
+	ld hl,gfx_empty_and_overlap_hearts
+	bit 7,c
+	jr z,+
+		; clip the displayed heart container count at 16
+		res 7,c
+
+		; set the flag to use the overlap partial heart gfx
+		set 7,a
+		ldh (<hFF8B),a
+
+		; swap the heart gfx so the empty color is a deeper, dark red
+		ld a,$10
+		rst_addAToHl
+	+
+
+	; swap the empty heart gfx with either the overlapped or empty tile
+	push bc
+	ldbc $00, :gfx_empty_and_overlap_hearts
+	ld d,$90
+	call queueDmaTransfer
+	pop bc
+	pop de
+	pop af
+	pop hl
 .endif
 	; e = hearts per row (7 normally, 8 if you have 15+ hearts)
 	ld e,$07
@@ -4148,6 +4207,9 @@ drawHeartDisplay:
 	sub c
 	ld b,a
 	ldh a,(<hFF8B)
+.ifdef ENABLE_DOUBLE_HEART_CAP
+	and $01
+.endif
 	or e
 	rrca
 	jr c,+
@@ -4191,7 +4253,16 @@ drawHeartDisplay:
 	jr z,@partiallyFilledHeart
 
 @filledHearts:
+.ifdef ENABLE_DOUBLE_HEART_CAP
+	ldh a,(<hFF8B)
+	bit 7,a
 	ld a,$0a
+	jr z,+
+		dec a
+	+
+.else
+	ld a,$0a
+.endif
 -
 	ldi (hl),a
 	dec c
@@ -4214,6 +4285,13 @@ drawHeartDisplay:
 	push hl
 
 	ld hl,gfx_partial_hearts - $10
+.ifdef ENABLE_DOUBLE_HEART_CAP
+	ldh a,(<hFF8B)
+	bit 7,a
+	jr z,+
+		ld hl,gfx_overlap_partial_hearts - $10
+	+
+.endif
 	ld a,d
 	swap a
 	rst_addAToHl
@@ -4223,7 +4301,11 @@ drawHeartDisplay:
 	; On file select screen, the heart graphics are loaded in both bank 0 and bank 1, but only
 	; the bank 1 version seems to matter. (Partial hearts are only seen when erasing a file?)
 	ldh a,(<hFF8B)
+.ifdef ENABLE_DOUBLE_HEART_CAP
+	and $01
+.else
 	or a
+.endif
 	jr z,+
 	ld e,$b1 ; vram bank 1
 +
@@ -4241,7 +4323,16 @@ drawHeartDisplay:
 	or a
 	jr z,@fillBlankSpace
 
+.ifdef ENABLE_DOUBLE_HEART_CAP
+	ldh a,(<hFF8B)
+	bit 7,a
 	ld a,$09
+	jr z,+
+		inc a
+	+
+.else
+	ld a,$09
+.endif
 -
 	ldi (hl),a
 	dec b
@@ -4249,7 +4340,11 @@ drawHeartDisplay:
 
 @fillBlankSpace:
 	ldh a,(<hFF8B)
+.ifdef ENABLE_DOUBLE_HEART_CAP
+	and $01
+.else
 	or a
+.endif
 	ret nz
 
 	ld c,$08
