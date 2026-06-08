@@ -2019,6 +2019,14 @@ loadFile:
 	ld c,$02
 	jr ++
 
+.ifdef ENABLE_NEW_GAME_PLUS
+;;
+; @param	hActiveFileSlot	File index
+initializeNgpFile:
+	ld c,$04
+	jr ++
+.endif
+
 ;;
 ; @param	hActiveFileSlot	File index
 eraseFile:

@@ -491,11 +491,24 @@ fileSelectMode8:
 
 ;;
 @mode3:
-	call fileSelectMode3@mode3
-	; TODO: write this
-	; unset all global flags and other world progression
-	; trackers in the new file, and update it to show NG+
-	ret
+	call fileSelectMode3@func_02_4397
+	call decFileSelectMode2IfBPressed
+	jp nz,fileSelectMode3@label_02_015
+	call func_02_448d
+	ret z
+
+	ld a,SND_SELECTITEM
+	call playSound
+	ld a,(wFileSelect.cursorPos2)
+	or a
+	jp z,setFileSelectModeTo1
+
+	call loadFile
+	ld a,(wFileSelect.cursorPos)
+	ldh (<hActiveFileSlot),a
+	call initializeNgpFile
+	call saveFile
+	jp setFileSelectModeTo1
 .endif
 
 ;;
@@ -1974,8 +1987,14 @@ loadFileDisplayVariables:
 	ld a,c
 	ldi (hl),a
 	ldi (hl),a
+.ifdef FILE_MENU_SHOW_CURRENT_HEARTS
+	ld a,(wLinkHealth)
+	ldi (hl),a
+	ld a,(wLinkMaxHealth)
+.else
 	ld a,(wLinkMaxHealth)
 	ldi (hl),a
+.endif
 	ldi (hl),a
 	ld a,(wDeathCounter)
 	ldi (hl),a

@@ -480,6 +480,7 @@ wFileIsHeroGame: ; $c613
 	db
 
 wFileIsCompleted: ; $c614
+	; NOTE: upper nibble is being repurposed for the NG+ cycle
 	db
 
 wObtainedRingBox: ; $c615

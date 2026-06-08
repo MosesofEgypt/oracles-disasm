@@ -603,8 +603,13 @@ vasu_giveRingInVar3a:
 gameCompleteDialog_markGameAsComplete:
 	xor a
 	ld (wMapleKillCounter),a
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld hl,wFileIsCompleted
+	set 0,(hl)
+.else
 	inc a
 	ld (wFileIsCompleted),a
+.endif
 .ifdef ROM_AGES
 	ld a,<TX_051c
 	ld (wMakuMapTextPresent),a

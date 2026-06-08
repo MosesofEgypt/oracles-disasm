@@ -31,6 +31,9 @@
 	.ifndef ENABLE_NEW_GAME_PLUS
 		.define ENABLE_NEW_GAME_PLUS			1
 	.endif
+	.ifndef FILE_MENU_SHOW_CURRENT_HEARTS
+		.define FILE_MENU_SHOW_CURRENT_HEARTS	1
+	.endif
 	.ifndef MORE_RUPEE_TYPES
 		.define MORE_RUPEE_TYPES				1
 	.endif

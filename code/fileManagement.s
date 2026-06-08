@@ -8,6 +8,83 @@ fileManagementFunction:
 	.dw saveFile
 	.dw loadFile
 	.dw eraseFile
+.ifdef ENABLE_NEW_GAME_PLUS
+	.dw initializeNgpFile
+
+initializeNgpFile:
+	; Unequip all rings, but don't remove from box
+	ld hl,wRingReduxFlags
+	ld a,$e0
+	and (hl)
+	ld (hl),a
+
+.ifdef EXTENDED_RING_BOX
+	ld hl,wRingReduxFlagsExt
+	ld a,$e0
+	and (hl)
+	ld (hl),a
+.endif
+
+	xor a
+	ld hl,wDeathRespawnBuffer
+	ld b,wGashaSpotFlags-wDeathRespawnBuffer
+	call fillMemory
+
+	ld hl,(wGashaMaturity+2)
+	ld b,wLinkMaxHealth-(wGashaMaturity+2)
+	call fillMemory
+
+	ld hl,wNumEmberSeeds
+	ld b,wRingBoxContents-wNumEmberSeeds
+	call fillMemory
+
+	ld hl,wKilledGoldenEnemies
+	ld b,(wSecretType+1)-wKilledGoldenEnemies
+	call fillMemory
+
+	ld hl,wGroup0RoomFlags
+	ld bc,(wGroup5RoomFlags+$100)-wGroup0RoomFlags
+	call fillMemoryBc
+
+	ld (wFluteIcon),a
+	ld (wObtainedSeasons),a
+	ld (wNumBombs),a
+	ld (wNumBombchus),a
+
+	; set wLinkHealth to wLinkMaxHealth
+	ld hl,wLinkMaxHealth
+	ldd a,(hl)
+	ld (hl),a
+
+	ld hl,initialNgpFileVariables_spawn
+	call initializeFileVariables
+
+	; Load in a: wFileIsHeroGame (bit 1), wFileIsLinkedGame (bit 0)
+	ld hl,wFileIsHeroGame
+	ldd a,(hl)
+	add a
+	add (hl) ; wFileIsLinkedGame
+
+	; Initialize data differently based on whether it's a linked or hero game
+	ld hl,initialNgpFileVariablesTable
+	rst_addDoubleIndex
+	rst_derefHl
+	call initializeFileVariables
+
+	; increment NG+ cycle
+	ld hl,wFileIsCompleted
+	ld a,(hl)
+	and $f0
+	add $10
+	cp $40
+	jr c,+
+		; cap to NG+3
+		or $30
+	+
+	ld (hl),a
+	ret
+
+.endif
 
 ;;
 initializeFile:
@@ -363,7 +440,9 @@ initialFileVariables:
 	.db <wMaxBombs,				$10
 	.db <wLinkHealth,			$10 ; 4 hearts (gets overwritten in standard game)
 	.db <wLinkMaxHealth,			$10
-
+.ifdef ENABLE_NEW_GAME_PLUS
+initialNgpFileVariables_spawn:
+.endif
 .ifdef ROM_AGES
 	; Initial spawn location
 	.db <wDeathRespawnBuffer.group,		$00
@@ -416,6 +495,23 @@ initialFileVariables_linkedGame:
 	.db <wPirateShipX,			$78
 .endif
 	.db $00
+
+.ifdef ENABLE_NEW_GAME_PLUS
+initialNgpFileVariablesTable:
+	.dw initialNgpFileVariables_standardGame
+	.dw initialNgpFileVariables_linkedGame
+	.dw initialNgpFileVariables_heroGame
+	.dw initialNgpFileVariables_linkedGame
+
+initialNgpFileVariables_linkedGame:
+	.db <wInventoryStorage,			ITEM_SWORD
+	.db <wObtainedTreasureFlags,	(1<<TREASURE_PUNCH) | (1<<TREASURE_SWORD)
+initialNgpFileVariables_standardGame:
+initialNgpFileVariables_heroGame:
+	.db <wChildStatus,				$00
+	.db <wAnimalCompanion,			$00
+	.db $00
+.endif
 
 ; This string is different in ages and seasons.
 saveVerificationString:
