@@ -2629,6 +2629,9 @@ fileSelectDrawLink:
 	rst_addAToHl
 	ld a,(hl)
 	rst_addAToHl
+.ifdef ENABLE_NEW_GAME_PLUS
+	call updateFileLinkPaletteForNewGamePlus
+.endif
 	jp addSpritesToOam
 
 @spriteTable:
@@ -2735,6 +2738,65 @@ fileSelectDrawLink:
 	.db $02
 	.db $4a $8c $30 $06
 	.db $4a $94 $32 $06
+
+.ifdef ENABLE_NEW_GAME_PLUS
+updateFileLinkPaletteForNewGamePlus:
+	push af
+	push hl
+	push bc
+	push de
+
+	ld hl,wFileSelect.cursorPos
+	ld a,(hl)
+
+	; get the NG+ color to use in b
+	ld d,FileDisplayStruct.b7
+	call getFileDisplayVariableAddress
+	ld a,(hl)
+	and $30
+	srl a
+	ld b,a
+
+	; for New Game Plus we change link's color by updating the palette
+	ld a,($ff00+R_SVBK)
+	push af
+
+	ld a,:w2TilesetBgPalettes
+	ld ($ff00+R_SVBK),a
+
+	; update sprite palette 0
+	ld a,b
+	ld bc,w2TilesetSprPalettes
+	ld hl,@newGamePlusPalettes
+	rst_addAToHl
+
+	ld e,$08
+	--
+		ldi a,(hl)
+		ld (bc),a
+		inc c
+		dec e
+		jr nz,--
+
+	; Slate sprite palette 0 for reloading
+	ld hl,hDirtySprPalettes
+	set 0,(hl)
+	pop af
+
+	ld ($ff00+R_SVBK),a
+	pop de
+	pop bc
+	pop hl
+	pop af
+	ret
+
+@newGamePlusPalettes:
+	; colors are RGB555 LE with high bit ignored, and R in lower bits
+	.dw $7fff $0000 (($08<<10)|($15<<5)|$02) (($11<<10)|($1a<<5)|$1f)	; green
+	.dw $7fff $0000 (($1f<<10)|($10<<5)|$03) (($11<<10)|($1a<<5)|$1f)	; blue
+	.dw $7fff $0000 (($05<<10)|($01<<5)|$1f) (($11<<10)|($1a<<5)|$1f)	; red
+	.dw $7fff $0000 (($01<<10)|($0f<<5)|$1f) (($11<<10)|($1a<<5)|$1f)	; gold
+.endif
 
 secretTextTable:
 	.dw @text0
