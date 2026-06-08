@@ -2039,6 +2039,10 @@ fileSelectDrawHeartsAndDeathCounter:
 	ld a,(wFileSelect.mode)
 	cp $03
 	ret z
+.ifdef ENABLE_NEW_GAME_PLUS
+	cp $08
+	ret z
+.endif
 
 	ld a,GFXH_FILE_MENU_LAYOUT
 	call loadGfxHeader
