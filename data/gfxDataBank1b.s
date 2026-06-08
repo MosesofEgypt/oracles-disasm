@@ -27,6 +27,6 @@
 .endif
 
 .ifdef ENABLE_DOUBLE_HEART_CAP
-	m_GfxDataSimple gfx_empty_and_overlap_hearts
-	m_GfxDataSimple gfx_overlap_partial_hearts
+	m_GfxDataSimple gfx_empty_normal_and_overlap_hearts
+	m_GfxDataSimple gfx_overlap_hearts
 .endif

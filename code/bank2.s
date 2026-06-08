@@ -4109,22 +4109,48 @@ inGameDrawHeartDisplay:
 ; @param hFF8B
 drawHeartDisplay:
 .ifdef ENABLE_DOUBLE_HEART_CAP
-	; if the rendered heart count is over 16, we loop back over to
-	; to start and render the next hearts over top of the previous
-
-	; clamp the displayed heart container count at 16
-	bit 7,a
-	jr z,+
-		set 6,a
-	+
-	bit 6,a
-	jr z,+
-		ld a,$40
-	+
-
 	push hl
 	push af
 	push de
+
+
+	; default to the empty heart tile gfx
+	ld hl,gfx_empty_normal_and_overlap_hearts
+
+	; if exactly 16, don't use stacked hearts
+	cp $40
+	jr z,+
+		; if heart count is higher than $40, set the flag
+		; to use the overlapped partial heart gfx
+		ld d,a
+		and $c0
+		jr z,+
+			ldh a,(<hFF8B)
+
+			; set the overlapped-hearts flag
+			set 7,a
+
+			; if the number of pieces in the last heart is less
+			; than 5, use the smaller non-stacked partial heart gfx
+			bit 2,d
+			jr z,++
+				set 6,a
+				ldh (<hFF8B),a
+
+				; determine if the last heart is empty AND needs to be small
+				ld a,d
+				sub c
+				cp $05
+				ldh a,(<hFF8B)
+				jr nc,++
+					set 5,a
+			++
+			ldh (<hFF8B),a
+
+			; use the overlapped heart tiles
+			ld a,$20
+			rst_addAToHl
+	+
 
 	; setup the offset for the heart tile replacement
 	ldh a,(<hFF8B)
@@ -4134,44 +4160,27 @@ drawHeartDisplay:
 		inc e
 	+
 
-	; if heart count is max, set displayed count to the max
-	; value($40) with the high bit set as a flat to swap the gfx
-	bit 7,c
-	jr z,+
-		ld c,$c0
-	+
-
-	; if the displayed amount would be higher than 16, clip it
-	bit 6,c
-	jr z,+
-		ld a,c
-		and $3f
-		ldh a,(<hFF8B)
-		jr z,+
-			set 7,c
-			res 6,c
-	+
-
-	; default to the empty heart tile gfx
-	ld hl,gfx_empty_and_overlap_hearts
-	bit 7,c
-	jr z,+
-		; clip the displayed heart container count at 16
-		res 7,c
-
-		; set the flag to use the overlap partial heart gfx
-		set 7,a
-		ldh (<hFF8B),a
-
-		; swap the heart gfx so the empty color is a deeper, dark red
-		ld a,$10
-		rst_addAToHl
-	+
-
-	; swap the empty heart gfx with either the overlapped or empty tile
+	; load the empty and full heart tiles
 	push bc
-	ldbc $00, :gfx_empty_and_overlap_hearts
+	ldbc $01, :gfx_empty_normal_and_overlap_hearts
 	ld d,$90
+	call queueDmaTransfer
+
+	; insert the non-overlapped empty heart tile
+	ldbc $00, :gfx_empty_normal_and_overlap_hearts
+	ld hl,gfx_empty_normal_and_overlap_hearts+$40
+	bit 0,e
+.ifdef ROM_AGES
+	; overwrite one of the rod season tiles
+	ld de,$91c0
+.else
+	; overwrite part of the harp of ages tile
+	ld de,$90c0
+.endif
+	jr z,+
+		; use vram bank 1
+		inc e
+	+
 	call queueDmaTransfer
 	pop bc
 	pop de
@@ -4187,10 +4196,33 @@ drawHeartDisplay:
 	srl a
 	srl a
 	ld b,a
+.ifdef ENABLE_DOUBLE_HEART_CAP
+	ldh a,(<hFF8B)
+	ld d,a
+	ld a,c
+	bit 7,d
+	jr z,++
+		and $07
+		ld d,a
+
+		bit 0,b
+		jr z,+
+			inc b
+		+
+
+		ld a,c
+		srl a
+		srl b
+		jr +++
+	++
+.endif
 	ld a,c
 	and $03
 	ld d,a
 	ld a,c
+.ifdef ENABLE_DOUBLE_HEART_CAP
+	+++
+.endif
 	srl a
 	srl a
 	ld c,a
@@ -4253,16 +4285,7 @@ drawHeartDisplay:
 	jr z,@partiallyFilledHeart
 
 @filledHearts:
-.ifdef ENABLE_DOUBLE_HEART_CAP
-	ldh a,(<hFF8B)
-	bit 7,a
 	ld a,$0a
-	jr z,+
-		dec a
-	+
-.else
-	ld a,$0a
-.endif
 -
 	ldi (hl),a
 	dec c
@@ -4289,7 +4312,13 @@ drawHeartDisplay:
 	ldh a,(<hFF8B)
 	bit 7,a
 	jr z,+
-		ld hl,gfx_overlap_partial_hearts - $10
+		ld hl,gfx_overlap_hearts - $10
+		bit 6,a
+		jr z,+
+			bit 5,a
+			jr z,+
+				; use the smaller non-overlapped heart gfx
+				ld hl,gfx_overlap_hearts + $70
 	+
 .endif
 	ld a,d
@@ -4323,25 +4352,32 @@ drawHeartDisplay:
 	or a
 	jr z,@fillBlankSpace
 
-.ifdef ENABLE_DOUBLE_HEART_CAP
-	ldh a,(<hFF8B)
-	bit 7,a
 	ld a,$09
-	jr z,+
-		inc a
-	+
-.else
-	ld a,$09
-.endif
 -
 	ldi (hl),a
 	dec b
 	jr nz,-
 
+.ifdef ENABLE_DOUBLE_HEART_CAP
+	; if the last heart is empty but not doubled, we need
+	; to go back and change it to the correct tile
+	ldh a,(<hFF8B)
+	bit 6,a
+	jr z,+
+		dec hl
+		.ifdef ROM_AGES
+			ld a,$1c
+		.else
+			ld a,$0c
+		.endif
+		ldi (hl),a
+	+
+.endif
+
 @fillBlankSpace:
 	ldh a,(<hFF8B)
 .ifdef ENABLE_DOUBLE_HEART_CAP
-	and $01
+	and $0f
 .else
 	or a
 .endif
