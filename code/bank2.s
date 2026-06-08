@@ -2793,7 +2793,7 @@ updateFileLinkPaletteForNewGamePlus:
 @newGamePlusPalettes:
 	; colors are RGB555 LE with high bit ignored, and R in lower bits
 	.dw $7fff $0000 (($08<<10)|($15<<5)|$02) (($11<<10)|($1a<<5)|$1f)	; green
-	.dw $7fff $0000 (($1f<<10)|($10<<5)|$03) (($11<<10)|($1a<<5)|$1f)	; blue
+	.dw $7fff $0000 (($1f<<10)|($0b<<5)|$03) (($11<<10)|($1a<<5)|$1f)	; blue
 	.dw $7fff $0000 (($05<<10)|($01<<5)|$1f) (($11<<10)|($1a<<5)|$1f)	; red
 	.dw $7fff $0000 (($01<<10)|($0f<<5)|$1f) (($11<<10)|($1a<<5)|$1f)	; gold
 .endif
@@ -4262,7 +4262,7 @@ drawHeartDisplay:
 
 
 	; default to the empty heart tile gfx
-	ld hl,gfx_empty_normal_and_overlap_hearts
+	ld hl,gfx_overlap_hearts+$c0
 
 	; if exactly 16, don't use stacked hearts
 	cp $40
@@ -4309,13 +4309,13 @@ drawHeartDisplay:
 
 	; load the empty and full heart tiles
 	push bc
-	ldbc $01, :gfx_empty_normal_and_overlap_hearts
+	ldbc $01, :gfx_overlap_hearts
 	ld d,$90
 	call queueDmaTransfer
 
 	; insert the non-overlapped empty heart tile
-	ldbc $00, :gfx_empty_normal_and_overlap_hearts
-	ld hl,gfx_empty_normal_and_overlap_hearts+$40
+	ldbc $00, :gfx_overlap_hearts
+	ld hl,gfx_overlap_hearts+$70
 	bit 0,e
 .ifdef ROM_AGES
 	; overwrite one of the rod season tiles
@@ -4416,6 +4416,9 @@ drawHeartDisplay:
 	xor a
 +
 	ld b,a
+	ldh a,(<hFF8B)
+	set 4,a
+	ldh (<hFF8B),a
 
 ;;
 ; CROSSITEMS: Modified this function due to the rearrangement of "gfx_hud.png". To save 2 tiles in
@@ -4472,6 +4475,13 @@ drawHeartDisplay:
 	swap a
 	rst_addAToHl
 	ldbc $00, :gfx_partial_hearts
+.ifdef ENABLE_DOUBLE_HEART_CAP
+	ldh a,(<hFF8B)
+	bit 7,a
+	jr z,+
+		ldbc $00, :gfx_overlap_hearts
+	+
+.endif
 	ld de,$90b0
 
 	; On file select screen, the heart graphics are loaded in both bank 0 and bank 1, but only
@@ -4511,13 +4521,16 @@ drawHeartDisplay:
 	ldh a,(<hFF8B)
 	bit 6,a
 	jr z,+
-		dec hl
-		.ifdef ROM_AGES
-			ld a,$1c
-		.else
-			ld a,$0c
-		.endif
-		ldi (hl),a
+		; make sure to only do this on the second row
+		bit 4,a
+		jr z,+
+			dec hl
+			.ifdef ROM_AGES
+				ld a,$1c
+			.else
+				ld a,$0c
+			.endif
+			ldi (hl),a
 	+
 .endif
 

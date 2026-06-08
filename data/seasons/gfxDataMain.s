@@ -607,4 +607,9 @@
 	m_GfxData gfx_startnewgameplus ; ????
 	m_GfxData gfx_newgameplus ; ????
 	m_GfxData gfx_make ; ????
+
+m_section_free Gfx_simpleGfxExtSection ALIGN $20
+	m_GfxDataSimple gfx_overlap_hearts
+.ends
+
 .endif

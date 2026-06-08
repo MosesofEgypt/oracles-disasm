@@ -516,6 +516,7 @@
 	m_GfxData flg_secret_list_menu ; $0e2a57
 	m_GfxData oth_twinrova_lava_layout ; $0e2aa2
 	m_GfxData oth_twinrova_normal_layout ; $0e2ad7
+
 .ifdef ENABLE_NEW_GAME_PLUS
 	m_GfxData map_pick_a_file_menu_middle ; ????
 	m_GfxData flg_pick_a_file_menu_middle ; ????
@@ -524,4 +525,9 @@
 	m_GfxData gfx_startnewgameplus ; ????
 	m_GfxData gfx_newgameplus ; ????
 	m_GfxData gfx_make ; ????
+
+m_section_free Gfx_simpleGfxExtSection ALIGN $20
+	m_GfxDataSimple gfx_overlap_hearts
+.ends
+
 .endif
