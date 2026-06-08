@@ -7706,6 +7706,19 @@ checkLinkIsOverHazard:
 	call objectCheckIsOverHazard
 	pop hl
 	pop bc
+.ifdef LAVA_SWIMMING_RING
+	ret nc
+	cp $04
+	jr nz,+
+		; treat lava as water with ring on
+		ld a,LAVA_SWIMMING_RING
+		call cpActiveRing
+		ld a,$04
+		jr nz,+
+			ld a,$01
+	+
+	scf
+.endif
 	ret
 
 ;;

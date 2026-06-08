@@ -206,6 +206,17 @@ linkApplyTileTypes:
 	ld (wLinkRaisedFloorOffset),a
 .endif
 	call @linkGetActiveTileType
+.ifdef LAVA_SWIMMING_RING
+	cp TILETYPE_LAVA
+	jr nz,+
+		; treat lava as water with ring on
+		ld a,LAVA_SWIMMING_RING
+		call cpActiveRing
+		ld a,TILETYPE_LAVA
+		jr nz,+
+			ld a,TILETYPE_WATER
+	+
+.endif
 
 	ld (wActiveTileType),a
 	rst_jumpTable

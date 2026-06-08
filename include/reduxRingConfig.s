@@ -6,10 +6,14 @@
 
 .ifdef ENABLE_REDUX_EXTRAS
 	.ifndef ENABLE_GASHA_REBALANCE
-		.define ENABLE_GASHA_REBALANCE			1
+		.define ENABLE_GASHA_REBALANCE		1
 	.endif
 	.ifndef ENABLE_SECRET_GASHA_RINGS
-;		.define ENABLE_SECRET_GASHA_RINGS 		1 	; keeping here for documentation
+;		.define ENABLE_SECRET_GASHA_RINGS 	1 	; keeping here for documentation
+	.endif
+	.ifndef LAVA_SWIMMING_RING
+		; specifies which ring enables swimming in lava
+;		.define LAVA_SWIMMING_RING			HIKERS_RING	; keeping here for documentation
 	.endif
 .endif
 

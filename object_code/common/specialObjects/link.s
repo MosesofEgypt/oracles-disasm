@@ -4274,9 +4274,19 @@ linkUpdateInAir_sidescroll:
 	jr z,@landedOnGround
 +
 	ld hl,wActiveTileType
+.ifdef LAVA_SWIMMING_RING
+	ld a,LAVA_SWIMMING_RING
+	call cpActiveRing
+	ldi a,(hl)
+	jr z,+
+		cp TILETYPE_SS_LAVA
+		jp z,forceDrownLink
+	+
+.else
 	ldi a,(hl)
 	cp TILETYPE_SS_LAVA
 	jp z,forceDrownLink
+.endif
 
 	; Check if he's ended up in a hole
 	cp TILETYPE_SS_HOLE
