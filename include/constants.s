@@ -1,5 +1,7 @@
 .include "constants/common/version.s"
 
+.include "include/reduxConfig.s"
+
 .include "constants/common/breakableTileSources.s"
 .include "constants/common/directions.s"
 .include "constants/common/collisionEffects.s"
@@ -56,4 +58,4 @@
 
 .endif
 
-.include "include/ringReduxConfig.s"
+.include "include/reduxRingConfig.s"

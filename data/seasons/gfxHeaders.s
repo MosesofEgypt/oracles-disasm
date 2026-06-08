@@ -1,6 +1,10 @@
 ; See data/ages/gfxHeaders.s for more info.
 
+.ifdef ENABLE_NEW_GAME_PLUS
+.define NUM_GFX_HEADERS $bd
+.else
 .define NUM_GFX_HEADERS $bb
+.endif
 
 gfxHeaderTable:
 	.repeat NUM_GFX_HEADERS index COUNT
@@ -1038,6 +1042,9 @@ m_GfxHeaderStart $a6, GFXH_SAVE_MENU_LAYOUT
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $a7, GFXH_NEW_FILE_OPTIONS
+.ifdef ENABLE_NEW_GAME_PLUS
+	m_GfxHeader gfx_newgameplus, $8e81
+.endif
 	m_GfxHeader gfx_newfilescreen, $8801
 	m_GfxHeaderEnd
 
@@ -1138,3 +1145,26 @@ m_GfxHeaderStart $b8, GFXH_TWINROVA_LAVA_LAYOUT
 m_GfxHeaderStart $b9, GFXH_TWINROVA_NORMAL_LAYOUT
 	m_GfxHeader oth_twinrova_normal_layout, $cf00
 	m_GfxHeaderEnd
+
+.ifdef ENABLE_NEW_GAME_PLUS
+m_GfxHeaderStart $bb, GFXH_FILE_MENU_NEW_GAME_PLUS
+	m_GfxHeader gfx_startnewgameplus, $8801
+	m_GfxHeader gfx_quit_2, $8a01
+	m_GfxHeader gfx_make, $8aa1
+	m_GfxHeader map_file_menu_top, w4TileMap
+	m_GfxHeader flg_file_menu_top, w4AttributeMap
+	m_GfxHeader map_file_menu_copy, w4TileMap+$0a0
+	m_GfxHeader flg_file_menu_copy, w4AttributeMap+$0a0
+	m_GfxHeader map_file_menu_bottom, w4TileMap+$1e0
+	m_GfxHeader flg_file_menu_bottom, w4AttributeMap+$1e0
+	m_GfxHeaderEnd
+
+m_GfxHeaderStart $bc, GFXH_PICK_A_FILE_MENU_LAYOUT
+	m_GfxHeader map_file_menu_top, w4TileMap
+	m_GfxHeader flg_file_menu_top, w4AttributeMap
+	m_GfxHeader map_pick_a_file_menu_middle, w4TileMap+$0a0
+	m_GfxHeader flg_pick_a_file_menu_middle, w4AttributeMap+$0a0
+	m_GfxHeader map_pick_a_file_menu_bottom, w4TileMap+$1e0
+	m_GfxHeader flg_pick_a_file_menu_bottom, w4AttributeMap+$1e0
+	m_GfxHeaderEnd
+.endif

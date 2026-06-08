@@ -598,3 +598,13 @@
 	m_GfxData spr_caravan ; $0e3ca0
 
 	m_GfxData gfx_harp_inventory
+
+.ifdef ENABLE_NEW_GAME_PLUS
+	m_GfxData map_pick_a_file_menu_middle ; ????
+	m_GfxData flg_pick_a_file_menu_middle ; ????
+	m_GfxData map_pick_a_file_menu_bottom ; ????
+	m_GfxData flg_pick_a_file_menu_bottom ; ????
+	m_GfxData gfx_startnewgameplus ; ????
+	m_GfxData gfx_newgameplus ; ????
+	m_GfxData gfx_make ; ????
+.endif

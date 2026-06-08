@@ -141,6 +141,9 @@ b2_fileSelectScreen:
 	.dw fileSelectMode5 ; Selecting between new game, secret, link
 	.dw fileSelectMode6 ; Entering a secret
 	.dw fileSelectMode7 ; Game link
+.ifdef ENABLE_NEW_GAME_PLUS
+	.dw fileSelectMode8 ; New Game Plus
+.endif
 
 ;;
 func_02_4149:
@@ -393,7 +396,11 @@ fileSelectMode5:
 	call disableLcd
 	ld a,GFXH_NEW_FILE_OPTIONS
 	call loadGfxHeader
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld a,GFXH_PICK_A_FILE_MENU_LAYOUT
+.else
 	ld a,GFXH_SAVE_MENU_LAYOUT
+.endif
 	call loadGfxHeader
 	ld a,UNCMP_GFXH_08
 	call loadUncompressedGfxHeader
@@ -431,6 +438,9 @@ fileSelectMode5:
 
 @selectionModes:
 	.db $02 ; Name entry
+.ifdef ENABLE_NEW_GAME_PLUS
+	.db $08 ; New Game Plus
+.endif
 	.db $06 ; Secret entry
 	.db $07 ; Game link
 
@@ -440,12 +450,53 @@ fileSelectMode5:
 -
 	add c
 	and $03
+.ifndef ENABLE_NEW_GAME_PLUS
 	cp $03
 	jr nc,-
+.endif
 
 	ld (hl),a
 	ld a,SND_MENU_MOVE
 	jp playSound
+
+.ifdef ENABLE_NEW_GAME_PLUS
+;;
+; Making a New Game Plus file
+fileSelectMode8:
+	call @mode8Update
+	jp fileSelectDrawAcornCursor
+
+;;
+@mode8Update:
+	ld a,(wFileSelect.mode2)
+	rst_jumpTable
+	.dw @mode0
+	.dw fileSelectMode3@mode1
+	.dw fileSelectMode3@mode2
+	.dw @mode3
+
+;;
+@mode0:
+	call setFileSelectCursorOffsetToFileSelectMode
+	ld a,$03
+	call func_02_4149
+	call disableLcd
+	ld a,GFXH_FILE_MENU_NEW_GAME_PLUS
+	call loadGfxHeader
+	call loadFileDisplayVariables
+	call textInput_updateEntryCursor
+	ld a,UNCMP_GFXH_08
+	call loadUncompressedGfxHeader
+	jp loadGfxRegisterState5AndIncFileSelectMode2
+
+;;
+@mode3:
+	call fileSelectMode3@mode3
+	; TODO: write this
+	; unset all global flags and other world progression
+	; trackers in the new file, and update it to show NG+
+	ret
+.endif
 
 ;;
 ; Copying file
@@ -2084,6 +2135,10 @@ fileSelectDrawAcornCursor:
 	.dw @table5
 	.dw @table6
 	.dw @table3
+.ifdef ENABLE_NEW_GAME_PLUS
+	.dw @table4	; stub
+	.dw @table4
+.endif
 
 @table1:
 	.dw @data11
@@ -2141,9 +2196,16 @@ fileSelectDrawAcornCursor:
 	.dw @data61
 
 @data61:
+.ifdef ENABLE_NEW_GAME_PLUS
+	.db $28 $20
+	.db $40 $20
+	.db $58 $20
+	.db $70 $20
+.else
 	.db $38 $20
 	.db $50 $20
 	.db $68 $20
+.endif
 
 ;;
 ; This is probably for linking to transfer ring secrets

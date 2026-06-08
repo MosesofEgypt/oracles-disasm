@@ -318,6 +318,21 @@ giveTreasure_body:
 @modea:
 	ld a,(de)
 	add c
+	bit 7,a
+	jr z,+
+		push hl
+		push af
+		; Check if we're adding to wLinkHealth
+		ld a,<wLinkMaxHealth
+		cp e
+		pop hl
+		ld a,h
+		pop hl
+		jr nz,+
+			; ensure link's max health doesn't overflow
+			ld a,$80
+		+
+	+
 	ld (de),a
 	ret
 
@@ -355,15 +370,6 @@ giveTreasure_body:
 	jp playSound
 +
 	add c
-.ifdef ENABLE_DOUBLE_HEART_CAP
-	bit 7,a
-	jr z,+
-		; if the high bit is set, this tried to overflow.
-		; instead, we're going to set to the max allowed of $80
-		ld a,$80
-	+
-.endif
-
 	ld (de),a
 	jr ++
 
