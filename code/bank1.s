@@ -3400,6 +3400,12 @@ initializeGame:
 	or a
 	jr z,@resetHealth
 
+.ifdef ENABLE_DOUBLE_HEART_CAP
+	; if health is maxed out at $80, handle the edge case
+	; of that being interpreted as negative and don't reset
+	cp $80
+	jr z,++
+.endif
 	; ...or negative.
 	bit 7,a
 	jr z,++
