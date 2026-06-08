@@ -8224,6 +8224,7 @@ cpActiveRing:
 	; determine if the flag is set
 	push hl
 	ld hl,wEquippedRingFlags
+	push af
 	call optimizedFlagCheck
 .else
 cpActiveRing:
@@ -8231,6 +8232,8 @@ cpActiveRing:
 	ld hl,wActiveRing
 	cp (hl)
 .endif
+	pop hl
+	ld a,h
 	pop hl
 	ret
 
