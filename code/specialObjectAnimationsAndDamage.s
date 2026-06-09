@@ -677,6 +677,17 @@ linkUpdateDamageToApplyForRings:
 	or a
 	ret z
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	; every enemy will do an extra quarter heart damage per NG cycle
+	ld e,a
+	call getNewGamePlusCycle
+	ld b,a
+	xor a
+	sub b
+	sub b
+	add e
+.endif
+
 .ifdef ENABLE_RING_REDUX
 	; for each power and armor ring, check if it's equipped and
 	; increase or reduce the damage by the associated amount.

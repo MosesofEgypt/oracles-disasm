@@ -516,8 +516,17 @@ fileSelectMode8:
 	ld a,(hl)
 	and $01
 	jr nz,+
-		ld a,SND_ERROR
-		jp playSound
+		; just for the fuck of it, you'll be able to enter
+		; new game plus if you're really damn persistent
+		ld hl,wRingColorPaletteB
+		ld a,(hl)
+		cp 100
+		jr nc,++
+			inc (hl)
+			ld a,SND_ERROR
+			jp playSound
+		++
+		ld (hl),$00
 	+
 .endif
 

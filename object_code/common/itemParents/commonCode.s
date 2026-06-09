@@ -334,6 +334,7 @@ itemEnableLinkTurning:
 	ld (hl),a
 	ret
 
+.ifndef ENABLE_RING_REDUX
 ;;
 ; Unused?
 ;
@@ -344,6 +345,7 @@ setCc95Bit:
 	or (hl)
 	ld (hl),a
 	ret
+.endif
 
 ;;
 ; Turn an item index (starting at $d2) into a bit.

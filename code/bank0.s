@@ -8374,6 +8374,14 @@ removeRing:
 
 .endif
 
+.ifdef ENABLE_NEW_GAME_PLUS
+getNewGamePlusCycle:
+	ld a,(wFileIsCompleted)
+	swap a
+	and $03
+	ret
+.endif
+
 .ifdef ENABLE_RING_REDUX
 spawnAzuchu:
 	; only run every few frames to prevent lag

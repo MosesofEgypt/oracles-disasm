@@ -60,6 +60,14 @@ itemCode05:
 	ldi a,(hl)
 	ld (de),a
 	ld c,(hl)
+.ifdef ENABLE_NEW_GAME_PLUS
+	; in NG+2 and higher, sword does 1 less damage
+	call getNewGamePlusCycle
+	cp $02
+	jr c,+
+		inc c
+	+
+.endif
 
 	; If var31 was nonzero, skip whimsical ring check?
 	ld e,Item.var31
