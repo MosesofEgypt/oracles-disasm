@@ -3428,11 +3428,24 @@ playHeartBeepAtInterval:
 
 	ld hl,wLinkHealth
 	ldi a,(hl)
+.ifdef ENABLE_DOUBLE_HEART_CAP
+	; the original code doesn't handle overflows properly
+	; when dealing with 32 hearts, so we must enable it to.
+	; we're kinda cheating though by cutting the vals in half
+	ld c,(hl)
+	inc a	; don't cut 1/4 heart down to 0
+	srl a
+	srl c
+.endif
 	dec a
 	add a
 	ret c
 	add a
+.ifdef ENABLE_DOUBLE_HEART_CAP
+	cp c
+.else
 	cp (hl)
+.endif
 	ret nc
 
 	ld a,SND_HEARTBEEP
