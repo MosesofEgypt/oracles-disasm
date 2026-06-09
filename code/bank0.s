@@ -8381,21 +8381,23 @@ spawnAzuchu:
 	and $0f
 	ret nz
 
-	; don't spawn if swimming or in the air
-	ld a,(wLinkSwimmingState)
-	ld l,a
+	; if link is disabled, don't spawn azuchu
+	ld a,(wDisabledObjects)
+	bit 0,a
+	ret nz
 
-	; swimming is fine if sidescrolling though
+	; spawning checks are only for top-down
 	ld a,(wTilesetFlags)
 	and TILESETFLAG_SIDESCROLL
-	ld a,l
-	jr z,+
-		xor a
-	+
+	jr nz,+
+		ld hl,(wLinkInAir)
+		or (hl)
+		ret nz
 
-	ld hl,(wLinkInAir)
-	or (hl)
-	ret nz
+		; don't spawn if on hazard or in the air
+		call checkLinkIsOverHazard
+		ret c
+	+
 
 	; don't spawn if not regular link object(i.e. riding raft/companion)
 	ld a,(wLinkObjectIndex)

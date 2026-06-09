@@ -28,6 +28,9 @@
 	.ifndef ENABLE_DOUBLE_HEART_CAP
 		.define ENABLE_DOUBLE_HEART_CAP			1
 	.endif
+	.ifndef NEW_GAME_PLUS_NEEDS_COMPLETION
+		.define NEW_GAME_PLUS_NEEDS_COMPLETION	1
+	.endif
 	.ifndef ENABLE_NEW_GAME_PLUS
 		.define ENABLE_NEW_GAME_PLUS			1
 	.endif

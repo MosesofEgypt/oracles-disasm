@@ -14,14 +14,11 @@ fileManagementFunction:
 initializeNgpFile:
 	; Unequip all rings, but don't remove from box
 	ld hl,wRingReduxFlags
-	ld a,$e0
-	and (hl)
+	ld a,$1f
 	ld (hl),a
 
 .ifdef EXTENDED_RING_BOX
 	ld hl,wRingReduxFlagsExt
-	ld a,$e0
-	and (hl)
 	ld (hl),a
 .endif
 

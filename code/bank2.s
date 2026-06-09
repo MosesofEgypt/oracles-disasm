@@ -261,6 +261,17 @@ fileSelectMode1:
 ;;
 ; Normal mode
 @state1:
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld a,(wKeysJustPressed)
+	bit BTN_BIT_SELECT,a
+	jr z,+
+		; press select for fast way into new game plus menu
+		ld a,$08
+		call setFileSelectMode
+		ld a,SND_SELECTITEM
+		jp playSound
+	+
+.endif
 	call fileSelectUpdateInput
 	jr nz,++
 
@@ -497,6 +508,19 @@ fileSelectMode8:
 	call func_02_448d
 	ret z
 
+.ifdef NEW_GAME_PLUS_NEEDS_COMPLETION
+	; determine if file is completed
+	ldh a,(<hActiveFileSlot)
+	ld d,FileDisplayStruct.b7
+	call getFileDisplayVariableAddress
+	ld a,(hl)
+	and $01
+	jr nz,+
+		ld a,SND_ERROR
+		jp playSound
+	+
+.endif
+
 	ld a,SND_SELECTITEM
 	call playSound
 	ld a,(wFileSelect.cursorPos2)
@@ -573,6 +597,12 @@ fileSelectMode3:
 	ldh a,(<hActiveFileSlot)
 	cp (hl)
 	ret nz
+.ifdef NEW_GAME_PLUS_NEEDS_COMPLETION
+	; allowed to select the same file if new game plus screen
+	ld a,(wFileSelect.mode)
+	cp $08
+	ret z
+.endif
 	ld a,(hl)
 	add b
 	and $03
