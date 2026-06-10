@@ -11716,6 +11716,25 @@ updateEnemy:
 
 .ifdef ROM_AGES
 	; Calculate bank number in 'b'
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld b,$10
+	cp $08
+	jr c,++
+	ld b,$0f
+	cp $70
+	jr nc,++
+	dec b
+	; we need more code space for New Game Plus, so we
+	; need to move a chunk of enemy code to a free bank
+	cp $3c
+	jr nc,+
+	dec b
+	cp $23
+	jr c,+
+	cp $2b
+	jr z,+
+	ld b,$3e
+.else
 	ld b,$0f
 	cp $70
 	jr nc,++
@@ -11726,6 +11745,7 @@ updateEnemy:
 	cp $08
 	jr nc,++
 	ld b,$10
+.endif
 
 .else ; ROM_SEASONS
 
@@ -11736,9 +11756,22 @@ updateEnemy:
 	cp $70
 	jr nc,+
 	dec b
+.ifdef ENABLE_NEW_GAME_PLUS
+	; we need more code space for New Game Plus, so we
+	; need to move a chunk of enemy code to a free bank
+	cp $3c
+	jr nc,+
+	dec b
+	cp $23
+	jr c,+
+	cp $2b
+	jr z,+
+	ld b,$3e
+.else
 	cp $30
 	jr nc,+
 	dec b
+.endif
 +
 	; Seasons sets the rom bank here instead of later, for no particular reason...?
 	ld e,a

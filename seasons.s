@@ -454,6 +454,7 @@ m_section_free Enemy_Code_Bank0c NAMESPACE bank0c
 	.include "object_code/common/enemies/spinyBeetle.s"
 	.include "object_code/common/enemies/armos.s"
 	.include "object_code/common/enemies/piranha.s"
+.ifndef ENABLE_NEW_GAME_PLUS
 	.include "object_code/common/enemies/polsVoice.s"
 	.include "object_code/common/enemies/likelike.s"
 	.include "object_code/common/enemies/gopongaFlower.s"
@@ -465,6 +466,7 @@ m_section_free Enemy_Code_Bank0c NAMESPACE bank0c
 	.include "object_code/common/enemies/podobooTower.s"
 	.include "object_code/common/enemies/thwimp.s"
 	.include "object_code/common/enemies/thwomp.s"
+.endif
 
 	.include "object_code/seasons/enemies/rollingSpikeTrap.s"
 	.include "object_code/seasons/enemies/pokey.s"
@@ -482,6 +484,7 @@ m_section_free Enemy_Code_Bank0d NAMESPACE bank0d
 
 	.include "object_code/common/enemies/commonCode.s"
 
+.ifndef ENABLE_NEW_GAME_PLUS
 	.include "object_code/common/enemies/tektite.s"
 	.include "object_code/common/enemies/stalfos.s"
 	.include "object_code/common/enemies/keese.s"
@@ -494,6 +497,7 @@ m_section_free Enemy_Code_Bank0d NAMESPACE bank0d
 	.include "object_code/common/enemies/greatFairy.s"
 	.include "object_code/common/enemies/fireKeese.s"
 	.include "object_code/common/enemies/waterTektite.s"
+.endif
 	.include "object_code/common/enemies/swordEnemies.s"
 	.include "object_code/common/enemies/peahat.s"
 	.include "object_code/common/enemies/wizzrobe.s"
@@ -914,6 +918,43 @@ m_section_free Seasons_Interactions_Bank15 NAMESPACE seasonsInteractionsBank15
 	; HACK-BASE: Normally audio code would start in bank $39. But to give more space for the
 	; data in the above includes, it's been relocated. So now, banks all the way up to and
 	; including bank $3e could be used for the above data (text, room layouts, graphics).
+
+
+.ifdef ENABLE_NEW_GAME_PLUS
+.BANK $3e SLOT 1
+.ORG 0
+
+m_section_free Enemy_Code_Bank3e NAMESPACE bank3e
+	.define BANK_3e $3e
+
+	.include "object_code/common/enemies/commonCode.s"
+
+	.include "object_code/common/enemies/polsVoice.s"
+	.include "object_code/common/enemies/likelike.s"
+	.include "object_code/common/enemies/gopongaFlower.s"
+	.include "object_code/common/enemies/dekuScrub.s"
+	.include "object_code/common/enemies/wallmaster.s"
+	.include "object_code/common/enemies/podoboo.s"
+	.include "object_code/common/enemies/giantBladeTrap.s"
+	.include "object_code/common/enemies/cheepcheep.s"
+	.include "object_code/common/enemies/podobooTower.s"
+	.include "object_code/common/enemies/thwimp.s"
+	.include "object_code/common/enemies/thwomp.s"
+
+	.include "object_code/common/enemies/tektite.s"
+	.include "object_code/common/enemies/stalfos.s"
+	.include "object_code/common/enemies/keese.s"
+	.include "object_code/common/enemies/babyCucco.s"
+	.include "object_code/common/enemies/zol.s"
+	.include "object_code/common/enemies/floormaster.s"
+	.include "object_code/common/enemies/cucco.s"
+	.include "object_code/common/enemies/giantCucco.s"
+	.include "object_code/common/enemies/butterfly.s"
+	.include "object_code/common/enemies/greatFairy.s"
+	.include "object_code/common/enemies/fireKeese.s"
+	.include "object_code/common/enemies/waterTektite.s"
+.ends
+.endif
 
 
 .BANK $3f SLOT 1
