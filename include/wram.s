@@ -346,29 +346,43 @@ wOptimizeScreenWaveEffect: ; $c580
 	db
 
 .ifdef ENABLE_MULTI_RING
-wEquippedRingFlags: ; $c580-$c587
+wEquippedRingFlags: ; $c581-$c588
 	; one bit for each ring to indicate if it's equipped this frame or not
 	dsb $08
 
-wRingComboCacheFlags: ; $c588
+wRingComboCacheFlags: ; $c589
 	; one bit for each cachable combo to indicate if it's active or not
 	db
 .endif
 
 .ifdef ENABLE_RING_REDUX
-wLinkOrigOamPalette: ; $c589
+wLinkOrigOamPalette: ; $c58a
 	db
 
-wRingColorPaletteA: ; $c58a
+wRingColorPaletteA: ; $c58b
 	; first color palette to toggle between
 	db
 
-wRingColorPaletteB: ; $c58b
+wRingColorPaletteB: ; $c58c
 	; second color palette to toggle between
 	db
 
-wColorRingFlags: ; $c58c
+wColorRingFlags: ; $c58d
 	; the wEquippedRingFlags from the previous frame for the color rings
+	db
+.endif
+
+.ifdef ENABLE_NEW_GAME_PLUS
+wNgpEnemiesUpgradedThisRoom:	; $c58e
+	; tracks how many enemies have been upgraded in difficulty tier this room
+	; high nibble tracks upgraded strong enemies
+	; low nibble tracks upgraded weak enemies
+	db
+
+wNgpPartsUpgradedThisRoom:	; $c58e
+	; tracks how many parts have been upgraded in difficulty tier this room
+	; high nibble tracks upgraded strong parts
+	; low nibble tracks upgraded weak parts
 	db
 .endif
 

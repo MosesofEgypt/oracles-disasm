@@ -8377,9 +8377,182 @@ removeRing:
 .ifdef ENABLE_NEW_GAME_PLUS
 getNewGamePlusCycle:
 	ld a,(wFileIsCompleted)
+	and $30
+	ret z
 	swap a
-	and $03
 	ret
+
+getEnemyUpgradeIndex:
+	push bc
+	and a,$01	; determine if weak or strong enemy
+	add a
+	add a
+	ld b,a
+	call getNewGamePlusCycle
+	add b
+	pop bc
+	ret
+
+getShouldUpgradeEnemyTier:
+	push hl
+	push bc
+	ld b,a
+	call getEnemyUpgradeIndex
+
+	ld hl,@ngpEnemyUpgradeLimits
+	rst_addAToHl
+	ld a,(wNgpEnemiesUpgradedThisRoom)
+	bit 0,b
+	jr z,+
+		swap a
+	+
+	and $0f
+	cp (hl)
+
+	pop bc
+	pop hl
+	ret
+
+@ngpEnemyUpgradeLimits:
+	; how many weak enemies can be upgraded
+	.db $00 $03 $04 $10
+	; how many strong enemies can be upgraded
+	.db $00 $02 $02 $04
+
+incrementEnemiesUpgraded:
+	push bc
+	push hl
+	ld b,a
+	ld hl,(wNgpEnemiesUpgradedThisRoom)
+	ld a,(hl)
+	bit 0,b
+	; swap to handle addition in upper nibble
+	jr nz,+
+		; weak enemy
+		swap a
+	+
+	add $10
+	jr nc,+
+		; if it overflowed, set to max value
+		or $f0
+	+
+	; swap back
+	bit 0,b
+	jr nz,+
+		swap a
+	+
+	ld (hl),a
+	pop hl
+	pop bc
+	ret
+
+;;
+;
+; @param	a	Indicates weak enemy if 0, strong if 1.
+; @param	d	The enemy to possibly upgrade
+; @param	hl	Start address of the enemy upgrades table
+; @param[out]	cflag	Set if the enemy was upgraded
+tryNgpUpgradeEnemyTier:
+	push af
+	call getShouldUpgradeEnemyTier
+	jr c,+
+		pop af
+		scf
+		ccf
+		ret
+	+
+
+	; allow this to work on enemies or parts
+	ld a,e
+	and $c0
+	add Object.subid
+	ld e,a
+	push bc
+
+	push hl
+	; figure out how many times we're upgrading the enemy
+	call getEnemyUpgradeIndex
+	ld hl,@ngpEnemyUpgradeTimes
+	rst_addAToHl
+	ld b,(hl)
+	pop hl
+
+	; determine which upgrade table to use for this enemy
+	call getNewGamePlusCycle
+	dec a
+	rst_addDoubleIndex
+	rst_derefHl
+
+	-
+		push de
+		push hl
+		ld a,(de)
+		rst_addDoubleIndex
+		ldi a,(hl)
+
+		; update the enemies subid and palette
+		ld c,a
+		and $0f
+		ld (de),a
+		ld a,c
+		swap a
+		and $07
+		ld c,a
+		ld a,e
+		add Object.oamFlags-Object.subid
+		ld e,a
+		ld a,(de)
+		dec e
+		ld a,(de)
+		and $f8
+		or c
+		ld (de),a
+
+		; grab the damage and health mod for after the loop
+		ld a,(hl)
+		pop hl
+		ld c,a
+
+		pop de
+		dec b
+		jr nz,-
+	+
+
+	; update the health
+	and $0f
+	add a	; health and damage buffs are each only 4-bit, so
+			; we use them to mean double their actual values
+	ld h,d
+	push af
+	ld a,e
+	add Object.health-Object.subid
+	ld l,a
+	pop af
+	add (hl)
+	ldd (hl),a
+
+	; update the damage
+	swap c
+	ld a,$0f
+	and c
+	ld c,a
+	xor a
+	sub c
+	sub c
+	add (hl)
+	ld (hl),a
+
+	pop bc
+	pop af
+	call incrementEnemiesUpgraded
+	scf
+	ret
+
+@ngpEnemyUpgradeTimes:
+	; how many times a weak enemy can be upgraded
+	.db $00 $01 $02 $02
+	; how many times a strong enemy can be upgraded
+	.db $00 $01 $01 $02
 .endif
 
 .ifdef ENABLE_RING_REDUX
@@ -11835,6 +12008,11 @@ updateEnemy:
 ; Note: ages doesn't save the bank number properly when something calls this, so it only
 ; works when called from bank 1 (same bank as "checkLoadPirateShip").
 initializeRoom:
+.ifdef ENABLE_NEW_GAME_PLUS
+	; reset the enemy upgraded count so it can be redone for this room
+	xor a
+	ld (wNgpEnemiesUpgradedThisRoom),a
+.endif
 
 .ifdef ROM_AGES
 	callab bank1.clearSolidObjectPositions

@@ -55,6 +55,11 @@ enemyCode09:
 octorok_state_uninitialized:
 	; Delete self if it's a golden enemy that's been defeated
 	ld e,Enemy.subid
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld hl,@ngpUpgradeTable
+	xor a	; indicate this is a weak enemy
+	call tryNgpUpgradeEnemyTier
+.endif
 	ld a,(de)
 	cp $04
 	jr nz,++
@@ -108,6 +113,28 @@ octorok_state_uninitialized:
 	ld (de),a
 	jp ecom_updateAnimationFromAngle
 
+.ifdef ENABLE_NEW_GAME_PLUS
+@ngpUpgradeTable:
+	.dw @ngpUpgradeSubtable1
+	.dw @ngpUpgradeSubtable1
+	.dw @ngpUpgradeSubtable2
+
+@ngpUpgradeSubtable1:
+	; (palette<<4)|subid, (damageBuff<<4)|healthBuff
+	.db $21 $11
+	.db $12 $21
+	.db $13 $21
+	.db $02 $53
+	.db $34 $74
+
+@ngpUpgradeSubtable2:
+	; (palette<<4)|subid, (damageBuff<<4)|healthBuff
+	.db $21 $12
+	.db $12 $22
+	.db $02 $32
+	.db $03 $55
+	.db $34 $74
+.endif
 
 ; For each subid, each byte determines the maximum index of the value that can be read
 ; from "octorok_counter1Values" below. Effectively, lower values attack more often.
