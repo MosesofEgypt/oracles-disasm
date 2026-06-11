@@ -783,3 +783,46 @@
 
 	.db \1&$ff, \2|(\1>>8)
 .endm
+
+
+.ifdef ENABLE_NEW_GAME_PLUS
+.define PALETTE_GREEN	$00
+.define PALETTE_BLUE	$01
+.define PALETTE_RED		$02
+.define PALETTE_GOLD	$03
+
+; Args:
+;   \1 - 3bit: newPalette
+;   \2 - 4bit: newSubid
+;   \3 - 7bit: newDamage
+;   \4 - 7bit: newHealth
+.macro m_ngp_upgrade
+	; (newPalette<<4)|newSubid, newDamage, newHealth
+	.db ((\1&$0f)<<4)|(\2&$0f) \3 \4
+.endm
+
+; same args as m_ngp_upgrade, but it can be
+; used as the terminator for a chain of upgrades
+.macro m_ngp_upgrade_final
+	; (newPalette<<4)|newSubid, newDamage, newHealth
+	m_ngp_upgrade $8|(\1) \2 \3 \4
+.endm
+
+; Args:
+;   \1 - 4bit: newPalette
+;   \2 - 4bit: newSubid
+;   \3 - 7bit: newDamage
+;   \4 - 7bit: newSpeed
+.macro m_ngp_upgrade_speed
+	; (newPalette<<4)|newSubid, newDamage, newSpeed
+	m_ngp_upgrade \1 \2 $80|(\3) \4
+.endm
+
+; same args as m_ngp_upgrade_speed, but it can be
+; used as the terminator for a chain of upgrades
+.macro m_ngp_upgrade_speed_final
+	; (newPalette<<4)|newSubid, newDamage, newSpeed
+	m_ngp_upgrade_speed $8|(\1) \2 \3 \4
+.endm
+
+.endif

@@ -74,6 +74,9 @@ CFLAGS =
 ifdef ORACLE_RING_REDUX
 	ORACLE_REDUX_DEFINES += -D ENABLE_RING_REDUX
 endif
+ifdef ORACLE_NEW_GAME_PLUS
+	ORACLE_REDUX_DEFINES += -D ENABLE_NEW_GAME_PLUS
+endif
 DEFINES += $(ORACLE_REDUX_DEFINES)
 
 
@@ -326,7 +329,7 @@ $(BUILD_DIR)/rooms/room06%.cmp: rooms/$(GAME)/large/room06%.bin | $(BUILD_DIR)/r
 # create a temp text.yaml by layering the base with any redux yamls needed
 $(BUILD_DIR)/textLayered.yaml: text/$(GAME)/text.yaml tools/build/layerText.py | $(BUILD_DIR)
 	@echo "Layering yamls..."
-	@$(PYTHON) tools/build/layerText.py $< text/ring_redux text/ring_redux/$(GAME) $@ "$(ORACLE_REDUX_DEFINES)"
+	@$(PYTHON) tools/build/layerText.py $< text/redux text/redux/$(GAME) $@ "$(ORACLE_REDUX_DEFINES)"
 
 # Parse & compress text
 $(BUILD_DIR)/textData.s: $(BUILD_DIR)/textLayered.yaml text/$(GAME)/dict.yaml tools/build/parseText.py | $(BUILD_DIR)

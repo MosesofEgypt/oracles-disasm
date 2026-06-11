@@ -42,6 +42,9 @@ if "RESIZE_RING_BOX" in defines:
 if "ENABLE_RING_REDUX" in defines:
     yaml_layers.append(os.path.join(yamlsDir, "ring_text.yaml"))
 
+if "ENABLE_NEW_GAME_PLUS" in defines:
+    yaml_layers.append(os.path.join(yamlsDir, "ngp_text.yaml"))
+
 layered_data = None
 for filename in yaml_layers:
     with open(filename) as f:

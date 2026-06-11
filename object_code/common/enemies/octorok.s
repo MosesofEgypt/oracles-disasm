@@ -55,11 +55,6 @@ enemyCode09:
 octorok_state_uninitialized:
 	; Delete self if it's a golden enemy that's been defeated
 	ld e,Enemy.subid
-.ifdef ENABLE_NEW_GAME_PLUS
-	ld hl,@ngpUpgradeTable
-	xor a	; indicate this is a weak enemy
-	call tryNgpUpgradeEnemyTier
-.endif
 	ld a,(de)
 	cp $04
 	jr nz,++
@@ -67,6 +62,22 @@ octorok_state_uninitialized:
 	bit 0,(hl)
 	jp nz,enemyDelete
 ++
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld hl,@ngpUpgradeTable
+	xor a	; indicate this is a weak enemy
+	call tryNgpUpgrade
+	jr nc,++
+		; if this is the gold octorok, don't let the speed be
+		; changed below, as we'll have customized it in the upgrade
+		ld e,Enemy.subid
+		ld a,(de)
+		cp $04
+		jr nz,++
+			ld e,Enemy.speed
+			ld a,(de)
+			jr +
+	++
+.endif
 	; If bit 1 of subid is set, octorok is faster
 	rrca
 	ld a,SPEED_80
@@ -120,20 +131,39 @@ octorok_state_uninitialized:
 	.dw @ngpUpgradeSubtable2
 
 @ngpUpgradeSubtable1:
-	; (palette<<4)|subid, (damageBuff<<4)|healthBuff
-	.db $21 $11
-	.db $12 $21
-	.db $13 $21
-	.db $02 $53
-	.db $34 $74
+	.dw @ngpSlowRedOctorokUpgrades1
+	.dw @ngpFastRedOctorokUpgrades1
+	.dw @ngpSlowBlueOctorokUpgrades1
+	.dw @ngpFastBlueOctorokUpgrades1
+	.dw @ngpGoldOctorokUpgrades1
+
+	@ngpSlowRedOctorokUpgrades1:
+		m_ngp_upgrade				PALETTE_RED   1 02 02
+	@ngpFastRedOctorokUpgrades1:
+		m_ngp_upgrade				PALETTE_BLUE  2 04 02
+	@ngpSlowBlueOctorokUpgrades1:
+		m_ngp_upgrade				PALETTE_BLUE  3 04 02
+	@ngpFastBlueOctorokUpgrades1:
+		m_ngp_upgrade_final			PALETTE_GREEN 2 10 10
+
+	@ngpGoldOctorokUpgrades1:
+		m_ngp_upgrade_speed_final	PALETTE_GOLD  4 14 SPEED_180
 
 @ngpUpgradeSubtable2:
-	; (palette<<4)|subid, (damageBuff<<4)|healthBuff
-	.db $21 $12
-	.db $12 $22
-	.db $02 $32
-	.db $03 $55
-	.db $34 $74
+	.dw @ngpSlowRedOctorokUpgrades2
+	.dw @ngpFastRedOctorokUpgrades2
+	.dw @ngpSlowBlueOctorokUpgrades2
+	.dw @ngpFastBlueOctorokUpgrades2
+	.dw @ngpGoldOctorokUpgrades1
+
+	@ngpSlowRedOctorokUpgrades2:
+		m_ngp_upgrade			PALETTE_BLUE  2 04 02
+	@ngpFastRedOctorokUpgrades2:
+		m_ngp_upgrade			PALETTE_BLUE  3 04 02
+	@ngpSlowBlueOctorokUpgrades2:
+		m_ngp_upgrade			PALETTE_GREEN 2 10 10
+	@ngpFastBlueOctorokUpgrades2:
+		m_ngp_upgrade_final		PALETTE_GREEN 3 10 10
 .endif
 
 ; For each subid, each byte determines the maximum index of the value that can be read

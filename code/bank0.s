@@ -8382,48 +8382,114 @@ getNewGamePlusCycle:
 	swap a
 	ret
 
-getEnemyUpgradeIndex:
+getUncappedUpgradeCount:
+	push de
 	push bc
-	and a,$01	; determine if weak or strong enemy
-	add a
-	add a
+	push hl
+	ld de,wNgpUncappedUpgradesThisRoom
+	ld hl,@ngpEnemyUpgradeTimes
+	jr getEnemyUpgradeCount@doTheThing
+
+@ngpEnemyUpgradeTimes:
+	; same structure and function as @ngpEnemyUpgradeTimes
+	; under the getEnemyUpgradeCount function. the difference
+	; is that since this is for respawning objects, the count
+	; should be more or less consistent since we're going to
+	; loop back around to the beginning once we hit the end
+	.db $11 $11 $11 $11 $11 $11 $11 $11; NG+1 weak enemy
+	.db $21 $21 $21 $21 $21 $21 $21 $21; NG+2 weak enemy
+	.db $32 $32 $32 $32 $32 $32 $32 $32; NG+3 weak enemy
+
+	.db $10 $10 $10 $10 $10 $10 $10 $10; NG+1 strong enemy
+	.db $11 $11 $11 $11 $11 $11 $11 $11; NG+2 strong enemy
+	.db $21 $21 $21 $21 $21 $21 $21 $21; NG+3 strong enemy
+
+getEnemyUpgradeCount:
+	push de
+	push bc
+	push hl
+	ld de,wNgpEnemiesUpgradedThisRoom
+	ld hl,@ngpEnemyUpgradeTimes
+@doTheThing:
 	ld b,a
 	call getNewGamePlusCycle
-	add b
-	pop bc
-	ret
-
-getShouldUpgradeEnemyTier:
-	push hl
-	push bc
-	ld b,a
-	call getEnemyUpgradeIndex
-
-	ld hl,@ngpEnemyUpgradeLimits
-	rst_addAToHl
-	ld a,(wNgpEnemiesUpgradedThisRoom)
+	dec a	; NG+0 doesn't have values
+	; multiply NG+ cycle by 8
+	add a
+	add a
+	add a
 	bit 0,b
 	jr z,+
+		; strong enemy, so skip the first set of 24 values
+		add $18
+	+
+	rst_addAToHl
+	ld a,(de)
+	bit 0,b
+	jr z,+
+		; strong enemy, so grab upper nibble for count
 		swap a
 	+
 	and $0f
-	cp (hl)
-
-	pop bc
+	ld c,a
+	srl a
+	rst_addAToHl
+	ld a,(hl)
+	; if count is even, use upper nibble as the times
+	bit 0,c
+	jr nz,+
+		swap a
+	+
+	and $0f
 	pop hl
+	pop bc
+	pop de
 	ret
 
-@ngpEnemyUpgradeLimits:
-	; how many weak enemies can be upgraded
-	.db $00 $03 $04 $10
-	; how many strong enemies can be upgraded
-	.db $00 $02 $02 $04
+@ngpEnemyUpgradeTimes:
+	; dictates how many times an enemy can be upgraded.
+	; each set of 8 bytes corresponds to how many times
+	; enemies have already been upgraded this screen.
+
+	; each nibble corresponds to one of the 16 times an
+    ; upgrade occurs per screen. to make it easy to read,
+    ; the high nibble represents an even numbered count
+    ; while low nibble represents an odd numbered count.
+
+	; this table is critical to creating variety in how
+	; many enemies are upgraded per screen. this helps
+	; prevent straight converting a room of red darknuts
+	; into a room of a blue/green.
+
+	; to prevent players killing weak enemies to get weak
+	; ones to spawn on reloading the room, the low indices
+	; should be the highest upgrade counts. these values
+	; should approach and reach 0 at higher indices, but
+	; take longer to do so on higher NG+ cycles.
+	.db $22 $22 $31 $11 $00 $00 $00 $00; NG+1 weak enemy
+	.db $33 $22 $23 $22 $11 $11 $00 $00; NG+2 weak enemy
+	.db $33 $32 $23 $32 $11 $11 $11 $10; NG+3 weak enemy
+
+	.db $11 $20 $10 $00 $00 $00 $00 $00; NG+1 strong enemy
+	.db $21 $21 $10 $00 $00 $00 $00 $00; NG+2 strong enemy
+	.db $33 $21 $21 $10 $00 $00 $00 $00; NG+3 strong enemy
+
+
+incrementUncappedUpgraded:
+	push bc
+	push hl
+	ld b,a
+	ld c,$0f	; will cause count to loop back to 0
+	ld hl,(wNgpUncappedUpgradesThisRoom)
+	jr incrementEnemiesUpgraded@doIncrement
 
 incrementEnemiesUpgraded:
 	push bc
 	push hl
 	ld b,a
+	ld c,$ff	; will cause count to be preserved at max
 	ld hl,(wNgpEnemiesUpgradedThisRoom)
+@doIncrement
 	ld a,(hl)
 	bit 0,b
 	; swap to handle addition in upper nibble
@@ -8433,8 +8499,9 @@ incrementEnemiesUpgraded:
 	+
 	add $10
 	jr nc,+
-		; if it overflowed, set to max value
+		; if it overflowed, set to max value or loop back to 0
 		or $f0
+		and c
 	+
 	; swap back
 	bit 0,b
@@ -8447,112 +8514,164 @@ incrementEnemiesUpgraded:
 	ret
 
 ;;
-;
-; @param	a	Indicates weak enemy if 0, strong if 1.
-; @param	d	The enemy to possibly upgrade
-; @param	hl	Start address of the enemy upgrades table
-; @param[out]	cflag	Set if the enemy was upgraded
-tryNgpUpgradeEnemyTier:
+; NOTE: This function is used when the objects upgrading shouldn't be
+;       limited by how many other objects were upgraded this screen.
+;       Used for projectiles and respawning enemies(i.e wallmasters)
+; @param	a	Indicates weak object if 0, strong if 1.
+; @param	d	The object to possibly upgrade
+; @param	hl	Start address of the upgrades table
+; @param[out]	cflag	Set if the object was upgraded
+tryNgpUpgradeUncapped:
 	push af
-	call getShouldUpgradeEnemyTier
-	jr c,+
+	call getNewGamePlusCycle
+	jr nz,+
 		pop af
 		scf
 		ccf
 		ret
 	+
 
+	; determine which table to use for upgrade values
+	dec a	; NG+0 has no upgrade table
+	rst_addDoubleIndex
+	rst_derefHl
+
 	; allow this to work on enemies or parts
 	ld a,e
 	and $c0
 	add Object.subid
 	ld e,a
-	push bc
 
-	push hl
-	; figure out how many times we're upgrading the enemy
-	call getEnemyUpgradeIndex
-	ld hl,@ngpEnemyUpgradeTimes
-	rst_addAToHl
-	ld b,(hl)
-	pop hl
+	; figure out how many times we're upgrading
+	call getUncappedUpgradeCount
+	or a
 
-	; determine which upgrade table to use for this enemy
+	; if the count is 0, don't do any upgrading, but DO
+	; increment the upgrade count so next object MIGHT
+	call nz,tryNgpUpgrade@doUpgrade
+	pop af
+	call incrementUncappedUpgraded
+	scf
+	ret
+
+;;
+;
+; @param	a	Indicates weak object if 0, strong if 1.
+; @param	d	The object to possibly upgrade
+; @param	hl	Start address of the upgrades table
+; @param[out]	cflag	Set if the object was upgraded
+tryNgpUpgrade:
+	push af
 	call getNewGamePlusCycle
-	dec a
+	jr nz,+
+		pop af
+		scf
+		ccf
+		ret
+	+
+
+	; determine which table to use for upgrade values
+	dec a	; NG+0 has no upgrade table
 	rst_addDoubleIndex
 	rst_derefHl
 
-	-
-		push de
-		push hl
-		ld a,(de)
-		rst_addDoubleIndex
-		ldi a,(hl)
-
-		; update the enemies subid and palette
-		ld c,a
-		and $0f
-		ld (de),a
-		ld a,c
-		swap a
-		and $07
-		ld c,a
-		ld a,e
-		add Object.oamFlags-Object.subid
-		ld e,a
-		ld a,(de)
-		dec e
-		ld a,(de)
-		and $f8
-		or c
-		ld (de),a
-
-		; grab the damage and health mod for after the loop
-		ld a,(hl)
-		pop hl
-		ld c,a
-
-		pop de
-		dec b
-		jr nz,-
-	+
-
-	; update the health
-	and $0f
-	add a	; health and damage buffs are each only 4-bit, so
-			; we use them to mean double their actual values
-	ld h,d
-	push af
+	; allow this to work on enemies or parts
 	ld a,e
-	add Object.health-Object.subid
-	ld l,a
-	pop af
-	add (hl)
-	ldd (hl),a
+	and $c0
+	add Object.subid
+	ld e,a
 
-	; update the damage
-	swap c
-	ld a,$0f
-	and c
-	ld c,a
-	xor a
-	sub c
-	sub c
-	add (hl)
-	ld (hl),a
+	; figure out how many times we're upgrading
+	call getEnemyUpgradeCount
+	or a
 
-	pop bc
+	; if the count is 0, don't do any upgrading, but DO
+	; increment the upgrade count so next object MIGHT
+	call nz,@doUpgrade
 	pop af
 	call incrementEnemiesUpgraded
 	scf
 	ret
 
-@ngpEnemyUpgradeTimes:
-	; how many times a weak enemy can be upgraded
-	.db $00 $01 $02 $02
-	; how many times a strong enemy can be upgraded
-	.db $00 $01 $01 $02
+@doUpgrade:
+	push bc
+	ld b,a
+
+	; get the upgrade table for this subid
+	ld a,(de)
+	rst_addDoubleIndex
+	rst_derefHl
+	-
+		bit 7,(hl)
+		; exit loop if this is the final upgrade
+		jr nz,+
+			inc hl	; skip palette/subid
+			inc hl	; skip damage
+			inc hl	; skip health/speed
+			dec b
+			jr nz,-
+	+
+
+	; mask out and update the subid
+	ldi a,(hl)
+	ld c,a
+	and $0f
+	ld (de),a
+
+	; move to the oam flags
+	ld a,e
+	add Object.oamFlags-Object.subid
+	ld e,a
+
+	; mask out the palette
+	ld a,c
+	swap a
+	and $07
+	ld c,a
+
+	; update the palette
+	ld a,(de)
+	and $f8
+	or c
+	ld (de),a
+
+	; update the backup palette
+	dec e
+	ld (de),a
+
+	; get the new damage
+	ld b,(hl)	; NOTE: keep hl on the damage since the flag
+				; 		to indicate speed/health is in bit 7
+	res 7,b
+	xor a
+	sub b
+	ld b,a
+
+	; move to and update the damage
+	ld a,e
+	add Object.damage-Object.oamFlagsBackup
+	ld e,a
+	ld a,b
+	ld (de),a
+
+	; determine if we're updating speed or health
+	bit 7,(hl)
+	inc hl
+	jr nz,+
+		; move to the health
+		inc de
+		jr +++
+	+
+		; move to the speed
+		ld a,e
+		add Object.speed-Object.damage
+		ld e,a
+	+++
+
+	ld a,(hl)
+	ld (de),a
+	pop bc
+	ret
 .endif
 
 .ifdef ENABLE_RING_REDUX

@@ -374,19 +374,20 @@ wColorRingFlags: ; $c58d
 
 .ifdef ENABLE_NEW_GAME_PLUS
 wNgpEnemiesUpgradedThisRoom:	; $c58e
-	; tracks how many enemies have been upgraded in difficulty tier this room
-	; high nibble tracks upgraded strong enemies
-	; low nibble tracks upgraded weak enemies
+	; tracks how many enemies have been upgraded in tier this room
+	; high nibble tracks strong upgrades
+	; low nibble tracks weak upgrades
 	db
 
-wNgpPartsUpgradedThisRoom:	; $c58e
-	; tracks how many parts have been upgraded in difficulty tier this room
-	; high nibble tracks upgraded strong parts
-	; low nibble tracks upgraded weak parts
+wNgpUncappedUpgradesThisRoom:	; $c58f
+	; tracks how many parts and respawning enemies have been upgraded in tier this room
+	; high nibble tracks strong upgrades
+	; low nibble tracks weak upgrades
 	db
 .endif
 
-; $c580-$c5af unused? (unless using ENABLE_MULTI_RING or ENABLE_RING_REDUX)
+; $c580-$c5af unused? (unless using ENABLE_MULTI_RING or
+;                      ENABLE_RING_REDUX or ENABLE_NEW_GAME_PLUS)
 
 .ENDS
 
