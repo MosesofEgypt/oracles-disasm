@@ -411,6 +411,7 @@ likelike_specialEatenEffect:
 		srl c
 		srl c
 		add c
+		inc a	; don't kill the poor kid
 		ld (hl),a
 		pop bc
 		ret

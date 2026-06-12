@@ -8462,7 +8462,7 @@ getUncappedUpgradeCount:
 	; should be more or less consistent since we're going to
 	; loop back around to the beginning once we hit the end
 	.db $11 $21 $11 $21 $11 $21 $11 $21; NG+1 weak enemy
-	.db $21 $31 $21 $31 $21 $31 $21 $31; NG+2 weak enemy
+	.db $23 $41 $21 $31 $21 $31 $21 $31; NG+2 weak enemy
 	.db $42 $31 $32 $31 $42 $31 $32 $31; NG+3 weak enemy
 
 	.db $10 $10 $10 $10 $10 $10 $10 $10; NG+1 strong enemy
@@ -8602,6 +8602,7 @@ tryNgpUpgradeUncapped:
 	rst_derefHl
 
 	; allow this to work on enemies or parts
+	push de
 	ld a,e
 	and $c0
 	add Object.subid
@@ -8614,6 +8615,7 @@ tryNgpUpgradeUncapped:
 	; if the count is 0, don't do any upgrading, but DO
 	; increment the upgrade count so next object MIGHT
 	call nz,tryNgpUpgrade@doUpgrade
+	pop de
 	pop af
 	call incrementUncappedUpgraded
 	scf
@@ -8641,6 +8643,7 @@ tryNgpUpgrade:
 	rst_derefHl
 
 	; allow this to work on enemies or parts
+	push de
 	ld a,e
 	and $c0
 	add Object.subid
@@ -8653,6 +8656,7 @@ tryNgpUpgrade:
 	; if the count is 0, don't do any upgrading, but DO
 	; increment the upgrade count so next object MIGHT
 	call nz,@doUpgrade
+	pop de
 	pop af
 	call incrementEnemiesUpgraded
 	scf
