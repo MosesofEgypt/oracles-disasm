@@ -342,6 +342,71 @@ subDecimalFromHlRef:
 	scf
 	ret
 
+.ifdef ENABLE_NEW_GAME_PLUS
+;;
+; Computes half of a bcd-encoded number from a 16-bit memory address.
+; If it would go below 0, the result is 0 and cflag is set.
+;
+; @param		hl	Address of the value to cut in half
+; @param[out]	bc	Half the value of hl
+; @param[out]	cflag	Set if the value would have gone under $0000.
+getHalf8BitDecimalFromHlRef:
+	ld a,(hl)
+
+;;
+; Computes half of the bcd-encoded number in a.
+; If it would go below 0, the result is 0 and cflag is set.
+;
+; @param		a	BCD value to cut in half
+; @param[out]	a	Half the value of a-in
+; @param[out]	cflag	Set if the value would have gone under $0000.
+getHalfDecimalOfA:
+	; get half the tens place
+	push bc
+	ld c,a
+	and $f0
+	srl a
+	bit 3,a
+	ld b,$00
+	jr z,+
+		ld b,$05
+	+
+	ld a,c
+	srl a
+	; preserve the underflow flag
+	push af
+	and $f7
+	add b
+	ld b,a
+	; restore underflow flag
+	pop af
+	ld a,b
+	pop bc
+	ret
+
+;;
+; Computes half of a bcd-encoded number from a 16-bit memory address.
+; If it would go below 0, the result is 0.
+;
+; @param	hl	Address of the value to cut in half
+; @param[out]	bc	Half the value of hl
+getHalf16BitDecimalFromHlRef:
+	; get half the thousands and hundreds place
+	inc hl
+	call getHalf8BitDecimalFromHlRef
+	ld b,a
+	ld c,$00
+	jr nc,+
+		ld c,$50
+	+
+
+	dec hl
+	call getHalf8BitDecimalFromHlRef
+	add c
+	ld c,a
+	ret
+.endif
+
 ;;
 ; @param	a	Operand 1
 ; @param	c	Operand 2
@@ -8396,13 +8461,13 @@ getUncappedUpgradeCount:
 	; is that since this is for respawning objects, the count
 	; should be more or less consistent since we're going to
 	; loop back around to the beginning once we hit the end
-	.db $11 $11 $11 $11 $11 $11 $11 $11; NG+1 weak enemy
-	.db $21 $21 $21 $21 $21 $21 $21 $21; NG+2 weak enemy
-	.db $32 $32 $32 $32 $32 $32 $32 $32; NG+3 weak enemy
+	.db $11 $21 $11 $21 $11 $21 $11 $21; NG+1 weak enemy
+	.db $21 $31 $21 $31 $21 $31 $21 $31; NG+2 weak enemy
+	.db $42 $31 $32 $31 $42 $31 $32 $31; NG+3 weak enemy
 
 	.db $10 $10 $10 $10 $10 $10 $10 $10; NG+1 strong enemy
-	.db $11 $11 $11 $11 $11 $11 $11 $11; NG+2 strong enemy
-	.db $21 $21 $21 $21 $21 $21 $21 $21; NG+3 strong enemy
+	.db $11 $21 $11 $21 $11 $21 $11 $21; NG+2 strong enemy
+	.db $41 $21 $31 $21 $41 $21 $31 $21; NG+3 strong enemy
 
 getEnemyUpgradeCount:
 	push de
@@ -8468,11 +8533,11 @@ getEnemyUpgradeCount:
 	; take longer to do so on higher NG+ cycles.
 	.db $22 $22 $31 $11 $00 $00 $00 $00; NG+1 weak enemy
 	.db $33 $22 $23 $22 $11 $11 $00 $00; NG+2 weak enemy
-	.db $33 $32 $23 $32 $11 $11 $11 $10; NG+3 weak enemy
+	.db $43 $14 $21 $32 $11 $11 $11 $10; NG+3 weak enemy
 
 	.db $11 $20 $10 $00 $00 $00 $00 $00; NG+1 strong enemy
 	.db $21 $21 $10 $00 $00 $00 $00 $00; NG+2 strong enemy
-	.db $33 $21 $21 $10 $00 $00 $00 $00; NG+3 strong enemy
+	.db $43 $23 $21 $10 $00 $00 $00 $00; NG+3 strong enemy
 
 
 incrementUncappedUpgraded:
@@ -8601,6 +8666,8 @@ tryNgpUpgrade:
 	ld a,(de)
 	rst_addDoubleIndex
 	rst_derefHl
+	dec b
+	jr z,+
 	-
 		bit 7,(hl)
 		; exit loop if this is the final upgrade
@@ -12128,9 +12195,10 @@ updateEnemy:
 ; works when called from bank 1 (same bank as "checkLoadPirateShip").
 initializeRoom:
 .ifdef ENABLE_NEW_GAME_PLUS
-	; reset the enemy upgraded count so it can be redone for this room
+	; reset the enemy upgraded counts so they can be redone for this room
 	xor a
 	ld (wNgpEnemiesUpgradedThisRoom),a
+	ld (wNgpUncappedUpgradesThisRoom),a
 .endif
 
 .ifdef ROM_AGES

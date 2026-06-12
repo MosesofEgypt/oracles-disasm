@@ -138,11 +138,11 @@ octorok_state_uninitialized:
 	.dw @ngpGoldOctorokUpgrades1
 
 	@ngpSlowRedOctorokUpgrades1:
-		m_ngp_upgrade				PALETTE_RED   1 02 02
+		m_ngp_upgrade				PALETTE_RED   1 03 03
 	@ngpFastRedOctorokUpgrades1:
-		m_ngp_upgrade				PALETTE_BLUE  2 04 02
+		m_ngp_upgrade				PALETTE_BLUE  2 04 04
 	@ngpSlowBlueOctorokUpgrades1:
-		m_ngp_upgrade				PALETTE_BLUE  3 04 02
+		m_ngp_upgrade				PALETTE_BLUE  3 04 04
 	@ngpFastBlueOctorokUpgrades1:
 		m_ngp_upgrade_final			PALETTE_GREEN 2 10 10
 
@@ -157,9 +157,9 @@ octorok_state_uninitialized:
 	.dw @ngpGoldOctorokUpgrades1
 
 	@ngpSlowRedOctorokUpgrades2:
-		m_ngp_upgrade			PALETTE_BLUE  2 04 02
+		m_ngp_upgrade			PALETTE_BLUE  2 04 04
 	@ngpFastRedOctorokUpgrades2:
-		m_ngp_upgrade			PALETTE_BLUE  3 04 02
+		m_ngp_upgrade			PALETTE_BLUE  3 04 04
 	@ngpSlowBlueOctorokUpgrades2:
 		m_ngp_upgrade			PALETTE_GREEN 2 10 10
 	@ngpFastBlueOctorokUpgrades2:

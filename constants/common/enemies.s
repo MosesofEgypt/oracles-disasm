@@ -192,6 +192,12 @@
 ; @subid_01{Like-like spawner. Hardcoded to only work in Season's lost woods.}
 ; @subid_02{Spawning in from left or bottom of screen (used with like-like spawner)}
 ; @subid_03{Falls from sky (used with like-like spawner)}
+; NOTE: In New Game Plus there are 3 variants of the above 4 types.
+;       The variants of subid_01 don't act any differently due to its
+;       nature as a spawner, but the others eat different things.
+;   (If 3 < subid <= 7) then they are blue, and eat 1/2 of your health(rounded up)
+;   (If 7 < subid <= B) then they are red, and eat 1/2 of your rupees(rounded up)
+;   (If B < subid <= F) then they are green, and eat 1/2 of your consumables(rounded up)
 .define ENEMY_LIKE_LIKE $24
 
 ;;

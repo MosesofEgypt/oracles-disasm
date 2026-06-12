@@ -38,6 +38,9 @@ enemyCode24:
 
 	ld e,Enemy.subid
 	ld a,(de)
+.ifdef ENABLE_NEW_GAME_PLUS
+	and $03
+.endif
 	or a
 	ld a,$0b
 	jr z,+
@@ -98,6 +101,9 @@ enemyCode24:
 
 @normalState:
 	ld a,b
+.ifdef ENABLE_NEW_GAME_PLUS
+	and $03
+.endif
 	rst_jumpTable
 	.dw likelike_subid00
 	.dw likelike_subid01
@@ -106,10 +112,69 @@ enemyCode24:
 
 
 likelike_state_uninitialized:
+.ifdef ENABLE_NEW_GAME_PLUS
+	; ensure the subid can't be out of bounds
+	ld a,b
+	and $03
+	ld e,Enemy.subid
+	ld (de),a
+
+	ld hl,@ngpUpgradeTable
+	xor a	; indicate this is a weak enemy
+	call tryNgpUpgradeUncapped
+
+	; fix the subid to include the original 2 bits
+	ld e,Enemy.subid
+	ld a,(de)
+	or b
+	ld (de),a
+.endif
 	bit 0,b
 	call z,objectSetVisiblec2
 	ld a,SPEED_40
 	jp ecom_setSpeedAndState8
+
+.ifdef ENABLE_NEW_GAME_PLUS
+@ngpUpgradeTable:
+	.dw @ngpUpgradeSubtable1
+	.dw @ngpUpgradeSubtable1
+	.dw @ngpUpgradeSubtable2
+
+@ngpUpgradeSubtable1:
+	.dw @ngpNormalLikeLikeUpgrades1
+	.dw @ngpSpawnerLikeLikeUpgrades
+	.dw @ngpLostWoodsSideLikeLikeUpgrades1
+	.dw @ngpLostWoodsTopLikeLikeUpgrades1
+	; NOTE: no need to define all 16 subtypes since they'll
+	;		never be used outside of being upgraded into.
+
+	@ngpSpawnerLikeLikeUpgrades:
+		m_ngp_upgrade_final			0 1 0 1
+
+	@ngpNormalLikeLikeUpgrades1:
+	@ngpLostWoodsSideLikeLikeUpgrades1:
+	@ngpLostWoodsTopLikeLikeUpgrades1:
+		m_ngp_upgrade			PALETTE_GOLD   $00 04 07
+		m_ngp_upgrade			PALETTE_RED    $08 04 07
+		m_ngp_upgrade			PALETTE_GREEN  $0c 04 07
+		m_ngp_upgrade_final		PALETTE_BLUE   $04 04 07
+
+@ngpUpgradeSubtable2:
+	.dw @ngpNormalLikeLikeUpgrades2
+	.dw @ngpSpawnerLikeLikeUpgrades
+	.dw @ngpLostWoodsSideLikeLikeUpgrades2
+	.dw @ngpLostWoodsTopLikeLikeUpgrades2
+	; NOTE: no need to define all 16 subtypes since they'll
+	;		never be used outside of being upgraded into.
+
+	@ngpNormalLikeLikeUpgrades2:
+	@ngpLostWoodsSideLikeLikeUpgrades2:
+	@ngpLostWoodsTopLikeLikeUpgrades2:
+		m_ngp_upgrade			PALETTE_GOLD   $00 04 09
+		m_ngp_upgrade			PALETTE_RED    $08 04 09
+		m_ngp_upgrade			PALETTE_GREEN  $0c 04 09
+		m_ngp_upgrade_final		PALETTE_BLUE   $04 04 09
+.endif
 
 
 likelike_state_switchHook:
@@ -128,6 +193,9 @@ likelike_state_switchHook:
 @substate3:
 	ld e,Enemy.subid
 	ld a,(de)
+.ifdef ENABLE_NEW_GAME_PLUS
+	and $03
+.endif
 	ld hl,@defaultStates
 	rst_addAToHl
 	ld b,(hl)
@@ -230,7 +298,32 @@ likelike_stateB:
 
 @releaseLink:
 	ld (hl),60
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld e,Enemy.subid
+	ld a,(de)
+	srl a
+	srl a
+	and $03
+	ld hl,@mashFrameCounts
+	rst_addAToHl
+	ld b,(hl)
+	ld h,d
 
+	ld l,Enemy.state
+	inc (hl)
+
+	ld l,Enemy.counter1
+	ld a,(hl)
+	cp b
+	jr nc,++
+		ld l,Enemy.subid
+		ld a,$0c
+		and (hl)
+		jr z,+
+			call likelike_specialEatenEffect
+			jr ++
+		+
+.else
 	ld l,Enemy.state
 	inc (hl)
 
@@ -238,6 +331,7 @@ likelike_stateB:
 	ld a,(hl)
 	cp 19
 	jr nc,++
+.endif
 	ld a,TREASURE_SHIELD
 	call checkTreasureObtained
 	jr nc,++
@@ -252,6 +346,13 @@ likelike_stateB:
 	ld e,Enemy.angle
 	ld (de),a
 	call objectSetVisiblec2
+
+.ifdef ENABLE_NEW_GAME_PLUS
+	jr likelike_releaseLink
+
+@mashFrameCounts:
+	.db 19 22 24 24
+.endif
 
 ;;
 likelike_releaseLink:
@@ -287,7 +388,82 @@ likelike_stateC:
 	and $18
 	ld e,Enemy.angle
 	ld (de),a
+.ifdef ENABLE_NEW_GAME_PLUS
+	jp likelike_animate
+.else
 	jr likelike_animate
+.endif
+
+.ifdef ENABLE_NEW_GAME_PLUS
+likelike_specialEatenEffect:
+	; eating either health, rupees, or consumables
+	cp $04
+	jr nz,+
+		; eat 1/3 of link's health
+		ld hl,wLinkHealth
+		push bc
+		ld a,(hl)
+		srl a
+		ld c,a
+		srl c
+		srl c
+		add c
+		srl c
+		srl c
+		add c
+		ld (hl),a
+		pop bc
+		ret
+	+
+	cp $08
+	jr nz,+
+		; eat half link's rupees
+		ld hl,wNumRupees
+
+		call getHalf16BitDecimalFromHlRef
+
+		ld (hl),c
+		inc hl
+		ld (hl),b
+		ret
+	+
+	; eat half link's consumables
+	; NOTE: these values are BCD, but they're only 8-bit.
+	;		thus, we only need the high byte of the calculation
+	ld hl,wNumBombs
+	call getHalf8BitDecimalFromHlRef
+	ld (hl),a
+
+	ld l,<wNumBombchus
+	call getHalf8BitDecimalFromHlRef
+	ld (hl),a
+
+	ld l,<wNumEmberSeeds
+	call getHalf8BitDecimalFromHlRef
+	ld (hl),a
+
+	inc l
+	call getHalf8BitDecimalFromHlRef
+	ld (hl),a
+
+	inc l
+	call getHalf8BitDecimalFromHlRef
+	ld (hl),a
+
+	inc l
+	call getHalf8BitDecimalFromHlRef
+	ld (hl),a
+
+	inc l
+	call getHalf8BitDecimalFromHlRef
+	ld (hl),a
+
+	ld hl,wStatusBarNeedsRefresh
+	set 1,(hl)
+
+	ld bc,TX_5110
+	jp showText
+.endif
 
 
 ; Like-like spawner.

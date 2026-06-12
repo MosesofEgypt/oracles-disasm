@@ -1,16 +1,15 @@
 groups:
 - group: 0x51
   data:
-  - name: TX_5113
-    index: 0x13
+  - name: TX_5110
+    index: 0x10
     text: |-
-      Your \col(1)rupees\col(0),
-      \col(1)seeds\col(0), \col(1)bombs\col(0),
-      and \col(1)bombchu\col(0)
+      Your \col(1)bombchu\col(0), 
+      \col(1)bombs\col(0), and \col(1)seeds\col(0)
       were eaten!
 
-  - name: TX_514
-    index: 0x14
+  - name: TX_5111
+    index: 0x11
     text: |-
       Your \col(1)rings\col(0),
       were disabled!
