@@ -5122,6 +5122,15 @@ inventoryMenuState1:
 	sub $10
 	ret c
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld b,a
+	ld a,(wRingsDisabledCounter)
+	or a
+	ld a,SND_ERROR
+	jp nz,playSound
+	ld a,b
+.endif
+
 .ifdef ROM_SEASONS
 	; Can't equip rings while boxing
 	ld b,a

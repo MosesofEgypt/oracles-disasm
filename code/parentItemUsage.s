@@ -74,6 +74,11 @@ checkUseItems:
 	ld a,(hl)
 	or a
 	jr z,+
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld a,(wFrameCounter)
+	rrca
+	jr c,+
+.endif
 	dec (hl)
 +
 	ld hl,wLinkUsingItem1

@@ -3529,6 +3529,9 @@ standardGameState:
 .ifdef ENABLE_MULTI_RING
 	call updateRingEquipStatuses
 .endif
+.ifdef ENABLE_NEW_GAME_PLUS
+	call updateRingsDisabled
+.endif
 .ifdef ENABLE_RING_REDUX
 	call updateAzuchu
 	call updateSystemType
@@ -3749,6 +3752,25 @@ clearExtendedRingBox:
 +
 .endif
 
+.ifdef ENABLE_NEW_GAME_PLUS
+updateRingsDisabled:
+	ld a,(wTextIsActive)
+	or a
+	ret nz
+
+	ld hl,wRingsDisabledCounter
+	ld a,(hl)
+	or a
+	ret z
+
+	call disableActiveRing
+	ld a,(wFrameCounter)
+	rrca
+	ret c
+	dec (hl)
+	ret
+.endif
+
 .ifdef ENABLE_MULTI_RING
 ;;
 ; Handles caching all ring related flags for the current frame, as
@@ -3757,11 +3779,16 @@ clearExtendedRingBox:
 updateRingEquipStatuses:
 	call clearRingEquipStatuses
 
+	ld a,(wRingsDisabledCounter)
+	or a
+	jr nz,++
 	; if the player can open the menu, then rings shouldn't be force-disabled.
 	ld a,(wMenuDisabled)
 	or a
+
 	ld hl,(wRingReduxFlags)
 	jr z,+
+		++
 		; if all rings are counted as disabled, don't unset any flags
 		bit 6,(hl)
 		ret nz

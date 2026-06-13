@@ -20,8 +20,36 @@ enemyCode15:
 	call cpActiveRing
 	jr z,@normalStatus
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	call getNewGamePlusCycle
+	; add 3 seconds for each newgame cycle
+	ld e,a
+	ld a,90
+	-
+		add 45
+		dec e
+		jr nz,-
+
+	ld l,Enemy.subid
+	ld h,d
+	bit 0,(hl)
+	jr z,+
+		ld hl,wRingsDisabledCounter
+		ld b,(hl)
+		ld (hl),a
+
+		; only show the message if not already disabled
+		ld a,b
+		or a
+		ld bc,TX_5111
+		call z,showText
+		jr @normalStatus
+	+
+		ld (wSwordDisabledCounter),a
+.else
 	ld a,180
 	ld (wSwordDisabledCounter),a
+.endif
 
 @normalStatus:
 	ld e,Enemy.state
@@ -44,7 +72,29 @@ enemyCode15:
 	ld (de),a
 	ld a,SPEED_c0
 	call ecom_setSpeedAndState8
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld hl,@ngpUpgradeTable
+	xor a	; indicate this is a weak enemy
+	call tryNgpUpgradeUncapped
+.endif
 	jp objectSetVisible82
+
+
+.ifdef ENABLE_NEW_GAME_PLUS
+@ngpUpgradeTable:
+	.dw @ngpUpgradeSubtable
+	.dw @ngpUpgradeSubtable
+	.dw @ngpUpgradeSubtable
+
+@ngpUpgradeSubtable:
+	.dw @ngpUpgrades
+
+	@ngpUpgrades:
+		m_ngp_upgrade_speed			PALETTE_RED   0 00 SPEED_c0
+		m_ngp_upgrade_speed			PALETTE_GOLD  1 00 SPEED_c0
+		m_ngp_upgrade_speed			PALETTE_RED   0 00 SPEED_180
+		m_ngp_upgrade_speed_final	PALETTE_GOLD  1 00 SPEED_180
+.endif
 
 
 @state_stub:

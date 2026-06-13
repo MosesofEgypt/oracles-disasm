@@ -384,6 +384,9 @@ wNgpUncappedUpgradesThisRoom:	; $c58f
 	; high nibble tracks strong upgrades
 	; low nibble tracks weak upgrades
 	db
+
+wRingsDisabledCounter: ; $c590
+	db
 .endif
 
 ; $c580-$c5af unused? (unless using ENABLE_MULTI_RING or

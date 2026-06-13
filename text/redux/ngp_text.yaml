@@ -11,5 +11,5 @@ groups:
   - name: TX_5111
     index: 0x11
     text: |-
-      Your \col(1)rings\col(0),
+      Your \col(1)rings\col(0)
       were disabled!
