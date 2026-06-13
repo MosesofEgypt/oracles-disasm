@@ -36,9 +36,45 @@ arrowDarknut_state_uninitialized:
 	ld e,Enemy.speed
 	ld a,SPEED_80
 	ld (de),a
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld hl,@ngpUpgradeTable
+	xor a	; indicate this is a weak enemy
+	call tryNgpUpgrade
+.endif
 	call ecom_setRandomCardinalAngle
 	call arrowDarknut_setState8WithRandomAngleAndCounter
 	jp objectSetVisiblec2
+
+.ifdef ENABLE_NEW_GAME_PLUS
+@ngpUpgradeTable:
+	.dw @ngpUpgradeSubtable1
+	.dw @ngpUpgradeSubtable1
+	.dw @ngpUpgradeSubtable2
+
+@ngpUpgradeSubtable1:
+	.dw @ngpRedUpgrades1
+	.dw @ngpBlueUpgrades
+	.dw @ngpGoldUpgrades
+
+@ngpUpgradeSubtable2:
+	.dw @ngpRedUpgrades2
+	.dw @ngpBlueUpgrades
+	.dw @ngpGoldUpgrades
+
+	@ngpRedUpgrades1:
+		m_ngp_upgrade				PALETTE_RED   0 06 08
+	@ngpRedUpgrades2:
+		m_ngp_upgrade				PALETTE_RED   0 06 08
+		m_ngp_upgrade				PALETTE_BLUE  1 08 11
+		m_ngp_upgrade_final			PALETTE_GREEN 1 10 12
+
+	@ngpBlueUpgrades:
+		m_ngp_upgrade				PALETTE_BLUE  1 08 11
+		m_ngp_upgrade_final			PALETTE_GREEN 1 10 12
+
+	@ngpGoldUpgrades:
+		m_ngp_upgrade_speed_final	PALETTE_GOLD  2 16 SPEED_100
+.endif
 
 
 arrowDarknut_state_9:

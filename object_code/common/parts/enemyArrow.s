@@ -34,6 +34,11 @@ partCode1a:
 	ld l,$cd
 	ld c,(hl)
 	call partCommon_setPositionOffsetAndRadiusFromAngle
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld hl,@ngpUpgradeTable
+	xor a	; indicate this is a weak projectile
+	call tryNgpUpgradeUncapped
+.endif
 	ld e,$c9
 	ld a,(de)
 	swap a
@@ -96,3 +101,20 @@ partCode1a:
 	ld (de),a
 	ld a,$04
 	jp partCommon_bounceWhenCollisionsEnabled
+
+.ifdef ENABLE_NEW_GAME_PLUS
+@ngpUpgradeTable:
+	.dw @ngpUpgradeSubtable1
+	.dw @ngpUpgradeSubtable2
+	.dw @ngpUpgradeSubtable2
+
+@ngpUpgradeSubtable1:
+	.dw @ngpProjectileUpgrades1
+	@ngpProjectileUpgrades1:
+		m_ngp_upgrade_speed_final	PALETTE_RED   0 06 SPEED_200
+
+@ngpUpgradeSubtable2:
+	.dw @ngpProjectileUpgrades2
+	@ngpProjectileUpgrades2:
+		m_ngp_upgrade_speed_final	PALETTE_GOLD  0 08 SPEED_300
+.endif
