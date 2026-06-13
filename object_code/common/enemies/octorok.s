@@ -139,12 +139,16 @@ octorok_state_uninitialized:
 
 	@ngpSlowRedOctorokUpgrades1:
 		m_ngp_upgrade				PALETTE_RED   1 03 03
+	@ngpSlowRedOctorokUpgrades2:
+		m_ngp_upgrade				PALETTE_BLUE  2 04 04
+		m_ngp_upgrade_final			PALETTE_BLUE  3 04 04
+
 	@ngpFastRedOctorokUpgrades1:
 		m_ngp_upgrade				PALETTE_BLUE  2 04 04
 	@ngpSlowBlueOctorokUpgrades1:
 		m_ngp_upgrade				PALETTE_BLUE  3 04 04
 	@ngpFastBlueOctorokUpgrades1:
-		m_ngp_upgrade_final			PALETTE_GREEN 2 10 10
+		m_ngp_upgrade_final			PALETTE_GREEN 6 10 10
 
 	@ngpGoldOctorokUpgrades1:
 		m_ngp_upgrade_speed_final	PALETTE_GOLD  4 14 SPEED_180
@@ -156,20 +160,22 @@ octorok_state_uninitialized:
 	.dw @ngpFastBlueOctorokUpgrades2
 	.dw @ngpGoldOctorokUpgrades1
 
-	@ngpSlowRedOctorokUpgrades2:
-		m_ngp_upgrade			PALETTE_BLUE  2 04 04
 	@ngpFastRedOctorokUpgrades2:
 		m_ngp_upgrade			PALETTE_BLUE  3 04 04
 	@ngpSlowBlueOctorokUpgrades2:
-		m_ngp_upgrade			PALETTE_GREEN 2 10 10
+		m_ngp_upgrade			PALETTE_GREEN 6 10 10
 	@ngpFastBlueOctorokUpgrades2:
-		m_ngp_upgrade_final		PALETTE_GREEN 3 10 10
+		m_ngp_upgrade_final		PALETTE_GREEN 5 10 10
 .endif
 
 ; For each subid, each byte determines the maximum index of the value that can be read
 ; from "octorok_counter1Values" below. Effectively, lower values attack more often.
 @counter1Ranges:
+.ifdef ENABLE_NEW_GAME_PLUS
+	.db $07 $07 $03 $03 $01 $01 $01 $01
+.else
 	.db $07 $07 $03 $03 $01
+.endif
 
 
 octorok_state_followingScentSeed:
@@ -277,6 +283,16 @@ octorok_state_09:
 	ld a,c
 	ld (de),a
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	; green always turns to face link
+	ld e,Enemy.subid
+	ld a,(de)
+	cp $05
+	jr c,+
+		call ecom_updateCardinalAngleTowardTarget
+		jp ecom_updateAnimationFromAngle
+	+
+.endif
 	; 1 in 4 chance of changing direction toward Link (overriding previous angle)
 	ld a,b
 	or a
