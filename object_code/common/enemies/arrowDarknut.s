@@ -65,9 +65,6 @@ arrowDarknut_state_uninitialized:
 		m_ngp_upgrade				PALETTE_RED   0 06 08
 	@ngpRedUpgrades2:
 		m_ngp_upgrade				PALETTE_RED   0 06 08
-		m_ngp_upgrade				PALETTE_BLUE  1 08 11
-		m_ngp_upgrade_final			PALETTE_GREEN 1 10 12
-
 	@ngpBlueUpgrades:
 		m_ngp_upgrade				PALETTE_BLUE  1 08 11
 		m_ngp_upgrade_final			PALETTE_GREEN 1 10 12

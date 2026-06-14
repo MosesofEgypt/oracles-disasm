@@ -61,7 +61,91 @@ moblin_state_uninitialized:
 	bit 1,a
 	jp nz,enemyDelete
 ++
+.ifdef ENABLE_NEW_GAME_PLUS
+	call arrowDarknut_state_uninitialized
+	ld h,d
+	ld l,Enemy.id
+	ld a,(hl)
+	ld hl,@ngpEnemy0CUpgradeTable
+	cp ENEMY_MASKED_MOBLIN
+	jr nz,+
+		ld hl,@ngpEnemy20UpgradeTable
+	+
+	cp ENEMY_ARROW_SHROUDED_STALFOS
+	jr nz,+
+		ld hl,@ngpEnemy22UpgradeTable
+	+
+
+	xor a	; indicate this is a weak enemy
+	jp tryNgpUpgrade
+
+@ngpEnemy0CUpgradeTable:
+	.dw @ngpEnemy0CUpgradeSubtable1
+	.dw @ngpEnemy0CUpgradeSubtable1
+	.dw @ngpEnemy0CUpgradeSubtable2
+
+@ngpEnemy0CUpgradeSubtable1:
+	.dw @ngpEnemy0CRedUpgrades1
+	.dw @ngpEnemy0CBlueUpgrades
+	.dw @ngpEnemy0CGoldUpgrades
+
+@ngpEnemy0CUpgradeSubtable2:
+	.dw @ngpEnemy0CRedUpgrades2
+	.dw @ngpEnemy0CBlueUpgrades
+	.dw @ngpEnemy0CGoldUpgrades
+
+	@ngpEnemy0CRedUpgrades1:
+		m_ngp_upgrade				PALETTE_RED   0 06 04
+	@ngpEnemy0CRedUpgrades2:
+		m_ngp_upgrade				PALETTE_RED   0 06 04
+	@ngpEnemy0CBlueUpgrades:
+		m_ngp_upgrade				PALETTE_BLUE  1 06 06
+		m_ngp_upgrade_final			PALETTE_GREEN 1 08 08
+
+	@ngpEnemy0CGoldUpgrades:
+		m_ngp_upgrade_speed_final	PALETTE_GOLD  2 16 SPEED_100
+
+@ngpEnemy20UpgradeTable:
+	.dw @ngpEnemy20UpgradeSubtable1
+	.dw @ngpEnemy20UpgradeSubtable1
+	.dw @ngpEnemy20UpgradeSubtable2
+
+@ngpEnemy20UpgradeSubtable1:
+	.dw @ngpEnemy20RedUpgrades1
+	.dw @ngpEnemy20BlueUpgrades
+
+@ngpEnemy20UpgradeSubtable2:
+	.dw @ngpEnemy20RedUpgrades2
+	.dw @ngpEnemy20BlueUpgrades
+
+	@ngpEnemy20RedUpgrades1:
+		m_ngp_upgrade				PALETTE_RED   0 06 03
+	@ngpEnemy20RedUpgrades2:
+		m_ngp_upgrade				PALETTE_RED   0 06 03
+	@ngpEnemy20BlueUpgrades:
+		m_ngp_upgrade				PALETTE_BLUE  1 06 05
+		m_ngp_upgrade_final			PALETTE_GREEN 1 08 07
+
+@ngpEnemy22UpgradeTable:
+	.dw @ngpEnemy22UpgradeSubtable1
+	.dw @ngpEnemy22UpgradeSubtable1
+	.dw @ngpEnemy22UpgradeSubtable2
+
+@ngpEnemy22UpgradeSubtable1:
+	.dw @ngpEnemy22Upgrades1
+
+@ngpEnemy22UpgradeSubtable2:
+	.dw @ngpEnemy22Upgrades2
+
+	@ngpEnemy22Upgrades1:
+		m_ngp_upgrade				PALETTE_GREEN 0 06 05
+	@ngpEnemy22Upgrades2:
+		m_ngp_upgrade				PALETTE_GREEN 0 06 05
+		m_ngp_upgrade				PALETTE_BLUE  1 06 07
+		m_ngp_upgrade_final			PALETTE_RED   1 08 09
+.else
 	jp arrowDarknut_state_uninitialized
+.endif
 
 
 moblin_state_scentSeed:
