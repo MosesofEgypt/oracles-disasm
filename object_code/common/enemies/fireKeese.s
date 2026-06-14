@@ -35,6 +35,20 @@ enemyCode39:
 
 	ld h,d
 	ld l,Enemy.oamFlags
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld a,(hl)
+	xor $05
+	ldd (hl),a
+	ld (hl),a
+
+	ld l,Enemy.state
+	ld (hl),$08
+
+	ld l,Enemy.damage
+	ld a,(hl)
+	sra a
+	ld (hl),a
+.else
 	ld a,$01
 	ldd (hl),a
 	ld (hl),a
@@ -44,6 +58,7 @@ enemyCode39:
 
 	ld l,Enemy.damage
 	ld (hl),-$04
+.endif
 
 	ld l,Enemy.var33
 	ld (hl),$02
@@ -88,11 +103,58 @@ fireKeese_state_uninitialized:
 	ld (hl),$08
 
 	ld l,Enemy.damage
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld a,(hl)
+	sla a
+	ld (hl),a
+.else
 	ld (hl),-$08
+.endif
 
 	bit 0,b
 	ld l,e
+.ifdef ENABLE_NEW_GAME_PLUS
+	jr nz,+
+		call @subid0
+		jr ++
+	+
+		call @subid1
+	++
+	ld hl,@ngpUpgradeTable
+
+	xor a
+	inc a	; indicate this is a strong enemy
+	jp tryNgpUpgrade
+
+@ngpUpgradeTable:
+	.dw @ngpUpgradeSubtable1
+	.dw @ngpUpgradeSubtable1
+	.dw @ngpUpgradeSubtable2
+
+@ngpUpgradeSubtable1:
+	.dw @ngpUpgrades10
+	.dw @ngpUpgrades11
+
+@ngpUpgradeSubtable2:
+	.dw @ngpUpgrades20
+	.dw @ngpUpgrades21
+
+	; NOTE: don't use odd values in damage, as bit 0 will
+	;		be dropped when sra and sla update the damage
+	@ngpUpgrades10:
+		m_ngp_upgrade				PALETTE_RED_INV		0 10 04
+	@ngpUpgrades20:
+		m_ngp_upgrade				PALETTE_RED_INV		0 10 04
+		m_ngp_upgrade_final			PALETTE_BLUE_INV	0 16 08
+
+	@ngpUpgrades11:
+		m_ngp_upgrade				PALETTE_RED_INV		1 10 04
+	@ngpUpgrades21:
+		m_ngp_upgrade				PALETTE_RED_INV		1 10 04
+		m_ngp_upgrade_final			PALETTE_BLUE_INV	1 16 08
+.else
 	jr z,@subid0
+.endif
 
 @subid1:
 	ld (hl),$0b ; [state]
@@ -227,12 +289,24 @@ fireKeese_stateA:
 
 	; [counter1] == 30
 	ld l,Enemy.oamFlags
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld a,(hl)
+	xor $05
+	ldd (hl),a
+	ld (hl),a
+
+	ld l,Enemy.damage
+	ld a,(hl)
+	sla a
+	ld (hl),a
+.else
 	ld a,$05
 	ldd (hl),a
 	ld (hl),a
 
 	ld l,Enemy.damage
 	ld (hl),-$08
+.endif
 	ld l,Enemy.var33
 	xor a
 	ld (hl),a

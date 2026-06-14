@@ -141,8 +141,8 @@ moblin_state_uninitialized:
 		m_ngp_upgrade				PALETTE_GREEN 0 06 05
 	@ngpEnemy22Upgrades2:
 		m_ngp_upgrade				PALETTE_GREEN 0 06 05
-		m_ngp_upgrade				PALETTE_BLUE  1 06 07
-		m_ngp_upgrade_final			PALETTE_RED   1 08 09
+		m_ngp_upgrade				PALETTE_BLUE  0 06 07
+		m_ngp_upgrade_final			PALETTE_RED   0 08 09
 .else
 	jp arrowDarknut_state_uninitialized
 .endif

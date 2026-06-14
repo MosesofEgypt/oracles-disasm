@@ -2,6 +2,9 @@
 ;;
 ; ITEM_AZUCHU
 itemCode10:
+	ld a,$01
+	ldh (<hFF93),a
+
 	; if link is disabled, don't process anything
 	ld a,(wDisabledObjects)
 	bit 0,a
@@ -258,6 +261,12 @@ itemCode10:
 ;;
 ; ITEM_BOMBCHUS
 itemCode0d:
+.ifdef ENABLE_RING_REDUX
+	; cache whether or not this is azuchu
+	xor a
+	ldh (<hFF93),a
+.endif
+
 	call bombchuCountdownToExplosion
 
 	; If state is $ff, it's exploding
@@ -1108,13 +1117,7 @@ bombchuCheckForEnemyTarget:
 
 .ifdef ENABLE_RING_REDUX
 isAzuchu:
-	push de
-	push af
-	ld e,Item.id
-	ld a,(de)
-	cp $10
-	pop de
-	ld a,d
-	pop de
+	ldh a,(<hFF93)
+	or a
 	ret
 .endif

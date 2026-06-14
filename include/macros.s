@@ -786,10 +786,12 @@
 
 
 .ifdef ENABLE_NEW_GAME_PLUS
-.define PALETTE_GREEN	$00
-.define PALETTE_BLUE	$01
-.define PALETTE_RED		$02
-.define PALETTE_GOLD	$03
+.define PALETTE_GREEN		$00
+.define PALETTE_BLUE		$01
+.define PALETTE_RED			$02
+.define PALETTE_GOLD		$03
+.define PALETTE_BLUE_INV	$04
+.define PALETTE_RED_INV		$05
 
 ; Args:
 ;   \1 - 3bit: newPalette
