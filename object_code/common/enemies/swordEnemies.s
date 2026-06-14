@@ -73,7 +73,132 @@ swordEnemy_state_uninitialized:
 	ld l,Enemy.var3f
 	set 4,(hl)
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	call swordEnemy_setChaseCooldown
+	ld hl,@ngpEnemy3DUpgradeTable
+	cp ENEMY_SWORD_SHROUDED_STALFOS
+	jr nz,+
+		ld hl,@ngpEnemy49UpgradeTable
+	+
+	cp ENEMY_SWORD_MASKED_MOBLIN
+	jr nz,+
+		ld hl,@ngpEnemy4AUpgradeTable
+	+
+	ld a,$01	; indicate this is a strong enemy
+	jp tryNgpUpgrade
+
+@ngpEnemy3DUpgradeTable:
+	.dw @ngpEnemy3DUpgradeSubtable1
+	.dw @ngpEnemy3DUpgradeSubtable1
+	.dw @ngpEnemy3DUpgradeSubtable2
+
+@ngpEnemy3DUpgradeSubtable1:
+	.dw @ngpEnemy3DRedUpgrades1
+	.dw @ngpEnemy3DBlueSlowUpgrades
+	.dw @ngpEnemy3DBlueFastUpgrades
+
+@ngpEnemy3DUpgradeSubtable2:
+	.dw @ngpEnemy3DRedUpgrades2
+	.dw @ngpEnemy3DBlueSlowUpgrades
+	.dw @ngpEnemy3DBlueFastUpgrades
+
+	@ngpEnemy3DRedUpgrades1:
+		; 06 03
+		m_ngp_upgrade				PALETTE_RED   0 08 04
+	@ngpEnemy3DRedUpgrades2:
+		m_ngp_upgrade				PALETTE_RED   0 08 04
+	@ngpEnemy3DBlueSlowUpgrades:
+		; 06 05
+		m_ngp_upgrade				PALETTE_BLUE  1 08 07
+	@ngpEnemy3DBlueFastUpgrades:
+		m_ngp_upgrade				PALETTE_BLUE  2 08 07
+		m_ngp_upgrade_final			PALETTE_GREEN 2 10 10
+
+@ngpEnemy48UpgradeTable:
+	.dw @ngpEnemy48UpgradeSubtable1
+	.dw @ngpEnemy48UpgradeSubtable1
+	.dw @ngpEnemy48UpgradeSubtable2
+
+@ngpEnemy48UpgradeSubtable1:
+	.dw @ngpEnemy48RedUpgrades1
+	.dw @ngpEnemy48BlueUpgrades
+	.dw @ngpEnemy48GoldUpgrades
+
+@ngpEnemy48UpgradeSubtable2:
+	.dw @ngpEnemy48RedUpgrades2
+	.dw @ngpEnemy48BlueUpgrades
+	.dw @ngpEnemy48GoldUpgrades
+
+	@ngpEnemy48RedUpgrades1:
+		; 04 06
+		m_ngp_upgrade				PALETTE_RED   0 06 08
+	@ngpEnemy48RedUpgrades2:
+		m_ngp_upgrade				PALETTE_RED   0 06 08
+	@ngpEnemy48BlueUpgrades:
+		; 08 09
+		m_ngp_upgrade				PALETTE_BLUE  1 12 11
+		m_ngp_upgrade				PALETTE_BLUE  1 12 11
+		m_ngp_upgrade_final			PALETTE_GREEN 1 16 13
+
+	@ngpEnemy48GoldUpgrades:
+		m_ngp_upgrade_speed_final	PALETTE_GOLD  2 16 SPEED_100
+
+@ngpEnemy49UpgradeTable:
+	.dw @ngpEnemy49UpgradeSubtable1
+	.dw @ngpEnemy49UpgradeSubtable1
+	.dw @ngpEnemy49UpgradeSubtable2
+
+@ngpEnemy49UpgradeSubtable1:
+	.dw @ngpEnemy49SlowUpgrades1
+	.dw @ngpEnemy49FastUpgrades
+	.dw @ngpEnemy49FastestUpgrades
+
+@ngpEnemy49UpgradeSubtable2:
+	.dw @ngpEnemy49SlowUpgrades2
+	.dw @ngpEnemy49FastUpgrades
+	.dw @ngpEnemy49FastestUpgrades
+
+	@ngpEnemy49SlowUpgrades1:
+		; 04 04
+		m_ngp_upgrade				PALETTE_GREEN 0 06 06
+	@ngpEnemy49SlowUpgrades2:
+		m_ngp_upgrade				PALETTE_GREEN 0 06 06
+	@ngpEnemy49FastUpgrades:
+		; 04 04
+		m_ngp_upgrade				PALETTE_BLUE  1 06 06
+	@ngpEnemy49FastestUpgrades:
+		; 04 04
+		m_ngp_upgrade_final			PALETTE_RED   2 08 08
+
+@ngpEnemy4AUpgradeTable:
+	.dw @ngpEnemy4AUpgradeSubtable1
+	.dw @ngpEnemy4AUpgradeSubtable1
+	.dw @ngpEnemy4AUpgradeSubtable2
+
+@ngpEnemy4AUpgradeSubtable1:
+	.dw @ngpEnemy4ARedUpgrades1
+	.dw @ngpEnemy4ABlueSlowUpgrades
+	.dw @ngpEnemy4ABlueFastUpgrades
+
+@ngpEnemy4AUpgradeSubtable2:
+	.dw @ngpEnemy4ARedUpgrades2
+	.dw @ngpEnemy4ABlueSlowUpgrades
+	.dw @ngpEnemy4ABlueFastUpgrades
+
+	@ngpEnemy4ARedUpgrades1:
+		; 04 02
+		m_ngp_upgrade				PALETTE_RED   0 06 03
+	@ngpEnemy4ARedUpgrades2:
+		m_ngp_upgrade				PALETTE_RED   0 06 03
+	@ngpEnemy4ABlueSlowUpgrades:
+		; 04 03
+		m_ngp_upgrade				PALETTE_BLUE  1 06 05
+	@ngpEnemy4ABlueFastUpgrades:
+		m_ngp_upgrade				PALETTE_BLUE  2 06 05
+		m_ngp_upgrade_final			PALETTE_GREEN 2 08 08
+.else
 	jp swordEnemy_setChaseCooldown
+.endif
 
 
 swordEnemy_state_switchHook:

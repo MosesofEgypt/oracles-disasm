@@ -8535,8 +8535,8 @@ getEnemyUpgradeCount:
 	.db $33 $22 $23 $22 $11 $11 $00 $00; NG+2 weak enemy
 	.db $43 $14 $21 $32 $11 $11 $11 $10; NG+3 weak enemy
 
-	.db $11 $20 $10 $00 $00 $00 $00 $00; NG+1 strong enemy
-	.db $21 $21 $10 $00 $00 $00 $00 $00; NG+2 strong enemy
+	.db $21 $11 $00 $00 $00 $00 $00 $00; NG+1 strong enemy
+	.db $21 $22 $10 $00 $00 $00 $00 $00; NG+2 strong enemy
 	.db $43 $23 $21 $10 $00 $00 $00 $00; NG+3 strong enemy
 
 

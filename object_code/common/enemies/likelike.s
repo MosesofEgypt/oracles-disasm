@@ -695,6 +695,9 @@ likelike_findAllLikelikesWithSubid0:
 	jr nz,++
 	inc l
 	ldd a,(hl)
+.ifdef ENABLE_NEW_GAME_PLUS
+	and $03
+.endif
 	or a
 	jr nz,++
 

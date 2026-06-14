@@ -22,6 +22,17 @@ enemyCode5a:
 	call findTileInRoom
 .ifdef ENABLE_RING_REDUX
 	jp nz,enemyDelete
+	; make tree visible(so azuchu can see it), but have it use
+	; a blank tile so it doesn't actually look like anything.
+	ld e,Enemy.visible
+	ld a,$80
+	ld (de),a
+	swap a
+	ld e,Enemy.oamDataAddress
+	ld (de),a
+	xor a
+	inc e
+	ld (de),a
 .else
 	jp nz,interactionDelete ; BUG: Wrong function call! (see below)
 .endif

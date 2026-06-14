@@ -986,19 +986,10 @@ bombchuCheckForEnemyTarget:
 	or a
 	jr z,@nextTarget
 
-.ifdef ENABLE_RING_REDUX
-	; azuchu doesn't need to SEE the enemy, she can SMELL THEM
-	; (also lets her attack seeds on a tree to collect them)
-	call isAzuchu
-	jr z,+
-.endif
 	; Check it's visible
 	ld l,Enemy.visible
 	bit 7,(hl)
 	jr z,@nextTarget
-.ifdef ENABLE_RING_REDUX
-	+
-.endif
 
 	; Check it's a valid target (see data/bombchuTargets.s)
 	ld l,Enemy.id
