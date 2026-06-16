@@ -989,6 +989,13 @@ linkApplyDamage:
 	; [wLinkHealth] = [wLinkMaxHealth]
 	ld hl,wLinkMaxHealth
 	ldd a,(hl)
+.ifdef ENABLE_NEW_GAME_PLUS
+	bit 7,a
+	jr z,+
+		; don't heal more than 16 hearts
+		ld a,$40
+	+
+.endif
 	ld (hl),a
 
 	; Set w1Link.health to $01 (again, this doesn't represent his actual health)
