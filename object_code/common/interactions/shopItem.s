@@ -63,6 +63,18 @@ shopItemState0:
 	ld a,(de)
 .endif
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	; If this is three hearts, replace it with a flash upgrade in NG+
+	cp $01
+	jr nz,+
+		call getNewGamePlusCycle
+		ld a,$01
+		jr z,+
+			; if the number of life vials is maxed out, delete self
+			ld a,$0c
+			ld (de),a
+	+
+.endif
 	; If this is the shield, check whether to replace it with a gasha seed (linked)
 	cp $03
 	jr nz,@checkFlutePurchasable
@@ -297,8 +309,24 @@ shopItemState3:
 	ld a,(de)
 	ld hl,shopItemPrices
 	rst_addAToHl
+.ifdef ENABLE_NEW_GAME_PLUS
+	; price of fairy flask charges increases with how many you have
+	ld a,(de)
+	cp $0c
+	ld a,(hl)
+	jr nz,+
+		call getRupeeValue
+		call getFlaskChargePrice
+		ld hl,wNumRupees
+		call subDecimalFromHlRef
+		jr ++
+	+
+		call removeRupeeValue
+	++
+.else
 	ldi a,(hl)
 	call removeRupeeValue
+.endif
 
 	; Determine what the treasure is, give it to him
 	ld e,Interaction.subid
@@ -368,8 +396,19 @@ shopItemGetTilesForRupeeDisplay:
 	ld a,c
 	ld hl,shopItemPrices
 	rst_addAToHl
+.ifdef ENABLE_NEW_GAME_PLUS
+	; price of fairy flask charges increases with how many you have
+	ld a,c
+	cp $0c
+	ld a,(hl)
+	push af
+	call getRupeeValue
+	pop af
+	call z,getFlaskChargePrice
+.else
 	ld a,(hl)
 	call getRupeeValue
+.endif
 
 	ld hl,wTmpcec0
 	ld (hl),e
@@ -429,7 +468,11 @@ shopItemGetTilesForRupeeDisplay:
 	.dw w3VramTiles+$6b
 	.dw w3VramTiles+$6f
 	.dw w3VramTiles+$67
+.ifdef ENABLE_NEW_GAME_PLUS
+	.dw w3VramTiles+$6f
+.else
 	.dw $ffff
+.endif
 	.dw w3VramTiles+$6f
 	.dw w3VramTiles+$67
 	.dw w3VramTiles+$6b
@@ -475,7 +518,12 @@ shopItemPrices:
 	/* $0a */ .db RUPEEVAL_300
 .endif
 	/* $0b */ .db RUPEEVAL_100
+.ifdef ENABLE_NEW_GAME_PLUS
+	; this is how much it costs for each charge you already have
+	/* $0c */ .db RUPEEVAL_050
+.else
 	/* $0c */ .db RUPEEVAL_010
+.endif
 	/* $0d */ .db RUPEEVAL_150
 .ifdef ENABLE_GASHA_REBALANCE
 	/* $0e */ .db RUPEEVAL_050
@@ -554,7 +602,11 @@ shopItemTreasureToGive:
 	/* $09 */ .db  TREASURE_POTION        $01
 	/* $0a */ .db  TREASURE_GASHA_SEED    $01
 	/* $0b */ .db  TREASURE_BOMBCHUS      $05
+.ifdef ENABLE_NEW_GAME_PLUS
+	/* $0c */ .db  TREASURE_LIFE_VIAL_CHARGE   $01
+.else
 	/* $0c */ .db  $00                    $00
+.endif
 .ifdef ROM_AGES
 	/* $0d */ .db  TREASURE_FLUTE         SPECIALOBJECT_DIMITRI
 	/* $0e */ .db  TREASURE_GASHA_SEED    $01
@@ -629,7 +681,11 @@ shopItemTextTable:
 	/* $09 */ .db <TX_006d
 	/* $0a */ .db <TX_004b
 	/* $0b */ .db <TX_0032
+.ifdef ENABLE_NEW_GAME_PLUS
+	/* $0c */ .db <TX_00_LIFE_VIAL
+.else
 	/* $0c */ .db $00
+.endif
 	/* $0d */ .db <TX_003b
 	/* $0e */ .db <TX_004b
 	/* $0f */ .db <TX_0054

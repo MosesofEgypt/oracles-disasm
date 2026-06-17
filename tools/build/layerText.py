@@ -44,6 +44,7 @@ if "ENABLE_RING_REDUX" in defines:
 
 if "ENABLE_NEW_GAME_PLUS" in defines:
     yaml_layers.append(os.path.join(yamlsDir, "ngp_text.yaml"))
+    yaml_layers.append(os.path.join(gameYamlsDir, "ngp_text.yaml"))
 
 layered_data = None
 for filename in yaml_layers:

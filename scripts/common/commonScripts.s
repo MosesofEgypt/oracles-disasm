@@ -486,7 +486,11 @@ shopkeeperScript_purchaseItem:
 	.dw @buyUpgradeableItem
 	.dw @buyUpgradeableItem
 	.dw @buyUpgradeableItem
+.ifdef ENABLE_NEW_GAME_PLUS
+	.dw @buyFlaskCharge
+.else
 	.dw @buyUpgradeableItem
+.endif
 	.dw @buyStrangeFlute
 	.dw @buyAdvanceShopGashaSeed
 	.dw @buyAdvanceShopGbaRing
@@ -524,6 +528,13 @@ shopkeeperScript_purchaseItem:
 	showtextnonexitablelowindex <TX_0e02
 	callscript shopkeeperConfirmPurchase
 	scriptend
+
+.ifdef ENABLE_NEW_GAME_PLUS
+@buyFlaskCharge:
+	showtextnonexitablelowindex <TX_0e_LIFE_VIAL
+	callscript shopkeeperConfirmPurchase
+	scriptend
+.endif
 
 @buyL1Shield:
 	showtextnonexitablelowindex <TX_0e03

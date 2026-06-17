@@ -5010,6 +5010,16 @@ cpOreChunkValue:
 .endif
 
 ;;
+; Compares the current total rupee count with the BCD count in bc
+;
+; @param	bc	The BCD count of rupees to compare
+; @param[out]	a	0 if Link has at least that many rupees, 1 otherwise
+; @param[out]	zflag	Set if Link has that many rupees
+cpRupeeCount:
+	ld hl,wNumRupees
+	jr +++
+
+;;
 ; Compares the current total rupee count with a value from the "getRupee" function.
 ;
 ; @param	a	Rupee type to compare with
@@ -5019,6 +5029,7 @@ cpRupeeValue:
 	ld hl,wNumRupees
 ++
 	call getRupeeValue
++++
 	rst_derefHl
 	call compareHlToBc
 	inc a
@@ -8440,6 +8451,55 @@ removeRing:
 .endif
 
 .ifdef ENABLE_NEW_GAME_PLUS
+getFlaskChargePrice:
+	; price of fairy flask charges increases with how many you have
+	push de
+	push hl
+	push af
+	ld h,b
+	ld l,c
+	ld a,(wLifeVialMaxCharges)
+	or a
+	jr z,+++
+		ld d,a
+		-
+			ld a,l
+			add c
+			daa
+			ld l,a
+
+			ld a,h
+			adc b
+			daa
+			ld h,a
+			and $f0
+			jr z,++
+				; would go over 999
+				ld h,$09
+				ld l,$99
+				jr +++
+			++
+
+			ld a,d
+			and $0f
+			ld a,d
+			jr nz,++
+				or a
+				jr z,+++
+					sub $10
+					or $0a
+			++
+			dec a
+			ld d,a
+			jr nz,-
+	+++
+	ld b,h
+	ld c,l
+	pop af
+	pop hl
+	pop de
+	ret
+
 getNewGamePlusCycle:
 	ld a,(wFileIsCompleted)
 	and $30

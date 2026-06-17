@@ -500,7 +500,11 @@ interaction47SubidData:
 	m_InteractionSubidData $5d $00 $23
 	m_InteractionSubidData $5d $0a $10
 	m_InteractionSubidData $61 $00 $50
+.ifdef ENABLE_NEW_GAME_PLUS
+	m_InteractionSubidData $c8 $00 $12
+.else
 	m_InteractionSubidData $5d $10 $13
+.endif
 	m_InteractionSubidData $5f $16 $03
 	m_InteractionSubidData $5d $0a $10
 	m_InteractionSubidData $5d $08 $00

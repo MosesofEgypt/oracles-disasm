@@ -115,6 +115,18 @@ giveTreasure_body:
 	pop bc
 	ld a,b
 	call @giveTreasure
+.ifdef ENABLE_NEW_GAME_PLUS
+	push af
+	ld a,b
+	cp TREASURE_LIFE_VIAL_CHARGE
+	jr nz,+
+		; if giving life vial, ensure the charges are full
+		ld hl,wLifeVialMaxCharges
+		ldd a,(hl)
+		ld (hl),a
+	+
+	pop af
+.endif
 
 	; Check if adding this item requires adding another item.
 	push af
@@ -679,6 +691,13 @@ addTreasureToInventory:
 ; @param[out]	a	Index of the inventory slot it went into
 ; @param[out]	zflag	z if already had the item
 @addToInventory:
+.ifdef ENABLE_NEW_GAME_PLUS
+	; convert flask charges into the flask itself
+	cp TREASURE_LIFE_VIAL_CHARGE
+	jr nz,+
+		ld a,TREASURE_LIFE_VIAL
+	+
+.endif
 	ld c,a
 	ld hl,wInventoryB
 

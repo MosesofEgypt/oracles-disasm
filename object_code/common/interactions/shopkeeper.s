@@ -538,10 +538,29 @@ shopkeeperState5:
 ;;
 ; @param	a	Item index?
 shopkeeperGetItemPrice:
+.ifdef ENABLE_NEW_GAME_PLUS
+	; price of fairy flask charges increases with how many you have
+	cp $0c
+	push af
+	ld hl,shopItemPrices
+	rst_addAToHl
+	pop af
+	ld a,(hl)
+
+	jr nz,+
+		call getRupeeValue
+		call getFlaskChargePrice
+		call cpRupeeCount
+		jr ++
+	+
+		call cpRupeeValue
+	++
+.else
 	ld hl,shopItemPrices
 	rst_addAToHl
 	ld a,(hl)
 	call cpRupeeValue
+.endif
 	ld (wShopHaveEnoughRupees),a
 	ld ($cbad),a
 	ld hl,wTextNumberSubstitution
@@ -589,6 +608,17 @@ shopkeeperCheckLinkHasItemAlready:
 
 	cp $0d
 	jr z,@flute
+
+.ifdef ENABLE_NEW_GAME_PLUS
+	cp $0c
+	jr nz,++
+		ld l,<wLifeVialMaxCharges
+		ld a,(hl)
+		cp $99
+		jr z,@cantSell
+		ret
+	++
+.endif
 
 	ld l,<wNumBombs
 	cp $04

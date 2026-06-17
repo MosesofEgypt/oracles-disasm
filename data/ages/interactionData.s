@@ -556,7 +556,11 @@ interaction47SubidData:
 	m_InteractionSubidData $79 $00 $23
 	m_InteractionSubidData $79 $0a $10
 	m_InteractionSubidData $7e $00 $50
+.ifdef ENABLE_NEW_GAME_PLUS
+	m_InteractionSubidData $e1 $00 $12
+.else
 	m_InteractionSubidData $79 $10 $13
+.endif
 	m_InteractionSubidData $7c $16 $03
 	m_InteractionSubidData $79 $0a $10
 	m_InteractionSubidData $79 $08 $00

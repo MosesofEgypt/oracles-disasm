@@ -111,7 +111,7 @@ treasureCollectionBehaviourTable:
 .ifdef ENABLE_NEW_GAME_PLUS
 	; TREASURE_LIFE_VIAL_CHARGE (0x14)
 	.db <wLifeVialMaxCharges
-	.db $0d
+	.db $03
 	.db SND_GETITEM
 .else
 	; TREASURE_14 (0x14)

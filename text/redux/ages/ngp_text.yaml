@@ -1,0 +1,10 @@
+groups:
+- group: 0x0e
+  data:
+  - name: TX_0e_LIFE_VIAL
+    index: auto
+    text: |-
+      \col(1)Flask Charge\col(0)\stop
+       \num1 Rupees
+      \jump(TX_0e2b)
+    null_terminator: False

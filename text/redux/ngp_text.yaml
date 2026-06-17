@@ -1,4 +1,15 @@
 groups:
+- group: 0x00
+  data:
+  - name: TX_00_LIFE_VIAL
+    index: auto
+    text: |-
+      You got a
+      \col(1)Flask Charge\col(0)!\stop
+      Your Fairy Flask
+      can now be used
+      more times!
+
 - group: 0x51
   data:
   - name: TX_51_ITEMS_EATEN
