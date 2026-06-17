@@ -3926,7 +3926,11 @@ loadEquippedItemSpriteData:
 	ld b,a
 .ifdef ENABLE_NEW_GAME_PLUS
 	; insert the vial sprite
-	cp $82
+.ifdef ROM_AGES
+	cp $bb
+.else
+	cp $b9
+.endif
 	jr z,++
 .endif
 
@@ -4680,7 +4684,11 @@ loadItemIconGfx:
 
 .ifdef ENABLE_NEW_GAME_PLUS
 	; insert the vial sprite
-	cp $82
+.ifdef ROM_AGES
+	cp $bb
+.else
+	cp $b9
+.endif
 	jr nz,+
 		ld hl,spr_item_icon_life_vial
 		ld b,:spr_item_icon_life_vial

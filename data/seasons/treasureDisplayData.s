@@ -58,13 +58,13 @@ treasureDisplayData_standard:
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_10
 	.db $00,                         $00, $00, $00, $00, $00, <TX_0900 ; TREASURE_HARP
 .ifdef ENABLE_NEW_GAME_PLUS
-	.db TREASURE_LIFE_VIAL,          $82, $01, $82, $21, $06, <TX_09_LIFE_VIAL ; TREASURE_LIFE_VIAL
+	.db TREASURE_LIFE_VIAL,          $b9, $01, $b9, $21, $06, <TX_09_LIFE_VIAL ; TREASURE_LIFE_VIAL
 .else
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_12
 .endif
 	.db $00,                         $07, $00, $07, $00, $ff, <TX_0900 ; X TREASURE_SLINGSHOT
 .ifdef ENABLE_NEW_GAME_PLUS
-	.db TREASURE_LIFE_VIAL_CHARGE,   $82, $01, $82, $21, $ff, <TX_0900 ; TREASURE_LIFE_VIAL_CHARGE
+	.db TREASURE_LIFE_VIAL_CHARGE,   $b9, $01, $b9, $21, $ff, <TX_0900 ; TREASURE_LIFE_VIAL_CHARGE
 .else
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_14
 .endif

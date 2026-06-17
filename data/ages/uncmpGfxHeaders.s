@@ -336,6 +336,6 @@ uncmpGfxHeader_foolsOre:
 
 .ifdef ENABLE_NEW_GAME_PLUS
 uncmpGfxHeader_lifeVialInv:
-	m_GfxHeader spr_item_icon_life_vial, $8041
+	m_GfxHeader spr_item_icon_life_vial, $8761
 	m_GfxHeaderEnd
 .endif
