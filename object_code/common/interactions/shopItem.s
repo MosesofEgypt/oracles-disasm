@@ -64,13 +64,12 @@ shopItemState0:
 .endif
 
 .ifdef ENABLE_NEW_GAME_PLUS
-	; If this is three hearts, replace it with a flash upgrade in NG+
+	; If this is three hearts, replace it with a flask upgrade in NG+
 	cp $01
 	jr nz,+
 		call getNewGamePlusCycle
-		ld a,$01
+		ld a,(de)
 		jr z,+
-			; if the number of life vials is maxed out, delete self
 			ld a,$0c
 			ld (de),a
 	+

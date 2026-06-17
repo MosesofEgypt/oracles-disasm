@@ -55,6 +55,21 @@ interactionCode81:
 	ld a,(wBoughtSubrosianShopItems)
 	and (hl)
 	jr nz,@func_7799
+.ifdef ENABLE_NEW_GAME_PLUS
+	; If this is three hearts, replace it with tier 2 ring in NG+
+	ld a,(de)
+	cp $0c
+	jr nz,+
+		call getNewGamePlusCycle
+		ld a,(de)
+		jr z,+
+			ld a,$08
+			ld (de),a
+			add a
+			ld hl,@table_779e
+			rst_addDoubleIndex
+	+
+.endif
 	inc hl
 	ld e,$77
 	ld b,$03
