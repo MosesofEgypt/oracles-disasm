@@ -608,9 +608,13 @@
 	m_GfxData gfx_newgameplus ; ????
 	m_GfxData gfx_make ; ????
 
-m_section_free Gfx_simpleGfxExtSection ALIGN $20
-	m_GfxDataSimple gfx_overlap_hearts
+m_section_free Gfx_simpleGfxExtSectionNgp ALIGN $20
 	m_GfxDataSimple spr_item_icon_life_vial
 .ends
+.endif
 
+.ifdef ENABLE_DOUBLE_HEART_CAP
+m_section_free Gfx_simpleGfxExtSectionDoubleHeart ALIGN $20
+	m_GfxDataSimple gfx_overlap_hearts
+.ends
 .endif
