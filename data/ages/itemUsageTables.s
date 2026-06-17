@@ -99,7 +99,7 @@ linkItemAnimationTable:
 .endif
 	.db $70, LINK_ANIM_MODE_HARP_2  ; ITEM_HARP
 .ifdef ENABLE_RING_REDUX
-	.db $80, LINK_ANIM_MODE_23    ; ITEM_LIFE_VIAL
+	.db $f6, LINK_ANIM_MODE_23    ; ITEM_LIFE_VIAL
 .else
 	.db $80, LINK_ANIM_MODE_NONE    ; ITEM_12
 .endif

@@ -237,7 +237,11 @@ itemCode16:
 @@destroyWithAnimation:
 	call objectReplaceWithAnimationIfOnHazard
 	ret c
+.ifdef ENABLE_NEW_GAME_PLUS
+	callab bank3e.itemMakeInteractionForBreakableTile
+.else
 	callab bank6.itemMakeInteractionForBreakableTile
+.endif
 	jp itemDelete
 
 ;;

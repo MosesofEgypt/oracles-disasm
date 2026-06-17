@@ -11451,7 +11451,11 @@ tryToBreakTile:
 	ldh (<hFF8F),a
 	ldh a,(<hRomBank)
 	push af
+.ifdef ENABLE_NEW_GAME_PLUS
+	callfrombank0 bank3e.tryToBreakTile_body
+.else
 	callfrombank0 bank6.tryToBreakTile_body
+.endif
 	rl e
 	pop af
 	rst_setrombank

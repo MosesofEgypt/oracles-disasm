@@ -65,7 +65,7 @@ initializeNgpFile:
 	ldd a,(hl)
 	; minimum of 5 charges
 	cp $05
-	jr nz,+
+	jr nc,+
 		ld a,$05
 	+
 	ldi (hl),a
