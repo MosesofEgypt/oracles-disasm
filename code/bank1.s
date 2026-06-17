@@ -3786,18 +3786,20 @@ updateRingsDisabled:
 updateRingEquipStatuses:
 	call clearRingEquipStatuses
 
+.ifdef ENABLE_NEW_GAME_PLUS
 	ld a,(wRingsDisabledCounter)
 	or a
 	jr nz,++
+.endif
 	; if the player can open the menu, then rings shouldn't be force-disabled.
 	ld a,(wMenuDisabled)
 	or a
 
 	ld hl,(wRingReduxFlags)
 	jr z,+
-		++
 		; if all rings are counted as disabled, don't unset any flags
 		bit 6,(hl)
+		++
 		ret nz
 	+
 
