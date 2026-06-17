@@ -3432,7 +3432,14 @@ playHeartBeepAtInterval:
 	; the original code doesn't handle overflows properly
 	; when dealing with 32 hearts, so we must enable it to.
 	; we're kinda cheating though by cutting the vals in half
+.ifdef ENABLE_RING_REDUX
+	call getLinkMaxHealth
+	ld c,a
+	dec l
+	ldi a,(hl)
+.else
 	ld c,(hl)
+.endif
 	inc a	; don't cut 1/4 heart down to 0
 	srl a
 	srl c
@@ -3444,7 +3451,15 @@ playHeartBeepAtInterval:
 .ifdef ENABLE_DOUBLE_HEART_CAP
 	cp c
 .else
+.ifdef ENABLE_RING_REDUX
+	ld l,a
+	call getLinkMaxHealth
+	ld h,a
+	ld a,l
+	cp h
+.else
 	cp (hl)
+.endif
 .endif
 	ret nc
 
@@ -3909,6 +3924,11 @@ loadEquippedItemSpriteData:
 	; Put left sprite index in 'b'
 	inc e
 	ld b,a
+.ifdef ENABLE_NEW_GAME_PLUS
+	; insert the vial sprite
+	cp $82
+	jr z,++
+.endif
 
 	; This comparison changes the palette used for the seed satchel, seed shooter, slingshot,
 	; and hyper slingshot.
@@ -3916,6 +3936,9 @@ loadEquippedItemSpriteData:
 	jr z,+
 	cp $86
 	jr c,+
+.ifdef ENABLE_NEW_GAME_PLUS
+++
+.endif
 	ldi a,(hl)
 	jr @gotAttribute
 +
@@ -4077,6 +4100,8 @@ drawTreasureExtraTiles:
 	jr z,@val04
 	dec a
 	jr z,@val05
+	dec a
+	jr z,@val06
 	jr @val00
 
 ; Display item quantity with "x" symbol (ie. slates in ages d8)
@@ -4101,8 +4126,16 @@ drawTreasureExtraTiles:
 	ld (de),a
 	ret
 
-; Display item quantity (ie. bombs, seed satchel)
+; Display item quantity vertically(ie. life vial)
+@val06:
+	push hl
+	ld h,$01
+	jr +
+; Display item quantity horizontally (ie. bombs, seed satchel)
 @val01:
+	push hl
+	ld h,$00
+	+
 	; 1's digit
 	inc e
 	ld a,b
@@ -4115,6 +4148,15 @@ drawTreasureExtraTiles:
 	ld a,c
 	ld (de),a
 	dec e
+	bit 0,h
+	jr z,+
+		push af
+		ld a,e
+		sub $20
+		ld e,a
+		pop af
+		inc e
+	+
 	ld (de),a
 
 	; 10's digit
@@ -4124,6 +4166,7 @@ drawTreasureExtraTiles:
 	and $0f
 	add $10
 	ld (de),a
+	pop hl
 	ret
 
 ; Display the item's level
@@ -4300,7 +4343,18 @@ inGameDrawHeartDisplay:
 	ldh (<hFF8B),a
 	ld a,(wDisplayedHearts)
 	ld c,a
+.ifdef ENABLE_RING_REDUX
+	call getLinkMaxHealth
+.else
 	ld a,(wLinkMaxHealth)
+.endif
+	; ensure the number of full hearts
+	; isn't over the number of containers
+	cp c
+	jr nc,+
+		ld c,a
+	+
+
 ;;
 ; @param a Number of heart containers (in quarters)
 ; @param c Number of hearts (in quarters)
@@ -4624,6 +4678,16 @@ loadItemIconGfx:
 
 	ld b,a
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	; insert the vial sprite
+	cp $82
+	jr nz,+
+		ld hl,spr_item_icon_life_vial
+		ld b,:spr_item_icon_life_vial
+		jp copy20BytesFromBank
+	+
+.endif
+
 	; CROSSITEMS: Replace L-1 boomerang sprite with L-2 sprite if applicable. (This was
 	; necessary due to VRAM limitations.)
 	cp $9c
@@ -4695,7 +4759,11 @@ loadItemIconGfx:
 ;;
 loadStatusBarMap:
 	ld c,$10
+.ifdef ENABLE_RING_REDUX
+	call getLinkMaxHealth
+.else
 	ld a,(wLinkMaxHealth)
+.endif
 	cp 14*4+1
 	jr c,+
 	inc c
@@ -4852,6 +4920,11 @@ inventoryMenuState0:
 	ld a,UNCMP_GFXH_HYPER_SLINGSHOT_INV
 	call loadUncompressedGfxHeader
 +
+.ifdef ENABLE_NEW_GAME_PLUS
+	; and do the same for the life vial
+	ld a,UNCMP_GFXH_LIFE_VIAL_INV
+	call loadUncompressedGfxHeader
+.endif
 
 	ld a,UNCMP_GFXH_06
 	call loadUncompressedGfxHeader

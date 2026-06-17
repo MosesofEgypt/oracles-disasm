@@ -1030,6 +1030,23 @@ wShooterSelectedSeeds:
 wSlingshotSelectedSeeds:
 	db
 
+.ifdef ENABLE_NEW_GAME_PLUS
+wLifeVialCharges: ; $c6fd/$c6f0
+	db
+
+wLifeVialMaxCharges: ; $c6fe/$c6f1
+	db
+.else
+wUnusedc6fd: ; $c6fd/$c6f0
+	db
+
+wUnusedc6fe: ; $c6fe/$c6f1
+	db
+.endif
+
+wUnusedc6ff: ; $c6ff/$c6f2
+	db
+
 .ENDS
 
 .define wSeedsAndHarpSongsObtained	wObtainedTreasureFlags+TREASURE_EMBER_SEEDS/8
@@ -1652,30 +1669,30 @@ wStatusBarNeedsRefresh: ; $cbe9/$cbea
 ; The following "wBItem" and "wAItem" variables are loaded almost directly from the
 ; "treasureDisplayData" structure.
 
-wBItemTreasure: ; $cbea
+wBItemTreasure: ; $cbea/$cbeb
 ; wBItemTreasure: This is the treasure index used to determine the item's level / ammo
 ; count. Usually this is either $00 or equal to [wInventoryB], but not always - the seed
 ; satchel sets this to a different value for each seed type, for instance.
 	db
-wBItemSpriteAttribute1: ; $cbeb
+wBItemSpriteAttribute1: ; $cbeb/$cbec
 	db
-wBItemSpriteAttribute2: ; $cbec
+wBItemSpriteAttribute2: ; $cbec/$cbed
 	db
-wBItemSpriteXOffset: ; $cbed
+wBItemSpriteXOffset: ; $cbed/$cbee
 	db
-wBItemDisplayMode: ; $cbee
+wBItemDisplayMode: ; $cbee/$cbef
 ; Whether to display item level, ammo, etc
 	db
 
-wAItemTreasure: ; $cbef
+wAItemTreasure: ; $cbef/$cbf0
 	db
-wAItemSpriteAttribute1: ; $cbf0
+wAItemSpriteAttribute1: ; $cbf0/$cbf1
 	db
-wAItemSpriteAttribute2: ; $cbf1
+wAItemSpriteAttribute2: ; $cbf1/$cbf2
 	db
-wAItemSpriteXOffset: ; $cbf2
+wAItemSpriteXOffset: ; $cbf2/$cbf3
 	db
-wAItemDisplayMode: ; $cbf3
+wAItemDisplayMode: ; $cbf3/$cbf4
 	db
 
 .ENDS

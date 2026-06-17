@@ -57,9 +57,17 @@ treasureDisplayData_standard:
 	.db $00,                         $88, $00, $00, $00, $ff, <TX_0900 ; TREASURE_SHOOTER
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_10
 	.db $00,                         $00, $00, $00, $00, $00, <TX_0900 ; TREASURE_HARP
+.ifdef ENABLE_NEW_GAME_PLUS
+	.db TREASURE_LIFE_VIAL,          $82, $01, $82, $21, $06, <TX_09_LIFE_VIAL ; TREASURE_LIFE_VIAL
+.else
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_12
+.endif
 	.db $00,                         $07, $00, $07, $00, $ff, <TX_0900 ; X TREASURE_SLINGSHOT
+.ifdef ENABLE_NEW_GAME_PLUS
+	.db TREASURE_LIFE_VIAL_CHARGE,   $82, $01, $82, $21, $ff, <TX_0900 ; TREASURE_LIFE_VIAL_CHARGE
+.else
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_14
+.endif
 	.db $00,                         $9b, $04, $00, $00, $ff, <TX_092a ; TREASURE_SHOVEL
 	.db $00,                         $99, $05, $00, $00, $ff, <TX_092b ; X TREASURE_BRACELET
 	.db $00,                         $07, $00, $07, $00, $00, <TX_0900 ; X TREASURE_FEATHER

@@ -69,10 +69,27 @@ greatFairy_state3:
 
 	ld hl,wLinkHealth
 	ldi a,(hl)
+.ifdef ENABLE_RING_REDUX
+	ld l,a
+	call getLinkMaxHealth
+	ld h,a
+	ld a,l
+	cp h
+.else
 	cp (hl)
+.endif
 	ld a,$04
 	ld bc,TX_4100
 	jr nz,++
+
+.ifdef ENABLE_NEW_GAME_PLUS
+	; Check if vial is full
+	ld hl,wLifeVialCharges
+	ldi a,(hl)
+	cp (hl)
+	ld a,$04
+	jr nz,++
+.endif
 
 	; Full health already
 	ld e,Enemy.counter1
@@ -141,6 +158,16 @@ greatFairy_state6:
 	ld a,TREASURE_HEART_REFILL
 	ld c,MAX_LINK_HEALTH
 	call giveTreasure
+.ifdef ENABLE_NEW_GAME_PLUS
+	; refill the life vial
+	ld hl,wLifeVialMaxCharges
+	ldd a,(hl)
+	ld (hl),a
+
+	; indicate the item count might need to be refreshed
+	ld hl,wStatusBarNeedsRefresh
+	set 1,(hl)
+.endif
 
 
 ; Waiting for all hearts to disappear

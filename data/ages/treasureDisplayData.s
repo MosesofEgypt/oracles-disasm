@@ -49,11 +49,12 @@ treasureDisplayData2:
 ;  b3: Right sprite index
 ;  b4: Right attribute
 ;  b5: $00: display level
-;      $01: display quantity
+;      $01: display quantity horizontally
 ;      $02: display seasons
 ;      $03: display nothing extra (stub?)
 ;      $04: display number with "x" (ie. x2). Used by slates only.
 ;      $05: display harp song (CROSSITEMS: Used to be $02)
+;      $06: display quantity vertically
 ;      $ff: display nothing extra
 ;  b6: Low byte of text index (high byte is $09)
 ;
@@ -87,9 +88,17 @@ treasureDisplayData_standard:
 	.db $00,                         $88, $00, $00, $00, $ff, <TX_0940 ; X TREASURE_SHOOTER (0x0f)
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_10 (0x10)
 	.db TREASURE_HARP,               $00, $00, $00, $00, $05, <TX_0941 ; X TREASURE_HARP (0x11)
-	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_12 (0x12)
+.ifdef ENABLE_NEW_GAME_PLUS
+	.db TREASURE_LIFE_VIAL,          $82, $01, $82, $21, $06, <TX_09_LIFE_VIAL ; TREASURE_LIFE_VIAL
+.else
+	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_12
+.endif
 	.db $00,                         $07, $00, $07, $00, $ff, <TX_0900 ; TREASURE_SLINGSHOT (0x13)
-	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_14 (0x14)
+.ifdef ENABLE_NEW_GAME_PLUS
+	.db TREASURE_LIFE_VIAL_CHARGE,   $82, $01, $82, $21, $ff, <TX_0900 ; TREASURE_LIFE_VIAL_CHARGE
+.else
+	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_14
+.endif
 	.db $00,                         $9b, $04, $00, $00, $ff, <TX_092a ; TREASURE_SHOVEL (0x15)
 	.db TREASURE_BRACELET,           $99, $05, $00, $00, $00, <TX_092b ; X TREASURE_BRACELET (0x16)
 	.db TREASURE_FEATHER,            $96, $04, $00, $00, $ff, <TX_092c ; X TREASURE_FEATHER (0x17)

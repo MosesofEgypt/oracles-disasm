@@ -445,7 +445,11 @@ parentItemUpdate:
 	.dw parentItemCode_shooter		; ITEM_SHOOTER
 	.dw clearParentItem			; ITEM_10
 	.dw parentItemCode_harp			; ITEM_HARP
+.ifdef ENABLE_NEW_GAME_PLUS
+	.dw parentItemCode_lifeVial	; ITEM_LIFE_VIAL
+.else
 	.dw clearParentItem			; ITEM_12
+.endif
 	.dw parentItemCode_slingshot		; ITEM_SLINGSHOT
 	.dw clearParentItem			; ITEM_14
 	.dw parentItemCode_shovel		; ITEM_SHOVEL

@@ -147,6 +147,9 @@ m_section_free Bank_6 NAMESPACE bank6
 	.include "object_code/common/itemParents/bombsBraceletParent.s"
 	.include "object_code/common/itemParents/featherParent.s"
 	.include "object_code/common/itemParents/magnetGloveParent.s"
+.ifdef ENABLE_NEW_GAME_PLUS
+	.include "object_code/common/itemParents/lifeVialParent.s"
+.endif
 
 	.include "object_code/common/itemParents/commonCode.s"
 

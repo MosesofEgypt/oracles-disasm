@@ -41,7 +41,7 @@ enemyCode15:
 		; only show the message if not already disabled
 		ld a,b
 		or a
-		ld bc,TX_5111
+		ld bc,TX_51_RINGS_DISABLED
 		call z,showText
 		jr @normalStatus
 	+

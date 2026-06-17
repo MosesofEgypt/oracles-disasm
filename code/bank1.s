@@ -3411,6 +3411,13 @@ initializeGame:
 	jr z,++
 
 @resetHealth:
+.ifdef ENABLE_NEW_GAME_PLUS
+	; refill the life vial halfway
+	ld hl,wLifeVialMaxCharges
+	ldd a,(hl)
+	call getHalfDecimalOfA
+	ld (hl),a
+.endif
 	; Get wLinkMaxHealth
 	inc l
 	ldd a,(hl)

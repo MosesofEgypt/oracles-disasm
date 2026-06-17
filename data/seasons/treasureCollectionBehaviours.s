@@ -91,20 +91,34 @@ treasureCollectionBehaviourTable:
 	.db $05
 	.db SND_GETITEM
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	; TREASURE_LIFE_VIAL (0x12)
+	.db <wLifeVialCharges
+	.db $0d
+	.db SND_NONE
+.else
 	; TREASURE_12 (0x12)
 	.db $00
 	.db $00
 	.db SND_NONE
+.endif
 
 	; TREASURE_SLINGSHOT (0x13)
 	.db <wSlingshotLevel
 	.db $08
 	.db SND_GETSEED
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	; TREASURE_LIFE_VIAL_CHARGE (0x14)
+	.db <wLifeVialMaxCharges
+	.db $0d
+	.db SND_GETITEM
+.else
 	; TREASURE_14 (0x14)
 	.db $00
 	.db $00
 	.db SND_NONE
+.endif
 
 	; TREASURE_SHOVEL (0x15)
 	.db $00

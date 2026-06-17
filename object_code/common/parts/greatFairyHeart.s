@@ -29,10 +29,18 @@ partCode30:
 	and $1f
 	ld (hl),a
 	ret nz
+.ifdef ENABLE_RING_REDUX
+	call getLinkMaxHealth
+	ld l,a
+	ld a,(wDisplayedHearts)
+	cp l
+	ret c
+.else
 	ld hl,wLinkMaxHealth
 	ld a,(wDisplayedHearts)
 	cp (hl)
 	ret nz
+.endif
 	ld a,$31
 	call objectGetRelatedObject1Var
 	dec (hl)

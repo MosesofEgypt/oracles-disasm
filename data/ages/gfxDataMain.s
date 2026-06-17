@@ -528,6 +528,7 @@
 
 m_section_free Gfx_simpleGfxExtSection ALIGN $20
 	m_GfxDataSimple gfx_overlap_hearts
+	m_GfxDataSimple spr_item_icon_life_vial
 .ends
 
 .endif

@@ -95,4 +95,8 @@
 
 .endif
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	UNCMP_GFXH_LIFE_VIAL_INV  db
+.endif
+
 .ENDE

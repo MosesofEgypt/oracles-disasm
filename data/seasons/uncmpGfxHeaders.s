@@ -13,6 +13,9 @@ uncmpGfxHeaderTable:
 	.dw uncmpGfxHeader_caneOfSomaria
 	.dw uncmpGfxHeader_switchHook
 	.dw uncmpGfxHeader_seedShooter
+.ifdef ENABLE_NEW_GAME_PLUS
+	.dw uncmpGfxHeader_lifeVialInv
+.endif
 
 
 uncmpGfxHeader00:
@@ -275,3 +278,9 @@ uncmpGfxHeader_switchHook:
 uncmpGfxHeader_seedShooter:
 	m_GfxHeader spr_seed_shooter, $8521
 	m_GfxHeaderEnd
+
+.ifdef ENABLE_NEW_GAME_PLUS
+uncmpGfxHeader_lifeVialInv:
+	m_GfxHeader spr_item_icon_life_vial, $8041
+	m_GfxHeaderEnd
+.endif

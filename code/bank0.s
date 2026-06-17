@@ -8746,6 +8746,16 @@ tryNgpUpgrade:
 .endif
 
 .ifdef ENABLE_RING_REDUX
+getLinkMaxHealth:
+	ld a,CURSED_RED_RING
+	call cpActiveRing
+	ld a,(wLinkMaxHealth)
+	ret nz
+	cp CURSE_RING_HEART_CAP
+	ret c
+	ld a,CURSE_RING_HEART_CAP
+	ret
+
 spawnAzuchu:
 	; only run every few frames to prevent lag
 	ld a,(wFrameCounter)

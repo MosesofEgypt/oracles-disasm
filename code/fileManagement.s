@@ -48,13 +48,28 @@ initializeNgpFile:
 	ld (wNumBombs),a
 	ld (wNumBombchus),a
 
+	ld (wSatchelSelectedSeeds),a
+	ld (wShooterSelectedSeeds),a
+	ld (wSlingshotSelectedSeeds),a
+
+	ld hl,initialNgpFileVariables_spawn
+	call initializeFileVariables
+
 	; set wLinkHealth to wLinkMaxHealth
 	ld hl,wLinkMaxHealth
 	ldd a,(hl)
 	ld (hl),a
 
-	ld hl,initialNgpFileVariables_spawn
-	call initializeFileVariables
+	; refill(or initialize) the life vial
+	ld hl,wLifeVialMaxCharges
+	ldd a,(hl)
+	; minimum of 5 charges
+	cp $05
+	jr nz,+
+		ld a,$05
+	+
+	ldi (hl),a
+	ld (hl),a
 
 	; Load in a: wFileIsHeroGame (bit 1), wFileIsLinkedGame (bit 0)
 	ld hl,wFileIsHeroGame
@@ -505,6 +520,8 @@ initialNgpFileVariables_linkedGame:
 	.db <wObtainedTreasureFlags,	(1<<TREASURE_PUNCH) | (1<<TREASURE_SWORD)
 initialNgpFileVariables_standardGame:
 initialNgpFileVariables_heroGame:
+	.db <wInventoryStorage+1,		ITEM_LIFE_VIAL
+	.db <wObtainedTreasureFlags+2,	(1<<(TREASURE_LIFE_VIAL-16))
 	.db <wChildStatus,				$00
 	.db <wAnimalCompanion,			$00
 	.db $00

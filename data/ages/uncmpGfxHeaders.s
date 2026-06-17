@@ -20,6 +20,9 @@ uncmpGfxHeaderTable:
 	.dw uncmpGfxHeader_l2Boomerang
 	.dw uncmpGfxHeader_rodOfSeasons
 	.dw uncmpGfxHeader_foolsOre
+.ifdef ENABLE_NEW_GAME_PLUS
+	.dw uncmpGfxHeader_lifeVialInv
+.endif
 
 
 
@@ -330,3 +333,9 @@ uncmpGfxHeader_rodOfSeasons:
 uncmpGfxHeader_foolsOre:
 	m_GfxHeader spr_item_icons_2, $8521, $02, $140
 	m_GfxHeaderEnd
+
+.ifdef ENABLE_NEW_GAME_PLUS
+uncmpGfxHeader_lifeVialInv:
+	m_GfxHeader spr_item_icon_life_vial, $8041
+	m_GfxHeaderEnd
+.endif

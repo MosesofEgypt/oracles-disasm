@@ -462,7 +462,7 @@ likelike_specialEatenEffect:
 	ld hl,wStatusBarNeedsRefresh
 	set 1,(hl)
 
-	ld bc,TX_5110
+	ld bc,TX_51_ITEMS_EATEN
 	jp showText
 .endif
 

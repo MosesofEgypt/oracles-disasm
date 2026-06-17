@@ -28,7 +28,11 @@ itemData:
 	.db $00 $00 $00 ; $10: ITEM_10
 .endif
 	.db $00 $00 $00 ; $11: ITEM_HARP
+.ifdef ENABLE_RING_REDUX
+	.db $00 $00 $00 ; $12: ITEM_LIFE_VIAL
+.else
 	.db $00 $00 $00 ; $12: ITEM_12
+.endif
 	.db $00 $52 $09 ; $13: ITEM_SLINGSHOT
 	.db $00 $00 $00 ; $14: ITEM_14
 	.db $00 $00 $00 ; $15: ITEM_SHOVEL

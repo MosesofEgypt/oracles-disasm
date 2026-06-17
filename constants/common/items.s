@@ -34,7 +34,11 @@
 	ITEM_10				db ; 0x10
 .endif
 	ITEM_HARP			db ; 0x11
+.ifdef ENABLE_NEW_GAME_PLUS
+	ITEM_LIFE_VIAL	db ; 0x12
+.else
 	ITEM_12				db ; 0x12
+.endif
 	ITEM_SLINGSHOT			db ; 0x13
 	ITEM_14				db ; 0x14
 	ITEM_SHOVEL			db ; 0x15
