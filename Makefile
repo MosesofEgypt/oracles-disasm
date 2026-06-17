@@ -151,10 +151,12 @@ CMP_GFX_FILES    = $(shell find $(GFX_CMP_DIR)/common $(GFX_CMP_DIR)/$(GAME) \
 PRECMP_GFX_FILES = $(shell find $(GFX_PRECMP_DIR)/common $(GFX_PRECMP_DIR)/$(GAME) -name '*.cmp')
 
 ifdef ORACLE_RING_REDUX
-# overriding ring gfx and adding the redux gfx
-PNG_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name '*.png')
-BIN_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name '*.bin')
-UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name '*.png')
+# overriding ring gfx
+BIN_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name 'map_rings.bin')
+endif
+ifdef ORACLE_NEW_GAME_PLUS
+PNG_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/ngp -name '*.png')
+UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/ngp -name '*.png')
 endif
 
 # List of all gfx files in their final form, ie. $(BUILD_DIR)/gfx/spr_link.cmp
