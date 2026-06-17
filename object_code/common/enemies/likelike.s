@@ -383,10 +383,17 @@ likelike_stateC:
 
 	ld l,Enemy.collisionType
 	set 7,(hl)
+.ifdef ENABLE_NEW_GAME_PLUS
+-
+.endif
 	jr likelike_animate
 ++
 	call ecom_applyVelocityForSideviewEnemyNoHoles
+.ifdef ENABLE_NEW_GAME_PLUS
+	jr nz,-
+.else
 	jr nz,likelike_animate
+.endif
 
 	; Ran into wall
 	call getRandomNumber_noPreserveVars
@@ -394,7 +401,7 @@ likelike_stateC:
 	ld e,Enemy.angle
 	ld (de),a
 .ifdef ENABLE_NEW_GAME_PLUS
-	jp likelike_animate
+	jr -
 .else
 	jr likelike_animate
 .endif
