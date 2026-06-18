@@ -44,6 +44,10 @@
 		; determines whether a NG+ file can only be started from a completed file.
 		.define NEW_GAME_PLUS_NEEDS_COMPLETION	1
 	.endif
+	.ifndef WIDE_LIFE_VIAL_SPRITE
+		; determines whether the fairy flask is 2 tiles wide instead of 1
+;		.define WIDE_LIFE_VIAL_SPRITE		1 	; keeping here for documentation
+	.endif
 	.ifndef FILE_MENU_SHOW_CURRENT_HEARTS
 		; determines whether the save menu shows the number of
 		; hearts link actually has full instead of the default

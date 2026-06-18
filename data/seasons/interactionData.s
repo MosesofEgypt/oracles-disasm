@@ -501,7 +501,11 @@ interaction47SubidData:
 	m_InteractionSubidData $5d $0a $10
 	m_InteractionSubidData $61 $00 $50
 .ifdef ENABLE_NEW_GAME_PLUS
+.ifdef WIDE_LIFE_VIAL_SPRITE
 	m_InteractionSubidData $c8 $00 $12
+.else
+	m_InteractionSubidData $c8 $00 $10
+.endif
 .else
 	m_InteractionSubidData $5d $10 $13
 .endif

@@ -205,5 +205,9 @@ objectGfxHeaderTable:
 	/* $c7 */ m_ObjectGfxHeader spr_hyperslingshot_inventory $00
 
 .ifdef ENABLE_NEW_GAME_PLUS
+.ifdef WIDE_LIFE_VIAL_SPRITE
 	/* $c8 */ m_ObjectGfxHeader spr_item_icon_life_vial
+.else
+	/* $c8 */ m_ObjectGfxHeader spr_item_icon_life_vial_slim
+.endif
 .endif

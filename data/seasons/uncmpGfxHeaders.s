@@ -281,6 +281,10 @@ uncmpGfxHeader_seedShooter:
 
 .ifdef ENABLE_NEW_GAME_PLUS
 uncmpGfxHeader_lifeVialInv:
+.ifdef WIDE_LIFE_VIAL_SPRITE
 	m_GfxHeader spr_item_icon_life_vial, $8721
+.else
+	m_GfxHeader spr_item_icon_life_vial_slim, $8721
+.endif
 	m_GfxHeaderEnd
 .endif

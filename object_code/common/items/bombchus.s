@@ -2,7 +2,7 @@
 ;;
 ; ITEM_AZUCHU
 itemCode10:
-	ld a,$01
+	xor a
 	ldh (<hFF93),a
 
 	; if link is disabled, don't process anything
@@ -263,7 +263,7 @@ itemCode10:
 itemCode0d:
 .ifdef ENABLE_RING_REDUX
 	; cache whether or not this is azuchu
-	xor a
+	ld a,$01
 	ldh (<hFF93),a
 .endif
 
@@ -997,8 +997,8 @@ bombchuCheckForEnemyTarget:
 	push hl
 	ld hl,bombchuTargets
 .ifdef ENABLE_RING_REDUX
-	call isAzuchu
 	push af
+	call isAzuchu
 	jr nz,+
 		; move to azuchu targets array
 		ld a,$10

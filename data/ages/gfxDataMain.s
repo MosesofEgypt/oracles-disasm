@@ -527,7 +527,11 @@
 	m_GfxData gfx_make ; ????
 
 m_section_free Gfx_simpleGfxExtSectionNgp ALIGN $20
+.ifdef WIDE_LIFE_VIAL_SPRITE
 	m_GfxDataSimple spr_item_icon_life_vial
+.else
+	m_GfxDataSimple spr_item_icon_life_vial_slim
+.endif
 .ends
 .endif
 

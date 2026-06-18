@@ -385,7 +385,7 @@ groups:
     index: 0x8a
     text: |-
       ATK: +100%
-      \heart cap of 4
+      \heart cap of 6
 
   - name: TX_308b
     index: 0x8b

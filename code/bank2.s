@@ -4690,8 +4690,13 @@ loadItemIconGfx:
 	cp $b9
 .endif
 	jr nz,+
+	.ifdef WIDE_LIFE_VIAL_SPRITE
 		ld hl,spr_item_icon_life_vial
 		ld b,:spr_item_icon_life_vial
+	.else
+		ld hl,spr_item_icon_life_vial_slim
+		ld b,:spr_item_icon_life_vial_slim
+	.endif
 		jp copy20BytesFromBank
 	+
 .endif

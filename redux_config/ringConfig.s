@@ -61,7 +61,7 @@
 
 		; determines how many hearts you are limited
 		; to while wearing the Red Curse Ring.
-		.define CURSE_RING_HEART_CAP		(4*4)
+		.define CURSE_RING_HEART_CAP		(6*4)
 
 		; NOTE: lower values == higher damage
 		; determines how much each ring reduces/increases damage dealt
