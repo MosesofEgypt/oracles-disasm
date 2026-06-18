@@ -32,9 +32,16 @@ partCode01:
 	ld a,(wIsMaplePresent)
 	or a
 	jp nz,partDelete
-
 	ld e,Part.subid
 	ld a,(de)
+.ifdef ENABLE_NEW_GAME_PLUS
+	; If this is a healing item, delete it in NG+
+	cp $02
+	jr nc,+
+		call getNewGamePlusCycle
+		jp nz,partDelete
+	+
+.endif
 	cp ITEM_DROP_100_RUPEES_OR_ENEMY
 	jr nz,@normalItem
 
