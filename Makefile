@@ -71,10 +71,19 @@ ifneq ($(filter 1, $(ROM_AGES) $(ROM_SEASONS)),)
 # defines for wla-gb
 DEFINES = $(ORACLE_EXTRA_DEFINES) # Can specify this on commandline
 CFLAGS =
-ifdef ORACLE_RING_REDUX
+# load the bare minimum redux config
+include redux_config/config.env
+ORACLE_REDUX_DEFINES =
+ifdef ENABLE_FULL_REDUX
+	ORACLE_REDUX_DEFINES += -D ENABLE_FULL_REDUX
+endif
+ifdef ENABLE_REDUX_EXTRAS
+	ORACLE_REDUX_DEFINES += -D ENABLE_REDUX_EXTRAS
+endif
+ifdef ENABLE_RING_REDUX
 	ORACLE_REDUX_DEFINES += -D ENABLE_RING_REDUX
 endif
-ifdef ORACLE_NEW_GAME_PLUS
+ifdef ENABLE_NEW_GAME_PLUS
 	ORACLE_REDUX_DEFINES += -D ENABLE_NEW_GAME_PLUS
 endif
 DEFINES += $(ORACLE_REDUX_DEFINES)
@@ -150,11 +159,11 @@ CMP_GFX_FILES    = $(shell find $(GFX_CMP_DIR)/common $(GFX_CMP_DIR)/$(GAME) \
                      -name '*.bin' -or -name '*.png')
 PRECMP_GFX_FILES = $(shell find $(GFX_PRECMP_DIR)/common $(GFX_PRECMP_DIR)/$(GAME) -name '*.cmp')
 
-ifdef ORACLE_RING_REDUX
+ifdef ENABLE_RING_REDUX
 # overriding ring gfx
 BIN_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name 'map_rings.bin')
 endif
-ifdef ORACLE_NEW_GAME_PLUS
+ifdef ENABLE_NEW_GAME_PLUS
 PNG_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/ngp -name '*.png')
 UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/ngp -name '*.png')
 endif

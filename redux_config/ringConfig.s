@@ -2,34 +2,42 @@
 ; NOTE: This file contains the config definitions for controlling various
 ;		aspects of the ring redux mod and things associated with it.
 ;		Most changes here will require editing the related text strings.
+; NOTE: Disabling a feature is done by commenting out a line with ';'.
+;		Setting the define value to '0' or something won't disable it.
 ;;
 
 .ifdef ENABLE_REDUX_EXTRAS
 	.ifndef ENABLE_GASHA_REBALANCE
+		; determines whether to use the updated gasha system.
+		; to learn how it works, look at 'notes/gashaRebalanceMechanics.txt'
 		.define ENABLE_GASHA_REBALANCE		1
 	.endif
 	.ifndef ENABLE_SECRET_GASHA_RINGS
+		; determines whether rings exclusive to linked games are available
+		; in the final ring tier. requires ENABLE_GASHA_REBALANCE to work.
 ;		.define ENABLE_SECRET_GASHA_RINGS 	1 	; keeping here for documentation
 	.endif
 	.ifndef LAVA_SWIMMING_RING
-		; specifies which ring enables swimming in lava
+		; determines which ring enables swimming in lava
 ;		.define LAVA_SWIMMING_RING			HIKERS_RING	; keeping here for documentation
 	.endif
 .endif
 
 .ifdef ENABLE_RING_REDUX
 	; NOTE: these values are in 1/8 heart increments, so 8 == 1 heart
+		; these determine how much each ring modifies link's sword damage.
 		.define RED_RING_ATK_MOD			8
 		.define GREEN_RING_ATK_MOD			6
 		.define GOLD_RING_ATK_MOD			4
-		.define CURSED_RED_RING_ATK_MOD	8
+		.define CURSED_RED_RING_ATK_MOD		8
 		.define MAX_RING_ATK_MOD			(8*5)
 
 	; NOTE: these values are 1/8 increments, so 3 = 37.5% damage reduction
+		; these determine how much each ring modifies link's damage taken.
 		.define BLUE_RING_DEF_MOD			4
 		.define GREEN_RING_DEF_MOD			3
 		.define GOLD_RING_DEF_MOD			2
-		.define CURSED_RED_RING_DEF_MOD	0
+		.define CURSED_RED_RING_DEF_MOD		0
 		.define HOLY_RING_DEF_MOD			2
 		.define MAX_RING_DEF_MOD			3
 
@@ -45,13 +53,18 @@
 		.define LUCK_RING_CHANCE			38
 
 	; NOTE: these values are in 1/4 heart increments, so 4 == 1 heart
+		; these values determine how many hearts must be
+		; remaining/lost for the ring to get its effect.
 		.define GOLD_RING_HEART_CUTOFF		(4*4)
-		.define CURSE_RING_HEART_CAP		(4*4)
 		.define LIGHT_RING_L1_CUTOFF		(4*3)
 		.define LIGHT_RING_L2_CUTOFF		(4*6)
 
-		; this is how much to reduce/increase damage dealt
+		; determines how many hearts you are limited
+		; to while wearing the Red Curse Ring.
+		.define CURSE_RING_HEART_CAP		(4*4)
+
 		; NOTE: lower values == higher damage
+		; determines how much each ring reduces/increases damage dealt
 		.define POWER_RING_L1_ATK_MOD		-1
 		.define POWER_RING_L2_ATK_MOD		-2
 		.define POWER_RING_L3_ATK_MOD		-3
@@ -60,10 +73,6 @@
 		.define ARMOR_RING_L3_ATK_MOD		1
 
 	; NOTE: these values are in 1/8 heart increments, so 8 == 1 heart
-		.define SPIN_SWING_COUNTER			(4*15 + 1)	; one startup frame, and 4 per spin
-		.define SWORD_BEAM_LIMIT			2			; number of beams onscreen at once
-		.define SUPER_BEAM_DELAY			60			; frames
-
 		; this is how much to reduce/increase damage taken
 		; NOTE: lower values == higher damage
 		.define POWER_RING_L1_DEF_MOD		-2
@@ -73,32 +82,26 @@
 		.define ARMOR_RING_L2_DEF_MOD		4
 		.define ARMOR_RING_L3_DEF_MOD		6
 
+	; determines how many spin-attacks the hurricane spin will do
+	.define SPIN_SWING_COUNTER			(4*15 + 1)	; one startup frame, and 4 per spin
+
+	; determines whether the hurricane spin lasts until you release the button.
+	; takes precedence over SPIN_SWING_COUNTER
+;	.define INDEFINITE_HURRICANE_SPIN	1
+
+	; determines how many sword beams will be allowed on
+	; screen when the ring combo to increase them is active.
+	.define SWORD_BEAM_LIMIT			2			; number of beams onscreen at once
+
+	; determines how many frames to wait between firing sword
+	; beams when the ring combo to continually fire is active.
+	.define SUPER_BEAM_DELAY			60			; frames
+
+	; determines how many rupees the Alchemy Ring
+	; consumes to generate ammo for each item type
 	.define ALCHEMY_SEED_COST 			RUPEEVAL_002
 	.define ALCHEMY_BOMB_COST 			RUPEEVAL_005
 	.define ALCHEMY_BOMBCHU_COST 		RUPEEVAL_050
-
-	; NOTE: if this is defined, the hurricane spin lasts until you release the button
-;	.define INDEFINITE_HURRICANE_SPIN	1
-.endif
-
-.ifdef RESIZE_RING_BOX
-	; NOTE: These are the sizes of each level of ring box.
-	;		Do not go over 5 rings for non-extended box
-	;		sizes, nor 10 rings for extended box sizes.
-	.ifdef EXTENDED_RING_BOX
-		.define RING_BOX_L1_SIZE		3
-		.define RING_BOX_L2_SIZE		5
-		.define RING_BOX_L3_SIZE		10
-	.else
-		.define RING_BOX_L1_SIZE		2
-		.define RING_BOX_L2_SIZE		4
-		.define RING_BOX_L3_SIZE		5
-	.endif
-.endif
-
-.ifdef INCREASE_WALLET_SIZE
-	; NOTE: do not go over 9999
-	.define MAX_WALLET_SIZE 			$9999
 .endif
 
 .ifdef PORTAL_RING_BOX_LEVEL
@@ -119,7 +122,10 @@
 	; The following are the rings that drop per tier, followed by
 	; cutoffs for the chance to drop. the comment after the cutoff
 	; is the weight that the above cutoffs were derived from.
+
+	;-------------------------------------------------------------------------
 	; NOTE: IF YOU CHANGE THE RINGS LISTED, YOU MUST UPDATE @ringTierMaskTable
+	;-------------------------------------------------------------------------
 
 	; tier0: high-buff/good-utility
 	.macro TIER0_RINGS_AND_CUTOFFS
@@ -207,7 +213,7 @@
 .endif
 
 .ifdef REMAP_RING_LIST
-	; If defined, also remaps the index numbers of each ring
+	; determines whether to remap the index numbers of each ring as well
 	.define REMAP_RING_LIST_NUMBERS		1
 
 	; NOTE: If you want to rearrange where the rings show up in the list, do so here.
@@ -236,9 +242,12 @@
 .endif
 
 
+;--------------------------------------------------------------------
+;  WARNING: DO NOT TOUCH ANYTHING BELOW THIS LINE
+;			Code below here is not meant to be configued.
+;			We're simply setting up dependent defines.
+;--------------------------------------------------------------------
 
-; NOTE: Code below here is not meant to be treated as configuration.
-;		We're simply setting up any dependent defines.
 
 .ifdef ENABLE_RING_REDUX
 	.define SEED_SHOOTER_BASE_ID		$40
@@ -256,12 +265,12 @@
 
 	.ifndef ENABLE_MULTI_RING
 		; necessary for so many things(combos, effect stacking, etc)
-		.define ENABLE_MULTI_RING	1
+		.define ENABLE_MULTI_RING		1
 	.endif
 
 	.ifndef ENABLE_PUNCH_WITH_ITEM
 		; the text for the rings indicate this is possible, so we're forcing it on
-		.define ENABLE_PUNCH_WITH_ITEM 			1
+		.define ENABLE_PUNCH_WITH_ITEM 	1
 	.endif
 .endif
 
