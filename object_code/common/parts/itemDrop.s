@@ -35,11 +35,20 @@ partCode01:
 	ld e,Part.subid
 	ld a,(de)
 .ifdef ENABLE_NEW_GAME_PLUS
-	; If this is a healing item, delete it in NG+
-	cp $02
-	jr nc,+
-		call getNewGamePlusCycle
-		jp nz,partDelete
+	; If this is a healing item, change it in NG+
+	push hl
+	push af
+	call getNewGamePlusCycle
+	pop hl
+	ld a,h
+	pop hl
+	jr z,+
+		; change it to 1 rupees if it's a heart, or 5 if a fairy
+		cp $02
+		jr nc,+
+			xor $01
+			add $02
+			ld (de),a
 	+
 .endif
 	cp ITEM_DROP_100_RUPEES_OR_ENEMY

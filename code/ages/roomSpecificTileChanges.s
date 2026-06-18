@@ -1267,7 +1267,16 @@ createInteraction90:
 tileReplacement_group0Mape1:
 	ld c,$1c
 	call createInteraction90
+.ifdef ENABLE_NEW_GAME_PLUS
+	call getNewGamePlusCycle
 	ld a,(wEssencesObtained)
+	jr z,+
+		; always want the great fairy open on NG+
+		or a,$01
+	+
+.else
+	ld a,(wEssencesObtained)
+.endif
 	rrca
 	ld l,$26
 	call c,setTileToDoor
