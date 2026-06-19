@@ -532,6 +532,7 @@ m_section_free Gfx_simpleGfxExtSectionNgp ALIGN $20
 .else
 	m_GfxDataSimple spr_item_icon_life_vial_slim
 .endif
+	m_GfxDataSimple spr_item_icons_sword_shield_l4
 .ends
 .endif
 

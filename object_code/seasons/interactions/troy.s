@@ -218,6 +218,14 @@ func_7a8e:
 func_7aa7:
 	ld a,TREASURE_SWORD
 	call checkTreasureObtained
+.ifdef ENABLE_NEW_GAME_PLUS
+	or $80
+	dec a
+	and $03
+	ld e,Interaction.var03
+	ld (de),a
+	ret
+.else
 	jr nc,@nobleSword
 	cp $03
 	jp nc,@nobleSword
@@ -229,3 +237,4 @@ func_7aa7:
 @nobleSword:
 	ld a,$01
 	jr -
+.endif

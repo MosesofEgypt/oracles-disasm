@@ -290,6 +290,10 @@ interaction60SubidData:
 	m_InteractionSubidData $5d $14 $00
 	m_InteractionSubidData $5d $14 $10
 	m_InteractionSubidData $5d $14 $20
+.ifdef ENABLE_NEW_GAME_PLUS
+	m_InteractionSubidData $c9 $00 $00
+	m_InteractionSubidData $c9 $02 $00
+.endif
 interaction92SubidData:
 	m_InteractionSubidData $65 $04 $00
 	m_InteractionSubidData $65 $06 $20

@@ -37,10 +37,11 @@
 
 	.include "code/bank2.s"
 	.include "code/roomInitialization.s"
-
+.ifndef ENABLE_NEW_GAME_PLUS
 	 m_section_free roomGfxChanges NAMESPACE roomGfxChanges
 		.include "code/ages/roomGfxChanges.s"
 	.ends
+.endif
 
 	.include "code/ages/garbage/bank02End.s"
 
@@ -1121,6 +1122,10 @@ m_section_free Enemy_Code_Bank3e NAMESPACE bank3e
 
 	.include "code/breakableTiles.s"
 	.include {"{GAME_DATA_DIR}/tile_properties/breakableTiles.s"}
+.ends
+
+m_section_free roomGfxChanges NAMESPACE roomGfxChanges
+	.include "code/ages/roomGfxChanges.s"
 .ends
 .endif
 

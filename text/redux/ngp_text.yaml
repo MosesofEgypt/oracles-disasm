@@ -10,6 +10,13 @@ groups:
       can now be used
       more times!
 
+  - name: TX_00_BUTTER_SWORD
+    index: auto
+    text: |-
+      You got the
+      legendary \col(1)Master
+      Sword\col(0)!
+
 - group: 0x51
   data:
   - name: TX_51_ITEMS_EATEN
@@ -33,3 +40,19 @@ groups:
       Fairy Flask
       Elixir of life.
       Refill at a Great Fairy.
+
+  - name: TX_09_BUTTER_SWORD
+    index: auto
+    text: |-
+      Butter Sword
+      It's golden hue
+      cuts through the
+      purest of evils.
+
+  - name: TX_09_BUTTER_SHIELD
+    index: auto
+    text: |-
+      Butter Shield
+      It's golden hue
+      wards off the
+      purest of evils

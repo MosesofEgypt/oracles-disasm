@@ -236,4 +236,5 @@ objectGfxHeaderTable:
 .else
 	/* $e1 */ m_ObjectGfxHeader spr_item_icon_life_vial_slim
 .endif
+	/* $e2 */ m_ObjectGfxHeader spr_item_icons_sword_shield_l4
 .endif

@@ -312,6 +312,10 @@ interaction63SubidData:
 	m_InteractionSubidData $45 $06 $20
 	m_InteractionSubidData $7a $00 $33
 	m_InteractionSubidData $7a $04 $13
+.ifdef ENABLE_NEW_GAME_PLUS
+	m_InteractionSubidData $e2 $00 $00
+	m_InteractionSubidData $e2 $02 $00
+.endif
 interaction17SubidData:
 	m_InteractionSubidData $7a $0c $50
 	m_InteractionSubidData $7a $08 $53

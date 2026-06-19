@@ -117,6 +117,12 @@ itemCode05:
 	.db ($80|ITEMCOLLISION_L3_SWORD)
 	.db (-5)
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	; L-4
+	.db ($80|ITEMCOLLISION_SWORDSPIN)
+	.db (-7)
+.endif
+
 
 ; State 4: swordspinning
 @state4:

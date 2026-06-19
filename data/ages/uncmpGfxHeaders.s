@@ -22,6 +22,7 @@ uncmpGfxHeaderTable:
 	.dw uncmpGfxHeader_foolsOre
 .ifdef ENABLE_NEW_GAME_PLUS
 	.dw uncmpGfxHeader_lifeVialInv
+	.dw uncmpGfxHeader_swordShieldInv
 .endif
 
 
@@ -341,5 +342,9 @@ uncmpGfxHeader_lifeVialInv:
 .else
 	m_GfxHeader spr_item_icon_life_vial_slim, $8761
 .endif
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_swordShieldInv:
+	m_GfxHeader spr_item_icons_sword_shield_l4, $8900
 	m_GfxHeaderEnd
 .endif

@@ -158,6 +158,11 @@ treasureObjectData05:
 	m_TreasureSubid $03, $01, $ff, $10, TREASURE_OBJECT_SWORD_03
 	m_TreasureSubid $03, $02, $ff, $11, TREASURE_OBJECT_SWORD_04
 	m_TreasureSubid $03, $03, $ff, $12, TREASURE_OBJECT_SWORD_05
+.ifdef ENABLE_NEW_GAME_PLUS
+	m_TreasureSubid $09, $04, $ff, $36, TREASURE_OBJECT_SWORD_06 ; needs to be here as a stub
+	m_TreasureSubid $09, $04, <TX_00_BUTTER_SWORD, $36, TREASURE_OBJECT_SWORD_07
+	m_TreasureSubid $03, $04, $ff, $36, TREASURE_OBJECT_SWORD_08
+.endif
 
 treasureObjectData06:
 	m_BeginTreasureSubids TREASURE_BOOMERANG

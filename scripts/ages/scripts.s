@@ -7993,8 +7993,18 @@ patch_giveRepairedItem:
 
 @sword:
 	jumptable_memoryaddress wTmpcfc0.patchMinigame.swordLevel
+.ifndef ENABLE_NEW_GAME_PLUS
 	.dw @level3
 	.dw @level2
+.else
+	.dw @level2
+	.dw @level3
+	.dw @level4
+@level4:
+	giveitem TREASURE_OBJECT_SWORD_07
+	giveitem TREASURE_OBJECT_SWORD_08
+	scriptjump @loseTradeItem
+.endif
 @level2:
 	giveitem TREASURE_OBJECT_SWORD_01
 	giveitem TREASURE_OBJECT_SWORD_04

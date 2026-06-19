@@ -210,4 +210,5 @@ objectGfxHeaderTable:
 .else
 	/* $c8 */ m_ObjectGfxHeader spr_item_icon_life_vial_slim
 .endif
+	/* $c9 */ m_ObjectGfxHeader spr_item_icons_sword_shield_l4
 .endif

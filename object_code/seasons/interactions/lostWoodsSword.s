@@ -14,7 +14,11 @@ interactionCode59:
 	ld a,TREASURE_SWORD
 	call checkTreasureObtained
 	jr nc,+
+.ifdef ENABLE_NEW_GAME_PLUS
+	cp $04
+.else
 	cp $03
+.endif
 	jp nc,interactionDelete
 	sub $01
 	ld e,$42

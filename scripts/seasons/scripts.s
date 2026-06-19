@@ -3839,6 +3839,13 @@ lostWoodsSwordScript:
 	jumptable_objectbyte $42
 	.dw @giveNobleSword
 	.dw @giveMasterSword
+.ifndef ENABLE_NEW_GAME_PLUS
+	.dw @giveButterSword
+@giveButterSword:
+	giveitem TREASURE_SWORD, $07
+	giveitem TREASURE_SWORD, $08
+	retscript
+.endif
 @giveNobleSword:
 	giveitem TREASURE_SWORD, $01
 	giveitem TREASURE_SWORD, $04
@@ -7579,6 +7586,13 @@ troyScript_giveReward:
 	jumptable_objectbyte Interaction.var03
 	.dw @nobleSword
 	.dw @masterSword
+.ifdef ENABLE_NEW_GAME_PLUS
+	.dw @butterSword
+@butterSword:
+	giveitem TREASURE_SWORD, $06
+	giveitem TREASURE_SWORD, $07
+	retscript
+.endif
 @nobleSword:
 	giveitem TREASURE_SWORD, $01
 	giveitem TREASURE_SWORD, $04

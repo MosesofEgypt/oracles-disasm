@@ -204,6 +204,9 @@ treasureDisplayData_sword:
 	.db TREASURE_SWORD, $90, $00, $00, $00, $00, <TX_0923 ; L1
 	.db TREASURE_SWORD, $91, $05, $00, $00, $00, <TX_0924 ; L2
 	.db TREASURE_SWORD, $92, $04, $00, $00, $00, <TX_0925 ; L3
+.ifdef ENABLE_NEW_GAME_PLUS
+	.db TREASURE_SWORD, $48, $03, $00, $00, $00, <TX_09_BUTTER_SWORD ; L4
+.endif
 
 treasureDisplayData_shield:
 	.db TREASURE_SHIELD, $93, $00, $00, $00, $00, <TX_0920 ; L1

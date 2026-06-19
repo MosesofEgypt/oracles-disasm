@@ -75,7 +75,13 @@ patch_subid00:
 
 	ld a,TREASURE_SWORD
 	call checkTreasureObtained
+.ifdef ENABLE_NEW_GAME_PLUS
+	or $80
+	dec a
+	and $03
+.else
 	and $01
+.endif
 	ld (wTmpcfc0.patchMinigame.swordLevel),a
 	ld hl,mainScripts.patch_upstairsRepairSwordScript
 	jr @setScript

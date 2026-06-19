@@ -3934,6 +3934,17 @@ loadEquippedItemSpriteData:
 	jr z,++
 .endif
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	; change the palette for the L-4 sword/shield
+	push hl
+	ld h,a
+	or $01
+	cp $49
+	ld a,h
+	pop hl
+	jr z,++
+.endif
+
 	; This comparison changes the palette used for the seed satchel, seed shooter, slingshot,
 	; and hyper slingshot.
 	cp $8a
@@ -4699,6 +4710,13 @@ loadItemIconGfx:
 	.endif
 		jp copy20BytesFromBank
 	+
+	; insert the L-4 sword and shield sprites
+	cp $48
+	jr nz,+
+		ld hl,spr_item_icons_sword_shield_l4
+		ld b,:spr_item_icons_sword_shield_l4
+		jp copy20BytesFromBank
+	+
 .endif
 
 	; CROSSITEMS: Replace L-1 boomerang sprite with L-2 sprite if applicable. (This was
@@ -4934,8 +4952,11 @@ inventoryMenuState0:
 	call loadUncompressedGfxHeader
 +
 .ifdef ENABLE_NEW_GAME_PLUS
-	; and do the same for the life vial
+	; and do the same for the life vial and L-4 sword/shield
 	ld a,UNCMP_GFXH_LIFE_VIAL_INV
+	call loadUncompressedGfxHeader
+
+	ld a,UNCMP_GFXH_L4_SWORD_SHIELD
 	call loadUncompressedGfxHeader
 .endif
 

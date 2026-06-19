@@ -252,6 +252,27 @@ interactiond9_state2:
 @ringBoxSubids:
 	.db $03 $03 $04 $04
 
+.ifdef ENABLE_NEW_GAME_PLUS
+@swordShieldSubids:
+	.db $01 $01
+	.db $01 $01
+	.db $02 $02
+	.db $07 $02
+	.db $07
+
+@swordUpgrade:
+	ld a,(wSwordLevel)
+	ld hl,@swordShieldSubids
+	jr ++
+
+@shieldUpgrade:
+	ld a,(wShieldLevel)
+	ld hl,@swordShieldSubids+1
+++
+	rst_addDoubleIndex
+	ld a,(hl)
+	jr @label_0b_135
+.else
 @swordShieldSubids:
 	.db $03 $01
 	.db $03 $01
@@ -270,6 +291,7 @@ interactiond9_state2:
 	inc hl
 	ld a,(hl)
 	jr @label_0b_135
+.endif
 
 @bombUpgrade:
 	ld bc,TREASURE_OBJECT_BOMB_UPGRADE_00
@@ -289,7 +311,14 @@ interactiond9_state2:
 	jr @createTreasureAndIncSubstate
 
 @label_0b_135:
+.ifdef ENABLE_NEW_GAME_PLUS
+	or $80
+	dec a
 	and $03
+	inc a
+.else
+	and $03
+.endif
 	ld c,a
 
 @createTreasureAndIncSubstate:
