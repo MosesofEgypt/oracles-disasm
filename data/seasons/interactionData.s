@@ -290,10 +290,6 @@ interaction60SubidData:
 	m_InteractionSubidData $5d $14 $00
 	m_InteractionSubidData $5d $14 $10
 	m_InteractionSubidData $5d $14 $20
-.ifdef ENABLE_NEW_GAME_PLUS
-	m_InteractionSubidData $c9 $00 $00
-	m_InteractionSubidData $c9 $02 $00
-.endif
 interaction92SubidData:
 	m_InteractionSubidData $65 $04 $00
 	m_InteractionSubidData $65 $06 $20
@@ -379,6 +375,10 @@ interactiondeSubidData:
 	m_InteractionSubidData $61 $06 $03 ; $82 (Tune of Echoes)
 	m_InteractionSubidData $61 $0e $33 ; $83 (Tune of Currents)
 	m_InteractionSubidData $61 $16 $13 ; $84 (Tune of Ages)
+.ifdef ENABLE_NEW_GAME_PLUS
+	m_InteractionSubidData $c9 $00 $00 ; $85 (L-4 sword)
+	m_InteractionSubidData $c9 $02 $00 ; $86 (L-4 shield)
+.endif
 
 	m_InteractionSubidDataEnd
 

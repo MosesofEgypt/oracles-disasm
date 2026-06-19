@@ -143,7 +143,7 @@ treasureObjectData01:
 	m_TreasureSubid $0a, $02, $20, $14, TREASURE_OBJECT_SHIELD_01
 	m_TreasureSubid $0a, $03, $21, $15, TREASURE_OBJECT_SHIELD_02
 .ifdef ENABLE_NEW_GAME_PLUS
-	m_TreasureSubid $0a, $04, <TX_00_BUTTER_SHIELD, $37, TREASURE_OBJECT_SHIELD_04
+	m_TreasureSubid $0a, $04, <TX_00_BUTTER_SHIELD, $86, TREASURE_OBJECT_SHIELD_04
 .endif
 
 treasureObjectData03:
@@ -162,9 +162,9 @@ treasureObjectData05:
 	m_TreasureSubid $03, $02, $ff, $11, TREASURE_OBJECT_SWORD_04
 	m_TreasureSubid $03, $03, $ff, $12, TREASURE_OBJECT_SWORD_05
 .ifdef ENABLE_NEW_GAME_PLUS
-	m_TreasureSubid $09, $04, $ff, $36, TREASURE_OBJECT_SWORD_06 ; needs to be here as a stub
-	m_TreasureSubid $09, $04, <TX_00_BUTTER_SWORD, $36, TREASURE_OBJECT_SWORD_07
-	m_TreasureSubid $03, $04, $ff, $36, TREASURE_OBJECT_SWORD_08
+	m_TreasureSubid $09, $04, $ff, $85, TREASURE_OBJECT_SWORD_06 ; needs to be here as a stub
+	m_TreasureSubid $09, $04, <TX_00_BUTTER_SWORD, $85, TREASURE_OBJECT_SWORD_07
+	m_TreasureSubid $03, $04, $ff, $85, TREASURE_OBJECT_SWORD_08
 .endif
 
 treasureObjectData06:
