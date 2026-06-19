@@ -212,6 +212,14 @@ enemyCheckCollisions:
 	or a
 	jr z,@checkHitLink
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	; treat L-4 shield as L-3
+	cp $04
+	jr c,+
+		ld a,ITEMCOLLISION_L3_SHIELD
+	+
+.endif
+
 	; Store shield level as collision type
 	ldh (<hFF90),a
 

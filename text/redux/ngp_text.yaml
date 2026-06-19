@@ -13,9 +13,15 @@ groups:
   - name: TX_00_BUTTER_SWORD
     index: auto
     text: |-
+      The Master Sword
+      awakened as the
+      \col(1)Golden Sword\col(0)!
+
+  - name: TX_00_BUTTER_SHIELD
+    index: auto
+    text: |-
       You got the
-      legendary \col(1)Master
-      Sword\col(0)!
+      \col(1)Golden Shield\col(0)!
 
 - group: 0x51
   data:
@@ -44,15 +50,15 @@ groups:
   - name: TX_09_BUTTER_SWORD
     index: auto
     text: |-
-      Butter Sword
-      It's golden hue
+      Golden Sword
+      Its golden hue
       cuts through the
-      purest of evils.
+      thickest of evils.
 
   - name: TX_09_BUTTER_SHIELD
     index: auto
     text: |-
-      Butter Shield
-      It's golden hue
-      wards off the
-      purest of evils
+      Golden Shield
+      Its golden sheen
+      wards off even the
+      strongest attack.

@@ -2270,6 +2270,11 @@ tokayGiveShieldUpgradeToLink:
 	cp $02
 	jr c,+
 	inc c
+.ifdef ENABLE_NEW_GAME_PLUS
+	cp $03
+	jr c,+
+	inc c
+.endif
 +
 	call createTreasure
 	ret nz
@@ -2667,6 +2672,11 @@ oldManGiveShieldUpgradeToLink:
 +
 	cp $03
 	jr c,+
+.ifdef ENABLE_NEW_GAME_PLUS
+	jr nz,+
+	ld a,$04
+	jr +
+.endif
 	ld a,$02
 +
 	ld c,a

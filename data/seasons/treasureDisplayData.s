@@ -179,6 +179,9 @@ treasureDisplayData_shield:
 	.db TREASURE_SHIELD,             $93, $00, $00, $00, $00, <TX_0920
 	.db TREASURE_SHIELD,             $94, $05, $00, $00, $00, <TX_0921
 	.db TREASURE_SHIELD,             $95, $04, $00, $00, $00, <TX_0922
+.ifdef ENABLE_NEW_GAME_PLUS
+	.db TREASURE_SHIELD,             $49, $03, $00, $00, $00, <TX_09_BUTTER_SHIELD
+.endif
 
 treasureDisplayData_feather:
 	.db TREASURE_FEATHER,            $96, $04, $00, $00, $00, <TX_092c

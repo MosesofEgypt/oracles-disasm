@@ -2681,6 +2681,12 @@ subrosianSmith_giveUpgradedShield:
 	xor a
 @haveShield:
 	cp $03
+.ifdef ENABLE_NEW_GAME_PLUS
+	jr nz,++
+		ld a,$04
+		jr +
+	++
+.endif
 	jr c,+
 	ld a,$02
 +

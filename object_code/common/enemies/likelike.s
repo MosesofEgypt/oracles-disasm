@@ -340,6 +340,11 @@ likelike_stateB:
 	ld a,TREASURE_SHIELD
 	call checkTreasureObtained
 	jr nc,++
+.ifdef ENABLE_NEW_GAME_PLUS
+	; can't eat L4 shield
+	cp $04
+	jr nc,++
+.endif
 
 	ld a,TREASURE_SHIELD
 	call loseTreasure

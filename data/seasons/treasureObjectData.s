@@ -142,6 +142,9 @@ treasureObjectData01:
 	m_TreasureSubid $0a, $01, $1f, $13, TREASURE_OBJECT_SHIELD_00
 	m_TreasureSubid $0a, $02, $20, $14, TREASURE_OBJECT_SHIELD_01
 	m_TreasureSubid $0a, $03, $21, $15, TREASURE_OBJECT_SHIELD_02
+.ifdef ENABLE_NEW_GAME_PLUS
+	m_TreasureSubid $0a, $04, <TX_00_BUTTER_SHIELD, $37, TREASURE_OBJECT_SHIELD_04
+.endif
 
 treasureObjectData03:
 	m_BeginTreasureSubids TREASURE_BOMBS

@@ -257,8 +257,8 @@ interactiond9_state2:
 	.db $01 $01
 	.db $01 $01
 	.db $02 $02
-	.db $07 $02
-	.db $07
+	.db $07 $04
+	.db $07 $04
 
 @swordUpgrade:
 	ld a,(wSwordLevel)

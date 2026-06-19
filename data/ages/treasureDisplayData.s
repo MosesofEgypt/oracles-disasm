@@ -48,13 +48,14 @@ treasureDisplayData2:
 ;  b2: Left attribute (palette)
 ;  b3: Right sprite index
 ;  b4: Right attribute
-;  b5: $00: display level
+;  b5: $00: display level horizontally
 ;      $01: display quantity horizontally
 ;      $02: display seasons
 ;      $03: display nothing extra (stub?)
 ;      $04: display number with "x" (ie. x2). Used by slates only.
 ;      $05: display harp song (CROSSITEMS: Used to be $02)
-;      $06: display quantity vertically
+;      $06: display level vertically
+;      $07: display quantity vertically
 ;      $ff: display nothing extra
 ;  b6: Low byte of text index (high byte is $09)
 ;
@@ -212,6 +213,9 @@ treasureDisplayData_shield:
 	.db TREASURE_SHIELD, $93, $00, $00, $00, $00, <TX_0920 ; L1
 	.db TREASURE_SHIELD, $94, $05, $00, $00, $00, <TX_0921 ; L2
 	.db TREASURE_SHIELD, $95, $04, $00, $00, $00, <TX_0922 ; L3
+.ifdef ENABLE_NEW_GAME_PLUS
+	.db TREASURE_SHIELD, $49, $03, $00, $00, $00, <TX_09_BUTTER_SHIELD ; L4
+.endif
 
 treasureDisplayData_bracelet:
 	.db TREASURE_BRACELET, $99, $05, $00, $00, $00, <TX_092b ; L1

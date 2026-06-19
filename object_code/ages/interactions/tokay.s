@@ -119,6 +119,11 @@ interactionCode48:
 	cp $02
 	jr c,+
 	ld b,$15
+.ifdef ENABLE_NEW_GAME_PLUS
+	cp $03
+	jr c,+
+	ld b,$43
+.endif
 +
 	ld a,b
 	ld e,Interaction.var03

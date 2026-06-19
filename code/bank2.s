@@ -4117,6 +4117,8 @@ drawTreasureExtraTiles:
 	jr z,@val05
 	dec a
 	jr z,@val06
+	dec a
+	jr z,@val07
 	jr @val00
 
 ; Display item quantity with "x" symbol (ie. slates in ages d8)
@@ -4142,7 +4144,7 @@ drawTreasureExtraTiles:
 	ret
 
 ; Display item quantity vertically(ie. life vial)
-@val06:
+@val07:
 	push hl
 	ld h,$01
 	jr +
@@ -4163,15 +4165,8 @@ drawTreasureExtraTiles:
 	ld a,c
 	ld (de),a
 	dec e
-	bit 0,h
-	jr z,+
-		push af
-		ld a,e
-		sub $20
-		ld e,a
-		pop af
-		inc e
-	+
+
+	call @vertHelper
 	ld (de),a
 
 	; 10's digit
@@ -4184,8 +4179,16 @@ drawTreasureExtraTiles:
 	pop hl
 	ret
 
-; Display the item's level
+; Display item's level vertically(ie. life vial)
+@val06:
+	push hl
+	ld h,$01
+	jr +
+; Display the item's level horizontally
 @val00:
+	push hl
+	ld h,$00
+	+
 	; Digit
 	inc e
 	ld a,b
@@ -4200,12 +4203,25 @@ drawTreasureExtraTiles:
 	dec e
 	ld (de),a
 
+	call @vertHelper
+
 	; 'L-' symbol
 	res 2,d
 	ld a,$1a
 	ld (de),a
+	pop hl
 	ret
 
+@vertHelper:
+	bit 0,h
+	ret z
+	push af
+	ld a,e
+	sub $20
+	ld e,a
+	pop af
+	inc e
+	ret
 
 ; Display the harp?
 @val05:
@@ -4712,8 +4728,12 @@ loadItemIconGfx:
 	+
 	; insert the L-4 sword and shield sprites
 	cp $48
+	ld hl,spr_item_icons_sword_shield_l4
+	jr z,++
+	cp $49
+	ld hl,spr_item_icons_sword_shield_l4+$20
 	jr nz,+
-		ld hl,spr_item_icons_sword_shield_l4
+		++
 		ld b,:spr_item_icons_sword_shield_l4
 		jp copy20BytesFromBank
 	+
