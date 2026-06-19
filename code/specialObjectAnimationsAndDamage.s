@@ -990,10 +990,10 @@ linkApplyDamage:
 	ld hl,wLinkMaxHealth
 	ldd a,(hl)
 .ifdef ENABLE_NEW_GAME_PLUS
-	bit 7,a
+	call getIsNewGamePlus
 	jr z,+
-		; don't heal more than 16 hearts
-		ld a,$40
+		; only heal half health in NG+
+		srl a
 	+
 .endif
 	ld (hl),a

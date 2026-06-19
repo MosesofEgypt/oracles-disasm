@@ -149,11 +149,7 @@ giveTreasure_body:
 .ifdef ENABLE_NEW_GAME_PLUS
 	cp TREASURE_HEART_CONTAINER
 	jr nz,+
-		push hl
-		ld h,a
-		call getNewGamePlusCycle
-		ld a,h
-		pop hl
+		call getIsNewGamePlus
 		jr z,+
 			; don't refill health with heart container, but do
 			; flag that the health tiles need to be updated

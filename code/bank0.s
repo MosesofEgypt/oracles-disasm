@@ -8500,6 +8500,14 @@ getFlaskChargePrice:
 	pop de
 	ret
 
+getIsNewGamePlus:
+	push hl
+	ld h,a
+	call getNewGamePlusCycle
+	ld a,h
+	pop hl
+	ret
+
 getNewGamePlusCycle:
 	ld a,(wFileIsCompleted)
 	and $30

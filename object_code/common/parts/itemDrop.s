@@ -36,12 +36,7 @@ partCode01:
 	ld a,(de)
 .ifdef ENABLE_NEW_GAME_PLUS
 	; If this is a healing item, change it in NG+
-	push hl
-	push af
-	call getNewGamePlusCycle
-	pop hl
-	ld a,h
-	pop hl
+	call getIsNewGamePlus
 	jr z,+
 		; change it to 1 rupees if it's a heart, or 5 if a fairy
 		cp $02
