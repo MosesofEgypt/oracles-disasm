@@ -339,6 +339,11 @@ updateTextbox:
 	bit 0,(hl)
 	jr z,+
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	; no heart refills from pieces of heart in NG+
+	call getNewGamePlusCycle
+	jr nz,+
+.endif
 	ld a,TREASURE_HEART_REFILL
 	ld c,$40
 	call giveTreasure

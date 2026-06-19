@@ -3023,14 +3023,18 @@ updateHeartRingCounter:
 	jr c,+
 		inc b
 	+
-
 	; check rings
 	; NOTE: only doubling ONCE if either ring is worn, as the code that
 	; 		handles health refills will double if both rings are worn.
-	call tripleHeartJoyComboActive
+	push bc
+	ldbc BLUE_JOY_RING,GOLD_JOY_RING
+	call eitherRingActive
+	pop bc
 	jr z,+
+	jr nc,++
+		+
 		sla c
-	+
+	++
 .else
 	ld a,(wActiveRing)
 
@@ -3073,9 +3077,36 @@ updateHeartRingCounter:
 	; Give hearts if health isn't full already
 	ld hl,wLinkHealth
 	ldi a,(hl)
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld h,(hl)
+	ld l,a
+	call getNewGamePlusCycle
+	ld a,l
+	ld l,$00
+	jr z,+
+		; in NG+, only refill up to 1 + wLinkMaxHealth/4
+		srl h
+		srl h
+		inc h
+		inc l
+	+
+	cp h
+	push hl
+	ld a,TREASURE_HEART_REFILL
+	call c,giveTreasure
+	pop hl
+
+	; if the health increase is capped, cap it
+	bit 0,l
+	jr z,+
+		ld a,h
+		ld (wLinkHealth),a
+	+
+.else
 	cp (hl)
 	ld a,TREASURE_HEART_REFILL
 	call c,giveTreasure
+.endif
 
 @clearCounter:
 	ld hl,wHeartRingCounter

@@ -146,6 +146,23 @@ giveTreasure_body:
 ; @param[out]	zflag	Set if the item being added wasn't in the table
 @findItemInTable:
 	ldh a,(<hFF8B)
+.ifdef ENABLE_NEW_GAME_PLUS
+	cp TREASURE_HEART_CONTAINER
+	jr nz,+
+		push hl
+		ld h,a
+		call getNewGamePlusCycle
+		ld a,h
+		pop hl
+		jr z,+
+			; don't refill health with heart container, but do
+			; flag that the health tiles need to be updated
+			ld hl,wStatusBarNeedsRefresh
+			set 2,(hl)
+			xor a
+			ret
+	+
+.endif
 	ld c,a
 --
 	ldi a,(hl)
