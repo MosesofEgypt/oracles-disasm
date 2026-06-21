@@ -62,15 +62,15 @@ arrowDarknut_state_uninitialized:
 	.dw @ngpGoldUpgrades
 
 	@ngpRedUpgrades1:
-		m_ngp_upgrade				PALETTE_RED   0 06 08
+		m_ngp_upgrade_p_si_d_h		PALETTE_RED   0 06 08
 	@ngpRedUpgrades2:
-		m_ngp_upgrade				PALETTE_RED   0 06 08
+		m_ngp_upgrade_p_si_d_h		PALETTE_RED   0 06 08
 	@ngpBlueUpgrades:
-		m_ngp_upgrade				PALETTE_BLUE  1 08 11
-		m_ngp_upgrade_final			PALETTE_GREEN 1 10 12
+		m_ngp_upgrade_p_si_d_h		PALETTE_BLUE  1 08 11
+		m_ngp_upgrade_p_si_d_h_term	PALETTE_GREEN 1 10 12
 
 	@ngpGoldUpgrades:
-		m_ngp_upgrade_speed_final	PALETTE_GOLD  2 16 SPEED_100
+		m_ngp_upgrade_p_si_h_s_term	PALETTE_GOLD  2 16 SPEED_100
 .endif
 
 

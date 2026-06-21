@@ -63,10 +63,10 @@ partCode18:
 @ngpUpgradeSubtable1:
 	.dw @ngpProjectileUpgrades1
 	@ngpProjectileUpgrades1:
-		m_ngp_upgrade_speed_final	PALETTE_GOLD  0 06 SPEED_200
+		m_ngp_upgrade_d_s_term		06 SPEED_200
 
 @ngpUpgradeSubtable2:
 	.dw @ngpProjectileUpgrades2
 	@ngpProjectileUpgrades2:
-		m_ngp_upgrade_speed_final	PALETTE_RED   0 08 SPEED_300
+		m_ngp_upgrade_p_d_s_term	PALETTE_RED 08 SPEED_300
 .endif

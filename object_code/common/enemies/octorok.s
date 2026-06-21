@@ -138,20 +138,20 @@ octorok_state_uninitialized:
 	.dw @ngpGoldOctorokUpgrades1
 
 	@ngpSlowRedOctorokUpgrades1:
-		m_ngp_upgrade				PALETTE_RED   1 03 03
+		m_ngp_upgrade_p_si_d_h		PALETTE_RED   1 03 03
 	@ngpSlowRedOctorokUpgrades2:
-		m_ngp_upgrade				PALETTE_BLUE  2 04 04
-		m_ngp_upgrade_final			PALETTE_BLUE  3 04 04
+		m_ngp_upgrade_p_si_d_h		PALETTE_BLUE  2 04 04
+		m_ngp_upgrade_p_si_d_h_term	PALETTE_BLUE  3 04 04
 
 	@ngpFastRedOctorokUpgrades1:
-		m_ngp_upgrade				PALETTE_BLUE  2 04 04
+		m_ngp_upgrade_p_si_d_h		PALETTE_BLUE  2 04 04
 	@ngpSlowBlueOctorokUpgrades1:
-		m_ngp_upgrade				PALETTE_BLUE  3 04 04
+		m_ngp_upgrade_p_si_d_h		PALETTE_BLUE  3 04 04
 	@ngpFastBlueOctorokUpgrades1:
-		m_ngp_upgrade_final			PALETTE_GREEN 6 10 10
+		m_ngp_upgrade_p_si_d_h_term	PALETTE_GREEN 6 10 10
 
 	@ngpGoldOctorokUpgrades1:
-		m_ngp_upgrade_speed_final	PALETTE_GOLD  4 14 SPEED_180
+		m_ngp_upgrade_p_d_s_term	PALETTE_GOLD  14 SPEED_180
 
 @ngpUpgradeSubtable2:
 	.dw @ngpSlowRedOctorokUpgrades2
@@ -161,11 +161,11 @@ octorok_state_uninitialized:
 	.dw @ngpGoldOctorokUpgrades1
 
 	@ngpFastRedOctorokUpgrades2:
-		m_ngp_upgrade			PALETTE_BLUE  3 04 04
+		m_ngp_upgrade_p_si_d_h		PALETTE_BLUE  3 04 04
 	@ngpSlowBlueOctorokUpgrades2:
-		m_ngp_upgrade			PALETTE_GREEN 6 10 10
+		m_ngp_upgrade_p_si_d_h		PALETTE_GREEN 6 10 10
 	@ngpFastBlueOctorokUpgrades2:
-		m_ngp_upgrade_final		PALETTE_GREEN 5 10 10
+		m_ngp_upgrade_p_si_d_h_term	PALETTE_GREEN 5 10 10
 .endif
 
 ; For each subid, each byte determines the maximum index of the value that can be read

@@ -95,15 +95,15 @@ moblin_state_uninitialized:
 	.dw @ngpEnemy0CGoldUpgrades
 
 	@ngpEnemy0CRedUpgrades1:
-		m_ngp_upgrade				PALETTE_RED   0 06 04
+		m_ngp_upgrade_p_si_d_h		PALETTE_RED   0 06 04
 	@ngpEnemy0CRedUpgrades2:
-		m_ngp_upgrade				PALETTE_RED   0 06 04
+		m_ngp_upgrade_p_si_d_h		PALETTE_RED   0 06 04
 	@ngpEnemy0CBlueUpgrades:
-		m_ngp_upgrade				PALETTE_BLUE  1 06 06
-		m_ngp_upgrade_final			PALETTE_GREEN 1 08 08
+		m_ngp_upgrade_p_si_d_h		PALETTE_BLUE  1 06 06
+		m_ngp_upgrade_p_si_d_h_term	PALETTE_GREEN 1 08 08
 
 	@ngpEnemy0CGoldUpgrades:
-		m_ngp_upgrade_speed_final	PALETTE_GOLD  2 16 SPEED_100
+		m_ngp_upgrade_p_d_h_term	PALETTE_GOLD  16 SPEED_100
 
 @ngpEnemy20UpgradeTable:
 	.dw @ngpEnemy20UpgradeSubtable1
@@ -119,12 +119,12 @@ moblin_state_uninitialized:
 	.dw @ngpEnemy20BlueUpgrades
 
 	@ngpEnemy20RedUpgrades1:
-		m_ngp_upgrade				PALETTE_RED   0 06 03
+		m_ngp_upgrade_p_si_d_h		PALETTE_RED   0 06 03
 	@ngpEnemy20RedUpgrades2:
-		m_ngp_upgrade				PALETTE_RED   0 06 03
+		m_ngp_upgrade_p_si_d_h		PALETTE_RED   0 06 03
 	@ngpEnemy20BlueUpgrades:
-		m_ngp_upgrade				PALETTE_BLUE  1 06 05
-		m_ngp_upgrade_final			PALETTE_GREEN 1 08 07
+		m_ngp_upgrade_p_si_d_h		PALETTE_BLUE  1 06 05
+		m_ngp_upgrade_p_si_d_h_term	PALETTE_GREEN 1 08 07
 
 @ngpEnemy22UpgradeTable:
 	.dw @ngpEnemy22UpgradeSubtable1
@@ -138,11 +138,11 @@ moblin_state_uninitialized:
 	.dw @ngpEnemy22Upgrades2
 
 	@ngpEnemy22Upgrades1:
-		m_ngp_upgrade				PALETTE_GREEN 0 06 05
+		m_ngp_upgrade_p_si_d_h		PALETTE_GREEN 0 06 05
 	@ngpEnemy22Upgrades2:
-		m_ngp_upgrade				PALETTE_GREEN 0 06 05
-		m_ngp_upgrade				PALETTE_BLUE  0 06 07
-		m_ngp_upgrade_final			PALETTE_RED   0 08 09
+		m_ngp_upgrade_p_si_d_h		PALETTE_GREEN 0 06 05
+		m_ngp_upgrade_p_si_d_h		PALETTE_BLUE  0 06 07
+		m_ngp_upgrade_p_si_d_h_term	PALETTE_RED   0 08 09
 .else
 	jp arrowDarknut_state_uninitialized
 .endif

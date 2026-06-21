@@ -794,56 +794,150 @@
 .define PALETTE_RED_INV		$05
 
 ; Args:
-;   NOTE: b0 being $ff signals end of chain
-;   \1 - 2bit: flags
-;        0: unset if has newDamage
-;        1: unset if has newHealth
-;	\2 - 6bit: newSpeed/2 (0x3f means don't change speed)
-;   \3 - byte: newSubid
+;   \1 - 1bit: flag
+;   \2 - byte: value
+.macro m_ngp_flagged_datum
+	.if \1 != 0
+		.db \2
+	.endif
+.endm
+
+; Args:
+;   \1 - 8bit: flags
+;        0: set if has newPalette
+;        1: set if has newSubid
+;        2: set if has newDamage
+;        3: set if has newHealth
+;        4: set if has newSpeed
+;        7: set if this is the last upgrade in the chain
+;   \2 - 3bit: newPalette
+;   \3 - 5bit: newSubid
 ;   \4 - byte: newDamage
 ;   \5 - byte: newHealth
-;.macro m_ngp_upgrade
-;	; (newPalette<<4)|newSubid, newDamage, newHealth
-;	.db (((\1)&$0f)<<4) | ((\2)&$0f)
-;	.if NARGS == 4
-;	.db \3
-; 	.db \4
-; 	.db \5
-;.endm
-;	.IF \1 == 0
+;	\6 - byte: newSpeed
+.macro m_ngp_upgrade
+	.db (\1)&$9f
+	m_ngp_flagged_datum (\1&$03) (((\2)&$07)<<5) | ((\3)&$1f)
+	m_ngp_flagged_datum (\1&$04) ($100-\4)
+	m_ngp_flagged_datum (\1&$08) \5
+	m_ngp_flagged_datum (\1&$10) \6
+.endm
+
+; same args as above, but with terminator flag set
+.macro m_ngp_upgrade_term
+	m_ngp_upgrade (\1)|$80 \2 \3 \4 \5 \6
+.endm
+
+; does no upgrades and terminates the chain
+.macro m_ngp_no_upgrade
+	m_ngp_upgrade $80 $00 $00 $00 $00 $00
+.endm
 
 ; Args:
 ;   \1 - 3bit: newPalette
-;   \2 - 4bit: newSubid
-;   \3 - 7bit: newDamage
-;   \4 - 7bit: newHealth
-.macro m_ngp_upgrade
-	; (newPalette<<4)|newSubid, newDamage, newHealth
-	.db ((\1&$0f)<<4)|(\2&$0f) \3 \4
+;   \2 - 5bit: newSubId
+;   \3 - byte: newDamage
+;   \4 - byte: newHealth
+;	\5 - byte: newSpeed
+.macro m_ngp_upgrade_p_si_d_h_s
+	m_ngp_upgrade $1f \1 \2 \3 \4 \5
 .endm
 
-; same args as m_ngp_upgrade, but it can be
-; used as the terminator for a chain of upgrades
-.macro m_ngp_upgrade_final
-	; (newPalette<<4)|newSubid, newDamage, newHealth
-	m_ngp_upgrade $8|(\1) \2 \3 \4
+; same args as above, but with terminator flag set
+.macro m_ngp_upgrade_p_si_d_h_s_term
+	m_ngp_upgrade_term $1f \1 \2 \3 \4 \5
 .endm
 
 ; Args:
-;   \1 - 4bit: newPalette
-;   \2 - 4bit: newSubid
-;   \3 - 7bit: newDamage
-;   \4 - 7bit: newSpeed
-.macro m_ngp_upgrade_speed
-	; (newPalette<<4)|newSubid, newDamage, newSpeed
-	m_ngp_upgrade \1 \2 $80|(\3) \4
+;   \1 - 3bit: newPalette
+;   \2 - 5bit: newSubId
+;   \3 - byte: newDamage
+;   \4 - byte: newHealth
+.macro m_ngp_upgrade_p_si_d_h
+	m_ngp_upgrade $0f \1 \2 \3 \4 $00
 .endm
 
-; same args as m_ngp_upgrade_speed, but it can be
-; used as the terminator for a chain of upgrades
-.macro m_ngp_upgrade_speed_final
-	; (newPalette<<4)|newSubid, newDamage, newSpeed
-	m_ngp_upgrade_speed $8|(\1) \2 \3 \4
+; same args as above, but with terminator flag set
+.macro m_ngp_upgrade_p_si_d_h_term
+	m_ngp_upgrade_term $0f \1 \2 \3 \4 $00
 .endm
 
+; Args:
+;   \1 - 3bit: newPalette
+;   \2 - 5bit: newSubId
+;   \3 - byte: newDamage
+;   \4 - byte: newSpeed
+.macro m_ngp_upgrade_p_si_d_s
+	m_ngp_upgrade $17 \1 \2 \3 $00 \4
+.endm
+
+; same args as above, but with terminator flag set
+.macro m_ngp_upgrade_p_si_d_s_term
+	m_ngp_upgrade_term $17 \1 \2 \3 $00 \4
+.endm
+
+; Args:
+;   \1 - 3bit: newPalette
+;   \2 - 5bit: newSubId
+;   \3 - byte: newHealth
+;   \4 - byte: newSpeed
+.macro m_ngp_upgrade_p_si_h_s
+	m_ngp_upgrade $1b \1 \2 $00 \3 \4
+.endm
+
+; same args as above, but with terminator flag set
+.macro m_ngp_upgrade_p_si_h_s_term
+	m_ngp_upgrade_term $1b \1 \2 $00 \3 \4
+.endm
+
+; Args:
+;   \1 - 3bit: newPalette
+;   \2 - 5bit: newSubId
+;   \3 - byte: newSpeed
+.macro m_ngp_upgrade_p_si_s
+	m_ngp_upgrade $13 \1 \2 $00 $00 \3
+.endm
+
+; same args as above, but with terminator flag set
+.macro m_ngp_upgrade_p_si_s_term
+	m_ngp_upgrade_term $13 \1 \2 $00 $00 \3
+.endm
+
+; Args:
+;   \1 - 3bit: newPalette
+;   \2 - byte: newDamage
+;   \3 - byte: newSpeed
+.macro m_ngp_upgrade_p_d_s
+	m_ngp_upgrade $15 \1 $00 \2 $00 \3
+.endm
+
+; same args as above, but with terminator flag set
+.macro m_ngp_upgrade_p_d_s_term
+	m_ngp_upgrade_term $15 \1 $00 \2 $00 \3
+.endm
+
+; Args:
+;   \1 - 3bit: newPalette
+;   \2 - byte: newDamage
+;   \3 - byte: newHealth
+.macro m_ngp_upgrade_p_d_h
+	m_ngp_upgrade $0d \1 $00 \2 \3 $00
+.endm
+
+; same args as above, but with terminator flag set
+.macro m_ngp_upgrade_p_d_h_term
+	m_ngp_upgrade_term $0d \1 $00 \2 \3 $00
+.endm
+
+; Args:
+;   \1 - byte: newDamage
+;   \2 - byte: newSpeed
+.macro m_ngp_upgrade_d_s
+	m_ngp_upgrade $14 $00 $00 \1 $00 \2
+.endm
+
+; same args as above, but with terminator flag set
+.macro m_ngp_upgrade_d_s_term
+	m_ngp_upgrade_term $14 $00 $00 \1 $00 \2
+.endm
 .endif

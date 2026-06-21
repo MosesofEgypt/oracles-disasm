@@ -8739,77 +8739,108 @@ tryNgpUpgrade:
 	rst_addDoubleIndex
 	rst_derefHl
 	dec b
-	jr z,+
+	ld a,(hl)
+	jr z,++
 	-
-		bit 7,(hl)
+		bit 7,a
 		; exit loop if this is the final upgrade
-		jr nz,+
-			inc hl	; skip palette/subid
-			inc hl	; skip damage
-			inc hl	; skip health/speed
+		jr nz,++
+			; skip past everything
+			and $03
+			ldi a,(hl)
+			jr z,+
+				inc hl	; skip palette/subid
+			+
+			bit 2,a
+			jr z,+
+				inc hl	; skip damage
+			+
+			bit 3,a
+			jr z,+
+				inc hl	; skip health
+			+
+			bit 4,a
+			jr z,+
+				inc hl	; skip speed
+			+
 			dec b
+			ld a,(hl)
 			jr nz,-
-	+
+	++
 
-	; mask out and update the subid
-	ldi a,(hl)
-	ld c,a
-	and $0f
-	ld (de),a
-
-	; move to the oam flags
-	ld a,e
-	add Object.oamFlags-Object.subid
-	ld e,a
-
-	; mask out the palette
-	ld a,c
-	swap a
-	and $07
-	ld c,a
-
-	; update the palette
-	ld a,(de)
-	and $f8
-	or c
-	ld (de),a
-
-	; update the backup palette
-	dec e
-	ld (de),a
-
-	; get the new damage
-	ld b,(hl)	; NOTE: keep hl on the damage since the flag
-				; 		to indicate speed/health is in bit 7
-	res 7,b
-	xor a
-	sub b
-	ld b,a
-
-	; move to and update the damage
-	ld a,e
-	add Object.damage-Object.oamFlagsBackup
-	ld e,a
-	ld a,b
-	ld (de),a
-
-	; determine if we're updating speed or health
-	bit 7,(hl)
 	inc hl
-	jr nz,+
-		; move to the health
-		inc de
-		jr +++
-	+
-		; move to the speed
-		ld a,e
-		add Object.speed-Object.damage
-		ld e,a
-	+++
 
+	; update the subid and palette
+	ld c,a
+	and $03
+	jr z,++
+		bit 1,c
+		jr z,+
+			; mask out and update the subid
+			ld a,(hl)
+			and $1f
+			ld (de),a
+		+
+
+		bit 0,c
+		jr z,+
+			push bc
+			; move to the oam flags
+			ld a,e
+			and $c0
+			add Object.oamFlags
+			ld e,a
+
+			; mask out the palette
+			ld a,(hl)
+			swap a
+			srl a
+			and $07
+			ld b,a
+
+			; update the palette
+			ld a,(de)
+			and $f8
+			or b
+			ld (de),a
+
+			; update the backup palette
+			dec e
+			ld (de),a
+			pop bc
+		+
+		inc hl
+	++
+
+	; update the damage
+	bit 2,c
+	ld b,Object.damage
+	call nz,@updateHelper
+
+	; update the health
+	bit 3,c
+	ld b,Object.health
+	call nz,@updateHelper
+
+	; update the speed
+	bit 4,c
+	ld b,Object.speed
+	call nz,@updateHelper
+
+	pop bc
+	ret
+
+@updateHelper:
+	; move to the property
+	ld a,e
+	and $c0
+	add b
+	ld e,a
+
+	; update property
 	ld a,(hl)
 	ld (de),a
-	pop bc
+	inc hl
 	ret
 .endif
 

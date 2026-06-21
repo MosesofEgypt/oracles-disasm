@@ -90,10 +90,10 @@ enemyCode15:
 	.dw @ngpUpgrades
 
 	@ngpUpgrades:
-		m_ngp_upgrade_speed			PALETTE_RED   0 00 SPEED_c0
-		m_ngp_upgrade_speed			PALETTE_GOLD  1 00 SPEED_c0
-		m_ngp_upgrade_speed			PALETTE_RED   0 00 SPEED_180
-		m_ngp_upgrade_speed_final	PALETTE_GOLD  1 00 SPEED_180
+		m_ngp_upgrade_p_si_s		PALETTE_RED   0 SPEED_c0
+		m_ngp_upgrade_p_si_s		PALETTE_GOLD  1 SPEED_c0
+		m_ngp_upgrade_p_si_s		PALETTE_RED   0 SPEED_180
+		m_ngp_upgrade_p_si_s_term	PALETTE_GOLD  1 SPEED_180
 .endif
 
 

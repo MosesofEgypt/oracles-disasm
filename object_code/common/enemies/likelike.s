@@ -112,7 +112,12 @@ enemyCode24:
 
 
 likelike_state_uninitialized:
+	bit 0,b
+	call z,objectSetVisiblec2
+	ld a,SPEED_40
 .ifdef ENABLE_NEW_GAME_PLUS
+	call ecom_setSpeedAndState8
+
 	; ensure the subid can't be out of bounds
 	ld a,b
 	and $03
@@ -128,11 +133,9 @@ likelike_state_uninitialized:
 	ld a,(de)
 	or b
 	ld (de),a
-.endif
-	bit 0,b
-	call z,objectSetVisiblec2
-	ld a,SPEED_40
+.else
 	jp ecom_setSpeedAndState8
+.endif
 
 .ifdef ENABLE_NEW_GAME_PLUS
 @ngpUpgradeTable:
@@ -149,15 +152,15 @@ likelike_state_uninitialized:
 	;		never be used outside of being upgraded into.
 
 	@ngpSpawnerLikeLikeUpgrades:
-		m_ngp_upgrade_final			0 1 0 1
+		m_ngp_no_upgrade
 
 	@ngpNormalLikeLikeUpgrades1:
 	@ngpLostWoodsSideLikeLikeUpgrades1:
 	@ngpLostWoodsTopLikeLikeUpgrades1:
-		m_ngp_upgrade			PALETTE_GOLD   $00 04 07
-		m_ngp_upgrade			PALETTE_RED    $08 04 07
-		m_ngp_upgrade			PALETTE_GREEN  $0c 04 07
-		m_ngp_upgrade_final		PALETTE_BLUE   $04 04 07
+		m_ngp_upgrade_p_si_h_s		PALETTE_GOLD   $00 07 SPEED_60
+		m_ngp_upgrade_p_si_h_s		PALETTE_RED    $08 07 SPEED_60
+		m_ngp_upgrade_p_si_h_s		PALETTE_GREEN  $0c 07 SPEED_60
+		m_ngp_upgrade_p_si_h_s_term	PALETTE_BLUE   $04 07 SPEED_60
 
 @ngpUpgradeSubtable2:
 	.dw @ngpNormalLikeLikeUpgrades2
@@ -170,10 +173,10 @@ likelike_state_uninitialized:
 	@ngpNormalLikeLikeUpgrades2:
 	@ngpLostWoodsSideLikeLikeUpgrades2:
 	@ngpLostWoodsTopLikeLikeUpgrades2:
-		m_ngp_upgrade			PALETTE_GOLD   $00 04 09
-		m_ngp_upgrade			PALETTE_RED    $08 04 09
-		m_ngp_upgrade			PALETTE_GREEN  $0c 04 09
-		m_ngp_upgrade_final		PALETTE_BLUE   $04 04 09
+		m_ngp_upgrade_p_si_h_s		PALETTE_GOLD   $00 09 SPEED_80
+		m_ngp_upgrade_p_si_h_s		PALETTE_RED    $08 09 SPEED_80
+		m_ngp_upgrade_p_si_h_s		PALETTE_GREEN  $0c 09 SPEED_80
+		m_ngp_upgrade_p_si_h_s_term	PALETTE_BLUE   $04 09 SPEED_80
 .endif
 
 

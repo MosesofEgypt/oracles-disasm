@@ -142,16 +142,16 @@ fireKeese_state_uninitialized:
 	; NOTE: don't use odd values in damage, as bit 0 will
 	;		be dropped when sra and sla update the damage
 	@ngpUpgrades10:
-		m_ngp_upgrade				PALETTE_RED_INV		0 10 04
+		m_ngp_upgrade_p_d_h			PALETTE_RED_INV		10 04
 	@ngpUpgrades20:
-		m_ngp_upgrade				PALETTE_RED_INV		0 10 04
-		m_ngp_upgrade_final			PALETTE_BLUE_INV	0 16 08
+		m_ngp_upgrade_p_d_h			PALETTE_RED_INV		10 04
+		m_ngp_upgrade_p_d_h_term	PALETTE_BLUE_INV	16 08
 
 	@ngpUpgrades11:
-		m_ngp_upgrade				PALETTE_RED_INV		1 10 04
+		m_ngp_upgrade_p_d_h			PALETTE_RED_INV		1 10 04
 	@ngpUpgrades21:
-		m_ngp_upgrade				PALETTE_RED_INV		1 10 04
-		m_ngp_upgrade_final			PALETTE_BLUE_INV	1 16 08
+		m_ngp_upgrade_p_d_h			PALETTE_RED_INV		1 10 04
+		m_ngp_upgrade_p_d_h_term	PALETTE_BLUE_INV	1 16 08
 .else
 	jr z,@subid0
 .endif
