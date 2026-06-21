@@ -794,6 +794,25 @@
 .define PALETTE_RED_INV		$05
 
 ; Args:
+;   NOTE: b0 being $ff signals end of chain
+;   \1 - 2bit: flags
+;        0: unset if has newDamage
+;        1: unset if has newHealth
+;	\2 - 6bit: newSpeed/2 (0x3f means don't change speed)
+;   \3 - byte: newSubid
+;   \4 - byte: newDamage
+;   \5 - byte: newHealth
+;.macro m_ngp_upgrade
+;	; (newPalette<<4)|newSubid, newDamage, newHealth
+;	.db (((\1)&$0f)<<4) | ((\2)&$0f)
+;	.if NARGS == 4
+;	.db \3
+; 	.db \4
+; 	.db \5
+;.endm
+;	.IF \1 == 0
+
+; Args:
 ;   \1 - 3bit: newPalette
 ;   \2 - 4bit: newSubid
 ;   \3 - 7bit: newDamage

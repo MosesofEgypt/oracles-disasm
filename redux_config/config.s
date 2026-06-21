@@ -48,6 +48,10 @@
 		; determines whether the fairy flask is 2 tiles wide instead of 1
 ;		.define WIDE_LIFE_VIAL_SPRITE		1 	; keeping here for documentation
 	.endif
+	.ifndef WIDE_L4_SWORD_SHIELD_SPRITE
+		; determines whether the L-4 sword and shield are 2 tiles wide instead of 1
+		.define WIDE_L4_SWORD_SHIELD_SPRITE		1
+	.endif
 	.ifndef FILE_MENU_SHOW_CURRENT_HEARTS
 		; determines whether the save menu shows the number of
 		; hearts link actually has full instead of the default

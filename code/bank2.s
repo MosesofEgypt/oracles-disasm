@@ -3938,8 +3938,8 @@ loadEquippedItemSpriteData:
 	; change the palette for the L-4 sword/shield
 	push hl
 	ld h,a
-	or $01
-	cp $49
+	or $07
+	cp $4f
 	ld a,h
 	pop hl
 	jr z,++
@@ -4201,9 +4201,9 @@ drawTreasureExtraTiles:
 	ld a,c
 	ld (de),a
 	dec e
-	ld (de),a
 
 	call @vertHelper
+	ld (de),a
 
 	; 'L-' symbol
 	res 2,d
@@ -4727,15 +4727,30 @@ loadItemIconGfx:
 		jp copy20BytesFromBank
 	+
 	; insert the L-4 sword and shield sprites
-	cp $48
-	ld hl,spr_item_icons_sword_shield_l4
+	.ifdef WIDE_L4_SWORD_SHIELD_SPRITE
+		cp $4a
+		ld hl,spr_item_icons_sword_shield_l4+$40
+	.else
+		cp $48
+		ld hl,spr_item_icons_sword_shield_l4
+	.endif
 	jr z,++
-	cp $49
-	ld hl,spr_item_icons_sword_shield_l4+$20
+	.ifdef WIDE_L4_SWORD_SHIELD_SPRITE
+		cp $4c
+		ld hl,spr_item_icons_sword_shield_l4+$80
+	.else
+		cp $49
+		ld hl,spr_item_icons_sword_shield_l4+$20
+	.endif
 	jr nz,+
 		++
-		ld b,:spr_item_icons_sword_shield_l4
-		jp copy20BytesFromBank
+		.ifdef WIDE_L4_SWORD_SHIELD_SPRITE
+			ldbc :spr_item_icons_sword_shield_l4,$40
+			jp copyBytesFromBank
+		.else
+			ld b,:spr_item_icons_sword_shield_l4
+			jp copy20BytesFromBank
+		.endif
 	+
 .endif
 
