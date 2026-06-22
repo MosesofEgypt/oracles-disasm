@@ -3815,6 +3815,11 @@ updateStatusBar_body:
 	ld a,(wAItemSpriteAttribute2)
 	ldi (hl),a
 
+	; we don't need to make sprite blockers if the menu is opened
+	ld a,(wOpenedMenuType)
+	or a
+	ret nz
+
 	push de
 	push bc
 	push hl
@@ -3834,10 +3839,10 @@ updateStatusBar_body:
 	pop hl
 	ld de,wAItemSpriteAttribute1
 	call @maybeCreateItemSpriteBlockers
-	pop bc
-	pop de
 	ld a,l
 	ldh (<hOamTail),a
+	pop bc
+	pop de
 	ret
 
 @maybeCreateItemSpriteBlockers:
@@ -3848,20 +3853,19 @@ updateStatusBar_body:
 	inc e
 	ld a,(de)
 	bit 4,a
-	inc e
 	ld a,c
 	call nz,@maybeCreateItemSpriteBlocker
 	ret
 
 @maybeCreateItemSpriteBlocker:
-	; if flag indicates to, we need to make an extra sprite
-	; to block later sprites from rendering over this one
+	; we need to make a sprite to block later
+	; sprites from rendering through this one
 	ld (hl),$10
 	inc l
 	ldi (hl),a
-	ld (hl),$9c
+	ld (hl),$4c
 	inc l
-	ld (hl),$03
+	ld (hl),$08
 	inc l
 	ret
 

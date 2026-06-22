@@ -554,10 +554,32 @@ remapTransformedSpecialObjectGfx:
 	ret
 
 @remapTransformLinkRiding:
-	; this is all we need to do to fix this. the first 13 sprites
-	; are for ricky, which throws off the count for the others.
-	inc a
-	cp a	; NOTE: doing this so remapTransformLinkNormal doesn't get called
+	; the first 13 sprites are for ricky, which throws off the count for the others.
+	; NOTE: we're doing "cp a" at the end so remapTransformLinkNormal isnt called
+
+	cp $1b ; sprites $1b and above are for moosh, and below are dimitri/rickey
+	jr c,+
+		; moosh sprite
+		inc a
+		cp a
+		ret
+	+
+	; dimitri sprite
+
+	; sprites $14 and below need to be adjusted down.
+	; sprites $15, $16, and $17 need to be left alone.
+	; sprites $18, $19, and $1a need to be adjusted up.
+	cp $15
+	jr nc,+
+		dec a
+		jr ++
+	+
+		cp $18
+		jr c,++
+			inc a
+	++
+
+	cp a
 	ret
 
 @remapTransformLinkNormal:
@@ -609,18 +631,18 @@ remapTransformedSpecialObjectGfx:
 			cp $09
 			jr nz,++	; jump if NOT companion-riding link
 				ld a,c
-				cp $0e
+				cp $0d
 				; we can remap all the companion riding sprites except rickey.
-				; the remappable indices are those where (0x2e < i < 0x0e)
+				; the remappable indices are those where (0x0d <= i < 0x2e)
 				jr c,++
 					cp $2f
 					jr c,+
-++
+			++
 			; cantRemap
 			cp a
 			ret
+	+
 
-+
 	; checkFrame
 	ld a,c
 
