@@ -207,7 +207,7 @@ treasureDisplayData_sword:
 	.db TREASURE_SWORD, $92, $04, $00, $00, $00, <TX_0925 ; L3
 .ifdef ENABLE_NEW_GAME_PLUS
 .ifdef WIDE_L4_SWORD_SHIELD_SPRITE
-	.db TREASURE_SWORD, $4a, $04, $4b, $03, $06, <TX_09_BUTTER_SWORD
+	.db TREASURE_SWORD, $4a, $14, $4b, $13, $06, <TX_09_BUTTER_SWORD
 .else
 	.db TREASURE_SWORD, $48, $03, $00, $00, $00, <TX_09_BUTTER_SWORD
 .endif
@@ -219,7 +219,7 @@ treasureDisplayData_shield:
 	.db TREASURE_SHIELD, $95, $04, $00, $00, $00, <TX_0922 ; L3
 .ifdef ENABLE_NEW_GAME_PLUS
 .ifdef WIDE_L4_SWORD_SHIELD_SPRITE
-	.db TREASURE_SHIELD, $4c, $03, $4d, $05, $06, <TX_09_BUTTER_SHIELD
+	.db TREASURE_SHIELD, $4c, $13, $4d, $15, $06, <TX_09_BUTTER_SHIELD
 .else
 	.db TREASURE_SHIELD, $49, $03, $00, $00, $00, <TX_09_BUTTER_SHIELD
 .endif

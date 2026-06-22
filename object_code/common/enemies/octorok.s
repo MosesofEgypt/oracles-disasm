@@ -66,16 +66,11 @@ octorok_state_uninitialized:
 	ld hl,@ngpUpgradeTable
 	xor a	; indicate this is a weak enemy
 	call tryNgpUpgrade
+	; if the octorok was upgraded, don't let the speed be changed below
 	jr nc,++
-		; if this is the gold octorok, don't let the speed be
-		; changed below, as we'll have customized it in the upgrade
-		ld e,Enemy.subid
+		ld e,Enemy.speed
 		ld a,(de)
-		cp $04
-		jr nz,++
-			ld e,Enemy.speed
-			ld a,(de)
-			jr +
+		jr +
 	++
 .endif
 	; If bit 1 of subid is set, octorok is faster
@@ -138,20 +133,20 @@ octorok_state_uninitialized:
 	.dw @ngpGoldOctorokUpgrades1
 
 	@ngpSlowRedOctorokUpgrades1:
-		m_ngp_upgrade_p_si_d_h		PALETTE_RED   1 03 03
+		m_ngp_upgrade_p_si_d_h_s		PALETTE_RED   1 03 03 SPEED_c0
 	@ngpSlowRedOctorokUpgrades2:
-		m_ngp_upgrade_p_si_d_h		PALETTE_BLUE  2 04 04
-		m_ngp_upgrade_p_si_d_h_term	PALETTE_BLUE  3 04 04
+		m_ngp_upgrade_p_si_d_h_s		PALETTE_BLUE  2 04 04 SPEED_c0
+		m_ngp_upgrade_p_si_d_h_s_term	PALETTE_BLUE  3 04 04 SPEED_e0
 
 	@ngpFastRedOctorokUpgrades1:
-		m_ngp_upgrade_p_si_d_h		PALETTE_BLUE  2 04 04
+		m_ngp_upgrade_p_si_d_h_s		PALETTE_BLUE  2 04 04 SPEED_c0
 	@ngpSlowBlueOctorokUpgrades1:
-		m_ngp_upgrade_p_si_d_h		PALETTE_BLUE  3 04 04
+		m_ngp_upgrade_p_si_d_h_s		PALETTE_BLUE  3 04 04 SPEED_c0
 	@ngpFastBlueOctorokUpgrades1:
-		m_ngp_upgrade_p_si_d_h_term	PALETTE_GREEN 6 10 10
+		m_ngp_upgrade_p_si_d_h_s_term	PALETTE_GREEN 6 10 10 SPEED_e0
 
 	@ngpGoldOctorokUpgrades1:
-		m_ngp_upgrade_p_d_s_term	PALETTE_GOLD  14 SPEED_180
+		m_ngp_upgrade_p_d_s_term		PALETTE_GOLD  14 SPEED_120
 
 @ngpUpgradeSubtable2:
 	.dw @ngpSlowRedOctorokUpgrades2
@@ -161,11 +156,11 @@ octorok_state_uninitialized:
 	.dw @ngpGoldOctorokUpgrades1
 
 	@ngpFastRedOctorokUpgrades2:
-		m_ngp_upgrade_p_si_d_h		PALETTE_BLUE  3 04 04
+		m_ngp_upgrade_p_si_d_h_s		PALETTE_BLUE  3 04 04 SPEED_c0
 	@ngpSlowBlueOctorokUpgrades2:
-		m_ngp_upgrade_p_si_d_h		PALETTE_GREEN 6 10 10
+		m_ngp_upgrade_p_si_d_h_s		PALETTE_GREEN 6 10 10 SPEED_e0
 	@ngpFastBlueOctorokUpgrades2:
-		m_ngp_upgrade_p_si_d_h_term	PALETTE_GREEN 5 10 10
+		m_ngp_upgrade_p_si_d_h_s_term	PALETTE_GREEN 5 10 10 SPEED_100
 .endif
 
 ; For each subid, each byte determines the maximum index of the value that can be read

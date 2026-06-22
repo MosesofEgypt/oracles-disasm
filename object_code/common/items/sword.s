@@ -119,8 +119,8 @@ itemCode05:
 
 .ifdef ENABLE_NEW_GAME_PLUS
 	; L-4
-	.db ($80|ITEMCOLLISION_SWORDSPIN)
-	.db (-7)
+	.db ($80|ITEMCOLLISION_L3_SWORD)
+	.db (-6)
 .endif
 
 

@@ -3749,7 +3749,7 @@ updateStatusBar_body:
 	ld a,(wcbe8)
 .ifndef ONE_HANDED_BIGGORON_SWORD
 	bit 7,a
-	jr nz,@biggoronSword
+	jp nz,@biggoronSword
 .endif
 
 	; Update item sprites
@@ -3795,8 +3795,8 @@ updateStatusBar_body:
 	ldi (hl),a
 	ld a,(wBItemSpriteAttribute2)
 	ldi (hl),a
-	ld a,b
 
+	ld a,b
 	ldi (hl),a
 	ld a,c
 	ldi (hl),a
@@ -3814,6 +3814,55 @@ updateStatusBar_body:
 	ldi (hl),a
 	ld a,(wAItemSpriteAttribute2)
 	ldi (hl),a
+
+	push de
+	push bc
+	push hl
+	ld l,<wOam+1
+	ld b,(hl)
+	ld l,<wOam+5
+	ld c,(hl)
+	pop hl
+	ld de,wBItemSpriteAttribute1
+	call @maybeCreateItemSpriteBlockers
+
+	push hl
+	ld l,<wOam+9
+	ld b,(hl)
+	ld l,<wOam+13
+	ld c,(hl)
+	pop hl
+	ld de,wAItemSpriteAttribute1
+	call @maybeCreateItemSpriteBlockers
+	pop bc
+	pop de
+	ld a,l
+	ldh (<hOamTail),a
+	ret
+
+@maybeCreateItemSpriteBlockers:
+	ld a,(de)
+	bit 4,a
+	ld a,b
+	call nz,@maybeCreateItemSpriteBlocker
+	inc e
+	ld a,(de)
+	bit 4,a
+	inc e
+	ld a,c
+	call nz,@maybeCreateItemSpriteBlocker
+	ret
+
+@maybeCreateItemSpriteBlocker:
+	; if flag indicates to, we need to make an extra sprite
+	; to block later sprites from rendering over this one
+	ld (hl),$10
+	inc l
+	ldi (hl),a
+	ld (hl),$9c
+	inc l
+	ld (hl),$03
+	inc l
 	ret
 
 .ifndef ONE_HANDED_BIGGORON_SWORD
