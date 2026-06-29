@@ -231,10 +231,10 @@ objectGfxHeaderTable:
 	/* $e0 */ m_ObjectGfxHeader spr_hyperslingshot_inventory
 
 .ifdef ENABLE_NEW_GAME_PLUS
-.ifdef WIDE_LIFE_VIAL_SPRITE
-	/* $e1 */ m_ObjectGfxHeader spr_item_icon_life_vial
-.else
-	/* $e1 */ m_ObjectGfxHeader spr_item_icon_life_vial_slim
-.endif
-	/* $e2 */ m_ObjectGfxHeader spr_item_icons_sword_shield_l4
+	.ifdef WIDE_INVENTORY_SPRITES
+		/* $e1 */ m_ObjectGfxHeader spr_item_icons_life_vial, 1
+	.else
+		/* $e1 */ m_ObjectGfxHeader spr_item_icons_life_vial_slim, 1
+	.endif
+	/* $e2 */ m_ObjectGfxHeader spr_item_icons_sword_shield_l4, 1
 .endif

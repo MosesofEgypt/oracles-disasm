@@ -58,22 +58,18 @@ treasureDisplayData_standard:
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_10
 	.db $00,                         $00, $00, $00, $00, $00, <TX_0900 ; TREASURE_HARP
 .ifdef ENABLE_NEW_GAME_PLUS
-	.ifdef WIDE_LIFE_VIAL_SPRITE
-		.db TREASURE_LIFE_VIAL,      $b9, $01, $b9, $21, $07, <TX_09_LIFE_VIAL ; TREASURE_LIFE_VIAL
-	.else
-		.db TREASURE_LIFE_VIAL,      $b9, $01, $00, $00, $01, <TX_09_LIFE_VIAL ; TREASURE_LIFE_VIAL
-	.endif
+.ifdef WIDE_INVENTORY_SPRITES
+	.db TREASURE_LIFE_VIAL,          $b9, $01, $b9, $21, $07, <TX_09_LIFE_VIAL ; TREASURE_LIFE_VIAL
+	.db $00,                         $07, $00, $07, $00, $ff, <TX_0900 ; X TREASURE_SLINGSHOT
+	.db TREASURE_LIFE_VIAL_CHARGE,   $b9, $01, $b9, $21, $ff, <TX_0900 ; TREASURE_LIFE_VIAL
+.else
+	.db TREASURE_LIFE_VIAL,          $b9, $01, $00, $00, $01, <TX_09_LIFE_VIAL ; TREASURE_LIFE_VIAL
+	.db $00,                         $07, $00, $07, $00, $ff, <TX_0900 ; X TREASURE_SLINGSHOT
+	.db TREASURE_LIFE_VIAL_CHARGE,   $b9, $01, $00, $00, $ff, <TX_0900 ; TREASURE_LIFE_VIAL
+.endif
 .else
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_12
-.endif
 	.db $00,                         $07, $00, $07, $00, $ff, <TX_0900 ; X TREASURE_SLINGSHOT
-.ifdef ENABLE_NEW_GAME_PLUS
-	.ifdef WIDE_LIFE_VIAL_SPRITE
-		.db TREASURE_LIFE_VIAL_CHARGE, $b9, $01, $b9, $21, $ff, <TX_0900 ; TREASURE_LIFE_VIAL
-	.else
-		.db TREASURE_LIFE_VIAL_CHARGE, $b9, $01, $00, $00, $ff, <TX_0900 ; TREASURE_LIFE_VIAL
-	.endif
-.else
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_14
 .endif
 	.db $00,                         $9b, $04, $00, $00, $ff, <TX_092a ; TREASURE_SHOVEL
@@ -172,7 +168,7 @@ treasureDisplayData_sword:
 	.db TREASURE_SWORD,              $91, $05, $00, $00, $00, <TX_0924
 	.db TREASURE_SWORD,              $92, $04, $00, $00, $00, <TX_0925
 .ifdef ENABLE_NEW_GAME_PLUS
-.ifdef WIDE_L4_SWORD_SHIELD_SPRITE
+.ifdef WIDE_INVENTORY_SPRITES
 	.db TREASURE_SWORD, $4a, $14, $4b, $13, $06, <TX_09_BUTTER_SWORD
 .else
 	.db TREASURE_SWORD, $48, $03, $00, $00, $00, <TX_09_BUTTER_SWORD
@@ -184,7 +180,7 @@ treasureDisplayData_shield:
 	.db TREASURE_SHIELD,             $94, $05, $00, $00, $00, <TX_0921
 	.db TREASURE_SHIELD,             $95, $04, $00, $00, $00, <TX_0922
 .ifdef ENABLE_NEW_GAME_PLUS
-.ifdef WIDE_L4_SWORD_SHIELD_SPRITE
+.ifdef WIDE_INVENTORY_SPRITES
 	.db TREASURE_SHIELD, $4c, $13, $4d, $15, $06, <TX_09_BUTTER_SHIELD
 .else
 	.db TREASURE_SHIELD, $49, $03, $00, $00, $00, <TX_09_BUTTER_SHIELD

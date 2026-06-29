@@ -167,6 +167,8 @@ ifdef ENABLE_NEW_GAME_PLUS
 PNG_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/ngp -name '*.png')
 UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/ngp -name '*.png')
 endif
+PNG_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/sprites -name '*.png')
+UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/sprites -name '*.png')
 
 # List of all gfx files in their final form, ie. $(BUILD_DIR)/gfx/spr_link.cmp
 GFXFILES := $(foreach file, $(CMP_GFX_FILES) $(UNCMP_GFX_FILES), \

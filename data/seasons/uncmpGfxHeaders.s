@@ -17,6 +17,9 @@ uncmpGfxHeaderTable:
 	.dw uncmpGfxHeader_lifeVialInv
 	.dw uncmpGfxHeader_swordShieldInv
 .endif
+.ifdef WIDE_INVENTORY_SPRITES
+	.dw uncmpGfxHeader_itemIconsWide
+.endif
 
 
 uncmpGfxHeader00:
@@ -282,7 +285,7 @@ uncmpGfxHeader_seedShooter:
 
 .ifdef ENABLE_NEW_GAME_PLUS
 uncmpGfxHeader_lifeVialInv:
-.ifdef WIDE_LIFE_VIAL_SPRITE
+.ifdef WIDE_INVENTORY_SPRITES
 	m_GfxHeader spr_item_icon_life_vial, $8721
 .else
 	m_GfxHeader spr_item_icon_life_vial_slim, $8721
@@ -291,5 +294,11 @@ uncmpGfxHeader_lifeVialInv:
 
 uncmpGfxHeader_swordShieldInv:
 	m_GfxHeader spr_item_icons_sword_shield_l4, $8900
+	m_GfxHeaderEnd
+.endif
+
+.ifdef WIDE_INVENTORY_SPRITES
+uncmpGfxHeader_itemIconsWide:
+	m_GfxHeader spr_item_icons_wide, $8000
 	m_GfxHeaderEnd
 .endif

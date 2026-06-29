@@ -607,19 +607,28 @@
 	m_GfxData gfx_startnewgameplus ; ????
 	m_GfxData gfx_newgameplus ; ????
 	m_GfxData gfx_make ; ????
-
-m_section_free Gfx_simpleGfxExtSectionNgp ALIGN $20
-.ifdef WIDE_LIFE_VIAL_SPRITE
-	m_GfxDataSimple spr_item_icon_life_vial
-.else
-	m_GfxDataSimple spr_item_icon_life_vial_slim
 .endif
-	m_GfxDataSimple spr_item_icons_sword_shield_l4
-.ends
+
+.ifdef WIDE_INVENTORY_SPRITES
+	m_section_free Gfx_gfxExtSection ALIGN $20
+		m_GfxData spr_item_icons_wide
+		.ifdef ENABLE_NEW_GAME_PLUS
+			m_GfxData spr_item_icon_life_vial
+			m_GfxData spr_item_icon_wide_sword_l4
+			m_GfxData spr_item_icon_wide_shield_l4
+		.endif
+	.ends
+.else
+.ifdef ENABLE_NEW_GAME_PLUS
+	m_section_free Gfx_gfxExtSection ALIGN $20
+		m_GfxData spr_item_icons_sword_shield_l4
+		m_GfxData spr_item_icon_life_vial_slim
+	.ends
+.endif
 .endif
 
 .ifdef ENABLE_DOUBLE_HEART_CAP
-m_section_free Gfx_simpleGfxExtSectionDoubleHeart ALIGN $20
-	m_GfxDataSimple gfx_overlap_hearts
+m_section_free Gfx_simpleGfxExtSection ALIGN $20
+	m_GfxData gfx_overlap_hearts
 .ends
 .endif

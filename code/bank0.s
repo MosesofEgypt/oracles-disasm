@@ -1946,8 +1946,11 @@ _mainLoop:
 	sub (BTN_A | BTN_B | BTN_START | BTN_SELECT)
 	jp z,resetGame
 +
-
+.ifdef WIDE_INVENTORY_SPRITES
+	ld a,(wEquippedItemOamTail)
+.else
 	ld a,$10
+.endif
 	ldh (<hOamTail),a
 	ld h,>wThreadStateBuffer
 	ld a,<wThreadStateBuffer
@@ -6198,26 +6201,6 @@ objectCheckCollidedWithLink_ignoreZ:
 	jr ---
 
 ;;
-; Unused?
-hObjectCheckCollidedWithLink:
-	push de
-	ld d,h
-	ld a,l
-	and $c0
-	add Object.zh
-	ld l,a
-	call _checkCollidedWithLink
-	pop de
-	ret
-
-;;
-; Unused?
-func_1c84:
-	ld a,(w1ReservedItemC.enabled)
-	or a
-	ret nz
-
-;;
 ; @param[out]	cflag	Set on collision
 objectHCheckCollisionWithLink:
 	push de
@@ -6655,16 +6638,6 @@ lookupKey:
 	ret
 
 ;;
-; Unused?
-;
-; @param a
-findByteInGroupTable:
-	ld e,a
-	ld a,(wActiveGroup)
-	rst_addDoubleIndex
-	rst_derefHl
-
-;;
 ; Search through zero-terminated list of bytes at hl, return when one equals e.
 ;
 ; @param	e	Value to match
@@ -6695,9 +6668,7 @@ lookupCollisionTable:
 lookupCollisionTable_paramE:
 	ld a,(wActiveCollisions)
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jr lookupKey
 
 ;;
@@ -6711,9 +6682,7 @@ findByteInCollisionTable:
 findByteInCollisionTable_paramE:
 	ld a,(wActiveCollisions)
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	jr findByteAtHl
 
 ;;
@@ -9454,20 +9423,6 @@ itemIncSubstate:
 	inc (hl)
 	ret
 ;;
-; Unused?
-cpInteractionState:
-	ld h,d
-	ld l,Interaction.state
-	cp (hl)
-	ret
-;;
-; Unused?
-cpInteractionSubstate:
-	ld h,d
-	ld l,Interaction.substate
-	cp (hl)
-	ret
-;;
 checkInteractionState:
 	ld e,Interaction.state
 	ld a,(de)
@@ -9861,9 +9816,7 @@ scriptFunc_jump_scf:
 scriptFunc_jump:
 	xor a
 ++
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	ldh a,(<hActiveObject)
 	ld d,a
 	ret
@@ -10208,16 +10161,6 @@ interactionCheckAdjacentTileIsSolid:
 	ld e,Interaction.angle
 	ld a,(de)
 	call convertAngleDeToDirection
-	jr ++
-
-;;
-; Unused?
-;
-interactionCheckAdjacentTileIsSolid_viaDirection:
-	ld e,Interaction.direction
-	ld a,(de)
-	sra a
-++
 	ld hl,@dirOffsets
 	rst_addAToHl
 	call objectGetShortPosition
@@ -10305,8 +10248,6 @@ interactionHSetPosition:
 	ret
 
 ;;
-; Unused?
-;
 interactionUnsetAlwaysUpdateBit:
 	ld h,d
 	ld l,Interaction.enabled
@@ -10322,16 +10263,6 @@ interactionLoadExtraGraphics:
 	; Why... what does this accomplish, other than possibly trashing tree graphics?
 	ld (wLoadedTreeGfxIndex),a
 
-	ret
-
-;;
-; Unused?
-;
-interactionFunc_278b:
-	ld l,Interaction.scriptPtr
-	ld (hl),c
-	inc l
-	ld (hl),b
 	ret
 
 ;;
@@ -10505,9 +10436,7 @@ enemySetAnimation:
 	ld a,(de)
 	ld hl,enemyAnimationTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	add hl,bc
 
 ;;
@@ -10893,9 +10822,7 @@ partSetAnimation:
 	ld a,(de)
 	ld hl,partAnimationTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	add hl,bc
 
 ;;
@@ -12277,9 +12204,7 @@ updateEnemy:
 	adc >enemyCodeTable
 	ld h,a
 
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 .ifdef ROM_AGES
 	ld a,b
 	rst_setrombank
@@ -12565,17 +12490,6 @@ markEnemyAsKilledInRoom:
 	.endif
 
 ;;
-; Calls bank2._stub_02_77f4. (Unused)
-;
-func_3211:
-	ld h,$03
-	.ifdef ROM_AGES
-	jr ++
-	.else
-	jp ++
-	.endif
-
-;;
 ; Places the numbers $00-$ff into w4RandomBuffer in a random order.
 ; Calls bank2.generateRandomBuffer.
 ;
@@ -12774,18 +12688,6 @@ darkenRoomLightly:
 	jr _darkenRoomHelper
 
 ;;
-; Unused?
-;
-; @param	a	How much to slow down palette thread
-func_32fc:
-	call setPaletteThreadDelay
-	ld a,$0d
-	ld b,$f0
-	ld (wPaletteThread_mode),a
-	ld a,$01
-	jr _setDarkeningVariables
-
-;;
 ; @param	a	Speed of darkening
 darkenRoomWithSpeed:
 	ld b,$f0
@@ -12833,18 +12735,6 @@ brightenRoomLightly:
 	ld b,$f7
 	ld a,$01
 	jr _brightenRoomHelper
-
-;;
-; Unused?
-;
-; @param	a
-func_333e:
-	call setPaletteThreadDelay
-	ld a,$0e
-	ld b,$00
-	ld (wPaletteThread_mode),a
-	ld a,$01
-	jr _setDarkeningVariables
 
 ;;
 ; @param	a	Speed of brightening
@@ -13806,9 +13696,7 @@ uniqueGfxFunc_380b:
 	ld a,b
 	ld hl,animationAndUniqueGfxData.uniqueGfxHeaderTable
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	rst_derefHl
 	call loadUniqueGfxHeaderEntry
 
 	pop af

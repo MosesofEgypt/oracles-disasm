@@ -3828,8 +3828,12 @@ updateStatusBar_body:
 	ld l,<wOam+5
 	ld c,(hl)
 	pop hl
+.ifdef WIDE_INVENTORY_SPRITES
+	ld de,wBItemDisplayMode
+.else
 	ld de,wBItemSpriteAttribute1
-	call @maybeCreateItemSpriteBlockers
+.endif
+	call @createItemSpriteBlockers
 
 	push hl
 	ld l,<wOam+9
@@ -3837,27 +3841,63 @@ updateStatusBar_body:
 	ld l,<wOam+13
 	ld c,(hl)
 	pop hl
+.ifdef WIDE_INVENTORY_SPRITES
+	ld de,wAItemDisplayMode
+.else
 	ld de,wAItemSpriteAttribute1
-	call @maybeCreateItemSpriteBlockers
+.endif
+	call @createItemSpriteBlockers
 	ld a,l
 	ldh (<hOamTail),a
+.ifdef WIDE_INVENTORY_SPRITES
+	ld (wEquippedItemOamTail),a
+.endif
 	pop bc
 	pop de
 	ret
 
-@maybeCreateItemSpriteBlockers:
+@createItemSpriteBlockers:
+.ifdef WIDE_INVENTORY_SPRITES
+	ldh a,(<hOamTail)
+	cp $28
+	ret nc
+
+	ld a,b
+	call @createItemSpriteBlocker
+	ldh a,(<hOamTail)
+	cp $28
+	ret nc
+
+	ld a,c
+	call @createItemSpriteBlocker
+	ldh a,(<hOamTail)
+	cp $28
+	ret nc
+
+	; check if this is a 3-tile wide item
+	ld a,(de)
+	inc a
+	ret z
+	bit 7,a
+	ret z
+
+	ld a,c
+	add $08
+	call @createItemSpriteBlocker
+.else
 	ld a,(de)
 	bit 4,a
 	ld a,b
-	call nz,@maybeCreateItemSpriteBlocker
+	call nz,@createItemSpriteBlocker
 	inc e
 	ld a,(de)
 	bit 4,a
 	ld a,c
-	call nz,@maybeCreateItemSpriteBlocker
+	call nz,@createItemSpriteBlocker
+.endif
 	ret
 
-@maybeCreateItemSpriteBlocker:
+@createItemSpriteBlocker:
 	; we need to make a sprite to block later
 	; sprites from rendering through this one
 	ld (hl),$10
@@ -3871,6 +3911,11 @@ updateStatusBar_body:
 
 .ifndef ONE_HANDED_BIGGORON_SWORD
 @biggoronSword:
+.ifdef WIDE_INVENTORY_SPRITES
+	ld a,$10
+	ld (wEquippedItemOamTail),a
+	ldh (<hOamTail),a
+.endif
 	ld hl,wOam
 	ld de,@oamData
 	ld b,$10
@@ -3997,13 +4042,14 @@ loadEquippedItemSpriteData:
 	pop hl
 	jr z,++
 .endif
-
+.ifndef WIDE_INVENTORY_SPRITES
 	; This comparison changes the palette used for the seed satchel, seed shooter, slingshot,
 	; and hyper slingshot.
 	cp $8a
 	jr z,+
 	cp $86
 	jr c,+
+.endif
 .ifdef ENABLE_NEW_GAME_PLUS
 ++
 .endif
@@ -4155,9 +4201,8 @@ drawItemTilesOnStatusBar:
 ; @param	c	$80 if drawing on A/B buttons, $07 if on inventory
 ; @param	de	Address to draw to (should be a tilemap of some kind)
 drawTreasureExtraTiles:
-	bit 7,a
-	ret nz
-
+	or a
+	jr z,@val00
 	dec a
 	jr z,@val01
 	dec a
@@ -4170,9 +4215,7 @@ drawTreasureExtraTiles:
 	jr z,@val05
 	dec a
 	jr z,@val06
-	dec a
-	jr z,@val07
-	jr @val00
+	jr @val07
 
 ; Display item quantity with "x" symbol (ie. slates in ages d8)
 @val04:
@@ -4278,6 +4321,9 @@ drawTreasureExtraTiles:
 
 ; Display the harp?
 @val05:
+.ifdef WIDE_INVENTORY_SPRITES
+	ret
+.else
 	ld h,d
 	ld l,e
 
@@ -4288,6 +4334,7 @@ drawTreasureExtraTiles:
 
 	; Drawing on A/B buttons
 
+	; draw blank tiles(tile $0f)
 	ld a,$0f
 	ldd (hl),a
 	ld (hl),$0d
@@ -4333,7 +4380,7 @@ drawTreasureExtraTiles:
 	ret
 
 .undefine HARP_TILE_BASE
-
+.endif
 
 ; Print magnet glove polarity (overwrites "S" with "N" if necessary)
 @val03:
@@ -4361,6 +4408,44 @@ drawTreasureExtraTiles:
 
 	; Spring
 	ld b,$1c
+.ifdef WIDE_INVENTORY_SPRITES
+	ld a,l
+	sub $21
+	ld l,a
+
+	ld b,$92
+	ld a,(wObtainedSeasons)
+	rrca
+
+	ld e,a
+	ld c,$03
+	call c,@drawTile
+
+	; Summer
+	inc b
+	ld a,$20
+	add l
+	ld l,a
+
+	inc c
+	srl e
+	call c,@drawTile
+
+	; Fall
+	inc l
+	inc b
+	srl e
+	call c,@drawTile
+
+	; Winter
+	ld a,l
+	sub $22
+	ld l,a
+
+	inc b
+	srl e
+	jr c,@drawTile
+.else
 .ifdef ROM_AGES
 	; Inventory only: adjust tile index
 	ld a,c
@@ -4394,6 +4479,7 @@ drawTreasureExtraTiles:
 	inc b
 	srl e
 	jr c,@drawTile
+.endif
 	ret
 
 
@@ -4762,49 +4848,60 @@ loadItemIconGfx:
 
 	ld b,a
 
-.ifdef ENABLE_NEW_GAME_PLUS
-	; insert the vial sprite
-.ifdef ROM_AGES
-	cp $bb
-.else
-	cp $b9
-.endif
-	jr nz,+
-	.ifdef WIDE_LIFE_VIAL_SPRITE
-		ld hl,spr_item_icon_life_vial
-		ld b,:spr_item_icon_life_vial
-	.else
-		ld hl,spr_item_icon_life_vial_slim
-		ld b,:spr_item_icon_life_vial_slim
-	.endif
-		jp copy20BytesFromBank
-	+
-	; insert the L-4 sword and shield sprites
-	.ifdef WIDE_L4_SWORD_SHIELD_SPRITE
+.ifdef WIDE_INVENTORY_SPRITES
+	.ifdef ENABLE_NEW_GAME_PLUS
+		; insert the vial sprite
+		.ifdef ROM_AGES
+			cp $bb
+		.else
+			cp $b9
+		.endif
+
+		jr nz,+
+			ld hl,spr_item_icons_life_vial
+			ld b,:spr_item_icons_life_vial
+			jp copy20BytesFromBank
+		+
+
 		cp $4a
+		; insert the L-4 sword and shield sprites
 		ld hl,spr_item_icons_sword_shield_l4+$40
-	.else
-		cp $48
-		ld hl,spr_item_icons_sword_shield_l4
-	.endif
-	jr z,++
-	.ifdef WIDE_L4_SWORD_SHIELD_SPRITE
+		jr z,++
 		cp $4c
 		ld hl,spr_item_icons_sword_shield_l4+$80
-	.else
-		cp $49
-		ld hl,spr_item_icons_sword_shield_l4+$20
-	.endif
-	jr nz,+
-		++
-		.ifdef WIDE_L4_SWORD_SHIELD_SPRITE
+		jr nz,+
+			++
 			ldbc :spr_item_icons_sword_shield_l4,$40
 			jp copyBytesFromBank
+		+
+	.endif
+.else
+	.ifdef ENABLE_NEW_GAME_PLUS
+		; insert the vial sprite
+		.ifdef ROM_AGES
+			cp $bb
 		.else
+			cp $b9
+		.endif
+
+		jr nz,+
+			ld hl,spr_item_icons_life_vial_slim
+			ld b,:spr_item_icons_life_vial_slim
+			jp copy20BytesFromBank
+		+
+
+		cp $48
+		; insert the L-4 sword and shield sprites
+		ld hl,spr_item_icons_sword_shield_l4
+		jr z,++
+		cp $49
+		ld hl,spr_item_icons_sword_shield_l4+$20
+		jr nz,+
+			++
 			ld b,:spr_item_icons_sword_shield_l4
 			jp copy20BytesFromBank
-		.endif
-	+
+		+
+	.endif
 .endif
 
 	; CROSSITEMS: Replace L-1 boomerang sprite with L-2 sprite if applicable. (This was
@@ -5024,6 +5121,24 @@ inventoryMenuState0:
 	ld a,GFXH_INVENTORY_SCREEN
 	call loadGfxHeader
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld a,UNCMP_GFXH_LIFE_VIAL_INV
+	call loadUncompressedGfxHeader
+.endif
+
+.ifdef WIDE_INVENTORY_SPRITES
+	; load the wide item icons
+	ld a,UNCMP_GFXH_ITEM_ICONS_WIDE
+	call loadUncompressedGfxHeader
+
+	ld a,UNCMP_GFXH_ITEM_ICONS_SEED_SPRITES
+	call loadUncompressedGfxHeader
+
+	ld a,UNCMP_GFXH_ITEM_ICONS_FIXUP_FILES
+	call loadUncompressedGfxHeader
+
+	call fixupWideItemGfx
+.else
 	; CROSSITEMS: Overwrite L-1 boomerang sprite with L-2 sprite if applicable. (This was
 	; necessary due to VRAM limitations.)
 	ld a,(wBoomerangLevel)
@@ -5039,13 +5154,6 @@ inventoryMenuState0:
 	ld a,UNCMP_GFXH_HYPER_SLINGSHOT_INV
 	call loadUncompressedGfxHeader
 +
-.ifdef ENABLE_NEW_GAME_PLUS
-	; and do the same for the life vial and L-4 sword/shield
-	ld a,UNCMP_GFXH_LIFE_VIAL_INV
-	call loadUncompressedGfxHeader
-
-	ld a,UNCMP_GFXH_L4_SWORD_SHIELD
-	call loadUncompressedGfxHeader
 .endif
 
 	ld a,UNCMP_GFXH_06
@@ -5059,6 +5167,158 @@ inventoryMenuState0:
 	call fastFadeinFromWhite
 	ld a,$03
 	jp loadGfxRegisterStateIndex
+
+.ifdef WIDE_INVENTORY_SPRITES
+fixupWideItemGfx:
+	push hl
+	push bc
+	ld hl,itemGfxIconFixupInfo
+	-
+		ld b,>wc600Block
+		ld c,(hl)
+		inc hl
+
+		; get the item level\subid
+		ld a,(bc)
+		ld c,a
+
+		push hl
+		rst_derefHl
+		ldi a,(hl)
+		ld b,a
+		ld a,c
+		cp b
+		jr c,+
+			ld a,b
+		+
+		rst_addAToHl
+
+		; get the gfx header to load and load it
+		ld a,(hl)
+		call loadUncompressedGfxHeader
+		pop hl
+		inc hl
+		inc hl
+
+		ld a,(hl)
+		or a
+		jr nz,-
+
+	pop bc
+	pop hl
+	call fixupWideItemGfx_harpOfAges
+	ret
+
+itemGfxIconFixupInfo:
+    .db <wBoomerangLevel
+    .dw @itemGfxHeadersBySubid_boomerang
+
+    .db <wBraceletLevel
+    .dw @itemGfxHeadersBySubid_bracelet
+
+    .db <wFeatherLevel
+    .dw @itemGfxHeadersBySubid_feather
+
+    .db <wMagnetGlovePolarity
+    .dw @itemGfxHeadersBySubid_magnetGlove
+
+    .db <wSwitchHookLevel
+    .dw @itemGfxHeadersBySubid_switchHook
+
+    .db <wSwordLevel
+    .dw @itemGfxHeadersBySubid_sword
+
+    .db <wShieldLevel
+    .dw @itemGfxHeadersBySubid_shield
+
+    .db <wFluteIcon
+    .dw @itemGfxHeadersBySubid_flutePartners
+
+	.db $00; terminator
+
+@itemGfxHeadersBySubid_boomerang:
+	.db $02
+	.db UNCMP_GFXH_ITEM_ICONS_BOOMERANG_L1
+	.db UNCMP_GFXH_ITEM_ICONS_BOOMERANG_L1
+	.db UNCMP_GFXH_ITEM_ICONS_BOOMERANG_L2
+
+@itemGfxHeadersBySubid_bracelet:
+	.db $02
+	.db UNCMP_GFXH_ITEM_ICONS_BRACELET_L1
+	.db UNCMP_GFXH_ITEM_ICONS_BRACELET_L1
+	.db UNCMP_GFXH_ITEM_ICONS_BRACELET_L2
+
+@itemGfxHeadersBySubid_feather:
+	.db $02
+	.db UNCMP_GFXH_ITEM_ICONS_FEATHER_L1
+	.db UNCMP_GFXH_ITEM_ICONS_FEATHER_L1
+	.db UNCMP_GFXH_ITEM_ICONS_FEATHER_L2
+
+@itemGfxHeadersBySubid_magnetGlove:
+	.db $01
+	.db UNCMP_GFXH_ITEM_ICONS_MAGNET_GLOVE_S
+	.db UNCMP_GFXH_ITEM_ICONS_MAGNET_GLOVE_N
+
+@itemGfxHeadersBySubid_switchHook:
+	.db $02
+	.db UNCMP_GFXH_ITEM_ICONS_SWITCH_HOOK_L1
+	.db UNCMP_GFXH_ITEM_ICONS_SWITCH_HOOK_L1
+	.db UNCMP_GFXH_ITEM_ICONS_SWITCH_HOOK_L2
+
+@itemGfxHeadersBySubid_sword:
+.ifdef ENABLE_NEW_GAME_PLUS
+	.db $04
+.else
+	.db $03
+.endif
+	.db UNCMP_GFXH_ITEM_ICONS_SWORD_L1
+	.db UNCMP_GFXH_ITEM_ICONS_SWORD_L1
+	.db UNCMP_GFXH_ITEM_ICONS_SWORD_L2
+	.db UNCMP_GFXH_ITEM_ICONS_SWORD_L3
+.ifdef ENABLE_NEW_GAME_PLUS
+	.db UNCMP_GFXH_ITEM_ICONS_SWORD_L4
+.endif
+
+@itemGfxHeadersBySubid_shield:
+.ifdef ENABLE_NEW_GAME_PLUS
+	.db $04
+.else
+	.db $03
+.endif
+	.db UNCMP_GFXH_ITEM_ICONS_SHIELD_L1
+	.db UNCMP_GFXH_ITEM_ICONS_SHIELD_L1
+	.db UNCMP_GFXH_ITEM_ICONS_SHIELD_L2
+	.db UNCMP_GFXH_ITEM_ICONS_SHIELD_L3
+.ifdef ENABLE_NEW_GAME_PLUS
+	.db UNCMP_GFXH_ITEM_ICONS_SHIELD_L4
+.endif
+
+@itemGfxHeadersBySubid_flutePartners:
+	.db $04
+	.db UNCMP_GFXH_ITEM_ICONS_FLUTE_NONE
+	.db UNCMP_GFXH_ITEM_ICONS_FLUTE_RICKY
+	.db UNCMP_GFXH_ITEM_ICONS_FLUTE_DIMITRI
+	.db UNCMP_GFXH_ITEM_ICONS_FLUTE_MOOSH
+
+
+fixupWideItemGfx_harpOfAges:
+	push hl
+    ld a,(wSelectedHarpSong)
+	and $03
+    ld hl,@itemGfxHeadersBySubid_harpTunes
+	rst_addAToHl
+	ld a,(hl)
+	call loadUncompressedGfxHeader
+	pop hl
+	ret
+
+@itemGfxHeadersBySubid_harpTunes:
+	.db UNCMP_GFXH_ITEM_ICONS_NO_TUNE
+	.db UNCMP_GFXH_ITEM_ICONS_TUNE_OF_ECHOES
+	.db UNCMP_GFXH_ITEM_ICONS_TUNE_OF_CURRENTS
+	.db UNCMP_GFXH_ITEM_ICONS_TUNE_OF_AGES
+
+.endif
 
 ;;
 func_02_55a8:
@@ -5624,7 +5884,12 @@ inventoryMenuState2:
 ++
 	ld d,>wc600Block
 	ld (de),a
+.ifdef WIDE_INVENTORY_SPRITES
+	call inventoryMenuState1@finalizeEquip
+	jp fixupWideItemGfx_harpOfAges
+.else
 	jp inventoryMenuState1@finalizeEquip
+.endif
 
 ;;
 @func_02_57f3:
@@ -6267,6 +6532,42 @@ seedAndHarpSpriteTable:
 	dbrel @sprite6
 	dbrel @sprite7
 
+.ifdef WIDE_INVENTORY_SPRITES
+@sprite0:
+	.db $01
+	.db $14 $0c $96 $02
+
+@sprite1:
+	.db $01
+	.db $14 $0c $98 $03
+
+@sprite2:
+	.db $01
+	.db $14 $0c $9a $01
+
+@sprite3:
+	.db $01
+	.db $14 $0c $9c $01
+
+@sprite4:
+	.db $01
+	.db $14 $0c $9e $00
+
+@sprite5:
+	.db $02
+	.db $14 $08 $44 $08
+	.db $14 $10 $46 $08
+
+@sprite6:
+	.db $02
+	.db $14 $08 $48 $0b
+	.db $14 $10 $4a $0b
+
+@sprite7:
+	.db $02
+	.db $14 $08 $4c $09
+	.db $14 $10 $4e $09
+.else
 @sprite0:
 	.db $01
 	.db $14 $0c $06 $0a
@@ -6301,6 +6602,7 @@ seedAndHarpSpriteTable:
 	.db $02
 	.db $14 $08 $56 $09
 	.db $14 $10 $58 $09
+.endif
 
 
 table_5ae5:
@@ -7025,6 +7327,31 @@ drawTreasureDisplayDataToBg:
 	ld b,a
 	call @writeTile
 
+	ld a,(hl)
+	cp $ff
+	jr z,+
+	bit 7,a
+	jr z,+
+		; draw the third tile
+		; sprite index for the third tile is the previous tile+2,
+		; and the palette is the upper nibble of the mode minus 8
+		dec hl
+		dec hl
+		inc e
+
+		; get the palette
+		swap a
+		and $07
+		ld b,a
+
+		; get the tile index
+		ldi a,(hl)
+		inc a
+		ld c,a
+		inc hl
+		call @writeTile
+	+
+
 	; Draw the "extra tiles" (ammo count, etc)
 	ld a,$20
 	call addAToDe
@@ -7032,7 +7359,62 @@ drawTreasureDisplayDataToBg:
 	ld b,a
 	ld c,$07
 	ldi a,(hl)
+
+.ifdef WIDE_INVENTORY_SPRITES
+	push bc
+	push de
+	push af
+	and $0f
+	cp $0f
+	jr z,+
+		cp $08
+		jr c,+
+			; this is the seed satchel, slingshot, or shooter, so we need
+			; to update the seed icon in the bottom corner of the tiles
+
+			; determine the new tile index
+			sub $07
+			ld b,a
+			pop af
+			push af
+			swap a
+			and $07 ; get the seed type
+			ld c,a
+			add $7e-$05 ; add the base tile
+			-
+				add $05
+				dec b
+				jr nz,-
+
+			; update the tile
+			ld (de),a
+
+			; update the attributes
+			ld a,d
+			add $04
+			ld d,a
+			ld a,c
+			ld hl,@seedPalettes
+			rst_addAToHl
+			ld a,(hl)
+			ld (de),a
+
+	+
+	pop af
+	pop de
+	pop bc
+	and $0f
+.endif
+
+	and $0f
+	cp $0f
+	ret z
 	jp drawTreasureExtraTiles
+
+.ifdef WIDE_INVENTORY_SPRITES
+@seedPalettes:
+	.db $04 $05 $03 $03 $02
+.endif
 
 ;;
 ; @param bc
@@ -7160,6 +7542,9 @@ inventoryMenuDrawSprites:
 ;;
 ; Draw harp sprites if it's in the inventory.
 inventoryMenuDrawHarpSprites:
+.ifdef WIDE_INVENTORY_SPRITES
+	ret
+.else
 	ld hl,wInventoryStorage
 	ld bc,$1000
 --
@@ -7227,6 +7612,7 @@ inventoryMenuDrawHarpSprites:
 	ld a,(hl)
 	rst_addAToHl
 	jp addSpritesToOam_withOffset
+.endif
 
 
 ;;
@@ -7236,6 +7622,9 @@ inventoryMenuDrawHarpSprites:
 ; Doesn't exist in seasons since there are no items drawn with sprites on the inventory
 ; screen (only the harp of ages).
 createBlankSpritesForItemSubmenu:
+.ifdef WIDE_INVENTORY_SPRITES
+	ret
+.else
 	ld hl,wInventory.cbc1
 	ldi a,(hl)
 	cp $04
@@ -7309,7 +7698,7 @@ createBlankSpritesForItemSubmenu:
 	.db $18 $90 $04 $88|PALETTE
 
 .undefine PALETTE
-
+.endif
 
 ; This is a list of treasures that are displayed on subscreen 1 if the player has them.
 ;   b0: treasure index

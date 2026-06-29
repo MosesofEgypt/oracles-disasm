@@ -204,11 +204,16 @@ objectGfxHeaderTable:
 	; CROSSITEMS: Extra object gfx headers
 	/* $c7 */ m_ObjectGfxHeader spr_hyperslingshot_inventory $00
 
-.ifdef ENABLE_NEW_GAME_PLUS
-.ifdef WIDE_LIFE_VIAL_SPRITE
-	/* $c8 */ m_ObjectGfxHeader spr_item_icon_life_vial
+.ifdef WIDE_INVENTORY_SPRITES
+	/* $c8 */ m_ObjectGfxHeader spr_item_icons_wide, 1
+	.ifdef ENABLE_NEW_GAME_PLUS
+		/* $c9 */ m_ObjectGfxHeader spr_item_icon_life_vial, 1
+		/* $ca */ m_ObjectGfxHeader spr_item_icon_wide_sword_l4, 1
+		/* $cb */ m_ObjectGfxHeader spr_item_icon_wide_shield_l4, 1
+	.endif
 .else
-	/* $c8 */ m_ObjectGfxHeader spr_item_icon_life_vial_slim
-.endif
-	/* $c9 */ m_ObjectGfxHeader spr_item_icons_sword_shield_l4
+	.ifdef ENABLE_NEW_GAME_PLUS
+		/* $c8 */ m_ObjectGfxHeader spr_item_icon_life_vial_slim, 1
+		/* $c9 */ m_ObjectGfxHeader spr_item_icons_sword_shield_l4, 1
+	.endif
 .endif

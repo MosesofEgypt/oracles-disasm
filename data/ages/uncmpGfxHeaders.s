@@ -11,15 +11,53 @@ uncmpGfxHeaderTable:
 		.dw uncmpGfxHeader{%.2x{COUNT}}
 	.endr
 
+.ifndef WIDE_INVENTORY_SPRITES
 	; CROSSITEMS: Extra gfx headers appended to the end of the table (starting at $40)
 	.dw uncmpGfxHeader_magicBoomerangInv
 	.dw uncmpGfxHeader_hyperSlingshotInv
+.endif
 	.dw uncmpGfxHeader_magnetGloves
 	.dw uncmpGfxHeader_slingshot
 	.dw uncmpGfxHeader_l1Boomerang
 	.dw uncmpGfxHeader_l2Boomerang
 	.dw uncmpGfxHeader_rodOfSeasons
 	.dw uncmpGfxHeader_foolsOre
+
+.ifdef WIDE_INVENTORY_SPRITES
+	.dw uncmpGfxHeader_itemIconsWide
+	.dw uncmpGfxHeader_boomerang
+	.dw uncmpGfxHeader_magicBoomerang
+	.dw uncmpGfxHeader_bracelet
+	.dw uncmpGfxHeader_powerGlove
+	.dw uncmpGfxHeader_feather
+	.dw uncmpGfxHeader_rocsCape
+	.dw uncmpGfxHeader_magnetGlovesNorth
+	.dw uncmpGfxHeader_magnetGlovesSouth
+	.dw uncmpGfxHeader_switchHookL1
+	.dw uncmpGfxHeader_switchHookL2
+	.dw uncmpGfxHeader_swordL1
+	.dw uncmpGfxHeader_swordL2
+	.dw uncmpGfxHeader_swordL3
+.ifdef ENABLE_NEW_GAME_PLUS
+	.dw uncmpGfxHeader_swordL4
+.endif
+	.dw uncmpGfxHeader_shieldL1
+	.dw uncmpGfxHeader_shieldL2
+	.dw uncmpGfxHeader_shieldL3
+.ifdef ENABLE_NEW_GAME_PLUS
+	.dw uncmpGfxHeader_shieldL4
+.endif
+	.dw uncmpGfxHeader_noTune
+	.dw uncmpGfxHeader_tuneOfEchoes
+	.dw uncmpGfxHeader_tuneOfCurrents
+	.dw uncmpGfxHeader_tuneOfAges
+	.dw uncmpGfxHeader_fluteNone
+	.dw uncmpGfxHeader_fluteRicky
+	.dw uncmpGfxHeader_fluteDimitri
+	.dw uncmpGfxHeader_fluteMoosh
+	.dw uncmpGfxHeader_fixupTiles
+	.dw uncmpGfxHeader_seedSprites
+.endif
 .ifdef ENABLE_NEW_GAME_PLUS
 	.dw uncmpGfxHeader_lifeVialInv
 	.dw uncmpGfxHeader_swordShieldInv
@@ -301,6 +339,118 @@ uncmpGfxHeader3f:
 	m_GfxHeaderEnd
 
 
+.ifdef WIDE_INVENTORY_SPRITES
+uncmpGfxHeader_itemIconsWide:
+	m_GfxHeader spr_item_icons_wide, $8001
+	m_GfxHeaderEnd
+
+; overwrite item icons with their higher level variants
+uncmpGfxHeader_boomerang:
+	m_GfxHeader spr_item_icons_wide, $8241, $04, $240
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_magicBoomerang:
+	m_GfxHeader spr_item_icons_wide_boomerang_l2, $8241
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_bracelet:
+	m_GfxHeader spr_item_icons_wide, $80c1, $04, $c0
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_powerGlove:
+	m_GfxHeader spr_item_icons_wide_bracelet_l2, $80c1
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_feather:
+	m_GfxHeader spr_item_icons_wide, $8081, $04, $80
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_rocsCape:
+	m_GfxHeader spr_item_icons_wide_feather_l2, $8081
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_magnetGlovesNorth:
+	m_GfxHeader spr_item_icons_wide, $8321, $04, $320
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_magnetGlovesSouth:
+	m_GfxHeader spr_item_icons_wide_magnet_glove_s, $8321
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_switchHookL1:
+	m_GfxHeader spr_item_icons_wide, $8201, $04, $200
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_switchHookL2:
+	m_GfxHeader spr_item_icons_wide_switch_hook_l2, $8201
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_swordL1:
+	m_GfxHeader spr_item_icons_wide, $8001, $04
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_shieldL1:
+	m_GfxHeader spr_item_icons_wide, $8041, $04, $40
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_swordL2:
+	m_GfxHeader spr_item_icons_wide_sword_l2, $8001
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_shieldL2:
+	m_GfxHeader spr_item_icons_wide_shield_l2, $8041
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_swordL3:
+	m_GfxHeader spr_item_icons_wide_sword_l3, $8001
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_shieldL3:
+	m_GfxHeader spr_item_icons_wide_shield_l3, $8041
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_noTune:
+	m_GfxHeader spr_item_icons_wide, $8561, $04, $560
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_tuneOfEchoes:
+	m_GfxHeader spr_item_icons_wide_songs, $8561, $04, $80
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_tuneOfCurrents:
+	m_GfxHeader spr_item_icons_wide_songs, $8561, $04, $40
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_tuneOfAges:
+	m_GfxHeader spr_item_icons_wide_songs, $8561, $04
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_fluteNone:
+	m_GfxHeader spr_item_icons_wide, $8521, $02, $520
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_fluteRicky:
+	m_GfxHeader spr_item_icons_wide_flute_partners, $8521, $02
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_fluteDimitri:
+	m_GfxHeader spr_item_icons_wide_flute_partners, $8521, $02, $20
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_fluteMoosh:
+	m_GfxHeader spr_item_icons_wide_flute_partners, $8521, $02, $40
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_fixupTiles:
+	m_GfxHeader gfx_item_icons_wide_fixup_tiles, $87e0
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_seedSprites:
+	m_GfxHeader spr_item_icons_wide_seeds_sprite, $8960
+	m_GfxHeaderEnd
+
+.else
+
 ; CROSSITEMS: Magical boomerang overwriting L-1 boomerang for inventory gfx
 uncmpGfxHeader_magicBoomerangInv:
 	m_GfxHeader spr_boomerang, $8381, $02, $40
@@ -310,6 +460,7 @@ uncmpGfxHeader_magicBoomerangInv:
 uncmpGfxHeader_hyperSlingshotInv:
 	m_GfxHeader spr_hyperslingshot_inventory, $8021
 	m_GfxHeaderEnd
+.endif
 
 uncmpGfxHeader_magnetGloves:
 	m_GfxHeader spr_magnet_gloves, $8521
@@ -337,14 +488,24 @@ uncmpGfxHeader_foolsOre:
 
 .ifdef ENABLE_NEW_GAME_PLUS
 uncmpGfxHeader_lifeVialInv:
-.ifdef WIDE_LIFE_VIAL_SPRITE
-	m_GfxHeader spr_item_icon_life_vial, $8761
+.ifdef WIDE_INVENTORY_SPRITES
+	m_GfxHeader spr_item_icons_life_vial, $8761
 .else
-	m_GfxHeader spr_item_icon_life_vial_slim, $8761
+	m_GfxHeader spr_item_icons_life_vial_slim, $8761
 .endif
 	m_GfxHeaderEnd
 
 uncmpGfxHeader_swordShieldInv:
 	m_GfxHeader spr_item_icons_sword_shield_l4, $8900
 	m_GfxHeaderEnd
+
+.ifdef WIDE_INVENTORY_SPRITES
+uncmpGfxHeader_swordL4:
+	m_GfxHeader spr_item_icons_wide_sword_l4, $8001
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_shieldL4:
+	m_GfxHeader spr_item_icons_wide_shield_l4, $8041
+	m_GfxHeaderEnd
+.endif
 .endif

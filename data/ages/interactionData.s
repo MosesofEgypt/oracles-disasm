@@ -561,7 +561,7 @@ interaction47SubidData:
 	m_InteractionSubidData $79 $0a $10
 	m_InteractionSubidData $7e $00 $50
 .ifdef ENABLE_NEW_GAME_PLUS
-.ifdef WIDE_LIFE_VIAL_SPRITE
+.ifdef WIDE_INVENTORY_SPRITES
 	m_InteractionSubidData $e1 $00 $12
 .else
 	m_InteractionSubidData $e1 $00 $10

@@ -389,6 +389,12 @@ wRingsDisabledCounter: ; $c590
 	db
 .endif
 
+.ifdef WIDE_INVENTORY_SPRITES
+wEquippedItemOamTail:
+	; end of the OAM for just the hud gfx
+	db
+.endif
+
 ; $c580-$c5af unused? (unless using ENABLE_MULTI_RING or
 ;                      ENABLE_RING_REDUX or ENABLE_NEW_GAME_PLUS)
 
