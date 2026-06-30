@@ -3540,8 +3540,27 @@ standardGameState:
 	call updateRingsDisabled
 .endif
 .ifdef ENABLE_RING_REDUX
+	; record whether the gameboy ring is equipped or not so we can
+	; check if we need to force the palettes to reload instantly
+	ld a,DMG_COLOR_RING
+	call cpActiveRing
+	ld a,$00
+	ld hl,wDmgRingEquippedPreviousFrame
+	jr nz,+
+		inc a
+	+
+
+	cp (hl)
+	jr z,+
+		; ring status changed. mark palettes as dirty
+		ld (hl),a
+		ld a,$ff
+		ldh (<hDirtyBgPalettes),a
+		ldh (<hDirtySprPalettes),a
+	+
+.endif
+.ifdef ENABLE_RING_REDUX
 	call updateAzuchu
-	call updateSystemType
 	call updateColorRingPalettes
 .endif
 	ld a,(wLinkDeathTrigger)
@@ -3921,17 +3940,6 @@ updateColorRingPalettes:
 	ld a,(hl)
 	inc l
 	ld (hl),a
-	ret
-
-updateSystemType:
-	; change mode to GBC if wearing ring
-	ld a,GBOY_COLOR_RING
-	call cpActiveRing
-	ld a,$ff	; GBA
-	jr nz,+
-		ld a,$01	; GBC
-	+
-	ldh (<hGameboyType),a
 	ret
 
 updateAzuchu:

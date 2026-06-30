@@ -67,6 +67,9 @@ refreshDirtyPalettes:
 	ld b,>w2BgPalettesBuffer
 	ld c,l
 	res 7,c
+.ifdef ENABLE_RING_REDUX
+	push bc
+.endif
 	ld e,$08
 -
 	ldi a,(hl)
@@ -74,6 +77,22 @@ refreshDirtyPalettes:
 	inc c
 	dec e
 	jr nz,-
+.ifdef ENABLE_RING_REDUX
+	; maybe make palettes monochrome green
+	ld a,DMG_COLOR_RING
+	call cpActiveRing
+	pop bc
+	jr nz,+
+		push hl
+		ld h,b
+		ld l,c
+		call @convertToDmgColor
+		call @convertToDmgColor
+		call @convertToDmgColor
+		call @convertToDmgColor
+		pop hl
+	+
+.endif
 
 	pop de
 	jr @refresh
@@ -87,6 +106,24 @@ refreshDirtyPalettes:
 
 ;;
 @gbaBrightenPalette:
+.ifdef ENABLE_RING_REDUX
+	; maybe make palettes monochrome green
+	ld a,DMG_COLOR_RING
+	call cpActiveRing
+	jr nz,+
+		; backup color for restoring later and then convert
+		push de
+		push hl
+		ldi a,(hl)
+		ld b,a
+		ldd a,(hl)
+		ld c,a
+		push bc
+		call @convertToDmgColor
+		dec l
+		dec l
+	+
+.endif
 	ldi a,(hl)
 	ld c,a
 	and $e0
@@ -126,7 +163,121 @@ refreshDirtyPalettes:
 	ldi (hl),a
 	set 7,l
 	ld h,c
+.ifdef ENABLE_RING_REDUX
+	ld a,DMG_COLOR_RING
+	call cpActiveRing
+	jr nz,+
+		; restore color
+		pop bc
+		ld d,h
+		ld e,l
+		pop hl
+		ld (hl),b
+		inc l
+		ld (hl),c
+		ld h,d
+		ld l,e
+		pop de
+	+
+.endif
 	ret
+
+.ifdef ENABLE_RING_REDUX
+@convertToDmgColor:
+	ldi a,(hl)
+	and $e0
+	ld b,a
+	ld a,(hl)
+	and $03
+	or b
+	swap a
+	ld b,a
+	srl b
+	ldd a,(hl)
+	and $7c
+	rrca
+	rrca
+	ld c,a
+	ld a,(hl)
+	and $1f
+
+	; a now contains red, b contains green, c contains blue
+	push hl
+	push af
+
+	; convert RGB into luminance
+	ld a,b
+	rra
+	ld hl,@greenConvTable
+	rst_addAToHl
+	ld b,(hl)
+
+	ld a,c
+	rra
+	ld hl,@blueConvTable
+	rst_addAToHl
+	ld c,(hl)
+
+	pop af
+	rra
+	ld hl,@redConvTable
+	rst_addAToHl
+	ld a,(hl)
+
+	; add together to get total luminance
+	add b
+	add c
+
+	; convert luminance to equivalent DMG color
+	ld hl,@dmgColorTable
+	; reduce fidelity from 32 values to 16 to reduce table size
+	srl a
+	add a
+	rst_addAToHl
+	ldi a,(hl)
+	ld b,a
+	ld a,(hl)
+	pop hl
+
+	; replace the colors
+	ld (hl),b
+	inc l
+	ld (hl),a
+	inc l
+	ret
+
+@redConvTable:
+	.db $00 $00 $01 $01 $02 $03 $03 $04
+	.db $04 $05 $06 $06 $07 $07 $08 $09
+
+@greenConvTable:
+	.db $00 $01 $02 $03 $04 $06 $07 $08
+	.db $09 $0a $0c $0d $0e $0f $10 $12
+
+@blueConvTable:
+	.db $00 $00 $00 $01 $01 $01 $01 $02
+	.db $02 $02 $03 $03 $03 $04 $04 $04
+
+@dmgColorTable:
+	; colors are RGB555 LE with high bit ignored, and R in lower bits
+	.dw (( 1<<10)|( 5<<5)| 2)
+	.dw (( 1<<10)|( 7<<5)| 2)
+	.dw (( 1<<10)|( 8<<5)| 3)
+	.dw (( 1<<10)|( 9<<5)| 4)
+	.dw (( 2<<10)|(11<<5)| 5)
+	.dw (( 3<<10)|(12<<5)| 7)
+	.dw (( 4<<10)|(13<<5)| 9)
+	.dw (( 5<<10)|(15<<5)|11)
+	.dw (( 6<<10)|(16<<5)|14)
+	.dw (( 6<<10)|(16<<5)|15)
+	.dw (( 7<<10)|(17<<5)|16)
+	.dw (( 7<<10)|(18<<5)|17)
+	.dw (( 8<<10)|(19<<5)|18)
+	.dw (( 8<<10)|(21<<5)|19)
+	.dw (( 9<<10)|(22<<5)|21)
+	.dw ((10<<10)|(24<<5)|22)
+
+.endif
 
 gbaModePaletteData:
 	.db $00 $05 $07 $08 $0a $0b $0c $0e

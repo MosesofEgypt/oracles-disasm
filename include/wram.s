@@ -395,6 +395,12 @@ wEquippedItemOamTail:
 	db
 .endif
 
+.ifdef ENABLE_RING_REDUX
+wDmgRingEquippedPreviousFrame:
+	db
+
+.endif
+
 ; $c580-$c5af unused? (unless using ENABLE_MULTI_RING or
 ;                      ENABLE_RING_REDUX or ENABLE_NEW_GAME_PLUS)
 

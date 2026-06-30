@@ -3811,7 +3811,7 @@ updateStatusBar_body:
 		add $08
 		add e
 		ldi (hl),a
-		ld a,$02
+		ld a,$50
 		ldi (hl),a
 		ld a,(wBItemSpriteAttribute3)
 		ldi (hl),a
@@ -3850,7 +3850,7 @@ updateStatusBar_body:
 		add $08
 		add c
 		ldi (hl),a
-		ld a,$00
+		ld a,$4e
 		ldi (hl),a
 		ld a,(wAItemSpriteAttribute3)
 		ldi (hl),a
@@ -4177,7 +4177,7 @@ loadEquippedItemSpriteData:
 		inc e
 		inc e
 		inc e
-		ld a,$05
+		ld a,$0d
 		ld (de),a
 		ld c,b
 		inc c
@@ -4194,6 +4194,7 @@ loadEquippedItemSpriteData:
 	jr z,+
 		swap a
 		and $07
+		set 3,a
 		ld (de),a
 		ld d,c
 		inc d
@@ -5203,7 +5204,7 @@ loadItemIconGfx:
 	.dw  spr_item_icons_wide_magnet_glove_n
 	.dw @@magnetGloveSwaps
 
-	.db $a9
+	.db $a3
 	.db <wFluteIcon
 	.db :spr_item_icons_wide_flute_partners
 	.dw  spr_item_icons_wide_flute_partners
@@ -5593,6 +5594,15 @@ inventoryMenuState0:
 	call loadUncompressedGfxHeader
 
 	ld a,UNCMP_GFXH_ITEM_ICONS_SEED_SPRITES
+	call loadUncompressedGfxHeader
+
+	ld a,UNCMP_GFXH_ITEM_ICONS_TUNE_OF_ECHOES_SPRITE
+	call loadUncompressedGfxHeader
+
+	ld a,UNCMP_GFXH_ITEM_ICONS_TUNE_OF_CURRENTS_SPRITE
+	call loadUncompressedGfxHeader
+
+	ld a,UNCMP_GFXH_ITEM_ICONS_TUNE_OF_AGES_SPRITE
 	call loadUncompressedGfxHeader
 
 	ld a,UNCMP_GFXH_ITEM_ICONS_FIXUP_FILES
@@ -7016,18 +7026,18 @@ seedAndHarpSpriteTable:
 
 @sprite5:
 	.db $02
-	.db $14 $08 $44 $08
-	.db $14 $10 $46 $08
+	.db $14 $08 $1c $00
+	.db $14 $10 $1e $00
 
 @sprite6:
 	.db $02
-	.db $14 $08 $48 $0b
-	.db $14 $10 $4a $0b
+	.db $14 $08 $2c $03
+	.db $14 $10 $2e $03
 
 @sprite7:
 	.db $02
-	.db $14 $08 $4c $09
-	.db $14 $10 $4e $09
+	.db $14 $08 $5a $01
+	.db $14 $10 $5c $01
 .else
 @sprite0:
 	.db $01

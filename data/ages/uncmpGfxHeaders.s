@@ -58,6 +58,9 @@ uncmpGfxHeaderTable:
 	.dw uncmpGfxHeader_fluteMoosh
 	.dw uncmpGfxHeader_fixupTiles
 	.dw uncmpGfxHeader_seedSprites
+	.dw uncmpGfxHeader_tuneOfEchoesSprite
+	.dw uncmpGfxHeader_tuneOfCurrentsSprite
+	.dw uncmpGfxHeader_tuneOfAgesSprite
 .endif
 .ifdef ENABLE_NEW_GAME_PLUS
 	.dw uncmpGfxHeader_lifeVialInv
@@ -342,8 +345,7 @@ uncmpGfxHeader3f:
 
 .ifdef WIDE_INVENTORY_SPRITES
 uncmpGfxHeader_itemIconsEquippedExt:
-	; TODO: fix this shit
-	m_GfxHeaderRam w4ItemIconGfxExt, $8000, $04
+	m_GfxHeaderRam w4ItemIconGfxExt, $84e1, $04
 	m_GfxHeaderEnd
 
 uncmpGfxHeader_itemIconsWide:
@@ -432,19 +434,19 @@ uncmpGfxHeader_tuneOfAges:
 	m_GfxHeaderEnd
 
 uncmpGfxHeader_fluteNone:
-	m_GfxHeader spr_item_icons_wide, $8521, $02, $520
+	m_GfxHeader spr_item_icons_wide, $8461, $02, $520
 	m_GfxHeaderEnd
 
 uncmpGfxHeader_fluteRicky:
-	m_GfxHeader spr_item_icons_wide_flute_partners, $8521, $02
+	m_GfxHeader spr_item_icons_wide_flute_partners, $8461, $02
 	m_GfxHeaderEnd
 
 uncmpGfxHeader_fluteDimitri:
-	m_GfxHeader spr_item_icons_wide_flute_partners, $8521, $02, $20
+	m_GfxHeader spr_item_icons_wide_flute_partners, $8461, $02, $20
 	m_GfxHeaderEnd
 
 uncmpGfxHeader_fluteMoosh:
-	m_GfxHeader spr_item_icons_wide_flute_partners, $8521, $02, $40
+	m_GfxHeader spr_item_icons_wide_flute_partners, $8461, $02, $40
 	m_GfxHeaderEnd
 
 uncmpGfxHeader_fixupTiles:
@@ -453,6 +455,18 @@ uncmpGfxHeader_fixupTiles:
 
 uncmpGfxHeader_seedSprites:
 	m_GfxHeader spr_item_icons_wide_seeds_sprite, $8960
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_tuneOfEchoesSprite:
+	m_GfxHeader spr_item_icons_song_sprites, $81c0, $04
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_tuneOfCurrentsSprite:
+	m_GfxHeader spr_item_icons_song_sprites, $82c0, $04, $40
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_tuneOfAgesSprite:
+	m_GfxHeader spr_item_icons_song_sprites, $85a0, $04, $80
 	m_GfxHeaderEnd
 
 .else

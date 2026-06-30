@@ -210,8 +210,8 @@ New rings:
         This is the Sign Ring, except it changes your color to gold.
         Can combine with another color ring to blend the colors.
 
-    GBC Tint Ring:
-        Switches the game to GBC mode(i.e. uses darker color palette and advance shop closes.)
+    Game Boy Ring:
+        Changes color palettes to resemble playing on an original Game Boy
 
 
 Modified rings:

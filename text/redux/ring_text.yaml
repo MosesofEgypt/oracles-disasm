@@ -291,7 +291,7 @@ groups:
   - name: TX_3079
     index: 0x79
     text: |-
-      GB Color Ring
+      Game Boy Ring
 
   - name: TX_307a
     index: 0x7a
@@ -634,8 +634,8 @@ groups:
   - name: TX_30b9
     index: 0xb9
     text: |-
-      This is now a
-      Game Boy Color!
+      This is now
+      a Game Boy!
 
   - name: TX_30ba
     index: 0xba

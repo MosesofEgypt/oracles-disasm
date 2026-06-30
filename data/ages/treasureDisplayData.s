@@ -316,10 +316,10 @@ treasureDisplayData_trade:
 
 treasureDisplayData_flute:
 .ifdef WIDE_INVENTORY_SPRITES
-	.db TREASURE_FLUTE, $a8, $00, $a9, $00, $ff, <TX_092e ; Strange flute
-	.db TREASURE_FLUTE, $a8, $03, $a9, $03, $ff, <TX_092f ; Ricky's flute
-	.db TREASURE_FLUTE, $a8, $02, $a9, $02, $ff, <TX_0930 ; Dimitri's flute
-	.db TREASURE_FLUTE, $a8, $01, $a9, $01, $ff, <TX_0931 ; Moosh's flute
+	.db TREASURE_FLUTE, $a2, $00, $a3, $00, $ff, <TX_092e ; Strange flute
+	.db TREASURE_FLUTE, $a2, $03, $a3, $03, $ff, <TX_092f ; Ricky's flute
+	.db TREASURE_FLUTE, $a2, $02, $a3, $02, $ff, <TX_0930 ; Dimitri's flute
+	.db TREASURE_FLUTE, $a2, $01, $a3, $01, $ff, <TX_0931 ; Moosh's flute
 .else
 	.db TREASURE_FLUTE, $8b, $00, $8c, $00, $ff, <TX_092e ; Strange flute
 	.db TREASURE_FLUTE, $8b, $03, $8d, $03, $ff, <TX_092f ; Ricky's flute

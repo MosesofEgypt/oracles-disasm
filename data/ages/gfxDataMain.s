@@ -535,6 +535,7 @@
 		m_GfxData spr_item_icons_wide_feather_l2
 		m_GfxData spr_item_icons_wide_magnet_glove_n
 		m_GfxData spr_item_icons_wide_seeds_sprite
+		m_GfxData spr_item_icons_song_sprites
 		m_GfxData spr_item_icons_wide_shield_l2
 		m_GfxData spr_item_icons_wide_shield_l3
 		m_GfxData spr_item_icons_wide_sword_l2
