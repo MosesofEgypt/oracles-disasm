@@ -5066,10 +5066,17 @@ loadItemIconGfx:
 			++
 			; found a match. see if we have a leveled sprite to use
 			ldi a,(hl)
+			; increment the level if necessary
+			cp <wSwordLevel
+			jr z,+
+				cp <wShieldLevel
+			+
+
 			push de
 			ld d,>wSwordLevel
 			ld e,a
 			ld a,(de)
+			call z,victoryRingIncLevel
 			ld c,a
 			pop de
 
