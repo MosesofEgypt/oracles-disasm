@@ -1690,6 +1690,11 @@ wBItemDisplayMode: ; $cbee/$cbef
 ; Whether to display item level, ammo, etc
 	db
 
+.ifdef WIDE_INVENTORY_SPRITES
+wBItemSpriteAttribute3:
+	db
+.endif
+
 wAItemTreasure: ; $cbef/$cbf0
 	db
 wAItemSpriteAttribute1: ; $cbf0/$cbf1
@@ -1700,6 +1705,11 @@ wAItemSpriteXOffset: ; $cbf2/$cbf3
 	db
 wAItemDisplayMode: ; $cbf3/$cbf4
 	db
+
+.ifdef WIDE_INVENTORY_SPRITES
+wAItemSpriteAttribute3:
+	db
+.endif
 
 .ENDS
 
@@ -3606,7 +3616,14 @@ w4StatusBarAttributeMap:	dsb $40		; $d640
 ; Icon graphics for the two equipped items
 w4ItemIconGfx:			dsb $80		; $d680
 
+.ifdef WIDE_INVENTORY_SPRITES
+; Icon graphics for the extended width equipped items
+w4ItemIconGfxExt:		dsb $40		; $d700
+
+w4Filler5:			dsb $40
+.else
 w4Filler5:			dsb $80
+.endif
 
 ; File info for file select screen, either from this cartridge or copied over from another one
 w4FileDisplayVariables:		INSTANCEOF FileDisplayStruct 3	; $d780

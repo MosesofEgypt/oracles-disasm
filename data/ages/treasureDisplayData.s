@@ -45,6 +45,7 @@ treasureDisplayData2:
 ; Data format:
 ;  b0: Treasure index to get level / quantity value from (if b5 is not $ff)
 ;  b1: Left sprite index
+;      NOTE: if set to $01, an empty sprite will be created as padding
 ;  b2: Left attribute (palette)
 ;  b3: Right sprite index
 ;  b4: Right attribute
@@ -141,7 +142,7 @@ treasureDisplayData_standard:
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_1c (0x1c)
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_MINECART_COLLISION (0x1d)
 .ifdef WIDE_INVENTORY_SPRITES
-	.db TREASURE_FOOLS_ORE,          $97, $00, $00, $00, $ff, <TX_09_FOOLSORE ; TREASURE_FOOLS_ORE (0x1e)
+	.db TREASURE_FOOLS_ORE,          $01, $00, $97, $00, $ff, <TX_09_FOOLSORE ; TREASURE_FOOLS_ORE (0x1e)
 .else
 	.db TREASURE_FOOLS_ORE,          $9a, $00, $00, $00, $ff, <TX_09_FOOLSORE ; TREASURE_FOOLS_ORE (0x1e)
 .endif
@@ -227,11 +228,11 @@ treasureDisplayData_standard:
 
 treasureDisplayData_satchel:
 .ifdef WIDE_INVENTORY_SPRITES
-	.db TREASURE_EMBER_SEEDS,        $88, $03, $89, $03, $08, <TX_092d ; Ember seeds
+	.db TREASURE_EMBER_SEEDS,        $88, $03, $89, $02, $08, <TX_092d ; Ember seeds
 	.db TREASURE_SCENT_SEEDS,        $88, $03, $89, $03, $18, <TX_092d ; Scent seeds
-	.db TREASURE_PEGASUS_SEEDS,      $88, $03, $89, $03, $28, <TX_092d ; Pegasus seeds
-	.db TREASURE_GALE_SEEDS,         $88, $03, $89, $03, $38, <TX_092d ; Gale seeds
-	.db TREASURE_MYSTERY_SEEDS,      $88, $03, $89, $03, $48, <TX_092d ; Mystery seeds
+	.db TREASURE_PEGASUS_SEEDS,      $88, $03, $89, $01, $28, <TX_092d ; Pegasus seeds
+	.db TREASURE_GALE_SEEDS,         $88, $03, $89, $01, $38, <TX_092d ; Gale seeds
+	.db TREASURE_MYSTERY_SEEDS,      $88, $03, $89, $00, $48, <TX_092d ; Mystery seeds
 .else
 	.db TREASURE_EMBER_SEEDS,        $80, $05, $83, $02, $01, <TX_092d ; Ember seeds
 	.db TREASURE_SCENT_SEEDS,        $80, $05, $84, $03, $01, <TX_092d ; Scent seeds
@@ -242,11 +243,11 @@ treasureDisplayData_satchel:
 
 treasureDisplayData_shooter:
 .ifdef WIDE_INVENTORY_SPRITES
-	.db TREASURE_EMBER_SEEDS,        $8e, $05, $8f, $05, $09, <TX_0940 ; Ember seeds
-	.db TREASURE_SCENT_SEEDS,        $8e, $05, $8f, $05, $19, <TX_0940 ; Scent seeds
-	.db TREASURE_PEGASUS_SEEDS,      $8e, $05, $8f, $05, $29, <TX_0940 ; Pegasus seeds
-	.db TREASURE_GALE_SEEDS,         $8e, $05, $8f, $05, $39, <TX_0940 ; Gale seeds
-	.db TREASURE_MYSTERY_SEEDS,      $8e, $05, $8f, $05, $49, <TX_0940 ; Mystery seeds
+	.db TREASURE_EMBER_SEEDS,        $8e, $02, $8f, $02, $09, <TX_0940 ; Ember seeds
+	.db TREASURE_SCENT_SEEDS,        $8e, $02, $8f, $03, $19, <TX_0940 ; Scent seeds
+	.db TREASURE_PEGASUS_SEEDS,      $8e, $02, $8f, $01, $29, <TX_0940 ; Pegasus seeds
+	.db TREASURE_GALE_SEEDS,         $8e, $02, $8f, $01, $39, <TX_0940 ; Gale seeds
+	.db TREASURE_MYSTERY_SEEDS,      $8e, $02, $8f, $00, $49, <TX_0940 ; Mystery seeds
 .else
 	.db TREASURE_EMBER_SEEDS,        $8a, $05, $83, $02, $01, <TX_0940 ; Ember seeds
 	.db TREASURE_SCENT_SEEDS,        $8a, $05, $84, $03, $01, <TX_0940 ; Scent seeds
@@ -365,10 +366,10 @@ treasureDisplayData_magnetGlove:
 treasureDisplayData_slingshot:
 .ifdef WIDE_INVENTORY_SPRITES
 	.db TREASURE_EMBER_SEEDS,        $8a, $01, $8b, $02, $0a, <TX_09_SLINGSHOT
-	.db TREASURE_SCENT_SEEDS,        $8a, $01, $8b, $02, $1a, <TX_09_SLINGSHOT
-	.db TREASURE_PEGASUS_SEEDS,      $8a, $01, $8b, $02, $2a, <TX_09_SLINGSHOT
-	.db TREASURE_GALE_SEEDS,         $8a, $01, $8b, $02, $3a, <TX_09_SLINGSHOT
-	.db TREASURE_MYSTERY_SEEDS,      $8a, $01, $8b, $02, $4a, <TX_09_SLINGSHOT
+	.db TREASURE_SCENT_SEEDS,        $8a, $01, $8b, $03, $1a, <TX_09_SLINGSHOT
+	.db TREASURE_PEGASUS_SEEDS,      $8a, $01, $8b, $01, $2a, <TX_09_SLINGSHOT
+	.db TREASURE_GALE_SEEDS,         $8a, $01, $8b, $01, $3a, <TX_09_SLINGSHOT
+	.db TREASURE_MYSTERY_SEEDS,      $8a, $01, $8b, $00, $4a, <TX_09_SLINGSHOT
 .else
 	.db TREASURE_EMBER_SEEDS,        $81, $04, $83, $02, $01, <TX_09_SLINGSHOT
 	.db TREASURE_SCENT_SEEDS,        $81, $04, $84, $03, $01, <TX_09_SLINGSHOT
@@ -380,10 +381,10 @@ treasureDisplayData_slingshot:
 treasureDisplayData_hyperSlingshot:
 .ifdef WIDE_INVENTORY_SPRITES
 	.db TREASURE_EMBER_SEEDS,        $8c, $00, $8d, $02, $0b, <TX_09_HYPERSLINGSHOT
-	.db TREASURE_SCENT_SEEDS,        $8c, $00, $8d, $02, $1b, <TX_09_HYPERSLINGSHOT
-	.db TREASURE_PEGASUS_SEEDS,      $8c, $00, $8d, $02, $2b, <TX_09_HYPERSLINGSHOT
-	.db TREASURE_GALE_SEEDS,         $8c, $00, $8d, $02, $3b, <TX_09_HYPERSLINGSHOT
-	.db TREASURE_MYSTERY_SEEDS,      $8c, $00, $8d, $02, $4b, <TX_09_HYPERSLINGSHOT
+	.db TREASURE_SCENT_SEEDS,        $8c, $00, $8d, $03, $1b, <TX_09_HYPERSLINGSHOT
+	.db TREASURE_PEGASUS_SEEDS,      $8c, $00, $8d, $01, $2b, <TX_09_HYPERSLINGSHOT
+	.db TREASURE_GALE_SEEDS,         $8c, $00, $8d, $01, $3b, <TX_09_HYPERSLINGSHOT
+	.db TREASURE_MYSTERY_SEEDS,      $8c, $00, $8d, $00, $4b, <TX_09_HYPERSLINGSHOT
 .else
 	.db TREASURE_EMBER_SEEDS,        $81, $05, $83, $02, $01, <TX_09_HYPERSLINGSHOT
 	.db TREASURE_SCENT_SEEDS,        $81, $05, $84, $03, $01, <TX_09_HYPERSLINGSHOT

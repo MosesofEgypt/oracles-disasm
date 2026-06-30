@@ -262,12 +262,10 @@ begin:
 	ld a,$00
 	jr nz,+
 
-.ifndef ENABLE_RING_REDUX
 	; Check GBA Mode
 	inc a
 	bit 0,b
 	jr z,+
-.endif
 	ld a,$ff
 +
 	ldh (<hGameboyType),a
@@ -1080,6 +1078,9 @@ copyMemoryBc:
 clearOam:
 	xor a
 	ldh (<hOamTail),a
+.ifdef WIDE_INVENTORY_SPRITES
+	ld (wEquippedItemOamTail),a
+.endif
 	ld h, wOam>>8
 	ld b,$e0
 -
@@ -5716,6 +5717,10 @@ checkReloadStatusBarGraphics:
 	jr c,+
 	ld a,UNCMP_GFXH_03
 +
+.ifdef WIDE_INVENTORY_SPRITES
+	call loadUncompressedGfxHeader
+	ld a,UNCMP_GFXH_ITEM_ICONS_EQUIPPED_EXT
+.endif
 	jp loadUncompressedGfxHeader
 
 ;;

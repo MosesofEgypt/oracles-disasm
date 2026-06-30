@@ -142,9 +142,11 @@ tileReplacement_group0Mapf6:
 
 ; Open GBA shop
 tileReplacement_group0Mapc5:
+.ifndef ADVANCE_SHOP_ALWAYS_OPEN
 	ldh a,(<hGameboyType)
 	rlca
 	ret nc
+.endif
 	ld hl,wRoomLayout+$14
 	ld (hl),$ea
 	ret

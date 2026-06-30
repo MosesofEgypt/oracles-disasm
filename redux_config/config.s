@@ -40,6 +40,10 @@
 		; determines whether link's max heart count is doubled to 32.
 		.define ENABLE_DOUBLE_HEART_CAP			1
 	.endif
+	.ifndef ADVANCE_SHOP_ALWAYS_OPEN
+		; determines whether the advance shop is open even on GBC
+		.define ADVANCE_SHOP_ALWAYS_OPEN			1
+	.endif
 	.ifndef NEW_GAME_PLUS_NEEDS_COMPLETION
 		; determines whether a NG+ file can only be started from a completed file.
 		.define NEW_GAME_PLUS_NEEDS_COMPLETION	1

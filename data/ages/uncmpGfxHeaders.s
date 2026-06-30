@@ -24,6 +24,7 @@ uncmpGfxHeaderTable:
 	.dw uncmpGfxHeader_foolsOre
 
 .ifdef WIDE_INVENTORY_SPRITES
+	.dw uncmpGfxHeader_itemIconsEquippedExt
 	.dw uncmpGfxHeader_itemIconsWide
 	.dw uncmpGfxHeader_boomerang
 	.dw uncmpGfxHeader_magicBoomerang
@@ -31,8 +32,8 @@ uncmpGfxHeaderTable:
 	.dw uncmpGfxHeader_powerGlove
 	.dw uncmpGfxHeader_feather
 	.dw uncmpGfxHeader_rocsCape
-	.dw uncmpGfxHeader_magnetGlovesNorth
 	.dw uncmpGfxHeader_magnetGlovesSouth
+	.dw uncmpGfxHeader_magnetGlovesNorth
 	.dw uncmpGfxHeader_switchHookL1
 	.dw uncmpGfxHeader_switchHookL2
 	.dw uncmpGfxHeader_swordL1
@@ -340,6 +341,11 @@ uncmpGfxHeader3f:
 
 
 .ifdef WIDE_INVENTORY_SPRITES
+uncmpGfxHeader_itemIconsEquippedExt:
+	; TODO: fix this shit
+	m_GfxHeaderRam w4ItemIconGfxExt, $8000, $04
+	m_GfxHeaderEnd
+
 uncmpGfxHeader_itemIconsWide:
 	m_GfxHeader spr_item_icons_wide, $8001
 	m_GfxHeaderEnd
@@ -369,12 +375,12 @@ uncmpGfxHeader_rocsCape:
 	m_GfxHeader spr_item_icons_wide_feather_l2, $8081
 	m_GfxHeaderEnd
 
-uncmpGfxHeader_magnetGlovesNorth:
+uncmpGfxHeader_magnetGlovesSouth:
 	m_GfxHeader spr_item_icons_wide, $8321, $04, $320
 	m_GfxHeaderEnd
 
-uncmpGfxHeader_magnetGlovesSouth:
-	m_GfxHeader spr_item_icons_wide_magnet_glove_s, $8321
+uncmpGfxHeader_magnetGlovesNorth:
+	m_GfxHeader spr_item_icons_wide_magnet_glove_n, $8321
 	m_GfxHeaderEnd
 
 uncmpGfxHeader_switchHookL1:

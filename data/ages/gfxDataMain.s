@@ -533,7 +533,7 @@
 		m_GfxData spr_item_icons_wide_boomerang_l2
 		m_GfxData spr_item_icons_wide_bracelet_l2
 		m_GfxData spr_item_icons_wide_feather_l2
-		m_GfxData spr_item_icons_wide_magnet_glove_s
+		m_GfxData spr_item_icons_wide_magnet_glove_n
 		m_GfxData spr_item_icons_wide_seeds_sprite
 		m_GfxData spr_item_icons_wide_shield_l2
 		m_GfxData spr_item_icons_wide_shield_l3
@@ -543,6 +543,11 @@
 		m_GfxData spr_item_icons_wide_songs
 		m_GfxData spr_item_icons_wide_flute_partners
 		m_GfxData gfx_item_icons_wide_fixup_tiles
+		m_GfxData spr_item_icons_wide_rod_hud
+		m_GfxData spr_item_icons_wide_satchel_hud
+		m_GfxData spr_item_icons_wide_shooter_hud
+		m_GfxData spr_item_icons_wide_slingshot_l1_hud
+		m_GfxData spr_item_icons_wide_slingshot_l2_hud
 		.ifdef ENABLE_NEW_GAME_PLUS
 			m_GfxData spr_item_icons_life_vial
 			m_GfxData spr_item_icons_sword_shield_l4

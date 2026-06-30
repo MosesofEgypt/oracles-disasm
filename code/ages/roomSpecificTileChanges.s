@@ -150,9 +150,11 @@ roomTileChangerCodeGroup7Data:
 ;;
 ; Opens advance shop
 tileReplacement_group1Map58:
+.ifndef ADVANCE_SHOP_ALWAYS_OPEN
 	ldh a,(<hGameboyType)
 	rlca
 	ret nc
+.endif
 	ld hl,wRoomLayout + $35
 	ld (hl),$de
 	ret
