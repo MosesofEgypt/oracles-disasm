@@ -3079,13 +3079,15 @@ hideStatusBar_body:
 	ld a,UNCMP_GFXH_03
 	call loadUncompressedGfxHeader
 
-	; Clear the first 4 oam objects, if exactly that number has been drawn?
-	; Must be the items on the status bar.
-	ld b,$10
-	ldh a,(<hOamTail)
-	cp b
+	; Clear the items on the status bar
+	ld a,(<wEquippedItemOamTail)
+	or a
+	ld b,a
 	ret nz
 
+	xor a
+	ld (wEquippedItemOamTail),a
+	ldh (<hOamTail),a
 	ld a,$e0
 	ld hl,wOam
 	jp fillMemory
@@ -3857,6 +3859,9 @@ updateStatusBar_body:
 	+
 .endif
 
+	ld a,l
+	ld (wEquippedItemOamTail),a
+
 	; we don't need to make sprite blockers if the menu is opened
 	ld a,(wOpenedMenuType)
 	or a
@@ -3891,28 +3896,26 @@ updateStatusBar_body:
 	call @createItemSpriteBlockers
 	ld a,l
 	ldh (<hOamTail),a
-.ifdef WIDE_INVENTORY_SPRITES
 	ld (wEquippedItemOamTail),a
-.endif
 	pop bc
 	pop de
 	ret
 
 @createItemSpriteBlockers:
 .ifdef WIDE_INVENTORY_SPRITES
-	ldh a,(<hOamTail)
+	ld a,(wEquippedItemOamTail)
 	cp $28
 	ret nc
 
 	ld a,b
 	call @createItemSpriteBlocker
-	ldh a,(<hOamTail)
+	ld a,(wEquippedItemOamTail)
 	cp $28
 	ret nc
 
 	ld a,c
 	call @createItemSpriteBlocker
-	ldh a,(<hOamTail)
+	ld a,(wEquippedItemOamTail)
 	cp $28
 	ret nc
 
@@ -3963,11 +3966,9 @@ updateStatusBar_body:
 
 .ifndef ONE_HANDED_BIGGORON_SWORD
 @biggoronSword:
-.ifdef WIDE_INVENTORY_SPRITES
 	ld a,$10
 	ld (wEquippedItemOamTail),a
 	ldh (<hOamTail),a
-.endif
 	ld hl,wOam
 	ld de,@oamData
 	ld b,$10
