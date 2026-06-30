@@ -612,17 +612,37 @@
 .ifdef WIDE_INVENTORY_SPRITES
 	m_section_free Gfx_gfxExtSection ALIGN $20
 		m_GfxData spr_item_icons_wide
+		m_GfxData spr_item_icons_wide_boomerang_l2
+		m_GfxData spr_item_icons_wide_bracelet_l2
+		m_GfxData spr_item_icons_wide_feather_l2
+		m_GfxData spr_item_icons_wide_magnet_glove_n
+		m_GfxData spr_item_icons_wide_seeds_sprite
+		m_GfxData spr_item_icons_song_sprites
+		m_GfxData spr_item_icons_wide_shield_l2
+		m_GfxData spr_item_icons_wide_shield_l3
+		m_GfxData spr_item_icons_wide_sword_l2
+		m_GfxData spr_item_icons_wide_sword_l3
+		m_GfxData spr_item_icons_wide_switch_hook_l2
+		m_GfxData spr_item_icons_wide_songs
+		m_GfxData spr_item_icons_wide_flute_partners
+		m_GfxData gfx_item_icons_wide_fixup_tiles
+		m_GfxData spr_item_icons_wide_rod_hud
+		m_GfxData spr_item_icons_wide_satchel_hud
+		m_GfxData spr_item_icons_wide_shooter_hud
+		m_GfxData spr_item_icons_wide_slingshot_l1_hud
+		m_GfxData spr_item_icons_wide_slingshot_l2_hud
 		.ifdef ENABLE_NEW_GAME_PLUS
-			m_GfxData spr_item_icon_life_vial
-			m_GfxData spr_item_icon_wide_sword_l4
-			m_GfxData spr_item_icon_wide_shield_l4
+			m_GfxData spr_item_icons_life_vial
+			m_GfxData spr_item_icons_sword_shield_l4
+			m_GfxData spr_item_icons_wide_sword_l4
+			m_GfxData spr_item_icons_wide_shield_l4
 		.endif
 	.ends
 .else
 .ifdef ENABLE_NEW_GAME_PLUS
 	m_section_free Gfx_gfxExtSection ALIGN $20
 		m_GfxData spr_item_icons_sword_shield_l4
-		m_GfxData spr_item_icon_life_vial_slim
+		m_GfxData spr_item_icons_life_vial_slim
 	.ends
 .endif
 .endif

@@ -4494,7 +4494,7 @@ drawTreasureExtraTiles:
 
 ; Print magnet glove polarity (overwrites "S" with "N" if necessary)
 @val03:
-.ifdef WIDE_INVENTORY_SPRITES
+.ifndef WIDE_INVENTORY_SPRITES
 	; CROSSITEMS: Return if we're drawing on the status bar rather than the inventory
 	ld a,c
 	cp $07
@@ -5487,10 +5487,10 @@ runInventoryMenu:
 	call clearOam
 .ifdef WIDE_INVENTORY_SPRITES
 	ld a,$18
-	ld (wEquippedItemOamTail),a
 .else
 	ld a,$10
 .endif
+	ld (wEquippedItemOamTail),a
 	ldh (<hOamTail),a
 	ld a,$04
 	ld ($ff00+R_SVBK),a
@@ -5586,6 +5586,10 @@ inventoryMenuState0:
 .ifdef ENABLE_NEW_GAME_PLUS
 	ld a,UNCMP_GFXH_LIFE_VIAL_INV
 	call loadUncompressedGfxHeader
+.ifndef WIDE_INVENTORY_SPRITES
+	ld a,UNCMP_GFXH_L4_SWORD_SHIELD
+	call loadUncompressedGfxHeader
+.endif
 .endif
 
 .ifdef WIDE_INVENTORY_SPRITES
@@ -11363,10 +11367,10 @@ runRingMenu:
 	call clearOam
 .ifdef WIDE_INVENTORY_SPRITES
 	ld a,$18
-	ld (wEquippedItemOamTail),a
 .else
 	ld a,$10
 .endif
+	ld (wEquippedItemOamTail),a
 	ldh (<hOamTail),a
 
 	ld hl,wTextboxFlags

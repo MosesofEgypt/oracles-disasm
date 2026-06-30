@@ -1078,9 +1078,7 @@ copyMemoryBc:
 clearOam:
 	xor a
 	ldh (<hOamTail),a
-.ifdef WIDE_INVENTORY_SPRITES
 	ld (wEquippedItemOamTail),a
-.endif
 	ld h, wOam>>8
 	ld b,$e0
 -
@@ -1947,11 +1945,7 @@ _mainLoop:
 	sub (BTN_A | BTN_B | BTN_START | BTN_SELECT)
 	jp z,resetGame
 +
-.ifdef WIDE_INVENTORY_SPRITES
 	ld a,(wEquippedItemOamTail)
-.else
-	ld a,$10
-.endif
 	ldh (<hOamTail),a
 	ld h,>wThreadStateBuffer
 	ld a,<wThreadStateBuffer
@@ -10166,6 +10160,16 @@ interactionCheckAdjacentTileIsSolid:
 	ld e,Interaction.angle
 	ld a,(de)
 	call convertAngleDeToDirection
+	jr ++
+
+;;
+; Unused in ages
+;
+interactionCheckAdjacentTileIsSolid_viaDirection:
+	ld e,Interaction.direction
+	ld a,(de)
+	sra a
+++
 	ld hl,@dirOffsets
 	rst_addAToHl
 	call objectGetShortPosition
