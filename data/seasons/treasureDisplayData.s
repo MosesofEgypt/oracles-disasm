@@ -52,7 +52,7 @@ treasureDisplayData_standard:
 	.db $00,                         $07, $00, $07, $00, $00, <TX_0900 ; X TREASURE_SWORD
 	.db $06,                         $07, $00, $07, $00, $00, <TX_0900 ; X TREASURE_BOOMERANG
 .ifdef WIDE_INVENTORY_SPRITES
-	.db TREASURE_ROD_OF_SEASONS,     $ad, $03, $ae, $01, $82, <TX_0941 ; TREASURE_ROD_OF_SEASONS (0x07)
+	.db TREASURE_ROD_OF_SEASONS,     $a4, $03, $a5, $01, $82, <TX_0941 ; TREASURE_ROD_OF_SEASONS (0x07)
 .else
 	.db TREASURE_ROD_OF_SEASONS,     $98, $02, $00, $00, $02, <TX_0941 ; TREASURE_ROD_OF_SEASONS
 .endif

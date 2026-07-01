@@ -5713,7 +5713,8 @@ checkReloadStatusBarGraphics:
 +
 .ifdef WIDE_INVENTORY_SPRITES
 	call loadUncompressedGfxHeader
-	ld a,UNCMP_GFXH_ITEM_ICONS_EQUIPPED_EXT
+	ld a,(wEquippedIconGfxExtToUse)
+	add UNCMP_GFXH_ITEM_ICONS_EQUIPPED_EXT_1
 .endif
 	jp loadUncompressedGfxHeader
 

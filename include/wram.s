@@ -405,6 +405,9 @@ wEquippedItemOamTail:
 	; end of the OAM for just the hud gfx
 	db
 
+wEquippedIconGfxExtToUse:
+	db
+
 ; $c580-$c5af unused? (unless using ENABLE_MULTI_RING or
 ;                      ENABLE_RING_REDUX or ENABLE_NEW_GAME_PLUS)
 

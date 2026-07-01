@@ -254,6 +254,22 @@ decideItemDropForBrokenTile:
 	call decideItemDrop
 	jr z,@done
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld a,ITEM_DROP_HEART+1
+	cp c
+	jr nc,+
+		call getIsNewGamePlus
+		jr z,+
+			; replace health drops from tile breaks with an enemy
+			; ONLY do this for grass though since it makes more
+			; sense for the enemies we'll be spawning to hide in it
+			ldh a,(<hFF8F)
+			cp BREAKABLETILESOURCE_SHOVEL
+			jr z,+
+				ld c,ITEM_DROP_100_RUPEES_OR_ENEMY|$80
+	+
+.endif
+
 	call getFreePartSlot
 	jr nz,@done
 	ld (hl),PART_ITEM_DROP
@@ -276,6 +292,9 @@ decideItemDropForBrokenTile:
 
 	ld l,Part.var03
 	ld a,c
+.ifdef ENABLE_NEW_GAME_PLUS
+	and $7f
+.endif
 	cp ITEM_DROP_100_RUPEES_OR_ENEMY
 	jr nz,+
 	ld (hl),$02 ; [var03]

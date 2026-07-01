@@ -45,11 +45,25 @@ partCode01:
 			add $02
 			ld (de),a
 	+
+	; if the high bit is set, it means ALWAYS make it an enemy
+	cp ITEM_DROP_100_RUPEES_OR_ENEMY|$80
+	jr nz,+
+		call getRandomNumber_noPreserveVars
+		; since we're replacing all health drops with enemies, we
+		; add a 50% chance to not spawn to keep the enemy count down
+		bit 7,a
+		jp z,partDelete
+		jp itemDrop_spawnEnemy
+	+
 .endif
 	cp ITEM_DROP_100_RUPEES_OR_ENEMY
 	jr nz,@normalItem
 
 	call getRandomNumber_noPreserveVars
+.ifdef ENABLE_NEW_GAME_PLUS
+	; remove high bit so we can use it to indicate this is a NG+ enemy spawn
+	and $7f
+.endif
 	cp $e0
 	jp c,itemDrop_spawnEnemy
 .ifdef ROM_SEASONS
@@ -409,6 +423,12 @@ itemDrop_spawnEnemy:
 	ld a,c
 	and $07
 	ld hl,@enemiesToSpawn
+.ifdef ENABLE_NEW_GAME_PLUS
+	bit 7,c
+	jr z,++
+		ld hl,@enemiesToSpawnFromGrass
+	++
+.endif
 	rst_addAToHl
 	ld b,(hl)
 +
@@ -424,6 +444,10 @@ itemDrop_spawnEnemy:
 @delete:
 	jp partDelete
 
+.ifdef ENABLE_NEW_GAME_PLUS
+@enemiesToSpawnFromGrass:
+	.db ENEMY_SWORD_MOBLIN,   ENEMY_SWORD_DARKNUT
+.endif
 @enemiesToSpawn:
 	.db ENEMY_ROPE,   ENEMY_ROPE,   ENEMY_ROPE,   ENEMY_BEETLE
 	.db ENEMY_BEETLE, ENEMY_BEETLE, ENEMY_BEETLE, ENEMY_BEETLE

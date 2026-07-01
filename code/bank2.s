@@ -3813,7 +3813,20 @@ updateStatusBar_body:
 		add $08
 		add e
 		ldi (hl),a
+		ld a,(wEquippedIconGfxExtToUse)
+		push bc
+		ld b,a
+		or a
 		ld a,$50
+		jr z,++
+			; first extended section in use, so use second
+			add $0e
+			dec b
+			jr z,++
+				; second extended section in use, so use third
+				add $18
+		++
+		pop bc
 		ldi (hl),a
 		ld a,(wBItemSpriteAttribute3)
 		ldi (hl),a
@@ -3852,7 +3865,20 @@ updateStatusBar_body:
 		add $08
 		add c
 		ldi (hl),a
+		ld a,(wEquippedIconGfxExtToUse)
+		push bc
+		ld b,a
+		or a
 		ld a,$4e
+		jr z,++
+			; first extended section in use, so use second
+			add $0e
+			dec b
+			jr z,++
+				; second extended section in use, so use third
+				add $18
+		++
+		pop bc
 		ldi (hl),a
 		ld a,(wAItemSpriteAttribute3)
 		ldi (hl),a
@@ -5007,7 +5033,7 @@ loadItemIconGfx:
 	ld c,b
 	ld hl,spr_item_icons_wide_rod_hud
 	ld b,:spr_item_icons_wide_rod_hud
-	ld a,$ad ; left
+	ld a,$a4 ; left
 	cp c
 	jr nz,+
 		ld a,(wObtainedSeasons)
@@ -5019,7 +5045,7 @@ loadItemIconGfx:
 		jp copy20BytesFromBank
 	+
 
-	ld a,$ae ; middle
+	ld a,$a5 ; middle
 	cp c
 	jr nz,+
 		ld a,(wObtainedSeasons)
@@ -5030,7 +5056,7 @@ loadItemIconGfx:
 		jp copy20BytesFromBank
 	+
 
-	ld a,$af ; right
+	ld a,$a6 ; right
 	cp c
 	jr nz,+
 		ld a,(wObtainedSeasons)

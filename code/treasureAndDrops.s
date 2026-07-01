@@ -905,7 +905,11 @@ decideItemDrop_body:
 	jr z,checkItemDropAvailable_body@done
 
 	ld a,c
+.ifdef ENABLE_BUGFIXES
+	and $0f
+.else
 	and $1f
+.endif
 	ld hl,itemDropSetTable
 	rst_addDoubleIndex
 	rst_derefHl
@@ -1612,8 +1616,8 @@ itemDropSetF:
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 
 ; Data format (per byte):
-;   Bits 0-2: Index for itemDropProbabilityTable
-;   Bits 3-7: Index for itemDropSetTable
+;   Bits 0-4: Index for itemDropSetTable
+;   Bits 5-7: Index for itemDropProbabilityTable
 ; Or it can be $ff for no item drop.
 ; Comments show changes in Seasons
 itemDropTables:
@@ -1634,8 +1638,6 @@ itemDropTables:
 	.db $ff $ff $ff $ff $ff $ff $ff $ff
 	.db $ef $ef $ef $ef $ef $ef $ef $ef
 	.db $ff $ff $ff $ff $ff $ff $ff $ff ; index 6: $ff -> $ef
-	.db $ff $41 $87 $65 $86 $8e $a7 $ae
-	.db $a0 $63 $69 $a5 $6e $ff $ff $ff
 .else
 	.db $ff $ef $ff $ff $ff $ff $ff $ff
 	.db $a6 $8e $86 $c1 $ac $86 $ff $ff
@@ -1653,9 +1655,11 @@ itemDropTables:
 	.db $ff $ff $ff $ff $ff $ff $ff $ff
 	.db $ef $ef $ef $ef $ef $ef $ef $ef
 	.db $ff $ff $ff $ff $ff $ff $ef $ff
+.endif
+	; indices $80 and higher are breakable tile drops
+	; theres no difference in them both between games
 	.db $ff $41 $87 $65 $86 $8e $a7 $ae
 	.db $a0 $63 $69 $a5 $6e $ff $ff $ff
-.endif
 
 ;;
 ; @param	a	Treasure index
