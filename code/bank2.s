@@ -291,6 +291,10 @@ fileSelectMode1:
 	; Selected a non-empty file
 	call incFileSelectMode2
 	call loadFile
+.ifdef ENABLE_MULTI_RING
+	callab bank1.updateRingEquipStatuses
+	callab bank1.processDmgPaletteUpdate
+.endif
 	ld a,UNCMP_GFXH_16
 	jp loadUncompressedGfxHeader
 
@@ -5670,11 +5674,18 @@ fixupWideItemGfx:
 	ld hl,itemGfxIconFixupInfo
 	-
 		ld b,>wc600Block
-		ld c,(hl)
-		inc hl
+		ldi a,(hl)
+		ld c,a
+
+		; increment the level if necessary
+		cp <wSwordLevel
+		jr z,+
+			cp <wShieldLevel
+		+
 
 		; get the item level\subid
 		ld a,(bc)
+		call z,victoryRingIncLevel
 		ld c,a
 
 		push hl
@@ -5701,8 +5712,7 @@ fixupWideItemGfx:
 
 	pop bc
 	pop hl
-	call fixupWideItemGfx_harpOfAges
-	ret
+	jp fixupWideItemGfx_harpOfAges
 
 itemGfxIconFixupInfo:
     .db <wBoomerangLevel
@@ -6489,6 +6499,9 @@ inventoryMenuState3:
 	ret c
 
 @subState2:
+.ifdef WIDE_INVENTORY_SPRITES
+	call fixupWideItemGfx
+.endif
 	ld a,$c7
 	ld (wGfxRegs2.WINX),a
 	xor a

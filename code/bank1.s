@@ -3531,15 +3531,8 @@ func_5a60:
 	call checkUpdateDungeonMinimap
 	jp func_593a
 
-;;
-standardGameState:
-.ifdef ENABLE_MULTI_RING
-	call updateRingEquipStatuses
-.endif
-.ifdef ENABLE_NEW_GAME_PLUS
-	call updateRingsDisabled
-.endif
 .ifdef ENABLE_RING_REDUX
+processDmgPaletteUpdate:
 	; record whether the gameboy ring is equipped or not so we can
 	; check if we need to force the palettes to reload instantly
 	ld a,DMG_COLOR_RING
@@ -3551,15 +3544,26 @@ standardGameState:
 	+
 
 	cp (hl)
-	jr z,+
-		; ring status changed. mark palettes as dirty
-		ld (hl),a
-		ld a,$ff
-		ldh (<hDirtyBgPalettes),a
-		ldh (<hDirtySprPalettes),a
-	+
+	ret z
+
+	; ring status changed. mark palettes as dirty
+	ld (hl),a
+	ld a,$ff
+	ldh (<hDirtyBgPalettes),a
+	ldh (<hDirtySprPalettes),a
+	ret
+.endif
+
+;;
+standardGameState:
+.ifdef ENABLE_MULTI_RING
+	call updateRingEquipStatuses
+.endif
+.ifdef ENABLE_NEW_GAME_PLUS
+	call updateRingsDisabled
 .endif
 .ifdef ENABLE_RING_REDUX
+	call processDmgPaletteUpdate
 	call updateAzuchu
 	call updateColorRingPalettes
 .endif
