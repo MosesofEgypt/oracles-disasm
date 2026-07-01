@@ -261,14 +261,24 @@ refreshDirtyPalettes:
 
 @dmgColorTable:
 	; colors are RGB555 LE with high bit ignored, and R in lower bits
+	; NOTE: leaving the full palette in here in case i decide
+	;       it's necessary to go back to 16 instead of 8.
 	.dw (( 1<<10)|( 5<<5)| 2)
+	;.dw (( 1<<10)|( 7<<5)| 2)
 	.dw (( 1<<10)|( 8<<5)| 3)
+	;.dw (( 1<<10)|( 9<<5)| 4)
 	.dw (( 2<<10)|(11<<5)| 5)
+	;.dw (( 3<<10)|(12<<5)| 7)
 	.dw (( 4<<10)|(13<<5)| 9)
+	;.dw (( 5<<10)|(15<<5)|11)
 	.dw (( 6<<10)|(16<<5)|14)
+	;.dw (( 6<<10)|(16<<5)|15)
 	.dw (( 7<<10)|(17<<5)|16)
+	;.dw (( 7<<10)|(18<<5)|17)
 	.dw (( 8<<10)|(19<<5)|18)
+	;.dw (( 8<<10)|(21<<5)|19)
 	.dw (( 9<<10)|(22<<5)|21)
+	;.dw ((10<<10)|(24<<5)|22)
 
 .endif
 
