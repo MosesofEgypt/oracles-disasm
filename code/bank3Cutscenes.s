@@ -462,6 +462,10 @@ intro_japaneseOnlyScreen:
 
 ;;
 intro_capcomScreen:
+	ld hl,(wKeysJustPressed)
+	bit BTN_BIT_START,(hl)
+	jp nz,@instantExit
+
 	ld a,(wIntroVar)
 	rst_jumpTable
 	.dw @state0
@@ -504,7 +508,7 @@ intro_capcomScreen:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-
+@instantExit
 	xor a
 	ld hl,wIntroStage
 	ld (hl),$02

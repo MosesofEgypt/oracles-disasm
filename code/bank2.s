@@ -271,6 +271,13 @@ fileSelectMode1:
 		ld a,SND_SELECTITEM
 		jp playSound
 	+
+	bit BTN_BIT_B,a
+	jp z,+
+		; press B to go back to intro
+		xor a
+		ldh (<hIntroInputsEnabled),a
+		jp startGame
+	+
 .endif
 	call fileSelectUpdateInput
 	jr nz,++
@@ -13094,7 +13101,27 @@ saveQuitMenu_state1:
 	; A pressed
 	ld a,(wSaveQuitMenu.cursorIndex)
 	or a
+
+.ifdef ENABLE_NEW_GAME_PLUS
+	jr z,+
+		; cannot save in NG+ dungeons
+		call getIsNewGamePlus
+		jr z,++
+			ld a,(wDungeonIndex)
+			cp $ff ; overworld
+			jr z,++
+			.ifdef ROM_AGES
+				cp $0e ; lots of non-dungeon areas
+			.endif
+			jr z,++
+				ld a,SND_ERROR
+				jp playSound
+		++
+		call saveFile
+	+
+.else
 	call nz,saveFile ; Save for options 2 and 3
+.endif
 
 	ld a,$02
 	ld (wSaveQuitMenu.state),a

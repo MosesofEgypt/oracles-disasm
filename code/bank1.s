@@ -3417,6 +3417,7 @@ initializeGame:
 	ldd a,(hl)
 	call getHalfDecimalOfA
 	ld (hl),a
+	ld l,<wLinkHealth
 .endif
 	; Get wLinkMaxHealth
 	inc l
