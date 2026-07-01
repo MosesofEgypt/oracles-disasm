@@ -3814,19 +3814,12 @@ updateStatusBar_body:
 		add e
 		ldi (hl),a
 		ld a,(wEquippedIconGfxExtToUse)
-		push bc
-		ld b,a
 		or a
 		ld a,$50
 		jr z,++
 			; first extended section in use, so use second
 			add $0e
-			dec b
-			jr z,++
-				; second extended section in use, so use third
-				add $18
 		++
-		pop bc
 		ldi (hl),a
 		ld a,(wBItemSpriteAttribute3)
 		ldi (hl),a
@@ -3866,19 +3859,12 @@ updateStatusBar_body:
 		add c
 		ldi (hl),a
 		ld a,(wEquippedIconGfxExtToUse)
-		push bc
-		ld b,a
 		or a
 		ld a,$4e
 		jr z,++
 			; first extended section in use, so use second
 			add $0e
-			dec b
-			jr z,++
-				; second extended section in use, so use third
-				add $18
 		++
-		pop bc
 		ldi (hl),a
 		ld a,(wAItemSpriteAttribute3)
 		ldi (hl),a

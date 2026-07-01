@@ -19,7 +19,6 @@ uncmpGfxHeaderTable:
 .ifdef WIDE_INVENTORY_SPRITES
 	.dw uncmpGfxHeader_itemIconsEquippedExt1
 	.dw uncmpGfxHeader_itemIconsEquippedExt2
-	.dw uncmpGfxHeader_itemIconsEquippedExt3
 	.dw uncmpGfxHeader_itemIconsWide
 	.dw uncmpGfxHeader_boomerang
 	.dw uncmpGfxHeader_magicBoomerang
@@ -309,10 +308,6 @@ uncmpGfxHeader_itemIconsEquippedExt1:
 
 uncmpGfxHeader_itemIconsEquippedExt2:
 	m_GfxHeaderRam w4ItemIconGfxExt, $85c1, $04
-	m_GfxHeaderEnd
-
-uncmpGfxHeader_itemIconsEquippedExt3:
-	m_GfxHeaderRam w4ItemIconGfxExt, $8741, $04
 	m_GfxHeaderEnd
 
 uncmpGfxHeader_itemIconsWide:

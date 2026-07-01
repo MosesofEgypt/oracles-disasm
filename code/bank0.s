@@ -5713,6 +5713,20 @@ checkReloadStatusBarGraphics:
 +
 .ifdef WIDE_INVENTORY_SPRITES
 	call loadUncompressedGfxHeader
+	; only load the ext hud gfx if necessary
+	ld a,(wAItemDisplayMode)
+	inc a
+	jr z,++
+		bit 7,a
+		jr nz,+
+			++
+			ld a,(wBItemDisplayMode)
+			inc a
+			ret z
+			bit 7,a
+			ret z
+
+	+
 	ld a,(wEquippedIconGfxExtToUse)
 	add UNCMP_GFXH_ITEM_ICONS_EQUIPPED_EXT_1
 .endif
