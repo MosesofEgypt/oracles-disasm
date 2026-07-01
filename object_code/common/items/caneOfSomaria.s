@@ -11,6 +11,13 @@ itemCode04:
 	.dw @state2
 
 @state0:
+.ifdef ENABLE_RING_REDUX
+	; reset this
+	xor a
+	ld hl,wSwordBaseDamageCached
+	ldi (hl),a
+	ld (hl),a
+.endif
 .ifdef ROM_AGES
 	ld a,UNCMP_GFXH_AGES_1c
 .else

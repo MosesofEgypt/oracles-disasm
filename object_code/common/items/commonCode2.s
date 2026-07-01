@@ -224,6 +224,12 @@ itemCalculateSwordDamage:
 	ld e,Item.var3a
 	ld a,(de)
 .ifdef ENABLE_RING_REDUX
+	push hl
+	ld hl,wSwordBaseDamageCached
+	cp (hl)
+	ldi (hl),a
+	jr z,@done
+
 	ld e,a
 	; calculate the multipliers(divisor is 8, so 1.5x will be $0c)
 	ld a,$08
@@ -279,6 +285,9 @@ itemCalculateSwordDamage:
 	+
 	call applyCurseArmorDamageCap
 	ld e,Item.damage
+	ld (hl),a
+@done
+	pop hl
 	ld (de),a
 	ret
 .else

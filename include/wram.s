@@ -393,6 +393,12 @@ wRingsDisabledCounter: ; $c590
 wDmgRingEquippedPreviousFrame:
 	db
 
+wSwordBaseDamageCached:
+	db
+
+wSwordFinalDamageCached:
+	db
+
 .endif
 
 wEquippedItemOamTail:

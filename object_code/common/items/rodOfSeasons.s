@@ -8,6 +8,13 @@ itemCode07:
 	.dw @state1
 
 @state0:
+.ifdef ENABLE_RING_REDUX
+	; reset this
+	xor a
+	ld hl,wSwordBaseDamageCached
+	ldi (hl),a
+	ld (hl),a
+.endif
 	ld a,$01
 	ld (de),a
 	ld h,d
