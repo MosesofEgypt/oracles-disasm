@@ -446,7 +446,7 @@ itemDrop_spawnEnemy:
 
 .ifdef ENABLE_NEW_GAME_PLUS
 @enemiesToSpawnFromGrass:
-	.db ENEMY_SWORD_MOBLIN,   ENEMY_SWORD_DARKNUT
+	.db ENEMY_SWORD_DARKNUT
 .endif
 @enemiesToSpawn:
 	.db ENEMY_ROPE,   ENEMY_ROPE,   ENEMY_ROPE,   ENEMY_BEETLE

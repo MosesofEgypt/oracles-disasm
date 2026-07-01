@@ -77,6 +77,9 @@ ORACLE_REDUX_DEFINES =
 ifdef ENABLE_FULL_REDUX
 	ORACLE_REDUX_DEFINES += -D ENABLE_FULL_REDUX
 endif
+ifdef ENABLE_DX_TITLE_SCREEN
+	ORACLE_REDUX_DEFINES += -D ENABLE_DX_TITLE_SCREEN
+endif
 ifdef ENABLE_REDUX_EXTRAS
 	ORACLE_REDUX_DEFINES += -D ENABLE_REDUX_EXTRAS
 endif
@@ -162,6 +165,10 @@ PRECMP_GFX_FILES = $(shell find $(GFX_PRECMP_DIR)/common $(GFX_PRECMP_DIR)/$(GAM
 ifdef ENABLE_RING_REDUX
 # overriding ring gfx
 BIN_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name 'map_rings.bin')
+endif
+ifdef ENABLE_DX_TITLE_SCREEN
+PNG_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name 'spr_titlescreen_sprites.png')
+UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name 'spr_titlescreen_sprites.png')
 endif
 ifdef ENABLE_NEW_GAME_PLUS
 PNG_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/ngp -name '*.png')

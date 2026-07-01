@@ -522,11 +522,25 @@ intro_capcomScreen:
 	jp enableIntroInputs
 .endif
 
+.ifdef ENABLE_DX_TITLE_SCREEN
+titlescreenDXSprite:
+	.db $04
+	.db $66 $86 $48 $00
+	.db $66 $8e $4a $00
+	.db $66 $96 $4c $00
+	.db $66 $9e $4e $00
+.endif
+
 ;;
 intro_titlescreen:
 	call getRandomNumber_noPreserveVars
 	call @runState
 	call clearOam
+
+.ifdef ENABLE_DX_TITLE_SCREEN
+	ld hl,titlescreenDXSprite
+	call addSpritesToOam
+.endif
 
 .ifdef ROM_AGES
 	ld hl,bank3f.titlescreenMakuSeedSprite

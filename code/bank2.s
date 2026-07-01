@@ -5995,9 +5995,13 @@ inventoryMenuState1:
 @@unequipBiggoron:
 	ld c,l
 	ld l,<wInventoryB
-	xor a
+
+	; swap with the overflowed item
+	ld a,(wBiggoronSwordOverflowItem)
 	ldi (hl),a
 	ld (hl),a
+	xor a
+	ld (wBiggoronSwordOverflowItem),a
 	ld l,c
 	ld a,b
 	ld (de),a
@@ -6034,11 +6038,25 @@ inventoryMenuState1:
 	ld c,a
 	ld l,<wInventoryStorage
 -
+	ld a,<wInventoryStorage+$10
+	cp l
+	jr nz,+
+		; overflowing out of inventory.
+		; put in overflow location
+		ld a,c
+		ld (wBiggoronSwordOverflowItem),a
+		ret
+	+
 	ldi a,(hl)
 	or a
 	jr nz,-
 
+	; clear this
+	xor a
+	ld (wBiggoronSwordOverflowItem),a
+
 	dec l
+
 	ld (hl),c
 	ret
 

@@ -1063,7 +1063,7 @@ wUnusedc6fe: ; $c6fe/$c6f1
 	db
 .endif
 
-wUnusedc6ff: ; $c6ff/$c6f2
+wBiggoronSwordOverflowItem: ; $c6ff/$c6f2
 	db
 
 .ENDS
