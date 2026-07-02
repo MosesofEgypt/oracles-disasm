@@ -35,22 +35,15 @@ partCode01:
 	ld e,Part.subid
 	ld a,(de)
 .ifdef ENABLE_NEW_GAME_PLUS
-	; If this is a healing item, change it in NG+
+	; If this is a healing item, delete it in NG+
 	call getIsNewGamePlus
-	jr z,+
-		; change it to 1 rupees if it's a heart, or 5 if a fairy
-		cp $02
-		jr nc,+
-			xor $01
-			add $02
-			ld (de),a
-	+
+	jp nz,partDelete
 	; if the high bit is set, it means ALWAYS make it an enemy
 	cp ITEM_DROP_100_RUPEES_OR_ENEMY|$80
 	jr nz,+
 		call getRandomNumber_noPreserveVars
 		; since we're replacing all health drops with enemies, we
-		; add a 25% chance to not spawn to keep the enemy count down
+		; add a 75% chance to not spawn to keep the enemy count down
 		bit 7,a
 		jp z,partDelete
 		bit 6,a
