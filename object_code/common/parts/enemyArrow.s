@@ -36,8 +36,7 @@ partCode1a:
 	call partCommon_setPositionOffsetAndRadiusFromAngle
 .ifdef ENABLE_NEW_GAME_PLUS
 	ld hl,@ngpUpgradeTable
-	xor a	; indicate this is a weak projectile
-	call tryNgpUpgradeUncapped
+	call tryNgpUpgradeProjectileIgnoreSubids
 .endif
 	ld e,$c9
 	ld a,(de)
@@ -104,17 +103,11 @@ partCode1a:
 
 .ifdef ENABLE_NEW_GAME_PLUS
 @ngpUpgradeTable:
-	.dw @ngpUpgradeSubtable1
-	.dw @ngpUpgradeSubtable2
-	.dw @ngpUpgradeSubtable2
+	.dw @ngpProjectileUpgrades
+	.dw @ngpProjectileUpgrades
+	.dw @ngpProjectileUpgrades
 
-@ngpUpgradeSubtable1:
-	.dw @ngpProjectileUpgrades1
-	@ngpProjectileUpgrades1:
-		m_ngp_upgrade_d_s_term		06 SPEED_200
-
-@ngpUpgradeSubtable2:
-	.dw @ngpProjectileUpgrades2
-	@ngpProjectileUpgrades2:
-		m_ngp_upgrade_p_d_s_term	PALETTE_GOLD  08 SPEED_300
+	@ngpProjectileUpgrades:
+		m_ngp_upgrade_d_s			06 SPEED_300
+		m_ngp_upgrade_p_d_s_term	PALETTE_GOLD  08 SPEED_400
 .endif

@@ -5,7 +5,7 @@
 partCode19:
 partCode31:
 	jp nz,partDelete
-	ld e,$c4
+	ld e,Part.state
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -16,10 +16,14 @@ partCode31:
 	ld h,d
 	ld l,e
 	inc (hl)
-	ld l,$c6
+	ld l,Part.counter1
 	ld (hl),$08
-	ld l,$d0
-	ld (hl),$3c
+	ld l,Part.speed
+	ld (hl),SPEED_180
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld hl,@ngpUpgradeTable
+	call tryNgpUpgradeProjectileIgnoreSubids
+.endif
 	jp objectSetVisible81
 
 @state1:
@@ -27,7 +31,7 @@ partCode31:
 	ret nz
 	ld l,e
 	inc (hl)
-	ld l,$c2
+	ld l,Part.subid
 	bit 0,(hl)
 	jr z,+
 	ldh a,(<hFFB2)
@@ -35,12 +39,12 @@ partCode31:
 	ldh a,(<hFFB3)
 	ld c,a
 	call objectGetRelativeAngle
-	ld e,$c9
+	ld e,Part.angle
 	ld (de),a
 	ret
 +
 	call objectGetAngleTowardEnemyTarget
-	ld e,$c9
+	ld e,Part.angle
 	ld (de),a
 	ret
 
@@ -48,7 +52,7 @@ partCode31:
 	ld a,(wFrameCounter)
 	and $03
 	jr nz,+
-	ld e,$dc
+	ld e,Part.oamFlags
 	ld a,(de)
 	xor $07
 	ld (de),a
@@ -57,3 +61,14 @@ partCode31:
 	call objectCheckWithinScreenBoundary
 	jp nc,partDelete
 	jp partAnimate
+
+.ifdef ENABLE_NEW_GAME_PLUS
+@ngpUpgradeTable:
+	.dw @ngpProjectileUpgrades
+	.dw @ngpProjectileUpgrades
+	.dw @ngpProjectileUpgrades
+
+	@ngpProjectileUpgrades:
+		m_ngp_upgrade_d_s			04 SPEED_200
+		m_ngp_upgrade_p_d_s_term	PALETTE_BLUE_INV  08 SPEED_300
+.endif

@@ -132,7 +132,7 @@ itemCode0a:
 .ifdef ENABLE_RING_REDUX
 	call isHasteRingEquipped
 	jr nz,+
-		ldbc SPEED_460,$14
+		ldbc SPEED_440,$14
 	+
 .endif
 	ld a,(wSwitchHookLevel)
@@ -142,7 +142,7 @@ itemCode0a:
 .ifdef ENABLE_RING_REDUX
 	call isHasteRingEquipped
 	jr nz,+
-		ldbc SPEED_640,$13
+		ldbc SPEED_620,$13
 	+
 .endif
 +

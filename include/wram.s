@@ -381,8 +381,8 @@ wNgpEnemiesUpgradedThisRoom:	; $c58e
 
 wNgpUncappedUpgradesThisRoom:	; $c58f
 	; tracks how many parts and respawning enemies have been upgraded in tier this room
-	; high nibble tracks strong upgrades
-	; low nibble tracks weak upgrades
+	; high nibble tracks projectile upgrades
+	; low nibble tracks enemy upgrades
 	db
 
 wRingsDisabledCounter: ; $c590

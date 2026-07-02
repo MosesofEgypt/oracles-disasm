@@ -31,8 +31,7 @@ partCode18:
 	ld (hl),$50
 .ifdef ENABLE_NEW_GAME_PLUS
 	ld hl,@ngpUpgradeTable
-	xor a	; indicate this is a weak projectile
-	call tryNgpUpgradeUncapped
+	call tryNgpUpgradeProjectileIgnoreSubids
 .endif
 	jp objectSetVisible81
 
@@ -56,17 +55,11 @@ partCode18:
 
 .ifdef ENABLE_NEW_GAME_PLUS
 @ngpUpgradeTable:
-	.dw @ngpUpgradeSubtable1
-	.dw @ngpUpgradeSubtable2
-	.dw @ngpUpgradeSubtable2
+	.dw @ngpProjectileUpgrades
+	.dw @ngpProjectileUpgrades
+	.dw @ngpProjectileUpgrades
 
-@ngpUpgradeSubtable1:
-	.dw @ngpProjectileUpgrades1
-	@ngpProjectileUpgrades1:
-		m_ngp_upgrade_d_s_term		06 SPEED_200
-
-@ngpUpgradeSubtable2:
-	.dw @ngpProjectileUpgrades2
-	@ngpProjectileUpgrades2:
+	@ngpProjectileUpgrades:
+		m_ngp_upgrade_d_s			06 SPEED_200
 		m_ngp_upgrade_p_d_s_term	PALETTE_RED 08 SPEED_300
 .endif

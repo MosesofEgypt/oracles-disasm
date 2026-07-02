@@ -8,7 +8,7 @@ partCode29:
 	cp $83
 	jp z,partDelete
 @normalStatus:
-	ld e,$c4
+	ld e,Part.state
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -16,23 +16,52 @@ partCode29:
 	.dw @state2
 
 @state0:
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld h,d
+	ld l,Part.speed
+	ld (hl),SPEED_200 ; default for beam
+	ld hl,@ngpUpgradeTable
+	call tryNgpUpgradeProjectileIgnoreSubids
+.endif
 	ld h,d
 	ld l,e
 	inc (hl)
-	ld l,$c6
+	ld l,Part.counter1
 	ld (hl),$02
-	ld l,$c9
+	ld l,Part.angle
 	ld c,(hl)
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld l,Part.speed
+	ld b,(hl)
+.else
 	ld b,$50
+.endif
 	ld a,$04
 	call objectSetComponentSpeedByScaledVelocity
-	ld e,$c9
+	ld e,Part.angle
 	ld a,(de)
 	and $0f
 	ld hl,@table_5737
 	rst_addAToHl
 	ld a,(hl)
 	jp partSetAnimation
+
+.ifdef ENABLE_NEW_GAME_PLUS
+; on NG+ the beams get crazy
+@ngpUpgradeTable:
+	.dw @ngpProjectileUpgrades1
+	.dw @ngpProjectileUpgrades2
+	.dw @ngpProjectileUpgrades3
+
+@ngpProjectileUpgrades1:
+	m_ngp_upgrade_d_s_term		08 SPEED_200
+
+@ngpProjectileUpgrades2:
+	m_ngp_upgrade_p_d_s_term	PALETTE_RED_INV  12 SPEED_300
+
+@ngpProjectileUpgrades3:
+	m_ngp_upgrade_p_d_s_term	PALETTE_RED      24 SPEED_400
+.endif
 
 @table_5737:
 	.db $00 $00 $01 $02
@@ -54,7 +83,7 @@ partCode29:
 
 func_5758:
 	call objectApplyComponentSpeed
-	ld e,$c2
+	ld e,Part.subid
 	ld a,(de)
 	ld b,a
 	ld a,(wFrameCounter)

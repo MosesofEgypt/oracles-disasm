@@ -7236,8 +7236,9 @@ getPositionOffsetForVelocity:
 	push de
 	ld d,c
 	res 7,b
-	dec b
-	dec b
+	inc b
+	inc b
+	inc b
 
 	call getPositionOffsetForVelocityOrig
 
@@ -8462,52 +8463,11 @@ removeRing:
 
 .ifdef ENABLE_NEW_GAME_PLUS
 getFlaskChargePrice:
-	; price of fairy flask charges increases with how many you have
-	push de
-	push hl
+	ldh a,(<hRomBank)
 	push af
-	ld h,b
-	ld l,c
-	ld a,(wLifeVialMaxCharges)
-	or a
-	jr z,+++
-		ld d,a
-		-
-			ld a,l
-			add c
-			daa
-			ld l,a
-
-			ld a,h
-			adc b
-			daa
-			ld h,a
-			and $f0
-			jr z,++
-				; would go over 999
-				ld h,$09
-				ld l,$99
-				jr +++
-			++
-
-			ld a,d
-			and $0f
-			ld a,d
-			jr nz,++
-				or a
-				jr z,+++
-					sub $10
-					or $0a
-			++
-			dec a
-			ld d,a
-			jr nz,-
-	+++
-	ld b,h
-	ld c,l
+	callfrombank0 bank3.getFlaskChargePrice
 	pop af
-	pop hl
-	pop de
+	rst_setrombank
 	ret
 
 getIsNewGamePlus:
@@ -8539,13 +8499,13 @@ getUncappedUpgradeCount:
 	; is that since this is for respawning objects, the count
 	; should be more or less consistent since we're going to
 	; loop back around to the beginning once we hit the end
-	.db $11 $21 $11 $21 $11 $21 $11 $21; NG+1 weak enemy
-	.db $23 $41 $21 $31 $21 $31 $21 $31; NG+2 weak enemy
-	.db $42 $31 $32 $31 $42 $31 $32 $31; NG+3 weak enemy
+	.db $11 $21 $11 $21 $11 $21 $11 $21; NG+1 enemy
+	.db $23 $41 $21 $31 $21 $31 $21 $31; NG+2 enemy
+	.db $42 $31 $32 $31 $42 $31 $32 $31; NG+3 enemy
 
-	.db $10 $10 $10 $10 $10 $10 $10 $10; NG+1 strong enemy
-	.db $11 $21 $11 $21 $11 $21 $11 $21; NG+2 strong enemy
-	.db $41 $21 $31 $21 $41 $21 $31 $21; NG+3 strong enemy
+	.db $11 $11 $11 $11 $11 $11 $11 $11; NG+1 projectile
+	.db $11 $21 $11 $21 $11 $21 $11 $21; NG+2 projectile
+	.db $21 $21 $21 $21 $21 $21 $21 $21; NG+3 projectile
 
 getEnemyUpgradeCount:
 	push de
@@ -8656,11 +8616,30 @@ incrementEnemiesUpgraded:
 	pop bc
 	ret
 
+tryNgpUpgradeUncappedEnemyIgnoreSubids:
+	set 1,a
+	jr +
+
+tryNgpUpgradeUncappedEnemy:
+	res 1,a
++
+	res 0,a
+	jr tryNgpUpgradeUncapped
+
+tryNgpUpgradeProjectileIgnoreSubids:
+	ld a,$03
+	jr tryNgpUpgradeUncapped
+
+tryNgpUpgradeProjectile:
+	ld a,$01
+
 ;;
 ; NOTE: This function is used when the objects upgrading shouldn't be
 ;       limited by how many other objects were upgraded this screen.
 ;       Used for projectiles and respawning enemies(i.e wallmasters)
-; @param	a	Indicates weak object if 0, strong if 1.
+; @param	a	Each bit indicates various things about the upgrade.
+;               Bit 0: Is projectile if 1, otherwise is enemy.
+;               Bit 1: Ignore subid tables if 1, otherwise use them.
 ; @param	d	The object to possibly upgrade
 ; @param	hl	Start address of the upgrades table
 ; @param[out]	cflag	Set if the object was upgraded
@@ -8678,6 +8657,9 @@ tryNgpUpgradeUncapped:
 	dec a	; NG+0 has no upgrade table
 	rst_addDoubleIndex
 	rst_derefHl
+	pop af
+	push bc
+	ld b,a
 
 	; allow this to work on enemies or parts
 	push de
@@ -8687,6 +8669,7 @@ tryNgpUpgradeUncapped:
 	ld e,a
 
 	; figure out how many times we're upgrading
+	ld a,b
 	call getUncappedUpgradeCount
 	or a
 
@@ -8694,17 +8677,20 @@ tryNgpUpgradeUncapped:
 	; increment the upgrade count so next object MIGHT
 	call nz,tryNgpUpgrade@doUpgrade
 	pop de
-	pop af
+	ld a,b
+	pop bc
 	call incrementUncappedUpgraded
 	scf
 	ret
 
 ;;
 ;
-; @param	a	Indicates weak object if 0, strong if 1.
-; @param	d	The object to possibly upgrade
+; @param	a	Each bit indicates various things about the upgrade.
+;               Bit 0: Is string enemy if 1, otherwise is enemy.
+;               Bit 1: Ignore subid tables if 1, otherwise use them.
+; @param	d	The enemy to possibly upgrade
 ; @param	hl	Start address of the upgrades table
-; @param[out]	cflag	Set if the object was upgraded
+; @param[out]	cflag	Set if the enemy was upgraded
 tryNgpUpgrade:
 	push af
 	call getNewGamePlusCycle
@@ -8719,15 +8705,16 @@ tryNgpUpgrade:
 	dec a	; NG+0 has no upgrade table
 	rst_addDoubleIndex
 	rst_derefHl
+	pop af
+	push bc
+	ld b,a
 
 	; allow this to work on enemies or parts
 	push de
-	ld a,e
-	and $c0
-	add Object.subid
-	ld e,a
+	ld e,Enemy.subid
 
 	; figure out how many times we're upgrading
+	ld a,b
 	call getEnemyUpgradeCount
 	or a
 
@@ -8735,19 +8722,23 @@ tryNgpUpgrade:
 	; increment the upgrade count so next object MIGHT
 	call nz,@doUpgrade
 	pop de
-	pop af
+	ld a,b
+	pop bc
 	call incrementEnemiesUpgraded
 	scf
 	ret
 
 @doUpgrade:
 	push bc
-	ld b,a
 
-	; get the upgrade table for this subid
-	ld a,(de)
-	rst_addDoubleIndex
-	rst_derefHl
+	; get the upgrade table for this subid(or skip if not there)
+	bit 1,b
+	ld b,a
+	jr nz,+
+		ld a,(de)
+		rst_addDoubleIndex
+		rst_derefHl
+	+
 	dec b
 	ld a,(hl)
 	jr z,++

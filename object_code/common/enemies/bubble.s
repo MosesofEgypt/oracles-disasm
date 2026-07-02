@@ -74,8 +74,7 @@ enemyCode15:
 	call ecom_setSpeedAndState8
 .ifdef ENABLE_NEW_GAME_PLUS
 	ld hl,@ngpUpgradeTable
-	xor a	; indicate this is a weak enemy
-	call tryNgpUpgradeUncapped
+	call tryNgpUpgradeUncappedEnemy
 .endif
 	jp objectSetVisible82
 

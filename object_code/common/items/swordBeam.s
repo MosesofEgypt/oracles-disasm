@@ -17,7 +17,7 @@ itemCode27:
 	ld (hl),SPEED_300
 
 .ifdef ENABLE_RING_REDUX
-	; if ring equipped, increase beam damage 50%
+	; if ring equipped, increase beam damage and speed 50%
 	ld a,VICTORY_RING
 	call cpActiveRing
 	jr nz,+

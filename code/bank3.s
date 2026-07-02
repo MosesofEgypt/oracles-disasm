@@ -858,4 +858,55 @@ secretXorCipher:
 	.db $19 $2a $06 $39 $3c $17 $33 $18
 .endif
 
+.ifdef ENABLE_NEW_GAME_PLUS
+getFlaskChargePrice:
+	; price of fairy flask charges increases with how many you have
+	push de
+	push hl
+	push af
+	ld h,b
+	ld l,c
+	ld a,(wLifeVialMaxCharges)
+	or a
+	jr z,+++
+		ld d,a
+		-
+			ld a,l
+			add c
+			daa
+			ld l,a
+
+			ld a,h
+			adc b
+			daa
+			ld h,a
+			and $f0
+			jr z,++
+				; would go over 999
+				ld h,$09
+				ld l,$99
+				jr +++
+			++
+
+			ld a,d
+			and $0f
+			ld a,d
+			jr nz,++
+				or a
+				jr z,+++
+					sub $10
+					or $0a
+			++
+			dec a
+			ld d,a
+			jr nz,-
+	+++
+	ld b,h
+	ld c,l
+	pop af
+	pop hl
+	pop de
+	ret
+.endif
+
 .ends

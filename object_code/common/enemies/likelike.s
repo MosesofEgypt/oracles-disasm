@@ -125,8 +125,7 @@ likelike_state_uninitialized:
 	ld (de),a
 
 	ld hl,@ngpUpgradeTable
-	xor a	; indicate this is a weak enemy
-	call tryNgpUpgradeUncapped
+	call tryNgpUpgradeUncappedEnemy
 
 	; fix the subid to include the original 2 bits
 	ld e,Enemy.subid
