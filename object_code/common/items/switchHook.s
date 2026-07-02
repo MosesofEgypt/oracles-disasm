@@ -132,13 +132,19 @@ itemCode0a:
 .ifdef ENABLE_RING_REDUX
 	call isHasteRingEquipped
 	jr nz,+
-		ldbc SPEED_300,$1c ; goes 1 pixel further, but whatever
+		ldbc SPEED_460,$14
 	+
 .endif
 	ld a,(wSwitchHookLevel)
 	dec a
 	jr z,+
 	ldbc SPEED_300,$26
+.ifdef ENABLE_RING_REDUX
+	call isHasteRingEquipped
+	jr nz,+
+		ldbc SPEED_640,$13
+	+
+.endif
 +
 	ld h,d
 	ld l,Item.speed
@@ -344,6 +350,15 @@ switchHookState3:
 	bit 5,(hl)
 	jp nz,func_5902
 
+.ifdef ENABLE_RING_REDUX
+	call isHasteRingEquipped
+	jr nz,+
+		ld l,Item.animParameter
+		bit 7,(hl)
+		call z,itemAnimate
+	+
+.endif
+
 	; Wait until the animation writes bit 7 to animParameter
 	ld l,Item.animParameter
 	bit 7,(hl)
@@ -353,7 +368,11 @@ switchHookState3:
 	; will rise and swap
 
 	call checkRelatedObject2States
+.ifdef ENABLE_RING_REDUX
+	jp nc,itemCode0a@label_07_185
+.else
 	jr nc,itemCode0a@label_07_185
+.endif
 	; Jump if an object collision, not a tile collision
 	jr nz,@@objectCollision
 
@@ -362,7 +381,11 @@ switchHookState3:
 	; Break the tile underneath whatever was latched on to
 	ld a,BREAKABLETILESOURCE_SWITCH_HOOK
 	call itemTryToBreakTile
+.ifdef ENABLE_RING_REDUX
 	jp nc,itemCode0a@label_07_185
+.else
+	jr nc,itemCode0a@label_07_185
+.endif
 
 	ld h,d
 	ld l,Item.var03

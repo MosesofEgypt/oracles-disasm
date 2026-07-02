@@ -13,6 +13,9 @@ itemCode27:
 	call applyOffsetTableHL
 	call itemLoadAttributesAndGraphics
 	call itemIncState
+	ld l,Item.speed
+	ld (hl),SPEED_300
+
 .ifdef ENABLE_RING_REDUX
 	; if ring equipped, increase beam damage 50%
 	ld a,VICTORY_RING
@@ -24,11 +27,10 @@ itemCode27:
 		sra a
 		add c
 		ld (hl),a
+		ld l,Item.speed
+		ld (hl),SPEED_480
 	+
 .endif
-
-	ld l,Item.speed
-	ld (hl),SPEED_300
 
 	; Calculate angle
 	ld l,Item.direction

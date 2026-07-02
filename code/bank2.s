@@ -13710,4 +13710,55 @@ runFakeReset:
 	inc (hl)
 	jp fadeoutToWhite
 
+
+.ifdef REDUX_UTIL_FUNCS
+;;
+; Removes the specified ring from the players ring list and unequips it
+;
+; @param	b	The ring to remove
+;
+removeRing:
+	push hl
+	push bc
+	ld a,b
+	ld hl,wRingsObtained
+	call unsetFlag
+	ld a,b
+
+	; remove from primary ring box
+	ld hl,wRingBoxContents
+	call @removeRingLoop
+
+.ifdef EXTENDED_RING_BOX
+	; remove from extended ring box
+	ld hl,wRingBoxContentsExt
+	call @removeRingLoop
+.endif
+
+.ifndef ENABLE_MULTI_RING
+	; remove from active ring
+	ld hl,(wActiveRing)
+	cp (hl)
+	jr nz,+
+		ld (hl),$ff
+	+
+.endif
+	pop bc
+	pop hl
+	ret
+
+@removeRingLoop:
+	ld b,$05
+	-
+		cp (hl)
+		jr nz,+
+			ld (hl),$ff
+		+
+		inc l
+		dec b
+		jr nz,-
+	ret
+
+.endif
+
 .ENDS

@@ -7226,6 +7226,64 @@ objectApplyGivenSpeed:
 	ret
 
 ;;
+; Same args and output as getPositionOffsetForVelocityOrig.
+; This is merely a wrapper that allows double the normal speed values
+getPositionOffsetForVelocity:
+	bit 7,b
+	jr z,getPositionOffsetForVelocityOrig
+
+	; allow more speed values by detecting high bit and adjusting
+	push de
+	ld d,c
+	res 7,b
+	dec b
+	dec b
+
+	call getPositionOffsetForVelocityOrig
+
+	; load the deltas onto the stack for adding later
+	ld hl,wTmpcec0+3
+	ld b,(hl)
+	dec l
+	ld c,(hl)
+	dec l
+	push bc
+	ld b,(hl)
+	dec l
+	ld c,(hl)
+	dec l
+	push bc
+
+	; get the base deltas to add to
+	ld b,SPEED_320
+	ld c,d
+	call getPositionOffsetForVelocityOrig
+
+	ld hl,wTmpcec0
+	; y pos delta
+	pop bc
+	ld a,(hl)
+	add c
+	ldi (hl),a
+	ld a,(hl)
+	adc b
+	ldi (hl),a
+
+	; x pos delta
+	pop bc
+	ld a,(hl)
+	add c
+	ldi (hl),a
+	ld a,(hl)
+	adc b
+	ldi (hl),a
+
+	pop de
+	ld hl,wTmpcec0
+	or h
+	ret
+
+;;
 ; Takes a speed and an angle, and calculates the values to add to an object's y and
 ; x positions.
 ;
@@ -7234,7 +7292,7 @@ objectApplyGivenSpeed:
 ; @param[out]	hl	Pointer to 4 bytes of data to be added to Y and X positions.
 ;			It always points to wTmpcec0.
 ; @param[out]	zflag	Set if the speed / angle was invalid (or speed is zero)
-getPositionOffsetForVelocity:
+getPositionOffsetForVelocityOrig:
 	bit 7,c
 	jr nz,@invalid
 
@@ -8390,45 +8448,14 @@ optimizedFlagCheck:
 ; @param	a	The ring to remove
 ;
 removeRing:
-	push hl
 	push bc
 	ld b,a
-	ld hl,wRingsObtained
-	call unsetFlag
-	ld a,b
-
-	; remove from primary ring box
-	ld hl,wRingBoxContents
-	call @removeRingLoop
-
-.ifdef EXTENDED_RING_BOX
-	; remove from extended ring box
-	ld hl,wRingBoxContentsExt
-	call @removeRingLoop
-.endif
-
-.ifndef ENABLE_MULTI_RING
-	; remove from active ring
-	ld hl,(wActiveRing)
-	cp (hl)
-	jr nz,+
-		ld (hl),$ff
-	+
-.endif
+	ldh a,(<hRomBank)
+	push af
+	callfrombank0 bank2.removeRing
+	pop af
+	rst_setrombank
 	pop bc
-	pop hl
-	ret
-
-@removeRingLoop:
-	ld b,$05
-	-
-		cp (hl)
-		jr nz,+
-			ld (hl),$ff
-		+
-		inc l
-		dec b
-		jr nz,-
 	ret
 
 .endif
@@ -10216,12 +10243,6 @@ interactionDecCounter1IfPaletteNotFading:
 	or a
 	ret nz
 	jp interactionDecCounter1
-
-;;
-; Unused?
-;
-interactionAnimate4Times:
-	call interactionAnimate
 
 ;;
 interactionAnimate3Times:
@@ -13257,13 +13278,6 @@ clearReservedInteraction0:
 	call clearMemory16ByteBlocks
 
 ;;
-; Unused?
-clearReservedInteraction1:
-	ld hl,w1ReservedInteraction1
-	ld b,$04
-	jp clearMemory16ByteBlocks
-
-;;
 ; Clear all interactions except wReservedInteraction0 and wReservedInteraction1.
 ;
 clearDynamicInteractions:
@@ -14868,34 +14882,6 @@ objectCreateSparkle:
 	ld (hl),INTERAC_SPARKLE
 	inc l
 	ld (hl),$00
-	jp objectCopyPositionWithOffset
-
-;;
-; Create a sparkle at the current object's position that moves up briefly.
-;
-; Unused?
-objectCreateSparkleMovingUp:
-	call getFreeInteractionSlot
-	ret nz
-	ld (hl),INTERAC_SPARKLE
-	inc l
-	ld (hl),$02
-	ld l,Interaction.speedY
-	ld (hl),$80
-	inc l
-	ld (hl),$ff
-	jp objectCopyPositionWithOffset
-
-;;
-; Create a red and blue decorative orb.
-;
-; Unused?
-objectCreateRedBlueOrb:
-	call getFreeInteractionSlot
-	ret nz
-	ld (hl),INTERAC_SPARKLE
-	inc l
-	ld (hl),$04
 	jp objectCopyPositionWithOffset
 
 ;;

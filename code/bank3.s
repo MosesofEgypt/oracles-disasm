@@ -120,7 +120,7 @@ oamDmaFunctionEnd:
 objectSpeedTable:
 	.define TMP_SPEED $20
 
-	.rept 24
+	.rept 25
 		; Calculate 8 sin/cos values per line at increments of 11.25 degrees
 		.dwsin 090 7 11.25 (-TMP_SPEED) 0 ; $00 <- angle
 		.dwcos 090 7 11.25 (-TMP_SPEED) 0 ; $08
