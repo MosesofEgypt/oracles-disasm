@@ -142,7 +142,7 @@ treasureDisplayData_standard:
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_1c (0x1c)
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_MINECART_COLLISION (0x1d)
 .ifdef WIDE_INVENTORY_SPRITES
-	.db TREASURE_FOOLS_ORE,          $01, $00, $97, $00, $ff, <TX_09_FOOLSORE ; TREASURE_FOOLS_ORE (0x1e)
+	.db TREASURE_FOOLS_ORE,          $97, $00, $a9, $00, $ff, <TX_093f ; TREASURE_FOOLS_ORE (0x1e)
 .else
 	.db TREASURE_FOOLS_ORE,          $9a, $00, $00, $00, $ff, <TX_09_FOOLSORE ; TREASURE_FOOLS_ORE (0x1e)
 .endif
