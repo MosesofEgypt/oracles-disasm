@@ -50,8 +50,10 @@ partCode01:
 	jr nz,+
 		call getRandomNumber_noPreserveVars
 		; since we're replacing all health drops with enemies, we
-		; add a 50% chance to not spawn to keep the enemy count down
+		; add a 25% chance to not spawn to keep the enemy count down
 		bit 7,a
+		jp z,partDelete
+		bit 6,a
 		jp z,partDelete
 		jp itemDrop_spawnEnemy
 	+
