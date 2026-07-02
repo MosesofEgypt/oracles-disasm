@@ -462,10 +462,6 @@ intro_japaneseOnlyScreen:
 
 ;;
 intro_capcomScreen:
-	ld hl,(wKeysJustPressed)
-	bit BTN_BIT_START,(hl)
-	jp nz,@instantExit
-
 	ld a,(wIntroVar)
 	rst_jumpTable
 	.dw @state0
@@ -495,6 +491,10 @@ intro_capcomScreen:
 ;;
 ; Fading in, waiting
 @state1:
+	ld hl,(wKeysJustPressed)
+	bit BTN_BIT_START,(hl)
+	jp nz,@instantExit
+
 	ld hl,wTmpcbb3
 	call decHlRef16WithCap
 	ret nz
