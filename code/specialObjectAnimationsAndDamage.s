@@ -494,7 +494,7 @@ remapTransformedSpecialObjectGfx:
 	; NOTE: this optimization only works because the ring
 	;		ids were happen to lie in the same byte
 	ld a,(wEquippedRingFlags+5)
-	or $7c
+	or $83
 	cp $ff
 
 	; if any rings are equipped, the above won't be zero
