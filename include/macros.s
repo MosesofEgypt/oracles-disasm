@@ -905,6 +905,13 @@
 
 ; Args:
 ;   \1 - 3bit: newPalette
+;   \2 - 5bit: newSubId
+.macro m_ngp_upgrade_p_si_term
+	m_ngp_upgrade_term $03 \1 \2 $00 $00 $00
+.endm
+
+; Args:
+;   \1 - 3bit: newPalette
 ;   \2 - byte: newDamage
 ;   \3 - byte: newSpeed
 .macro m_ngp_upgrade_p_d_s

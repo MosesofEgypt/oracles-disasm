@@ -26,7 +26,28 @@ enemyCode16:
 	call ecom_setSpeedAndState8AndVisible
 	ld l,Enemy.counter1
 	ld (hl),$05
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld hl,@ngpUpgradeTable
+	call tryNgpUpgradeUncappedEnemyIgnoreSubids
+.endif
 	jp objectMakeTileSolid
+
+.ifdef ENABLE_NEW_GAME_PLUS
+; on NG+ the beams get crazy
+@ngpUpgradeTable:
+	.dw @ngpEnemyUpgrades1
+	.dw @ngpEnemyUpgrades2
+	.dw @ngpEnemyUpgrades3
+
+@ngpEnemyUpgrades1:
+	m_ngp_no_upgrade
+
+@ngpEnemyUpgrades2:
+	m_ngp_upgrade_p_si_term	PALETTE_GOLD  01
+
+@ngpEnemyUpgrades3:
+	m_ngp_upgrade_p_si_term	PALETTE_RED   02
+.endif
 
 
 @state_stub:
@@ -75,7 +96,15 @@ enemyCode16:
 	call ecom_decCounter1
 	ret nz
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld l,Enemy.subid
+	ld a,$05
+	sub (hl)
+	ld l,Enemy.counter1
+	ld (hl),a
+.else
 	ld (hl),$05
+.endif
 	ld l,Enemy.angle
 	ld a,(hl)
 	inc a

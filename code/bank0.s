@@ -9209,62 +9209,96 @@ victoryRingIncLevel:
 	inc a
 	ret
 
-swordBeamHeartCutoff:
-	ldbc LIGHT_RING_L2,LIGHT_RING_L1
-	call eitherRingActive
-	ld c,$00
-	jr nz,+
-		jr nc,++
-			ld c,$40
-			ret
-		++
-		ld c,LIGHT_RING_L2_CUTOFF
-	+
-	ret nc
-	ld c,LIGHT_RING_L1_CUTOFF
-	ret
-
-getBombLimit:
-	ld e,$01
-	ld a,BOMBERS_RING
-	call cpActiveRing
-	ret nz
-	ld e,$04
-	ret
-
 fractionOf8Multiply:
-	; tuck the full multiplier into c for later
-	ld c,a
-	; copy the fractional-multiples into b for decrementing
+	push hl
+	push de
+
+	; store the number of whole increments of 8 in h
+	ld h,a
+	srl h
+	srl h
+	srl h
+
+	; copy the fractional-multiples into l for decrementing
 	and $07
-	ld b,a
-	; reset a and add whole-multiples of the damage for each fraction
-	ld a,$00
+	ld l,a
+
+	; store the base as a positive value in d
+	ld a,e
+	bit 7,a
+	jr z,+
+		cpl
+		inc a
+	+
+	ld d,a
+
+	ld b,$00
+	ld c,b
 
 	; add fractions if there are any
+	ld a,l
+	or a
+	ld a,c
 	jr z,+
 		-
-			add e
-			dec b
+			add d
+			jr nc,++
+				inc b
+			++
+			dec l
 			jr nz,-
 
 		; convert the whole multiples into fractions
-		sra a
-		sra a
-		sra a
+		srl a
+		srl a
+		srl a
+		ld c,a
+
+		ld a,b
+		swap a
+		sla a
+		and $e0
+		or c
+		ld c,a
+
+		srl b
+		srl b
+		srl b
 	+
 
-	; convert c to whole increments of 8
-	sra c
-	sra c
-	sra c
-
 	; add the whole multiples
-	-
-		ret z
-		add e
-		dec c
-		jr -
+	ld a,h
+	or a
+	ld a,c
+	jr z,+
+		-
+			add d
+			jr nc,++
+				inc b
+			++
+			dec h
+			jr nz,-
+		ld c,a
+	+
+
+	bit 7,e
+	jr z,+
+		; fix the sign
+		ld a,c
+		cpl
+		inc a
+		ld c,a
+		ld a,b
+		cpl
+		jr nc,++
+			inc a
+		++
+		ld b,a
+	+
+
+	pop de
+	pop hl
+	ret
 
 applyCurseArmorDamageCap:
 	; if wearing blue curse, all damage becomes 1/4 heart
@@ -9294,7 +9328,7 @@ calculatePowerRingModifier:
 
 	; for each power and armor ring, check if it's equipped and
 	; increase or reduce the damage by the associated amount.
-	ld bc,$0600
+	ldbc $06,$00
 
 	-
 		ld a,b
@@ -9310,10 +9344,9 @@ calculatePowerRingModifier:
 		dec b
 		jr nz,-
 
-	ld b,c
 	pop af
 	; return the modifier plus the base damage in a
-	add b
+	add c
 	pop de
 	ret
 

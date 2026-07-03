@@ -693,4 +693,19 @@ alchemyRingRestock:
 	xor a
 	ret
 
+swordBeamHeartCutoff:
+	ldbc LIGHT_RING_L2,LIGHT_RING_L1
+	call eitherRingActive
+	ld c,$00
+	jr nz,+
+		jr nc,++
+			ld c,$40
+			ret
+		++
+		ld c,LIGHT_RING_L2_CUTOFF
+	+
+	ret nc
+	ld c,LIGHT_RING_L1_CUTOFF
+	ret
+
 .endif

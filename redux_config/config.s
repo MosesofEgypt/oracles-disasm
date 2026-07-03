@@ -48,6 +48,10 @@
 		; determines whether a NG+ file can only be started from a completed file.
 		.define NEW_GAME_PLUS_NEEDS_COMPLETION	1
 	.endif
+	.ifndef ENABLE_PASSIVE_SHIELD
+		; determines whether your shield can be used passively on the side
+		.define ENABLE_PASSIVE_SHIELD	1
+	.endif
 	.ifndef WIDE_INVENTORY_SPRITES
 		; determines whether the inventory items are 2 or 3 tiles wide
 		.define WIDE_INVENTORY_SPRITES			1

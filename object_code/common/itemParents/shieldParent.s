@@ -30,7 +30,6 @@ parentItemCode_shield:
 .ifdef ENABLE_RING_REDUX
 	call victoryRingIncLevel
 .endif
-	add $00
 	ld (wUsingShield),a
 	ret
 

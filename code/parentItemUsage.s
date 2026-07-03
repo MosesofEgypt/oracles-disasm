@@ -20,12 +20,41 @@ clearAllParentItems_body:
 	cp WEAPON_ITEM_INDEX
 	jr c,--
 
+.ifdef ENABLE_PASSIVE_SHIELD
+	call setupPassiveShield
+	xor a
+.else
 	xor a
 	ld (wUsingShield),a
+.endif
 	ld (wcc63),a
 	ld (wMagnetGloveState),a
 	pop de
 	ret
+
+
+.ifdef ENABLE_PASSIVE_SHIELD
+setupPassiveShield:
+.ifdef ROM_AGES
+	; no passive shield underwater
+	ld a,(wTilesetFlags)
+	and TILESETFLAG_UNDERWATER
+	ld a,$00
+	jr nz,+
+.endif
+	ld a,TREASURE_SHIELD
+	call checkTreasureObtained
+	ld a,$00
+	jr nc,+
+		ld a,(wShieldLevel)
+		.ifdef ENABLE_RING_REDUX
+			call victoryRingIncLevel
+		.endif
+		set 7,a
+	+
+	ld (wUsingShield),a
+	ret
+.endif
 
 ;;
 ; Called from "updateParentItemButtonAssignment" in bank 0.
@@ -68,8 +97,12 @@ updateParentItemButtonAssignment_body:
 ; Use items if the appropriate buttons are pressed along with other conditions.
 ;
 checkUseItems:
+.ifdef ENABLE_PASSIVE_SHIELD
+	call setupPassiveShield
+.else
 	xor a
 	ld (wUsingShield),a
+.endif
 	ld hl,wSwordDisabledCounter
 	ld a,(hl)
 	or a

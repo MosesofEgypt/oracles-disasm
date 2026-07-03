@@ -273,6 +273,13 @@ itemCalculateSwordDamage:
 	+
 	; applyMultipliers
 	call fractionOf8Multiply
+	ld a,$ff
+	cp b
+	ld a,c ; use the low byte of the result
+	jr z,+
+		; result is over -128, so set to -128
+		ld a,$80
+	+
 	call calculatePowerRingModifier
 
 	ld e,a

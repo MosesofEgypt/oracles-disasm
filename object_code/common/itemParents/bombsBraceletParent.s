@@ -850,4 +850,12 @@ parentItemCode_bracelet:
 	.db $81 $81 $c2
 	.db $c2 $82 $94
 	.db $94 $14
+
+getBombLimit:
+	ld e,$01
+	ld a,BOMBERS_RING
+	call cpActiveRing
+	ret nz
+	ld e,$04
+	ret
 .endif

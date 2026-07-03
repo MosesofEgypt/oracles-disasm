@@ -2208,9 +2208,9 @@ wShieldY: ; $cc70/$cc8a
 wShieldX: ; $cc71
 	db
 
-wcc73: ; $cc73
+wShieldHeight: ; $cc72
 	db
-wcc72: ; $cc72
+wShieldWidth: ; $cc73
 	db
 
 wGrabbableObjectBuffer: ; $cc74

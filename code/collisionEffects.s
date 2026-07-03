@@ -2,10 +2,31 @@
 ; For each Enemy and each Part, check for collisions with Link and Items.
 checkEnemyAndPartCollisions:
 	; Calculate shield position
+	ld hl,@shieldCollisionData
+.ifdef ENABLE_PASSIVE_SHIELD
+	ld a,(wUsingShield)
+.else
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld a,(wUsingShield)
+.endif
+.endif
+
+.ifdef ENABLE_PASSIVE_SHIELD
+	bit 7,a
+	; smaller hitbox if passively held
+	jr z,+
+		ld hl,@shieldCollisionDataPassive
+	+
+.endif
+.ifdef ENABLE_NEW_GAME_PLUS
+	cp $04
+	jr nz,+
+		ld hl,@shieldCollisionDataL4
+	+
+.endif
 	ld a,(w1Link.direction)
 	add a
 	add a
-	ld hl,@shieldPositionOffsets
 	rst_addAToHl
 	ld de,wShieldY
 	ld a,(w1Link.yh)
@@ -76,12 +97,63 @@ checkEnemyAndPartCollisions:
 
 	ret
 
-@shieldPositionOffsets:
-	.db $f9 $01 $01 $06 ; DIR_UP
-	.db $00 $06 $07 $01 ; DIR_RIGHT
-	.db $06 $ff $01 $06 ; DIR_DOWN
-	.db $00 $f9 $07 $01 ; DIR_LEFT
+; NOTE: these are relative to link's center coordinate.
+;       that is, the spot in the middle of his sprites.
+@shieldCollisionData:
+	; facing up
+	.db $f9 $01 ; position offset y/x
+	.db $01 $06 ; shield hitbox h/w
 
+	; facing right
+	.db $00 $06 ; position offset y/x
+	.db $07 $01 ; shield hitbox h/w
+
+	; facing down
+	.db $06 $ff ; position offset y/x
+	.db $01 $06 ; shield hitbox h/w
+
+	; facing left
+	.db $00 $f9 ; position offset y/x
+	.db $07 $01 ; shield hitbox h/w
+
+.ifdef ENABLE_NEW_GAME_PLUS
+@shieldCollisionDataL4:
+	; facing up
+	.db $00 $02 ; position offset y/x
+	.db $07 $09 ; shield hitbox h/w
+
+	; facing right
+	.db $00 $00 ; position offset y/x
+	.db $09 $07 ; shield hitbox h/w
+
+	; facing down
+	.db $00 $fe ; position offset y/x
+	.db $07 $09 ; shield hitbox h/w
+
+	; facing left
+	.db $00 $00 ; position offset y/x
+	.db $09 $07 ; shield hitbox h/w
+.endif
+
+.ifdef ENABLE_PASSIVE_SHIELD
+; smaller hitbox, held further away
+@shieldCollisionDataPassive:
+	; facing up (shield facing right)
+	.db $00 $08 ; position offset y/x
+	.db $06 $01 ; shield hitbox h/w
+
+	; facing right (shield facing down)
+	.db $08 $ff ; position offset y/x
+	.db $01 $05 ; shield hitbox h/w
+
+	; facing down (shield facing left)
+	.db $00 $f7 ; position offset y/x
+	.db $06 $01 ; shield hitbox h/w
+
+	; facing left (shield facing up)
+	.db $f7 $01 ; position offset y/x
+	.db $01 $05 ; shield hitbox h/w
+.endif
 
 ;;
 ; Check if the given part is colliding with an item or link, and do the appropriate
@@ -209,6 +281,10 @@ enemyCheckCollisions:
 
 	; If the shield is out...
 	ld a,(wUsingShield)
+.ifdef ENABLE_PASSIVE_SHIELD
+	; remove passively-held flag
+	res 7,a
+.endif
 	or a
 	jr z,@checkHitLink
 
@@ -283,6 +359,10 @@ enemyCheckCollisions:
 
 	; calculate the damage and store in w1Link.damage
 	ld a,(wUsingShield)
+.ifdef ENABLE_PASSIVE_SHIELD
+	; remove passively-held flag
+	res 7,a
+.endif
 	ld c,a
 	xor a
 	sub b

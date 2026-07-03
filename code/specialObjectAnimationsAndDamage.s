@@ -364,6 +364,11 @@ func_4553:
 +
 	; Check if he's holding out the shield, and what level
 	ld a,(wUsingShield)
+.ifdef ENABLE_PASSIVE_SHIELD
+	; dont use shielding animation when just passively held
+	bit 7,a
+	jr nz,+
+.endif
 	or a
 	jr z,+
 
@@ -410,6 +415,11 @@ func_4553:
 
 	; Standard, just walking or standing animation
 @standingAnimation:
+.ifdef ENABLE_PASSIVE_SHIELD
+	ld a,(wUsingShield)
+	or a
+	jr z,@animationFound
+.else
 	ld a,(wInventoryA)
 	cp ITEM_SHIELD
 	jr z,@shieldEquipped
@@ -417,6 +427,7 @@ func_4553:
 	ld a,(wInventoryB)
 	cp ITEM_SHIELD
 	jr nz,@animationFound
+.endif
 
 	; Walking or standing with shield equipped
 @shieldEquipped:
@@ -703,6 +714,11 @@ linkUpdateDamageToApplyForRings:
 	; for each power and armor ring, check if it's equipped and
 	; increase or reduce the damage by the associated amount.
 	call calculateArmorRingModifier
+	bit 7,a
+	jr nz,+
+		; over/underflow. set to min damage
+		ld a,$ff
+	+
 
 	ld e,a
 	; calculate the multipliers(divisor is 8, so 1.5x will be $0c)
@@ -717,10 +733,11 @@ linkUpdateDamageToApplyForRings:
 	jr nc,+
 		sub HOLY_RING_DEF_MOD
 	+
+	sub b
 
 	ldbc RED_HOLY_RING, $ff
 	call eitherRingActive
-	jr nc,+
+	jr nz,+
 		sub HOLY_RING_DEF_MOD
 	+
 
@@ -733,8 +750,8 @@ linkUpdateDamageToApplyForRings:
 	jr nc,+
 		sub GREEN_RING_DEF_MOD
 	+
-
 	sub b
+
 	ldbc CURSED_RED_RING, GOLD_RING
 	call eitherRingActive
 	ld b,$00
@@ -744,16 +761,15 @@ linkUpdateDamageToApplyForRings:
 	jr nc,+
 		sub GOLD_RING_DEF_MOD
 		ld c,a
-		ld hl,wLinkHealth
-		ld a,(hl)
+		ld a,(wLinkHealth)
 		cp GOLD_RING_HEART_CUTOFF
 		ld a,c
 		jr nc,++
 			sub GOLD_RING_DEF_MOD
 		++
-		sub b
-
 	+
+	sub b
+
 	; capToMinDamage
 	; what we're doing is a bit complicated, but essentially we want
 	; to ensure the minimum damage multiplier is 3/8. math gets a bit
@@ -761,14 +777,22 @@ linkUpdateDamageToApplyForRings:
 	; now we need to subtract that $40
 	sub MAX_RING_DEF_MOD+$40
 	jr nc,+
-		ld a,$ff
+		xor a
 	+
 	add MAX_RING_DEF_MOD
 
 	; applyMultipliers
 	call fractionOf8Multiply
+	ld a,$ff
+	cp b
+	ld a,c ; use the low byte of the result
+	jr z,+
+		; result is over -128, so set to -128
+		ld a,$80
+	+
 	bit 7,a
 	jr nz,+
+		; cap to minimum damage
 		ld a,$ff
 	+
 
