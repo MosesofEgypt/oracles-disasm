@@ -22,6 +22,11 @@ initializeNgpFile:
 	ld (hl),a
 .endif
 
+	; record whether or not the player has the biggorons sword
+	ld a,(wObtainedTreasureFlags+(TREASURE_BIGGORON_SWORD>>3))
+	and 1<<(TREASURE_BIGGORON_SWORD&$07)
+	push af
+
 	xor a
 	ld hl,wDeathRespawnBuffer
 	ld b,wGashaSpotFlags-wDeathRespawnBuffer
@@ -54,6 +59,14 @@ initializeNgpFile:
 
 	ld hl,initialNgpFileVariables_spawn
 	call initializeFileVariables
+
+	pop af
+	or a
+	jr z,+
+		; add biggoron sword to inventory
+		ld hl,initialNgpFileVariables_biggoronsword
+		call initializeFileVariables
+	+
 
 	; set wLinkHealth to wLinkMaxHealth
 	ld hl,wLinkMaxHealth
@@ -524,6 +537,11 @@ initialNgpFileVariables_heroGame:
 	.db <wObtainedTreasureFlags+2,	(1<<(TREASURE_LIFE_VIAL-16))
 	.db <wChildStatus,				$00
 	.db <wAnimalCompanion,			$00
+	.db $00
+
+initialNgpFileVariables_biggoronsword:
+	.db <wInventoryStorage+$0f,									ITEM_BIGGORON_SWORD
+	.db <wObtainedTreasureFlags+(TREASURE_BIGGORON_SWORD>>3),	(1<<(TREASURE_BIGGORON_SWORD&$07))
 	.db $00
 .endif
 
