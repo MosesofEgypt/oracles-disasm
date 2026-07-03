@@ -9050,10 +9050,6 @@ swordShmupComboActive:
 	ldbc ENERGY_RING,CHARGE_RING
 	jr bothRingsActive
 
-smashingBoardComboActive:
-	ldbc STEADFAST_RING,HASTE_RING
-	jr bothRingsActive
-
 eitherRingActiveAndPopBC:
 	call eitherRingActive
 	pop bc

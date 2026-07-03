@@ -556,6 +556,16 @@ enemyCheckCollisions:
 	.dw collisionEffect3e
 	.dw collisionEffect3f
 
+.ifdef ENABLE_RING_REDUX
+smashingBoardComboActive:
+	; don't allow passively using it
+	ld a,(wUsingShield)
+	bit 7,a
+	ret nz
+	ldbc STEADFAST_RING,HASTE_RING
+	jp bothRingsActive
+.endif
+
 ; Parameters which get passed to collision code functions:
 ; bc = link / item object (points to the start of the object)
 ; de = enemy / part object (points to Object.enemyCollisionMode)

@@ -64,24 +64,27 @@ itemCode02:
 .ifdef ENABLE_RING_REDUX
 @updatePunchAttributes:
 	ld l,Item.subid
+	; expert punch (bit 0 of Item.subid set)
 	bit 0,(hl)
 	ret z
 
 	ld a,FIST_RING
 	call cpActiveRing
+	ld l,Item.collisionType
 	jr z,+
 		; expert punch
 		ldbc 8,-4
+		; increment to ITEMCOLLISION_EXPERT_PUNCH
+		inc (hl)
 		jr ++
 	+
 		; super punch
 		ldbc 15,-6
+		; switch to ITEMCOLLISION_SWORDSPIN
+		; doing this so onox can be hurt
+		ld (hl),ITEMCOLLISION_SWORDSPIN|$80
 	++
 
-	; expert punch (bit 0 of Item.subid set)
-    ; increment to ITEMCOLLISION_EXPERT_PUNCH
-	ld l,Item.collisionType
-	inc (hl)
 	inc hl
 	inc hl
 
