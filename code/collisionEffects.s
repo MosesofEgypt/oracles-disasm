@@ -119,20 +119,20 @@ checkEnemyAndPartCollisions:
 .ifdef ENABLE_NEW_GAME_PLUS
 @shieldCollisionDataL4:
 	; facing up
-	.db $00 $02 ; position offset y/x
-	.db $07 $09 ; shield hitbox h/w
+	.db $f9 $01 ; position offset y/x
+	.db $05 $07 ; shield hitbox h/w
 
 	; facing right
-	.db $00 $00 ; position offset y/x
-	.db $09 $07 ; shield hitbox h/w
+	.db $00 $02 ; position offset y/x
+	.db $07 $05 ; shield hitbox h/w
 
 	; facing down
-	.db $00 $fe ; position offset y/x
-	.db $07 $09 ; shield hitbox h/w
+	.db $02 $ff ; position offset y/x
+	.db $05 $07 ; shield hitbox h/w
 
 	; facing left
-	.db $00 $00 ; position offset y/x
-	.db $09 $07 ; shield hitbox h/w
+	.db $00 $f9 ; position offset y/x
+	.db $07 $05 ; shield hitbox h/w
 .endif
 
 .ifdef ENABLE_PASSIVE_SHIELD
