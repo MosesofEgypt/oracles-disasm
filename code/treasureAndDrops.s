@@ -1703,3 +1703,12 @@ checkIncreaseGashaMaturityForGettingTreasure:
 	.db TREASURE_HEART_REFILL	  4
 .endif
 	.db $00
+
+.ifdef ENABLE_RING_REDUX
+tripleHeartJoyComboActive:
+	push bc
+	ldbc BLUE_JOY_RING,GOLD_JOY_RING
+	call bothRingsActive
+	pop bc
+	ret
+.endif

@@ -369,4 +369,8 @@ checkBoomerangParentStillValid:
 	cp $00
 	pop hl
 	ret
+
+lightningBoomerangComboActive:
+	ldbc RANG_RING_L1,RANG_RING_L2
+	jp bothRingsActive
 .endif

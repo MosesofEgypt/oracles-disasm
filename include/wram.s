@@ -408,6 +408,13 @@ wEquippedItemOamTail:
 wEquippedIconGfxExtToUse:
 	db
 
+.ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
+wAutoEquipInvSlot:
+	; low byte of the inventory slot the context-sensitive item was pulled
+	; from when equipped, and the previously equipped item was put into
+	db
+.endif
+
 ; $c580-$c5af unused? (unless using ENABLE_MULTI_RING or
 ;                      ENABLE_RING_REDUX or ENABLE_NEW_GAME_PLUS)
 
@@ -559,7 +566,11 @@ wMiscSettings: ; $c629
 	; Bit 3:    Set if passive shield should be enabled
 	; Bit 4:    Set if context-sensitive items should be enabled.
 	;           This includes rod of seasons on stumps, harp of ages
-	;           on warp tiles, and bracelet when pushing a wall tile
+	;           on warp tiles, bracelet when pushing a wall tile, the
+	;           the magnetic gloves when facing a magnetic tile, and
+	;           the switch hook when facing a diamond switch hook tile
+	; Bit 5:    Set if context-sensitive item should go in A.
+	;           Unset if context-sensitive item should go in B.
 	db
 .else
 wTextSpeed: ; $c629

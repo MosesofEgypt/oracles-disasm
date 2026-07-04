@@ -586,6 +586,10 @@ explosionTryToBreakNextTile:
 	.db $fc $1f $00
 	.db $fc $00 $1f
 	.db $fc $e0 $00
+
+instantBombComboActive:
+	ldbc BOMBPROOF_RING,HASTE_RING
+	jp bothRingsActive
 .else
 	.db $f8 $f3 $f3
 	.db $f8 $0c $f3

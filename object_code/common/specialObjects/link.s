@@ -4198,6 +4198,15 @@ linkUpdateInAir:
 
 	; Check if wActiveTileType is TILETYPE_HOLE or TILETYPE_WARPHOLE
 	ld a,(wActiveTileType)
+.ifdef ROM_SEASONS
+.ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
+	push af
+	cp TILETYPE_STUMP
+	ld a,ITEM_ROD_OF_SEASONS
+	call handleAutoEquipItem
+	pop af
+.endif
+.endif
 	dec a
 	cp TILETYPE_WARPHOLE
 	jr nc,+

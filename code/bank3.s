@@ -69,6 +69,10 @@ init:
 .ifdef ENABLE_MULTI_RING
 	call clearRingEquipStatuses
 .endif
+.ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
+	ld a,$ff
+	ld (wAutoEquipInvSlot),a
+.endif
 
 	jp startGame
 

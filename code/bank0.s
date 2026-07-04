@@ -8856,79 +8856,91 @@ getLinkMaxHealth:
 	ld a,CURSE_RING_HEART_CAP
 	ret
 
-spawnAzuchu:
-	; only run every few frames to prevent lag
-	ld a,(wFrameCounter)
-	and $0f
-	ret nz
-
-	; if link is disabled, don't spawn azuchu
-	ld a,(wDisabledObjects)
-	bit 0,a
-	ret nz
-
-	; spawning checks are only for top-down
-	ld a,(wTilesetFlags)
-	and TILESETFLAG_SIDESCROLL
-	jr nz,+
-		ld hl,(wLinkInAir)
-		or (hl)
-		ret nz
-
-		; don't spawn if on hazard or in the air
-		call checkLinkIsOverHazard
-		ret c
-	+
-
-	; don't spawn if not regular link object(i.e. riding raft/companion)
-	ld a,(wLinkObjectIndex)
-	cp >w1Link
-	ret nz
-
-	ld a,(wLinkRidingObject)
-	or a
-	ret nz
-
-	; backup relatedObject2 of link since it's gonna get overwritten
-	ld hl,w1Link.relatedObj2
-	ld e,(hl)
-	inc l
-	ld d,(hl)
-	push de
+.ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
+;;
+; @param	a		The item to auto-equip or un-equip.
+; @param	zflag	Equip item if set. Otherwise unequip.
+handleAutoEquipItem:
 	push hl
-
-	; must point to w1Link
-	ld (hl),>w1Link
-
-	; create azuchu if not exists
-	ldbc ITEM_AZUCHU,$01
-	ldde >w1Link,$01
-
-	ldh a,(<hRomBank)
 	push af
-	callfrombank0 bank6.itemCreateChildWithID
-	jr nc,+
+	ld hl,wMiscSettings
+	bit 4,(hl)
+	jr z,++
+		bit 5,(hl)
+		ld hl,wInventoryB
+		jr z,+
+			inc l
+		+
 		pop af
-		rst_setrombank
-		jr ++
-	+
-		pop af
-		rst_setrombank
-
-		; clear parent
-		xor a
-		ld l,Item.relatedObj1
-		ldi (hl),a
-		ld  (hl),a
+		push af
+		push de
+		ld d,a
+		jr nz,+
+			; equipping. only swap if not already equipped
+			cp (hl)
+			jr z,+++
+				ld a,$ff
+				ld (wAutoEquipInvSlot),a
+				call @swapItemWithInventory
+				jr +++
+		+
+		; unequipping. only swap if it was auto-equipped
+		cp (hl)
+		jr nz,+++
+			ld a,(wAutoEquipInvSlot)
+			cp $ff
+			call nz,@swapItemWithInventory
+		+++
+			pop de
 	++
-
-	; restore link child object
+	pop af
 	pop hl
-	pop de
-	ld (hl),d
-	dec l
-	ld (hl),e
 	ret
+
+;;
+; @param d                 The item to auto-equip or un-equip.
+; @param hl                The equipped item slot to swap out
+; @param wAutoEquipInvSlot The inventory item slot to swap with.
+;                          If this is $ff, it must be searched for.
+@swapItemWithInventory:
+	ld a,(wAutoEquipInvSlot)
+	cp $ff
+	jr nz,+
+		push hl
+		; find d in wInventoryStorage
+		ld hl,wInventoryStorage
+		ld e,$10
+		-
+			ldi a,(hl)
+			cp d
+			jr z,++
+				dec e
+				jr nz,-
+					; failed to find it
+					pop hl
+					ret
+			++
+		dec l
+		ld a,l
+		ld (wAutoEquipInvSlot),a
+		pop hl
+	+
+	ld a,(wAutoEquipInvSlot)
+	ld e,a
+	ld d,>wInventoryStorage
+
+	ld a,(de)
+	ld d,a
+	ld a,(hl)
+	ld (hl),d
+	ld d,>wInventoryStorage
+	ld (de),a
+
+	ld hl,(wStatusBarNeedsRefresh)
+	set 0,(hl)
+	set 1,(hl)
+	ret
+.endif
 
 .ifdef ROM_AGES
 isDeepUnderwater:
@@ -9034,16 +9046,8 @@ isHasteRingEquipped:
 	pop de
 	ret
 
-lightningBoomerangComboActive:
-	ldbc RANG_RING_L1,RANG_RING_L2
-	jr bothRingsActive
-
 remoteBombComboActive:
 	ldbc PEACE_RING,BOMBERS_RING
-	jr bothRingsActive
-
-instantBombComboActive:
-	ldbc BOMBPROOF_RING,HASTE_RING
 	jr bothRingsActive
 
 swordShmupComboActive:
@@ -9070,42 +9074,6 @@ cacheMiningBombComboActive:
 	ldh (<hFFBD),a	; store temporarily for restoring later
 	xor a
 	jp setRingComboFlag
-
-alchemyJoyComboActive:
-	push bc
-	ldbc BLUE_JOY_RING,GOLD_JOY_RING
-	jr eitherRingActiveAndPopBC
-
-tripleHeartJoyComboActive:
-	push bc
-	ldbc BLUE_JOY_RING,GOLD_JOY_RING
-	call bothRingsActive
-	pop bc
-	ret
-
-dolphinComboActive:
-	push bc
-	ldbc ZORA_SCALE_RING,ROCS_RING
-	call eitherRingActive
-	ld b,0
-	jr nz,+
-		inc b
-	+
-	jr nc,+
-		inc b
-	+
-
-	ld a,TREASURE_MERMAID_SUIT
-	call checkTreasureObtained
-	jr nc,+
-		inc b
-	+
-	ld a,b
-	pop bc
-	cp $02
-	ret c
-	xor a
-	ret
 
 enemyPogoComboActive:
 	push bc

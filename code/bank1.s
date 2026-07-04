@@ -3952,7 +3952,74 @@ updateAzuchu:
 	ld a,AZUCHU_RING
 	call cpActiveRing
 	ret nz
-	jp spawnAzuchu
+
+	; only run every few frames to prevent lag
+	ld a,(wFrameCounter)
+	and $0f
+	ret nz
+
+	; if link is disabled, don't spawn azuchu
+	ld a,(wDisabledObjects)
+	bit 0,a
+	ret nz
+
+	; spawning checks are only for top-down
+	ld a,(wTilesetFlags)
+	and TILESETFLAG_SIDESCROLL
+	jr nz,+
+		ld hl,(wLinkInAir)
+		or (hl)
+		ret nz
+
+		; don't spawn if on hazard or in the air
+		call checkLinkIsOverHazard
+		ret c
+	+
+
+	; don't spawn if not regular link object(i.e. riding raft/companion)
+	ld a,(wLinkObjectIndex)
+	cp >w1Link
+	ret nz
+
+	ld a,(wLinkRidingObject)
+	or a
+	ret nz
+
+	; backup relatedObject2 of link since it's gonna get overwritten
+	ld hl,w1Link.relatedObj2
+	ld e,(hl)
+	inc l
+	ld d,(hl)
+	push de
+	push hl
+
+	; must point to w1Link
+	ld (hl),>w1Link
+
+	; create azuchu if not exists
+	ldbc ITEM_AZUCHU,$01
+	ld d,>w1Link
+
+	callab bank6.itemCreateUniqueChildWithID
+	; the c flag will get overwritten by the callab, so we have
+	; to do the same check to determine if it was created correctly
+	ld a,h
+	cp LAST_DYNAMIC_ITEM_INDEX+1
+	jr z,++
+		; clear parent
+		xor a
+		ld l,Item.relatedObj1
+		ldi (hl),a
+		ld  (hl),a
+	++
+
+	; restore link child object
+	pop hl
+	pop de
+	ld (hl),d
+	dec l
+	ld (hl),e
+	ret
 
 updateQuickSwapItems:
 	ld a,(wOpenedMenuType)

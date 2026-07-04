@@ -132,6 +132,16 @@ itemCreateChildAndDeleteOnFailure:
 	jp clearParentItem
 
 ;;
+; @param	b	Item ID to create (see constants/common/items.s)
+; @param	c	Subid for item
+; @param	d	Points to w1ParentItem2, or some parent item?
+; @param[out]	h	The newly created child item
+; @param[out]	cflag	Set on failure
+itemCreateUniqueChildWithID:
+	ld e,$01
+	jr itemCreateChildWithID
+
+;;
 ; Creates an item object, based on the id of another item object?
 ;
 ; "Parent" items call this to create an actual physical object (since parent items don't
@@ -708,4 +718,8 @@ swordBeamHeartCutoff:
 	ld c,LIGHT_RING_L1_CUTOFF
 	ret
 
+alchemyJoyComboActive:
+	push bc
+	ldbc BLUE_JOY_RING,GOLD_JOY_RING
+	jp eitherRingActiveAndPopBC
 .endif

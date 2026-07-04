@@ -528,5 +528,26 @@ getCanUseItemsInWater:
 		ret
 	+
 
-	jp dolphinComboActive
+	push bc
+	ldbc ZORA_SCALE_RING,ROCS_RING
+	call eitherRingActive
+	ld b,0
+	jr nz,+
+		inc b
+	+
+	jr nc,+
+		inc b
+	+
+
+	ld a,TREASURE_MERMAID_SUIT
+	call checkTreasureObtained
+	jr nc,+
+		inc b
+	+
+	ld a,b
+	pop bc
+	cp $02
+	ret c
+	xor a
+	ret
 .endif

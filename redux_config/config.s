@@ -52,6 +52,11 @@
 		; determines whether your shield can be used passively on the side
 		.define ENABLE_PASSIVE_SHIELD	1
 	.endif
+	.ifndef CONTEXT_SENSITIVE_AUTO_EQUIP
+		; determines whether to automatically equip certain items
+		; if you are standing/pushing on the tile they are used on
+		.define CONTEXT_SENSITIVE_AUTO_EQUIP	1
+	.endif
 	.ifndef ENABLE_SETTINGS_MENU
 		; determines whether there is a 4th pause screen for settings
 		.define ENABLE_SETTINGS_MENU	1
