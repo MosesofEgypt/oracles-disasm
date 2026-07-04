@@ -107,7 +107,7 @@ interactionCodee1:
 	ld hl,w1Link.yh
 	ldi a,(hl)
 	; lower y position a little to account for visual offset
-	add $09
+	add $06
 	ld e,a
 	inc l
 	ld a,(hl)
@@ -122,7 +122,7 @@ interactionCodee1:
 	call @getCoordDist
 	pop hl
 	add h
-	cp $08
+	cp $0a
 	jr nc,+
 		; close enough to autoequip, so set flag
 		xor a
