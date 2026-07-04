@@ -416,8 +416,8 @@ textOptionCode:
 ; These are values determining how many frames until the cursor appears.
 ; Which value is used depends on wTextSpeed.
 @cursorDelay:
-.ifdef ENABLE_SETTINGS_MENU
-	.db $20 $1c $18 $14 $10 $0c $08
+.ifdef MORE_MESSAGE_SPEEDS
+	.db $24 $20 $1c $18 $14 $10 $0c $0c
 .else
 	.db $20 $1c $18 $14 $10
 .endif
@@ -1489,6 +1489,13 @@ updateCharacterDisplayTimer:
 	ld a,(wKeysJustPressed)
 	and BTN_A | BTN_B
 	jr nz,@skipToLineEnd
+.ifdef MORE_MESSAGE_SPEEDS
+	ld a,(wMiscSettings)
+	and $07
+	cp $07
+	; speed 7 is instant text
+	jr z,@skipToLineEnd
+.endif
 
 	; Wait for the next character to display itself
 @countdownToNextCharacter:
@@ -2992,27 +2999,11 @@ textControlCodeC_0:
 .ifdef ENABLE_SETTINGS_MENU
 	ld a,(wMiscSettings)
 	and $07
-	rlca
-	rlca
-	add c
-	ld hl,textSpeedData
-	rst_addAToHl
-	ld a,(hl)
-	ld (w7CharacterDisplayLength),a
-	jr textControlCodeC_ret
-
-textSpeedData:
-	.db $04 $05 $07 $08 ; Text speed 1
-	.db $03 $04 $05 $07 ; Text speed 2
-	.db $02 $03 $04 $05 ; 3
-	.db $02 $02 $03 $03 ; 4
-	.db $01 $01 $02 $02 ; 5
-	.db $01 $01 $01 $01 ; 6
-	.db $01 $01 $01 $01 ; 7
 .else
 	ld a,(wTextSpeed)
-	swap a
-	rrca
+.endif
+	rlca
+	rlca
 	add c
 	ld hl,textSpeedData
 	rst_addAToHl
@@ -3024,11 +3015,18 @@ textSpeedData:
 ; know why there are 8 bytes per text speed, but the 3rd byte of each appears
 ; to be the only important one.
 textSpeedData:
-	.db $04 $05 $07 $08 $0a $0c $0e $0f ; Text speed 1
-	.db $03 $04 $05 $07 $08 $0a $0b $0c ; Text speed 2
-	.db $02 $03 $04 $05 $06 $08 $08 $0a ; 3
-	.db $02 $02 $03 $03 $04 $06 $06 $08 ; 4
-	.db $01 $01 $02 $02 $03 $03 $04 $05 ; 5
+	; Text speed 1
+.ifdef MORE_MESSAGE_SPEEDS
+	.db $05 $06 $09 $0a
+.endif
+	.db $04 $05 $07 $08
+	.db $03 $04 $05 $07
+	.db $02 $03 $04 $05
+	.db $02 $02 $03 $03
+	.db $01 $01 $02 $02
+.ifdef MORE_MESSAGE_SPEEDS
+	.db $01 $01 $01 $01
+	.db $01 $01 $01 $01
 .endif
 
 ;;

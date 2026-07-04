@@ -370,7 +370,7 @@ fileSelectMode1:
 	and $07
 	add c
 .ifdef MORE_MESSAGE_SPEEDS
-	cp $07
+	cp $08
 .else
 	cp $05
 .endif
@@ -409,7 +409,7 @@ fileSelectMode1:
 @data:
 	.db $01
 .ifdef MORE_MESSAGE_SPEEDS
-	.db $90 $21 $2e $01
+	.db $91 $19 $2e $01
 .else
 	.db $90 $31 $2e $01
 .endif

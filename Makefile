@@ -175,6 +175,8 @@ UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name 'spr_titlescreen_sp
 endif
 ifdef MORE_MESSAGE_SPEEDS
 BIN_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/more_msg_speeds -name '*.bin')
+PNG_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/more_msg_speeds -name '*.png')
+UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/more_msg_speeds -name '*.png')
 endif
 ifdef ENABLE_NEW_GAME_PLUS
 PNG_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/ngp -name '*.png')
