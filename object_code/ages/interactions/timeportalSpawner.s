@@ -92,7 +92,51 @@ interactionCodee1:
 	ld (hl),$03
 	ret
 
+.ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
+@getCoordDist:
+	sub (hl)
+	bit 7,a
+	jr z,+
+		cpl
+		inc a
+	+
+	ret
+
 @state1:
+	; check that link is close to the portal
+	ld hl,w1Link.yh
+	ldi a,(hl)
+	; lower y position a little to account for visual offset
+	add $09
+	ld e,a
+	inc l
+	ld a,(hl)
+
+	ld h,d
+	ld l,Interaction.xh
+	; check that the x and y coords are close enough
+	call @getCoordDist
+	push af
+	ld l,Interaction.yh
+	ld a,e
+	call @getCoordDist
+	pop hl
+	add h
+	cp $08
+	jr nc,+
+		; close enough to autoequip, so set flag
+		xor a
+	+
+	ld a,ITEM_HARP
+
+	call handleAutoEquipItem
+	jr nz,+
+		ld a,$01
+		ld (wSelectedHarpSong),a
+	+
+.else
+@state1:
+.endif
 	ld a,(wLinkPlayingInstrument)
 	dec a
 	ret nz

@@ -8860,6 +8860,7 @@ getLinkMaxHealth:
 ;;
 ; @param	a		The item to auto-equip or un-equip.
 ; @param	zflag	Equip item if set. Otherwise unequip.
+; @param[out]	zflag	Set if swap occurred.
 handleAutoEquipItem:
 	push hl
 	push af
@@ -8878,10 +8879,13 @@ handleAutoEquipItem:
 		jr nz,+
 			; equipping. only swap if not already equipped
 			cp (hl)
-			jr z,+++
+			jr z,+++++
 				ld a,$ff
 				ld (wAutoEquipInvSlot),a
 				call @swapItemWithInventory
+				jr +++
+			+++++
+				or $01
 				jr +++
 		+
 		; unequipping. only swap if it was auto-equipped
@@ -8889,11 +8893,18 @@ handleAutoEquipItem:
 		jr nz,+++
 			ld a,(wAutoEquipInvSlot)
 			cp $ff
-			call nz,@swapItemWithInventory
+			jr z,++++
+				call @swapItemWithInventory
+				ld a,$ff
+				ld (wAutoEquipInvSlot),a
+				jr +++
+		++++
+			or $01
 		+++
 			pop de
 	++
-	pop af
+	pop hl
+	ld a,h
 	pop hl
 	ret
 
@@ -8930,8 +8941,34 @@ handleAutoEquipItem:
 	ld d,>wInventoryStorage
 
 	ld a,(de)
+.ifndef ONE_HANDED_BIGGORON_SWORD
+	cp ITEM_BIGGORON_SWORD
+	jr nz,+
+		; biggoron sword being equipped. put it in both slots
+		ld d,(hl)
+		push hl
+		ld l,<wInventoryB
+		ldi (hl),a
+		ldi (hl),a
+		pop hl
+		ld (hl),d
+	+
+.endif
 	ld d,a
 	ld a,(hl)
+.ifndef ONE_HANDED_BIGGORON_SWORD
+	cp ITEM_BIGGORON_SWORD
+	jr nz,+
+		; biggoron sword being unequipped. remove from both slots
+		push hl
+		ld l,<wInventoryB
+		xor a
+		ldi (hl),a
+		ldi (hl),a
+		ld a,ITEM_BIGGORON_SWORD
+		pop hl
+	+
+.endif
 	ld (hl),d
 	ld d,>wInventoryStorage
 	ld (de),a
@@ -8939,6 +8976,7 @@ handleAutoEquipItem:
 	ld hl,(wStatusBarNeedsRefresh)
 	set 0,(hl)
 	set 1,(hl)
+	xor a ; set flag indicating swap occurred
 	ret
 .endif
 

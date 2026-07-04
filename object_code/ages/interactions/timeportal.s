@@ -75,6 +75,11 @@ interactionCodede:
 ; Also called by INTERAC_TIMEPORTAL_SPAWNER.
 interactionBeginTimewarp:
 	call resetLinkInvincibility
+.ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
+	ld a,ITEM_HARP
+	or a
+	call handleAutoEquipItem
+.endif
 	ld hl,w1Link
 	call objectCopyPosition
 	ld l,<w1Link.direction
