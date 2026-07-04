@@ -4072,7 +4072,7 @@ loadEquippedItemGfx:
 	call c,loadItemIconGfx
 
 ;;
-setupHudIconBgPriority:
+setupHudIconBgTileProperties:
 	ld bc,$0020
 	ld hl,w4StatusBarAttributeMap+$02
 	ld a,(wBItemSpriteXOffset)
@@ -4103,7 +4103,7 @@ setupHudIconBgPriority:
 	; handle an extra sprite
 	call @func1
 	ld a,(wAItemSpriteAttribute3)
-	ld hl,w4StatusBarAttributeMap+$08
+	ld hl,w4StatusBarAttributeMap+$07
 	inc a
 	ret z
 .endif
@@ -4313,7 +4313,7 @@ drawItemTilesOnStatusBar:
 	ld a,(wInventoryA)
 	ld de,wAItemTreasure
 	call loadEquippedItemSpriteData
-	call setupHudIconBgPriority
+	call setupHudIconBgTileProperties
 
 	; Draw A button item
 	; Need to check if the status bar is squished to the left
