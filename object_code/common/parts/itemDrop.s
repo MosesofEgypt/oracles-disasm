@@ -35,9 +35,17 @@ partCode01:
 	ld e,Part.subid
 	ld a,(de)
 .ifdef ENABLE_NEW_GAME_PLUS
-	; If this is a healing item, delete it in NG+
+	; If this is a healing item, change it in NG+
 	call getIsNewGamePlus
-	jp nz,partDelete
+	jr z,+
+		; change it to 5 rupees if it's a heart, or delete if a fairy
+		or a
+		jp z,partDelete
+		cp ITEM_DROP_HEART
+		jr nz,+
+			ld a,ITEM_DROP_5_RUPEES
+			ld (de),a
+	+
 	; if the high bit is set, it means ALWAYS make it an enemy
 	cp ITEM_DROP_100_RUPEES_OR_ENEMY|$80
 	jr nz,+

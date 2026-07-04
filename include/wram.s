@@ -555,9 +555,11 @@ wTotalRupeesCollected: ; $c627
 
 .ifdef ENABLE_SETTINGS_MENU
 wMiscSettings: ; $c629
-	; Bits 0-2: Text speed
-	; Bit 3: 	Set if passive shield should be enabled
-	; Bit 4: 	Set if context-sensitive items should be enabled
+	; Bits 0-2: Text speed(0-7)
+	; Bit 3:    Set if passive shield should be enabled
+	; Bit 4:    Set if context-sensitive items should be enabled.
+	;           This includes rod of seasons on stumps, harp of ages
+	;           on warp tiles, and bracelet when pushing a wall tile
 	db
 .else
 wTextSpeed: ; $c629
