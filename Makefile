@@ -89,6 +89,9 @@ endif
 ifdef ENABLE_NEW_GAME_PLUS
 	ORACLE_REDUX_DEFINES += -D ENABLE_NEW_GAME_PLUS
 endif
+ifdef MORE_MESSAGE_SPEEDS
+	ORACLE_REDUX_DEFINES += -D MORE_MESSAGE_SPEEDS
+endif
 DEFINES += $(ORACLE_REDUX_DEFINES)
 
 
@@ -169,6 +172,9 @@ endif
 ifdef ENABLE_DX_TITLE_SCREEN
 PNG_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name 'spr_titlescreen_sprites.png')
 UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name 'spr_titlescreen_sprites.png')
+endif
+ifdef MORE_MESSAGE_SPEEDS
+BIN_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/more_msg_speeds -name '*.bin')
 endif
 ifdef ENABLE_NEW_GAME_PLUS
 PNG_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/ngp -name '*.png')

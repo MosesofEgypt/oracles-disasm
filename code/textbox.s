@@ -400,7 +400,12 @@ textOptionCode:
 	inc (hl)
 
 	; Set the delay until the cursor appears
+.ifdef ENABLE_SETTINGS_MENU
+	ld a,(wMiscSettings)
+	and $07
+.else
 	ld a,(wTextSpeed)
+.endif
 	ld hl,@cursorDelay
 	rst_addAToHl
 	ld a,(hl)
@@ -411,7 +416,11 @@ textOptionCode:
 ; These are values determining how many frames until the cursor appears.
 ; Which value is used depends on wTextSpeed.
 @cursorDelay:
+.ifdef ENABLE_SETTINGS_MENU
+	.db $20 $1c $18 $14 $10 $0c $08
+.else
 	.db $20 $1c $18 $14 $10
+.endif
 
 ;;
 @state01:
@@ -2672,12 +2681,6 @@ handleTextControlCode:
 	.dw @controlCodeE
 	.dw @controlCodeF
 
-; Unused?
-@blankCode:
-	pop hl
-	pop bc
-	ret
-
 ;;
 ; Null terminator; end of text
 @controlCode0:
@@ -2897,14 +2900,6 @@ handleTextControlCode:
 	ld (w7SoundEffect),a
 	jr @popBcAndRet
 
-; Unused?
-	pop hl
-	call readByteFromW7ActiveBankAndIncHl
-	ld b,a
-	call @@func2
-	call @@func1
-	jr @popBcAndRet
-
 @@func1:
 	push de
 	ld a,e
@@ -2973,10 +2968,18 @@ handleTextControlCode:
 ; @param[out] a Frames per character
 getCharacterDisplayLength:
 	push hl
+.ifdef ENABLE_SETTINGS_MENU
+	ld a,(wMiscSettings)
+	and $07
+	rlca
+	rlca
+	ld hl,textSpeedData+2
+.else
 	ld a,(wTextSpeed)
 	swap a
 	rrca
 	ld hl,textSpeedData+2
+.endif
 	rst_addAToHl
 	ld a,(hl)
 	pop hl
@@ -2986,6 +2989,27 @@ getCharacterDisplayLength:
 ; Sets the speed of the text. Value of $02 for c sets it to normal, lower
 ; values are faster, higher ones are slower.
 textControlCodeC_0:
+.ifdef ENABLE_SETTINGS_MENU
+	ld a,(wMiscSettings)
+	and $07
+	rlca
+	rlca
+	add c
+	ld hl,textSpeedData
+	rst_addAToHl
+	ld a,(hl)
+	ld (w7CharacterDisplayLength),a
+	jr textControlCodeC_ret
+
+textSpeedData:
+	.db $04 $05 $07 $08 ; Text speed 1
+	.db $03 $04 $05 $07 ; Text speed 2
+	.db $02 $03 $04 $05 ; 3
+	.db $02 $02 $03 $03 ; 4
+	.db $01 $01 $02 $02 ; 5
+	.db $01 $01 $01 $01 ; 6
+	.db $01 $01 $01 $01 ; 7
+.else
 	ld a,(wTextSpeed)
 	swap a
 	rrca
@@ -3005,6 +3029,8 @@ textSpeedData:
 	.db $02 $03 $04 $05 $06 $08 $08 $0a ; 3
 	.db $02 $02 $03 $03 $04 $06 $06 $08 ; 4
 	.db $01 $01 $02 $02 $03 $03 $04 $05 ; 5
+.endif
+
 ;;
 ; Slow down the text. Used for essences.
 textControlCodeC_7:

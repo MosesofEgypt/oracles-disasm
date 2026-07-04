@@ -457,7 +457,11 @@ initialFileVariablesTable:
 
 ; Initial values for variables in the c6xx block.
 initialFileVariables:
+.ifdef ENABLE_SETTINGS_MENU
+	.db <wMiscSettings,			$1c
+.else
 	.db <wTextSpeed,			$04
+.endif
 	.db <wc608,				$01
 	.db <wLinkName+5,			$00 ; Ensure names have null terminator
 	.db <wKidName+5,			$00

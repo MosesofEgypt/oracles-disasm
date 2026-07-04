@@ -553,8 +553,16 @@ wTotalRupeesCollected: ; $c627
 ; Used for the rupee ring. 2 bytes.
 	dw
 
+.ifdef ENABLE_SETTINGS_MENU
+wMiscSettings: ; $c629
+	; Bits 0-2: Text speed
+	; Bit 3: 	Set if passive shield should be enabled
+	; Bit 4: 	Set if context-sensitive items should be enabled
+	db
+.else
 wTextSpeed: ; $c629
 	db
+.endif
 
 wActiveLanguage: ; $c62a
 ; Doesn't do anything on the US version

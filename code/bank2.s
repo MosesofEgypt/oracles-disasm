@@ -364,18 +364,41 @@ fileSelectMode1:
 	jp decFileSelectMode2
 
 @leftOrRight:
+.ifdef ENABLE_SETTINGS_MENU
+	ld hl,wMiscSettings
+	ld a,(hl)
+	and $07
+	add c
+.ifdef MORE_MESSAGE_SPEEDS
+	cp $07
+.else
+	cp $05
+.endif
+	ret nc
+	ld c,a
+	ld a,(hl)
+	and $f8
+	or c
+	ld (hl),a
+.else
 	ld hl,wTextSpeed
 	ld a,(hl)
 	add c
 	cp $05
 	ret nc
 	ld (hl),a
+.endif
 	ld a,SND_MENU_MOVE
 	jp playSound
 
 ;;
 @textSpeedMenu_addCursorToOam:
+.ifdef ENABLE_SETTINGS_MENU
+	ld a,(wMiscSettings)
+	and $07
+.else
 	ld a,(wTextSpeed)
+.endif
 	swap a
 	ld c,a
 	ld b,$00
@@ -385,7 +408,11 @@ fileSelectMode1:
 ; OAM data for cursor?
 @data:
 	.db $01
+.ifdef MORE_MESSAGE_SPEEDS
+	.db $90 $21 $2e $01
+.else
 	.db $90 $31 $2e $01
+.endif
 
 ;;
 ; Screen fading out

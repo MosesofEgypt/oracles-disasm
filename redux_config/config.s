@@ -52,6 +52,10 @@
 		; determines whether your shield can be used passively on the side
 		.define ENABLE_PASSIVE_SHIELD	1
 	.endif
+	.ifndef ENABLE_SETTINGS_MENU
+		; determines whether there is a 4th pause screen for settings
+		.define ENABLE_SETTINGS_MENU	1
+	.endif
 	.ifndef WIDE_INVENTORY_SPRITES
 		; determines whether the inventory items are 2 or 3 tiles wide
 		.define WIDE_INVENTORY_SPRITES			1
