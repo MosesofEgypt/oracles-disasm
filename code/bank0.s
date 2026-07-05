@@ -8879,12 +8879,13 @@ handleAutoEquipItem:
 		jr nz,+
 			; equipping. only swap if not already equipped
 			cp (hl)
-			jr z,+++++
-				ld a,$ff
-				ld (wAutoEquipInvSlot),a
-				call @swapItemWithInventory
+			jr z,++++
+				ld a,(wAutoEquipInvSlot)
+				cp $ff
+				jr nz,++++
+					call @swapItemWithInventory
 				jr +++
-			+++++
+			++++
 				or $01
 				jr +++
 		+

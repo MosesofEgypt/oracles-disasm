@@ -408,10 +408,19 @@ func_4553:
 
 	; Pushing against a wall
 @pushingAnimation:
+.ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
+	xor a
+	ld a,ITEM_BRACELET
+	call handleAutoEquipItem
+.endif
 	ld a,(w1Link.direction)
 	ld (wLinkPushingDirection),a
 	ld c,$04
+.ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
+	jr @pushingAnimationFound
+.else
 	jr @animationFound
+.endif
 
 	; Standard, just walking or standing animation
 @standingAnimation:
@@ -438,6 +447,12 @@ func_4553:
 	ld c,$06
 
 @animationFound:
+.ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
+	ld a,ITEM_BRACELET
+	or a
+	call handleAutoEquipItem
+@pushingAnimationFound:
+.endif
 	ld a,(wLinkClimbingVine)
 	or a
 	jr z,+

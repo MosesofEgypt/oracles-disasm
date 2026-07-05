@@ -565,8 +565,9 @@ wMiscSettings: ; $c629
 	; Bits 0-2: Text speed(0-7)
 	; Bit 3:    Set if passive shield should be enabled
 	; Bit 4:    Set if context-sensitive items should be enabled.
-	;           This includes rod of seasons on stumps, harp of ages
-	;           on warp tiles, bracelet when pushing a wall tile, the
+	;           This includes rod of seasons on stumps, the harp
+	;           when on warp tiles, the bracelet when pushing on a
+	;           wall tile, the shovel when pushing on a dirt tile,
 	;           the magnetic gloves when facing a magnetic tile, and
 	;           the switch hook when facing a diamond switch hook tile
 	; Bit 5:    Set if context-sensitive item should go in A.

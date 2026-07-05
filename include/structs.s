@@ -335,7 +335,7 @@
 	;   7: up-left
 	adjacentWallsBitset	db ; $33
 
-	; Bit 4 set if Link is pushing against a wall?
+	; Bit 4 unset if Link is pushing against a wall
 	var34			db ; $34
 
 	; Link: keeps track of when you press "A" to swim faster in water (for flippers).

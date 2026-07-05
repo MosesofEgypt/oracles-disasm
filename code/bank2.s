@@ -6004,6 +6004,22 @@ inventoryMenuState1:
 	ld h,d
 	ld a,(wTmpcbb6)
 	ld e,a
+.ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
+	; if the item being equipped goes into the context
+	; sensitive slot, we need to reset the auto-equip.
+	ld a,(wMiscSettings)
+	bit 5,a
+	ld a,<wInventoryB
+	jr z,+
+		inc a
+	+
+	cp e
+	jr nz,+
+		; reset the auto-equip slot
+		ld a,$ff
+		ld (wAutoEquipInvSlot),a
+	+
+.endif
 	ld a,(wInventorySubmenu0CursorPos)
 	add <wInventoryStorage
 	ld l,a
@@ -6049,6 +6065,11 @@ inventoryMenuState1:
 	call @@putItemInFirstBlankSlot
 	ld a,(wInventoryA)
 	call @@putItemInFirstBlankSlot
+.ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
+	; reset the auto-equip slot
+	ld a,$ff
+	ld (wAutoEquipInvSlot),a
+.endif
 	ld l,<wInventoryB
 	ld (hl),b
 	inc l
