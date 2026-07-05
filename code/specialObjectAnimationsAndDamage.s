@@ -324,7 +324,7 @@ func_4553:
 
 	ld a,(w1Link.direction)
 	ld (wLinkPushingDirection),a
-	jr @animationFound
+	jp @animationFound
 .endif
 
 @notUnderwater:
@@ -409,8 +409,15 @@ func_4553:
 	; Pushing against a wall
 @pushingAnimation:
 .ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
-	xor a
-	ld a,ITEM_BRACELET
+	call getItemForTileBeingPushedOn
+	cp ITEM_SEED_SATCHEL
+	jr nz,+
+		; it's the seed satchel, so we need to switch to ember seeds
+		xor a
+		ld (wSatchelSelectedSeeds),a
+		ld a,ITEM_SEED_SATCHEL
+	+
+	cp a ; equip
 	call handleAutoEquipItem
 .endif
 	ld a,(w1Link.direction)
@@ -448,9 +455,28 @@ func_4553:
 
 @animationFound:
 .ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
-	ld a,ITEM_BRACELET
-	or a
-	call handleAutoEquipItem
+	ld a,(wAutoEquipInvSlot)
+	cp $ff
+	jr z,+
+		ld a,(wMiscSettings)
+		bit 5,a
+		ld a,(wInventoryB)
+		jr z,++
+			ld a,(wInventoryA)
+		++
+		; only unequip if it's one of these that we equipped
+		cp ITEM_SHOVEL
+		jr z,++
+		cp ITEM_BRACELET
+		jr z,++
+		cp ITEM_SWORD
+		jr z,++
+		cp ITEM_SEED_SATCHEL
+		jr nz,+
+			++
+			or a ; unequip
+			call handleAutoEquipItem
+	+
 @pushingAnimationFound:
 .endif
 	ld a,(wLinkClimbingVine)
@@ -465,6 +491,62 @@ func_4553:
 	add a
 	ld (w1Link.var34),a
 	ret
+
+.ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
+getItemForTileBeingPushedOn:
+	push hl
+	push bc
+	ld hl,w1Link.yh
+	ld b,(hl)
+	ld l,<w1Link.xh
+	ld c,(hl)
+
+	; add offset for link's facing direction
+	ld l,<w1Link.direction
+	ld a,(hl)
+	add a
+	ld hl,@facingOffsets
+	rst_addAToHl
+	ldi a,(hl)
+	add b
+	ld b,a
+	ldi a,(hl)
+	add c
+	ld c,a
+
+	ld hl,@breakableSourcesAndItems
+	-
+		ldi a,(hl)
+		or a
+		jr z,+
+			push hl
+			call tryToBreakTile
+			pop hl
+			ldi a,(hl)
+			jr nc,-
+				pop bc
+				pop hl
+				ret
+		+
+	pop bc
+	pop hl
+	; if none of the above, default to bracelet
+	ld a,ITEM_BRACELET
+	ret
+
+@facingOffsets:
+	.db $f8 $00
+	.db $00 $08
+	.db $08 $00
+	.db $00 $f8
+
+@breakableSourcesAndItems:
+	.db BREAKABLETILESOURCE_SHOVEL|$80      ITEM_SHOVEL
+	.db BREAKABLETILESOURCE_BRACELET|$80    ITEM_BRACELET
+	.db BREAKABLETILESOURCE_SWORD_L1|$80    ITEM_SWORD
+	.db BREAKABLETILESOURCE_EMBER_SEED|$80  ITEM_SEED_SATCHEL
+	.db $00 ; terminator
+.endif
 
 ;;
 ; Gets the ID to use for the Link object based on what transformation rings he's wearing
