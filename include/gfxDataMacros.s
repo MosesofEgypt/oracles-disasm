@@ -33,11 +33,7 @@
 		.BANK DATA_BANK SLOT 1
 		.ORGA $4000
 
-		.repeat $8000-DATA_ADDR index COUNT
-			.db $00
-		.endr
-
-		.redefine PAD_AMOUNT $00
+		.redefine PAD_AMOUNT $8000-DATA_ADDR
 		.redefine DATA_ADDR $4000
 	.endif
 
