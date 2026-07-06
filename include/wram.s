@@ -560,7 +560,7 @@ wTotalRupeesCollected: ; $c627
 ; Used for the rupee ring. 2 bytes.
 	dw
 
-.ifdef ENABLE_SETTINGS_MENU
+.ifdef MORE_MESSAGE_SPEEDS
 wMiscSettings: ; $c629
 	; Bits 0-2: Text speed(0-7)
 	; Bit 3:    Set if passive shield should be enabled

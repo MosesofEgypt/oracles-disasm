@@ -4034,9 +4034,11 @@ updateQuickSwapItems:
 		ret
 	+
 
+.ifdef MORE_MESSAGE_SPEEDS
 	ld a,(wMiscSettings)
 	bit 6,a
 	ret z
+.endif
 
 	ld a,(wKeysPressed)
 	and (BTN_SELECT|BTN_START)

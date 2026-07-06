@@ -8864,9 +8864,11 @@ getLinkMaxHealth:
 handleAutoEquipItem:
 	push hl
 	push af
+.ifdef MORE_MESSAGE_SPEEDS
 	ld hl,wMiscSettings
 	bit 4,(hl)
 	jr z,++
+.endif
 		bit 5,(hl)
 		ld hl,wInventoryB
 		jr z,+

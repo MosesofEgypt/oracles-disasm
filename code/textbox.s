@@ -400,7 +400,7 @@ textOptionCode:
 	inc (hl)
 
 	; Set the delay until the cursor appears
-.ifdef ENABLE_SETTINGS_MENU
+.ifdef MORE_MESSAGE_SPEEDS
 	ld a,(wMiscSettings)
 	and $07
 .else
@@ -2975,7 +2975,7 @@ handleTextControlCode:
 ; @param[out] a Frames per character
 getCharacterDisplayLength:
 	push hl
-.ifdef ENABLE_SETTINGS_MENU
+.ifdef MORE_MESSAGE_SPEEDS
 	ld a,(wMiscSettings)
 	and $07
 	rlca
@@ -2996,7 +2996,7 @@ getCharacterDisplayLength:
 ; Sets the speed of the text. Value of $02 for c sets it to normal, lower
 ; values are faster, higher ones are slower.
 textControlCodeC_0:
-.ifdef ENABLE_SETTINGS_MENU
+.ifdef MORE_MESSAGE_SPEEDS
 	ld a,(wMiscSettings)
 	and $07
 .else

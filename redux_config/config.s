@@ -57,10 +57,6 @@
 		; if you are standing/pushing on the tile they are used on
 		.define CONTEXT_SENSITIVE_AUTO_EQUIP	1
 	.endif
-	.ifndef ENABLE_SETTINGS_MENU
-		; determines whether there is a 4th pause screen for settings
-		.define ENABLE_SETTINGS_MENU	1
-	.endif
 	.ifndef WIDE_INVENTORY_SPRITES
 		; determines whether the inventory items are 2 or 3 tiles wide
 		.define WIDE_INVENTORY_SPRITES			1

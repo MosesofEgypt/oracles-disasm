@@ -364,16 +364,12 @@ fileSelectMode1:
 	jp decFileSelectMode2
 
 @leftOrRight:
-.ifdef ENABLE_SETTINGS_MENU
+.ifdef MORE_MESSAGE_SPEEDS
 	ld hl,wMiscSettings
 	ld a,(hl)
 	and $07
 	add c
-.ifdef MORE_MESSAGE_SPEEDS
 	cp $08
-.else
-	cp $05
-.endif
 	ret nc
 	ld c,a
 	ld a,(hl)
@@ -393,7 +389,7 @@ fileSelectMode1:
 
 ;;
 @textSpeedMenu_addCursorToOam:
-.ifdef ENABLE_SETTINGS_MENU
+.ifdef MORE_MESSAGE_SPEEDS
 	ld a,(wMiscSettings)
 	and $07
 .else
@@ -6009,12 +6005,16 @@ inventoryMenuState1:
 .ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
 	; if the item being equipped goes into the context
 	; sensitive slot, we need to reset the auto-equip.
+.ifdef MORE_MESSAGE_SPEEDS
 	ld a,(wMiscSettings)
 	bit 5,a
 	ld a,<wInventoryB
 	jr z,+
 		inc a
 	+
+.else
+	ld a,<wInventoryB
+.endif
 	cp e
 	jr nz,+
 		; reset the auto-equip slot

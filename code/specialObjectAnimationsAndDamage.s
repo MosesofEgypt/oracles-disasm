@@ -458,12 +458,16 @@ func_4553:
 	ld a,(wAutoEquipInvSlot)
 	cp $ff
 	jr z,+
+.ifdef MORE_MESSAGE_SPEEDS
 		ld a,(wMiscSettings)
 		bit 5,a
 		ld a,(wInventoryB)
 		jr z,++
 			ld a,(wInventoryA)
 		++
+.else
+		ld a,(wInventoryB)
+.endif
 		; only unequip if it's one of these that we equipped
 		cp ITEM_SHOVEL
 		jr z,++
