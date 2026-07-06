@@ -22,13 +22,13 @@
 .macro m_GfxDataAligned
 	.assert NARGS == 1
 
-	.fopen {"{BUILD_DIR}/gfx/\1.cmp"} file
+	.fopen {"{BUILD_DIR}/gfx/\1.bin"} file
 	.fsize file SIZE
 	.fclose file
 
 	.define PAD_AMOUNT ((DATA_ADDR+$0f)&$fff0)-DATA_ADDR
 
-	.if DATA_ADDR+PAD_AMOUNT+SIZE >= $8000
+	.if DATA_ADDR+PAD_AMOUNT+SIZE > $8000
 		.redefine DATA_BANK DATA_BANK+1
 		.BANK DATA_BANK SLOT 1
 		.ORGA $4000

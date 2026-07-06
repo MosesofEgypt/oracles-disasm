@@ -187,6 +187,24 @@ inventorySubmenu3InitSelection:
 	ret
 
 inventorySubmenu3_drawCursors:
+	ld a,(wFrameCounter)
+	bit 3,a
+	jr z,+
+		ld a,(wInventorySubmenu3CursorPos)
+		call determinePageForSetting
+
+		ld hl,@arrowUpSpritesBlue
+		push af
+
+		cp $00
+		call nz,addSpritesToOam
+		pop af
+
+		ld hl,@arrowDownSpritesRed
+		cp $01
+		call c,addSpritesToOam
+	+
+
 	ld a,(wInventorySubmenu3CursorPos)
     add SETTINGS_PER_PAGE
     -
@@ -248,6 +266,16 @@ inventorySubmenu3_drawCursors:
 	ld a,c
 	ld (wInventory.itemSubmenuIndex),a
 	ret
+
+@arrowUpSpritesBlue
+	.db $02
+	.db $27 $12 $0e $04
+	.db $27 $97 $0e $04
+
+@arrowDownSpritesRed
+	.db $02
+	.db $71 $12 $0e $45
+	.db $71 $97 $0e $45
 
 @drawSettingCursor:
 	ld a,(wInventorySubmenu3CursorPos)
