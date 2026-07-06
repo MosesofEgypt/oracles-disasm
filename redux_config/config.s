@@ -158,3 +158,9 @@
 	.define ENABLE_RING_REDUX			1
 .endif
 .endif
+
+.ifdef ENABLE_SETTINGS_MENU
+.ifndef MORE_MESSAGE_SPEEDS
+	.define MORE_MESSAGE_SPEEDS			1
+.endif
+.endif

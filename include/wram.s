@@ -572,6 +572,7 @@ wMiscSettings: ; $c629
 	;           the switch hook when facing a diamond switch hook tile
 	; Bit 5:    Set if context-sensitive item should go in A.
 	;           Unset if context-sensitive item should go in B.
+	; Bit 6:    Set if quick-swap should be enabled.
 	db
 .else
 wTextSpeed: ; $c629
@@ -1746,6 +1747,10 @@ wAItemSpriteAttribute3:
 	db
 .endif
 
+.ifdef ENABLE_SETTINGS_MENU
+wInventorySubmenu3CursorPos:
+	db
+.endif
 .ENDS
 
 

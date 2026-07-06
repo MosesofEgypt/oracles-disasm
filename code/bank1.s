@@ -4034,10 +4034,9 @@ updateQuickSwapItems:
 		ret
 	+
 
-	; allow quick swapping if wearing the ring
-	ld a,QUICKSWAP_RING
-	call cpActiveRing
-	ret nz
+	ld a,(wMiscSettings)
+	bit 6,a
+	ret z
 
 	ld a,(wKeysPressed)
 	and (BTN_SELECT|BTN_START)

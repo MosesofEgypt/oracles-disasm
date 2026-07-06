@@ -92,17 +92,39 @@ interactionCodee1:
 	ld (hl),$03
 	ret
 
+@state1:
 .ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
-@getCoordDist:
-	sub (hl)
-	bit 7,a
-	jr z,+
-		cpl
-		inc a
-	+
+	; check that link is close to the portal
+	call autoEquipHarp
+.endif
+	ld a,(wLinkPlayingInstrument)
+	dec a
+	ret nz
+	call interactionIncState
+
+@markSpotDiscovered:
+	call getThisRoomFlags
+	set ROOMFLAG_BIT_PORTALSPOT_DISCOVERED,(hl)
 	ret
 
-@state1:
+@state2:
+	ld a,(wLinkPlayingInstrument)
+	or a
+	ret nz
+.ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
+	; unequip harp after activating portal
+	ld a,ITEM_HARP
+	or a
+	call handleAutoEquipItem
+.endif
+	ld a,SNDCTRL_STOPSFX
+	call playSound
+	ld a,SND_TELEPORT
+	call playSound
+	jp interactionIncState
+
+.ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
+autoEquipHarp:
 	; check that link is close to the portal
 	ld hl,w1Link.yh
 	ldi a,(hl)
@@ -134,25 +156,14 @@ interactionCodee1:
 		ld a,$01
 		ld (wSelectedHarpSong),a
 	+
-.else
-@state1:
-.endif
-	ld a,(wLinkPlayingInstrument)
-	dec a
-	ret nz
-	call interactionIncState
-
-@markSpotDiscovered:
-	call getThisRoomFlags
-	set ROOMFLAG_BIT_PORTALSPOT_DISCOVERED,(hl)
 	ret
 
-@state2:
-	ld a,(wLinkPlayingInstrument)
-	or a
-	ret nz
-	ld a,SNDCTRL_STOPSFX
-	call playSound
-	ld a,SND_TELEPORT
-	call playSound
-	jp interactionIncState
+@getCoordDist:
+	sub (hl)
+	bit 7,a
+	jr z,+
+		cpl
+		inc a
+	+
+	ret
+.endif

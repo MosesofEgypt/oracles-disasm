@@ -1,10 +1,6 @@
 ; See data/ages/gfxHeaders.s for more info.
 
-.ifdef ENABLE_NEW_GAME_PLUS
-.define NUM_GFX_HEADERS $bd
-.else
-.define NUM_GFX_HEADERS $bb
-.endif
+.define NUM_GFX_HEADERS $bf
 
 gfxHeaderTable:
 	.repeat NUM_GFX_HEADERS index COUNT
@@ -1166,5 +1162,28 @@ m_GfxHeaderStart $bc, GFXH_PICK_A_FILE_MENU_LAYOUT
 	m_GfxHeader flg_pick_a_file_menu_middle, w4AttributeMap+$0a0
 	m_GfxHeader map_pick_a_file_menu_bottom, w4TileMap+$1e0
 	m_GfxHeader flg_pick_a_file_menu_bottom, w4AttributeMap+$1e0
+	m_GfxHeaderEnd
+.else
+m_GfxHeaderStart $bb, GFXH_FILE_MENU_NEW_GAME_PLUS
+	m_GfxHeaderEnd
+m_GfxHeaderStart $bc, GFXH_PICK_A_FILE_MENU_LAYOUT
+	m_GfxHeaderEnd
+.endif
+
+.ifdef ENABLE_SETTINGS_MENU
+m_GfxHeaderStart $bd, GFXH_INVENTORY_SUBSCREEN_4_PAGE_0
+	m_GfxHeader map_inventory_screen_4_page_0, w4TileMap+$040
+	m_GfxHeader flg_inventory_screen_4_page_0, w4AttributeMap+$040
+	m_GfxHeaderEnd
+
+m_GfxHeaderStart $be, GFXH_INVENTORY_SUBSCREEN_4_PAGE_1
+	m_GfxHeader map_inventory_screen_4_page_1, w4TileMap+$040
+	m_GfxHeader flg_inventory_screen_4_page_1, w4AttributeMap+$040
+	m_GfxHeaderEnd
+.else
+m_GfxHeaderStart $bd, GFXH_INVENTORY_SUBSCREEN_4_PAGE_0
+	m_GfxHeaderEnd
+
+m_GfxHeaderStart $be, GFXH_INVENTORY_SUBSCREEN_4_PAGE_1
 	m_GfxHeaderEnd
 .endif

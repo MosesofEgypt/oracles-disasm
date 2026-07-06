@@ -50,15 +50,15 @@ uncmpGfxHeaderTable:
 	.dw uncmpGfxHeader_fluteRicky
 	.dw uncmpGfxHeader_fluteDimitri
 	.dw uncmpGfxHeader_fluteMoosh
-	.dw uncmpGfxHeader_fixupTiles
-	.dw uncmpGfxHeader_seedSprites
-	.dw uncmpGfxHeader_tuneOfEchoesSprite
-	.dw uncmpGfxHeader_tuneOfCurrentsSprite
-	.dw uncmpGfxHeader_tuneOfAgesSprite
 .endif
 .ifdef ENABLE_NEW_GAME_PLUS
 	.dw uncmpGfxHeader_lifeVialInv
 	.dw uncmpGfxHeader_swordShieldInv
+.endif
+.ifdef ENABLE_SETTINGS_MENU
+	.dw uncmpGfxHeader_inventorySubscreen4GfxRevert
+	.dw uncmpGfxHeader_inventorySubscreen4Page0Gfx
+	.dw uncmpGfxHeader_inventorySubscreen4Page1Gfx
 .endif
 
 
@@ -312,6 +312,11 @@ uncmpGfxHeader_itemIconsEquippedExt2:
 
 uncmpGfxHeader_itemIconsWide:
 	m_GfxHeader spr_item_icons_wide, $8001
+	m_GfxHeader gfx_item_icons_wide_fixup_tiles, $87e0
+	m_GfxHeader spr_item_icons_wide_seeds_sprite, $8960
+	m_GfxHeader spr_item_icons_song_sprites, $81c0, $04
+	m_GfxHeader spr_item_icons_song_sprites, $82c0, $04, $40
+	m_GfxHeader spr_item_icons_song_sprites, $85a0, $04, $80
 	m_GfxHeaderEnd
 
 ; overwrite item icons with their higher level variants
@@ -411,26 +416,6 @@ uncmpGfxHeader_fluteMoosh:
 	m_GfxHeader spr_item_icons_wide_flute_partners, $8461, $02, $40
 	m_GfxHeaderEnd
 
-uncmpGfxHeader_fixupTiles:
-	m_GfxHeader gfx_item_icons_wide_fixup_tiles, $87e0
-	m_GfxHeaderEnd
-
-uncmpGfxHeader_seedSprites:
-	m_GfxHeader spr_item_icons_wide_seeds_sprite, $8960
-	m_GfxHeaderEnd
-
-uncmpGfxHeader_tuneOfEchoesSprite:
-	m_GfxHeader spr_item_icons_song_sprites, $81c0, $04
-	m_GfxHeaderEnd
-
-uncmpGfxHeader_tuneOfCurrentsSprite:
-	m_GfxHeader spr_item_icons_song_sprites, $82c0, $04, $40
-	m_GfxHeaderEnd
-
-uncmpGfxHeader_tuneOfAgesSprite:
-	m_GfxHeader spr_item_icons_song_sprites, $85a0, $04, $80
-	m_GfxHeaderEnd
-
 .else
 
 ; CROSSITEMS: Magical boomerang overwriting L-1 boomerang for inventory gfx
@@ -478,4 +463,18 @@ uncmpGfxHeader_shieldL4:
 	m_GfxHeader spr_item_icons_wide_shield_l4, $8041
 	m_GfxHeaderEnd
 .endif
+.endif
+
+.ifdef ENABLE_SETTINGS_MENU
+uncmpGfxHeader_inventorySubscreen4GfxRevert:
+	m_GfxHeader gfx_rings_uncomp, $8a00
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_inventorySubscreen4Page0Gfx:
+	m_GfxHeader gfx_settings_text_page_0, $8a00
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_inventorySubscreen4Page1Gfx:
+	m_GfxHeader gfx_settings_text_page_1, $8a00
+	m_GfxHeaderEnd
 .endif

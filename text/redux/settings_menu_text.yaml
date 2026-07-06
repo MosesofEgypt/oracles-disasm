@@ -1,0 +1,43 @@
+groups:
+- group: 0x09
+  data:
+  - name: TX_09_MESSAGE_SPEED
+    index: auto
+    text: |-
+      Message Speed
+      How quickly text appears.
+      Speed 8 is instantaneous.
+
+  - name: TX_09_PASSIVE_SHIELD
+    index: auto
+    text: |-
+      Passive Shield
+      Shield is passively
+      held at all times.
+
+  - name: TX_09_CONTEXT_SENSITIVE_ITEMS
+    index: auto
+    text: |-
+      Contextual Items
+      Items are auto-equipped
+      when pressing/standing on
+      an area they can be used.
+
+  - name: TX_09_CONTEXT_SENSITIVE_BUTTON
+    index: auto
+    text: |-
+      Context Button
+      The button that all
+      contextual items
+      are equipped to.
+
+  - name: TX_09_QUICK_SWAP
+    index: auto
+    text: |-
+      Quick Swapping
+      Hold Select to swap
+      \abtn/\bbtn items with
+      the first two inventory
+      items. Release without
+      pressing \abtn/\bbtn to
+      open the map.

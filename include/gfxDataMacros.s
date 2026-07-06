@@ -17,6 +17,41 @@
 	.endif
 .endm
 
+; Same as m_GfxData, except it ensures the data is aligned
+; to a 16-byte boundary, and doesn't skip over data banks
+.macro m_GfxDataAligned
+	.assert NARGS == 1
+
+	.fopen {"{BUILD_DIR}/gfx/\1.cmp"} file
+	.fsize file SIZE
+	.fclose file
+
+	.define PAD_AMOUNT ((DATA_ADDR+$0f)&$fff0)-DATA_ADDR
+
+	.if DATA_ADDR+PAD_AMOUNT+SIZE >= $8000
+		.redefine DATA_BANK DATA_BANK+1
+		.BANK DATA_BANK SLOT 1
+		.ORGA $4000
+
+		.repeat $8000-DATA_ADDR index COUNT
+			.db $00
+		.endr
+
+		.redefine PAD_AMOUNT $00
+		.redefine DATA_ADDR $4000
+	.endif
+
+	.repeat PAD_AMOUNT index COUNT
+		.db $00
+	.endr
+
+	.redefine DATA_ADDR DATA_ADDR+PAD_AMOUNT
+	.undefine PAD_AMOUNT
+	.undefine SIZE
+
+	m_GfxData \1
+.endm
+
 ; Start of a gfx header. Creates a label at the current position (ie. gfxHeader00:) and an exported
 ; definition.
 ; Arguments:

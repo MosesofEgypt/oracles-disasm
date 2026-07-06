@@ -81,7 +81,7 @@ groups:
   - name: TX_304f
     index: 0x4f
     text: |-
-      Quickswap Ring
+      Unused Ring
 
   - name: TX_3050
     index: 0x50
@@ -414,8 +414,7 @@ groups:
   - name: TX_308f
     index: 0x8f
     text: |-
-      Select + \abtn/\bbtn
-      swaps equipment
+      Currently unused
 
   - name: TX_3090
     index: 0x90

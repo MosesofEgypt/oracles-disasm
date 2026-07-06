@@ -910,6 +910,10 @@ m_section_free Seasons_Interactions_Bank15 NAMESPACE seasonsInteractionsBank15
 
 	m_GfxDataSimple map_rings ; $717a0
 
+.ifdef ENABLE_DOUBLE_HEART_CAP
+	m_GfxDataSimple gfx_overlap_hearts
+.endif
+
 	; "${BUILD_DIR}/textData.s" will determine where this data starts.
 	;   Ages:    1d:4000
 	;   Seasons: 1c:5c00
@@ -927,11 +931,22 @@ m_section_free Seasons_Interactions_Bank15 NAMESPACE seasonsInteractionsBank15
 	; including bank $3e could be used for the above data (text, room layouts, graphics).
 
 
+.ifdef ENABLE_SETTINGS_MENU
+.BANK $3d SLOT 1
+.ORG 0
+
+m_section_free settingsMenuCode NAMESPACE settingsMenuCode
+	.define BANK_3d $3d
+
+	.include "code/settingsMenu.s"
+.ends
+.endif
+
 .ifdef ENABLE_NEW_GAME_PLUS
 .BANK $3e SLOT 1
 .ORG 0
 
-m_section_free Enemy_Code_Bank3e NAMESPACE bank3e
+m_section_free enemyCode_Bank3e NAMESPACE bank3e
 	.define BANK_3e $3e
 
 	.include "object_code/common/enemies/commonCode.s"

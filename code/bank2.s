@@ -5654,22 +5654,6 @@ inventoryMenuState0:
 	; load the wide item icons
 	ld a,UNCMP_GFXH_ITEM_ICONS_WIDE
 	call loadUncompressedGfxHeader
-
-	ld a,UNCMP_GFXH_ITEM_ICONS_SEED_SPRITES
-	call loadUncompressedGfxHeader
-
-	ld a,UNCMP_GFXH_ITEM_ICONS_TUNE_OF_ECHOES_SPRITE
-	call loadUncompressedGfxHeader
-
-	ld a,UNCMP_GFXH_ITEM_ICONS_TUNE_OF_CURRENTS_SPRITE
-	call loadUncompressedGfxHeader
-
-	ld a,UNCMP_GFXH_ITEM_ICONS_TUNE_OF_AGES_SPRITE
-	call loadUncompressedGfxHeader
-
-	ld a,UNCMP_GFXH_ITEM_ICONS_FIXUP_FILES
-	call loadUncompressedGfxHeader
-
 	call fixupWideItemGfx
 .else
 	; CROSSITEMS: Overwrite L-1 boomerang sprite with L-2 sprite if applicable. (This was
@@ -5881,6 +5865,9 @@ func_02_55b2:
 	.dw @subScreen0
 	.dw @subScreen1
 	.dw @subScreen2
+.ifdef ENABLE_SETTINGS_MENU
+	.dw @subScreen3
+.endif
 
 ;;
 @subScreen0:
@@ -5892,6 +5879,10 @@ func_02_55b2:
 
 ;;
 @subScreen1:
+.ifdef ENABLE_SETTINGS_MENU
+	ld a,GFXH_INVENTORY_SUBSCREEN_4_GFX_REVERT
+	call loadUncompressedGfxHeader
+.endif
 	ld a,GFXH_INVENTORY_SUBSCREEN_2
 	call loadGfxHeader
 	jp inventorySubscreen1_drawTreasures
@@ -5900,6 +5891,14 @@ func_02_55b2:
 	ld a,GFXH_INVENTORY_SUBSCREEN_3
 	call loadGfxHeader
 	jp inventorySubscreen2_drawTreasures
+
+.ifdef ENABLE_SETTINGS_MENU
+;;
+@subScreen3:
+	xor a
+	ld (wInventory.itemSubmenuIndex),a
+	jpab settingsMenuCode.inventorySubscreen3_draw
+.endif
 
 ;;
 ; Main state, waits for inputs
@@ -5921,6 +5920,9 @@ inventoryMenuState1:
 	.dw @subscreen0
 	.dw @subscreen1
 	.dw @subscreen2
+.ifdef ENABLE_SETTINGS_MENU
+	.dw @subscreen3
+.endif
 
 ;;
 @func_02_5606:
@@ -6306,6 +6308,20 @@ inventoryMenuState1:
 	call showItemText1
 	jp inventorySubmenu2_drawCursor
 
+.ifdef ENABLE_SETTINGS_MENU
+@subscreen3:
+	callab settingsMenuCode.updateSettingsMenu
+	ld a,(wInventorySubmenu3CursorPos)
+	call showItemText1
+	jp inventorySubmenu3_drawCursors
+
+inventorySubmenu3SelectOption:
+	jpab settingsMenuCode.inventorySubmenu3SelectOption
+
+inventorySubmenu3_drawCursors:
+	jpab settingsMenuCode.inventorySubmenu3_drawCursors
+.endif
+
 ;;
 ; Opening a submenu (seeds, harp songs)
 inventoryMenuState2:
@@ -6318,8 +6334,9 @@ inventoryMenuState2:
 	ld a,(wMenuActiveState)
 	cp $02
 	ret nz
-
+.ifndef WIDE_INVENTORY_SPRITES
 	jp createBlankSpritesForItemSubmenu
+.endif
 
 ; ROM_SEASONS just starts directly at @subStates.
 
@@ -6540,7 +6557,11 @@ inventoryMenuState3:
 	ld hl,wInventorySubmenu
 	ld a,(hl)
 	inc a
+.ifdef ENABLE_SETTINGS_MENU
+	cp $04
+.else
 	cp $03
+.endif
 	jr c,+
 	xor a
 +
@@ -8204,10 +8225,8 @@ inventoryMenuDrawHarpSprites:
 ;
 ; Doesn't exist in seasons since there are no items drawn with sprites on the inventory
 ; screen (only the harp of ages).
+.ifndef WIDE_INVENTORY_SPRITES
 createBlankSpritesForItemSubmenu:
-.ifdef WIDE_INVENTORY_SPRITES
-	ret
-.else
 	ld hl,wInventory.cbc1
 	ldi a,(hl)
 	cp $04

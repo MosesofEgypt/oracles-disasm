@@ -20,3 +20,10 @@ gfxDataBank1a:
 .ifdef ROM_AGES
 	m_GfxDataSimple gfx_animations_1		; $06b200
 .endif
+
+.ifdef ENABLE_NEW_GAME_PLUS
+	m_GfxDataSimple spr_item_icons_sword_shield_l4
+	.ifndef WIDE_INVENTORY_SPRITES
+		m_GfxDataSimple spr_item_icons_life_vial_slim
+	.endif
+.endif

@@ -41,6 +41,11 @@ setupPassiveShield:
 	and TILESETFLAG_UNDERWATER
 	ld a,$00
 	jr nz,+
+	ld a,(wMiscSettings)
+	; no passive shield if flag disabled
+	bit 3,a
+	ld a,$00
+	jr z,+
 .endif
 	ld a,TREASURE_SHIELD
 	call checkTreasureObtained

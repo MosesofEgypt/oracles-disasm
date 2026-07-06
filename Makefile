@@ -74,6 +74,12 @@ CFLAGS =
 # load the bare minimum redux config
 include redux_config/config.env
 ORACLE_REDUX_DEFINES =
+ifdef ENABLE_SETTINGS_MENU
+ifndef MORE_MESSAGE_SPEEDS
+	MORE_MESSAGE_SPEEDS = 1
+endif
+	ORACLE_REDUX_DEFINES += -D ENABLE_SETTINGS_MENU
+endif
 ifdef ENABLE_FULL_REDUX
 	ORACLE_REDUX_DEFINES += -D ENABLE_FULL_REDUX
 endif
@@ -168,6 +174,12 @@ PRECMP_GFX_FILES = $(shell find $(GFX_PRECMP_DIR)/common $(GFX_PRECMP_DIR)/$(GAM
 ifdef ENABLE_RING_REDUX
 # overriding ring gfx
 BIN_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name 'map_rings.bin')
+UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name 'map_rings.bin')
+endif
+ifdef ENABLE_SETTINGS_MENU
+BIN_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/settings_menu -name '*.bin')
+UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/settings_menu -name '*.bin' -or -name '*.png')
+PNG_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/settings_menu -name '*.png')
 endif
 ifdef ENABLE_DX_TITLE_SCREEN
 PNG_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name 'spr_titlescreen_sprites.png')
@@ -175,8 +187,8 @@ UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name 'spr_titlescreen_sp
 endif
 ifdef MORE_MESSAGE_SPEEDS
 BIN_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/more_msg_speeds -name '*.bin')
+UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/more_msg_speeds -name '*.bin' -or -name '*.png')
 PNG_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/more_msg_speeds -name '*.png')
-UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/more_msg_speeds -name '*.png')
 endif
 ifdef ENABLE_NEW_GAME_PLUS
 PNG_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/ngp -name '*.png')

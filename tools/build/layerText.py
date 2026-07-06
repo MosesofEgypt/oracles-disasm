@@ -32,12 +32,16 @@ if "ENABLE_FULL_REDUX" in defines:
 
 if "ENABLE_REDUX_EXTRAS" in defines:
     defines.append("ENABLE_GASHA_REBALANCE")
+    defines.append("ENABLE_SETTINGS_MENU")
 
 if "ENABLE_GASHA_REBALANCE" in defines:
     yaml_layers.append(os.path.join(gameYamlsDir, "gasha_price_text.yaml"))
 
 if "RESIZE_RING_BOX" in defines:
     yaml_layers.append(os.path.join(yamlsDir, "ring_box_text.yaml"))
+
+if "ENABLE_SETTINGS_MENU" in defines:
+    yaml_layers.append(os.path.join(yamlsDir, "settings_menu_text.yaml"))
 
 if "ENABLE_RING_REDUX" in defines:
     yaml_layers.append(os.path.join(yamlsDir, "ring_text.yaml"))

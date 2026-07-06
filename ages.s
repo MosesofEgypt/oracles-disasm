@@ -1064,6 +1064,10 @@ m_section_free Gfx_1b ALIGN $20
 
 	m_GfxDataSimple map_rings ; $717a0
 
+.ifdef ENABLE_DOUBLE_HEART_CAP
+	m_GfxDataSimple gfx_overlap_hearts
+.endif
+
 	.include {"{GAME_DATA_DIR}/largeRoomLayoutTables.s"} ; $719c0
 	.include "code/ages/garbage/bank1cEnd.s"
 
@@ -1084,11 +1088,22 @@ m_section_free Gfx_1b ALIGN $20
 	; including bank $3e could be used for the above data (text, room layouts, graphics).
 
 
+.ifdef ENABLE_SETTINGS_MENU
+.BANK $3d SLOT 1
+.ORG 0
+
+m_section_free settingsMenuCode NAMESPACE settingsMenuCode
+	.define BANK_3d $3d
+
+	.include "code/settingsMenu.s"
+.ends
+.endif
+
 .ifdef ENABLE_NEW_GAME_PLUS
 .BANK $3e SLOT 1
 .ORG 0
 
-m_section_free Enemy_Code_Bank3e NAMESPACE bank3e
+m_section_free enemyCode_Bank3e NAMESPACE bank3e
 	.define BANK_3e $3e
 
 	.include "object_code/common/enemies/commonCode.s"
