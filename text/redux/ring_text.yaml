@@ -81,7 +81,7 @@ groups:
   - name: TX_304f
     index: 0x4f
     text: |-
-      Unused Ring
+      Fencer's Ring
 
   - name: TX_3050
     index: 0x50
@@ -414,7 +414,8 @@ groups:
   - name: TX_308f
     index: 0x8f
     text: |-
-      Currently unused
+      Shield when hit
+      lands to parry.
 
   - name: TX_3090
     index: 0x90

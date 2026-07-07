@@ -31,6 +31,14 @@ groups:
       contextual items
       are equipped to.
 
+  - name: TX_09_LOW_HEART_WARNING
+    index: auto
+    text: |-
+      Low-Heart Beep
+      A warning sound will play
+      while you are at 1/4 or
+      less of your max health.
+
   - name: TX_09_QUICK_SWAP
     index: auto
     text: |-

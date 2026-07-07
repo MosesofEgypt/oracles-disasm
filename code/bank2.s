@@ -3498,7 +3498,11 @@ playHeartBeepAtInterval:
 .endif
 .endif
 	ret nc
-
+.ifdef MORE_MESSAGE_SPEEDS
+	ld a,(wMiscSettings)
+	bit 7,a
+	ret z
+.endif
 	ld a,SND_HEARTBEEP
 	jp playSound
 
@@ -6313,18 +6317,13 @@ inventoryMenuState1:
 	callab settingsMenuCode.updateSettingsMenu
 	ld a,(wInventorySubmenu3CursorPos)
 	call showItemText1
-	jp inventorySubmenu3_drawCursors
-
-inventorySubmenu3SelectOption:
-	jpab settingsMenuCode.inventorySubmenu3SelectOption
-
-inventorySubmenu3_drawCursors:
 	jpab settingsMenuCode.inventorySubmenu3_drawCursors
 .endif
 
 ;;
 ; Opening a submenu (seeds, harp songs)
 inventoryMenuState2:
+.ifndef WIDE_INVENTORY_SPRITES
 	call @subStates
 
 	; CROSSITEMS: We're now drawing the "blank sprites" to hide the harp in Seasons. The check
@@ -6334,7 +6333,6 @@ inventoryMenuState2:
 	ld a,(wMenuActiveState)
 	cp $02
 	ret nz
-.ifndef WIDE_INVENTORY_SPRITES
 	jp createBlankSpritesForItemSubmenu
 .endif
 

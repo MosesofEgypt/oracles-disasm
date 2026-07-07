@@ -1,4 +1,4 @@
-.define SETTINGS_COUNT      $05
+.define SETTINGS_COUNT      $06
 .define SETTINGS_PER_PAGE   $03
 
 updateSettingsMenu:
@@ -80,7 +80,7 @@ updateSettingsMenu:
 	
 
 @optionCounts:
-	.db $02 $02 $02 $02 $08
+	.db $02 $02 $02 $02 $02 $08
 
 inventorySubmenu3SelectOption:
 	ld a,(wInventory.itemSubmenuIndex)
@@ -118,6 +118,13 @@ inventorySubmenu3SelectOption:
 	jr nz,+
 		; passive shield selected
 		ld c,1<<3
+		jr +++
+	+
+
+	dec a
+	jr nz,+
+		; low-heart warning selected
+		ld c,1<<7
 		+++
 		ld a,c
 		cpl
@@ -171,6 +178,13 @@ inventorySubmenu3InitSelection:
 	jr nz,+
 		; passive shield selected
 		bit 3,(hl)
+		jr +++
+	+
+
+	dec a
+	jr nz,+
+		; low-heart warning selected
+		bit 7,(hl)
 		+++
 		ld a,$00
 		jr z,++
@@ -284,6 +298,7 @@ inventorySubmenu3_drawCursors:
 	.dw @drawCursorContextSensitiveItems
 	.dw @drawCursorContextSensitiveButton
 	.dw @drawCursorPassiveShield
+	.dw @drawCursorLowHeartWarning
 	.dw @drawCursorMessageSpeed
 
 @drawCursorQuickSwap:
@@ -312,9 +327,13 @@ inventorySubmenu3_drawCursors:
 	ld b,$38
 	jr @drawCursor2
 
+@drawCursorLowHeartWarning:
+	ld b,$50
+	jr @drawCursor2
+
 @drawCursorMessageSpeed:
 	ld hl,@cursorOffsets8
-	ld b,$51
+	ld b,$69
 	jr @drawCursor
 
 @cursorOffsets2:
@@ -410,6 +429,7 @@ itemSubmenu3TextIndices:
 	.db <TX_09_CONTEXT_SENSITIVE_ITEMS
 	.db <TX_09_CONTEXT_SENSITIVE_BUTTON
 	.db <TX_09_PASSIVE_SHIELD
+	.db <TX_09_LOW_HEART_WARNING
 	.db <TX_09_MESSAGE_SPEED
 
 .undefine SETTINGS_COUNT

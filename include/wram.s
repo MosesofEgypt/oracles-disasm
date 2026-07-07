@@ -573,6 +573,7 @@ wMiscSettings: ; $c629
 	; Bit 5:    Set if context-sensitive item should go in A.
 	;           Unset if context-sensitive item should go in B.
 	; Bit 6:    Set if quick-swap should be enabled.
+	; Bit 7:    Set if low-heart warning should be enabled.
 	db
 .else
 wTextSpeed: ; $c629

@@ -458,7 +458,7 @@ initialFileVariablesTable:
 ; Initial values for variables in the c6xx block.
 initialFileVariables:
 .ifdef MORE_MESSAGE_SPEEDS
-	.db <wMiscSettings,			$1d
+	.db <wMiscSettings,			$9d
 .else
 	.db <wTextSpeed,			$04
 .endif
