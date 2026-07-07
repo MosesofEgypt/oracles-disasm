@@ -22,7 +22,7 @@
 .macro m_GfxDataAligned
 	.assert NARGS == 1
 
-	.fopen {"{BUILD_DIR}/gfx/\1.bin"} file
+	.fopen {"{BUILD_DIR}/gfx/\1.cmp"} file
 	.fsize file SIZE
 	.fclose file
 
