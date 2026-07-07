@@ -415,6 +415,13 @@ wAutoEquipInvSlot:
 	db
 .endif
 
+.ifdef ENABLE_RING_REDUX
+wShieldParryTimers:
+	; Bits 0-4: Cooldown frames before parry can be reattempted
+	; Bits 5-7: Number of frames remaining for a parry to count
+	db
+.endif
+
 ; $c580-$c5af unused? (unless using ENABLE_MULTI_RING or
 ;                      ENABLE_RING_REDUX or ENABLE_NEW_GAME_PLUS)
 

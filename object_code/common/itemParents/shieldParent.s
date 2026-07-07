@@ -31,11 +31,49 @@ parentItemCode_shield:
 	call victoryRingIncLevel
 .endif
 	ld (wUsingShield),a
+.ifdef ENABLE_RING_REDUX
+	call @shieldHeldLastFrame
+	ret nz
+	; shield wasn't out last frame.
+	; check if the timer for parry attempts is empty
+	ld bc,wShieldParryTimers
+	ld a,(bc)
+	and $1f
+	jr nz,+
+		; attempt timer is empty, so reset it and the active timer.
+		ld a,(wUsingShield)
+		dec a
+		and $03
+		add a
+		ld hl,@parryTimers
+		rst_addAToHl
+		ldi a,(hl)
+		or (hl)
+		; fall through
+	+
+	; attempt timer isn't empty, so set the active timer to 0 as a fail.
+	ld (bc),a
 	ret
+
+@parryTimers:
+	.db $1e (4<<5)
+	.db $1b (4<<5)
+	.db $18 (5<<5)
+	.db $14 (7<<5)
+
+.else
+	ret
+.endif
 
 @deleteSelf:
 	xor a
 	ld (wUsingShield),a
+.ifdef ENABLE_RING_REDUX
+	ld hl,wShieldParryTimers
+	ld a,(hl)
+	and $1f
+	ld (hl),a
+.endif
 	jp clearParentItem
 
 ;;
@@ -76,3 +114,12 @@ parentItemCode_shield:
 	xor a
 	ret
 
+
+.ifdef ENABLE_RING_REDUX
+@shieldHeldLastFrame:
+	ld h,d
+	ld l,Item.var03
+	ld a,(wKeysPressedLastFrame)
+	and (hl)
+	ret
+.endif

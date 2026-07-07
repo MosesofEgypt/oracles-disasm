@@ -434,8 +434,9 @@ func_4553:
 .ifdef ENABLE_PASSIVE_SHIELD
 	ld a,(wUsingShield)
 	or a
-	jr z,@animationFound
-.else
+	jr nz,@shieldEquipped
+.endif
+
 	ld a,(wInventoryA)
 	cp ITEM_SHIELD
 	jr z,@shieldEquipped
@@ -443,7 +444,6 @@ func_4553:
 	ld a,(wInventoryB)
 	cp ITEM_SHIELD
 	jr nz,@animationFound
-.endif
 
 	; Walking or standing with shield equipped
 @shieldEquipped:

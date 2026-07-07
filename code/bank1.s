@@ -3566,6 +3566,7 @@ standardGameState:
 .ifdef ENABLE_RING_REDUX
 	call processDmgPaletteUpdate
 	call updateAzuchu
+	call updateParryTimers
 	call updateColorRingPalettes
 .endif
 	ld a,(wLinkDeathTrigger)
@@ -3877,6 +3878,36 @@ updateRingEquipStatuses:
 .endif
 
 .ifdef ENABLE_RING_REDUX
+updateParryTimers:
+	; decrement parry timers
+	ld hl,wShieldParryTimers
+	ld a,(hl)
+	or a
+	ret z
+
+	push bc
+	swap a
+	and $0e
+	or a
+	jr z,++
+		dec a
+		dec a
+		swap a
+	++
+
+	ld b,a
+	ld a,(hl)
+	and $1f
+	or a
+	jr z,++
+		dec a
+	++
+	or b
+	ld (hl),a
+
+	pop bc
+	ret
+
 updateColorRingPalettes:
 	; get the flags specifying the color rings that are equipped
 	ld hl,wEquippedRingFlags+6

@@ -286,7 +286,7 @@ enemyCheckCollisions:
 	res 7,a
 .endif
 	or a
-	jr z,@checkHitLink
+	jp z,@checkHitLink
 
 .ifdef ENABLE_NEW_GAME_PLUS
 	; treat L-4 shield as L-3
@@ -322,6 +322,26 @@ enemyCheckCollisions:
 
 .ifdef ENABLE_RING_REDUX
 	jr nc,@checkHitLink
+
+	; check if this is a parry
+	ld a,(wShieldParryTimers)
+	and $e0
+	jr z,+
+		ld a,(wUsingShield)
+		bit 7,a
+		jr nz,+
+			; successful parry. stun enemy
+			ld a,ITEMCOLLISION_PEGASUS_SEED|$80
+			ldh (<hFF90),a
+			ld a,(w1Link.damage)	; backup
+			push af
+			xor a
+			ld (w1Link.damage),a
+			call @handleCollision
+			pop af
+			ld (w1Link.damage),a	; restore
+			ret
+	+
 
 	; Don't interact with if invincible
 	ldh a,(<hActiveObjectType)
@@ -1205,7 +1225,7 @@ collisionEffect36:
 	; convert elec shocks on items into regular attacks
 	ld a,b ; load object upper byte address into a
 	cp >w1Link
-	jr z,+
+	jr nz,+
 		ld a,GREEN_HOLY_RING
 		call cpActiveRing
 		jp z,collisionEffect09
@@ -1215,8 +1235,8 @@ collisionEffect36:
 	ld h,b
 	ld l,$01
 	ld a,(hl)
-	cp ITEM_AZUCHU
 	pop hl
+	cp ITEM_AZUCHU
 	; if azuchu, convert to regular attack
 	jp z,collisionEffect09
 .endif
