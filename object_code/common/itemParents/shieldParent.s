@@ -59,7 +59,7 @@ parentItemCode_shield:
 	.db $1e (4<<5)
 	.db $1b (4<<5)
 	.db $18 (5<<5)
-	.db $14 (7<<5)
+	.db $14 (6<<5)
 
 .else
 	ret
