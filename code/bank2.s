@@ -3523,9 +3523,11 @@ loadCommonGraphics_body:
 	jr nz,+
 	bit TILESETFLAG_BIT_DUNGEON,a
 	jr z,+
-	ld hl,gfx_key
+	m_ReadGfxDataHashedFilename gfx_key
+	ld hl,{filename}
 	ld de,$9040
-	ldbc $00, :gfx_key
+	ldbc $00, :{filename}
+
 	call queueDmaTransfer
 +
 
@@ -3573,10 +3575,12 @@ loadCommonGraphics_body:
 @loadMoneyGraphic:
 	; Load either key (a=$00) or ore chunk (a=$10) graphic to replace rupee graphic
 	push bc
-	ld hl,gfx_key_orechunk
+	m_ReadGfxDataHashedFilename gfx_key_orechunk
+	ld hl,{filename}
 	rst_addAToHl
 	ld de,$9040
-	ldbc $00, :gfx_key_orechunk
+	ldbc $00, :{filename}
+
 	call queueDmaTransfer
 	pop bc
 
@@ -4701,7 +4705,8 @@ drawHeartDisplay:
 
 
 	; default to the empty heart tile gfx
-	ld hl,gfx_overlap_hearts+$c0
+	m_ReadGfxDataHashedFilename gfx_overlap_hearts
+	ld hl,{filename}+$c0
 
 	; if exactly 16, don't use stacked hearts
 	cp $40
@@ -4748,13 +4753,13 @@ drawHeartDisplay:
 
 	; load the empty and full heart tiles
 	push bc
-	ldbc $01, :gfx_overlap_hearts
+	ldbc $01, :{filename}
 	ld d,$90
 	call queueDmaTransfer
 
 	; insert the non-overlapped empty heart tile
-	ldbc $00, :gfx_overlap_hearts
-	ld hl,gfx_overlap_hearts+$70
+	ldbc $00, :{filename}
+	ld hl,{filename}+$70
 	bit 0,e
 .ifdef ROM_AGES
 	; overwrite one of the rod season tiles
@@ -4896,29 +4901,33 @@ drawHeartDisplay:
 	push de
 	push hl
 
-	ld hl,gfx_partial_hearts - $10
+	m_ReadGfxDataHashedFilename gfx_partial_hearts
+	ld hl,{filename} - $10
 .ifdef ENABLE_DOUBLE_HEART_CAP
 	ldh a,(<hFF8B)
 	bit 7,a
 	jr z,+
-		ld hl,gfx_overlap_hearts - $10
+		m_ReadGfxDataHashedFilename gfx_overlap_hearts
+		ld hl,{filename} - $10
 		bit 6,a
 		jr z,+
 			bit 5,a
 			jr z,+
 				; use the smaller non-overlapped heart gfx
-				ld hl,gfx_overlap_hearts + $70
+				ld hl,{filename} + $70
 	+
 .endif
 	ld a,d
 	swap a
 	rst_addAToHl
-	ldbc $00, :gfx_partial_hearts
+	m_ReadGfxDataHashedFilename gfx_partial_hearts
+	ldbc $00, :{filename}
 .ifdef ENABLE_DOUBLE_HEART_CAP
 	ldh a,(<hFF8B)
 	bit 7,a
 	jr z,+
-		ldbc $00, :gfx_overlap_hearts
+		m_ReadGfxDataHashedFilename gfx_overlap_hearts
+		ldbc $00, :{filename}
 	+
 .endif
 	ld de,$90b0
@@ -5047,16 +5056,18 @@ loadItemIconGfx:
 		.endif
 
 		jr nz,+
-			ld hl,spr_item_icons_life_vial
-			ld b,:spr_item_icons_life_vial
+			m_ReadGfxDataHashedFilename spr_item_icons_life_vial
+			ld hl,{filename}
+			ld b,:{filename}
 			jp copy20BytesFromBank
 		+
 	.endif
 
 	; check for rod of seasons changes
 	ld c,b
-	ld hl,spr_item_icons_wide_rod_hud
-	ld b,:spr_item_icons_wide_rod_hud
+	m_ReadGfxDataHashedFilename spr_item_icons_wide_rod_hud
+	ld hl,{filename}
+	ld b,:{filename}
 	ld a,$a4 ; left
 	cp c
 	jr nz,+
@@ -5216,9 +5227,10 @@ loadItemIconGfx:
 	res 7,a
 	add a
 	call multiplyABy16
-	ld hl,spr_item_icons_wide
+	m_ReadGfxDataHashedFilename spr_item_icons_wide
+	ld hl,{filename}
 	add hl,bc
-	ld b,:spr_item_icons_wide
+	ld b,:{filename}
 	jp copy20BytesFromBank
 
 @clear:
@@ -5234,50 +5246,58 @@ loadItemIconGfx:
 @partialItemSwaps:
 	.db $89
 	.db <wSatchelSelectedSeeds
-	.db :spr_item_icons_wide_satchel_hud
-	.dw  spr_item_icons_wide_satchel_hud
+	m_ReadGfxDataHashedFilename spr_item_icons_wide_satchel_hud
+	.db :{filename}
+	.dw {filename}
 	.dw @@seedSwaps
 
 	.db $8b
 	.db <wSlingshotSelectedSeeds
-	.db :spr_item_icons_wide_slingshot_l1_hud
-	.dw  spr_item_icons_wide_slingshot_l1_hud
+	m_ReadGfxDataHashedFilename spr_item_icons_wide_slingshot_l1_hud
+	.db :{filename}
+	.dw {filename}
 	.dw @@seedSwaps
 
 	.db $8d
 	.db <wSlingshotSelectedSeeds
-	.db :spr_item_icons_wide_slingshot_l2_hud
-	.dw  spr_item_icons_wide_slingshot_l2_hud
+	m_ReadGfxDataHashedFilename spr_item_icons_wide_slingshot_l2_hud
+	.db :{filename}
+	.dw {filename}
 	.dw @@seedSwaps
 
 	.db $8f
 	.db <wShooterSelectedSeeds
-	.db :spr_item_icons_wide_shooter_hud
-	.dw  spr_item_icons_wide_shooter_hud
+	m_ReadGfxDataHashedFilename spr_item_icons_wide_shooter_hud
+	.db :{filename}
+	.dw {filename}
 	.dw @@seedSwaps
 
 	.db $99
 	.db <wMagnetGlovePolarity
-	.db :spr_item_icons_wide_magnet_glove_n
-	.dw  spr_item_icons_wide_magnet_glove_n
+	m_ReadGfxDataHashedFilename spr_item_icons_wide_magnet_glove_n
+	.db :{filename}
+	.dw {filename}
 	.dw @@magnetGloveSwaps
 
 	.db $a3
 	.db <wFluteIcon
-	.db :spr_item_icons_wide_flute_partners
-	.dw  spr_item_icons_wide_flute_partners
+	m_ReadGfxDataHashedFilename spr_item_icons_wide_flute_partners
+	.db :{filename}
+	.dw {filename}
 	.dw @@fluteSwaps
 
 	.db $ab
 	.db <wSelectedHarpSong
-	.db :spr_item_icons_wide_songs
-	.dw  spr_item_icons_wide_songs
+	m_ReadGfxDataHashedFilename spr_item_icons_wide_songs
+	.db :{filename}
+	.dw {filename}
 	.dw @@harpSwaps1
 
 	.db $ac
 	.db <wSelectedHarpSong
-	.db :spr_item_icons_wide_songs
-	.dw  spr_item_icons_wide_songs
+	m_ReadGfxDataHashedFilename spr_item_icons_wide_songs
+	.db :{filename}
+	.dw {filename}
 	.dw @@harpSwaps2
 
 	.db $00 ; terminator
@@ -5340,54 +5360,64 @@ loadItemIconGfx:
 
 @@swordSwaps:
 	.db $02
-	.db :spr_item_icons_wide_sword_l2
-	.dw  spr_item_icons_wide_sword_l2
+	m_ReadGfxDataHashedFilename spr_item_icons_wide_sword_l2
+	.db :{filename}
+	.dw {filename}
 	.db $03
-	.db :spr_item_icons_wide_sword_l3
-	.dw  spr_item_icons_wide_sword_l3
+	m_ReadGfxDataHashedFilename spr_item_icons_wide_sword_l3
+	.db :{filename}
+	.dw {filename}
 .ifdef ENABLE_NEW_GAME_PLUS
 	.db $04
-	.db :spr_item_icons_wide_sword_l4
-	.dw  spr_item_icons_wide_sword_l4
+	m_ReadGfxDataHashedFilename spr_item_icons_wide_sword_l4
+	.db :{filename}
+	.dw {filename}
 .endif
 	.db $00 ; terminator
 
 @@shieldSwaps:
 	.db $02
-	.db :spr_item_icons_wide_shield_l2
-	.dw  spr_item_icons_wide_shield_l2
+	m_ReadGfxDataHashedFilename spr_item_icons_wide_shield_l2
+	.db :{filename}
+	.dw {filename}
 	.db $03
-	.db :spr_item_icons_wide_shield_l3
-	.dw  spr_item_icons_wide_shield_l3
+	m_ReadGfxDataHashedFilename spr_item_icons_wide_shield_l3
+	.db :{filename}
+	.dw {filename}
 .ifdef ENABLE_NEW_GAME_PLUS
 	.db $04
-	.db :spr_item_icons_wide_shield_l4
-	.dw  spr_item_icons_wide_shield_l4
+	m_ReadGfxDataHashedFilename spr_item_icons_wide_shield_l4
+	.db :{filename}
+	.dw {filename}
 .endif
 	.db $00 ; terminator
 
 @@featherSwaps:
 	.db $02
-	.db :spr_item_icons_wide_feather_l2
-	.dw  spr_item_icons_wide_feather_l2
+	m_ReadGfxDataHashedFilename spr_item_icons_wide_feather_l2
+	.db :{filename}
+	.dw {filename}
 	.db $00 ; terminator
 
 @@braceletSwaps:
 	.db $02
-	.db :spr_item_icons_wide_bracelet_l2
-	.dw  spr_item_icons_wide_bracelet_l2
+	m_ReadGfxDataHashedFilename spr_item_icons_wide_bracelet_l2
+	.db :{filename}
+	.dw {filename}
 	.db $00 ; terminator
 
 @@switchHookSwaps:
 	.db $02
-	.db :spr_item_icons_wide_switch_hook_l2
-	.dw  spr_item_icons_wide_switch_hook_l2
+	m_ReadGfxDataHashedFilename spr_item_icons_wide_switch_hook_l2
+	.db :{filename}
+	.dw {filename}
 	.db $00 ; terminator
 
 @@boomerangSwaps:
 	.db $02
-	.db :spr_item_icons_wide_boomerang_l2
-	.dw  spr_item_icons_wide_boomerang_l2
+	m_ReadGfxDataHashedFilename spr_item_icons_wide_boomerang_l2
+	.db :{filename}
+	.dw {filename}
 	.db $00 ; terminator
 
 .else
@@ -5400,20 +5430,21 @@ loadItemIconGfx:
 		.endif
 
 		jr nz,+
-			ld hl,spr_item_icons_life_vial_slim
-			ld b,:spr_item_icons_life_vial_slim
+			m_ReadGfxDataHashedFilename spr_item_icons_life_vial_slim
+			ld hl,{filename}
+			ld b,:{filename}
 			jp copy20BytesFromBank
 		+
 
 		cp $48
 		; insert the L-4 sword and shield sprites
-		ld hl,spr_item_icons_sword_shield_l4
+		m_ReadGfxDataHashedFilename spr_item_icons_sword_shield_l4
 		jr z,++
 		cp $49
-		ld hl,spr_item_icons_sword_shield_l4+$20
+		ld hl,{filename}+$20
 		jr nz,+
 			++
-			ld b,:spr_item_icons_sword_shield_l4
+			ld b,:{filename}
 			jp copy20BytesFromBank
 		+
 	.endif
@@ -5425,8 +5456,9 @@ loadItemIconGfx:
 	ld a,(wBoomerangLevel)
 	cp $02
 	jr nz,+
-	ld hl,spr_boomerang+$40
-	ld b,:spr_boomerang
+	m_ReadGfxDataHashedFilename spr_boomerang
+	ld hl,{filename}+$40
+	ld b,:{filename}
 	jp copy20BytesFromBank
 +
 	; Also replace L-1 slingshot with L-2 sprite if applicable.
@@ -5445,19 +5477,20 @@ loadItemIconGfx:
 	jr nz,+
 
 	; Copy "blank" sprite for top half (using lower half of mystery seed sprite)
-	ld hl,spr_item_icons_1 + $07 * $20 + $10
-	ld b,:spr_item_icons_1
+	m_ReadGfxDataHashedFilename spr_item_icons_1
+	ld hl,{filename} + $07 * $20 + $10
+	ld b,:{filename}
 	ld c,$10
 	call copyBytesFromBank
 
 	; Copy polarity sprite ("N" or "S")
-	ld hl,spr_item_icons_1 + $09 * $20
+	ld hl,{filename} + $09 * $20
 	ld a,(wMagnetGlovePolarity)
 	and $01
 	xor $01
 	swap a
 	rst_addAToHl
-	ld b,:spr_item_icons_1
+	ld b,:{filename}
 	ld c,$10
 	jp copyBytesFromBank
 +
@@ -5475,10 +5508,11 @@ loadItemIconGfx:
 
 	add a
 	call multiplyABy16
-	ld hl,spr_item_icons_1
+	ld hl,{filename}
 	add hl,bc
-	ld b,:spr_item_icons_1
+	ld b,:{filename}
 	jp copy20BytesFromBank
+
 @clear:
 	ld h,d
 	ld l,e
@@ -12992,7 +13026,8 @@ getRingTiles:
 	jr +
 +
 	call multiplyABy8
-	ld hl,map_rings
+	m_ReadGfxDataHashedFilename map_rings
+	ld hl,{filename}
 	add hl,bc
 	push de
 	call copy8BytesFromRingMapToCec0

@@ -2074,20 +2074,23 @@ func_53eb:
 
 ;;
 @dmaHeartPieceDisplay:
-	ld hl,gfx_font_heartpiece
+	m_ReadGfxDataHashedFilename gfx_font_heartpiece
+	.define partial_hearts_filename {filename}
+
+	ld hl,{filename}
 	ld de,$95d0
-	ldbc $00, :gfx_font_heartpiece
+	ldbc $00, :{filename}
 	call queueDmaTransfer
 
-	ld hl,gfx_font_heartpiece+$10
+	ld hl,{filename}+$10
 	ld e,$f0
 	call queueDmaTransfer
 
-	ld hl,gfx_font_heartpiece+$20
+	ld hl,{filename}+$20
 	ld de,$97c0
 	call queueDmaTransfer
 
-	ld hl,gfx_font_heartpiece+$30
+	ld hl,{filename}+$30
 	ld e,$e0
 	jp queueDmaTransfer
 

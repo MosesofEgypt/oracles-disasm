@@ -5348,7 +5348,8 @@ retrieveTextCharacter:
 	rst_derefHl
 	add hl,bc
 	pop bc
-	ld a,:gfx_font
+	m_ReadGfxDataHashedFilename gfx_font
+	ld a,:{filename}
 	rst_setrombank
 	call @func_18fd
 
@@ -5363,8 +5364,10 @@ retrieveTextCharacter:
 
 @data:
 	.dw gfx_font_start
-	.dw gfx_font_jp
-	.dw gfx_font_tradeitems
+	m_ReadGfxDataHashedFilename gfx_font_jp
+	.dw {filename}
+	m_ReadGfxDataHashedFilename gfx_font_tradeitems
+	.dw {filename}
 
 ;;
 ; @param bc
@@ -5585,7 +5588,8 @@ clearAllItemsAndPutLinkOnGround:
 copyTextCharacterGfx:
 	push hl
 	push bc
-	ld hl,gfx_font_jp
+	m_ReadGfxDataHashedFilename gfx_font_jp
+	ld hl,{filename}
 	bit 0,c
 	jr nz,+
 
@@ -5600,7 +5604,8 @@ copyTextCharacterGfx:
 	add hl,bc
 	ldh a,(<hRomBank)
 	push af
-	ld a,:gfx_font
+	m_ReadGfxDataHashedFilename gfx_font
+	ld a,:{filename}
 	rst_setrombank
 	ld a,(wFileSelect.fontXor)
 	ld c,a
@@ -5845,7 +5850,8 @@ getRoomDungeonProperties:
 copy8BytesFromRingMapToCec0:
 	ldh a,(<hRomBank)
 	push af
-	ld a,:map_rings
+	m_ReadGfxDataHashedFilename map_rings
+	ld a,:{filename}
 	rst_setrombank
 	ld de,wTmpcec0
 	ld b,$08

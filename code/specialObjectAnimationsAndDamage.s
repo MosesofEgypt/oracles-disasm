@@ -246,7 +246,8 @@ getSpecialObjectGraphicsFrame:
 	; Bit 0: bank select
 	ld a,l
 	and $01
-	add :spr_link
+	m_ReadGfxDataHashedFilename spr_link
+	add :{filename}
 	ld c,a
 
 	; Bits 1-4: size (divided by 16)
