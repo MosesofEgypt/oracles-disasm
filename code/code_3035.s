@@ -41,7 +41,7 @@ incCbc1:
 
 ;;
 incCbc2:
-	ld hl,$cbc2
+	ld hl,wGenericCutscene.cbc2
 	inc (hl)
 	ret
 

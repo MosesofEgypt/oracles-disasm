@@ -13280,7 +13280,7 @@ seasonsFunc_34a0:
 clearWramBank1:
 	xor a
 	ld ($ff00+R_SVBK),a
-	ld hl,$d000
+	ld hl,w1Link.enabled
 	ld bc,$0100
 	jp clearMemoryBc16ByteBlocks
 

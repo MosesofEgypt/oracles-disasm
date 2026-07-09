@@ -59,7 +59,7 @@ ramrock_state8_substate0:
 	ld a,DISABLE_LINK
 	ld (wDisabledObjects),a
 	ld (wMenuDisabled),a
-	ld a,($cc93)
+	ld a,(wcc93)
 	or a
 	ret nz
 

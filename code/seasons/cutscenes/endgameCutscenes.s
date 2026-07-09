@@ -16,7 +16,7 @@ endgameCutsceneHandler_09_stage0:
 	jp checkEnemyAndPartCollisionsIfTextInactive
 
 endgameCutsceneHandler_09_stage0_body:
-	ld de,$cbc2
+	ld de,wGenericCutscene.cbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -216,7 +216,7 @@ endgameCutsceneHandler_09_stage0_body:
 	jr z,++
 	ld c,$0d
 ++
-	ld hl,$cbc2
+	ld hl,wGenericCutscene.cbc2
 	ld (hl),c
 	jp seasonsFunc_03_6405
 @state7Table0:
@@ -696,7 +696,7 @@ endgameCutsceneHandler_09_stage1:
 	jp updateAllObjects
 
 endgameCutsceneHandler_09_stage1_body:
-	ld de,$cbc2
+	ld de,wGenericCutscene.cbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -895,7 +895,7 @@ endgameCutsceneHandler_0f_stage0:
 	jp updateAllObjects
 
 endgameCutsceneHandler_0f_stage0_body:
-	ld de,$cbc2
+	ld de,wGenericCutscene.cbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -924,7 +924,7 @@ endgameCutsceneHandler_0f_stage0_body:
 .endif
 	xor a
 	ldh (<hActiveObjectType),a
-	ld de,$d000
+	ld de,w1Link.enabled
 	ld bc,$f8f0
 	ld a,$28
 	call objectCreateExclamationMark
@@ -1096,7 +1096,7 @@ endgameCutsceneHandler_0f_stage1:
 	jp updateAllObjects
 
 endgameCutsceneHandler_0f_stage1_body:
-	ld de,$cbc2
+	ld de,wGenericCutscene.cbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -1280,7 +1280,7 @@ endgameCutsceneHandler_0a_body:
 	.dw endgameCutsceneHandler_0a_stage3
 
 endgameCutsceneHandler_0a_stage0:
-	ld de,$cbc2
+	ld de,wGenericCutscene.cbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -1333,7 +1333,7 @@ endgameCutsceneHandler_0a_stage0:
 	jp fadeoutToWhite
 
 endgameCutsceneHandler_0a_stage1:
-	ld de,$cbc2
+	ld de,wGenericCutscene.cbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -1519,7 +1519,7 @@ endgameCutsceneHandler_0a_stage1:
 	jr nc,+
 	inc (hl)
 	xor a
-	ld ($cbc2),a
+	ld (wGenericCutscene.cbc2),a
 	jr ++
 +
 	call seasonsFunc_03_646a
@@ -1545,7 +1545,7 @@ endgameCutsceneHandler_0a_stage1:
 endgameCutsceneHandler_0a_stage2:
 	xor a
 	ldh (<hOamTail),a
-	ld de,$cbc2
+	ld de,wGenericCutscene.cbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -1758,7 +1758,7 @@ endgameCutsceneHandler_0a_stage2:
 	jp fadeoutToWhiteWithDelay
 
 endgameCutsceneHandler_0a_stage3:
-	ld de,$cbc2
+	ld de,wGenericCutscene.cbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0

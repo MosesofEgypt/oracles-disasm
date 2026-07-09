@@ -24,7 +24,7 @@ partCode16:
 	inc a
 	ld (wDisableScreenTransitions),a
 	ld (wDisabledObjects),a
-	ld ($cbca),a
+	ld (wDisableLinkCollisionsAndMenu),a
 	inc a
 	ld (wTmpcfc0.genericCutscene.cfd0),a
 	ld a,$08
@@ -86,7 +86,7 @@ partCode16:
 	ld (wDisableScreenTransitions),a
 	ld (wTmpcfc0.genericCutscene.cfd0),a
 	ld (wDisabledObjects),a
-	ld ($cbca),a
+	ld (wDisableLinkCollisionsAndMenu),a
 +
 	ldi a,(hl)
 	cp $5a

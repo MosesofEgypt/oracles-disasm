@@ -21,7 +21,7 @@ enemyCode02:
 	call checkLinkCollisionsEnabled
 	jr nc,@dead
 	ld a,$ff
-	ld ($cbca),a
+	ld (wDisableLinkCollisionsAndMenu),a
 	ld (wMenuDisabled),a
 	ld h,d
 	ld l,$a4
@@ -77,7 +77,7 @@ enemyCode02:
 	call loadPaletteHeader
 	ld a,$01
 	ld ($cfcf),a
-	ld ($cbca),a
+	ld (wDisableLinkCollisionsAndMenu),a
 	call ecom_setSpeedAndState8
 	ld a,$53
 	jp playSound
@@ -388,7 +388,7 @@ generalOnox_subid1:
 	ret nz
 	inc a
 	ld (wDisabledObjects),a
-	ld ($cbca),a
+	ld (wDisableLinkCollisionsAndMenu),a
 	ld e,$85
 	ld (de),a
 	ld bc,TX_501d
@@ -427,7 +427,7 @@ generalOnox_subid1:
 	set 7,(hl)
 	xor a
 	ld (wDisabledObjects),a
-	ld ($cbca),a
+	ld (wDisableLinkCollisionsAndMenu),a
 
 @func_5ae5:
 	ld h,d

@@ -137,7 +137,7 @@ enemyCode72:
 	ld a,(de)
 	or a
 	call nz,func_4d54
-	ld hl,$d000
+	ld hl,w1Link.enabled
 	call preventObjectHFromPassingObjectD
 	call objectAddToGrabbableObjectBuffer
 	jp enemyAnimate
@@ -184,7 +184,7 @@ enemyCode72:
 	jp objectSetVisible82
 	
 @stateA:
-	ld hl,$d000
+	ld hl,w1Link.enabled
 	call preventObjectHFromPassingObjectD
 	call ecom_decCounter1
 	jr nz,@animate
@@ -207,7 +207,7 @@ enemyCode72:
 	ld a,$06
 	jp enemySetAnimation
 +
-	ld hl,$d000
+	ld hl,w1Link.enabled
 	call preventObjectHFromPassingObjectD
 	call objectAddToGrabbableObjectBuffer
 	ld e,$a1

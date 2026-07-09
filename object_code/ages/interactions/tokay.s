@@ -823,7 +823,7 @@ wildTokayParticipant_checkGrabMeat:
 	call objectDelete_de
 
 	; Delete something?
-	ld hl,$cfda
+	ld hl,wTmpcfc0.normal.cfc0+$1a
 	ldi a,(hl)
 	ld e,(hl)
 	ld d,a

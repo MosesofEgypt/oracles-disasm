@@ -550,7 +550,7 @@ mapleCutscenes:
 	ld a,$f0
 	jr z,+
 	ld a,d
-	ld ($cc48),a
+	ld (wLinkObjectIndex),a
 	ld a,$d0
 +
 	ld l,SpecialObject.zh

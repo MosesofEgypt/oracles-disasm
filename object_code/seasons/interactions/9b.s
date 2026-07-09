@@ -89,7 +89,7 @@ func_5b49:
 	ld a,$80
 	ld ($d01a),a
 	ld a,$02
-	ld ($d008),a
+	ld (w1Link.direction),a
 	call setLinkForceStateToState08
 	call interactionIncSubstate
 	ld l,$46
@@ -109,7 +109,7 @@ func_5b49:
 	call getRoomFlags
 	ld (hl),c
 	ld a,$03
-	ld ($cc6a),a
+	ld (wLinkForceState),a
 	xor a
 	ld (wLinkHealth),a
 	jp interactionDelete

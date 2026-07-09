@@ -58,7 +58,7 @@ interactionCode6a:
 @@@substate0:
 	ld a,$01
 	ld (de),a
-	ld ($cfda),a
+	ld (wTmpcfc0.normal.cfc0+$1a),a
 	ld a,$50
 	ld (wTmpcfc0.genericCutscene.cfd3),a
 	ld hl,mainScripts.danceLeaderScript_promptForTutorial
@@ -97,7 +97,7 @@ interactionCode6a:
 	ld ($cfd4),a
 	ld a,$09
 	ld (wTmpcfc0.genericCutscene.cfd1),a
-	ld hl,$cfda
+	ld hl,wTmpcfc0.normal.cfc0+$1a
 	inc (hl)
 	ret
 
@@ -289,7 +289,7 @@ interactionCode6a:
 	call interactionIncSubstate
 	ld a,$81
 	ld (wDisabledObjects),a
-	ld ($cbca),a
+	ld (wDisableLinkCollisionsAndMenu),a
 	ld a,$1e
 	call addToGashaMaturity
 	jp fastFadeinFromWhite
@@ -498,7 +498,7 @@ interactionCode6a:
 	.db <TX_010e, <TX_010f, <TX_0110
 	.db <TX_0111, <TX_0112, <TX_0113
 @@state1:
-	ld a,($cfda)
+	ld a,(wTmpcfc0.normal.cfc0+$1a)
 	or a
 	jr nz,+
 	call interactionRunScript
@@ -518,7 +518,7 @@ interactionCode6a:
 	jr nz,@@func_5fb8
 	ld h,d
 	ld l,$7b
-	ld a,($cfda)
+	ld a,(wTmpcfc0.normal.cfc0+$1a)
 	cp (hl)
 	ret z
 	ld (hl),a

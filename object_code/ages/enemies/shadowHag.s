@@ -79,7 +79,7 @@ shadowHag_state8:
 
 ; Wait for door to close, then begin cutscene
 @substate0:
-	ld a,($cc93)
+	ld a,(wcc93)
 	or a
 	ret nz
 

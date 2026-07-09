@@ -33,7 +33,7 @@ companionScript_subid00:
 @state0:
 	ld a,$01
 	ld (de),a
-	ld a,($cc48)
+	ld a,(wLinkObjectIndex)
 	and $01
 	jr z,companionScript_delete
 	ld a,($d101)
@@ -188,7 +188,7 @@ companionScript_subid06:
 	inc a
 	ld (de),a
 	ld (wMenuDisabled),a
-	ld hl,$d000
+	ld hl,w1Link.enabled
 	call objectTakePosition
 	ld a,($d10b)
 	ld b,a
@@ -299,11 +299,11 @@ companionScript_giveFlute:
 	xor c
 	ld e,$5c
 	ld (de),a
-	ld hl,$cc6a
+	ld hl,wLinkForceState
 	ld a,$04
 	ldi (hl),a
 	ld (hl),$01
-	ld hl,$d000
+	ld hl,w1Link.enabled
 	ld bc,$f200
 	call objectTakePositionWithOffset
 	call objectSetVisible80
@@ -313,7 +313,7 @@ companionScriptFunc_6eaf:
 	call retIfTextIsActive
 	ld (wDisabledObjects),a
 	call objectSetInvisible
-	ld a,($cc48)
+	ld a,(wLinkObjectIndex)
 	and $0f
 	add a
 	swap a

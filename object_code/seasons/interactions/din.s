@@ -157,7 +157,7 @@ dinState1_subid0:
 	ld l,$4d
 	ldd a,(hl)
 	ld (hl),a
-	ld hl,$d008
+	ld hl,w1Link.direction
 	ld (hl),$03
 	call setLinkForceStateToState08
 @ret:

@@ -198,7 +198,7 @@ eyesoar_state_stub:
 ; Flickering into existence
 eyesoar_state8:
 	; Something about doors?
-	ld a,($cc93)
+	ld a,(wcc93)
 	or a
 	ret nz
 

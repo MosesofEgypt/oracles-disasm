@@ -90,7 +90,7 @@ specialWarp_subid4:
 @state1:
 	ld a,d
 	ld (wDisableWarpTiles),a
-	ld a,($cc48)
+	ld a,(wLinkObjectIndex)
 	cp $d1
 	ret nz
 	call objectCheckCollidedWithLink_notDeadAndNotGrabbing
@@ -138,7 +138,7 @@ specialWarp_subid7:
 @state2:
 	ld a,d
 	ld (wDisableScreenTransitions),a
-	ld a,($cc48)
+	ld a,(wLinkObjectIndex)
 	cp $d1
 	ret nz
 	xor a

@@ -262,7 +262,7 @@ interactionCode89:
 	ld ($ff00+R_SVBK),a
 	ldh a,(<hFFBD)
 	ld b,a
-	ld a,($cbc2)
+	ld a,(wGenericCutscene.cbc2)
 	ld e,a
 	ld a,(w4RingFortuneStuff)
 	ld c,a
@@ -316,7 +316,7 @@ interactionCode89:
 
 	ldh a,(<hFFBD)
 	ld b,a
-	ld a,($cbc2)
+	ld a,(wGenericCutscene.cbc2)
 	ld e,a
 
 	pop af

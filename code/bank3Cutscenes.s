@@ -723,7 +723,7 @@ introCinematic_ridingHorse:
 introCinematic_ridingHorse_state0:
 	call disableLcd
 	ld hl,wOamEnd
-	ld bc,$d000-wOamEnd
+	ld bc,w1Link.enabled-wOamEnd
 	call clearMemoryBc
 
 	ld a,:w4TileMap
@@ -1011,7 +1011,7 @@ introCinematic_ridingHorse:
 introCinematic_ridingHorse_state0:
 	call disableLcd
 	ld hl,wOamEnd
-	ld bc,$d000-wOamEnd
+	ld bc,w1Link.enabled-wOamEnd
 	call clearMemoryBc
 
 	ld a,$10

@@ -853,8 +853,8 @@ subrosianFunc_58b1:
 
 subrosian_knockLinkOut:
 	ld a,$10
-	ld ($cc6b),a
-	ld hl,$d008
+	ld (wcc50),a
+	ld hl,w1Link.direction
 	ld (hl),$03
 	ret
 
@@ -1219,7 +1219,7 @@ piratianCaptain_setInvisible:
 
 pirateCaptain_freezeLinkForCutscene:
 	call setLinkForceStateToState08
-	ld hl,$d008
+	ld hl,w1Link.direction
 	ld (hl),$01
 	ret
 
@@ -1380,7 +1380,7 @@ headSmelter_loadHideFromBombScript:
 
 headSmelter_loadDanceMovements:
 	ld a,$0b
-	ld ($cc6a),a
+	ld (wLinkForceState),a
 	ld hl,w1Link.yh
 	ld a,$68
 	sub (hl)
@@ -1742,7 +1742,7 @@ seasonsFunc_15_5d32:
 	ld ($cfd4),a
 	ld a,$09
 	ld (wTmpcfc0.genericCutscene.cfd1),a
-	ld hl,$cfda
+	ld hl,wTmpcfc0.normal.cfc0+$1a
 	inc (hl)
 	ret
 
@@ -1782,7 +1782,7 @@ floodgateKeeper_checkStage:
 
 d4Keyhole_setState0eDisableAllSorts:
 	ld a,$0e
-	ld ($cc6a),a
+	ld (wLinkForceState),a
 d4KeyHolw_disableAllSorts:
 	ld a,$01
 	ld (wMenuDisabled),a
@@ -2115,11 +2115,11 @@ trampoline_foundRoom:
 	pop hl
 +++
 	ld a,c
-	ld ($cc6b),a
+	ld (wcc50),a
 	ret
 trampoline_couldntFindRoom:
 	ld a,$03
-	ld ($cc6b),a
+	ld (wcc50),a
 	ret
 
 trampoline_group4Warps:

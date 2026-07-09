@@ -128,7 +128,7 @@ interactionCode4d:
 	dec a
 	ld (wActiveMusic),a
 
-	ld hl,$cc93
+	ld hl,wcc93
 	set 7,(hl)
 
 	ld a,LINK_STATE_FORCE_MOVEMENT

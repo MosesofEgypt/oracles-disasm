@@ -364,7 +364,7 @@ octogon_subid0:
 
 octogon_subid0AboveWater_state8:
 	; Wait for shutters to close
-	ld a,($cc93)
+	ld a,(wcc93)
 	or a
 	ret nz
 

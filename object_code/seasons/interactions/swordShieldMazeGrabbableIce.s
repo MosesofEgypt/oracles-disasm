@@ -22,7 +22,7 @@ interactionCode68:
 	ld a,($cc77)
 	or a
 	jr nz,+
-	ld a,($cc48)
+	ld a,(wLinkObjectIndex)
 	rrca
 	call nc,objectPushLinkAwayOnCollision
 +
@@ -88,13 +88,13 @@ interactionCode68:
 @state3:
 	call interactionDecCounter1
 	ret nz
-	ld a,($d004)
+	ld a,(w1Link.state)
 	cp $01
 	jr nz,delete
 	ld a,($cc34)
 	or a
 	jr nz,delete
-	ld a,($cc48)
+	ld a,(wLinkObjectIndex)
 	cp $d0
 	jr nz,delete
 	call resetLinkInvincibility

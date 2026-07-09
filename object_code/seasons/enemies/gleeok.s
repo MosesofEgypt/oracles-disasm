@@ -267,10 +267,10 @@ enemyCode06:
 	ld a,(hl)
 	cp $87
 	jr c,@@animate
-	ld a,($d00f)
+	ld a,(w1Link.zh)
 	rlca
 	ret c
-	ld hl,$cc6a
+	ld hl,wLinkForceState
 	ld a,$14
 	ldi (hl),a
 	ld (hl),$00

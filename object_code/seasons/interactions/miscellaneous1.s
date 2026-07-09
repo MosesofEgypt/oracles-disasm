@@ -251,7 +251,7 @@ tarmArmosUnlockingStairs:
 	jp runScriptDeleteWhenDone
 
 tarmArmosWallByStump:
-	ld a,($cc4c)
+	ld a,(wActiveRoom)
 	cp $42
 	jp nz,interactionDelete
 	ld e,Interaction.state
@@ -343,7 +343,7 @@ oreChunkDigSpot:
 	ld (hl),$0e
 	inc l
 	ld (hl),$01
-	ld a,($d008)
+	ld a,(w1Link.direction)
 	swap a
 	rrca
 	ld l,$c9
@@ -599,7 +599,7 @@ onoxCastleCutscene:
 	ld a,CUTSCENE_S_ONOX_CASTLE_FORCE
 	ld (wCutsceneTrigger),a
 	xor a
-	ld ($d008),a
+	ld (w1Link.direction),a
 	call dropLinkHeldItem
 	call clearAllParentItems
 	jp interactionDelete
@@ -910,7 +910,7 @@ interactionCode6bSubid25:
 	ld a,TILEINDEX_INDOOR_UPSTAIRCASE
 	call setTile
 	xor a
-	ld ($cbca),a
+	ld (wDisableLinkCollisionsAndMenu),a
 	jp interactionDelete
 
 ; TODO: there is a subrosian where this one should be?

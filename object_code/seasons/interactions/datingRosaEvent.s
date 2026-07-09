@@ -71,7 +71,7 @@ interactionCode31:
 	ld a,(de)
 	ldi (hl),a
 	ld e,$48
-	ld a,($d008)
+	ld a,(w1Link.direction)
 	ld (de),a
 	ld (hl),$00
 	call interactionSetAnimation
@@ -210,7 +210,7 @@ interactionCode31:
 	ld a,$01
 	ld (wDisabledObjects),a
 	ld a,$02
-	ld ($d008),a
+	ld (w1Link.direction),a
 	ld a,$29
 	call interactionSetHighTextIndex
 	ld hl,mainScripts.rosaScript_dateEnded

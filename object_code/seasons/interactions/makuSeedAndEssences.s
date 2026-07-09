@@ -49,7 +49,7 @@ interactionCodede:
 	jp objectSetVisible82
 @@state1:
 	ld a,$0f
-	ld ($cc6b),a
+	ld (wcc50),a
 	call interactionDecCounter1
 	ret nz
 	ld (hl),$40
@@ -63,7 +63,7 @@ interactionCodede:
 	ret nz
 	ld (hl),$78
 	ld a,$10
-	ld ($cc6b),a
+	ld (wcc50),a
 	ld l,$4b
 	ld (hl),$28
 	ld l,$4d

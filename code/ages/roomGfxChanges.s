@@ -301,7 +301,7 @@ roomTileChangesAfterLoad00:
 
 ;;
 drawCollapsedWingDungeon:
-	; Load the tile data for the cave to 2:$d000
+	; Load the tile data for the cave to 2:w1Link.enabled
 	ld a,GFXH_WING_DUNGEON_COLLAPSED
 	call loadGfxHeader
 

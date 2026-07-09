@@ -555,7 +555,7 @@ script_14_4aea:
 	asm15 scriptHelp.headSmelter_loadDanceMovements
 	movedown $11
 	delay 6
-	writememory $d008, $00
+	writememory w1Link.direction, $00
 	delay 8
 	showtext TX_2a03
 	setmusic $31
@@ -601,7 +601,7 @@ headSmelterScript_blowUpRocks:
 	setangleandanimation $18
 	checkcfc0bit 0
 	asm15 scriptHelp.headSmelter_loadHideFromBombScript
-	writememory $d008, $00
+	writememory w1Link.direction, $00
 	moveleft $19
 	moveup $19
 	delay 5
@@ -615,7 +615,7 @@ headSmelterScript_blowUpRocks:
 	showtext TX_2709
 	xorcfc0bit 2
 	applyspeed $31
-	writememory $d008, $02
+	writememory w1Link.direction, $02
 	enableinput
 	asm15 scriptHelp.headSmelter_enableScreenTransitions
 	scriptend
@@ -677,7 +677,7 @@ danceLeaderScript_moveIntoPosition:
 	showtext TX_0102
 	orroomflag $80
 	setdisabledobjectsto91
-	writememory $d008, $03
+	writememory w1Link.direction, $03
 	incstate
 	setspeed $50
 	moveleft $21
@@ -1468,7 +1468,7 @@ dinScript_subid4Init_body:
 	scriptend
 
 dinScript_discoverLinkCollapsed_body:
-	checkmemoryeq $d00f, $00
+	checkmemoryeq w1Link.zh, $00
 	delay 10
 	setspeed $14
 	movedown $3c

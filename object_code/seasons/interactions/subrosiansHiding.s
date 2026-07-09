@@ -41,7 +41,7 @@ rosaSubId0:
 	ld (wDisabledObjects),a
 	ld (wMenuDisabled),a
 	ld e,$79
-	ld a,($cc4c)
+	ld a,(wActiveRoom)
 	ld (de),a
 	xor a
 	ld (wActiveMusic),a
@@ -70,7 +70,7 @@ rosaSubId0:
 	.db $58 $58
 	.db $58 $58
 @func_67fb:
-	ld a,($cc4c)
+	ld a,(wActiveRoom)
 	cp $cb
 	jp z,interactionDelete
 	ld a,($cc62)
@@ -88,7 +88,7 @@ rosaSubId0:
 	.dw @var38_00
 	.dw @var38_01
 @var38_00:
-	ld a,($cc4c)
+	ld a,(wActiveRoom)
 	cp $cb
 	jr nz,@func_67fb
 	ld a,($cc9e)
@@ -111,7 +111,7 @@ rosaSubId0:
 	ld e,$79
 	ld a,(de)
 	ld b,a
-	ld a,($cc4c)
+	ld a,(wActiveRoom)
 	cp b
 	ret z
 	ld (de),a
@@ -131,7 +131,7 @@ rosaSubId0:
 	call addAToBc
 	ld a,(bc)
 	ld b,a
-	ld a,($cc4c)
+	ld a,(wActiveRoom)
 	cp b
 	jr nz,@func_67fb
 	jp @func_67d1
@@ -273,7 +273,7 @@ strangeBrothersSubId0:
 	ld e,$40
 	ld a,$83
 	ld (de),a
-	ld a,($cc4c)
+	ld a,(wActiveRoom)
 	ld (wTmpcfc0.genericCutscene.cfd1),a
 	ld a,GLOBALFLAG_STRANGE_BROTHERS_HIDING_IN_PROGRESS
 	call setGlobalFlag
@@ -362,7 +362,7 @@ strangeBrothersSubId0State2:
 	ld (wDisableScreenTransitions),a
 	ld (wTmpcfc0.normal.cfc0),a
 +
-	ld a,($cc4c)
+	ld a,(wActiveRoom)
 	ld b,a
 	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	cp b
@@ -385,7 +385,7 @@ strangeBrothersSubId0State2:
 	call addAToBc
 	ld a,(bc)
 	ld b,a
-	ld a,($cc4c)
+	ld a,(wActiveRoom)
 	cp b
 	jp nz,func_698f
 	jp func_6964

@@ -263,7 +263,7 @@ func_04_6e9b:
 	ld a,$02
 	ld ($ff00+R_SVBK),a
 	ld hl,wRoomLayout
-	ld de,$d000
+	ld de,w1Link.enabled
 	ld b,$c0
 	call copyMemory
 	ld hl,wRoomCollisions
@@ -295,7 +295,7 @@ func_04_6ed1:
 	ld a,$02
 	ld ($ff00+R_SVBK),a
 	ld hl,wRoomLayout
-	ld de,$d000
+	ld de,w1Link.enabled
 	ld b,$c0
 	call copyMemoryReverse
 	ld hl,wRoomCollisions

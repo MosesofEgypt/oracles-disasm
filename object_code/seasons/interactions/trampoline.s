@@ -28,7 +28,7 @@ interactionCode7c:
 	ld (de),a
 	jp func_76d4
 @state2:
-	ld a,($d00f)
+	ld a,(w1Link.zh)
 	or a
 	jr nz,@func_7677
 	xor a
@@ -79,7 +79,7 @@ interactionCode7c:
 	ld c,a
 	call interactionCheckContainsPoint
 	ret nc
-	ld a,($d00f)
+	ld a,(w1Link.zh)
 	ld b,a
 	cp $e8
 	jr nc,+

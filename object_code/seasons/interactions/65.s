@@ -27,7 +27,7 @@ interactionCode65:
 	ld ($ff00+R_SVBK),a
 
 	ld a,$80
-	ld hl,$d000
+	ld hl,w1Link.enabled
 	call @func_51c0
 
 	ld hl,$d0a0
@@ -96,9 +96,9 @@ interactionCode65:
 	call func_5258
 	jp nz,interactionDelete
 	ld a,$11
-	ld ($cc6a),a
+	ld (wLinkForceState),a
 	ld a,$81
-	ld ($cc6b),a
+	ld (wcc50),a
 	jp interactionDelete
 @state2:
 	call func_5258
@@ -227,7 +227,7 @@ func_52d9:
 	ldi a,(hl)
 	ld d,(hl)
 	ld e,a
-	ld hl,$d000
+	ld hl,w1Link.enabled
 	ld b,$05
 	ld c,$02
 	call queueDmaTransfer

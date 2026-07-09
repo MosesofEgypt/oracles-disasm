@@ -131,17 +131,17 @@ interactionCode6e:
 	jr nc,@@func_6c22
 	call @@func_6c22
 	ld a,$02
-	ld ($cc6b),a
+	ld (wcc50),a
 	jp interactionDelete
 @@func_6c19:
-	ld hl,$d008
+	ld hl,w1Link.direction
 	ld a,(hl)
 	inc a
 	and $03
 	ld (hl),a
 	ret
 @@func_6c22:
-	ld hl,$d000
+	ld hl,w1Link.enabled
 	jp objectCopyPosition
 @subid2:
 	ld a,GLOBALFLAG_SAW_STRANGE_BROTHERS_IN_HOUSE

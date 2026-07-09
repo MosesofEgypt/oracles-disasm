@@ -16,7 +16,7 @@ partCode44:
 	ld (hl),$01
 +
 	ld a,$13
-	ld ($cc6a),a
+	ld (wLinkForceState),a
 	jr func_73db
 ++
 	ld e,$c4

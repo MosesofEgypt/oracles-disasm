@@ -176,7 +176,7 @@ partCode35:
 	xor a
 	ld l,$ca
 	ldd (hl),a
-	ld ($d00a),a
+	ld (w1Link.y),a
 	ld (hl),$10
 	ld l,$d0
 	ld (hl),$14

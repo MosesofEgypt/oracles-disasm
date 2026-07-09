@@ -4830,7 +4830,7 @@ goron_targetCarts_configureInventory:
 	ld a,$99
 	ld (bc),a
 
-	; Save currently selected seeds to $cfda, then equip scent seeds
+	; Save currently selected seeds to wTmpcfc0.normal.cfc0+$1a, then equip scent seeds
 	ld c,<wShooterSelectedSeeds
 	ld a,(bc)
 	ldi (hl),a

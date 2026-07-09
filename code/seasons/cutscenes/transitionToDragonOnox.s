@@ -357,7 +357,7 @@ table_71cb:
 seasonsFunc_0f_71cf_copyw6Filler1IntoWramBank3:
 	call load5aIntoBc
 	push bc
-	ld hl,$d000
+	ld hl,w1Link.enabled
 	add hl,bc
 	ld b,$50
 	call seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer
@@ -458,7 +458,7 @@ table_7291:
 	
 ;;
 ; @param	b	number of bytes to copy
-; @param	hl	a few values between $d000-$db00 in bank 6 (w6Filler1, etc)
+; @param	hl	a few values between w1Link.enabled-$db00 in bank 6 (w6Filler1, etc)
 seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer:
 	ld a,$06
 	ld ($ff00+R_SVBK),a

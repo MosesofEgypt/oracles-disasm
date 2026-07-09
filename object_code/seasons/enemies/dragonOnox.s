@@ -22,7 +22,7 @@
 ;   $cfd7 - Pointer to main body (subid $01)
 ;   wTmpcfc0.fallDownHoleEvent.cfd8 - Pointer to left shoulder (subid $02)
 ;   wTmpcfc0.shootingGallery.cfd9 - Pointer to right shoulder (subid $03)
-;   $cfda - Pointer to left claw (subid $04)
+;   wTmpcfc0.normal.cfc0+$1a - Pointer to left claw (subid $04)
 ;   $cfdb - Pointer to right claw (subid $05)
 ;   $cfdc - Pointer to left claw sphere (subid $06)
 ;   $cfdd - Pointer to right claw sphere (subid $07)
@@ -404,7 +404,7 @@ dragonOnox_mainBody_state2:
 	ld a,(w1Link.xh)
 	cp (hl)
 	; dragon Onox subid 4
-	ld hl,$cfda
+	ld hl,wTmpcfc0.normal.cfc0+$1a
 	jr c,+
 	; subid 5
 	inc l
@@ -657,7 +657,7 @@ dragonOnox_mainBody_state8:
 	ld l,Enemy.var36
 	bit 7,(hl)
 	; dragon Onox subid 4
-	ld hl,$cfda
+	ld hl,wTmpcfc0.normal.cfc0+$1a
 	jr z,+
 	inc l
 +
@@ -889,7 +889,7 @@ dragonOnox_mainBody_stateE:
 	ld l,Enemy.collisionType
 	res 7,(hl)
 	; dragon Onox subid 4 - left claw
-	ld a,($cfda)
+	ld a,(wTmpcfc0.normal.cfc0+$1a)
 	ld h,a
 	res 7,(hl)
 	; dragon Onox subid 5 - right claw
@@ -1420,7 +1420,7 @@ dragonOnox_leftClawSphere:
 
 	ld l,Enemy.relatedObj1+1
 	; dragon Onox subid 4
-	ld a,($cfda)
+	ld a,(wTmpcfc0.normal.cfc0+$1a)
 	ldd (hl),a
 	ld (hl),$80
 
@@ -1493,7 +1493,7 @@ dragonOnox_leftShoulderSphere:
 
 	ld l,Enemy.relatedObj1+1
 	; dragon Onox subid 4
-	ld a,($cfda)
+	ld a,(wTmpcfc0.normal.cfc0+$1a)
 	ldd (hl),a
 	ld (hl),$80
 

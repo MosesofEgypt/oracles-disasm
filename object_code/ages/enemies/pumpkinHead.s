@@ -63,7 +63,7 @@ pumpkinHead_state_uninitialized:
 
 pumpkinHead_state_spawner:
 	; Wait for doors to close
-	ld a,($cc93)
+	ld a,(wcc93)
 	or a
 	ret nz
 

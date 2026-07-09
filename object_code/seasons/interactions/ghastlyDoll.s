@@ -73,9 +73,9 @@ interactionCode94:
 	jp showText
 @state3:
 	ld a,$04
-	ld ($cc6a),a
+	ld (wLinkForceState),a
 	ld a,$01
-	ld ($cc6b),a
+	ld (wcc50),a
 	ld hl,w1Link.yh
 	ld bc,$f200
 	call objectTakePositionWithOffset

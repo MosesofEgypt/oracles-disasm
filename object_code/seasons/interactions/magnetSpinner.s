@@ -45,7 +45,7 @@ interactionCode7b:
 	ld e,$48
 	ld (de),a
 	ld b,a
-	ld a,($d008)
+	ld a,(w1Link.direction)
 	xor $02
 	cp b
 	ret nz
@@ -64,11 +64,11 @@ interactionCode7b:
 	ld a,($ccb4)
 	cp $3f
 	ret nz
-	ld a,($d004)
+	ld a,(w1Link.state)
 	cp $01
 	ret nz
 	ld a,$02
-	ld ($cc6a),a
+	ld (wLinkForceState),a
 	xor a
 	ld ($cc6c),a
 	ret
@@ -115,7 +115,7 @@ interactionCode7b:
 	call @func_758d
 	ldh a,(<hFF8B)
 	xor $02
-	ld ($d008),a
+	ld (w1Link.direction),a
 @func_75bb:
 	ld e,Interaction.state
 	ld a,$01

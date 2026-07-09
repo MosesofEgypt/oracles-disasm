@@ -33,7 +33,7 @@ interactionCode9c:
 	ld a,($cc88)
 	or a
 	ret nz
-	ld a,($cc48)
+	ld a,(wLinkObjectIndex)
 	rrca
 	ret c
 	call objectCheckCollidedWithLink
@@ -51,7 +51,7 @@ interactionCode9c:
 	ld a,(de)
 	or a
 	ret z
-	ld a,($cc48)
+	ld a,(wLinkObjectIndex)
 	cp $d0
 	jp nz,seasonsFunc_0a_5d18
 	call checkLinkID0AndControlNormal
@@ -76,14 +76,14 @@ interactionCode9c:
 	ld a,(de)
 	ld (w1Link.xh),a
 	xor a
-	ld ($d00f),a
+	ld (w1Link.zh),a
 	ld a,$52
 	call playSound
 	ld a,$02
 	jp interactionSetAnimation
 @state3:
 	ld a,$10
-	ld ($cc6b),a
+	ld (wcc50),a
 	call interactionAnimate
 	ld e,$61
 	ld a,(de)
@@ -101,7 +101,7 @@ interactionCode9c:
 	ld a,$04
 	ld (de),a
 	ld a,$06
-	ld ($cc6a),a
+	ld (wLinkForceState),a
 	jp objectSetVisible83
 @state4:
 @state7:

@@ -1990,7 +1990,7 @@ setObjectsEnabledTo2:
 	call setEnemiesEnabledTo2
 	call setPartsEnabledTo2
 	call setItemsEnabledTo2
-	ld hl,$d000
+	ld hl,w1Link.enabled
 	ld c,$d2
 	jr setObjectsEnabledTo2_hlpr
 
@@ -2037,7 +2037,7 @@ clearObjectsWithEnabled2:
 	call clearEnemiesWithEnabled2
 	call clearPartsWithEnabled2
 	call clearItemsWithEnabled2
-	ld hl,$d000
+	ld hl,w1Link.enabled
 	ld c,$d2
 	jr clearObjectsWithEnabled2_hlpr
 
@@ -3321,7 +3321,7 @@ runGameLogic:
 ; Clears a lot of memory, loads common palette header $0f,
 initializeGame:
 	ld hl,wOamEnd
-	ld bc,$d000-wOamEnd
+	ld bc,w1Link.enabled-wOamEnd
 	call clearMemoryBc
 	call clearScreenVariablesAndWramBank1
 	call initializeSeedTreeRefillData
@@ -5865,7 +5865,7 @@ func_7b93:
 	ld hl,wGenericCutscene.cbb3
 	inc (hl)
 	ld a,$03
-	ld ($d000),a
+	ld (w1Link.enabled),a
 	ld a,LINK_STATE_WARPING
 	ld (wLinkForceState),a
 	ld a,$0b

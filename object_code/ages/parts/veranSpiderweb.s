@@ -198,7 +198,7 @@ partCode56:
 	or a
 	jr z,+
 	ld bc,$fa00
-	ld hl,$d000
+	ld hl,w1Link.enabled
 	call objectCopyPositionWithOffset
 +
 	ld h,d
@@ -231,7 +231,7 @@ partCode56:
 	ret
 	
 @@state4:
-	ld hl,$d005
+	ld hl,w1Link.substate
 	ld a,(hl)
 	cp $02
 	jp z,partDelete

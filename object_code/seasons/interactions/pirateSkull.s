@@ -186,7 +186,7 @@ interactionCode4d:
 	ld (de),a
 	jp interactionInitGraphics
 @@state1:
-	ld a,($d00f)
+	ld a,(w1Link.zh)
 	or a
 	ret nz
 	ld a,$02
@@ -206,7 +206,7 @@ interactionCode4d:
 	ld l,$49
 	ld (hl),$10
 	ld a,$02
-	ld ($cc6b),a
+	ld (wcc50),a
 	ld a,$ca
 	jp playSound
 @@state3:

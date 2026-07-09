@@ -190,9 +190,9 @@ interactionCode81:
 	ld ($ccea),a
 	call func_7973
 	ld a,$04
-	ld ($cc6a),a
+	ld (wLinkForceState),a
 	ld a,$01
-	ld ($cc6b),a
+	ld (wcc50),a
 	ld h,d
 	ld l,$4b
 	ld a,(w1Link.yh)

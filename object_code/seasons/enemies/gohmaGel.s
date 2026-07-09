@@ -258,7 +258,7 @@ gohma_gel_subid2:
 	jr +++
 
 @seasonsFunc_0d_6f25:
-	ld a,($d009)
+	ld a,(w1Link.angle)
 	bit 7,a
 	jp nz,ecom_setRandomAngle
 	xor $10

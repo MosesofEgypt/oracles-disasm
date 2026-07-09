@@ -246,7 +246,7 @@ func_03_6275:
 	ret
 @state2:
 	ld a,$03
-	ld ($d000),a
+	ld (w1Link.enabled),a
 	ld a,$0f
 	ld (wLinkForceState),a
 	jr @bootedFromPalace_incState
@@ -254,7 +254,7 @@ func_03_6275:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	ld a,($d005)
+	ld a,(w1Link.warpVar1)
 	cp $02
 	ret nz
 	ld bc,TX_590a
@@ -1804,7 +1804,7 @@ func_6ed6:
 	push af
 	ld a,$04
 	ld ($ff00+R_SVBK),a
-	ld hl,$d000
+	ld hl,w1Link.enabled
 	ld bc,$0240
 	call clearMemoryBc
 	ld hl,$d400
@@ -2135,7 +2135,7 @@ func_70f7:
 	ldh (<hFF8E),a
 	push hl
 	ld c,d
-	ld de,$d000
+	ld de,w1Link.enabled
 	call func_712f
 	pop hl
 	set 2,h
@@ -2355,7 +2355,7 @@ func_03_7244:
 	.dw @@cbb3_04
 	.dw @@cbb3_05
 @@cbb3_00:
-	ld hl,$d000
+	ld hl,w1Link.enabled
 --
 	call func_7431
 	call func_745c
@@ -2370,7 +2370,7 @@ func_03_7244:
 	ld hl,$dc00
 	jr --
 @@cbb3_04:
-	ld hl,$d000
+	ld hl,w1Link.enabled
 	call func_7431
 	call func_7456
 	jp timewarpCutscene_incCBB3
@@ -2466,7 +2466,7 @@ func_03_7244:
 	ld de,w1Link.yh
 	call getShortPositionFromDE
 	ld (wTmpcbb9),a
-	ld de,$d000
+	ld de,w1Link.enabled
 	call objectDelete_de
 	jp timewarpCutscene_incCBB3
 @@cbb3_03:
@@ -3171,7 +3171,7 @@ func_03_7cb7:
 	ld a,$50
 	ld (wLinkStateParameter),a
 	ld a,$10
-	ld ($d009),a
+	ld (w1Link.angle),a
 	ret
 @func_7d33:
 	ld (hl),$10
@@ -3216,7 +3216,7 @@ func_03_7cb7:
 	ld a,$60
 	ld (wLinkStateParameter),a
 	ld a,$10
-	ld ($d009),a
+	ld (w1Link.angle),a
 	jp blackTowerEscapeAttempt_incState
 @state4:
 	ld a,(wTmpcbb5)

@@ -61,7 +61,7 @@ swoop_state8:
 	ld (wMenuDisabled),a
 
 	; Wait for door to close
-	ld a,($cc93)
+	ld a,(wcc93)
 	or a
 	ret nz
 

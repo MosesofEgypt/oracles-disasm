@@ -38,7 +38,7 @@ interactionCode33:
 	ld a,$01
 	ld (wMenuDisabled),a
 	ld (wDisabledObjects),a
-	ld a,($cc93)
+	ld a,(wcc93)
 	or a
 	ret nz
 

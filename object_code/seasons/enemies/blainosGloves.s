@@ -466,7 +466,7 @@ seasonsFunc_0d_7915:
 	ret nz
 	ld l,$b4
 	ld (hl),$08
-	ld hl,$d00f
+	ld hl,w1Link.zh
 	ld a,(hl)
 	sub $08
 	ld (hl),a

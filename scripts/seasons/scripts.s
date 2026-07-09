@@ -862,7 +862,7 @@ sokraScript_inVillage:
 	asm15 scriptHelp.villageSokra_waitUntilLinkInPosition
 	jumpifobjectbyteeq $76, $00, -
 	wait 20
-	writememory $d008, $00
+	writememory w1Link.direction, $00
 	showtextlowindex <TX_5200
 	wait 20
 	setangle $00
@@ -935,7 +935,7 @@ sokraScript_easternSuburbsPortal:
 	asm15 scriptHelp.seasonsFunc_15_5802
 	jumpifobjectbyteeq $76, $00, -
 	wait 20
-	writememory $d008, $01
+	writememory w1Link.direction, $01
 	showtextlowindex <TX_5205
 -
 	wait 20
@@ -4319,7 +4319,7 @@ floodgateKeyholeScript_keyEntered:
 	playsound SNDCTRL_STOPMUSIC
 	shakescreen 120
 	wait 60
-	writememory $d008, $01
+	writememory w1Link.direction, $01
 	orroomflag $80
 	spawninteraction INTERAC_MISCELLANEOUS_1, $14, $00, $00
 	incstate
@@ -4333,7 +4333,7 @@ d4KeyholeScript_disableThingsAndScreenShake:
 	playsound SND_RUMBLE2
 	shakescreen 255
 	wait 60
-	writememory $d008, $02
+	writememory w1Link.direction, $02
 	orroomflag $80
 	scriptend
 
@@ -4843,14 +4843,14 @@ stealingFeatherScript:
 	wait 8
 	playsound SND_WHISTLE
 	wait 30
-	writememory $d008, $03
+	writememory w1Link.direction, $03
 	wait 30
-	writememory $d008, $01
+	writememory w1Link.direction, $01
 	setmusic MUS_HIDE_AND_SEEK
 	asm15 scriptHelp.stealingFeather_spawnStrangeBrothers
 	xorcfc0bit 0
 	wait 20
-	writememory $d008, $01
+	writememory w1Link.direction, $01
 	checkcfc0bit 1
 	playsound SND_SCENT_SEED
 	asm15 scriptHelp.stealingFeather_spawnSelfWithSubId0
@@ -4948,7 +4948,7 @@ companionScript_mooshInSpoolSwamp:
 +
 	showtext TX_2213
 	ormemory wMooshState, $20
-	checkmemoryeq $cc48, $d1
+	checkmemoryeq wLinkObjectIndex, $d1
 	showtext TX_2212
 	enablemenu
 	enableallobjects
@@ -5005,7 +5005,7 @@ companionScript_RickyInNorthHoron:
 	showtext TX_2008
 @last:
 	writememory $d103, $01
-	checkmemoryeq $cc48, $d1
+	checkmemoryeq wLinkObjectIndex, $d1
 	showtext TX_2005
 	enableallobjects
 	scriptend
@@ -5027,7 +5027,7 @@ companionScript_RickyLeavingYouInSpoolSwamp:
 	asm15 scriptHelp.seasonsFunc_15_5eb4
 	enableallobjects
 	checkmemoryeq $cc77, $00
-	writememory $d008, $01
+	writememory w1Link.direction, $01
 	setdisabledobjectsto11
 	writememory $d103, $05
 	setcounter1 $10
@@ -5070,7 +5070,7 @@ companionScript_dimitriTutorial:
 	writememory $d126, $06
 	writememory $d127, $08
 	ormemory wDimitriState, $80
-	checkmemoryeq $cc48, $d1
+	checkmemoryeq wLinkObjectIndex, $d1
 	showtext TX_211d
 	enableallobjects
 	enablemenu
@@ -5130,7 +5130,7 @@ companionScript_mooshInMtCucco:
 +
 	writememory wMooshState, $80
 	enableallobjects
-	checkmemoryeq $cc48, $d1
+	checkmemoryeq wLinkObjectIndex, $d1
 	jumptable_objectbyte $7b
 	.dw @mooshIsNotCompanion2
 	.dw @mooshIsCompanion2
@@ -6993,10 +6993,10 @@ shipPiratianScript_1stDizzyPirateDescending:
 	callscript shipPiratian_spinFromDizziness
 	callscript shipPiratian_spinFromDizziness
 	callscript shipPiratian_spinFromDizziness
-	writememory $d008, $03
+	writememory w1Link.direction, $03
 	callscript shipPiratian_spinFromDizziness
 	callscript shipPiratian_spinFromDizziness
-	writememory $d008, $00
+	writememory w1Link.direction, $00
 	wait 30
 	showtextlowindex <TX_4e0b
 	spawninteraction INTERAC_SHIP_PIRATIAN, $0b, $98, $78
@@ -7024,13 +7024,13 @@ shipPiratian_spinAround:
 shipPirationScript_2ndDizzyPirateDescending:
 	callscript shipPiratian_spinAround
 	showtextlowindex <TX_4e0c
-	writememory $d008, $02
+	writememory w1Link.direction, $02
 	callscript @moveAroundUncontrollably
 	callscript @moveAroundUncontrollably
 	callscript @moveAroundUncontrollably
-	writememory $d008, $01
+	writememory w1Link.direction, $01
 	callscript @moveAroundUncontrollably
-	writememory $d008, $00
+	writememory w1Link.direction, $00
 	wait 30
 	showtextlowindex <TX_4e0d
 	spawninteraction INTERAC_SHIP_PIRATIAN, $0c, $98, $78
@@ -7051,12 +7051,12 @@ shipPirationScript_2ndDizzyPirateDescending:
 shipPirationScript_3rdDizzyPirateDescending:
 	callscript shipPiratian_spinAround
 	showtextlowindex <TX_4e0e
-	writememory $d008, $02
+	writememory w1Link.direction, $02
 	callscript shipPiratian_spinFromDizziness
 	callscript shipPiratian_spinFromDizziness
 	callscript shipPiratian_spinFromDizziness
 	wait 30
-	writememory $d008, $03
+	writememory w1Link.direction, $03
 	showtextlowindex <TX_4e0f
 	spawninteraction INTERAC_SHIP_PIRATIAN_CAPTAIN, $01, $98, $78
 	checkcfc0bit 7
@@ -7159,7 +7159,7 @@ shipPiratianCaptainScript_gettingSick:
 	setspeed SPEED_080
 	callscript shipPiratian_spinFromDizziness
 	callscript shipPiratian_spinFromDizziness
-	writememory $d008, $02
+	writememory w1Link.direction, $02
 	showtextlowindex <TX_4e10
 	xorcfc0bit 7
 	scriptjump pirateShipLoop

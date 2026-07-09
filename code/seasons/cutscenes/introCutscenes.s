@@ -1050,7 +1050,7 @@ seasonsFunc_03_7a88:
 	push af
 	ld a,$04
 	ld ($ff00+R_SVBK),a
-	ld hl,$d000
+	ld hl,w1Link.enabled
 	ld bc,$0240
 	call clearMemoryBc
 	ld hl,$d400

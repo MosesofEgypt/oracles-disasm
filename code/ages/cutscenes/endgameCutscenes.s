@@ -1018,7 +1018,7 @@ endgameCutsceneHandler_0f:
 	jp updateAllObjects
 
 @@runSubstates:
-	ld de,$cbc2
+	ld de,wGenericCutscene.cbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @@substate0
@@ -1047,7 +1047,7 @@ endgameCutsceneHandler_0f:
 .endif
 	xor a
 	ldh (<hActiveObjectType),a
-	ld de,$d000
+	ld de,w1Link.enabled
 	ld bc,$f8f0
 	ld a,$28
 	call objectCreateExclamationMark
@@ -1188,7 +1188,7 @@ endgameCutsceneHandler_0f:
 	jp updateAllObjects
 
 @@runSubstates:
-	ld de,$cbc2
+	ld de,wGenericCutscene.cbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @@substate0
@@ -1353,7 +1353,7 @@ endgameCutsceneHandler_0a:
 	.dw @state2
 	.dw @state3
 @state0:
-	ld de,$cbc2
+	ld de,wGenericCutscene.cbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @@substate0
@@ -1405,7 +1405,7 @@ endgameCutsceneHandler_0a:
 	jp fadeoutToWhite
 
 @state1:
-	ld de,$cbc2
+	ld de,wGenericCutscene.cbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @@substate0
@@ -1572,7 +1572,7 @@ endgameCutsceneHandler_0a:
 	jr nc,@@func_5fc7
 	inc (hl)
 	xor a
-	ld ($cbc2),a
+	ld (wGenericCutscene.cbc2),a
 	jr ++
 @@func_5fc7:
 	call cutscene_clearTmpCBB3

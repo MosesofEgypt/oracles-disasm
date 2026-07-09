@@ -54,7 +54,7 @@ blackTowerEscape_simulatedInput4:
 agesFunc_10_70f6:
 	xor a
 	ldh (<hOamTail),a
-	ld de,$cbc2
+	ld de,wGenericCutscene.cbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @substate0
@@ -264,7 +264,7 @@ agesFunc_10_70f6:
 
 
 agesFunc_10_7298:
-	ld de,$cbc2
+	ld de,wGenericCutscene.cbc2
 	ld a,(de)
 	rst_jumpTable
 	.dw @substate0
