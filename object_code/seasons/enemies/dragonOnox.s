@@ -13,7 +13,7 @@
 ;   var36:
 ;   var37:
 ;   var38:
-;   $cfc8 - near end
+;   wTmpcfc0.normal.cfc0+$08 - near end
 ;   $cfc9
 ;   wTmpcfc0.normal.cfc0+$0a
 ;   wTmpcfc0.normal.cfc0+$0b
@@ -898,7 +898,7 @@ dragonOnox_mainBody_stateE:
 	res 7,(hl)
 
 	ld a,$04
-	ld ($cfc8),a
+	ld (wTmpcfc0.normal.cfc0+$08),a
 	ld a,SNDCTRL_STOPMUSIC
 	call playSound
 	ld a,(wTmpcfc0.normal.cfc0+$0d)

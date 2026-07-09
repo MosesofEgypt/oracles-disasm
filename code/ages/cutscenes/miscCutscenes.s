@@ -37,7 +37,7 @@ func_03_6103:
 	ld (wActiveRoom),a
 	call fairyCutscene_incState
 	xor a
-	ld ($cfd2),a
+	ld (wTmpcfc0.genericCutscene.cfd2),a
 	call disableLcd
 	call clearScreenVariablesAndWramBank1
 	call initializeVramMaps
@@ -69,7 +69,7 @@ func_03_6103:
 @state3:
 @state6:
 @state9:
-	ld hl,$cfd2
+	ld hl,wTmpcfc0.genericCutscene.cfd2
 	ld a,(hl)
 	or a
 	ret z
@@ -448,7 +448,7 @@ nayruSingingCutsceneHandler:
 	ret nz
 	call cutscene_incCutsceneState
 	xor a
-	ld ($cfd2),a
+	ld (wTmpcfc0.genericCutscene.cfd2),a
 	call getFreePartSlot
 	ret nz
 	ld (hl),PART_LIGHTNING
@@ -462,7 +462,7 @@ nayruSingingCutsceneHandler:
 	ld (hl),$28
 	ret
 @state9:
-	ld a,($cfd2)
+	ld a,(wTmpcfc0.genericCutscene.cfd2)
 	or a
 	ret z
 	call cutscene_incCutsceneState

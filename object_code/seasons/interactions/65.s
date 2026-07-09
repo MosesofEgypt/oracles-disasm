@@ -70,7 +70,7 @@ interactionCode65:
 	xor a
 	ld (wDisableScreenTransitions),a
 	ld a,$3c
-	ld ($cd19),a
+	ld (wScreenShakeCounterX),a
 	call interactionDecCounter1
 	ret nz
 	ld (hl),$78
@@ -89,7 +89,7 @@ interactionCode65:
 	ld a,$70
 	call playSound
 	ld a,$0f
-	ld ($cd18),a
+	ld (wScreenShakeCounterY),a
 	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $09
 	ret c

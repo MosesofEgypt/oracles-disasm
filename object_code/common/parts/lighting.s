@@ -61,10 +61,10 @@ partCode27:
 	ld a,$ff
 .else
 	ld b,a
-	ld a,($cfd2)
+	ld a,(wTmpcfc0.genericCutscene.cfd2)
 	or b
 .endif
-	ld ($cfd2),a
+	ld (wTmpcfc0.genericCutscene.cfd2),a
 	ret
 
 @func_55a6:

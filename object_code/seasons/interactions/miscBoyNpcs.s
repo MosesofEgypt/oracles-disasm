@@ -141,13 +141,13 @@ interactionCode3e:
 	ld l,$60
 	ld (hl),$01
 	call interactionIncSubstate
-	ld hl,$cceb
+	ld hl,wccd4
 	ld (hl),$01
 	call interactionAnimate
 +
 	jp @@@runScriptPushLinkAwayUpdateDrawPriority
 @@@substate1:
-	ld a,($cceb)
+	ld a,(wccd4)
 	cp $02
 	jr nz,@@@runScriptPushLinkAwayUpdateDrawPriority
 	call @func_68e9

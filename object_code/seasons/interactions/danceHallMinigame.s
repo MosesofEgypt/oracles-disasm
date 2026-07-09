@@ -78,13 +78,13 @@ interactionCode6a:
 
 @@func_5c6f:
 	ld a,$01
-	ld ($cfd2),a
+	ld (wTmpcfc0.genericCutscene.cfd2),a
 	ld a,$04
 	jr +++
 
 @@func_5c78:
 	ld a,$ff
-	ld ($cfd2),a
+	ld (wTmpcfc0.genericCutscene.cfd2),a
 	ld a,$04
 	jr +++
 
@@ -173,7 +173,7 @@ interactionCode6a:
 	ld (hl),$01
 	ld a,$02
 	ld (de),a
-	ld hl,$cfc8
+	ld hl,wTmpcfc0.normal.cfc0+$08
 	call @func_5ec4
 	ldi (hl),a
 	call @func_5ec4
@@ -377,7 +377,7 @@ interactionCode6a:
 	ret z
 	ld hl,wTmpcfc0.shootingGallery.cfd9
 	inc (hl)
-	ld hl,$cfc8
+	ld hl,wTmpcfc0.normal.cfc0+$08
 	rst_addAToHl
 	ld a,(hl)
 	cp b
@@ -420,7 +420,7 @@ interactionCode6a:
 	ret
 @func_5efd:
 	ld a,(wTmpcfc0.normal.cfc0+$0b)
-	ld hl,$cfc8
+	ld hl,wTmpcfc0.normal.cfc0+$08
 	rst_addAToHl
 	ld a,(hl)
 	ldh (<hFF8B),a
@@ -549,7 +549,7 @@ interactionCode6a:
 	inc hl
 	jr -
 +
-	ld a,($cfd2)
+	ld a,(wTmpcfc0.genericCutscene.cfd2)
 	bit 7,a
 	jr nz,+
 	ld a,(hl)
@@ -646,7 +646,7 @@ interactionCode6a:
 	ret nc
 +
 	ld (hl),a
-	ld a,($cfd2)
+	ld a,(wTmpcfc0.genericCutscene.cfd2)
 	ld l,$48
 	add (hl)
 	and $03

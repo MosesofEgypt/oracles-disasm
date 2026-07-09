@@ -109,7 +109,7 @@ interactionCode82:
 	ld a,(de)
 	call func_7a9f
 	ret nz
-	ld hl,$cceb
+	ld hl,wccd4
 	ld (hl),$02
 	ld h,d
 	ld l,$45

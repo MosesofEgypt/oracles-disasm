@@ -143,7 +143,7 @@ flameOfDestructionCutscene_state1:
 	ld (wDirtyFadeSprPalettes),a
 	ld (wFadeSprPaletteSources),a
 	xor a
-	ld ($cfc6),a
+	ld (wTmpcfc0.genericCutscene.cfc6),a
 	call cutscene_func_03_72af
 	call loadInteracIdb4_subid6And7
 	ld a,MUS_DISASTER
@@ -384,7 +384,7 @@ zeldaKidnappedCutscene_state1Handler:
 	ld a,$1e
 	ld (wGenericCutscene.cbb5),a
 	xor a
-	ld ($cfc6),a
+	ld (wTmpcfc0.genericCutscene.cfc6),a
 	call cutscene_func_03_72af
 	call loadInteracIdb4_subid2And3
 	ld a,$21
@@ -438,7 +438,7 @@ zeldaKidnappedCutscene_state1Handler:
 	ld hl,wTmpcfc0.normal.cfc0
 	res 0,(hl)
 	xor a
-	ld ($cfc6),a
+	ld (wTmpcfc0.genericCutscene.cfc6),a
 	call loadInteracIdb4_subid4And5
 	ld a,$04
 	call fadeinFromWhiteWithDelay
@@ -485,7 +485,7 @@ zeldaKidnappedCutscene_state1Handler:
 	ld a,$f1
 	call playSound
 	xor a
-	ld ($cfc6),a
+	ld (wTmpcfc0.genericCutscene.cfc6),a
 	call loadInteracIdb4_subid6And7
 	call getFreeInteractionSlot
 	jr nz,+

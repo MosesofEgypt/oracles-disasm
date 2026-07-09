@@ -814,7 +814,7 @@ mittensOwnerScript:
 	writememory wTmpcfc0.genericCutscene.cfde, $00
 	spawninteraction INTERAC_TRADE_ITEM, $06, $44, $68
 	showtextlowindex <TX_0b33
-	ormemory $cceb, $01
+	ormemory wccd4, $01
 	showtextlowindex <TX_0b34
 	setcounter1 $20
 	setanimation $02
@@ -7248,7 +7248,7 @@ linkedCutsceneScript_witches2:
 	wait 30
 	createpuff
 	xorcfc0bit 7
-	writememory $cfc6, $00
+	writememory wTmpcfc0.genericCutscene.cfc6, $00
 	asm15 scriptHelp.seasonsFunc_15_6378
 	wait 1
 	asm15 scriptHelp.seasonsFunc_15_6383

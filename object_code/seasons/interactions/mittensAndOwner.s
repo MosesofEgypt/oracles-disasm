@@ -66,7 +66,7 @@ interactionCode26:
 	jp interactionSetScript
 @state1:
 	call interactionRunScript
-	ld a,($cceb)
+	ld a,(wccd4)
 	or a
 	jp z,npcFaceLinkAndAnimate
 	call func_5a99
@@ -130,6 +130,6 @@ func_5a99:
 	dec (hl)
 	ret nz
 	xor a
-	ld ($cceb),a
+	ld (wccd4),a
 	ld a,$02
 	jp interactionSetAnimation

@@ -130,7 +130,7 @@ flameOfSorrowState1:
 	ld (wActiveMusic),a
 	call playSound
 	xor a
-	ld ($cfc6),a
+	ld (wTmpcfc0.genericCutscene.cfc6),a
 	ld a,$1e
 	jp linkedCutscene_aIntoCBB5_incSubstate
 @substate7:
@@ -302,7 +302,7 @@ zeldaKidnappedState1:
 	call playSound
 	xor a
 	ld (wTmpcfc0.normal.cfc0),a
-	ld ($cfc6),a
+	ld (wTmpcfc0.genericCutscene.cfc6),a
 	ld a,$1e
 	jp linkedCutscene_aIntoCBB5_incSubstate
 @substateB:
@@ -345,7 +345,7 @@ zeldaKidnappedState1:
 	ld hl,wTmpcfc0.normal.cfc0
 	res 0,(hl)
 	xor a
-	ld ($cfc6),a
+	ld (wTmpcfc0.genericCutscene.cfc6),a
 	ld a,$04
 	jp linkedCutscene_aIntoCBB5_incSubstate
 @substate11:

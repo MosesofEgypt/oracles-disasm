@@ -1722,13 +1722,13 @@ seasonsFunc_15_5d12:
 ; ==================================================================================================
 seasonsFunc_15_5d20:
 	ld a,$01
-	ld ($cfd2),a
+	ld (wTmpcfc0.genericCutscene.cfd2),a
 	ld a,$04
 	jr +++
 
 seasonsFunc_15_5d29:
 	ld a,$ff
-	ld ($cfd2),a
+	ld (wTmpcfc0.genericCutscene.cfd2),a
 	ld a,$04
 	jr +++
 	

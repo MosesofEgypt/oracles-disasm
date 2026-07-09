@@ -44,7 +44,7 @@ interactionCode83:
 	.dw @@susbtate1
 	.dw @@susbtate2
 @@susbtate0:
-	ld a,($cceb)
+	ld a,(wccd4)
 	cp $01
 	ret nz
 	call getRandomNumber_noPreserveVars
@@ -81,7 +81,7 @@ interactionCode83:
 	ret c
 	jp interactionIncSubstate
 @@susbtate2:
-	ld a,($cceb)
+	ld a,(wccd4)
 	cp $02
 	ret nz
 	xor a

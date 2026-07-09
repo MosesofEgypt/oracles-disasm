@@ -131,7 +131,7 @@ interactionCodebc:
 	ld (hl),40
 
 @func_6eac:
-	ld hl,wTmpcfc0.genericCutscene.cfc6
+	ld hl,wTmpcfc0.wTmpcfc0.genericCutscene.cfc6
 	inc (hl)
 	ld a,(hl)
 	cp $02

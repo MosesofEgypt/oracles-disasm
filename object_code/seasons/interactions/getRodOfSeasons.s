@@ -4,7 +4,7 @@
 ; Variables:
 ;   var03:    Index of a seasons' sparkle from 0 to 3
 ;   var3b:    Initial time for each seasons' sparkle to start dropping sparkles
-;   $cceb:    Set to 1 when Rod disappears, to remove its aura, and continue cutscene
+;   wccd4:    Set to 1 when Rod disappears, to remove its aura, and continue cutscene
 ; ==================================================================================================
 interactionCodee6:
 	ld e,Interaction.state
@@ -31,7 +31,7 @@ interactionCodee6_state0:
 	bit 5,(hl)
 	jp nz,interactionDelete
 	xor a
-	ld ($cceb),a
+	ld (wccd4),a
 	ld hl,mainScripts.gettingRodOfSeasonsScript
 	jp interactionSetScript
 
@@ -281,11 +281,11 @@ interactionCodee6_state1:
 	call interactionDecCounter2
 	ret nz
 	ld a,$01
-	ld ($cceb),a
+	ld (wccd4),a
 	jp interactionDelete
 
 @rodOfSeasonsAura:
-	ld a,($cceb)
+	ld a,(wccd4)
 	or a
 	jp nz,interactionDelete
 

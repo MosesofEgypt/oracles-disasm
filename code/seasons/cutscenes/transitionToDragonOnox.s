@@ -3,7 +3,7 @@
 ; TODO: finish
 
 seasonsFunc_0f_6f75:
-	ld a,($cfc8)
+	ld a,(wTmpcfc0.normal.cfc0+$08)
 	rst_jumpTable
 	.dw @state0
 	.dw @return
@@ -76,7 +76,7 @@ seasonsFunc_0f_6f75:
 	ld a,$80
 	ld ($cfce),a
 	ld (wLinkInAir),a
-	ld hl,$cfc8
+	ld hl,wTmpcfc0.normal.cfc0+$08
 	inc (hl)
 	call disableLcd
 	call seasonsFunc_0f_70b4_swapGraphics
@@ -122,7 +122,7 @@ seasonsFunc_0f_6f75:
 	xor a
 	ld ($ff00+R_SVBK),a
 	ld a,$03
-	ld ($cfc8),a
+	ld (wTmpcfc0.normal.cfc0+$08),a
 	ret
 
 seasonsFunc_0f_704d:
@@ -154,7 +154,7 @@ seasonsFunc_0f_704d:
 
 	call stopTextThread
 	ld a,$05
-	ld ($cfc8),a
+	ld (wTmpcfc0.normal.cfc0+$08),a
 	call disableLcd
 
 	xor a
@@ -258,7 +258,7 @@ seasons_func_0f_712a:
 	cp $78
 	ret nz
 	ld a,$06
-	ld ($cfc8),a
+	ld (wTmpcfc0.normal.cfc0+$08),a
 	; Onox phase 1 room flags
 	ld hl,$ca91
 	set 7,(hl)
@@ -333,7 +333,7 @@ seasonsFunc_0f_7182:
 +
 	ld ($c490),a
 	ld ($cfce),a
-	ld a,($cd18)
+	ld a,(wScreenShakeCounterY)
 	or a
 	ret z
 	call getRandomNumber_noPreserveVars

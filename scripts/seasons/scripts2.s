@@ -1592,7 +1592,7 @@ gettingRodOfSeasons_body:
 	spawninteraction INTERAC_GET_ROD_OF_SEASONS, $02, $38, $50
 	asm15 fadeinFromWhiteWithDelay, $04
 	checkpalettefadedone
-	checkflagset $00, $cceb
+	checkflagset $00, wccd4
 	asm15 seasonsInteractionsBank15.forceLinksDirection, DIR_DOWN
 	delay $07
 

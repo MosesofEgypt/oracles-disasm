@@ -142,7 +142,7 @@ twinrovaWitches_state1:
 	ld l,$47
 	ld (hl),$28
 @@func_7126:
-	ld hl,$cfc6
+	ld hl,wTmpcfc0.genericCutscene.cfc6
 	inc (hl)
 	ld a,(hl)
 	cp $02

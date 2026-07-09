@@ -360,8 +360,8 @@ generalOnox_subid1:
 	inc l
 	xor a
 	ld (hl),a
-	ld ($cd18),a
-	ld ($cd19),a
+	ld (wScreenShakeCounterY),a
+	ld (wScreenShakeCounterX),a
 	ld l,$b0
 	dec a
 	ldi (hl),a
@@ -653,7 +653,7 @@ generalOnox_subid2:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	ld hl,$cfc8
+	ld hl,wTmpcfc0.normal.cfc0+$08
 	inc (hl)
 	jp enemyDelete
 

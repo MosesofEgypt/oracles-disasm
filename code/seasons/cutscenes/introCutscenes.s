@@ -254,7 +254,7 @@ cutscene06Func5:
 	jp incCutsceneState2
 
 seasonsFunc_03_7516:
-	ld de,$cfd2
+	ld de,wTmpcfc0.genericCutscene.cfd2
 	ld b,$03
 -
 	ld a,(de)
@@ -333,7 +333,7 @@ cutscene06Func7:
 	jp seasonsFunc_03_74b6
 	
 cutscene06Func8:
-	ld hl,$cfd2
+	ld hl,wTmpcfc0.genericCutscene.cfd2
 	ld a,(hl)
 	bit 4,a
 	ret z

@@ -8,10 +8,10 @@ interactionCode51:
 	and $0f
 	ld a,$b3
 	call z,playSound
-	ld a,($cd18)
+	ld a,(wScreenShakeCounterY)
 	or a
 	jr nz,+
-	ld a,($cd19)
+	ld a,(wScreenShakeCounterX)
 	or a
 	call z,func_7a9a
 +
@@ -66,9 +66,9 @@ func_7a9a:
 	pop hl
 	jp interactionDelete
 +
-	ld ($cd18),a
+	ld (wScreenShakeCounterY),a
 	ldi a,(hl)
-	ld ($cd19),a
+	ld (wScreenShakeCounterX),a
 	ld e,$70
 	ldi a,(hl)
 	ld (de),a

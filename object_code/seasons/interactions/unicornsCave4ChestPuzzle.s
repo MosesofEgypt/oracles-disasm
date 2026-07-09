@@ -38,7 +38,7 @@ interactionCode62:
 	ld b,a
 	ld c,$01
 	call @@func_4fa5
-	ld a,($cfd2)
+	ld a,(wTmpcfc0.genericCutscene.cfd2)
 	ld b,a
 	ld c,$02
 	call @@func_4fa5

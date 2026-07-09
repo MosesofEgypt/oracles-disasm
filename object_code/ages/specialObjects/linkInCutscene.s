@@ -546,7 +546,7 @@ linkCutscene3:
 	jp itemIncSubstate
 
 @substate8:
-	ld a,($cfd2)
+	ld a,(wTmpcfc0.genericCutscene.cfd2)
 	or a
 	jr z,linkCutsceneFunc_73e8
 
