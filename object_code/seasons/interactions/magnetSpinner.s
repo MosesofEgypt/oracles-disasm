@@ -98,12 +98,12 @@ interactionCode7b:
 	ld e,$4b
 	ld a,(de)
 	add (hl)
-	ld ($d00b),a
+	ld (w1Link.yh),a
 	inc hl
 	ld e,$4d
 	ld a,(de)
 	add (hl)
-	ld ($d00d),a
+	ld (w1Link.xh),a
 	ret
 @func_75a7:
 	ld e,$48

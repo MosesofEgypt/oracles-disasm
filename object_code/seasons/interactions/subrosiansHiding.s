@@ -38,8 +38,8 @@ rosaSubId0:
 	call interactionSetAlwaysUpdateBit
 	call objectSetReservedBit1
 	ld a,$01
-	ld ($cca4),a
-	ld ($cc02),a
+	ld (wDisabledObjects),a
+	ld (wMenuDisabled),a
 	ld e,$79
 	ld a,($cc4c)
 	ld (de),a
@@ -51,7 +51,7 @@ rosaSubId0:
 	ld a,$80
 	ld ($cc9f),a
 	ld a,$01
-	ld ($ccab),a
+	ld (wDisableScreenTransitions),a
 	ldbc $01 INTERAC_ROSA_HIDING
 	call spawnHider
 	ld e,a
@@ -79,7 +79,7 @@ rosaSubId0:
 @func_680c:
 	xor a
 	ld ($cc9f),a
-	ld ($ccab),a
+	ld (wDisableScreenTransitions),a
 	jp interactionDelete
 @substate1:
 	ld e,$78
@@ -99,14 +99,14 @@ rosaSubId0:
 	ld (de),a
 	ret
 @var38_01:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	or a
 	jr z,+
 	ld e,$7a
 	ld a,$01
 	ld (de),a
 	xor a
-	ld ($ccab),a
+	ld (wDisableScreenTransitions),a
 +
 	ld e,$79
 	ld a,(de)
@@ -245,8 +245,8 @@ func_6919:
 	ret
 +
 	xor a
-	ld ($cca4),a
-	ld ($ccab),a
+	ld (wDisabledObjects),a
+	ld (wDisableScreenTransitions),a
 	jp interactionDelete
 table_6931:
 	.dw mainScripts.rosaHidingScript_1stScreen
@@ -274,12 +274,12 @@ strangeBrothersSubId0:
 	ld a,$83
 	ld (de),a
 	ld a,($cc4c)
-	ld ($cfd1),a
+	ld (wTmpcfc0.genericCutscene.cfd1),a
 	ld a,GLOBALFLAG_STRANGE_BROTHERS_HIDING_IN_PROGRESS
 	call setGlobalFlag
 func_6964:
 	ld a,$01
-	ld ($ccab),a
+	ld (wDisableScreenTransitions),a
 	ldbc $01 INTERAC_STRANGE_BROTHERS_HIDING
 	call spawnHider
 	ldbc $02 INTERAC_STRANGE_BROTHERS_HIDING
@@ -291,7 +291,7 @@ func_6964:
 	call getRandomNumber
 	and $01
 +
-	ld ($cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
 	ld e,$46
 	ld a,(de)
 	cp $06
@@ -333,14 +333,14 @@ func_69ac:
 	ret
 
 strangeBrothersSubId0State1:
-	ld a,($cd00)
+	ld a,(wScreenVariables)
 	and $01
 	ret z
 	ld a,($cc9e)
 	cp $02
 	ret nz
 	xor a
-	ld ($cfc0),a
+	ld (wTmpcfc0.normal.cfc0),a
 	ld e,Interaction.state
 	ld a,$02
 	ld (de),a
@@ -350,7 +350,7 @@ strangeBrothersSubId0State1:
 	jp playSound
 
 strangeBrothersSubId0State2:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	cp $ff
 	jr z,func_6a23
 	and $03
@@ -359,16 +359,16 @@ strangeBrothersSubId0State2:
 	ld e,$7a
 	ld (de),a
 	xor a
-	ld ($ccab),a
-	ld ($cfc0),a
+	ld (wDisableScreenTransitions),a
+	ld (wTmpcfc0.normal.cfc0),a
 +
 	ld a,($cc4c)
 	ld b,a
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	cp b
 	ret z
 	ld a,b
-	ld ($cfd1),a
+	ld (wTmpcfc0.genericCutscene.cfd1),a
 	cp $51
 	jr z,func_698f
 	ld e,$7a
@@ -397,12 +397,12 @@ func_6a23:
 	ld a,$03
 	ld (de),a
 	ld a,$01
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld bc,TX_2804
 	jp showText
 
 strangeBrothersSubId0State3:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	or a
 	ret nz
 	ld a,GLOBALFLAG_JUST_CAUGHT_BY_STRANGE_BROTHERS
@@ -410,7 +410,7 @@ strangeBrothersSubId0State3:
 	ld a,GLOBALFLAG_STRANGE_BROTHERS_HIDING_IN_PROGRESS
 	call unsetGlobalFlag
 	xor a
-	ld ($ccab),a
+	ld (wDisableScreenTransitions),a
 	ld hl,@warpDestVariables
 	call setWarpDestVariables
 	jp interactionDelete
@@ -482,7 +482,7 @@ strangeBrothersSubId2:
 	ld a,(de)
 	or a
 	jr nz,@func_6add
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	cp $ff
 	jr z,@func_6add
 	call interactionAnimate
@@ -497,9 +497,9 @@ strangeBrothersSubId2:
 	jp objectSetSpeedZ
 @func_6add:
 	ld a,$ff
-	ld ($cfc0),a
+	ld (wTmpcfc0.normal.cfc0),a
 	ld a,$01
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	ld h,d
 	ld l,$44
 	inc (hl)
@@ -527,5 +527,5 @@ strangeBrothersSubId2:
 	jr +
 +
 	xor a
-	ld ($cfc0),a
+	ld (wTmpcfc0.normal.cfc0),a
 	jp interactionDelete

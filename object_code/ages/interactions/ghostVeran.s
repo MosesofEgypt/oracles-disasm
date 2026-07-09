@@ -101,7 +101,7 @@ runVeranGhostSubid0:
 	jp interactionSetScript
 
 @substate2:
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	or a
 	jr z,++
 
@@ -153,13 +153,13 @@ runVeranGhostSubid0:
 	jp playSound
 
 @substate4:
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	cp $02
 	ret nz
 	jr ---
 
 @substate6:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $12
 	jr nz,+
 	ld bc,$0302
@@ -197,7 +197,7 @@ runVeranGhostSubid0:
 	ret
 
 @substate7:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $17
 	ret nz
 

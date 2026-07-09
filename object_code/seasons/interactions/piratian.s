@@ -217,9 +217,9 @@ func_6c78:
 	jp playSound
 func_6c8b:
 	ld hl,table_6cb2
-	ld a,($d00b)
+	ld a,(w1Link.yh)
 	ld c,a
-	ld a,($d00d)
+	ld a,(w1Link.xh)
 	ld b,a
 ---
 	ldi a,(hl)

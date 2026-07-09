@@ -50,7 +50,7 @@ interactionCode72:
 	call @spawnSubservientMoblin
 	ld (hl),$78
 
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld b,$04
 	call clearMemory
 

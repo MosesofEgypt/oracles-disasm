@@ -45,6 +45,7 @@ wSoundDisabled: ; $c01b
 	db
 
 wc01c: ; $c01c
+	; something to do with sound channels
 	db
 
 wSoundCmd: ; $c01d
@@ -2452,8 +2453,8 @@ wcca7: ; $cca7
 wUpgradesObtained: ; $cca8/$ccc2
 	db
 
-.ifdef ROM_SEASONS ; TODO: related to springbloom flower state
-wUnknown: ; -/$ccc3
+.ifdef ROM_SEASONS ;
+wSpringBloomFlowerState: ; -/$ccc3
 	db
 .endif
 

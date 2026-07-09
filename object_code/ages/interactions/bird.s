@@ -114,7 +114,7 @@ bird_runSubid0:
 	.dw @substate3
 
 @substate0:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $0e
 	jr nz,++
 
@@ -129,7 +129,7 @@ bird_runSubid0:
 	jp interactionRunScript
 
 @substate1:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $10
 	ret nz
 

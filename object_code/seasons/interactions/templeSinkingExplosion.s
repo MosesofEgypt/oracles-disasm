@@ -27,7 +27,7 @@ interactionCode86:
 	call func_7cb3
 	jp objectSetVisible81
 @state1:
-	ld hl,$cfd3
+	ld hl,wTmpcfc0.genericCutscene.cfd3
 	ld a,(hl)
 	inc a
 	jp z,interactionDelete
@@ -59,7 +59,7 @@ interactionCode86:
 	jp z,objectSetInvisible
 	jp objectSetVisible
 func_7cb3:
-	ld hl,$cfd3
+	ld hl,wTmpcfc0.genericCutscene.cfd3
 	ld a,(hl)
 	and $7f
 	ld hl,table_7cd8

@@ -209,7 +209,7 @@ interactionCode3a:
 	.dw @@substate2
 
 @@substate0:
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	cp $02
 	jp nz,interactionAnimate
 
@@ -224,7 +224,7 @@ interactionCode3a:
 
 @@substate1:
 	callab interactionOscillateXRandomly
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	cp $03
 	ret nz
 
@@ -251,7 +251,7 @@ interactionCode3a:
 	call interactionDecCounter1
 	ret nz
 	ld a,$04
-	ld ($cfd1),a
+	ld (wTmpcfc0.genericCutscene.cfd1),a
 	jp interactionDelete
 
 
@@ -342,13 +342,13 @@ interactionCode3a:
 
 @@substate0:
 	call interactionRunScript
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	cp $01
 	ret nz
 	jp interactionIncSubstate
 
 @@substate1:
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	cp $02
 	ret nz
 	call interactionIncSubstate
@@ -373,7 +373,7 @@ interactionCode3a:
 	ret nz
 
 	ld a,$01
-	ld ($cfd1),a
+	ld (wTmpcfc0.genericCutscene.cfd1),a
 	ld a,SND_RESTORE
 	call playSound
 	jpab setCounter1To120AndPlaySoundEffectAndIncSubstate

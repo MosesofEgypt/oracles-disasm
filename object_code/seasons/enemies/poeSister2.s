@@ -111,7 +111,7 @@ enemyCode76:
 	or a
 	ret nz
 	inc a
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	ld h,d
 	ld l,e
 	inc (hl)
@@ -134,7 +134,7 @@ enemyCode76:
 	dec a
 	jr nz,@animate
 	xor a
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	ld bc,TX_0a05
 	jp showText
 +

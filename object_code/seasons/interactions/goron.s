@@ -153,7 +153,7 @@ interactionCode3b:
 @func_67fc:
 	ld e,$4d
 	ld a,(de)
-	ld hl,$d00d
+	ld hl,w1Link.xh
 	cp (hl)
 	ld a,$02
 	ret c

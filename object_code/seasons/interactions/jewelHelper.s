@@ -173,7 +173,7 @@ interactionCode90:
 	xor a
 	ld e,Interaction.substate
 	ld (de),a
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld (wDisabledObjects),a
 	ret
 
@@ -295,7 +295,7 @@ interactionCode90:
 	ld l,$46
 	ld (hl),$1e
 	ld a,$80
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld a,$81
 	ld (wDisabledObjects),a
 	ret

@@ -173,7 +173,7 @@ interactionCode84:
 	jp nz,interactionDelete
 
 	call objectTakePosition
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	bit 0,a
 	jp nz,interactionDelete
 	jr @animateAndFlicker

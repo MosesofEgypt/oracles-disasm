@@ -378,13 +378,13 @@
 	.endif
 .ENDM
 
-; Holds execution until the given bit of address $cfc0 is set.
+; Holds execution until the given bit of address wTmpcfc0.normal.cfc0 is set.
 ; param1:	Bit to check (0-7)
 .MACRO checkcfc0bit
 	.db $a0 | (\1)
 .ENDM
 
-; Xors the given bit in address $cfc0.
+; Xors the given bit in address wTmpcfc0.normal.cfc0.
 ; param1:	Bit to xor (0-7)
 .MACRO xorcfc0bit
 	.db $a8 | (\1)

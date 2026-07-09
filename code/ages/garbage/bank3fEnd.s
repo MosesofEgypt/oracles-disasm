@@ -43,7 +43,7 @@ func_7cd1:
 	xor a
 	ld (wDisabledObjects),a
 	ld (wMenuDisabled),a
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	set 0,(hl)
 	ld a,(wActiveMusic)
 	call $0cb1

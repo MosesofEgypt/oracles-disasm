@@ -24,7 +24,7 @@ specialWarp_subid0:
 specialWarp_subid1:
 	call checkInteractionState
 	jr nz,+
-	ld a,($cd00)
+	ld a,(wScreenVariables)
 	and $01
 	ret z
 	ld a,$01
@@ -41,7 +41,7 @@ specialWarp_subid1:
 	ret nz
 	ld (hl),$eb
 	ld a,$81
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	jp interactionDelete
 
 specialWarp_subid2:
@@ -137,19 +137,19 @@ specialWarp_subid7:
 @state1:
 @state2:
 	ld a,d
-	ld ($ccab),a
+	ld (wDisableScreenTransitions),a
 	ld a,($cc48)
 	cp $d1
 	ret nz
 	xor a
-	ld ($ccab),a
-	ld a,($cd00)
+	ld (wDisableScreenTransitions),a
+	ld a,(wScreenVariables)
 	and $01
 	ret nz
 	xor a
-	ld ($cd00),a
+	ld (wScreenVariables),a
 	ld a,$ff
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	ld (wActiveMusic),a
 	jr specialWarp_subid4@setWarpVariables
 

@@ -162,7 +162,7 @@ D6getRandomButtonResult:
 	ld b,a
 +
 	ld a,b
-	ld ($cfc1),a
+	ld (wTmpcfc0.normal.doorControllerState),a
 	ret
 
 
@@ -181,7 +181,7 @@ D6spawnFloorDestroyerAndEscapeBridge:
 
 D6spawnChestAfterCrystalTrapRoom_body:
 	xor a
-	ld ($cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
 	call getThisRoomFlags
 	inc hl
 	res 5,(hl)
@@ -279,7 +279,7 @@ checkPoeBeaten:
 	jr nz,+
 	dec a
 +
-	ld ($cfc1),a
+	ld (wTmpcfc0.normal.doorControllerState),a
 	ret
 
 
@@ -373,7 +373,7 @@ countFireKeese:
 
 D8checkAllIceBlocksInPlace:
 	xor a
-	ld ($cfc1),a
+	ld (wTmpcfc0.normal.doorControllerState),a
 	ld h,>wRoomLayout
 	ld l,$4d
 	ld a,TILEINDEX_PUSHABLE_ICE_BLOCK
@@ -386,7 +386,7 @@ D8checkAllIceBlocksInPlace:
 	cp (hl)
 	ret nz
 	ld a,$01
-	ld ($cfc1),a
+	ld (wTmpcfc0.normal.doorControllerState),a
 	ret
 
 
@@ -548,7 +548,7 @@ makuTree_checkGateHit:
 	call objectCheckCollidedWithLink_notDead
 	ret nc
 	ld a,$01
-	ld ($cfc0),a
+	ld (wTmpcfc0.normal.cfc0),a
 	ret
 
 
@@ -680,7 +680,7 @@ villageSokra_waitUntilLinkInPosition:
 seasonsFunc_15_5802:
 	ld e,$4b
 	ld a,(de)
-	ld hl,$d00b
+	ld hl,w1Link.yh
 	cp (hl)
 	jp nz,objectApplySpeed
 	ld e,$76
@@ -712,7 +712,7 @@ villageSokra_checkStageInGame:
 	jr z,+
 	inc b
 +
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	ld (hl),b
 	ret
 
@@ -724,7 +724,7 @@ suburbsSokra_jumpOffStump:
 seasonsFunc_15_5840:
 	ld e,$4b
 	ld a,(de)
-	ld hl,$d00b
+	ld hl,w1Link.yh
 	cp (hl)
 
 seasonsFunc_15_5847:
@@ -841,7 +841,7 @@ blossom_openNameEntryMenu:
 ; INTERAC_SUBROSIAN
 ; ==================================================================================================
 subrosianFunc_58ac:
-	ld hl,$cfde
+	ld hl,wTmpcfc0.genericCutscene.cfde
 	jr +
 subrosianFunc_58b1:
 	ld hl,$cfdc
@@ -859,13 +859,13 @@ subrosian_knockLinkOut:
 	ret
 
 subrosianFunc_58c4:
-	ld a,($d00b)
+	ld a,(w1Link.yh)
 	ld e,$4b
 	ld (de),a
 	ret
 
 subrosian_setYAboveLink:
-	ld a,($d00b)
+	ld a,(w1Link.yh)
 	sub $08
 	ld e,$4b
 	ld (de),a
@@ -884,7 +884,7 @@ subrosianFunc_58dc:
 	ld b,a
 	ld c,$0e
 +
-	ld a,($cfc1)
+	ld a,(wTmpcfc0.normal.doorControllerState)
 	add c
 	sub b
 	ld e,$47
@@ -980,7 +980,7 @@ subrosian_checkSignsDestroyed:
 	inc c
 +
 	ld a,c
-	ld ($cfc0),a
+	ld (wTmpcfc0.normal.cfc0),a
 	ld a,b
 	call hexToDec
 	swap c
@@ -1226,13 +1226,13 @@ pirateCaptain_freezeLinkForCutscene:
 seasonsFunc_15_5a70:
 	ld e,$4d
 	ld a,(de)
-	ld hl,$d00d
+	ld hl,w1Link.xh
 	sub (hl)
 	ld b,a
 	add $0c
 	cp $18
 	ret nc
-	ld a,($d00b)
+	ld a,(w1Link.yh)
 	cp $38
 	ret c
 	ld a,b
@@ -1374,7 +1374,7 @@ headSmelter_loseBombFlower:
 	jp loseTreasure
 
 headSmelter_loadHideFromBombScript:
-	ld hl,$cfde
+	ld hl,wTmpcfc0.genericCutscene.cfde
 	ld bc,mainScripts.headSmelterAtTempleScript_hideFromBomb
 	jr headSmelter_loadScriptIntoWram
 
@@ -1389,7 +1389,7 @@ headSmelter_loadDanceMovements:
 	ld (hl),DIR_DOWN
 	ld l,<w1Link.angle
 	ld (hl),ANGLE_DOWN
-	ld hl,$cfde
+	ld hl,wTmpcfc0.genericCutscene.cfde
 	ld bc,mainScripts.headSmelterScript_danceMovementText1
 	call headSmelter_loadScriptIntoWram
 	ld hl,$cfdc
@@ -1643,7 +1643,7 @@ putAwayLinksItems:
 	ld a,$ff
 	ld (wStatusBarNeedsRefresh),a
 	ld hl,wInventoryB
-	ld e,<$cfdf
+	ld e,<wTmpcfc0.genericCutscene.cfdf
 	ldh a,(<hFF8B)
 	and $0f
 	call @saveItemToB
@@ -1652,7 +1652,7 @@ putAwayLinksItems:
 	ldh a,(<hFF8B)
 	swap a
 	and $0f
-	ld e,<$cfde
+	ld e,<wTmpcfc0.genericCutscene.cfde
 	call @saveItemToB
 	ld a,b
 	cp ITEM_BIGGORON_SWORD
@@ -1693,7 +1693,7 @@ seasonsFunc_15_5cf7:
 	ld a,$ff
 	ld ($cbea),a
 	ld h,>wc600Block
-	ld de,$cfdf
+	ld de,wTmpcfc0.genericCutscene.cfdf
 	ld c,$80
 	call seasonsFunc_15_5d12
 	ld e,$de
@@ -1741,7 +1741,7 @@ seasonsFunc_15_5d32:
 +++
 	ld ($cfd4),a
 	ld a,$09
-	ld ($cfd1),a
+	ld (wTmpcfc0.genericCutscene.cfd1),a
 	ld hl,$cfda
 	inc (hl)
 	ret
@@ -1777,7 +1777,7 @@ floodgateKeeper_checkStage:
 	jr nz,+
 	dec a
 +
-	ld ($cfc1),a
+	ld (wTmpcfc0.normal.doorControllerState),a
 	ret
 
 d4Keyhole_setState0eDisableAllSorts:
@@ -1785,10 +1785,10 @@ d4Keyhole_setState0eDisableAllSorts:
 	ld ($cc6a),a
 d4KeyHolw_disableAllSorts:
 	ld a,$01
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld ($cca5),a
 	ld a,$ff
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	jp interactionSetAlwaysUpdateBit
 
 floodgate_disableObjectsScreenTransition:
@@ -2058,13 +2058,13 @@ sunkenCityBullies_lookToLink:
 trampoline_bounce:
 	ld a,LINK_STATE_BOUNCING_ON_TRAMPOLINE
 	ld (wLinkForceState),a
-	ld hl,$d00b
+	ld hl,w1Link.yh
 	call objectCopyPosition
-	ld a,($d00b)
+	ld a,(w1Link.yh)
 	swap a
 	and $0f
 	ldh (<hFF8D),a
-	ld a,($d00d)
+	ld a,(w1Link.xh)
 	swap a
 	and $0f
 	xor $0f
@@ -2442,7 +2442,7 @@ makuTree_spawnBubble:
 	inc e
 	ld a,h
 	ld (de),a
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	res 7,(hl)
 	ret
 
@@ -2602,7 +2602,7 @@ impa_checkIf4thEssenceGotten:
 	jr nz,@got4thEssence
 	inc b
 @got4thEssence:
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	ld (hl),b
 	ret
 
@@ -2699,7 +2699,7 @@ subrosianSmith_giveUpgradedShield:
 	inc l
 	ld (hl),c
 	push de
-	ld de,$d00b
+	ld de,w1Link.yh
 	call objectCopyPosition_rawAddress
 	pop de
 	ret
@@ -2756,7 +2756,7 @@ moblinKeepScene_putLinkOnGround:
 ; INTERAC_SHIP_PIRATIAN_CAPTAIN
 ; ==================================================================================================
 shipPiratian_incCbb3:
-	ld hl,$cbb3
+	ld hl,wGenericCutscene.cbb3
 	inc (hl)
 	ret
 
@@ -3152,8 +3152,8 @@ seasonsFunc_15_6518:
 
 seasonsFunc_15_652e:
 	xor a
-	ld ($cca4),a
-	ld ($cc02),a
+	ld (wDisabledObjects),a
+	ld (wMenuDisabled),a
 	call getThisRoomFlags
 	and $c0
 	ld (hl),a
@@ -3188,7 +3188,7 @@ seasonsFunc_15_654e:
 
 seasonsFunc_15_6558:
 	xor a
-	ld ($cfd1),a
+	ld (wTmpcfc0.genericCutscene.cfd1),a
 	ret
 
 masterDiver_forceLinkState:

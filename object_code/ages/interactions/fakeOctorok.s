@@ -82,7 +82,7 @@ impaOctorokCode:
 	.dw @substate3
 
 @substate0:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $01
 	ret nz
 	call interactionIncSubstate

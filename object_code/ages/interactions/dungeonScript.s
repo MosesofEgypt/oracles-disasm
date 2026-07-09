@@ -15,7 +15,7 @@ interactionCode20:
 	ld (de),a
 
 	xor a
-	ld ($cfc1),a
+	ld (wTmpcfc0.normal.doorControllerState),a
 	ld ($cfc2),a
 
 	ld a,(wDungeonIndex)

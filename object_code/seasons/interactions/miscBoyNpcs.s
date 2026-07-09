@@ -219,11 +219,11 @@ interactionCode3e:
 +
 	jp animateRunScript
 @@@substate1:
-	ld a,($ccc3)
+	ld a,(wSpringBloomFlowerState)
 	or a
 	ret nz
 	inc a
-	ld ($ccc3),a
+	ld (wSpringBloomFlowerState),a
 	call interactionIncSubstate
 	jp objectSetVisiblec2
 @@@substate2:
@@ -248,7 +248,7 @@ interactionCode3e:
 	jp interactionSetAnimation
 @@@substate4:
 	ld e,$4f
-	ld a,($ccc3)
+	ld a,(wSpringBloomFlowerState)
 	ld (de),a
 	or a
 	ret nz

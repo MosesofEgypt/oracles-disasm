@@ -15,19 +15,19 @@
 ;   var38:
 ;   $cfc8 - near end
 ;   $cfc9
-;   $cfca
-;   $cfcb
-;   $cfcc
-;   $cfcd
+;   wTmpcfc0.normal.cfc0+$0a
+;   wTmpcfc0.normal.cfc0+$0b
+;   wTmpcfc0.normal.cfc0+$0c
+;   wTmpcfc0.normal.cfc0+$0d
 ;   $cfd7 - Pointer to main body (subid $01)
-;   $cfd8 - Pointer to left shoulder (subid $02)
-;   $cfd9 - Pointer to right shoulder (subid $03)
+;   wTmpcfc0.fallDownHoleEvent.cfd8 - Pointer to left shoulder (subid $02)
+;   wTmpcfc0.shootingGallery.cfd9 - Pointer to right shoulder (subid $03)
 ;   $cfda - Pointer to left claw (subid $04)
 ;   $cfdb - Pointer to right claw (subid $05)
 ;   $cfdc - Pointer to left claw sphere (subid $06)
 ;   $cfdd - Pointer to right claw sphere (subid $07)
-;   $cfde - Pointer to left shoulder sphere (subid $08)
-;   $cfdf - Pointer to right shoulder sphere (subid $09)
+;   wTmpcfc0.genericCutscene.cfde - Pointer to left shoulder sphere (subid $08)
+;   wTmpcfc0.genericCutscene.cfdf - Pointer to right shoulder sphere (subid $09)
 ; ==================================================================================================
 enemyCode05:
 	jr z,@normalStatus
@@ -124,7 +124,7 @@ dragonOnox_bodyPartSpawner:
 -
 	push hl
 	call ecom_spawnUncountedEnemyWithSubid01
-	; spawn from subids $02 to $09, storing in $cfd8 to $cfdf
+	; spawn from subids $02 to $09, storing in wTmpcfc0.fallDownHoleEvent.cfd8 to wTmpcfc0.genericCutscene.cfdf
 	ld a,$0a
 	sub c
 	ld (hl),a
@@ -356,7 +356,7 @@ dragonOnox_mainBody_state2:
 	call ecom_decCounter1
 	jr nz,+
 	ld (hl),$1e
-	ld a,($cfcc)
+	ld a,(wTmpcfc0.normal.cfc0+$0c)
 	sub $10
 	cp $40
 	jr c,+
@@ -372,9 +372,9 @@ dragonOnox_mainBody_state2:
 	; var36
 	inc l
 	ld c,(hl)
-	ld a,($cfcc)
+	ld a,(wTmpcfc0.normal.cfc0+$0c)
 	ld h,a
-	ld a,($cfcd)
+	ld a,(wTmpcfc0.normal.cfc0+$0d)
 	ld l,a
 	sub c
 	add $06
@@ -671,7 +671,7 @@ dragonOnox_mainBody_state8:
 @substate3:
 	ld h,d
 	ld l,Enemy.var36
-	ld a,($cfcd)
+	ld a,(wTmpcfc0.normal.cfc0+$0d)
 	sub (hl)
 	add $02
 	cp $05
@@ -692,7 +692,7 @@ dragonOnox_mainBody_state8:
 	call objectNudgeAngleTowards
 +
 	call seasonsFunc_0f_650d
-	ld a,($cfcc)
+	ld a,(wTmpcfc0.normal.cfc0+$0c)
 	cp $d0
 	ret nz
 	ld h,d
@@ -705,7 +705,7 @@ dragonOnox_mainBody_state8:
 @substate5:
 	call ecom_decCounter1
 	ld bc,$b000
-	ld a,($cfcd)
+	ld a,(wTmpcfc0.normal.cfc0+$0d)
 	or a
 	jr nz,+
 	ld l,e
@@ -713,7 +713,7 @@ dragonOnox_mainBody_state8:
 	ret
 +
 	ld l,a
-	ld a,($cfcc)
+	ld a,(wTmpcfc0.normal.cfc0+$0c)
 	ld h,a
 	ld e,Enemy.counter1
 	ld a,(de)
@@ -725,7 +725,7 @@ dragonOnox_mainBody_state8:
 	jp seasonsFunc_0f_650d
 
 @substate6:
-	ld hl,$cfcc
+	ld hl,wTmpcfc0.normal.cfc0+$0c
 	inc (hl)
 	ret nz
 	ld h,d
@@ -901,11 +901,11 @@ dragonOnox_mainBody_stateE:
 	ld ($cfc8),a
 	ld a,SNDCTRL_STOPMUSIC
 	call playSound
-	ld a,($cfcd)
+	ld a,(wTmpcfc0.normal.cfc0+$0d)
 	cpl
 	inc a
 	ld (wScreenOffsetX),a
-	ld a,($cfcc)
+	ld a,(wTmpcfc0.normal.cfc0+$0c)
 	cpl
 	inc a
 	ld (wScreenOffsetY),a
@@ -932,9 +932,9 @@ dragonOnox_mainBody_stateE:
 	and $03
 	ld hl,@seasonsTable_0f_61b9
 	rst_addAToHl
-	ld a,($cfcd)
+	ld a,(wTmpcfc0.normal.cfc0+$0d)
 	add (hl)
-	ld ($cfcd),a
+	ld (wTmpcfc0.normal.cfc0+$0d),a
 	jp seasonsFunc_0f_650d
 
 @seasonsTable_0f_61b9:
@@ -955,7 +955,7 @@ dragonOnox_leftShoulder:
 	call objectSetVisible83
 
 @offsetBasedOncfca:
-	ld a,($cfca)
+	ld a,(wTmpcfc0.normal.cfc0+$0a)
 	cp $08
 	ld bc,$603a
 	jr c,+
@@ -967,12 +967,12 @@ dragonOnox_leftShoulder:
 	; $08		bc = $5238
 	; $09+		bc = $6640
 	ld e,Enemy.yh
-	ld a,($cfcc)
+	ld a,(wTmpcfc0.normal.cfc0+$0c)
 	add b
 	ld (de),a
 
 	ld e,Enemy.xh
-	ld a,($cfcd)
+	ld a,(wTmpcfc0.normal.cfc0+$0d)
 	add c
 	ld (de),a
 	ret
@@ -992,7 +992,7 @@ dragonOnox_rightShoulder:
 	call objectSetVisible83
 
 @offsetBasedOncfca:
-	ld a,($cfca)
+	ld a,(wTmpcfc0.normal.cfc0+$0a)
 	cp $08
 	ld bc,$6066
 	jr c,+
@@ -1004,12 +1004,12 @@ dragonOnox_rightShoulder:
 	; $08		bc = $6660
 	; $09+		bc = $5268
 	ld e,Enemy.yh
-	ld a,($cfcc)
+	ld a,(wTmpcfc0.normal.cfc0+$0c)
 	add b
 	ld (de),a
 
 	ld e,Enemy.xh
-	ld a,($cfcd)
+	ld a,(wTmpcfc0.normal.cfc0+$0d)
 	add c
 	ld (de),a
 	ret
@@ -1058,7 +1058,7 @@ dragonOnox_leftClaw:
 	ld a,$00
 	call objectGetRelatedObject1Var
 	ld bc,$30d8
-	ld a,($cfca)
+	ld a,(wTmpcfc0.normal.cfc0+$0a)
 	cp $06
 	jr c,+
 	sub $09
@@ -1103,7 +1103,7 @@ dragonOnox_leftClaw:
 	ret
 
 @state2:
-	ld a,($cfca)
+	ld a,(wTmpcfc0.normal.cfc0+$0a)
 	sub $06
 	cp $02
 	jr c,+
@@ -1314,7 +1314,7 @@ dragonOnox_leftClaw:
 	call enemySetAnimation
 
 @@substate1:
-	ld a,($cfca)
+	ld a,(wTmpcfc0.normal.cfc0+$0a)
 	or a
 	call z,@@seasonsFunc_0f_63e1
 	ld a,$00
@@ -1389,7 +1389,7 @@ dragonOnox_rightClaw:
 	ld a,Enemy.enabled-Enemy
 	call objectGetRelatedObject1Var
 	ld bc,$3028
-	ld a,($cfca)
+	ld a,(wTmpcfc0.normal.cfc0+$0a)
 	cp $06
 	jr c,+
 	sub $08
@@ -1426,7 +1426,7 @@ dragonOnox_leftClawSphere:
 
 	ld l,Enemy.relatedObj2+1
 	; dragon Onox subid 2
-	ld a,($cfd8)
+	ld a,(wTmpcfc0.fallDownHoleEvent.cfd8)
 	ldd (hl),a
 	ld (hl),$80
 
@@ -1472,7 +1472,7 @@ dragonOnox_rightClawSphere:
 	ld (hl),$80
 	ld l,Enemy.relatedObj2+1
 	; dragon Onox subid 3
-	ld a,($cfd9)
+	ld a,(wTmpcfc0.shootingGallery.cfd9)
 	ldd (hl),a
 	ld (hl),$80
 	ld a,$0e
@@ -1499,7 +1499,7 @@ dragonOnox_leftShoulderSphere:
 
 	ld l,Enemy.relatedObj2+1
 	; dragon Onox subid 2
-	ld a,($cfd8)
+	ld a,(wTmpcfc0.fallDownHoleEvent.cfd8)
 	ldd (hl),a
 	ld (hl),$80
 
@@ -1547,7 +1547,7 @@ dragonOnox_rightShoulderSphere:
 	ld (hl),$80
 	ld l,Enemy.relatedObj2+1
 	; dragon Onox subid 3
-	ld a,($cfd9)
+	ld a,(wTmpcfc0.shootingGallery.cfd9)
 	ldd (hl),a
 	ld (hl),$80
 	ld a,$0c
@@ -1557,18 +1557,18 @@ dragonOnox_rightShoulderSphere:
 
 seasonsFunc_0f_650d:
 	ld e,Enemy.yh
-	ld a,($cfcc)
+	ld a,(wTmpcfc0.normal.cfc0+$0c)
 	ld (de),a
 	ld e,Enemy.xh
-	ld a,($cfcd)
+	ld a,(wTmpcfc0.normal.cfc0+$0d)
 	ld (de),a
 	call objectApplySpeed
 	ld e,Enemy.yh
 	ld a,(de)
-	ld ($cfcc),a
+	ld (wTmpcfc0.normal.cfc0+$0c),a
 	ld e,Enemy.xh
 	ld a,(de)
-	ld ($cfcd),a
+	ld (wTmpcfc0.normal.cfc0+$0d),a
 	ret
 
 seasonsFunc_0f_6529:
@@ -1690,7 +1690,7 @@ seasonsFunc_0f_65bb:
 	ret
 
 seasonsFunc_0f_65c7:
-	ld a,($cfca)
+	ld a,(wTmpcfc0.normal.cfc0+$0a)
 	and $0e
 	ld b,a
 	rrca
@@ -1698,12 +1698,12 @@ seasonsFunc_0f_65c7:
 	ld hl,seasonsTable_0f_65ed
 	rst_addAToHl
 	ld e,Enemy.yh
-	ld a,($cfcc)
+	ld a,(wTmpcfc0.normal.cfc0+$0c)
 	add (hl)
 	ld (de),a
 	ld e,Enemy.xh
 	inc hl
-	ld a,($cfcd)
+	ld a,(wTmpcfc0.normal.cfc0+$0d)
 	add (hl)
 	ld (de),a
 	inc hl
@@ -1756,14 +1756,14 @@ seasonsFunc_0f_65fc:
 	ld b,$04
 +
 	ld (hl),b
-	ld a,($cfcb)
+	ld a,(wTmpcfc0.normal.cfc0+$0b)
 	inc a
 	cp $06
 	jr c,+
 	xor a
 +
 	or $80
-	ld ($cfcb),a
+	ld (wTmpcfc0.normal.cfc0+$0b),a
 	ret
 
 seasonsFunc_0f_6637:
@@ -1857,9 +1857,9 @@ seasonsTable_0f_669a:
 	.db $08 $10
 
 seasonsFunc_0f_66aa:
-	ld a,($cfcc)
+	ld a,(wTmpcfc0.normal.cfc0+$0c)
 	ld h,a
-	ld a,($cfcd)
+	ld a,(wTmpcfc0.normal.cfc0+$0d)
 	ld l,a
 	cp c
 	jr nz,+

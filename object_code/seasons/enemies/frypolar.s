@@ -91,7 +91,7 @@ enemyCode77:
 	ret nz
 	inc a
 	ld (de),a
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	ret
 
 @@substate1:
@@ -197,7 +197,7 @@ enemyCode77:
 	ld (hl),$fe
 	call objectSetVisible83
 	xor a
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	ld a,$2d
 	ld (wActiveMusic),a
 	jp playSound

@@ -71,8 +71,8 @@ seasonsFunc_0f_6f75:
 	ld bc,wRoomLayoutEnd-wRoomLayout
 	call clearMemoryBc
 	xor a
-	ld ($cfca),a
-	ld ($cfcb),a
+	ld (wTmpcfc0.normal.cfc0+$0a),a
+	ld (wTmpcfc0.normal.cfc0+$0b),a
 	ld a,$80
 	ld ($cfce),a
 	ld (wLinkInAir),a
@@ -114,9 +114,9 @@ seasonsFunc_0f_6f75:
 	call clearEnemies
 	call getFreeEnemySlot
 	ld (hl),ENEMY_DRAGON_ONOX
-	ld hl,$cfca
+	ld hl,wTmpcfc0.normal.cfc0+$0a
 	call seasons_func_0f_712a
-	ld hl,$cfcb
+	ld hl,wTmpcfc0.normal.cfc0+$0b
 	res 7,(hl)
 	call seasons_func_0f_722f
 	xor a
@@ -127,10 +127,10 @@ seasonsFunc_0f_6f75:
 
 seasonsFunc_0f_704d:
 	call seasonsFunc_0f_70b4_swapGraphics
-	ld hl,$cfca
+	ld hl,wTmpcfc0.normal.cfc0+$0a
 	call seasons_func_0f_712a
 --
-	ld hl,$cfcb
+	ld hl,wTmpcfc0.normal.cfc0+$0b
 	res 7,(hl)
 	call seasons_func_0f_722f
 	xor a
@@ -254,7 +254,7 @@ seasons_func_0f_712a:
 	jp seasons_func_0f_71fb
 
 @state5:
-	ld a,($cfcc)
+	ld a,(wTmpcfc0.normal.cfc0+$0c)
 	cp $78
 	ret nz
 	ld a,$06
@@ -293,7 +293,7 @@ seasonsFunc_0f_7159:
 	dec (hl)
 +
 	ld hl,hCameraY
-	ld a,($d00b)
+	ld a,(w1Link.yh)
 	sub (hl)
 	cp $40
 	ret z
@@ -311,7 +311,7 @@ seasonsFunc_0f_7159:
 	ret
 
 seasonsFunc_0f_7182:
-	ld hl,$cfcc
+	ld hl,wTmpcfc0.normal.cfc0+$0c
 	ldh a,(<hCameraY)
 	ld b,a
 	sub (hl)
@@ -377,7 +377,7 @@ seasonsFunc_0f_71cf_copyw6Filler1IntoWramBank3:
 	jp loadUncompressedGfxHeader
 
 seasons_func_0f_71fb:
-	ld a,($cfca)
+	ld a,(wTmpcfc0.normal.cfc0+$0a)
 	sub $06
 	cp $03
 	jr c,+
@@ -412,7 +412,7 @@ seasons_func_0f_722f:
 	ld b,$e0
 	ld a,$0d
 	call fillMemory
-	ld a,($cfcb)
+	ld a,(wTmpcfc0.normal.cfc0+$0b)
 	cp $03
 	jr c,+
 	sub $03
@@ -427,7 +427,7 @@ seasons_func_0f_722f:
 	and $0f
 	ld b,a
 	push bc
-	ld a,($cfcb)
+	ld a,(wTmpcfc0.normal.cfc0+$0b)
 	ld hl,table_7291
 	rst_addAToHl
 	ld a,(hl)
@@ -515,14 +515,14 @@ seasonsFunc_0f_72a5_copyFromwTmpVramBufferIntoBank3:
 	ret
 
 seasons_func_0f_72d1:
-	ld a,($cfca)
+	ld a,(wTmpcfc0.normal.cfc0+$0a)
 	cp $09
 	jr c,++
 	ld c,$00
 	jr +
 
 seasons_func_0f_72dc:
-	ld a,($cfca)
+	ld a,(wTmpcfc0.normal.cfc0+$0a)
 	cp $09
 	jr c,++
 	ld c,$20
@@ -568,14 +568,14 @@ seasons_func_0f_72dc:
 	ret
 
 seasons_func_0f_731a:
-	ld a,($cfcb)
+	ld a,(wTmpcfc0.normal.cfc0+$0b)
 	cp $03
 	jr c,++
 	ld c,$00
 	jr +
 
 seasons_func_0f_7325:
-	ld a,($cfcb)
+	ld a,(wTmpcfc0.normal.cfc0+$0b)
 	cp $03
 	jr c,++
 	ld c,$20

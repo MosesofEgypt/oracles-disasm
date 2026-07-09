@@ -94,7 +94,7 @@ interactionCode96:
 	.dw @@@substate6
 	.dw @@@substate7
 @@@substate0:
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld a,(hl)
 	cp $02
 	jp z,func_5768
@@ -131,7 +131,7 @@ interactionCode96:
 	ld (hl),$09
 	jp interactionIncSubstate
 @@@substate2:
-	ld hl,$cfd1
+	ld hl,wTmpcfc0.genericCutscene.cfd1
 	ld a,(hl)
 	or a
 	jp z,npcFaceLinkAndAnimate
@@ -152,7 +152,7 @@ interactionCode96:
 	ld a,(de)
 	inc a
 	ld b,a
-	ld hl,$cfd1
+	ld hl,wTmpcfc0.genericCutscene.cfd1
 	ld a,(hl)
 	cp b
 	jp nz,npcFaceLinkAndAnimate
@@ -197,7 +197,7 @@ interactionCode96:
 	call objectApplySpeed
 	call objectCheckWithinScreenBoundary
 	ret c
-	ld hl,$cfd1
+	ld hl,wTmpcfc0.genericCutscene.cfd1
 	ld e,$42
 	ld a,(de)
 	add $02
@@ -221,7 +221,7 @@ interactionCode96:
 	jp interactionDelete
 @@subid3:
 	call interactionAnimate
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld a,(hl)
 	inc a
 	ret nz

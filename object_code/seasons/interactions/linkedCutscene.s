@@ -67,7 +67,7 @@ interactionCodeb3:
 	ld h,d
 	ld l,Interaction.state
 	ld (hl),$01
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	ld (hl),$00
 	ld a,>TX_5000
 	call interactionSetHighTextIndex

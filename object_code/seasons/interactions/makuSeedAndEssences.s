@@ -26,11 +26,11 @@ interactionCodede:
 	ld a,$01
 	ld (de),a
 	call interactionInitGraphics
-	ld a,($d00b)
+	ld a,(w1Link.yh)
 	sub $0e
 	ld e,$4b
 	ld (de),a
-	ld a,($d00d)
+	ld a,(w1Link.xh)
 	ld e,$4d
 	ld (de),a
 	call setLinkForceStateToState08
@@ -140,9 +140,9 @@ interactionCodede:
 	ret nz
 	ld (hl),$3c
 	ld a,$01
-	ld ($cfc0),a
+	ld (wTmpcfc0.normal.cfc0),a
 	ld a,$20
-	ld ($cfc1),a
+	ld (wTmpcfc0.normal.doorControllerState),a
 	jp interactionIncSubstate
 @@substate3:
 @@substate5:
@@ -150,7 +150,7 @@ interactionCodede:
 	ld a,(wFrameCounter)
 	and $03
 	jr nz,@@incSubstateAtInterval
-	ld hl,$cfc1
+	ld hl,wTmpcfc0.normal.doorControllerState
 	dec (hl)
 	jr @@incSubstateAtInterval
 @@substate4:
@@ -158,7 +158,7 @@ interactionCodede:
 	ld a,(wFrameCounter)
 	and $03
 	jr nz,@@incSubstateAtInterval
-	ld hl,$cfc1
+	ld hl,wTmpcfc0.normal.doorControllerState
 	inc (hl)
 @@incSubstateAtInterval:
 	call interactionDecCounter1
@@ -166,7 +166,7 @@ interactionCodede:
 	ld (hl),$3c
 	jp interactionIncSubstate
 @@substate8:
-	ld hl,$cfc1
+	ld hl,wTmpcfc0.normal.doorControllerState
 	inc (hl)
 	ld a,$b4
 	call playSound
@@ -174,12 +174,12 @@ interactionCodede:
 	call fadeoutToWhiteWithDelay
 	jp interactionIncSubstate
 @@substate9:
-	ld hl,$cfc1
+	ld hl,wTmpcfc0.normal.doorControllerState
 	inc (hl)
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	ld hl,$cbb3
+	ld hl,wGenericCutscene.cbb3
 	inc (hl)
 	ld a,$08
 	call fadeinFromWhiteWithDelay
@@ -218,7 +218,7 @@ interactionCodede:
 	ret nz
 	jp interactionIncState
 @@state2:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	or a
 	ret z
 	jp interactionIncState
@@ -238,7 +238,7 @@ interactionCodede:
 	or a
 	call z,func_6c8f
 	ld bc,$2850
-	ld a,($cfc1)
+	ld a,(wTmpcfc0.normal.doorControllerState)
 	jp objectSetPositionInCircleArc
 func_6c8f:
 	ld a,SND_CIRCLING

@@ -121,7 +121,7 @@ interactionCode31:
 	ld (wDisabledObjects),a
 	ld a,$00
 	ld (wScrollMode),a
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld b,$10
 	call clearMemory
 
@@ -147,7 +147,7 @@ interactionCode31:
 	call checkIsLinkedGame
 	jp nz,interactionDelete
 	xor a
-	ld ($cfc0),a
+	ld (wTmpcfc0.normal.cfc0),a
 
 @preBlackTowerCutscene:
 	ld a,TREASURE_MAKU_SEED
@@ -442,7 +442,7 @@ impaSubid0:
 	call interactionDecCounter1IfTextNotActive
 	ret nz
 
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld (hl),$02
 	ld hl,mainScripts.impaScript_moveAwayFromRock
 	call interactionSetScript
@@ -468,7 +468,7 @@ impaSubid0:
 	call interactionAnimateAsNpc
 	call interactionRunScript
 	call impaPreventLinkFromLeavingStoneScreen
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $06
 	ret nz
 
@@ -491,7 +491,7 @@ impaSubid0:
 ; she's evil
 @substateD:
 	call objectSetPriorityRelativeToLink_withTerrainEffects
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $09
 	jp nz,@updateAnimationWhileFollowingLink
 
@@ -555,7 +555,7 @@ impaSubid1:
 	.dw impaSubid1Substate2
 
 @substate0:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $20
 	jp nz,interactionAnimate
 
@@ -639,7 +639,7 @@ impaSubid2:
 	call interactionIncSubstate
 	call interactionCode31@loadScript
 	ld a,$01
-	ld ($cfc0),a
+	ld (wTmpcfc0.normal.cfc0),a
 	jp fadeinFromWhite
 
 ;;
@@ -702,12 +702,12 @@ impaSubid2Substate6:
 @nextState:
 	ld (hl),$00
 	ld a,$02
-	ld ($cfc0),a
+	ld (wTmpcfc0.normal.cfc0),a
 	jp interactionIncSubstate
 
 impaSubid2Substate7:
 	call impaAnimateAndRunScript
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	cp $03
 	ret c
 	jpab scriptHelp.turnToFaceSomething
@@ -755,7 +755,7 @@ impaSubid4:
 	.dw @thing4
 
 @thing0:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	rrca
 	ret nc
 	ld e,Interaction.var39
@@ -856,7 +856,7 @@ impaSubid5:
 	.dw @substate2
 
 @substate0:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $04
 	ret nz
 

@@ -141,7 +141,7 @@ partCode10:
 	ld h,d
 	ld l,Part.collisionType
 	res 7,(hl)
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	or a
 	ret nz
 
@@ -151,7 +151,7 @@ partCode10:
 
 	; Don't have satchel
 	ld a,d
-	ld ($cfc0),a
+	ld (wTmpcfc0.normal.cfc0),a
 	ld bc,TX_0035
 	jp showText
 

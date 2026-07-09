@@ -43,7 +43,7 @@ interactionCodead:
 	.dw @substate3
 	.dw @substate4
 @substate0:
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	ld h,d
@@ -52,7 +52,7 @@ interactionCodead:
 	ret nz
 	jp interactionIncSubstate
 @substate1:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	cp $01
 	jr nz,+
 	call interactionIncSubstate

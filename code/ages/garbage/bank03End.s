@@ -13,7 +13,7 @@ func_7e54:
 	ld a,$07
 	ld (wTmpcbb5),a
 	xor a
-	ld ($cfde),a
+	ld (wTmpcfc0.genericCutscene.cfde),a
 	call $3b46
 	ld (hl),$92
 	ld l,$43

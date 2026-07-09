@@ -228,7 +228,7 @@ ancientRuinsScript_UShapePitToMagicBoomerangOrb:
 
 ancientRuinsScript_randomButtonRoom:
 	asm15 scriptHelp.D6getRandomButtonResult
-	jumptable_memoryaddress $cfc1
+	jumptable_memoryaddress wTmpcfc0.normal.doorControllerState
 	.dw ancientRuinsScript_randomButtonRoom
 	.dw @success
 	.dw @failed
@@ -380,7 +380,7 @@ explorersCryptScript_2ndPoeSisterRoom:
 explorersCryptScript_4FiresRoom_1:
 	stopifroomflag40set
 	asm15 scriptHelp.checkFirstPoeBeaten
-	jumptable_memoryaddress $cfc1
+	jumptable_memoryaddress wTmpcfc0.normal.doorControllerState
 	.dw @notBeaten
 	.dw explorersCrypt_poeBeaten
 
@@ -396,7 +396,7 @@ explorersCrypt_poeBeaten:
 explorersCryptScript_4FiresRoom_2:
 	stopifroomflag40set
 	asm15 scriptHelp.checkSecondPoeBeaten
-	jumptable_memoryaddress $cfc1
+	jumptable_memoryaddress wTmpcfc0.normal.doorControllerState
 	.dw @notBeaten
 	.dw explorersCrypt_poeBeaten
 
@@ -465,7 +465,7 @@ swordAndShieldMazeScript_pushableIceBlocks:
 @waitUntilIceBlocksInPlace:
 	wait 8
 	asm15 scriptHelp.D8checkAllIceBlocksInPlace
-	jumptable_memoryaddress $cfc1
+	jumptable_memoryaddress wTmpcfc0.normal.doorControllerState
 	.dw @waitUntilIceBlocksInPlace
 	.dw @success
 @success:

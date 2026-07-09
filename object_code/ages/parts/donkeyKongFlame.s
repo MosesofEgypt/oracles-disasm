@@ -3,7 +3,7 @@
 ; ==================================================================================================
 partCode2c:
 	jp nz,partDelete
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	or a
 	jr z,+
 	call objectCreatePuff

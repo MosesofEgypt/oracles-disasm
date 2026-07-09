@@ -37,7 +37,7 @@ interactionCodebf:
 	ld a,(hl)
 	or a
 	jr nz,@subid1
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	bit 0,a
 	ret z
 	ld l,$45
@@ -45,12 +45,12 @@ interactionCodebf:
 	ld a,$02
 	jp interactionSetAnimation
 @subid1:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	bit 7,a
 	jp nz,interactionDelete
 	ret
 @substate2:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	bit 1,a
 	jp nz,interactionDelete
 	ret

@@ -73,9 +73,9 @@ interactionCode7c:
 @func_7677:
 	ld a,$0a
 	call objectSetCollideRadius
-	ld a,($d00b)
+	ld a,(w1Link.yh)
 	ld b,a
-	ld a,($d00d)
+	ld a,(w1Link.xh)
 	ld c,a
 	call interactionCheckContainsPoint
 	ret nc

@@ -22,7 +22,7 @@ enemyCode02:
 	jr nc,@dead
 	ld a,$ff
 	ld ($cbca),a
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld h,d
 	ld l,$a4
 	ld (hl),$00
@@ -387,7 +387,7 @@ generalOnox_subid1:
 	or a
 	ret nz
 	inc a
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	ld ($cbca),a
 	ld e,$85
 	ld (de),a
@@ -426,7 +426,7 @@ generalOnox_subid1:
 	ld l,$a4
 	set 7,(hl)
 	xor a
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	ld ($cbca),a
 
 @func_5ae5:
@@ -575,7 +575,7 @@ generalOnox_subid2:
 	ret nz
 	ld ($cfcf),a
 	inc a
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	ld h,d
 	ld l,$8b
 	ld (hl),$50
@@ -650,7 +650,7 @@ generalOnox_subid2:
 	jp fadeoutToWhite
 
 @stateC:
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	ld hl,$cfc8

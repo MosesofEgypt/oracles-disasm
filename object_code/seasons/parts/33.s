@@ -23,7 +23,7 @@ partCode33:
 	jr z,+
 	ld b,$e0
 +
-	ld a,($d00d)
+	ld a,(w1Link.xh)
 	add b
 	ld c,a
 	sub $08

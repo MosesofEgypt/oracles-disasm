@@ -55,12 +55,12 @@ table_6f41:
 
 linkedHerosCaveOldMan_takeRupees:
 	xor a
-	ld ($cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
 	ld a,RUPEEVAL_060
 	call cpRupeeValue
 	ret nz
 	ld a,RUPEEVAL_060
 	call removeRupeeValue
 	ld a,$01
-	ld ($cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
 	ret

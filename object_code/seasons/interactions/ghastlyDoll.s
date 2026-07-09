@@ -12,7 +12,7 @@ interactionCode94:
 	.dw @state4
 @state0:
 	ld a,$01
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld hl,$d02d
 	ld a,(hl)
 	or a

@@ -98,7 +98,7 @@ enemyCode70:
 	.dw @@@substate2
 	
 @@@substate0:
-	ld a,($d00b)
+	ld a,(w1Link.yh)
 	cp $78
 	ret nc
 	ld h,d
@@ -118,12 +118,12 @@ enemyCode70:
 	call playSound
 	
 @@@substate2:
-	ld a,($d00d)
+	ld a,(w1Link.xh)
 	sub $28
 	ld c,a
 
 @@func_4646:
-	ld a,($d00b)
+	ld a,(w1Link.yh)
 	ld b,a
 	ld e,$8b
 	ld a,(de)
@@ -293,12 +293,12 @@ enemyCode70:
 	ld a,(de)
 	or a
 	jr z,+
-	ld a,($d00d)
+	ld a,(w1Link.xh)
 	add $28
 	ld c,a
 	jp @subid0@func_4646
 +
-	ld a,($d00b)
+	ld a,(w1Link.yh)
 	cp $78
 	ret nc
 	ld h,d

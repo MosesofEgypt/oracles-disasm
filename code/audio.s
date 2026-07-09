@@ -845,7 +845,7 @@ label_39_038:
 	ld a,$00
 	ld ($ff00+R_NR41),a
 	ld a,$80
-	ld ($c01c),a
+	ld (wc01c),a
 	jp doNextChannelCommand
 
 ; Command $d0 to $df
@@ -1541,13 +1541,13 @@ standardCmdChannel7:
 	ld ($ff00+R_NR43),a
 	ld a,$00
 	ld ($ff00+R_NR41),a
-	ld a,($c01c)
+	ld a,(wc01c)
 	cp $00
 	jr z,+
 	ld ($ff00+R_NR44),a
 +
 	ld a,$00
-	ld ($c01c),a
+	ld (wc01c),a
 	jp setChannelWaitCounter
 
 channelCmdff:

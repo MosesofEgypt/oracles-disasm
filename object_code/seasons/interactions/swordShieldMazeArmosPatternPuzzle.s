@@ -35,7 +35,7 @@ interactionCode67:
 	call interactionSetScript
 	call interactionIncState
 	ld a,$81
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	call objectSetVisible82
 	call setCameraFocusedObject
 	call func_57f3
@@ -146,7 +146,7 @@ interactionCode67:
 	jp c,interactionDelete
 	ret
 func_57f3:
-	ld hl,$d00b
+	ld hl,w1Link.yh
 	ldi a,(hl)
 	add $04
 	and $f0

@@ -62,7 +62,7 @@ interactionCode9a:
 	ld (hl),a
 	ld a,$01
 	ld (wDisabledObjects),a
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld l,$46
 	ld (hl),$5a
 	ret
@@ -181,7 +181,7 @@ interactionCode9a:
 	res 1,(hl)
 	xor a
 	ld (wDisabledObjects),a
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	jp interactionDelete
 
 ;;
@@ -248,13 +248,13 @@ state1_subid3:
 	xor a
 	jp func_5a82
 @substate2:
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	ldh (<hSprPaletteSources),a
 	dec a
 	ldh (<hDirtySprPalettes),a
-	ld ($cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
 	call interactionIncSubstate
 	ld l,$46
 	ld (hl),$1e

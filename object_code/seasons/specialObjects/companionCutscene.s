@@ -222,7 +222,7 @@ rickyState1:
 	ld hl,w1Link.visible
 	ld (hl),a
 	inc a
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	ret
 
 @@substate8:
@@ -246,7 +246,7 @@ rickyState1:
 	sub $10
 	rlca
 	jr nc,+
-	ld hl,$cfdf
+	ld hl,wTmpcfc0.genericCutscene.cfdf
 	ld (hl),$01
 	ret
 +
@@ -577,7 +577,7 @@ mapleCutscenes:
 	.dw ret
 
 @@@substate0:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	or a
 	jr z,@@subid0
 	call itemIncSubstate

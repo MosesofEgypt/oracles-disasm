@@ -72,7 +72,7 @@ func_7e0f:
 	ld (hl),$01
 	ld l,$79
 	ld (hl),$00
-	ld a,($d00d)
+	ld a,(w1Link.xh)
 	ld l,$4d
 	cp (hl)
 	jr nc,func_7e2c

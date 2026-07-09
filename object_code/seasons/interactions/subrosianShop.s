@@ -172,7 +172,7 @@ interactionCode81:
 	xor a
 	ld (de),a
 	ld a,$80
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ret
 @state3:
 	ld e,Interaction.substate
@@ -195,11 +195,11 @@ interactionCode81:
 	ld ($cc6b),a
 	ld h,d
 	ld l,$4b
-	ld a,($d00b)
+	ld a,(w1Link.yh)
 	sub $0e
 	ld (hl),a
 	ld l,$4d
-	ld a,($d00d)
+	ld a,(w1Link.xh)
 	ld (hl),a
 	ld l,$46
 	ld a,$80
@@ -260,8 +260,8 @@ interactionCode81:
 @substate1:
 	call retIfTextIsActive
 	xor a
-	ld ($cca4),a
-	ld ($cc02),a
+	ld (wDisabledObjects),a
+	ld (wMenuDisabled),a
 	jp interactionDelete
 @substate2:
 	call interactionDecCounter1
@@ -292,7 +292,7 @@ interactionCode81:
 	jp fadeoutToWhite
 @substate3:
 	call interactionAnimate
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	call interactionDecCounter2
@@ -309,12 +309,12 @@ interactionCode81:
 	call setStatusBarNeedsRefreshBit1
 	jp fadeinFromWhite
 @substate4:
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	xor a
-	ld ($cca4),a
-	ld ($cc02),a
+	ld (wDisabledObjects),a
+	ld (wMenuDisabled),a
 	ld bc,TX_2b0e
 	call showText
 	jp interactionDelete

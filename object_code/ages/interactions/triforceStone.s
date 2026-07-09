@@ -63,7 +63,7 @@ interactionCode34:
 	ld l,<w1Link.speed
 	ld (hl),SPEED_80
 
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld (hl),$06
 	ld a,SND_MAKUDISAPPEAR
 	jp playSound

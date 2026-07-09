@@ -14,7 +14,7 @@ interactionCode92:
 	.dw fallingRock_subid06
 
 
-; Spawner of falling rocks; stops when $cfdf is nonzero. Used when freeing goron elder.
+; Spawner of falling rocks; stops when wTmpcfc0.genericCutscene.cfdf is nonzero. Used when freeing goron elder.
 fallingRock_subid00:
 	call checkInteractionState
 	jr nz,@state1

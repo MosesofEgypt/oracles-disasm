@@ -24,7 +24,7 @@ interactionCode9c:
 	call interactionInitGraphics
 	call objectSetVisible83
 @state1:
-	ld a,($ccc3)
+	ld a,(wSpringBloomFlowerState)
 	or a
 	jr z,+
 	ld a,$05
@@ -39,7 +39,7 @@ interactionCode9c:
 	call objectCheckCollidedWithLink
 	ret nc
 	ld a,$02
-	ld ($ccc3),a
+	ld (wSpringBloomFlowerState),a
 ++
 	ld e,$44
 	ld (de),a
@@ -129,12 +129,12 @@ interactionCode9c:
 	inc a
 	jr nz,@func_5ce8
 	ld (de),a
-	ld ($ccc3),a
+	ld (wSpringBloomFlowerState),a
 	call objectSetVisible83
 	jp interactionIncState
 @func_5ce8:
 	dec a
-	ld ($ccc3),a
+	ld (wSpringBloomFlowerState),a
 	cp $02
 	ret c
 	jp objectSetVisible82
@@ -170,7 +170,7 @@ seasonsFunc_0a_5d18:
 	ld a,$01
 	ld (de),a
 	dec a
-	ld ($ccc3),a
+	ld (wSpringBloomFlowerState),a
 	call interactionSetAlwaysUpdateBit
 	res 7,(hl)
 	call objectSetVisible83

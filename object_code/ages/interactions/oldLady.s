@@ -154,7 +154,7 @@ interactionCode3d:
 	call interactionDecCounter1
 	ret nz
 	ld a,$ff
-	ld ($cfdf),a
+	ld (wTmpcfc0.genericCutscene.cfdf),a
 	ret
 
 
@@ -195,7 +195,7 @@ interactionCode3d:
 	dec (hl)
 	jr nz,++
 	ld a,$ff
-	ld ($cfdf),a
+	ld (wTmpcfc0.genericCutscene.cfdf),a
 ++
 	call interactionRunScript
 	jp interactionAnimateBasedOnSpeed

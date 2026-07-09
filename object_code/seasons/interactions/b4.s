@@ -148,13 +148,13 @@ twinrovaWitches_state1:
 	cp $02
 	ret nz
 	ld (hl),$00
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	set 0,(hl)
 	ret
 @@substate2:
 	call seasonsFunc_0a_71ce
 	call @animate
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	bit 0,a
 	ret nz
 	call interactionDecCounter2
@@ -214,7 +214,7 @@ twinrovaWitches_state1:
 @@substate0:
 	call seasonsFunc_0a_71ce
 	call @animate
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	bit 0,a
 	ret z
 	call interactionIncSubstate

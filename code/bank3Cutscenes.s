@@ -754,7 +754,7 @@ introCinematic_ridingHorse_state0:
 	ld (hl),$01
 
 	ld a,$20
-	ld ($cbb8),a
+	ld (wGenericCutscene.cbb8),a
 	ld a,$10
 	ld (wTmpcbb9),a
 	ld a,$22
@@ -1022,13 +1022,13 @@ introCinematic_ridingHorse_state0:
 	call loadPaletteHeader
 
 	; Use cbb3-cbb4 as a 2-byte counter; wait for 0x37e=894 frames
-	ld hl,$cbb3
+	ld hl,wGenericCutscene.cbb3
 	ld (hl),$7e
 	inc hl
 	ld (hl),$03
 
 	ld a,$20
-	ld ($cbb8),a
+	ld (wGenericCutscene.cbb8),a
 	ld a,$10
 	ld (wTmpcbb9),a
 	ld a,$22
@@ -1998,15 +1998,15 @@ seasonsFunc_03_5367:
 	ld a,($cbb6)
 	dec a
 	jr nz,++
-	ld a,($cbba)
+	ld a,(wGenericCutscene.cbba)
 	xor $01
-	ld ($cbba),a
+	ld (wGenericCutscene.cbba),a
 	ld a,$05
 	jr z,++
 	ld a,$22
 ++
 	ld ($cbb6),a
-	ld a,($cbba)
+	ld a,(wGenericCutscene.cbba)
 	or a
 	ret
 

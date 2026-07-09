@@ -218,12 +218,12 @@ zeldaKidnappedState1:
 @substate1:
 	call func_7ba1
 	ret nz
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	set 0,(hl)
 	ld a,$01
 	jp linkedCutscene_aIntoCBB5_incSubstate
 @substate2:
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	bit 1,(hl)
 	ret z
 	call func_03_7b95
@@ -237,7 +237,7 @@ zeldaKidnappedState1:
 	ret nz
 	xor a
 	call func_7c83
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	set 2,(hl)
 	ld a,$1e
 	jp linkedCutscene_aIntoCBB5_incSubstate
@@ -253,12 +253,12 @@ zeldaKidnappedState1:
 	ret nz
 	ld a,$01
 	call func_7c83
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	set 3,(hl)
 	ld a,$1e
 	jp linkedCutscene_aIntoCBB5_incSubstate
 @substate6:
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	bit 4,(hl)
 	ret z
 	ld a,$1e
@@ -266,7 +266,7 @@ zeldaKidnappedState1:
 @substate7:
 	call func_03_7b95
 	ret nz
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	set 5,(hl)
 	ld a,$28
 	jp linkedCutscene_aIntoCBB5_incSubstate
@@ -284,11 +284,11 @@ zeldaKidnappedState1:
 	ld a,$3c
 	cp (hl)
 	ret nz
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	set 6,(hl)
 	ret
 @func_7a63:
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	set 7,(hl)
 	ld a,$3c
 	jp linkedCutscene_aIntoCBB5_incSubstate
@@ -301,12 +301,12 @@ zeldaKidnappedState1:
 	ld (wActiveMusic),a
 	call playSound
 	xor a
-	ld ($cfc0),a
+	ld (wTmpcfc0.normal.cfc0),a
 	ld ($cfc6),a
 	ld a,$1e
 	jp linkedCutscene_aIntoCBB5_incSubstate
 @substateB:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	bit 0,a
 	ret z
 	call func_03_7b95
@@ -326,11 +326,11 @@ zeldaKidnappedState1:
 @substateE:
 	call func_7b9a
 	ret nz
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	res 0,(hl)
 	jp linkedCutscene_incSubstate
 @substateF:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	bit 0,a
 	ret z
 	ld a,SND_LIGHTNING
@@ -342,7 +342,7 @@ zeldaKidnappedState1:
 	call func_7b48
 	ret nz
 	call clearDynamicInteractions
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	res 0,(hl)
 	xor a
 	ld ($cfc6),a
@@ -373,7 +373,7 @@ zeldaKidnappedState1:
 	ret nz
 	ld a,SND_BEAM2
 	call playSound
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	set 0,(hl)
 	ld a,$5a
 	jp linkedCutscene_aIntoCBB5_incSubstate

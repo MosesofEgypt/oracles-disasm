@@ -322,19 +322,19 @@ piratianCaptain_preCutsceneScene:
 ; ==================================================================================================
 zelda_triforceOnHandText:
 	asm15 objectSetInvisible
-	checkmemoryeq $cfc0, $01
+	checkmemoryeq wTmpcfc0.normal.cfc0, $01
 	asm15 objectSetVisible
-	checkmemoryeq $cfc0, $06
+	checkmemoryeq wTmpcfc0.normal.cfc0, $06
 	setanimation $03
 	delay 2
-	writememory $cfc0, $07
+	writememory wTmpcfc0.normal.cfc0, $07
 	showtext TX_3d0c ; triforce on your hand
 	delay 3
 	setanimation $07
 	setangle ANGLE_LEFT
 	setspeed SPEED_20
 	applyspeed $1e
-	writememory $cfc0, $08
+	writememory wTmpcfc0.normal.cfc0, $08
 	scriptend
 
 zelda_kidnapped:
@@ -377,7 +377,7 @@ script_14_49c8:
 	delay 10
 	setanimation $00
 	setcounter1 $96
-	writememory $cfdf, $01
+	writememory wTmpcfc0.genericCutscene.cfdf, $01
 	scriptend
 
 
@@ -391,10 +391,10 @@ talon_giveMushroomAfterWaking:
 	playsound $69
 	setanimation $04
 	delay 7
-	writememory $cfde, $80
+	writememory wTmpcfc0.genericCutscene.cfde, $80
 	setanimation $02
 	showtextlowindex <TX_0b3b
-	writememory $cfdf, $01
+	writememory wTmpcfc0.genericCutscene.cfdf, $01
 	giveitem TREASURE_TRADEITEM, $08
 	orroomflag $40
 	asm15 scriptHelp.resetBit5ofRoomFlags
@@ -420,41 +420,41 @@ tornadoScript_startDestruction:
 	delay 10
 	setangle $08
 	applyspeed $11
-	ormemory $cfd1, $10
+	ormemory wTmpcfc0.genericCutscene.cfd1, $10
 	delay 5
 	applyspeed $0d
 	delay 7
 	setangle $00
 	applyspeed $08
-	ormemory $cfd1, $02
+	ormemory wTmpcfc0.genericCutscene.cfd1, $02
 	delay 7
 	setangle $08
 	applyspeed $13
-	ormemory $cfd1, $08
+	ormemory wTmpcfc0.genericCutscene.cfd1, $08
 	delay 7
 	setangle $00
 	applyspeed $0a
-	ormemory $cfd1, $04
+	ormemory wTmpcfc0.genericCutscene.cfd1, $04
 	delay 7
 	setangle $18
 	applyspeed $30
 	setangle $00
 	applyspeed $0d
-	ormemory $cfd1, $01
+	ormemory wTmpcfc0.genericCutscene.cfd1, $01
 	scriptend
 
 tornadoScript_endDestruction:
 	setangle $08
 	applyspeed $14
-	ormemory $cfd1, $40
-	checkmemoryeq $cfd0, $07
+	ormemory wTmpcfc0.genericCutscene.cfd1, $40
+	checkmemoryeq wTmpcfc0.genericCutscene.cfd0, $07
 	applyspeed $16
-	ormemory $cfd1, $80
-	checkmemoryeq $cfd0, $0a
+	ormemory wTmpcfc0.genericCutscene.cfd1, $80
+	checkmemoryeq wTmpcfc0.genericCutscene.cfd0, $0a
 	delay 9
 	setangle $00
 	applyspeed $28
-	writememory $cfd0, $0b
+	writememory wTmpcfc0.genericCutscene.cfd0, $0b
 	orroomflag $80
 	scriptend
 
@@ -479,7 +479,7 @@ dinImprisoned_OnoxExplainsMotive:
 	delay 3
 	showtext TX_1e04
 	delay 3
-	writememory $cfd0, $0b
+	writememory wTmpcfc0.genericCutscene.cfd0, $0b
 	scriptend
 
 dinImprisoned_OnoxSaysComeIfYouDare:
@@ -693,36 +693,36 @@ danceLeaderScript_moveIntoPosition:
 	scriptend
 
 danceLeaderScript_danceTutorial:
-	writememory $cfdf, $00
+	writememory wTmpcfc0.genericCutscene.cfdf, $00
 	spawninteraction INTERAC_DANCE_HALL_MINIGAME, $03, $00, $00
 	setanimation $05
-	writememory $cfdf, $01
+	writememory wTmpcfc0.genericCutscene.cfdf, $01
 	delay 2
 	showtext TX_0105
 	setanimation $05
 	playsound $ca
 	asm15 scriptHelp.seasonsFunc_15_5d20
-	checkmemoryeq $cfd1, $00
+	checkmemoryeq wTmpcfc0.genericCutscene.cfd1, $00
 	setcounter1 $32
 	setanimation $06
-	writememory $cfdf, $02
+	writememory wTmpcfc0.genericCutscene.cfdf, $02
 	delay 2
 	showtext TX_0106
 	setanimation $06
 	playsound $cb
 	asm15 scriptHelp.seasonsFunc_15_5d29
-	checkmemoryeq $cfd1, $00
+	checkmemoryeq wTmpcfc0.genericCutscene.cfd1, $00
 	setcounter1 $32
 	setanimation $04
-	writememory $cfdf, $03
+	writememory wTmpcfc0.genericCutscene.cfdf, $03
 	delay 2
 	showtext TX_0107
 	setanimation $04
 	playsound $cd
 	asm15 scriptHelp.seasonsFunc_15_5d32
-	checkmemoryeq $cfd1, $00
+	checkmemoryeq wTmpcfc0.genericCutscene.cfd1, $00
 	setcounter1 $32
-	writememory $cfdf, $ff
+	writememory wTmpcfc0.genericCutscene.cfdf, $ff
 	setanimation $01
 	showtext TX_0108
 	jumpiftextoptioneq $01, mainScripts.danceLeaderScript_promptForTutorial@needTutorial
@@ -1315,7 +1315,7 @@ strangeBrother2Script_finishedScreenPattern2:
 jewelHelperScript_jewelMoldorm_body:
 	stopifroomflag40set
 	checkcfc0bit 0
-	writememory $ccab, $01
+	writememory wDisableScreenTransitions, $01
 	delay 8
 	playsound $4d
 	delay 8
@@ -1363,7 +1363,7 @@ jewelHelperScript_jewelMoldorm_body:
 	asm15 scriptHelp.jewelHelper_createPuff, $07
 	setcounter1 $06
 	playsound $67
-	writememory $cfc0, $00
+	writememory wTmpcfc0.normal.cfc0, $00
 	asm15 scriptHelp.jewelHelper_createMoldorm
 	playsound $73
 	asm15 scriptHelp.jewelHelper_createPuff, $04
@@ -1372,7 +1372,7 @@ jewelHelperScript_jewelMoldorm_body:
 	asm15 scriptHelp.jewelHelper_createPuff, $06
 	asm15 scriptHelp.jewelHelper_createPuff, $08
 	setmusic $2d
-	writememory $ccab, $00
+	writememory wDisableScreenTransitions, $00
 	checkcfc0bit 0
 	playsound $4d
 	resetmusic
@@ -1408,7 +1408,7 @@ kingMoblin_trapLinkInBombedHouse:
 	setangle $10
 	setanimation $01
 	applyspeed $30
-	writememory $cfd1, $01
+	writememory wTmpcfc0.genericCutscene.cfd1, $01
 	scriptend
 
 
@@ -1449,12 +1449,12 @@ dinScript_subid2Init_body:
 	setspeed $28
 	setangleandanimation $10
 	applyspeed $0a
-	writememory $cfc0, $01
+	writememory wTmpcfc0.normal.cfc0, $01
 	applyspeed $1b
 	setcounter1 $06
-	writememory $cfc0, $02
+	writememory wTmpcfc0.normal.cfc0, $02
 	setcounter1 $6e
-	writememory $cfdf, $01
+	writememory wTmpcfc0.genericCutscene.cfdf, $01
 	scriptend
 
 dinScript_subid4Init_body:
@@ -1463,7 +1463,7 @@ dinScript_subid4Init_body:
 	applyspeed $80
 	setcounter1 $06
 	setangleandanimation $18
-	checkmemoryeq $cfc0, $02
+	checkmemoryeq wTmpcfc0.normal.cfc0, $02
 	setanimation $07
 	scriptend
 
@@ -1495,22 +1495,22 @@ dinScript_discoverLinkCollapsed_body:
 ; ==================================================================================================
 ZeldaBeingKidnappedEvent_body:
 	disableinput
-	writememory $ccab, $01
+	writememory wDisableScreenTransitions, $01
 	delay 6
 	setmusic $2d
 	delay 6
 	showtext TX_0504
 	delay 6
-	writememory $cfc0, $01
+	writememory wTmpcfc0.normal.cfc0, $01
 	setcounter1 $3e
 	showtext TX_0505
 	asm15 restartSound
 	delay 6
-	writememory $cfc0, $02
+	writememory wTmpcfc0.normal.cfc0, $02
 	setcounter1 $80
 	playsound $c8
 	delay 7
-	writememory $cfc0, $03
+	writememory wTmpcfc0.normal.cfc0, $03
 	setcounter1 $02
 	setmusic $2d
 	enableinput
@@ -1525,30 +1525,30 @@ ZeldaBeingKidnappedEvent_body:
 	delay 5
 	playsound $c8
 	delay 6
-	writememory $cfc0, $04
+	writememory wTmpcfc0.normal.cfc0, $04
 	asm15 scriptHelp.playLinkCutscene2
 	checkmemoryeq $d001, $00
 	delay 6
 	asm15 scriptHelp.forceLinkState8AndSetDirection, DIR_UP
 	setmusic $39
-	writememory $cfc0, $05
+	writememory wTmpcfc0.normal.cfc0, $05
 	setcounter1 $42
 	showtext TX_0506
-	writememory $cfc0, $06
+	writememory wTmpcfc0.normal.cfc0, $06
 	setcounter1 $24
-	writememory $cfc0, $07
+	writememory wTmpcfc0.normal.cfc0, $07
 	delay 5
 	asm15 scriptHelp.forceLinkState8AndSetDirection, DIR_LEFT
 	setcounter1 $46
 	showtext TX_0507
 	asm15 scriptHelp.zeldaKidnappedRoom_loadImpa
-	writememory $cfc0, $08
+	writememory wTmpcfc0.normal.cfc0, $08
 	delay 7
-	writememory $cfc0, $09
+	writememory wTmpcfc0.normal.cfc0, $09
 	asm15 scriptHelp.forceLinkState8AndSetDirection, DIR_DOWN
 	setcounter1 $32
 	showtext TX_0508
-	writememory $cfc0, $0a
+	writememory wTmpcfc0.normal.cfc0, $0a
 	delay 6
 	showtext TX_0509
 	delay 3
@@ -1556,11 +1556,11 @@ ZeldaBeingKidnappedEvent_body:
 	delay 6
 	showtext TX_050a
 	delay 6
-	writememory $cfc0, $0b
+	writememory wTmpcfc0.normal.cfc0, $0b
 	setcounter1 $40
 	resetmusic
 	setglobalflag GLOBALFLAG_ZELDA_SAVED_FROM_VIRE
-	writememory $ccab, $0
+	writememory wDisableScreenTransitions, $0
 	enableinput
 	scriptend
 

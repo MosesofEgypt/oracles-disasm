@@ -153,7 +153,7 @@ interactionCode3b:
 	.dw @@substate4
 
 @@substate0:
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	cp $02
 	jp nz,interactionAnimate
 
@@ -166,7 +166,7 @@ interactionCode3b:
 
 @@substate1:
 	callab interactionOscillateXRandomly
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	cp $04
 	ret nz
 

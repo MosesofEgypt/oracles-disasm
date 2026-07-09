@@ -75,7 +75,7 @@ agesFunc_10_70f6:
 	call clearDynamicInteractions
 	call clearOam
 	xor a
-	ld ($cfde),a
+	ld (wTmpcfc0.genericCutscene.cfde),a
 	ld a,GFXH_CREDITS_SCROLL
 	call loadGfxHeader
 	ld a,PALH_a0
@@ -93,7 +93,7 @@ agesFunc_10_70f6:
 	ld (hl),$50
 	ret
 @substate1:
-	ld a,($cfdf)
+	ld a,(wTmpcfc0.genericCutscene.cfdf)
 	or a
 	ret z
 	ld hl,wTmpcbb3
@@ -445,7 +445,7 @@ agesFunc_10_7298:
 	jr nz,+
 	ld (hl),$d1
 	xor a
-	ld ($cfde),a
+	ld (wTmpcfc0.genericCutscene.cfde),a
 +
 	jp incCbc2
 @substate7:
@@ -457,7 +457,7 @@ agesFunc_10_7298:
 	jr nz,++
 	ret
 @func_7407:
-	ld a,($cfde)
+	ld a,(wTmpcfc0.genericCutscene.cfde)
 	or a
 	ret z
 ++

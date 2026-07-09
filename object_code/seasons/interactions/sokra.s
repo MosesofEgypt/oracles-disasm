@@ -86,10 +86,10 @@ interactionCode27:
 	jr nz,++
 	ret
 +
-	ld a,($d00d)
+	ld a,(w1Link.xh)
 	cp $78
 	ret c
-	ld a,($d00b)
+	ld a,(w1Link.yh)
 	cp $3c
 	ret c
 	cp $60
@@ -112,7 +112,7 @@ interactionCode27:
 	jp c,interactionDelete
 	call checkInteractionSubstate
 	ret nz
-	ld a,($d00d)
+	ld a,(w1Link.xh)
 	cp $18
 	ret c
 	call interactionIncSubstate

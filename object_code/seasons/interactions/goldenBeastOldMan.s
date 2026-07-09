@@ -35,7 +35,7 @@ checkGoldenBeastsKilled:
 	jr z,+
 	dec a
 +
-	ld ($cfc1),a
+	ld (wTmpcfc0.normal.doorControllerState),a
 	ret
 
 giveRedRing:

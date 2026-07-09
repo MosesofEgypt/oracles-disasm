@@ -31,18 +31,18 @@ interactionCode57:
 	jr c,--
 	jr @func7d84
 @func_7d5a:
-	ld a,($d00b)
+	ld a,(w1Link.yh)
 	sub $20
 	ret nc
 	ld a,$22
-	ld ($d00b),a
+	ld (w1Link.yh),a
 	ld a,($cc77)
 	or a
 	ret nz
 	ld a,$80
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	ld a,$01
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld hl,mainScripts.ingoScript_LinkApproachingVases
 	call interactionSetScript
 	ld h,d

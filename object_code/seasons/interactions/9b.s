@@ -11,17 +11,17 @@ interactionCode9b:
 	ld a,$01
 	ld (de),a
 	xor a
-	ld ($cfd0),a
-	ld ($cfd1),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd1),a
 @state1:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $02
 	jr nz,func_5b49
-	ld hl,$cfd1
+	ld hl,wTmpcfc0.genericCutscene.cfd1
 	ld a,(hl)
 	cp $03
 	ret nz
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld hl,$cc63
 	ld a,$80
 	ldi (hl),a
@@ -42,13 +42,13 @@ func_5b49:
 	.dw @substate2
 	.dw @substate3
 @substate0:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	or a
 	ret z
 	xor a
-	ld ($cbb3),a
+	ld (wGenericCutscene.cbb3),a
 	dec a
-	ld ($cbba),a
+	ld (wGenericCutscene.cbba),a
 	jp interactionIncSubstate
 @func_5b65:
 	bit 6,a
@@ -58,11 +58,11 @@ func_5b49:
 	set 7,(hl)
 	ret
 @substate1:
-	ld hl,$cbb3
+	ld hl,wGenericCutscene.cbb3
 	ld b,$02
 	call flashScreen
 	ret z
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld (hl),$ff
 	push de
 	call hideStatusBar

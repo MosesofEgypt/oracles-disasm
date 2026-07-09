@@ -119,7 +119,7 @@ piratian_state5:
 	jp objectSetVisible
 
 piratian_state6:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	or a
 	jp nz,interactionDelete
 	call interactionRunScript

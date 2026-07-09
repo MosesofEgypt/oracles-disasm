@@ -177,11 +177,11 @@ interactionCode4d:
 	and $20
 	jp nz,interactionDelete
 	ld a,$01
-	ld ($cca4),a
-	ld a,($d00b)
+	ld (wDisabledObjects),a
+	ld a,(w1Link.yh)
 	ld e,$4b
 	ld (de),a
-	ld a,($d00d)
+	ld a,(w1Link.xh)
 	ld e,$4d
 	ld (de),a
 	jp interactionInitGraphics
@@ -228,11 +228,11 @@ interactionCode4d:
 	ld l,$44
 	inc (hl)
 	xor a
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	ld bc,TX_4d07
 	jp showText
 @@state5:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	or a
 	ret z
 	call objectCreatePuff

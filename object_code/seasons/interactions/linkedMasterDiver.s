@@ -46,7 +46,7 @@ interactionCodecd:
 @setScript:
 	call interactionSetScript
 	xor a
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ldi (hl),a
 	ldi (hl),a
 	ldi (hl),a
@@ -54,7 +54,7 @@ interactionCodecd:
 	call interactionSetAnimation
 	jp interactionAnimateAsNpc
 @subid1:
-	ld hl,$cfd1
+	ld hl,wTmpcfc0.genericCutscene.cfd1
 	ld a,(hl)
 	or a
 	jp nz,interactionDelete

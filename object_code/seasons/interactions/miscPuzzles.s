@@ -556,7 +556,7 @@ interactionCodedc_subid8:
 	or $08
 	ld (hl),a
 	ld a,$81
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	xor a
 	ld ($ccbc),a
 	ret
@@ -600,17 +600,17 @@ interactionCodedc_subidC:
 	call interactionIncState
 	call interactionSetAlwaysUpdateBit
 	ld a,$81
-	ld ($cca4),a
-	ld ($cc02),a
+	ld (wDisabledObjects),a
+	ld (wMenuDisabled),a
 +
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	ld bc,TX_0202
 	call showText
 	xor a
-	ld ($cca4),a
-	ld ($cc02),a
+	ld (wDisabledObjects),a
+	ld (wMenuDisabled),a
 	jp interactionDelete
 
 interactionCodedc_subidD:

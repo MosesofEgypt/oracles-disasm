@@ -21,11 +21,11 @@ interactionCode85:
 	ret nz
 	inc a
 	ld (hl),a
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld a,MUS_CARNIVAL
 	call playSound
 @state1:
-	ld a,($d00d)
+	ld a,(w1Link.xh)
 	cp $70
 	ld a,$01
 	jr c,+

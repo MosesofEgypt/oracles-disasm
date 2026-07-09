@@ -7,7 +7,7 @@ partCode2b:
 	ld a,(de)
 	cp $9a
 	ret nz
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	set 0,(hl)
 	jp partDelete
 @normalStatus:

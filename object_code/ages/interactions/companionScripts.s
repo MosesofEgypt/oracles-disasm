@@ -336,7 +336,7 @@ companionScript_subid08:
 	.dw companionScript_runScript
 
 @state0:
-	; Clear $10 bytes starting at $cfd0
+	; Clear $10 bytes starting at wTmpcfc0.genericCutscene.cfd0
 	ld hl,wTmpcfc0.fairyHideAndSeek.active
 	ld b,$10
 	call clearMemory

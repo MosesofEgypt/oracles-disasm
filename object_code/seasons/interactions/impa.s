@@ -128,7 +128,7 @@ interactionCode9d:
 	call objectSetInvisible
 	call interactionSetAlwaysUpdateBit
 	ld a,$0a
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	jr @@func_5dd5
 @@subid5:
 	ld a,GLOBALFLAG_IMPA_ASKED_TO_SAVE_ZELDA

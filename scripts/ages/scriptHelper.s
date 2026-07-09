@@ -348,7 +348,7 @@ shootingGallery_equipBiggoronSword:
 	ld (hl),a
 
 ;;
-; Saves equipped items to $cfd7-$cfd8, then equips new items.
+; Saves equipped items to $cfd7-wTmpcfc0.fallDownHoleEvent.cfd8, then equips new items.
 
 ; @param	hFF8A	B-button item to equip
 ; @param	hFF8B	A-button item to equip
@@ -1739,7 +1739,7 @@ oscillateXRandomly:
 	jpab agesInteractionsBank08.interactionOscillateXRandomly
 
 ;;
-; Forces the next animation frame to be loaded; does something with var38 and $cfd3?
+; Forces the next animation frame to be loaded; does something with var38 and wTmpcfc0.genericCutscene.cfd3?
 ;
 ; @param	a	?
 loadNextAnimationFrameAndMore:
@@ -4823,7 +4823,7 @@ goron_targetCarts_configureInventory:
 	ld (bc),a
 
 @setupSeedShooter:
-	; Save Link's scent seed count to $cfd9, then give him 99 seeds for the game
+	; Save Link's scent seed count to wTmpcfc0.shootingGallery.cfd9, then give him 99 seeds for the game
 	ld c,<wNumScentSeeds
 	ld a,(bc)
 	ldi (hl),a

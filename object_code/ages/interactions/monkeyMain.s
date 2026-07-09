@@ -362,7 +362,7 @@ monkeySubid0State1:
 	.dw monkeySubid0State1Substate3
 
 @substate0:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $0e
 	jp nz,interactionRunScript
 	call interactionIncSubstate
@@ -370,7 +370,7 @@ monkeySubid0State1:
 	jp interactionSetAnimation
 
 @substate1:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $10
 	ret nz
 	call interactionIncSubstate
@@ -740,7 +740,7 @@ monkey8Disappearance:
 	call interactionDecCounter1
 	ret nz
 	ld a,$ff
-	ld ($cfdf),a
+	ld (wTmpcfc0.genericCutscene.cfdf),a
 	jp interactionDelete
 
 ;;
@@ -846,7 +846,7 @@ monkeySubid4State1:
 	call interactionDecCounter1
 	ret nz
 	ld a,$ff
-	ld ($cfdf),a
+	ld (wTmpcfc0.genericCutscene.cfdf),a
 	ret
 
 @monkey3:

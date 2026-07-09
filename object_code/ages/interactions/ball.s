@@ -24,7 +24,7 @@ interactionCode95:
 	.dw @substate2
 
 @substate0:
-	ld a,($cfd3)
+	ld a,(wTmpcfc0.genericCutscene.cfd3)
 	or a
 	ret z
 	call interactionIncSubstate
@@ -66,7 +66,7 @@ interactionCode95:
 	ld c,$75
 +
 	xor a
-	ld ($cfd3),a
+	ld (wTmpcfc0.genericCutscene.cfd3),a
 	ld e,Interaction.substate
 	ld (de),a
 	jp interactionSetPosition

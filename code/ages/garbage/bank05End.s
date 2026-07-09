@@ -127,11 +127,11 @@ subrosiaDance_buttonAPressed:
 	jp $2a50 ; specialObjectSetAnimation
 
 subrosiaDance_storeButtonPress:
-	ld a,($cfd8)
+	ld a,(wTmpcfc0.fallDownHoleEvent.cfd8)
 	inc a
 	ret nz
 	ld a,b
-	ld ($cfd8),a
+	ld (wTmpcfc0.fallDownHoleEvent.cfd8),a
 	ret
 
 subrosiaDance_state2:
@@ -157,7 +157,7 @@ subrosiaDance_moveLink:
 	ld a,(de)
 	ld (hl),a
 
-	ld a,($cfd3)
+	ld a,(wTmpcfc0.genericCutscene.cfd3)
 	ld e,SpecialObject.speed
 	ld (de),a
 	call $1fda ; objectApplySpeed
@@ -239,10 +239,10 @@ subrosiaDance_state5:
 	ret
 
 subrosiaDance_checkSpinOrCollapse:
-	; $cfd0 == $00, ret
-	; $cfd0 == $ff, LINK_ANIM_MODE_COLLAPSED -> next state ret
+	; wTmpcfc0.genericCutscene.cfd0 == $00, ret
+	; wTmpcfc0.genericCutscene.cfd0 == $ff, LINK_ANIM_MODE_COLLAPSED -> next state ret
 	; else LINK_ANIM_MODE_SPIN -> next state animate
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	or a
 	ret z
 	pop hl

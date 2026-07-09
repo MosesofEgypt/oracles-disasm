@@ -487,12 +487,12 @@ seasonsFunc_0d_7915:
 	ld e,$8b
 	ld a,(de)
 	add (hl)
-	ld ($d00b),a
+	ld (w1Link.yh),a
 	inc hl
 	ld e,$8d
 	ld a,(de)
 	add (hl)
-	ld ($d00d),a
+	ld (w1Link.xh),a
 	ret
 
 seasonsTable_0d_7954:

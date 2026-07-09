@@ -99,9 +99,9 @@ interactionCode68:
 	jr nz,delete
 	call resetLinkInvincibility
 	ld a,$80
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld (wDisableWarpTiles),a
-	ld ($ccab),a
+	ld (wDisableScreenTransitions),a
 	call getThisRoomFlags
 	set 6,(hl)
 	call func_58e4
@@ -147,7 +147,7 @@ func_5907:
 func_590b:
 	ld a,l
 func_590c:
-	ld ($cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
 	ld a,(wActiveRoom)
 	cp $7f
 	jr nz,+

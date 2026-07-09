@@ -34,7 +34,7 @@ interactionCodea9:
 	.dw @substate5
 
 @substate0:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	or a
 	ret z
 	call interactionIncSubstate
@@ -45,7 +45,7 @@ interactionCodea9:
 	jp interactionSetAnimation
 
 @substate1:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	cp $02
 	ret nz
 	call interactionIncSubstate

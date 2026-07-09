@@ -224,10 +224,10 @@ gohma_gel_subid2:
 	.dw @seasonsFunc_0d_6f33
 
 @stateD:
-	ld a,($d00b)
+	ld a,(w1Link.yh)
 	ld e,$8b
 	ld (de),a
-	ld a,($d00d)
+	ld a,(w1Link.xh)
 	ld e,$8d
 	ld (de),a
 	call ecom_decCounter1

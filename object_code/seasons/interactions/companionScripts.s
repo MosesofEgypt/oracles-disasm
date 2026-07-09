@@ -187,7 +187,7 @@ companionScript_subid06:
 	jr nz,@goToRunScriptThenDelete
 	inc a
 	ld (de),a
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld hl,$d000
 	call objectTakePosition
 	ld a,($d10b)
@@ -259,7 +259,7 @@ companionScript_subid03:
 	call loseTreasure
 companionScript_giveFlute:
 	ld a,$01
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	call interactionIncState
 	ld e,$79
 	ld a,(de)
@@ -311,18 +311,18 @@ companionScript_giveFlute:
 
 companionScriptFunc_6eaf:
 	call retIfTextIsActive
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	call objectSetInvisible
 	ld a,($cc48)
 	and $0f
 	add a
 	swap a
-	ld ($cca4),a
+	ld (wDisabledObjects),a
 	call interactionRunScript
 	ret nc
 	xor a
-	ld ($cca4),a
-	ld ($cc02),a
+	ld (wDisabledObjects),a
+	ld (wMenuDisabled),a
 	jr companionScript_delete2
 
 ; Dimitri in Spool Swamp
@@ -393,7 +393,7 @@ companionScript_subid08:
 	cp SPECIALOBJECT_DIMITRI
 	jr z,companionScript_delete2
 @state1:
-	ld a,($cd00)
+	ld a,(wScreenVariables)
 	and $0e
 	ret nz
 	ld hl,$d10b

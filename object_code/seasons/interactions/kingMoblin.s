@@ -60,8 +60,8 @@ interactionCode95:
 	call parseGivenObjectData
 	call objectSetVisible83
 	xor a
-	ld ($cfd0),a
-	ld ($cfd1),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd1),a
 	jr @state1
 @@subid4:
 	ld hl,mainScripts.script73cd
@@ -98,7 +98,7 @@ interactionCode95:
 	.dw @@@substate0
 	.dw @@@substate1
 @@@substate0:
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld a,(hl)
 	cp $02
 	jr nz,@@@func_54ec
@@ -124,7 +124,7 @@ interactionCode95:
 	ld a,(de)
 	inc a
 	ret nz
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	ld (hl),$01
 	ld h,d
 	ld l,$76
@@ -191,7 +191,7 @@ interactionCode95:
 	jp interactionCode96@state1@subid2
 @@subid2:
 	call interactionAnimate
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld a,(hl)
 	inc a
 	ret nz
@@ -207,7 +207,7 @@ interactionCode95:
 @@subid4:
 	call interactionRunScript
 	jp c,interactionDelete
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	bit 0,(hl)
 	jr z,@@subid3
 	ld a,(wFrameCounter)

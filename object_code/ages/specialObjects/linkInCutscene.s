@@ -151,7 +151,7 @@ linkCutscene_oscillateZ_1:
 
 ;;
 linkCutscene_oscillateZ:
-	ld a,($cbb7)
+	ld a,(wGenericCutscene.cbb7)
 .ifdef ROM_SEASONS
 	ld b,a
 	and $07
@@ -162,7 +162,7 @@ linkCutscene_oscillateZ:
 	and $07
 	jr nz,++
 
-	ld a,($cbb7)
+	ld a,(wGenericCutscene.cbb7)
 .endif
 	and $38
 	swap a
@@ -202,7 +202,7 @@ linkCutscene0_substate6:
 	ret
 +
 	call specialObjectAnimate
-	ld a,($cbb7)
+	ld a,(wGenericCutscene.cbb7)
 	rrca
 	jp nc,objectSetInvisible
 	jp objectSetVisible
@@ -285,7 +285,7 @@ linkCutscene1:
 	call objectApplySpeed
 	call itemDecCounter1
 	ret nz
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld (hl),$01
 	ld a,SND_CLINK
 	call playSound
@@ -326,7 +326,7 @@ linkCutscene2:
 	.dw @substate8
 
 @substate0:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $02
 	ret nz
 
@@ -423,7 +423,7 @@ linkCutscene2:
 	ld (hl),$10
 	ld b,$00
 	call @label_72cc
-	ld hl,$cfd0
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld (hl),$03
 	ret
 
@@ -459,7 +459,7 @@ linkCutscene3:
 	.dw @substate9
 
 @substate0:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $09
 	ret nz
 
@@ -474,7 +474,7 @@ linkCutscene3:
 	jp specialObjectSetAnimation
 
 @substate1:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $0a
 	ret nz
 	call itemIncSubstate
@@ -492,7 +492,7 @@ linkCutscene3:
 @substate3:
 	ld b,$0e
 	ld c,$02
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp b
 	ret nz
 	call itemIncSubstate
@@ -500,7 +500,7 @@ linkCutscene3:
 	jp specialObjectSetAnimation
 
 @substate4:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $11
 	ret nz
 
@@ -601,13 +601,13 @@ linkCutscene4:
 	.dw @substate5
 
 @substate0:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $1f
 	ret nz
 	jp itemIncSubstate
 
 @substate1:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $20
 	jp nz,linkCutsceneFunc_73e8
 	call itemIncSubstate
@@ -641,7 +641,7 @@ linkCutscene4:
 	call linkCutscene_animateAndDecCounter1
 	jp nz,objectApplySpeed
 	ld a,$21
-	ld ($cfd0),a
+	ld (wTmpcfc0.genericCutscene.cfd0),a
 	ld a,$81
 	ld (wMenuDisabled),a
 	ld (wDisabledObjects),a
@@ -740,7 +740,7 @@ linkCutscene6:
 	jp itemIncSubstate
 
 @substate1:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $07
 	ret nz
 	call itemIncSubstate
@@ -804,10 +804,10 @@ linkCutscene8:
 	.dw @substate1
 
 @substate0:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $03
 	jr z,+
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $01
 	ret nz
 +
@@ -842,20 +842,20 @@ linkCutscene9:
 	.dw @substate4
 
 @substate0:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	cp $01
 	ret nz
 	call itemIncSubstate
 	jp objectSetVisible82
 
 @substate1:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	cp $03
 	ret nz
 	call itemIncSubstate
 
 @substate2:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	cp $06
 	jp nz,linkCutsceneFunc_73e8
 
@@ -880,7 +880,7 @@ linkCutscene9:
 @substate4:
 	call itemDecCounter1
 	jp nz,specialObjectAnimate
-	ld hl,$cfdf
+	ld hl,wTmpcfc0.genericCutscene.cfdf
 	ld (hl),$ff
 	ret
 
@@ -926,7 +926,7 @@ linkCutsceneA:
 	.dw @substate3
 
 @substate0:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	cp $01
 	ret nz
 
@@ -938,7 +938,7 @@ linkCutsceneA:
 .endif
 
 @substate1:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	cp $07
 	ret nz
 
@@ -951,7 +951,7 @@ linkCutsceneA:
 	jp specialObjectSetAnimation
 
 @substate2:
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	cp $08
 	ret nz
 
@@ -984,7 +984,7 @@ linkCutsceneA:
 	call decHlRef16WithCap
 	ret nz
 
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	ld (hl),$09
 	ret
 
@@ -1030,7 +1030,7 @@ linkCutsceneB:
 
 @state1:
 	ld a,(wFrameCounter)
-	ld ($cbb7),a
+	ld (wGenericCutscene.cbb7),a
 	ld e,SpecialObject.substate
 	ld a,(de)
 	rst_jumpTable

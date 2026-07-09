@@ -264,7 +264,7 @@ interactionCodeae:
 	ld hl,wTmpcfc0.genericCutscene.cfdf
 	ld (hl),$ff
 .else
-	ld hl,$cfde
+	ld hl,wTmpcfc0.genericCutscene.cfde
 	ld (hl),$01
 .endif
 	jp interactionDelete

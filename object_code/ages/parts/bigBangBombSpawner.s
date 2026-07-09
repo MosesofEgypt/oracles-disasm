@@ -131,7 +131,7 @@ func_77f0:
 	cp $ff
 	jr nz,func_7805
 	ld a,$01
-	ld ($cfc0),a
+	ld (wTmpcfc0.normal.cfc0),a
 	ret
 	
 func_7805:

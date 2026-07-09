@@ -53,13 +53,13 @@ interactionCode6e:
 	inc (hl)
 	ld l,$4d
 	ld a,(hl)
-	ld ($cfc1),a
-	ld hl,$cfc0
+	ld (wTmpcfc0.normal.doorControllerState),a
+	ld hl,wTmpcfc0.normal.cfc0
 	set 2,(hl)
 	xor a
 	call interactionSetAnimation
 @@state2:
-	ld hl,$cfc0
+	ld hl,wTmpcfc0.normal.cfc0
 	bit 7,(hl)
 	jp nz,interactionDelete
 	ld a,(wFrameCounter)
@@ -108,10 +108,10 @@ interactionCode6e:
 	ld bc,$fe00
 	call objectSetSpeedZ
 	ld l,$4b
-	ld a,($d00b)
+	ld a,(w1Link.yh)
 	ldi (hl),a
 	inc l
-	ld a,($d00d)
+	ld a,(w1Link.xh)
 	ld (hl),a
 @@substate1:
 	ld a,(wFrameCounter)

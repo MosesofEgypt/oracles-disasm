@@ -108,7 +108,7 @@ makuTreeScript_gateHit:
 	setcollisionradii $14, $20
 @checkLinkHitGateWithSword:
 	asm15 scriptHelp.makuTree_checkGateHit
-	jumptable_memoryaddress $cfc0
+	jumptable_memoryaddress wTmpcfc0.normal.cfc0
 	.dw @checkLinkHitGateWithSword
 	.dw @gateHit
 @gateHit:
@@ -143,7 +143,7 @@ seasonsSpiritsScript_spiritStatue:
 	; no rod of seasons
 	checkabutton
 	disableinput
-	writememory $cfc0, $00
+	writememory wTmpcfc0.normal.cfc0, $00
 	asm15 scriptHelp.spawnSeasonsSpiritSubId01
 	xorcfc0bit 0
 	playsound SND_CIRCLING
@@ -203,7 +203,7 @@ seasonsSpiritsScript_seasonsGotten:
 -
 	checkabutton
 	disableinput
-	writememory $cfc0, $00
+	writememory wTmpcfc0.normal.cfc0, $00
 	asm15 scriptHelp.spawnSeasonsSpiritSubId01
 	xorcfc0bit 0
 	playsound SND_CIRCLING
@@ -811,14 +811,14 @@ mittensOwnerScript:
 	scriptjump -
 @givingFish:
 	wait 30
-	writememory $cfde, $00
+	writememory wTmpcfc0.genericCutscene.cfde, $00
 	spawninteraction INTERAC_TRADE_ITEM, $06, $44, $68
 	showtextlowindex <TX_0b33
 	ormemory $cceb, $01
 	showtextlowindex <TX_0b34
 	setcounter1 $20
 	setanimation $02
-	writememory $cfde, $40
+	writememory wTmpcfc0.genericCutscene.cfde, $40
 	showtextlowindex <TX_0b35
 	giveitem TREASURE_TRADEITEM, $07
 	orroomflag $40
@@ -893,7 +893,7 @@ sokraScript_inVillage:
 	setanimation $02
 	writeobjectbyte $43, $01
 	asm15 scriptHelp.villageSokra_checkStageInGame
-	jumptable_memoryaddress $cfc0
+	jumptable_memoryaddress wTmpcfc0.normal.cfc0
 	.dw @noEssences
 	.dw @firstEssenceGotten
 	.dw @ZeldaTaken
@@ -1750,7 +1750,7 @@ subrosianScript_signsGuy:
 	initcollisions
 	jumpifroomflagset $20, @ringGotten
 	asm15 scriptHelp.subrosian_checkSignsDestroyed
-	jumptable_memoryaddress $cfc0
+	jumptable_memoryaddress wTmpcfc0.normal.cfc0
 	.dw @0signsBroken
 	.dw @lessThan20SignsBroken
 	.dw @lessThan50SignsBroken
@@ -2751,7 +2751,7 @@ piratian1FScript_text1BasedOnD6Beaten:
 	scriptjump --
 @haveFixedPiratesBell:
 	jumpifobjectbyteeq $71, $01, @talkedTo
-	jumpifmemoryset $cfc0, $01, @readyToLeave
+	jumpifmemoryset wTmpcfc0.normal.cfc0, $01, @readyToLeave
 	scriptjump @haveFixedPiratesBell
 @talkedTo:
 	writeobjectbyte $71, $00
@@ -2768,7 +2768,7 @@ piratian1FScript_text2BasedOnD6Beaten:
 	initcollisions
 --
 	jumpifobjectbyteeq $71, $01, @talkedTo
-	jumpifmemoryset $cfc0, $01, @readyToLeave
+	jumpifmemoryset wTmpcfc0.normal.cfc0, $01, @readyToLeave
 	scriptjump --
 @talkedTo:
 	setdisabledobjectsto91
@@ -3158,21 +3158,21 @@ script5fea:
 	loadscript scripts2.script_14_49c8
 
 script5fee:
-	checkmemoryeq $cfc0, $01
+	checkmemoryeq wTmpcfc0.normal.cfc0, $01
 	setanimation $02
-	checkmemoryeq $cfc0, $02
+	checkmemoryeq wTmpcfc0.normal.cfc0, $02
 	setspeed SPEED_100
 	movedown $45
 	setanimation $00
-	checkmemoryeq $cfc0, $07
+	checkmemoryeq wTmpcfc0.normal.cfc0, $07
 	setcoords $8c, $40
 	moveup $45
 	setanimation $01
-	checkmemoryeq $cfc0, $09
+	checkmemoryeq wTmpcfc0.normal.cfc0, $09
 	setanimation $02
-	checkmemoryeq $cfc0, $0a
+	checkmemoryeq wTmpcfc0.normal.cfc0, $0a
 	setanimation $01
-	checkmemoryeq $cfc0, $0b
+	checkmemoryeq wTmpcfc0.normal.cfc0, $0b
 	movedown $49
 	scriptend
 
@@ -3237,8 +3237,8 @@ zeldaScript_healLinkIfNeeded:
 ; INTERAC_TALON
 ; ==================================================================================================
 caveTalonScript:
-	writememory $cfde, $00
-	writememory $cfdf, $00
+	writememory wTmpcfc0.genericCutscene.cfde, $00
+	writememory wTmpcfc0.genericCutscene.cfdf, $00
 	spawninteraction INTERAC_TRADE_ITEM, $08, $68, $48
 	initcollisions
 -
@@ -3310,7 +3310,7 @@ troupeScript1:
 -
 	checkabutton
 	showloadedtext
-	ormemory $cfd3, $01
+	ormemory wTmpcfc0.genericCutscene.cfd3, $01
 	scriptjump -
 
 troupeScript2:
@@ -3322,7 +3322,7 @@ troupeScript2:
 	cplinkx $48
 	setanimationfromobjectbyte $48
 	showloadedtext
-	ormemory $cfd3, $02
+	ormemory wTmpcfc0.genericCutscene.cfd3, $02
 	enableallobjects
 	scriptjump -
 
@@ -3332,7 +3332,7 @@ troupeScript3:
 -
 	checkabutton
 	showloadedtext
-	ormemory $cfd3, $04
+	ormemory wTmpcfc0.genericCutscene.cfd3, $04
 	scriptjump -
 
 troupeScript4:
@@ -3341,7 +3341,7 @@ troupeScript4:
 -
 	checkabutton
 	showloadedtext
-	ormemory $cfd3, $08
+	ormemory wTmpcfc0.genericCutscene.cfd3, $08
 	scriptjump -
 
 troupeScript_Impa:
@@ -3350,7 +3350,7 @@ troupeScript_Impa:
 	checkabutton
 	asm15 scriptHelp.dinDancing_spinLink
 	showloadedtext
-	ormemory $cfd3, $10
+	ormemory wTmpcfc0.genericCutscene.cfd3, $10
 	asm15 scriptHelp.dinDancingEvent_setTextAdd_0a_ifLinked, <TX_0c05
 -
 	checkabutton
@@ -3367,7 +3367,7 @@ troupeScript_Din:
 	checkabutton
 	setanimation $06
 	showloadedtext
-	ormemory $cfd3, $20
+	ormemory wTmpcfc0.genericCutscene.cfd3, $20
 	scriptjump -
 
 troupeScript_startDanceScene:
@@ -3379,7 +3379,7 @@ troupeScript_startDanceScene:
 	setdisabledobjectsto11
 	setanimation $06
 	showloadedtext
-	ormemory $cfd3, $40
+	ormemory wTmpcfc0.genericCutscene.cfd3, $40
 	orroomflag $40
 	scriptjump -
 
@@ -3419,7 +3419,7 @@ dinImprisonedScript_OnoxSendsTempleDown:
 	wait 60
 	showtext TX_1e06
 	wait 60
-	writememory $cfd0, $0f
+	writememory wTmpcfc0.genericCutscene.cfd0, $0f
 	scriptend
 
 dinImprisonedScript_OnoxSaysComeIfYouDare:
@@ -4255,7 +4255,7 @@ subrosianScript_templeFallenText:
 floodgateKeeperScript:
 	initcollisions
 	asm15 scriptHelp.floodgateKeeper_checkStage
-	jumptable_memoryaddress $cfc1
+	jumptable_memoryaddress wTmpcfc0.normal.doorControllerState
 	.dw @noFloodgateKey
 	.dw @gotFloodgateKey
 	.dw @floodgateKeyUsed
@@ -4465,7 +4465,7 @@ rosaHidingScript_lookRightDownUp:
 ; INTERAC_STRANGE_BROTHERS_HIDING
 ; ==================================================================================================
 strangeBrother1Script_1stScreen:
-	jumptable_memoryaddress $cfd0
+	jumptable_memoryaddress wTmpcfc0.genericCutscene.cfd0
 	.dw @halfChanceWhenFeatherNotGotten
 	.dw @otherPattern
 @halfChanceWhenFeatherNotGotten:
@@ -4518,7 +4518,7 @@ toStrangeBrotherScript_1stScreenInit:
 	scriptjump strangeBrotherScript_1stScreenInit
 
 strangeBrother1Script_2ndScreen:
-	jumptable_memoryaddress $cfd0
+	jumptable_memoryaddress wTmpcfc0.genericCutscene.cfd0
 	.dw @pattern1
 	.dw @pattern2
 @pattern1:
@@ -4563,7 +4563,7 @@ strangeBrother1Script_2ndScreen:
 	scriptend
 	
 strangeBrother1Script_3rdScreen:
-	jumptable_memoryaddress $cfd0
+	jumptable_memoryaddress wTmpcfc0.genericCutscene.cfd0
 	.dw @pattern1
 	.dw @pattern2
 @pattern1:
@@ -4602,7 +4602,7 @@ strangeBrother1Script_3rdScreen:
 	scriptend
 	
 strangeBrother1Script_4thScreen:
-	jumptable_memoryaddress $cfd0
+	jumptable_memoryaddress wTmpcfc0.genericCutscene.cfd0
 	.dw @pattern1
 	.dw @pattern2
 @pattern1:
@@ -4637,7 +4637,7 @@ strangeBrother1Script_4thScreen:
 	scriptend
 	
 strangeBrother1Script_5thScreen:
-	jumptable_memoryaddress $cfd0
+	jumptable_memoryaddress wTmpcfc0.genericCutscene.cfd0
 	.dw @pattern1
 	.dw @pattern2
 @pattern1:
@@ -4675,7 +4675,7 @@ strangeBrother1Script_5thScreen:
 	scriptend
 	
 strangeBrother1Script_6thScreen:
-	jumptable_memoryaddress $cfd0
+	jumptable_memoryaddress wTmpcfc0.genericCutscene.cfd0
 	.dw @pattern1
 	.dw @pattern2
 @pattern1:
@@ -4717,7 +4717,7 @@ strangeBrother1Script_finishedScreen:
 	setcoords $48, $18
 	setanimation $01
 	playsound SND_SOLVEPUZZLE
-	checkflagset $00, $cd00
+	checkflagset $00, wScreenVariables
 	asm15 scriptHelp.strangeBrothersFunc_15_5d9a
 	wait 60
 	showtext TX_2803
@@ -4730,7 +4730,7 @@ strangeBrother1Script_finishedScreen:
 	scriptend
 
 strangeBrother2Script_1stScreen:
-	jumptable_memoryaddress $cfd0
+	jumptable_memoryaddress wTmpcfc0.genericCutscene.cfd0
 	.dw @halfChanceWhenFeatherNotGotten
 	.dw @otherPattern
 @halfChanceWhenFeatherNotGotten:
@@ -4745,7 +4745,7 @@ strangeBrother2Script_1stScreen:
 	loadscript scripts2.strangeBrother2Script_1stScreenPattern2
 
 strangeBrother2Script_2ndScreen:
-	jumptable_memoryaddress $cfd0
+	jumptable_memoryaddress wTmpcfc0.genericCutscene.cfd0
 	.dw @pattern1
 	.dw @pattern2
 @pattern1:
@@ -4754,7 +4754,7 @@ strangeBrother2Script_2ndScreen:
 	loadscript scripts2.strangeBrother2Script_2ndScreenPattern2
 	
 strangeBrother2Script_3rdScreen:
-	jumptable_memoryaddress $cfd0
+	jumptable_memoryaddress wTmpcfc0.genericCutscene.cfd0
 	.dw @pattern1
 	.dw @pattern2
 @pattern1:
@@ -4763,7 +4763,7 @@ strangeBrother2Script_3rdScreen:
 	loadscript scripts2.strangeBrother2Script_3rdScreenPattern2
 	
 strangeBrother2Script_4thScreen:
-	jumptable_memoryaddress $cfd0
+	jumptable_memoryaddress wTmpcfc0.genericCutscene.cfd0
 	.dw @pattern1
 	.dw @pattern2
 @pattern1:
@@ -4772,7 +4772,7 @@ strangeBrother2Script_4thScreen:
 	loadscript scripts2.strangeBrother2Script_4thScreenPattern2
 	
 strangeBrother2Script_5thScreen:
-	jumptable_memoryaddress $cfd0
+	jumptable_memoryaddress wTmpcfc0.genericCutscene.cfd0
 	.dw @pattern1
 	.dw @pattern2
 @pattern1:
@@ -4781,7 +4781,7 @@ strangeBrother2Script_5thScreen:
 	loadscript scripts2.strangeBrother2Script_5thScreenPattern2
 	
 strangeBrother2Script_6thScreen:
-	jumptable_memoryaddress $cfd0
+	jumptable_memoryaddress wTmpcfc0.genericCutscene.cfd0
 	.dw @pattern1
 	.dw @pattern2
 @pattern1:
@@ -5151,12 +5151,12 @@ companionScript_mooshInMtCucco:
 ; INTERAC_ANIMAL_MOBLIN_BULLIES
 ; ==================================================================================================
 moblinBulliesScript_dimitriBully1BeforeSaving:
-	writememory $ccab, $01
+	writememory wDisableScreenTransitions, $01
 	makeabuttonsensitive
 	jumpifc6xxset <wDimitriState, $04, @promptForPayment
 	disablemenu
 	setdisabledobjectsto11
-	writememory $ccab, $00
+	writememory wDisableScreenTransitions, $00
 	callscript moblinBulliesScript_hop
 @animalBulliedInitDone:
 	jumptable_objectbyte $77
@@ -5175,7 +5175,7 @@ moblinBulliesScript_dimitriBully1BeforeSaving:
 @notEnoughRupees:
 	showtext TX_211b
 @promptForPayment:
-	writememory $ccab, $00
+	writememory wDisableScreenTransitions, $00
 	setangleandanimation $00
 	jumpifglobalflagset GLOBALFLAG_PAID_50_RUPEES_TO_DIMITRI_BULLIES, @paid50Rupees
 	checkabutton
@@ -5881,7 +5881,7 @@ script71b1:
 
 script71c8:
 	asm15 scriptHelp.makuTree_storeIntoVar37SpawnBubbleIf0, $04
-	checkflagset $00, $cd00
+	checkflagset $00, wScreenVariables
 	disableinput
 	wait 30
 	asm15 scriptHelp.makuTree_storeIntoVar37SpawnBubbleIf0, $01
@@ -5951,13 +5951,13 @@ script7255:
 
 script7261:
 	asm15 scriptHelp.makuTree_storeIntoVar37SpawnBubbleIf0, $04
-	checkmemoryeq $cfc0, $02
+	checkmemoryeq wTmpcfc0.normal.cfc0, $02
 	asm15 scriptHelp.makuTree_storeIntoVar37SpawnBubbleIf0, $01
 	showtext TX_3d07
 	wait 1
 	asm15 scriptHelp.makuTree_storeIntoVar37SpawnBubbleIf0, $04
 	wait 60
-	writememory $cfc0, $03
+	writememory wTmpcfc0.normal.cfc0, $03
 	setcounter1 $ff
 	scriptend
 
@@ -6228,13 +6228,13 @@ script73cd:
 
 script73d8:
 	setspeed SPEED_100
-	checkmemoryeq $cfc0, $02
+	checkmemoryeq wTmpcfc0.normal.cfc0, $02
 	setangle $00
 	applyspeed $25
-	checkmemoryeq $cfc0, $05
+	checkmemoryeq wTmpcfc0.normal.cfc0, $05
 	setangle $10
 	applyspeed $25
-	checkmemoryeq $cfc0, $06
+	checkmemoryeq wTmpcfc0.normal.cfc0, $06
 	setangle $00
 	applyspeed $25
 	scriptend
@@ -6300,26 +6300,26 @@ script743c:
 
 script7443:
 	setspeed SPEED_100
-	checkmemoryeq $cfc0, $01
+	checkmemoryeq wTmpcfc0.normal.cfc0, $01
 	moveleft $29
 	setanimation $09
-	checkmemoryeq $cfc0, $03
+	checkmemoryeq wTmpcfc0.normal.cfc0, $03
 	asm15 scriptHelp.moblin_spawnSwordMaskedMoblin
 	wait 1
 	scriptend
 
 script7456:
 	setspeed SPEED_100
-	checkmemoryeq $cfc0, $01
+	checkmemoryeq wTmpcfc0.normal.cfc0, $01
 	moveright $29
 	setanimation $09
-	checkmemoryeq $cfc0, $03
+	checkmemoryeq wTmpcfc0.normal.cfc0, $03
 	asm15 scriptHelp.moblin_spawnSwordMaskedMoblin
 	wait 1
 	scriptend
 
 script7469:
-	checkmemoryeq $cfc0, $03
+	checkmemoryeq wTmpcfc0.normal.cfc0, $03
 	asm15 scriptHelp.moblin_spawnMaskedMoblin
 	wait 1
 	scriptend
@@ -6384,8 +6384,8 @@ impaScript_afterOnoxTakesDin:
 	setangleandanimation $08
 	setcounter1 $06
 	applyspeed $20
-	writememory $cfd0, $01
-	checkmemoryeq $cfd0, $02
+	writememory wTmpcfc0.genericCutscene.cfd0, $01
+	checkmemoryeq wTmpcfc0.genericCutscene.cfd0, $02
 	wait 30
 	jumpifmemoryeq wIsLinkedGame, $01, @linkedText
 	showtext TX_2500
@@ -6403,7 +6403,7 @@ impaScript_afterOnoxTakesDin:
 	applyspeed $20
 	setanimation $02
 	wait 30
-	writememory $cfd0, $03
+	writememory wTmpcfc0.genericCutscene.cfd0, $03
 	orroomflag $40
 	setglobalflag GLOBALFLAG_INTRO_DONE
 	enableinput
@@ -6434,7 +6434,7 @@ impaScript_after4thEssence:
 	
 impaScript_after5thEssence:
 	asm15 scriptHelp.impa_checkIf4thEssenceGotten
-	jumptable_memoryaddress $cfc0
+	jumptable_memoryaddress wTmpcfc0.normal.cfc0
 	.dw @got4thEssence
 	.dw impaScript_after3rdEssence@gotFlippers
 @got4thEssence:
@@ -6716,20 +6716,20 @@ dinScript_discoverLinkCollapsed:
 
 ; interactionCodeaa
 script769f:
-	checkmemoryeq $cfc0, $01
+	checkmemoryeq wTmpcfc0.normal.cfc0, $01
 	setanimation $01
 	checkobjectbyteeq $61, $01
-	writememory $cfc0, $02
+	writememory wTmpcfc0.normal.cfc0, $02
 	scriptend
 
 script76ad:
-	checkmemoryeq $cfc0, $02
+	checkmemoryeq wTmpcfc0.normal.cfc0, $02
 	asm15 scriptHelp.seasonsFunc_15_62d9
 	setanimation $03
 	scriptend
 
 script76b7:
-	checkmemoryeq $cfc0, $03
+	checkmemoryeq wTmpcfc0.normal.cfc0, $03
 	setangle $18
 	setspeed SPEED_100
 	applyspeed $20
@@ -6744,12 +6744,12 @@ script76b7:
 	applyspeed $20
 	wait 10
 	setanimation $07
-	writememory $cfc0, $04
+	writememory wTmpcfc0.normal.cfc0, $04
 	setcounter1 $80
 	scriptend
 
 script76dc:
-	checkmemoryeq $cfc0, $05
+	checkmemoryeq wTmpcfc0.normal.cfc0, $05
 	setangle $18
 	setspeed SPEED_100
 	applyspeed $10
@@ -6766,7 +6766,7 @@ script76dc:
 	wait 30
 	showtext TX_3d08
 	setcounter1 $80
-	writememory $cfc0, $06
+	writememory wTmpcfc0.normal.cfc0, $06
 	scriptend
 
 
@@ -7383,10 +7383,10 @@ zeldaNPCScript_ba_subid1:
 	scriptend
 	
 zeldaNPCScript_ba_subid3:
-	checkmemoryeq $cfc0, $08
+	checkmemoryeq wTmpcfc0.normal.cfc0, $08
 	setspeed SPEED_100
 	moveup $31
-	checkmemoryeq $cfc0, $0b
+	checkmemoryeq wTmpcfc0.normal.cfc0, $0b
 	movedown $31
 	scriptend
 	
@@ -7832,7 +7832,7 @@ goldenCaveSubrosianScript_7d00:
 script7d19:
 	checkpalettefadedone
 	asm15 scriptHelp.seasonsFunc_15_6518
-	writememory $cc02, $01
+	writememory wMenuDisabled, $01
 	wait 20
 	showloadedtext
 	setspeed SPEED_200
@@ -8208,7 +8208,7 @@ goldenBeastOldManScript:
 -
 	checkabutton
 	asm15 seasonsInteractionsBank15.checkGoldenBeastsKilled
-	jumptable_memoryaddress $cfc1
+	jumptable_memoryaddress wTmpcfc0.normal.doorControllerState
 	.dw @notSlayed4Beasts
 	.dw @slayed4Beasts
 @notSlayed4Beasts:
@@ -8256,7 +8256,7 @@ linkedHerosCaveOldManScript:
 	scriptjump -
 @answeredYes:
 	asm15 seasonsInteractionsBank15.linkedHerosCaveOldMan_takeRupees
-	jumptable_memoryaddress $cfd0
+	jumptable_memoryaddress wTmpcfc0.genericCutscene.cfd0
 	.dw @notEnoughRupees
 	.dw @hasEnoughRupees
 @hasEnoughRupees:

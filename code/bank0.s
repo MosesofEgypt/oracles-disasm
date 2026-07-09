@@ -4120,7 +4120,7 @@ func_1383:
 	ld b,a
 	push bc
 	ld a,$08
-	ld ($cd00),a
+	ld (wScreenVariables),a
 	ld a,$03
 	ld ($cd04),a
 	xor a

@@ -115,7 +115,7 @@ soldierSubid04:
 	.dw soldierSubid04Substate4
 
 soldierSubid04Substate0:
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	cp $06
 	jr nz,soldierUpdateAnimationAndRunScript
 

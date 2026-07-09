@@ -70,7 +70,7 @@ interactionCode3f:
 
 @@substate0:
 	call interactionAnimate
-	ld a,($cfd1)
+	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	cp $01
 	ret nz
 	call interactionIncSubstate

@@ -151,7 +151,7 @@ bear_state1:
 
 @substate1:
 	call interactionRunScript
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $0e
 	ret nz
 	call interactionIncSubstate
@@ -160,7 +160,7 @@ bear_state1:
 
 @substate2:
 	call interactionAnimate
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $10
 	ret nz
 	call interactionIncSubstate

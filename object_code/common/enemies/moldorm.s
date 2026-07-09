@@ -94,7 +94,7 @@ enemyCode4f:
 	or a
 	jr nz,+
 	inc a
-	ld ($cfc0),a
+	ld (wTmpcfc0.normal.cfc0),a
 +
 .endif
 	jp enemyDie

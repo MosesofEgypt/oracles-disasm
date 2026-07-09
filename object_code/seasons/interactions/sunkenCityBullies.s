@@ -106,18 +106,18 @@ interactionCode76:
 	jr nz,@delete
 	xor a
 	ld ($cba0),a
-	ld ($cca4),a
-	ld ($cc02),a
+	ld (wDisabledObjects),a
+	ld (wMenuDisabled),a
 @delete:
 	jp interactionDelete
 @state3:
-	ld a,($cd00)
+	ld a,(wScreenVariables)
 	and $0e
 	ret nz
 	call interactionAnimateAsNpc
 	jr ++
 @state1:
-	ld a,($cd00)
+	ld a,(wScreenVariables)
 	and $0e
 	ret nz
 	call interactionAnimateAsNpc
@@ -129,7 +129,7 @@ interactionCode76:
 	and $08
 	jr nz,func_742a
 ++
-	ld a,($c4ab)
+	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	ld c,$40

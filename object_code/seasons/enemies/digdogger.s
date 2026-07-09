@@ -432,12 +432,12 @@ enemyCode7c:
 	call c,ecom_setZAboveScreen
 	ret nz
 	ld l,$8b
-	ld a,($d00b)
+	ld a,(w1Link.yh)
 	and $f0
 	add $08
 	ldi (hl),a
 	inc l
-	ld a,($d00d)
+	ld a,(w1Link.xh)
 	and $f0
 	add $08
 	ld (hl),a

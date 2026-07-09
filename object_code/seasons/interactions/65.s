@@ -68,15 +68,15 @@ interactionCode65:
 	ret
 @state1:
 	xor a
-	ld ($ccab),a
+	ld (wDisableScreenTransitions),a
 	ld a,$3c
 	ld ($cd19),a
 	call interactionDecCounter1
 	ret nz
 	ld (hl),$78
 	ld a,$01
-	ld ($ccab),a
-	ld hl,$cfd0
+	ld (wDisableScreenTransitions),a
+	ld hl,wTmpcfc0.genericCutscene.cfd0
 	inc (hl)
 	call func_5261
 	call func_545a
@@ -90,7 +90,7 @@ interactionCode65:
 	call playSound
 	ld a,$0f
 	ld ($cd18),a
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $09
 	ret c
 	call func_5258
@@ -103,22 +103,22 @@ interactionCode65:
 @state2:
 	call func_5258
 	jp nz,interactionDelete
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $09
 	jr z,func_524d
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	ld c,$08
 	call multiplyAByC
 	ld a,l
 	add $10
 	ld b,a
-	ld hl,$d00b
+	ld hl,w1Link.yh
 	ld a,(hl)
 	cp b
 	jr nc,+
 	ld (hl),b
 +
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	ld b,a
 	ld a,$15
 	sub b
@@ -127,7 +127,7 @@ interactionCode65:
 	ld a,l
 	sub $0e
 	ld b,a
-	ld hl,$d00b
+	ld hl,w1Link.yh
 	ld a,(hl)
 	cp b
 	ret c
@@ -137,7 +137,7 @@ func_524d:
 	ld a,$08
 	call setScreenShakeCounter
 	ld a,$58
-	ld ($d00b),a
+	ld (w1Link.yh),a
 	ret
 func_5258:
 	ld a,(wActiveRoom)
@@ -210,7 +210,7 @@ func_52c6:
 	ret
 func_52d9:
 	push de
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	add a
 	ld hl,table_5326
 	rst_addDoubleIndex
@@ -231,7 +231,7 @@ func_52d9:
 	ld b,$05
 	ld c,$02
 	call queueDmaTransfer
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	add a
 	ld hl,table_5352
 	rst_addDoubleIndex
@@ -279,7 +279,7 @@ table_5352:
 	.db $61 $99 $60 $99
 	.db $41 $99 $40 $99
 func_537e:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	or a
 	ret z
 	bit 0,a
@@ -289,7 +289,7 @@ func_537e:
 	ld l,a
 	ld a,$0f
 	call func_53bb
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	srl a
 	ld b,a
 	ld a,$0a
@@ -305,7 +305,7 @@ func_53a1:
 	ld l,a
 	ld a,$0c
 	call func_53bb
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	inc a
 	srl a
 	ld b,a
@@ -326,7 +326,7 @@ func_53bb:
 	jr nz,-
 	ret
 func_53c7:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	or a
 	ret z
 	bit 0,a
@@ -336,7 +336,7 @@ func_53c7:
 	ld l,a
 	ld a,$b0
 	call func_53e7
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	srl a
 	ld b,a
 	ld a,$0a
@@ -398,7 +398,7 @@ func_5440:
 	jp copyMemory
 
 func_545a:
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	or a
 	ret z
 	push de
@@ -408,7 +408,7 @@ func_545a:
 	ld b,$40
 	ld c,$02
 	call func_553a
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	ld hl,table_5544
 	rst_addDoubleIndex
 	ldi a,(hl)
@@ -423,7 +423,7 @@ func_545a:
 	ld b,$40
 	ld c,$02
 	call func_553a
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	ld hl,table_5558
 	rst_addDoubleIndex
 	ldi a,(hl)
@@ -438,7 +438,7 @@ func_545a:
 	ld b,$40
 	ld c,$02
 	call func_553a
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	ld hl,table_5544
 	rst_addDoubleIndex
 	ldi a,(hl)
@@ -455,7 +455,7 @@ func_545a:
 	ld b,$40
 	ld c,$02
 	call func_553a
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	ld hl,table_5558
 	rst_addDoubleIndex
 	ldi a,(hl)
@@ -475,7 +475,7 @@ func_545a:
 	ld hl,$dc00
 	ld a,$0b
 	call func_552a
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	ld c,a
 	ld b,$00
 	ld a,$16
@@ -502,7 +502,7 @@ func_545a:
 	ret
 func_552a:
 	ld e,a
-	ld a,($cfd0)
+	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	ld c,a
 	ld a,e
 --

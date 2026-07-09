@@ -17,7 +17,7 @@ interactionCode5d:
 @state1:
 	ld e,$42
 	ld a,(de)
-	ld hl,$cfde
+	ld hl,wTmpcfc0.genericCutscene.cfde
 	call checkFlag
 	jp nz,interactionDelete
 	jp objectPreventLinkFromPassing

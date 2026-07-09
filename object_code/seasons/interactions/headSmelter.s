@@ -55,7 +55,7 @@ interactionCode53:
 	jp objectSetVisible82
 @@state3:
 	xor a
-	ld ($cfc0),a
+	ld (wTmpcfc0.normal.cfc0),a
 	call interactionRunScript
 	ld e,$45
 	ld a,(de)
@@ -67,7 +67,7 @@ interactionCode53:
 @@@substate0:
 @@@substate1:
 	call interactionAnimate
-	ld a,($cfc0)
+	ld a,(wTmpcfc0.normal.cfc0)
 	call getHighestSetBit
 	ret nc
 	cp $03

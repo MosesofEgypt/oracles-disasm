@@ -40,7 +40,7 @@ interactionCode9e:
 	ld a,$81
 	ld (wDisabledObjects),a
 	ld a,$80
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld hl,mainScripts.script7556
 	jp interactionSetScript
 @substate1:
@@ -80,7 +80,7 @@ interactionCode9e:
 	call func_5f87
 	ret nz
 	xor a
-	ld ($cc02),a
+	ld (wMenuDisabled),a
 	ld (wDisabledObjects),a
 	ld a,$4d
 	call playSound

@@ -96,7 +96,7 @@ interactionCode0f:
 .ifdef ROM_AGES
 ;;
 ; Certain rooms have things happen when something falls into a hole; this writes something
-; around $cfd8 to provide a signal?
+; around wTmpcfc0.fallDownHoleEvent.cfd8 to provide a signal?
 @checkUpdateHoleEvent:
 	ld a,(wActiveRoom)
 	ld e,a
