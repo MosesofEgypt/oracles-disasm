@@ -159,14 +159,14 @@ addDoubleIndexToBc:
 ; @param e Bank of the function to call
 ; @param hl Address of the function to call
 interBankCall:
-	ld a,($ff97)
+	ld a,(hRomBank)
 	push af
 	ld a,e
-	ld ($ff97),a
+	ld (hRomBank),a
 	ld ($2222),a
 	call jpHl
 	pop af
-	ld ($ff97),a
+	ld (hRomBank),a
 	ld ($2222),a
 	ret
 
