@@ -30,7 +30,7 @@ interactionCode94:
 	ld l,$50
 	ld (hl),$28
 	call interactionInitGraphics
-	ld a,($d01a)
+	ld a,(w1Link.visible)
 	ld e,$5a
 	ld (de),a
 	ld a,$57
@@ -92,7 +92,7 @@ interactionCode94:
 	ld (hl),a
 	ld a,$03
 	call interactionSetAnimation
-	ld a,($d01a)
+	ld a,(w1Link.visible)
 	ld e,$5a
 	ld (de),a
 	ld bc,TX_005c

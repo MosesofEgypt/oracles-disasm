@@ -153,7 +153,7 @@ armos_subid00:
 	.dw armos_subid00_stateB
 	.dw armos_subid00_stateC
 
-; Waiting for Link to touch the statue (or for "$cca2" trigger?)
+; Waiting for Link to touch the statue (or for "wcca2" trigger?)
 armos_subid00_state8:
 	ld a,(wcca2)
 	or a

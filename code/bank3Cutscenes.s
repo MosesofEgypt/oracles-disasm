@@ -1995,7 +1995,7 @@ seasonsFunc_03_5367:
 ;;
 ; @param[out]	zflag
 @func:
-	ld a,($cbb6)
+	ld a,(wGenericCutscene.cbb6)
 	dec a
 	jr nz,++
 	ld a,(wGenericCutscene.cbba)
@@ -2005,7 +2005,7 @@ seasonsFunc_03_5367:
 	jr z,++
 	ld a,$22
 ++
-	ld ($cbb6),a
+	ld (wGenericCutscene.cbb6),a
 	ld a,(wGenericCutscene.cbba)
 	or a
 	ret

@@ -19,8 +19,8 @@ initTextbox:
 ++
 	ld a,$07
 	ld ($ff00+R_SVBK),a
-	ld hl,$d000
-	ld bc,w7TextVariablesEnd - $d000
+	ld hl,w1Link.enabled
+	ld bc,w7TextVariablesEnd - w1Link.enabled
 	call clearMemoryBc
 	jp initTextboxStuff
 
@@ -2075,7 +2075,6 @@ func_53eb:
 ;;
 @dmaHeartPieceDisplay:
 	m_ReadGfxDataHashedFilename gfx_font_heartpiece
-	.define partial_hearts_filename {filename}
 
 	ld hl,{filename}
 	ld de,$95d0
@@ -3060,9 +3059,9 @@ textControlCodeC_ret:
 ;;
 ; Unused?
 textControlCodeC_6:
-	ld a,($cbab)
+	ld a,(wcbaa+$01)
 	ld (wTextNumberSubstitution+1),a
-	ld a,($cbaa)
+	ld a,(wcbaa)
 	ld (wTextNumberSubstitution),a
 
 ;;
@@ -3142,7 +3141,7 @@ nameAddressTable:
 	.dw w7SecretText1 w7SecretText2
 
 ; This data structure works with text command $08. When buying something from
-; a shop, it checks the given variable ($cbad) and displays one of these pieces
+; a shop, it checks the given variable (wcbad) and displays one of these pieces
 ; of text depending on the value.
 ;
 .ifdef ROM_AGES
@@ -3168,22 +3167,22 @@ extraTextIndices:
 
 ; Potion in Syrup's hut
 @index0d:
-	.dw $cbad
+	.dw wcbad
 	.db <TX_0d02, <TX_0d08, <TX_0d04, <TX_0d03
 
 ; Gasha seed in Syrup's hut
 @index0e:
-	.dw $cbad
+	.dw wcbad
 	.db <TX_0d06, <TX_0d08, <TX_0d07, <TX_0d03
 
 ; Ring box upgrade in upstairs Lynna shop
 @index0f:
-	.dw $cbad
+	.dw wcbad
 	.db $ff, <TX_0e06, <TX_0e05, $ff
 
 ; Bombchus in Syrup's hut
 @index11:
-	.dw $cbad
+	.dw wcbad
 	.db <TX_0d0c, <TX_0d08, <TX_0d07, <TX_0d03
 .else
 extraTextIndices:
@@ -3248,17 +3247,17 @@ extraTextIndices:
 
 ; Potion in Syrup's hut
 @index0d:
-	.dw $cbad
+	.dw wcbad
 	.db <TX_0d02, <TX_0d08, <TX_0d04, <TX_0d03
 
 ; Gasha seed in Syrup's hut
 @index0e:
-	.dw $cbad
+	.dw wcbad
 	.db <TX_0d06, <TX_0d08, <TX_0d07, <TX_0d03
 
 ; TODO: ???
 @index0f:
-	.dw $cbad
+	.dw wcbad
 	.db $ff, <TX_0e06, <TX_0e05, $ff
 
 @index10:
@@ -3268,6 +3267,6 @@ extraTextIndices:
 
 ; Bombchus in Syrup's hut
 @index11:
-	.dw $cbad
+	.dw wcbad
 	.db <TX_0d0c, <TX_0d08, <TX_0d07, <TX_0d03
 .endif

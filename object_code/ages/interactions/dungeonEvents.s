@@ -244,7 +244,7 @@ interaction21_subid0a:
 
 	; Do something with the chest?
 	ld a,$01
-	ld ($cca2),a
+	ld (wcca2),a
 
 	ld hl,objectData.moonlitGrotto_onOrbActivation
 	call parseGivenObjectData
@@ -300,7 +300,7 @@ interaction21_subid0c:
 	ld a,(wActiveTriggers)
 	or a
 	ret z
-	ld ($cca2),a
+	ld (wcca2),a
 	ld hl,objectData.moonlitGrotto_onArmosSwitchPressed
 	call parseGivenObjectData
 	jp interactionDelete

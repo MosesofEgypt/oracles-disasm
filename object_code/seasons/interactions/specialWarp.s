@@ -36,7 +36,7 @@ specialWarp_subid1:
 	or a
 	ret nz
 	call objectGetTileAtPosition
-	ld a,($ccb3)
+	ld a,(wActiveTilePos)
 	cp l
 	ret nz
 	ld (hl),$eb
@@ -165,7 +165,7 @@ specialWarp_subidC:
 	ld a,$02
 	call objectSetCollideRadius
 +
-	ld a,($cc78)
+	ld a,(wLinkSwimmingState)
 	rlca
 	ret nc
 	call objectCheckCollidedWithLink_notDeadAndNotGrabbing
@@ -203,7 +203,7 @@ specialWarp_subidD:
 	ld a,$02
 	call objectSetCollideRadius
 +
-	ld a,($cc78)
+	ld a,(wLinkSwimmingState)
 	rlca
 	ret nc
 	call objectCheckCollidedWithLink_notDeadAndNotGrabbing

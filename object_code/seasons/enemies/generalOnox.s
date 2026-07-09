@@ -625,11 +625,11 @@ generalOnox_subid2:
 	ld l,e
 	inc (hl)
 	ld a,$30
-	ld ($cd08),a
+	ld (wScreenOffsetY),a
 	ld a,$08
-	ld ($cbae),a
+	ld (wTextboxFlags),a
 	ld a,$06
-	ld ($cbac),a
+	ld (wTextboxPosition),a
 	ld bc,TX_5022
 	jp showText
 

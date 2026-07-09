@@ -201,7 +201,7 @@ interactionCode4e:
 	ld a,$80
 	ld (wTmpcfc0.genericCutscene.cfd3),a
 	ld a,CUTSCENE_S_DIN_DANCING
-	ld ($cc04),a
+	ld (wCutsceneTrigger),a
 	ld a,$08
 	call setLinkIDOverride
 	ld l,$02

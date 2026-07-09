@@ -24,7 +24,7 @@
 ;   wTmpcfc0.shootingGallery.cfd9 - Pointer to right shoulder (subid $03)
 ;   wTmpcfc0.normal.cfc0+$1a - Pointer to left claw (subid $04)
 ;   wTmpcfc0.targetCarts.beginGameTrigger - Pointer to right claw (subid $05)
-;   $cfdc - Pointer to left claw sphere (subid $06)
+;   wTmpcfc0.shootingGallery.disableGoronNpcs - Pointer to left claw sphere (subid $06)
 ;   wTmpcfc0.targetCarts.crystalsHitInFirstRoom - Pointer to right claw sphere (subid $07)
 ;   wTmpcfc0.genericCutscene.cfde - Pointer to left shoulder sphere (subid $08)
 ;   wTmpcfc0.genericCutscene.cfdf - Pointer to right shoulder sphere (subid $09)

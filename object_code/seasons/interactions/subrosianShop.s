@@ -208,7 +208,7 @@ interactionCode81:
 	ld l,$45
 	ld a,$01
 	ld (hl),a
-	ld hl,$cbea
+	ld hl,wStatusBarNeedsRefresh
 	set 2,(hl)
 	ld e,Interaction.subid
 	ld a,(de)
@@ -376,7 +376,7 @@ func_7973:
 	or a
 	ret z
 	ld a,$ff
-	ld ($cbea),a
+	ld (wStatusBarNeedsRefresh),a
 	ld e,$77
 	ld a,(de)
 	or a

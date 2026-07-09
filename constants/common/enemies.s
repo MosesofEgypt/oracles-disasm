@@ -152,7 +152,7 @@
 ; @postype{none}
 ; @Y{Tile index to spawn armos on (ie. $26))
 ; @X{Tile index to replace those tiles with once the armos spawn (ie. $a0)}
-; @subid_00{Red: activates when touched, or when nonzero is written to $cca2.}
+; @subid_00{Red: activates when touched, or when nonzero is written to wcca2.}
 ; @subid_01{Blue: activates when Link is close to it. Faster, extra health, moves toward
 ;           Link more actively. Records positions of killed armos in wTmpcfc0.genericCutscene.cfd0-wTmpcfc0.genericCutscene.cfdf. (Might
 ;           be used in a seasons puzzle?)}

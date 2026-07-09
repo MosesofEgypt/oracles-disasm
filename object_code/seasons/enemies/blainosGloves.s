@@ -477,7 +477,7 @@ seasonsFunc_0d_7915:
 	ld a,$09
 	call objectGetRelatedObject1Var
 	ld a,(hl)
-	ld ($d02c),a
+	ld (w1Link.knockbackAngle),a
 	add $04
 	and $18
 	rrca
@@ -508,8 +508,8 @@ seasonsFunc_0d_795c:
 	dec (hl)
 	ret nz
 	ld a,$14
-	ld ($d02b),a
-	ld ($d02d),a
+	ld (w1Link.invincibilityCounter),a
+	ld (w1Link.knockbackCounter),a
 	ret
 
 seasonsFunc_0d_796d:

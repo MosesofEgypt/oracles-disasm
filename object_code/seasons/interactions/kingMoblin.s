@@ -77,7 +77,7 @@ interactionCode95:
 	ld a,$95
 	ld (wInteractionIDToLoadExtraGfx),a
 	ld a,$05
-	ld ($cc1e),a
+	ld (wcc1e),a
 	call interactionInitGraphics
 	call objectSetVisible81
 	jr @state1

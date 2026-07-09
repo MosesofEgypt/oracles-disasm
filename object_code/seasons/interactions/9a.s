@@ -264,7 +264,7 @@ state1_subid3:
 	inc l
 	ld (hl),$50
 	ld a,$80
-	ld ($d01a),a
+	ld (w1Link.visible),a
 	ld a,$02
 	ld (w1Link.direction),a
 	call setLinkForceStateToState08

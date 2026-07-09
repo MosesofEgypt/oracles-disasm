@@ -31,7 +31,7 @@ interactionCode87:
 	call makuTree_spawnGnarledKey
 	ld hl,mainScripts.script710b
 	call interactionSetScript
-	ld a,($cc39)
+	ld a,(ws_cc39)
 	or a
 	jr nz,+
 	ld a,$01
@@ -147,7 +147,7 @@ makuTree_setAppropriateStage:
 @setStageToLast:
 	ld a,$0e
 @setStage:
-	ld ($cc39),a
+	ld (ws_cc39),a
 	ret
 
 makuTree_setRoomFlag40OnGnarledKeyGet:

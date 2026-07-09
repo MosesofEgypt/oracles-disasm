@@ -69,7 +69,7 @@ func_5b49:
 	call clearItems
 	pop de
 	xor a
-	ld ($d01a),a
+	ld (w1Link.visible),a
 	call clearPaletteFadeVariablesAndRefreshPalettes
 	ld a,$ff
 	ldh (<hDirtyBgPalettes),a
@@ -87,7 +87,7 @@ func_5b49:
 	ld a,$50
 	ld (w1Link.xh),a
 	ld a,$80
-	ld ($d01a),a
+	ld (w1Link.visible),a
 	ld a,$02
 	ld (w1Link.direction),a
 	call setLinkForceStateToState08

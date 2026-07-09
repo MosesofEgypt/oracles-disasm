@@ -138,7 +138,7 @@ seasonsFunc_03_67f8:
 	ld a,(wGenericCutscene.cbb8)
 	ld (wGfxRegs2.WINY),a
 	ld (wGfxRegs1.WINY),a
-	ld ($cbbc),a
+	ld (wGenericCutscene.cbbc),a
 	jr seasonsFunc_03_684c
 
 incCbb3:
@@ -371,7 +371,7 @@ seasonsFunc_03_69d1:
 	ld a,(wGenericCutscene.cbb8)
 	ld (wGfxRegs2.WINY),a
 	ld (wGfxRegs1.WINY),a
-	ld ($cbbc),a
+	ld (wGenericCutscene.cbbc),a
 	ret
 
 cutsceneHandler_0c_stage4:
@@ -418,13 +418,13 @@ cutsceneHandler_0c_stage5:
 	ld (wGenericCutscene.cbb8),a
 	ld (wGenericCutscene.cbbf),a
 	ld a,$10
-	ld ($cbbd),a
+	ld (wGenericCutscene.cbbd),a
 	ld a,$03
 	ld (wRoomStateModifier),a
 	ld bc,ROOM_SEASONS_0f2
 	call cutsceneHandler_0c_stage3@loadNewRoom
 	ld a,$ff
-	ld ($cd25),a
+	ld (wTilesetAnimation),a
 	ld e,$00
 	call loadObjectGfxHeaderToSlot4
 	ld a,GFXH_PIRATE_SHIP_ARRIVING_LAYOUT
@@ -491,7 +491,7 @@ seasonsFunc_03_6a9d:
 	jp queueDmaTransfer
 
 seasonsFunc_03_6aca:
-	ld hl,$cbbd
+	ld hl,wGenericCutscene.cbbd
 	dec (hl)
 	jr nz,seasonsFunc_03_6a9d
 	ld (hl),$10

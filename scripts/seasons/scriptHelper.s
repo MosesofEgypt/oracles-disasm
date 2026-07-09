@@ -844,7 +844,7 @@ subrosianFunc_58ac:
 	ld hl,wTmpcfc0.genericCutscene.cfde
 	jr +
 subrosianFunc_58b1:
-	ld hl,$cfdc
+	ld hl,wTmpcfc0.shootingGallery.disableGoronNpcs
 +
 	ld (hl),d
 	inc hl
@@ -1285,7 +1285,7 @@ zelda_checkIfLinkFullyHealed:
 
 ; Unused function?
 	ld hl,wLinkHealth
-	ld a,($cbe4)
+	ld a,(wDisplayedHearts)
 	cp (hl)
 	ret nz
 	ld e,$7f
@@ -1384,7 +1384,7 @@ headSmelter_loadDanceMovements:
 	ld hl,w1Link.yh
 	ld a,$68
 	sub (hl)
-	ld ($cc6c),a
+	ld (wLinkStateParameter),a
 	ld l,<w1Link.direction
 	ld (hl),DIR_DOWN
 	ld l,<w1Link.angle
@@ -1392,7 +1392,7 @@ headSmelter_loadDanceMovements:
 	ld hl,wTmpcfc0.genericCutscene.cfde
 	ld bc,mainScripts.headSmelterScript_danceMovementText1
 	call headSmelter_loadScriptIntoWram
-	ld hl,$cfdc
+	ld hl,wTmpcfc0.shootingGallery.disableGoronNpcs
 	ld bc,mainScripts.headSmelterScript_danceMovementText2
 
 headSmelter_loadScriptIntoWram:
@@ -1691,7 +1691,7 @@ seasonsFunc_15_5cf0:
 seasonsFunc_15_5cf7:
 	push de
 	ld a,$ff
-	ld ($cbea),a
+	ld (wStatusBarNeedsRefresh),a
 	ld h,>wc600Block
 	ld de,wTmpcfc0.genericCutscene.cfdf
 	ld c,$80
@@ -1786,7 +1786,7 @@ d4Keyhole_setState0eDisableAllSorts:
 d4KeyHolw_disableAllSorts:
 	ld a,$01
 	ld (wMenuDisabled),a
-	ld ($cca5),a
+	ld (wcc8b),a
 	ld a,$ff
 	ld (wDisabledObjects),a
 	jp interactionSetAlwaysUpdateBit
@@ -2974,7 +2974,7 @@ zeldaKidnapped_moblinData:
 
 linkedFunc_15_6430:
 	ld a,(wcce2)
-	ld hl,$cbaa
+	ld hl,wcbaa
 	ldi (hl),a
 	ld (hl),$00
 	ld a,(wcce3)

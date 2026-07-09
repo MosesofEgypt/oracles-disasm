@@ -16,7 +16,7 @@ interactionCode9c:
 @state0:
 	ld a,$01
 	ld (de),a
-	ld a,($cc4e)
+	ld a,(wRoomStateModifier)
 	or a
 	jp nz,interactionDelete
 	ld a,$06
@@ -30,7 +30,7 @@ interactionCode9c:
 	ld a,$05
 	jr ++
 +
-	ld a,($cc88)
+	ld a,(wWarpsDisabled)
 	or a
 	ret nz
 	ld a,(wLinkObjectIndex)
@@ -66,7 +66,7 @@ interactionCode9c:
 	call resetLinkInvincibility
 	ld a,$83
 	ld (wDisabledObjects),a
-	ld ($cc88),a
+	ld (wWarpsDisabled),a
 	call setLinkForceStateToState08
 	call interactionSetAlwaysUpdateBit
 	xor a

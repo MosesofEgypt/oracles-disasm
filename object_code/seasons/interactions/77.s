@@ -29,13 +29,13 @@ interactionCode77:
 	ld a,(de)
 	or a
 	jr nz,@func_74dd
-	ld a,($c486)
+	ld a,(wGfxRegs1.SCY)
 	ld b,a
 	ld a,$7d
 	sub b
 	ld e,$4b
 	ld (de),a
-	ld a,($c487)
+	ld a,(wGfxRegs1.SCX)
 	ld b,a
 	ld a,$54
 	sub b
@@ -43,13 +43,13 @@ interactionCode77:
 	ld (de),a
 	ret
 @func_74dd:
-	ld a,($c488)
+	ld a,(wGfxRegs1.WINY)
 	ld b,a
 	ld a,$e9
 	add b
 	ld e,$4b
 	ld (de),a
-	ld a,($c489)
+	ld a,(wGfxRegs1.WINX)
 	ld b,a
 	ld a,$19
 	add b

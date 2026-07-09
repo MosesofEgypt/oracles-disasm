@@ -309,7 +309,7 @@ tarmArmosWallByStump:
 
 tarmEscapedLostWoods:
 	call returnIfScrollMode01Unset
-	ld a,($cd02)
+	ld a,(wScreenTransitionDirection)
 	or a
 	jp nz,interactionDelete
 ++
@@ -808,7 +808,7 @@ sidescrollingStaticSeedSatchel:
 	jp misc1_spawnTreasureBCifRoomFlagBit5NotSet
 
 mtCuccoBananaTree:
-	ld a,($cc4e)
+	ld a,(wRoomStateModifier)
 	or a
 	jp nz,interactionDelete
 	call getThisRoomFlags

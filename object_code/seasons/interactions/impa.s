@@ -187,11 +187,11 @@ interactionCode9d:
 @@subid4:
 	call checkInteractionSubstate
 	jr nz,func_5eb1
-	ld a,($cbc3)
+	ld a,(wUseSimulatedInput)
 	rlca
 	ret nc
 	xor a
-	ld ($cbc3),a
+	ld (wUseSimulatedInput),a
 	inc a
 	ld (wDisabledObjects),a
 	call interactionIncSubstate

@@ -306,11 +306,11 @@ piratianCaptain_preCutsceneScene:
 	checkcfc0bit 2
 	asm15 scriptHelp.piratianCaptain_simulatedInput
 	enableallobjects
-	checkflagset $07, $cbc3
+	checkflagset $07, wUseSimulatedInput
 	setdisabledobjectsto91
 	delay 5
 	asm15 scriptHelp.piratianCaptain_setLinkInvisible
-	writememory $cbc3, $00
+	writememory wUseSimulatedInput, $00
 	delay 8
 	setdisabledobjectsto11
 	writememory wCutsceneTrigger, CUTSCENE_S_PIRATES_DEPART

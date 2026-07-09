@@ -64,7 +64,7 @@ cutscene06Func1:
 	ld (hl),$58
 	inc hl
 	ld (hl),$02
-	ld hl,$cbb6
+	ld hl,wGenericCutscene.cbb6
 	ld (hl),$28
 	call fastFadeinFromWhite
 	call incCutsceneState2
@@ -133,7 +133,7 @@ cutscene06Func2:
 	ld bc,$00f0
 	call compareHlToBc
 	ret nc
-	ld a,($c482)
+	ld a,(wKeysJustPressed)
 	and $01
 	ret z
 +
@@ -146,12 +146,12 @@ seasonsFunc_03_7458:
 	ld a,(wFrameCounter)
 	and $07
 	ret nz
-	ld hl,$cbb6
+	ld hl,wGenericCutscene.cbb6
 	ld a,(hl)
 	or a
 	ret z
 	dec (hl)
-	ld hl,$c487
+	ld hl,wGfxRegs1.SCX
 	inc (hl)
 	ret
 cutscene06Func3:
@@ -553,7 +553,7 @@ cutsceneDinImprisoned:
 	ld a,$81
 	call seasonsFunc_03_7a6b
 	ld a,$81
-	ld ($cbcb),a
+	ld (wOpenedMenuType),a
 	call seasonsFunc_03_7a88
 	ld bc,TX_1e05
 	call showText
@@ -581,7 +581,7 @@ cutsceneDinImprisoned:
 	ld hl,wGenericCutscene.cbb3
 	ld (hl),$f0
 	xor a
-	ld ($cbcb),a
+	ld (wOpenedMenuType),a
 	jp incCutsceneState2
 
 @state7:
@@ -665,7 +665,7 @@ cutscene08Func0:
 	ldh (<hCameraY),a
 	ldi a,(hl)
 	ldh (<hCameraX),a
-	ld de,$cbb6
+	ld de,wGenericCutscene.cbb6
 	ldi a,(hl)
 	ld (de),a
 	inc de
@@ -790,7 +790,7 @@ cutscene08Func6:
 	ret nz
 	ld a,$01
 	ld (wMenuDisabled),a
-	ld bc,$1e04
+	ld bc,TX_1e04
 	call showText
 	jp incCutsceneState2
 cutscene08Func7:
@@ -818,7 +818,7 @@ seasonsFunc_03_7909:
 	sub $07
 	ret nz
 	ld (hl),a
-	ld hl,$cbb6
+	ld hl,wGenericCutscene.cbb6
 	inc (hl)
 	ret
 
@@ -909,7 +909,7 @@ seasonsFunc_03_79af:
 	ld de,wGfxRegs1.SCY
 	dec b
 	jr nz,+
-	ld de,$c488
+	ld de,wGfxRegs1.WINY
 +
 	jp seasonsFunc_03_79cd
 
@@ -919,7 +919,7 @@ seasonsFunc_03_79bb:
 	ldi (hl),a
 	ldh a,(<hCameraX)
 	ldi (hl),a
-	ld de,$cbb6
+	ld de,wGenericCutscene.cbb6
 	ld a,(de)
 	ldi (hl),a
 	inc de
@@ -960,7 +960,7 @@ seasonsTable_03_79e9:
 
 seasonsFunc_03_7a01:
 	ld hl,$cbd5
-	ld de,$c485
+	ld de,wGfxRegs1.LCDC
 	ld b,$0c
 -
 	ld a,(de)
@@ -975,7 +975,7 @@ seasonsFunc_03_7a01:
 
 seasonsFunc_03_7a17:
 	ld hl,$cbd5
-	ld de,$c485
+	ld de,wGfxRegs1.LCDC
 	ld b,$0c
 -
 	ldi a,(hl)
@@ -983,8 +983,8 @@ seasonsFunc_03_7a17:
 	inc e
 	dec b
 	jr nz,-
-	ld a,($c485)
-	ld ($c497),a
+	ld a,(wGfxRegs1.LCDC)
+	ld (wGfxRegsFinal.LCDC),a
 	ld ($ff00+R_LCDC),a
 	ret
 
@@ -1145,7 +1145,7 @@ cutscene0dFunc0:
 	ld (hl),$3c
 	ld a,$13
 	call loadGfxRegisterStateIndex
-	ld a,($c48d)
+	ld a,(wGfxRegs2.SCX)
 	ldh (<hCameraX),a
 	xor a
 	ldh (<hCameraY),a
@@ -1206,10 +1206,10 @@ cutscene0dFunc6:
 	ret nz
 	call incCutsceneState2
 	ld a,$08
-	ld ($cbae),a
+	ld (wTextboxFlags),a
 	ld a,$03
-	ld ($cbac),a
-	ld bc,$0c15
+	ld (wTextboxPosition),a
+	ld bc,TX_0c15
 	jp showText
 cutscene0dFunc7:
 	call retIfTextIsActive
@@ -1274,7 +1274,7 @@ cutscene0eFunc1:
 	ret nz
 	ld (hl),$14
 	call incCutsceneState2
-	ld hl,$cbae
+	ld hl,wTextboxFlags
 	ld (hl),$04
 	ld bc,$1719
 	jp showText
@@ -1329,7 +1329,7 @@ cutscene0eFunc3:
 	ldh (<hFF8B),a
 	ld a,$f0
 	ld c,a
-	ld ($c4ae),a
+	ld (wPaletteThread_parameter),a
 	call seasonsFunc_35cc
 	ld a,$ff
 	ldh (<hDirtyBgPalettes),a
@@ -1361,7 +1361,7 @@ cutscene0eFunc5:
 	ret nz
 	ld (hl),$5a
 	ld a,$f0
-	ld ($c4ae),a
+	ld (wPaletteThread_parameter),a
 	call brightenRoom
 	ld a,$ff
 	ld (wDirtyFadeBgPalettes),a
@@ -1389,7 +1389,7 @@ cutscene0eFunc7:
 	ld a,$82
 	ld (wWarpDestGroup),a
 	ld a,$5d
-	ld ($cc64),a
+	ld (wWarpDestRoom),a
 	xor a
 	ld (wWarpTransition),a
 	ld a,$03

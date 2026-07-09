@@ -31,7 +31,7 @@ interactionCodeab:
 	ld a,(wLinkObjectIndex)
 	cp $d0
 	jr z,+
-	ld a,($d10d)
+	ld a,(w1Companion.xh)
 	jr ++
 +
 	ld a,(w1Link.xh)

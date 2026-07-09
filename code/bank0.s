@@ -4122,10 +4122,10 @@ func_1383:
 	ld a,$08
 	ld (wScreenVariables),a
 	ld a,$03
-	ld ($cd04),a
+	ld (wScreenTransitionState),a
 	xor a
-	ld ($cd05),a
-	ld ($cd06),a
+	ld (wScreenTransitionState2),a
+	ld (wScreenTransitionState3),a
 	ld a,$01
 	rst_setrombank
 	call bank1.func_49c9
@@ -14298,7 +14298,7 @@ generateVramTilesWithRoomChanges:
 ;;
 ; Gets the mapping data for a tile (the values to form the 2x2 tile).
 ;
-; Tile indices go to $cec0-$cec3, and flag values go to $cec4-$cec7.
+; Tile indices go to $cec0-$cec3, and flag values go to wEnemyPlacement.cec4-$cec7.
 ;
 ; @param	a	Tile to get mapping data for
 ; @param[out]	b	Top-left flag value
@@ -14330,7 +14330,7 @@ getTileMappingData:
 .endif
 
 	pop de
-	ld a,($cec4)
+	ld a,(wEnemyPlacement.cec4)
 	ld b,a
 	ld a,(wTmpcec0)
 	ld c,a

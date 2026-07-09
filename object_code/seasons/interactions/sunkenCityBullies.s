@@ -82,7 +82,7 @@ interactionCode76:
 	and $1f
 	call z,func_743e
 	ld a,$78
-	ld ($cc85),a
+	ld (wInstrumentsDisabledCounter),a
 	ret
 @state2:
 	ld c,$40

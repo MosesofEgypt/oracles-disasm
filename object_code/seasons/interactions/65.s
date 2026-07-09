@@ -148,7 +148,7 @@ func_5258:
 func_5261:
 	ld a,$02
 	ld ($ff00+R_SVBK),a
-	ld a,($cd09)
+	ld a,(wScreenOffsetX)
 	cpl
 	inc a
 	swap a

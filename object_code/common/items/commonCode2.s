@@ -399,7 +399,7 @@ itemMimicBgTile:
 	; animation depending on whether they reuse the same tile or not.
 	; If they don't, it assumes that the graphics are adjacent to each other, due to
 	; sprite limitations?
-	ld a,($cec1)
+	ld a,(wEnemyPlacement.numEnemies)
 	sub c
 	jr z,+
 	ld a,$01

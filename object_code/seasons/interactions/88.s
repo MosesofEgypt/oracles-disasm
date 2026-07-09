@@ -80,7 +80,7 @@ interactionCode88:
 	ld a,(hl)
 	call loadPaletteHeader
 	ld a,$ff
-	ld ($cd29),a
+	ld (wLoadedTilesetPalette),a
 	ld a,(de)
 	or a
 	ld a,$d2

@@ -200,7 +200,7 @@ partCode35:
 	ldi a,(hl)
 	cp $11
 	jr z,@@dropLinkHeldItem
-	ld a,($d221)
+	ld a,(w1ParentItem2.animParameter)
 	or a
 	jr nz,@state2func_67c9
 	ld e,$f3

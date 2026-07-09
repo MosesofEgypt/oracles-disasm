@@ -966,11 +966,11 @@ fileSelectMode6:
 	call secretFunctionCaller
 	jp nz,fileSelect_printError
 
-	ld a,($ced2)
+	ld a,(wEnemyPlacement.placedEnemyPositions+$02)
 	or a
 	jr z,+
 
-	ld a,($cec5)
+	ld a,(wEnemyPlacement.cec5)
 .ifdef ROM_AGES
 	dec a
 .else; ROM_SEASONS
@@ -1037,9 +1037,9 @@ runSecretEntryMenu:
 	jr nz,@invalidSecret
 
 
-	; [$cec4] = the unpacked secret's "wShortSecretIndex" value (only for short secret
+	; [wEnemyPlacement.cec4] = the unpacked secret's "wShortSecretIndex" value (only for short secret
 	; types)
-	ld a,($cec4)
+	ld a,(wEnemyPlacement.cec4)
 	ld b,a
 	ld a,(wSecretInputType)
 	cp $ff
@@ -1055,7 +1055,7 @@ runSecretEntryMenu:
 	cp $02
 	jr z,@loadRingSecretData
 
-	; 5-letter secret: check that [$cec4] == [wSecretInputType]&$3f (basically, this
+	; 5-letter secret: check that [wEnemyPlacement.cec4] == [wSecretInputType]&$3f (basically, this
 	; is the short secret type that we're looking for, not somebody else's)
 	and $3f
 	sub b
@@ -2306,7 +2306,7 @@ fileSelectDrawAcornCursor:
 ;;
 ; This is probably for linking to transfer ring secrets
 runGameLinkMenu:
-	ld hl,$cbb6
+	ld hl,wGenericCutscene.cbb6
 	inc (hl)
 	call fileSelect_redrawDecorationsAndSetWramBank4
 

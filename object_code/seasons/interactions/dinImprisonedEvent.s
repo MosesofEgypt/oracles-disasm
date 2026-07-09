@@ -501,17 +501,17 @@ interactionCode4f_state1:
 	jp interactionIncSubstate
 
 @func_7a1e:
-	ld a,($c486)
+	ld a,(wGfxRegs1.SCY)
 	ld b,a
 	ld a,c
 	sub b
 	sub $40
 	ld b,a
-	ld a,($c486)
+	ld a,(wGfxRegs1.SCY)
 	add b
 	cp $10
 	ret nc
-	ld ($c486),a
+	ld (wGfxRegs1.SCY),a
 	ldh (<hCameraY),a
 	ret
 

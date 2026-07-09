@@ -78,7 +78,7 @@ interactionCode75:
 	ld a,$04
 	call interactionSetAnimation
 @subid2:
-	ld hl,$cbb6
+	ld hl,wGenericCutscene.cbb6
 	ld a,(hl)
 	or a
 	ret z

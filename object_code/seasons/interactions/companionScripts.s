@@ -93,7 +93,7 @@ companionScript_subid01:
 	jr nz,companionScript_delete
 	or a
 	ld a,$01
-	ld ($ccf4),a
+	ld (wDiggingUpEnemiesForbidden),a
 	ret nz
 	jp interactionAnimateAsNpc
 
@@ -174,7 +174,7 @@ companionScript_subid06:
 	ld hl,mainScripts.companionScript_mooshInMtCucco
 	jp interactionSetScript
 @state1:
-	ld a,($d13d)
+	ld a,(w1Companion.var3d)
 	or a
 	jr z,@goToRunScriptThenDelete
 	ld e,$78
@@ -190,9 +190,9 @@ companionScript_subid06:
 	ld (wMenuDisabled),a
 	ld hl,w1Link.enabled
 	call objectTakePosition
-	ld a,($d10b)
+	ld a,(w1Companion.yh)
 	ld b,a
-	ld a,($d10d)
+	ld a,(w1Companion.xh)
 	ld c,a
 	call objectGetRelativeAngle
 	ld e,$49
@@ -200,7 +200,7 @@ companionScript_subid06:
 	ld a,$02
 	ld (w1Companion.direction),a
 	add $01
-	ld ($d13f),a
+	ld (w1Companion.var3f),a
 @goToRunScriptThenDelete:
 	jp companionScript_runScriptDeleteWhenDone
 @state2:
@@ -281,7 +281,7 @@ companionScript_giveFlute:
 	ld c,a
 	ld a,TREASURE_FLUTE
 	call giveTreasure
-	ld hl,$cbea
+	ld hl,wStatusBarNeedsRefresh
 	set 0,(hl)
 	ld e,Interaction.subid
 	ld a,$01

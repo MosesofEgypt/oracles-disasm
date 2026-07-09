@@ -1203,7 +1203,7 @@ blackTowerCompleteCutsceneHandler:
 	ld (wTilesetFlags),a
 	ld (wGfxRegs1.LYC),a
 	ld (wGfxRegs2.SCY),a
-	ld ($d01a),a
+	ld (w1Link.visible),a
 	ld a,$10
 	ld (wScreenOffsetY),a
 	call checkIsLinkedGame
@@ -2059,7 +2059,7 @@ func_701d:
 	ret c
 	call func_7098
 	ld a,$0f
-	ld ($ce5d),a
+	ld (wRoomCollisions+$5d),a
 	ret
 
 func_7098:

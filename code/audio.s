@@ -1515,7 +1515,7 @@ standardCmdChannel6:
 	inc de
 	ld a,(de)
 	ld h,a
-	ld a,($c074)
+	ld a,(wChannelsEnabled+$07)
 	cp $00
 	jr nz,@end
 

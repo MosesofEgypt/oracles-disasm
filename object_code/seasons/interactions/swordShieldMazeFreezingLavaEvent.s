@@ -138,14 +138,14 @@ interactionCode69:
 	ret nz
 	jp interactionDelete
 @func_5a0a:
-	ld a,($cc57)
+	ld a,(wDungeonFloor)
 	inc a
-	ld ($cc57),a
+	ld (wDungeonFloor),a
 	call getActiveRoomFromDungeonMapPosition
-	ld ($cc64),a
+	ld (wWarpDestRoom),a
 	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	ld (wWarpDestPos),a
-	ld a,($cc49)
+	ld a,(wActiveGroup)
 	or $80
 	ld (wWarpDestGroup),a
 	xor a

@@ -166,9 +166,9 @@ func_6b77:
 	ld hl,bitTable
 	add l
 	ld l,a
-	ld a,($ccd4)
+	ld a,(wShootingGalleryHitTargets)
 	or (hl)
-	ld ($ccd4),a
+	ld (wShootingGalleryHitTargets),a
 	jr func_6baf
 
 func_6b9f:

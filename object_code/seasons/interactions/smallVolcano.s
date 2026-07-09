@@ -43,7 +43,7 @@ interactionCode51:
 @state0:
 	inc a
 	ld (de),a
-	ld ($ccae),a
+	ld (wScreenShakeMagnitude),a
 	ld e,$42
 	ld a,(de)
 	ld hl,table_7acb

@@ -362,7 +362,7 @@ interactionCodedc_subid6:
 	jp nz,interactionDelete
 	call interactionIncState
 +
-	ld a,($cc31)
+	ld a,(wToggleBlocksState)
 	bit 6,a
 	ret z
 	call getFreeInteractionSlot
@@ -476,7 +476,7 @@ interactionCodedc_subid7:
 	inc a
 	jp z,interactionDelete
 	xor a
-	ld ($ccc8),a
+	ld (wccb1),a
 	ld e,$44
 	ld a,$01
 	ld (de),a

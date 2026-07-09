@@ -1844,7 +1844,6 @@ wInteractionIDToLoadExtraGfx: ; $cc1e/$cc1d
 .ifdef ROM_SEASONS
 
 wcc1e: ; -/$cc1e
-; Unused?
 	db
 .endif
 
@@ -2428,7 +2427,7 @@ wChestContentsOverride: ; $cca3/$ccbd
 ; Used for farore's secrets, maybe also the chest minigame?
 	dw
 
-wEyePuzzleCorrectDirection: ; $cca5/$ccbe
+wEyePuzzleCorrectDirection: ; $cca5/$ccbf
 ; Correct direction to move in for the scrambled rooms in the final dungeon
 	db
 wBlockPushAngle: ; $cca6/$ccc0

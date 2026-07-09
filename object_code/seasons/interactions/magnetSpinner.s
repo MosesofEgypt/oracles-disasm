@@ -10,7 +10,7 @@ interactionCode7b:
 	dec (hl)
 	jr z,+
 	ld a,d
-	ld ($ccb0),a
+	ld (wLinkRidingObject),a
 +
 	ld e,Interaction.state
 	ld a,(de)
@@ -54,14 +54,14 @@ interactionCode7b:
 	call interactionIncState
 	jp func_75e1
 @func_754e:
-	ld a,($ccb0)
+	ld a,(wLinkRidingObject)
 	or a
 	ret nz
 	ld c,$18
 	call objectCheckLinkWithinDistance
 	srl a
 	ret nz
-	ld a,($ccb4)
+	ld a,(wActiveTileIndex)
 	cp $3f
 	ret nz
 	ld a,(w1Link.state)
@@ -70,7 +70,7 @@ interactionCode7b:
 	ld a,$02
 	ld (wLinkForceState),a
 	xor a
-	ld ($cc6c),a
+	ld (wLinkStateParameter),a
 	ret
 @state2:
 	call func_75e1

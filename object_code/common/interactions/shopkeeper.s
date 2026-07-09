@@ -562,7 +562,7 @@ shopkeeperGetItemPrice:
 	call cpRupeeValue
 .endif
 	ld (wShopHaveEnoughRupees),a
-	ld ($cbad),a
+	ld (wcbad),a
 	ld hl,wTextNumberSubstitution
 	ld (hl),c
 	inc l

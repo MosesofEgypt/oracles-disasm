@@ -22,7 +22,7 @@ interactionCode62:
 	ld e,Interaction.state
 	ld a,$01
 	ld (de),a
-	ld ($ccbb),a
+	ld (wcca1),a
 	xor a
 	ld (wTmpcfc0.fallDownHoleEvent.cfd8),a
 	ld (wTmpcfc0.shootingGallery.cfd9),a

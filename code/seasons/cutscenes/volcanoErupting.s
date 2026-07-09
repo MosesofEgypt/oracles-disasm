@@ -116,7 +116,7 @@ cutsceneHandler_0b_stage2:
 	ld hl,wGenericCutscene.cbb5
 	call seasonsFunc_03_6db1
 	ld bc,$1488
-	ld hl,$cbb6
+	ld hl,wGenericCutscene.cbb6
 	call seasonsFunc_03_6db1
 	ld hl,wGenericCutscene.cbb4
 	dec (hl)

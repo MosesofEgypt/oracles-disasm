@@ -28,9 +28,9 @@ partCode44:
 	ld (de),a
 	call @func_73ae
 	call objectGetAngleTowardEnemyTarget
-	ld ($d02c),a
+	ld (w1Link.knockbackAngle),a
 	ld a,$18
-	ld ($d02d),a
+	ld (w1Link.knockbackCounter),a
 	ld a,$52
 	call playSound
 @normalStatus:

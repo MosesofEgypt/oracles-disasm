@@ -31,7 +31,7 @@ makuTreeScript_remoteCutscene:
 	disableinput
 	orroomflag $40
 makuTreeScript_remoteCutsceneDontSetRoomFlag:
-	writememory $cbae, $04
+	writememory wTextboxFlags, $04
 	setmusic MUS_MAKU_TREE
 	wait 40
 	asm15 hideStatusBar
@@ -3142,7 +3142,7 @@ zeldaScript_ganonBeat:
 	setcounter1 $dc
 	showtext TX_3d05
 	wait 60
-	writememory $cc04, $0f
+	writememory wCutsceneTrigger, $0f
 	scriptend
 
 zeldaScript_afterEscapingRoomOfRites:
@@ -5790,7 +5790,7 @@ script710b:
 	.dw unlinked
 	.dw linked
 unlinked:
-	jumptable_memoryaddress $cc39
+	jumptable_memoryaddress ws_cc39
 	.dw stage0
 	.dw script71a2
 	.dw script71a2
@@ -5807,7 +5807,7 @@ unlinked:
 	.dw script7223 ; highest essence gotten is 8, but wc6e5 is not $09
 	.dw stageFinishedGame
 linked:
-	jumptable_memoryaddress $cc39
+	jumptable_memoryaddress ws_cc39
 	.dw stage0
 	.dw script71a2
 	.dw script71a2
@@ -6172,14 +6172,14 @@ jewelHelperScript_eyeglassLakeSquareJewel:
 	.dw jewelHelperScript_squareJewel
 
 jewelHelperScript_squareJewel:
-	writememory $ccbd, TREASURE_SQUARE_JEWEL
-	writememory $ccbe, $00
+	writememory wChestContentsOverride, TREASURE_SQUARE_JEWEL
+	writememory wChestContentsOverride+$01, $00
 	settileat $57, TILEINDEX_CHEST
 	scriptend
 
 jewelHelperScript_40Rupees:
-	writememory $ccbd, TREASURE_RUPEES
-	writememory $ccbe, RUPEEVAL_040
+	writememory wChestContentsOverride, TREASURE_RUPEES
+	writememory wChestContentsOverride+$01, RUPEEVAL_040
 	settileat $57, TILEINDEX_CHEST
 	scriptend
 
@@ -7558,7 +7558,7 @@ troyScript_gameBegun:
 	disableinput
 	callscript troyScript_postGameEffects
 	callscript troyScript_giveReward
-	writememory $cbea, $ff
+	writememory wStatusBarNeedsRefresh, $ff
 	wait 90
 	enableallobjects
 	setdisabledobjectsto91

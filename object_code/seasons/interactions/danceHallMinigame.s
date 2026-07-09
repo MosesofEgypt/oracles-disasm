@@ -119,7 +119,7 @@ interactionCode6a:
 	ld a,$08
 +
 	ld (wTmpcfc0.targetCarts.savedBItem),a
-	ld ($cfdc),a
+	ld (wTmpcfc0.shootingGallery.disableGoronNpcs),a
 	call @@@func_5cdd
 	ld a,(wTmpcfc0.targetCarts.savedBItem)
 	ld hl,@@@table_5d0b

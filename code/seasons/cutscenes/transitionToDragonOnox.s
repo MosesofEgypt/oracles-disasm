@@ -315,16 +315,16 @@ seasonsFunc_0f_7182:
 	ldh a,(<hCameraY)
 	ld b,a
 	sub (hl)
-	ld ($c48c),a
+	ld (wGfxRegs2.SCY),a
 	inc l
 	xor a
 	sub (hl)
-	ld ($c48d),a
+	ld (wGfxRegs2.SCX),a
 	ld a,b
 	add $28
-	ld ($c4a0),a
+	ld (wGfxRegs6.SCY),a
 	xor a
-	ld ($c4a1),a
+	ld (wGfxRegs6.SCX),a
 	sub b
 	sub $50
 	cp $90
@@ -345,9 +345,9 @@ seasonsFunc_0f_7182:
 	cp $90
 	ret nc
 	ld (wGfxRegs2.LYC),a
-	ld a,($c4a0)
+	ld a,(wGfxRegs6.SCY)
 	sub (hl)
-	ld ($c4a0),a
+	ld (wGfxRegs6.SCY),a
 	ret
 table_71cb:
 	.db $ff $fe $01 $02

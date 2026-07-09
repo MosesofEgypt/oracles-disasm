@@ -75,7 +75,7 @@ nextToChestTile:
 	or a
 	ret nz
 ++
-	; Store chest position in $cca2
+	; Store chest position in wcca2
 	ld a,c
 	ld (wcca2),a
 

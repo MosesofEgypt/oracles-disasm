@@ -103,7 +103,7 @@ interactionCode43:
 	ld e,Interaction.var39
 	ld (de),a
 .endif
-	ld ($cbad),a
+	ld (wcbad),a
 
 	; Check the item type, see if Link is allowed to buy any more than he already has
 	pop af

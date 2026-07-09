@@ -79,15 +79,15 @@ interactionCode90:
 	call checkIsLinkedGame
 	jr nz,@label_0a_132
 	ld a,$34
-	ld ($ccbd),a
+	ld (wChestContentsOverride),a
 	ld a,$01
-	ld ($ccbe),a
+	ld (wChestContentsOverride+$01),a
 	jp interactionDelete
 @label_0a_132:
 	xor a
 	ld (wcca2),a
 	inc a
-	ld ($ccbb),a
+	ld (wcca1),a
 	ret
 
 @subid7Init:
