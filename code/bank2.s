@@ -4106,8 +4106,13 @@ setupHudIconBgTileProperties:
 .ifdef WIDE_INVENTORY_SPRITES
 	; handle an extra sprite
 	call @func1
+	ld a,(wcbe8)
+	rrca
+	ld hl,w4StatusBarAttributeMap+$08
+	jr nc,+
+		dec l
+	+
 	ld a,(wAItemSpriteAttribute3)
-	ld hl,w4StatusBarAttributeMap+$07
 	inc a
 	ret z
 .endif
