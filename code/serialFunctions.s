@@ -18,12 +18,12 @@ func_4000:
 	ldh a,(<hSerialInterruptBehaviour)
 	cp SERIAL_UPPER_NIBBLE + $d0
 	jr z,+
-	ld a,($d98b)
+	ld a,(w4d98b)
 	or a
 	jr nz,++
-	ld a,($d983)
+	ld a,(w4d983)
 	xor $01
-	ld ($d983),a
+	ld (w4d983),a
 	jr z,++
 	ldh a,(<hSerialInterruptBehaviour)
 +
@@ -64,7 +64,7 @@ sendPacketByte:
 	or a
 	jr nz,@getNumBytes
 	inc a
-	ld ($d98b),a
+	ld (w4d98b),a
 	ret
 
 @getNumBytes:
@@ -91,7 +91,7 @@ sendPacketByte:
 	add (hl)
 	ld (hl),a
 	xor a
-	ld ($d98b),a
+	ld (w4d98b),a
 	ret
 
 
@@ -100,7 +100,7 @@ func_4087:
 	or a
 	ret z
 	ld a,$01
-	ld ($d98b),a
+	ld (w4d98b),a
 	xor a
 	ld ($ff00+R_SB),a
 	ldh (<hReceivedSerialByte),a
@@ -123,7 +123,7 @@ disableSerialIfByteReceived:
 ; If available, receive another byte and write it to w4PacketBuffer+[w4PacketByteIndex].
 receivePacketByte:
 	xor a
-	ld ($d98b),a
+	ld (w4d98b),a
 	call waitForSerialByte
 	cp $80
 	ret z
@@ -144,7 +144,7 @@ receivePacketByte:
 	ld a,(w4DisableLinkTimeout)
 	or a
 	ret nz
-	ld hl,$d984
+	ld hl,w4d984
 	inc (hl)
 	ret nz
 	ld a,$86
@@ -172,7 +172,7 @@ receivePacketByte:
 +
 	xor a
 	ld (w4WaitingForNextByte),a
-	ld ($d984),a
+	ld (w4d984),a
 	ld ($ff00+R_SB),a
 	ret
 
@@ -190,7 +190,7 @@ receivePacketByte:
 	ld (hl),a
 	xor a
 	ld ($ff00+R_SB),a
-	ld ($d984),a
+	ld (w4d984),a
 	ret
 
 
@@ -461,7 +461,7 @@ func_426e:
 	ld (w4PacketByteIndex),a
 	ldh (<hFFBD),a
 	ld (w4PacketChecksum),a
-	ld ($d984),a
+	ld (w4d984),a
 	inc a
 	ld (w4WaitingForNextByte),a
 	jr setLinkTimerTo180
@@ -854,8 +854,8 @@ func_44ac:
 	ldi (hl),a ; $d980
 	ldi (hl),a ; w4PacketByteIndex
 	ldi (hl),a ; w4PacketChecksum
-	ldi (hl),a ; $d983
-	ldi (hl),a ; $d984
+	ldi (hl),a ; w4d983
+	ldi (hl),a ; w4d984
 	ldi (hl),a ; w4DisableLinkTimeout
 	ldi (hl),a ; w4LinkRetryCounter
 	ldh (<hFFBE),a

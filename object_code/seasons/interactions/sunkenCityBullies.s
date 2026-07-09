@@ -47,7 +47,7 @@ interactionCode76:
 	ld a,(hl)
 	jp interactionSetAnimation
 @func_7375:
-	ld hl,$d101
+	ld hl,w1Companion.id
 	ld a,(hl)
 	cp SPECIALOBJECT_DIMITRI
 	jr nz,@delete

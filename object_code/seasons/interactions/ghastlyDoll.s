@@ -60,11 +60,11 @@ interactionCode94:
 +
 	call objectGetRelativeAngle
 	xor $10
-	ld ($d109),a
+	ld (w1Companion.angle),a
 	ret
 @func_53b6:
 	ld a,$ff
-	ld ($d109),a
+	ld (w1Companion.angle),a
 	call interactionIncState
 	call objectSetInvisible
 	ld a,$5e
@@ -109,5 +109,5 @@ interactionCode94:
 	ld ($cba0),a
 	ld (wDisabledObjects),a
 	ld a,$02
-	ld ($d105),a
+	ld (w1Companion.substate),a
 	jp interactionDelete

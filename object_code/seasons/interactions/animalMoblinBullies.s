@@ -40,7 +40,7 @@ interactionCode73:
 	ld a,$01
 	ld (de),a
 	call interactionInitGraphics
-	ld hl,$d101
+	ld hl,w1Companion.id
 	ld a,(wAnimalCompanion)
 	cp SPECIALOBJECT_MOOSH
 	jr z,@func_70c1

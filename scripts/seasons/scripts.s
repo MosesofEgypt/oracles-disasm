@@ -5016,7 +5016,7 @@ companionScript_RickyLeavingYouInSpoolSwamp:
 	jumpifmemoryset $d13e, $01, +
 	scriptjump companionScript_RickyLeavingYouInSpoolSwamp
 +
-	writememory $d108, $03
+	writememory w1Companion.direction, $03
 	setcounter1 $10
 	writememory $d13f, $08
 	writememory $d103, $04
@@ -5038,11 +5038,11 @@ companionScript_RickyLeavingYouInSpoolSwamp:
 	jumpifmemoryset $d13e, $04, +
 	scriptjump -
 +
-	writememory $d108, $00
+	writememory w1Companion.direction, $00
 	writememory $d13f, $18
 	writememory $d103, $07
 	setcounter1 $96
-	writememory $d108, $02
+	writememory w1Companion.direction, $02
 	writememory $d13f, $03
 	writememory $d103, $06
 	enablemenu
@@ -5089,7 +5089,7 @@ companionScript_dimitriBeingBullied:
 
 companionScript_mooshEnteringSunkenCity:
 	writememory $d13f, $14
-	writememory $d108, $00
+	writememory w1Companion.direction, $00
 	checkpalettefadedone
 	disablemenu
 	writememory $d103, $09

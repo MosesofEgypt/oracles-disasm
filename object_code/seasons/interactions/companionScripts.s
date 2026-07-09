@@ -36,7 +36,7 @@ companionScript_subid00:
 	ld a,(wLinkObjectIndex)
 	and $01
 	jr z,companionScript_delete
-	ld a,($d101)
+	ld a,(w1Companion.id)
 	cp $0b
 	jr nz,companionScript_delete
 	ld a,(wAnimalCompanion)
@@ -65,7 +65,7 @@ companionScript_subid01:
 	.dw companionScript_giveFlute
 	.dw companionScriptFunc_6eaf
 @state0:
-	ld a,($d101)
+	ld a,(w1Companion.id)
 	cp $0d
 	jr nz,companionScript_delete
 	ld a,(wAnimalCompanion)
@@ -117,7 +117,7 @@ companionScript_subid02:
 	ld a,(wLinkObjectIndex)
 	and $01
 	jr z,companionScript_delete
-	ld a,($d101)
+	ld a,(w1Companion.id)
 	cp SPECIALOBJECT_RICKY
 	jr z,@func_6d72
 	cp SPECIALOBJECT_MOOSH
@@ -198,7 +198,7 @@ companionScript_subid06:
 	ld e,$49
 	ld (de),a
 	ld a,$02
-	ld ($d108),a
+	ld (w1Companion.direction),a
 	add $01
 	ld ($d13f),a
 @goToRunScriptThenDelete:
@@ -386,7 +386,7 @@ companionScript_subid08:
 @state0:
 	ld a,$01
 	ld (de),a
-	ld a,($d101)
+	ld a,(w1Companion.id)
 	cp SPECIALOBJECT_DIMITRI
 	jr nz,companionScript_delete2
 	ld a,(wAnimalCompanion)
