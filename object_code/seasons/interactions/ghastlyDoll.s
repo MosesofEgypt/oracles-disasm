@@ -106,7 +106,7 @@ interactionCode94:
 	call interactionDecCounter1
 	ret nz
 	xor a
-	ld ($cba0),a
+	ld (wTextIsActive),a
 	ld (wDisabledObjects),a
 	ld a,$02
 	ld (w1Companion.substate),a

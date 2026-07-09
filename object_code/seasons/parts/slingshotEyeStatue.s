@@ -11,7 +11,7 @@ partCode0d:
 	ld a,(hl)
 	ld b,a
 	and $07
-	ld hl,$ccba
+	ld hl,wActiveTriggers
 	call setFlag
 	bit 7,b
 	jr z,@normalStatus
@@ -34,6 +34,6 @@ partCode0d:
 	ret nz
 	ld e,Part.subid
 	ld a,(de)
-	ld hl,$ccba
+	ld hl,wActiveTriggers
 	call unsetFlag
 	jp objectSetInvisible

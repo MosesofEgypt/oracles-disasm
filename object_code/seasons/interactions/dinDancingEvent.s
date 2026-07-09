@@ -19,7 +19,7 @@ interactionCode4e:
 	jp nz,@seasonsFunc_08_754c
 	ld hl,objectData.objectData7e4e
 	call parseGivenObjectData
-	ld hl,$cc1d
+	ld hl,wInteractionIDToLoadExtraGfx
 	ld (hl),$4e
 	inc hl
 	ld (hl),$06

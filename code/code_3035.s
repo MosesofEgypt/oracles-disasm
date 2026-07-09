@@ -35,7 +35,7 @@ decCbb3:
 
 ;;
 incCbc1:
-	ld hl,$cbc1
+	ld hl,wMapMenu.drawWarpDestinations
 	inc (hl)
 	ret
 

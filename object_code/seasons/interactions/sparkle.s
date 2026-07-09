@@ -103,13 +103,13 @@ interactionCode84:
 	jr @animateAndFlicker
 
 @runSubid09:
-	ld a,($cbb9)
+	ld a,(wGenericCutscene.cbb9)
 	cp $06
 	jp z,interactionDelete
 	jr @animateFlickerAndTakeRelatedObj1Position
 
 @runSubid06:
-	ld a,($cbb9)
+	ld a,(wGenericCutscene.cbb9)
 	cp $07
 	jp z,interactionDelete
 

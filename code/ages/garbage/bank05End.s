@@ -76,7 +76,7 @@
 	inc hl
 	jr -
 +
-	ld a,($cc46)
+	ld a,(wGameKeysJustPressed)
 	and $10
 	ld a,(hl)
 	; BTN_BIT_RIGHT

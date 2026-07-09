@@ -144,12 +144,12 @@ interactionCode69:
 	call getActiveRoomFromDungeonMapPosition
 	ld ($cc64),a
 	ld a,(wTmpcfc0.genericCutscene.cfd0)
-	ld ($cc66),a
+	ld (wWarpDestPos),a
 	ld a,($cc49)
 	or $80
-	ld ($cc63),a
+	ld (wWarpDestGroup),a
 	xor a
-	ld ($cc65),a
+	ld (wWarpTransition),a
 	ld a,$03
 	ld (wWarpTransition2),a
 	call getThisRoomFlags

@@ -260,7 +260,7 @@ cutsceneHandler_0c_stage3:
 	call incCbb3
 	ld a,$40
 	ld (wGenericCutscene.cbb8),a
-	ld ($cbbf),a
+	ld (wGenericCutscene.cbbf),a
 	ld a,$1e
 	ld (wGenericCutscene.cbb4),a
 	ld a,$01
@@ -416,7 +416,7 @@ cutsceneHandler_0c_stage5:
 	call incCbb3
 	ld a,$90
 	ld (wGenericCutscene.cbb8),a
-	ld ($cbbf),a
+	ld (wGenericCutscene.cbbf),a
 	ld a,$10
 	ld ($cbbd),a
 	ld a,$03
@@ -472,7 +472,7 @@ cutsceneHandler_0c_stage5:
 seasonsFunc_03_6a9d:
 	ld a,$02
 	ld ($ff00+R_SVBK),a
-	ld a,($cbbe)
+	ld a,(wGenericCutscene.cbbe)
 	dec a
 	and $03
 	ld hl,seasonsTable_03_6b1a
@@ -497,7 +497,7 @@ seasonsFunc_03_6aca:
 	ld (hl),$10
 	ld a,$02
 	ld ($ff00+R_SVBK),a
-	ld a,($cbbe)
+	ld a,(wGenericCutscene.cbbe)
 	ld hl,seasonsTable_03_6b1a
 	rst_addDoubleIndex
 	rst_derefHl
@@ -520,10 +520,10 @@ seasonsFunc_03_6aca:
 	ld de,$8ce0
 	ld bc,$0102
 	call queueDmaTransfer
-	ld a,($cbbe)
+	ld a,(wGenericCutscene.cbbe)
 	inc a
 	and $03
-	ld ($cbbe),a
+	ld (wGenericCutscene.cbbe),a
 	ret
 
 seasonsTable_03_6b1a:
@@ -585,14 +585,14 @@ oamData_03_6b72:
 	.db $10 $a6 $4c $09
 
 incCbbfAndCbb8:
-	ld hl,$cbbf
+	ld hl,wGenericCutscene.cbbf
 	inc (hl)
 	ld hl,wGenericCutscene.cbb8
 	inc (hl)
 	ret
 
 decCbbfAndCbb8:
-	ld hl,$cbbf
+	ld hl,wGenericCutscene.cbbf
 	dec (hl)
 	ld hl,wGenericCutscene.cbb8
 	dec (hl)

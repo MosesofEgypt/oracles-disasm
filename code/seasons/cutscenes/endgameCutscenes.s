@@ -3,7 +3,7 @@
 ;;
 ; CUTSCENE_S_DIN_CRYSTAL_DESCENDING
 endgameCutsceneHandler_09:
-	ld de,$cbc1
+	ld de,wMapMenu.drawWarpDestinations
 	ld a,(de)
 	rst_jumpTable
 	.dw endgameCutsceneHandler_09_stage0
@@ -278,7 +278,7 @@ endgameCutsceneHandler_09_stage0_body:
 	ret nz
 	call seasonsFunc_03_646a
 	ld a,$01
-	ld ($cbc1),a
+	ld (wMapMenu.drawWarpDestinations),a
 	call disableActiveRing
 	jp fadeoutToWhite
 
@@ -741,13 +741,13 @@ endgameCutsceneHandler_09_stage1_body:
 	call seasonsFunc_03_645a
 	ret nz
 	call incCbc2
-	ld hl,$cbb5
+	ld hl,wGenericCutscene.cbb5
 	ld (hl),$d0
 --
 	ld hl,seasonsOamData_03_6472
 -
 	ld b,$30
-	ld de,$cbb5
+	ld de,wGenericCutscene.cbb5
 	ld a,(de)
 	ld c,a
 	jr +
@@ -769,7 +769,7 @@ endgameCutsceneHandler_09_stage1_body:
 	jp addSpritesToOam_withOffset
 
 @state3:
-	ld hl,$cbb5
+	ld hl,wGenericCutscene.cbb5
 	inc (hl)
 	jr nz,--
 	call clearOam
@@ -783,7 +783,7 @@ endgameCutsceneHandler_09_stage1_body:
 	call decCbb3
 	ret nz
 	call incCbc2
-	ld hl,$cbb5
+	ld hl,wGenericCutscene.cbb5
 	ld (hl),$d0
 @state4Func0:
 	ld hl,seasonsOamData_03_650b
@@ -791,7 +791,7 @@ endgameCutsceneHandler_09_stage1_body:
 
 @state5:
 	call @state4Func0
-	ld hl,$cbb5
+	ld hl,wGenericCutscene.cbb5
 	dec (hl)
 	ld a,(hl)
 	sub $a0
@@ -883,7 +883,7 @@ endgameCutsceneHandler_09_stage1_body:
 ;;
 ; CUTSCENE_S_ROOM_OF_RITES_COLLAPSE
 endgameCutsceneHandler_0f:
-	ld de,$cbc1
+	ld de,wMapMenu.drawWarpDestinations
 	ld a,(de)
 	rst_jumpTable
 	.dw endgameCutsceneHandler_0f_stage0
@@ -1271,7 +1271,7 @@ endgameCutsceneHandler_0a:
 	jp func_3539
 
 endgameCutsceneHandler_0a_body:
-	ld de,$cbc1
+	ld de,wMapMenu.drawWarpDestinations
 	ld a,(de)
 	rst_jumpTable
 	.dw endgameCutsceneHandler_0a_stage0
@@ -1525,7 +1525,7 @@ endgameCutsceneHandler_0a_stage1:
 	call seasonsFunc_03_646a
 	call enableActiveRing
 	ld a,$02
-	ld ($cbc1),a
+	ld (wMapMenu.drawWarpDestinations),a
 	ld hl,wLinkMaxHealth
 	ldd a,(hl)
 	ld (hl),a ; [wLinkHealth]
@@ -1603,7 +1603,7 @@ endgameCutsceneHandler_0a_stage2:
 	jr nz,+
 	call seasonsFunc_03_646a
 	ld a,$03
-	ld ($cbc1),a
+	ld (wMapMenu.drawWarpDestinations),a
 	ld a,$04
 	jp fadeoutToWhiteWithDelay
 +
@@ -1753,7 +1753,7 @@ endgameCutsceneHandler_0a_stage2:
 	ret nz
 	call seasonsFunc_03_646a
 	ld a,$03
-	ld ($cbc1),a
+	ld (wMapMenu.drawWarpDestinations),a
 	ld a,$04
 	jp fadeoutToWhiteWithDelay
 

@@ -19,7 +19,7 @@ interactionCode68:
 @state1:
 	ld c,$20
 	call objectUpdateSpeedZ_paramC
-	ld a,($cc77)
+	ld a,(wLinkInAir)
 	or a
 	jr nz,+
 	ld a,(wLinkObjectIndex)
@@ -91,7 +91,7 @@ interactionCode68:
 	ld a,(w1Link.state)
 	cp $01
 	jr nz,delete
-	ld a,($cc34)
+	ld a,(wLinkDeathTrigger)
 	or a
 	jr nz,delete
 	ld a,(wLinkObjectIndex)

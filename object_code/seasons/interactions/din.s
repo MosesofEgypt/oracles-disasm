@@ -359,7 +359,7 @@ dinState1_subid7:
 +
 	jp interactionAnimate
 @substate3:
-	ld a,($cba0)
+	ld a,(wTextIsActive)
 	or a
 	jr nz,+
 	call interactionDecCounter1

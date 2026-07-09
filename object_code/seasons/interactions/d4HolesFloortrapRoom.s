@@ -16,7 +16,7 @@ interactionCodec5:
 	ld bc,d4floorTrapRoom_tilesToBreak
 	jp d4floorTrapRoom_storeAddressOfFirstHoleTilePosition
 @state1:
-	ld a,($ccba)
+	ld a,(wActiveTriggers)
 	or a
 	ret z
 	ld a,$f1

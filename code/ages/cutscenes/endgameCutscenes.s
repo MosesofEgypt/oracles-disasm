@@ -599,7 +599,7 @@ endgameCutsceneHandler_20:
 	jp updateAllObjects
 
 @runStates:
-	ld de,$cbc1
+	ld de,wMapMenu.drawWarpDestinations
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -1006,7 +1006,7 @@ endgameCutsceneHandler_20:
 ;;
 ; CUTSCENE_ROOM_OF_RITES_COLLAPSE
 endgameCutsceneHandler_0f:
-	ld de,$cbc1
+	ld de,wMapMenu.drawWarpDestinations
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -1345,7 +1345,7 @@ endgameCutsceneHandler_0a:
 	jp func_3539
 
 @runStates:
-	ld de,$cbc1
+	ld de,wMapMenu.drawWarpDestinations
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -1578,7 +1578,7 @@ endgameCutsceneHandler_0a:
 	call cutscene_clearTmpCBB3
 	call cutscene_clearCFC0ToCFDF
 	ld a,$02
-	ld ($cbc1),a
+	ld (wMapMenu.drawWarpDestinations),a
 ++
 	jp fadeoutToWhite
 

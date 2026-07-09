@@ -36,7 +36,7 @@ func_69f3:
 
 func_69fe:
 	xor a
-	ld ($cbb5),a
+	ld (wGenericCutscene.cbb5),a
 	ld a,$1e
 	jp specialObjectSetAnimation
 
@@ -68,7 +68,7 @@ rickyState1:
 	or a
 	jr z,+
 	ld a,$01
-	ld ($cbb5),a
+	ld (wGenericCutscene.cbb5),a
 	ld l,SpecialObject.substate
 	inc (hl)
 +
@@ -200,7 +200,7 @@ rickyState1:
 	ld (hl),$ff
 .endif
 	ld a,$81
-	ld ($cc77),a
+	ld (wLinkInAir),a
 	ld hl,w1Link.speed
 	ld (hl),SPEED_80
 	ld l,<w1Link.speedZ

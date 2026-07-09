@@ -125,7 +125,7 @@ runVeranGhostSubid0:
 	jp playSound
 ++
 	call objectGetPosition
-	ld hl,$cfd5
+	ld hl,wTmpcfc0.genericCutscene.cfd5
 	ld (hl),b
 	inc l
 	ld e,Interaction.var3d
@@ -167,7 +167,7 @@ runVeranGhostSubid0:
 	jr ++
 +
 	call objectGetPosition
-	ld hl,$cfd5
+	ld hl,wTmpcfc0.genericCutscene.cfd5
 	ld (hl),b
 	inc l
 	ld e,Interaction.var3d

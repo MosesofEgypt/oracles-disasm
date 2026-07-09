@@ -75,7 +75,7 @@ interactionCode7b:
 @state2:
 	call func_75e1
 	call interactionAnimate
-	ld a,($cc79)
+	ld a,(wMagnetGloveState)
 	or a
 	jr z,@func_75bb
 	bit 1,a

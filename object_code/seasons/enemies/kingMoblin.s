@@ -50,7 +50,7 @@ enemyCode07:
 
 @state0:
 	ld a,$07
-	ld ($cc1c),a
+	ld (wEnemyIDToLoadExtraGfx),a
 	ld a,$8c
 	call loadPaletteHeader
 	ld a,$14

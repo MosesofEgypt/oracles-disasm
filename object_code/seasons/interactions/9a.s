@@ -20,11 +20,11 @@ interactionCode9a:
 	call interactionInitGraphics
 	jp objectSetVisible82
 @@subid2:
-	ld a,($cc36)
+	ld a,(wcdd7)
 	or a
 	jp z,interactionDelete
 	xor a
-	ld ($cc36),a
+	ld (wcdd7),a
 	ld a,GLOBALFLAG_DESTROYED_MOBLIN_HOUSE_REPAIRED
 	call unsetGlobalFlag
 	call getThisRoomFlags

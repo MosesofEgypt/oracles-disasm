@@ -31,7 +31,7 @@ partCode16:
 	ld (wTmpcfc0.normal.cfc0),a
 +
 	ld a,$01
-	ld ($cc36),a
+	ld (wcdd7),a
 @normalStatus:
 	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld a,(hl)
@@ -78,7 +78,7 @@ partCode16:
 	ld a,(wScreenVariables)
 	and $01
 	jr z,+
-	ld a,($cc34)
+	ld a,(wLinkDeathTrigger)
 	or a
 	jp nz,+
 	call func_6515

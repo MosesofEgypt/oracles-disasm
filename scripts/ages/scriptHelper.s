@@ -1268,7 +1268,7 @@ nayruScript13:
 	scriptjump @npcLoop
 
 ;;
-; Turns to face position value at $cfd5/$cfd6?
+; Turns to face position value at wTmpcfc0.genericCutscene.cfd5/$cfd6?
 turnToFaceSomething:
 	ld a,$0f
 

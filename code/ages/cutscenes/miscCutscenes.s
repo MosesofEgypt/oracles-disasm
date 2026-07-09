@@ -851,7 +851,7 @@ func_6733:
 	call setWarpDestVariables
 	ld a,(wTmpcfc0.genericCutscene.cfd3)
 	ld (wWarpDestPos),a
-	ld a,($cfd4)
+	ld a,(wTmpcfc0.goronDance.linkStartedDance)
 	ld (wcc50),a
 	ld a,$ff
 	ld (wActiveMusic),a
@@ -2327,7 +2327,7 @@ func_03_7244:
 	ldi (hl),a
 	ld (hl),a
 	ld a,$01
-	ld ($cc20),a
+	ld (wcc1f+$01),a
 	dec a
 	ld (wScrollMode),a
 	ld a,$08
@@ -2403,7 +2403,7 @@ func_03_7244:
 .endif
 	call refreshObjectGfx
 	xor a
-	ld ($cc20),a
+	ld (wcc1f+$01),a
 	ld hl,wTmpcbb3
 	ld (hl),$00
 	jp timewarpCutscene_incState

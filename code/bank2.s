@@ -6424,7 +6424,7 @@ inventoryMenuState2:
 	xor a
 	ldi (hl),a
 
-	; $cbc1 = 1
+	; wMapMenu.drawWarpDestinations = 1
 	inc a
 	ldi (hl),a
 

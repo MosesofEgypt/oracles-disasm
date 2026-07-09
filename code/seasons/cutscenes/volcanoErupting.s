@@ -64,7 +64,7 @@ cutsceneHandler_0b_stage1:
 
 @state1:
 	ld bc,$1478
-	ld hl,$cbb5
+	ld hl,wGenericCutscene.cbb5
 	call seasonsFunc_03_6db1
 	call seasonsFunc_03_6ddf
 	ret nz
@@ -113,7 +113,7 @@ seasonsFunc_03_6c5f:
 cutsceneHandler_0b_stage2:
 	call seasonsFunc_03_6df8
 	ld bc,$1430
-	ld hl,$cbb5
+	ld hl,wGenericCutscene.cbb5
 	call seasonsFunc_03_6db1
 	ld bc,$1488
 	ld hl,$cbb6
@@ -160,7 +160,7 @@ cutsceneHandler_0b_stage3:
 	inc (hl)
 
 @state2:
-	ld hl,$cbb5
+	ld hl,wGenericCutscene.cbb5
 	call seasonsFunc_03_6dcb
 	call seasonsFunc_03_6ddf
 	ret nz
@@ -188,7 +188,7 @@ cutsceneHandler_0b_stage3:
 	call seasonsFunc_03_6df8
 
 @state4:
-	ld hl,$cbb5
+	ld hl,wGenericCutscene.cbb5
 	call seasonsFunc_03_6dcb
 	call seasonsFunc_03_6ddf
 	ret nz
@@ -249,7 +249,7 @@ cutsceneHandler_0b_stage5:
 	jp seasonsFunc_03_6d9f
 
 @state4:
-	ld hl,$cbb5
+	ld hl,wGenericCutscene.cbb5
 	call seasonsFunc_03_6dcb
 	call seasonsFunc_03_6ddf
 	ret nz

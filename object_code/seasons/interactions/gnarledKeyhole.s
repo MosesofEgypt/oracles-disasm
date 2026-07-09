@@ -76,7 +76,7 @@ interactionCode21:
 	ld (wMenuDisabled),a
 	ld a,$4d
 	call playSound
-	ld a,($cc62)
+	ld a,(wActiveMusic2)
 	ld (wActiveMusic),a
 	call playSound
 	jp interactionDelete

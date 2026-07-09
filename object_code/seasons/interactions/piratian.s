@@ -184,14 +184,14 @@ func_6c3c:
 func_6c51:
 	call func_6c8b
 	jr z,++
-	ld a,($cc46)
+	ld a,(wGameKeysJustPressed)
 	bit 6,a
 	jr z,+
 	ld c,$01
 	ld b,$db
 	jp func_6c78
 +
-	ld a,($cc45)
+	ld a,(wGameKeysPressed)
 	bit 6,a
 	ret nz
 ++

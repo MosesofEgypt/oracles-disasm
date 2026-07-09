@@ -469,7 +469,7 @@ interactionCodedc_subid7:
 	ld d,a
 	jp interactionIncState
 @state4:
-	ld a,($cc30)
+	ld a,(wNumEnemies)
 	or a
 	ret nz
 	ld a,(wActiveTriggers)
@@ -545,7 +545,7 @@ interactionCodedc_subid8:
 	inc l
 	ld (hl),c
 	ld l,$4b
-	ld a,($ccbc)
+	ld a,(wcca2)
 	ld b,a
 	and $f0
 	ldi (hl),a
@@ -558,7 +558,7 @@ interactionCodedc_subid8:
 	ld a,$81
 	ld (wDisabledObjects),a
 	xor a
-	ld ($ccbc),a
+	ld (wcca2),a
 	ret
 table_6a02:
 	.db $66 $5b $43 $3b

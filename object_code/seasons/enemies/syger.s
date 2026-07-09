@@ -657,7 +657,7 @@ seasonsFunc_0e_5523:
 	ret
 
 func_554a:
-	ld a,($ccf0)
+	ld a,(wScentSeedActive)
 	or a
 	jr nz,+
 	ld a,(wFrameCounter)

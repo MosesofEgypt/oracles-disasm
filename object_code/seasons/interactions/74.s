@@ -39,7 +39,7 @@ interactionCode74:
 	ld a,(de)
 	ld hl,@table_7229
 	rst_addAToHl
-	ld a,($cbbf)
+	ld a,(wGenericCutscene.cbbf)
 	add (hl)
 	ld e,$4b
 	ld (de),a

@@ -4860,7 +4860,7 @@ loadObjectGfx2:
 	ld h,a
 
 .ifdef ROM_AGES
-	ld a,($cc20)
+	ld a,(wcc1f+$01)
 	or a
 	jr nz,@label_00_192
 .endif

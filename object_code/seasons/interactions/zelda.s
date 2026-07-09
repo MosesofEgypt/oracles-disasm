@@ -33,7 +33,7 @@ zelda_state0:
 
 @subid0:
 	ld a,$b0
-	ld ($cc1d),a
+	ld (wInteractionIDToLoadExtraGfx),a
 	ld (wLoadedTreeGfxIndex),a
 	
 	call getThisRoomFlags

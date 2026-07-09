@@ -2,7 +2,7 @@
 ; PART_HOLES_FLOORTRAP
 ; Variables:
 ;   var30 - pointer to tile at part's position
-;   $ccbf - set to 1 when button in hallway to D3 miniboss is pressed
+;   wEyePuzzleCorrectDirection - set to 1 when button in hallway to D3 miniboss is pressed
 ; ==================================================================================================
 partCode0a:
 	ld e,Part.subid
@@ -27,7 +27,7 @@ partCode0a:
 	ret
 @@state1:
 	; Proceed once button in D3 hallway to miniboss stepped on
-	ld a,($ccbf)
+	ld a,(wEyePuzzleCorrectDirection)
 	or a
 	ret z
 
@@ -57,7 +57,7 @@ partCode0a:
 	ld (hl),$20
 	ret
 @@state1:
-	ld a,($ccbf)
+	ld a,(wEyePuzzleCorrectDirection)
 	or a
 	ret z
 	call @breakFloorsAtInterval

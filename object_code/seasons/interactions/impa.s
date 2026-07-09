@@ -33,7 +33,7 @@ interactionCode9d:
 	jr nz,@@func_5d73
 	ld a,$1f
 	call playSound
-	ld a,($cc62)
+	ld a,(wActiveMusic2)
 	ld (wActiveMusic),a
 	jr ++
 @@func_5d73:
@@ -197,7 +197,7 @@ interactionCode9d:
 	call interactionIncSubstate
 	jp objectSetVisible
 func_5eb1:
-	ld a,($cba0)
+	ld a,(wTextIsActive)
 	or a
 	call nz,seasonsFunc_0a_6710
 	call interactionAnimateAsNpc

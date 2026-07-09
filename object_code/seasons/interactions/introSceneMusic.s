@@ -15,7 +15,7 @@ interactionCode85:
 	call getARoomFlags
 	and $40
 	jp nz,interactionDelete
-	ld hl,$cfd7
+	ld hl,wTmpcfc0.targetCarts.savedBItem
 	ld a,(hl)
 	or a
 	ret nz

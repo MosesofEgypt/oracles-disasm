@@ -32,7 +32,7 @@ specialWarp_subid1:
 	call objectGetTileAtPosition
 	ld (hl),$20
 +
-	ld a,($cc77)
+	ld a,(wLinkInAir)
 	or a
 	ret nz
 	call objectGetTileAtPosition
@@ -96,7 +96,7 @@ specialWarp_subid4:
 	call objectCheckCollidedWithLink_notDeadAndNotGrabbing
 	ret nc
 	xor a
-	ld ($cc65),a
+	ld (wWarpTransition),a
 @setWarpVariables:
 	ld h,d
 	ld l,$70
@@ -208,7 +208,7 @@ specialWarp_subidD:
 	ret nc
 	call objectCheckCollidedWithLink_notDeadAndNotGrabbing
 	ret nc
-	ld hl,$cc63
+	ld hl,wWarpDestGroup
 	ld (hl),$85
 	inc l
 	ld (hl),$12

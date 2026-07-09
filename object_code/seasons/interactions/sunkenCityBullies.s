@@ -105,7 +105,7 @@ interactionCode76:
 	cp $01
 	jr nz,@delete
 	xor a
-	ld ($cba0),a
+	ld (wTextIsActive),a
 	ld (wDisabledObjects),a
 	ld (wMenuDisabled),a
 @delete:

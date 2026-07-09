@@ -36,7 +36,7 @@ interactionCode57:
 	ret nc
 	ld a,$22
 	ld (w1Link.yh),a
-	ld a,($cc77)
+	ld a,(wLinkInAir)
 	or a
 	ret nz
 	ld a,$80

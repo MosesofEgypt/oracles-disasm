@@ -727,7 +727,7 @@ danceLeaderScript_danceTutorial:
 	showtext TX_0108
 	jumpiftextoptioneq $01, mainScripts.danceLeaderScript_promptForTutorial@needTutorial
 	showtext TX_0109
-	checkmemoryeq $cba0, $00
+	checkmemoryeq wTextIsActive, $00
 	scriptjump mainScripts.danceLeaderScript_promptForTutorial@danceLeaderScript_readyToDance
 
 

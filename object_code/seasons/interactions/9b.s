@@ -22,7 +22,7 @@ interactionCode9b:
 	cp $03
 	ret nz
 	ld (wMenuDisabled),a
-	ld hl,$cc63
+	ld hl,wWarpDestGroup
 	ld a,$80
 	ldi (hl),a
 	ld a,$6f

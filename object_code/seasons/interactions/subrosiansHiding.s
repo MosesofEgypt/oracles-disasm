@@ -49,7 +49,7 @@ rosaSubId0:
 	call playSound
 @func_67d1:
 	ld a,$80
-	ld ($cc9f),a
+	ld (wcc85),a
 	ld a,$01
 	ld (wDisableScreenTransitions),a
 	ldbc $01 INTERAC_ROSA_HIDING
@@ -73,12 +73,12 @@ rosaSubId0:
 	ld a,(wActiveRoom)
 	cp $cb
 	jp z,interactionDelete
-	ld a,($cc62)
+	ld a,(wActiveMusic2)
 	ld (wActiveMusic),a
 	call playSound
 @func_680c:
 	xor a
-	ld ($cc9f),a
+	ld (wcc85),a
 	ld (wDisableScreenTransitions),a
 	jp interactionDelete
 @substate1:
@@ -91,7 +91,7 @@ rosaSubId0:
 	ld a,(wActiveRoom)
 	cp $cb
 	jr nz,@func_67fb
-	ld a,($cc9e)
+	ld a,(wcc84)
 	cp $02
 	ret nz
 	ld e,$78
@@ -302,7 +302,7 @@ func_698f:
 	call playSound
 func_6995:
 	xor a
-	ld ($cc9e),a
+	ld (wcc84),a
 	jp interactionDelete
 
 ;;
@@ -336,7 +336,7 @@ strangeBrothersSubId0State1:
 	ld a,(wScreenVariables)
 	and $01
 	ret z
-	ld a,($cc9e)
+	ld a,(wcc84)
 	cp $02
 	ret nz
 	xor a

@@ -85,7 +85,7 @@ interactionCode90:
 	jp interactionDelete
 @label_0a_132:
 	xor a
-	ld ($ccbc),a
+	ld (wcca2),a
 	inc a
 	ld ($ccbb),a
 	ret
@@ -285,10 +285,10 @@ interactionCode90:
 	.dw @@substate1
 	.dw @@substate2
 @@substate0:
-	ld a,($ccbc)
+	ld a,(wcca2)
 	or a
 	ret z
-	ld a,($cc34)
+	ld a,(wLinkDeathTrigger)
 	or a
 	ret nz
 	call interactionIncSubstate

@@ -74,7 +74,7 @@ seasonsFunc_0f_6f75:
 	ld (wTmpcfc0.normal.cfc0+$0a),a
 	ld (wTmpcfc0.normal.cfc0+$0b),a
 	ld a,$80
-	ld ($cfce),a
+	ld (wTmpcfc0.fallDownHoleEvent.filler+$0e),a
 	ld (wLinkInAir),a
 	ld hl,wTmpcfc0.normal.cfc0+$08
 	inc (hl)
@@ -86,7 +86,7 @@ seasonsFunc_0f_6f75:
 	call fadeinFromWhite
 	ld a,$02
 	call loadGfxRegisterStateIndex
-	ld a,($cfce)
+	ld a,(wTmpcfc0.fallDownHoleEvent.filler+$0e)
 	ld (wGfxRegs2.LYC),a
 	ld a,$06
 	ldh (<hNextLcdInterruptBehaviour),a
@@ -137,8 +137,8 @@ seasonsFunc_0f_704d:
 	ld ($ff00+$70),a
 	ld a,$02
 	call loadGfxRegisterStateIndex
-	ld a,($cfce)
-	ld ($c490),a
+	ld a,(wTmpcfc0.fallDownHoleEvent.filler+$0e)
+	ld (wGfxRegs2.LYC),a
 	ld a,$06
 	ldh (<hNextLcdInterruptBehaviour),a
 	ret
@@ -223,7 +223,7 @@ seasonsFunc_0f_70b4_swapGraphics:
 	jp loadUncompressedGfxHeader
 
 @state3:
-	ld hl,$cfc9
+	ld hl,wTmpcfc0.fallDownHoleEvent.filler+$09
 	bit 7,(hl)
 	jr nz,+
 	ld l,$cb
@@ -246,7 +246,7 @@ seasonsFunc_0f_70b4_swapGraphics:
 	ret
 
 ;;
-; @param	hl	$cfca/$cfc9 in @state3
+; @param	hl	$cfca/wTmpcfc0.fallDownHoleEvent.filler+$09 in @state3
 seasons_func_0f_712a:
 	ld a,(hl)
 	cp $06
@@ -277,7 +277,7 @@ seasons_func_0f_712a:
 	ret
 
 seasonsFunc_0f_7159:
-	ld a,($cfcf)
+	ld a,(wTmpcfc0.fallDownHoleEvent.filler+$0f)
 	or a
 	ret nz
 	ld hl,wScreenShakeCounterY
@@ -331,8 +331,8 @@ seasonsFunc_0f_7182:
 	jr c,+
 	ld a,$c7
 +
-	ld ($c490),a
-	ld ($cfce),a
+	ld (wGfxRegs2.LYC),a
+	ld (wTmpcfc0.fallDownHoleEvent.filler+$0e),a
 	ld a,(wScreenShakeCounterY)
 	or a
 	ret z
@@ -340,11 +340,11 @@ seasonsFunc_0f_7182:
 	and $03
 	ld hl,table_71cb
 	rst_addAToHl
-	ld a,($c490)
+	ld a,(wGfxRegs2.LYC)
 	add (hl)
 	cp $90
 	ret nc
-	ld ($c490),a
+	ld (wGfxRegs2.LYC),a
 	ld a,($c4a0)
 	sub (hl)
 	ld ($c4a0),a

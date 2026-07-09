@@ -15,7 +15,7 @@ partCode33:
 	ld l,$d0
 	ld (hl),$50
 	ld b,$00
-	ld a,($cc45)
+	ld a,(wGameKeysPressed)
 	and $30
 	jr z,+
 	ld b,$20

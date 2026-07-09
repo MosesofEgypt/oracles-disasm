@@ -185,9 +185,9 @@ interactionCode81:
 	.dw @substate4
 @substate0:
 	call objectSetVisible80
-	ld a,($ccea)
+	ld a,(wInShop)
 	dec a
-	ld ($ccea),a
+	ld (wInShop),a
 	call func_7973
 	ld a,$04
 	ld (wLinkForceState),a

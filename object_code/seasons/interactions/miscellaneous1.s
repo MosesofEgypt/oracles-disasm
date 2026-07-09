@@ -109,7 +109,7 @@ floodgateKeyhole:
 	ld a,(wTmpcfc0.normal.cfc0)
 	bit 7,a
 	ret z
-	ld a,($cc62)
+	ld a,(wActiveMusic2)
 	ld (wActiveMusic),a
 	call playSound
 	jr ++
@@ -331,9 +331,9 @@ oreChunkDigSpot:
 	jp nz,interactionDelete
 +
 	call objectGetShortPosition
-	ld ($ccc5),a
+	ld (wccaa),a
 @state1:
-	ld a,($ccc5)
+	ld a,(wccaa)
 	inc a
 	ret nz
 	call getFreePartSlot
@@ -727,7 +727,7 @@ tickTockSecretEntrance:
 	cp $04
 	ret nz
 	ld a,l
-	ld ($ccc5),a
+	ld (wccaa),a
 	ld e,Interaction.state
 	ld a,$01
 	ld (de),a
@@ -753,7 +753,7 @@ graveSecretEntrance:
 	cp $01
 	ret z
 	ld a,l
-	ld ($ccc5),a
+	ld (wccaa),a
 	jr setEnteredWarpSetStairsPlaySolvedSound
 
 d4MinibossRoom:

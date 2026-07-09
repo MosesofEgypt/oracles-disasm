@@ -232,7 +232,7 @@ gohma_gel_subid2:
 	ld (de),a
 	call ecom_decCounter1
 	jr z,++
-	ld a,($cc46)
+	ld a,(wGameKeysJustPressed)
 	or a
 	jr z,+
 	dec (hl)

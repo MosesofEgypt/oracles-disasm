@@ -117,7 +117,7 @@ func_7a01:
 	ret
 func_7a0d:
 	ld a,$04
-	ld hl,$cc30
+	ld hl,wNumEnemies
 	sub (hl)
 	ret z
 	ldh (<hFF8D),a

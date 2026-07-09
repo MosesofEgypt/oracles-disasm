@@ -115,7 +115,7 @@ interactionCode31:
 	ld bc,$fe40
 	jp objectSetSpeedZ
 +
-	ld a,($cc77)
+	ld a,(wLinkInAir)
 	or a
 	ret z
 	ld a,(wDisabledObjects)

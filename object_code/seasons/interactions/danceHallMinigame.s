@@ -11,7 +11,7 @@ interactionCode6a:
 	.dw @subid3
 @subid0:
 	ld a,$01
-	ld ($ccea),a
+	ld (wInShop),a
 	ld b,$20
 	ld hl,wTmpcfc0.normal.cfc0
 	call clearMemory
@@ -94,7 +94,7 @@ interactionCode6a:
 	
 	ld a,$03
 +++
-	ld ($cfd4),a
+	ld (wTmpcfc0.goronDance.linkStartedDance),a
 	ld a,$09
 	ld (wTmpcfc0.genericCutscene.cfd1),a
 	ld hl,wTmpcfc0.normal.cfc0+$1a
@@ -118,19 +118,19 @@ interactionCode6a:
 	jr c,+
 	ld a,$08
 +
-	ld ($cfd7),a
+	ld (wTmpcfc0.targetCarts.savedBItem),a
 	ld ($cfdc),a
 	call @@@func_5cdd
-	ld a,($cfd7)
+	ld a,(wTmpcfc0.targetCarts.savedBItem)
 	ld hl,@@@table_5d0b
 	rst_addAToHl
 	call getRandomNumber
 	and $03
 	add (hl)
-	ld ($cfd5),a
+	ld (wTmpcfc0.genericCutscene.cfd5),a
 	xor a
-	ld ($cfd4),a
-	ld ($cfdb),a
+	ld (wTmpcfc0.goronDance.linkStartedDance),a
+	ld (wTmpcfc0.targetCarts.beginGameTrigger),a
 	ld a,$cc
 	call playSound
 	ld e,$47
@@ -139,13 +139,13 @@ interactionCode6a:
 	ld a,$22
 	jp playSound
 @@@func_5cdd:
-	ld a,($cfd7)
+	ld a,(wTmpcfc0.targetCarts.savedBItem)
 	ld hl,@@@table_5ced
 	rst_addDoubleIndex
 	ldi a,(hl)
 	ld (wTmpcfc0.genericCutscene.cfd3),a
 	ldi a,(hl)
-	ld ($cfd6),a
+	ld (wTmpcfc0.targetCarts.prizeIndex),a
 	ret
 @@@table_5ced:
 	.db $28 $20
@@ -183,7 +183,7 @@ interactionCode6a:
 	xor a
 	ld (hl),a
 	ld e,$46
-	ld a,($cfd6)
+	ld a,(wTmpcfc0.targetCarts.prizeIndex)
 	ld (de),a
 	call @func_5eb9
 @@@substate2:
@@ -195,7 +195,7 @@ interactionCode6a:
 	jp @func_5ee1
 +
 	call interactionIncSubstate
-	ld a,($cfd6)
+	ld a,(wTmpcfc0.targetCarts.prizeIndex)
 	ld l,$46
 	ld (hl),a
 	xor a
@@ -221,7 +221,7 @@ interactionCode6a:
 	ld a,(wTmpcfc0.shootingGallery.cfd9)
 	cp $03
 	jr nz,@@@func_5d91
-	ld hl,$cfd5
+	ld hl,wTmpcfc0.genericCutscene.cfd5
 	dec (hl)
 	jr z,@@@func_5dab
 	call @@func_5e77
@@ -344,7 +344,7 @@ interactionCode6a:
 	call interactionRunScript
 	jp npcFaceLinkAndAnimate
 @@func_5e77:
-	ld hl,$cfdb
+	ld hl,wTmpcfc0.targetCarts.beginGameTrigger
 	ld a,(hl)
 	cp $08
 	jr c,+
@@ -360,12 +360,12 @@ interactionCode6a:
 	rrca
 	and $03
 	ld b,a
-	ld a,($cfd7)
+	ld a,(wTmpcfc0.targetCarts.savedBItem)
 	add b
-	ld ($cfd7),a
+	ld (wTmpcfc0.targetCarts.savedBItem),a
 	jp @@state4@func_5cdd
 @func_5e97:
-	ld a,($cfdd)
+	ld a,(wTmpcfc0.targetCarts.crystalsHitInFirstRoom)
 	or a
 	ret nz
 	ld a,(wTmpcfc0.fallDownHoleEvent.cfd8)
@@ -415,7 +415,7 @@ interactionCode6a:
 	ld hl,wTmpcfc0.normal.cfc0+$0b
 	inc (hl)
 	ld e,$46
-	ld a,($cfd6)
+	ld a,(wTmpcfc0.targetCarts.prizeIndex)
 	ld (de),a
 	ret
 @func_5efd:
@@ -522,7 +522,7 @@ interactionCode6a:
 	cp (hl)
 	ret z
 	ld (hl),a
-	ld a,($cfd4)
+	ld a,(wTmpcfc0.goronDance.linkStartedDance)
 	ld l,$44
 	ld (hl),a
 	cp $04
@@ -692,7 +692,7 @@ interactionCode6a:
 	call objectCheckCollidedWithLink
 	ret nc
 	ld a,$01
-	ld ($cfdd),a
+	ld (wTmpcfc0.targetCarts.crystalsHitInFirstRoom),a
 	ret
 @subid3:
 	ld e,Interaction.state

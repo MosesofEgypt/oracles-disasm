@@ -76,7 +76,7 @@ enemyCode02:
 	ld a,$89
 	call loadPaletteHeader
 	ld a,$01
-	ld ($cfcf),a
+	ld (wTmpcfc0.fallDownHoleEvent.filler+$0f),a
 	ld (wDisableLinkCollisionsAndMenu),a
 	call ecom_setSpeedAndState8
 	ld a,$53
@@ -383,7 +383,7 @@ generalOnox_subid1:
 	ld a,(de)
 	or a
 	ret nz
-	ld a,($cc34)
+	ld a,(wLinkDeathTrigger)
 	or a
 	ret nz
 	inc a
@@ -570,10 +570,10 @@ generalOnox_subid2:
 	.dw @stateC
 
 @state8:
-	ld a,($cc77)
+	ld a,(wLinkInAir)
 	or a
 	ret nz
-	ld ($cfcf),a
+	ld (wTmpcfc0.fallDownHoleEvent.filler+$0f),a
 	inc a
 	ld (wDisabledObjects),a
 	ld h,d

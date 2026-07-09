@@ -424,7 +424,7 @@ twinrova_loadScript:
 	.dw mainScripts.twinrova_subid06Script
 
 ;;
-; Gets a position stored in $cfd5/$cfd6?
+; Gets a position stored in wTmpcfc0.genericCutscene.cfd5/$cfd6?
 ;
 ; @param[out]	bc	Position
 func_0a_7877:

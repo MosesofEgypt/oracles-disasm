@@ -9,7 +9,7 @@ D3spawnPitSpreader:
 
 D3StatuePuzzleCheck:
 	xor a
-	ld ($ccba),a
+	ld (wActiveTriggers),a
 	ld l,$84
 	ld h,>wRoomLayout
 	ldi a,(hl)
@@ -33,7 +33,7 @@ D3StatuePuzzleCheck:
 	cp $2d
 	ret nz
 	ld a,$01
-	ld ($ccba),a
+	ld (wActiveTriggers),a
 	ret
 
 
@@ -107,7 +107,7 @@ spawnPitSpreader:
 
 D3hallToMiniboss_buttonStepped:
 	ld a,$01
-	ld ($ccbf),a
+	ld (wEyePuzzleCorrectDirection),a
 	ret
 
 
@@ -1533,7 +1533,7 @@ blainoScript_saveVariables:
 	ld e,Interaction.var37
 	ld (de),a
 	ld a,$00
-	ld ($cced),a
+	ld (wShootingGalleryBallStatus),a
 	xor a
 	ld e,Interaction.var31
 	ld (de),a
@@ -1685,7 +1685,7 @@ putAwayLinksItems:
 ; TODO: This is possibly a function for restoring Link's items after the blaino fight, which may be
 ; used in the Japanese version only?
 seasonsFunc_15_5cf0:
-	ld a,($ccec)
+	ld a,(wShopHaveEnoughRupees)
 	cp $03
 	jr z,+
 seasonsFunc_15_5cf7:
@@ -1739,7 +1739,7 @@ seasonsFunc_15_5d32:
 ; unknown
 	ld a,$03
 +++
-	ld ($cfd4),a
+	ld (wTmpcfc0.goronDance.linkStartedDance),a
 	ld a,$09
 	ld (wTmpcfc0.genericCutscene.cfd1),a
 	ld hl,wTmpcfc0.normal.cfc0+$1a
@@ -1828,15 +1828,15 @@ strangeBrothersFunc_15_5d9a:
 
 subrosianHiding_store02Intocc9e:
 	ld a,$02
-	ld ($cc9e),a
+	ld (wcc84),a
 	ret
 
 rosaHiding_hidingFinishedSetInitialRoomsFlags:
 	ld hl,wOverworldRoomFlags+(<ROOM_SEASONS_0cb)
 	set 7,(hl)
 	xor a
-	ld ($cc9e),a
-	ld ($cc9f),a
+	ld (wcc84),a
+	ld (wcc85),a
 	ret
 
 strangeBrothersFunc_15_5dc4:
@@ -2465,7 +2465,7 @@ makuTree_disableEverythingIfUnlinked:
 	ret
 
 seasonsFunc_15_619a:
-	ld a,($cc66)
+	ld a,(wWarpDestPos)
 	or a
 	ret nz
 	call setLinkForceStateToState08
@@ -2792,11 +2792,11 @@ seasonsFunc_15_6334:
 	call brightenRoom
 ++
 	xor a
-	ld ($c4b2),a
-	ld ($c4b4),a
+	ld (wDirtyFadeSprPalettes),a
+	ld (wFadeSprPaletteSources),a
 	ld a,$7e
-	ld ($c4b1),a
-	ld ($c4b3),a
+	ld (wDirtyFadeBgPalettes),a
+	ld (wFadeBgPaletteSources),a
 	ret
 
 seasonsFunc_15_6347:

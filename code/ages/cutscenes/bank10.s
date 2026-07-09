@@ -109,7 +109,7 @@ agesFunc_10_70f6:
 	jr nz,@func_7174
 	callab bank3Cutscenes.cutscene_clearTmpCBB3
 	ld a,$03
-	ld ($cbc1),a
+	ld (wMapMenu.drawWarpDestinations),a
 	ld a,$04
 	jp fadeoutToWhiteWithDelay
 @func_7174:
@@ -258,7 +258,7 @@ agesFunc_10_70f6:
 	ret nz
 	callab bank3Cutscenes.cutscene_clearTmpCBB3
 	ld a,$03
-	ld ($cbc1),a
+	ld (wMapMenu.drawWarpDestinations),a
 	ld a,$04
 	jp fadeoutToWhiteWithDelay
 

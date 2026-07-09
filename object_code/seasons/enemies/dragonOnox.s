@@ -14,18 +14,18 @@
 ;   var37:
 ;   var38:
 ;   wTmpcfc0.normal.cfc0+$08 - near end
-;   $cfc9
+;   wTmpcfc0.fallDownHoleEvent.filler+$09
 ;   wTmpcfc0.normal.cfc0+$0a
 ;   wTmpcfc0.normal.cfc0+$0b
 ;   wTmpcfc0.normal.cfc0+$0c
 ;   wTmpcfc0.normal.cfc0+$0d
-;   $cfd7 - Pointer to main body (subid $01)
+;   wTmpcfc0.targetCarts.savedBItem - Pointer to main body (subid $01)
 ;   wTmpcfc0.fallDownHoleEvent.cfd8 - Pointer to left shoulder (subid $02)
 ;   wTmpcfc0.shootingGallery.cfd9 - Pointer to right shoulder (subid $03)
 ;   wTmpcfc0.normal.cfc0+$1a - Pointer to left claw (subid $04)
-;   $cfdb - Pointer to right claw (subid $05)
+;   wTmpcfc0.targetCarts.beginGameTrigger - Pointer to right claw (subid $05)
 ;   $cfdc - Pointer to left claw sphere (subid $06)
-;   $cfdd - Pointer to right claw sphere (subid $07)
+;   wTmpcfc0.targetCarts.crystalsHitInFirstRoom - Pointer to right claw sphere (subid $07)
 ;   wTmpcfc0.genericCutscene.cfde - Pointer to left shoulder sphere (subid $08)
 ;   wTmpcfc0.genericCutscene.cfdf - Pointer to right shoulder sphere (subid $09)
 ; ==================================================================================================
@@ -70,7 +70,7 @@ enemyCode05:
 	; var31 - $06
 	; var32 - $04
 	; var37 - $01
-	; $cfc9 - $86
+	; wTmpcfc0.fallDownHoleEvent.filler+$09 - $86
 	ld l,Enemy.var37
 	ld (hl),$01
 	ld l,Enemy.var31
@@ -117,8 +117,8 @@ dragonOnox_bodyPartSpawner:
 	ld a,(de)
 	ld (hl),a
 	ld a,h
-	; store in $cfd7 a pointer to Dragon Onox with subid $01
-	ld hl,$cfd7
+	; store in wTmpcfc0.targetCarts.savedBItem a pointer to Dragon Onox with subid $01
+	ld hl,wTmpcfc0.targetCarts.savedBItem
 	ldi (hl),a
 	ld c,$08
 -
@@ -216,13 +216,13 @@ dragonOnox_checkTransitionState:
 ++
 	; non-state 8
 	;	var30 - bit 0 of previous var30
-	;	$cfc9 - $80|bit 0 of previous var30
+	;	wTmpcfc0.fallDownHoleEvent.filler+$09 - $80|bit 0 of previous var30
 	; state 8, substate of $02/$03, bit 4 of angle set (ANGLE_DOWN/ANGLE_LEFT)
 	;	var30 - $08
-	;	$cfc9 - $88
+	;	wTmpcfc0.fallDownHoleEvent.filler+$09 - $88
 	; state 8, substate of $02/$03, bit 4 of angle not set (ANGLE_UP/ANGLE_RIGHT)
 	;	var30 - $09
-	;	$cfc9 - $89
+	;	wTmpcfc0.fallDownHoleEvent.filler+$09 - $89
 	jp dragonOnoxLoadaIntoVar30Andcfc9
 
 dragonOnox_mainBody_state0:
@@ -893,7 +893,7 @@ dragonOnox_mainBody_stateE:
 	ld h,a
 	res 7,(hl)
 	; dragon Onox subid 5 - right claw
-	ld a,($cfdb)
+	ld a,(wTmpcfc0.targetCarts.beginGameTrigger)
 	ld h,a
 	res 7,(hl)
 
@@ -1043,7 +1043,7 @@ dragonOnox_leftClaw:
 
 	ld l,Enemy.relatedObj1+1
 	; dragon Onox subid 1
-	ld a,($cfd7)
+	ld a,(wTmpcfc0.targetCarts.savedBItem)
 	ldd (hl),a
 	ld (hl),$80
 	ld a,$03
@@ -1373,7 +1373,7 @@ dragonOnox_rightClaw:
 
 	ld l,Enemy.relatedObj1+1
 	; dragon Onox subid 1
-	ld a,($cfd7)
+	ld a,(wTmpcfc0.targetCarts.savedBItem)
 	ldd (hl),a
 	ld (hl),$80
 	ld a,$04
@@ -1467,7 +1467,7 @@ dragonOnox_rightClawSphere:
 	inc (hl)
 	ld l,Enemy.relatedObj1+1
 	; dragon Onox subid 5
-	ld a,($cfdb)
+	ld a,(wTmpcfc0.targetCarts.beginGameTrigger)
 	ldd (hl),a
 	ld (hl),$80
 	ld l,Enemy.relatedObj2+1
@@ -1542,7 +1542,7 @@ dragonOnox_rightShoulderSphere:
 	inc (hl)
 	ld l,Enemy.relatedObj1+1
 	; dragon Onox subid 5
-	ld a,($cfdb)
+	ld a,(wTmpcfc0.targetCarts.beginGameTrigger)
 	ldd (hl),a
 	ld (hl),$80
 	ld l,Enemy.relatedObj2+1
@@ -1743,7 +1743,7 @@ seasonsFunc_0f_65fc:
 	ld (de),a
 +
 	or $80
-	ld ($cfc9),a
+	ld (wTmpcfc0.fallDownHoleEvent.filler+$09),a
 ++
 	; Enemy.var32
 	inc l
@@ -1878,7 +1878,7 @@ dragonOnoxLoadaIntoVar30Andcfc9:
 	ld e,Enemy.var30
 	ld (de),a
 	or $80
-	ld ($cfc9),a
+	ld (wTmpcfc0.fallDownHoleEvent.filler+$09),a
 	ret
 
 dragonOnoxLowHealthThresholdIntoC:

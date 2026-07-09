@@ -1543,11 +1543,11 @@ subrosian_jump:
 	scriptjump -
 	
 subrosianScript_shopkeeper:
-	writememory $ccea, $05
+	writememory wInShop, $05
 	initcollisions
 -
 	checkabutton
-	jumpifmemoryeq $ccea, $00, script5690
+	jumpifmemoryeq wInShop, $00, script5690
 	showtext TX_2b0f
 	scriptjump -
 script5690:
@@ -3136,7 +3136,7 @@ zeldaScript_ganonBeat:
 	makeabuttonsensitive
 	checkabutton
 	setdisabledobjectsto11
-	writememory $cc1d, $b0
+	writememory wInteractionIDToLoadExtraGfx, $b0
 	writememory wLoadedTreeGfxIndex, $01
 	setanimation $06
 	setcounter1 $dc
@@ -3925,7 +3925,7 @@ blainoScript:
 	asm15 fadeoutToWhite
 	checkpalettefadedone
 	setdisabledobjectsto11
-	writememory $cced, $01
+	writememory wShootingGalleryBallStatus, $01
 	asm15 scriptHelp.blainoScript_clearItemsAndPegasusSeeds
 	asm15 scriptHelp.blainoScript_setLinkPositionAndState
 	asm15 scriptHelp.blainoScript_spawnBlainoEnemy
@@ -3959,7 +3959,7 @@ blainoFightDoneScript:
 	checkpalettefadedone
 	resetmusic
 	writeobjectbyte Interaction.pressedAButton, $00
-	jumptable_memoryaddress $ccec
+	jumptable_memoryaddress wShopHaveEnoughRupees
 	.dw @fightWon
 	.dw @fightWon
 	.dw @fightLost
@@ -5026,7 +5026,7 @@ companionScript_RickyLeavingYouInSpoolSwamp:
 +
 	asm15 scriptHelp.seasonsFunc_15_5eb4
 	enableallobjects
-	checkmemoryeq $cc77, $00
+	checkmemoryeq wLinkInAir, $00
 	writememory w1Link.direction, $01
 	setdisabledobjectsto11
 	writememory $d103, $05
@@ -5755,7 +5755,7 @@ subrosianShopScript_oreChunks:
 	
 subrosianShopScript_buyItem:
 	jumpiftextoptioneq $00, @buying
-	writememory $cba0, $01
+	writememory wTextIsActive, $01
 	writeobjectbyte $7d, $ff
 	scriptend
 @buying:
@@ -5776,7 +5776,7 @@ script70fb:
 	scriptend
 
 script7102:
-	writememory $cba0, $01
+	writememory wTextIsActive, $01
 	setdisabledobjectsto11
 	writeobjectbyte $7d, $01
 	retscript
