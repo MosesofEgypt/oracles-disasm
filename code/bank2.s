@@ -7827,7 +7827,13 @@ itemSubmenu2BlurbDisplayData:
 		.db $10 $00 $11 $00 $ff ; Spring
 		.db $12 $00 $13 $00 $ff
 		.db $14 $02 $15 $02 $ff ; Summer
+	.ifdef WIDE_INVENTORY_SPRITES
+		; the wide icons are taking up some vram real estate
+		; here, so tweak this slightly to account for it
+		.db $15 $22 $14 $22 $ff
+	.else
 		.db $16 $02 $17 $02 $ff
+	.endif
 		.db $18 $03 $19 $03 $ff ; Fall
 		.db $1a $03 $1b $03 $ff
 		.db $1c $01 $1d $01 $ff ; Winter
