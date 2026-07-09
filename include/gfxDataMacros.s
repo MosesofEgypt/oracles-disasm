@@ -2,19 +2,103 @@
 .macro m_GfxData
 	.assert NARGS == 1
 
-	\1:
-	m_IncbinCrossBankData {"{BUILD_DIR}/gfx/\1.cmp"}, 3
+	m_ReadGfxDataHashedFilename \1
+
+	.ifndef HASHED_GFX_{filename}
+		{filename}:
+		m_IncbinCrossBankData {"{BUILD_DIR}/gfx/{filename}.cmp"}, 3
+		.define HASHED_GFX_{filename}
+	.endif
+
+	.undefine filename
 .endm
 
-; Same as last, but doesn't support inter-bank stuff, so DATA_ADDR and DATA_BANK
-; don't need to be defined beforehand.
-.macro m_GfxDataSimple
-	.if NARGS == 2
-		\1: .incbin {"{BUILD_DIR}/gfx/\1.cmp"} SKIP 3+(\2)
+.macro m_ReadGfxDataHashedFilename
+	.fopen {"{BUILD_DIR}/gfx/\1.hash"} file
+
+	.redefine filename ""
+	; just so we're clear, i fucking hate that I had to do this.
+	; the substitution engine is too simple to handle some finite
+	; recursion, so we have to explicitly declare each byte read
+	m_ReadGfxDataHashedFilenameByte
+
+	m_ReadGfxDataHashedFilenameByte
+	m_ReadGfxDataHashedFilenameByte
+	m_ReadGfxDataHashedFilenameByte
+	m_ReadGfxDataHashedFilenameByte
+	m_ReadGfxDataHashedFilenameByte
+	m_ReadGfxDataHashedFilenameByte
+	m_ReadGfxDataHashedFilenameByte
+	m_ReadGfxDataHashedFilenameByte
+	m_ReadGfxDataHashedFilenameByte
+	m_ReadGfxDataHashedFilenameByte
+	.fclose file
+.endm
+
+.macro m_ReadGfxDataHashedFilenameByte
+	m_ReadGfxDataHashedFilenameHexChar
+	m_ReadGfxDataHashedFilenameHexChar
+.endm
+
+.macro m_ReadGfxDataHashedFilenameHexChar
+	.fread file data
+
+	; map to ascii characters and concatenate string
+	.if data == $30
+		.redefine filename {"{filename}0"}
+	.elif data == $31
+		.redefine filename {"{filename}1"}
+	.elif data == $32
+		.redefine filename {"{filename}2"}
+	.elif data == $33
+		.redefine filename {"{filename}3"}
+	.elif data == $34
+		.redefine filename {"{filename}4"}
+	.elif data == $35
+		.redefine filename {"{filename}5"}
+	.elif data == $36
+		.redefine filename {"{filename}6"}
+	.elif data == $37
+		.redefine filename {"{filename}7"}
+	.elif data == $38
+		.redefine filename {"{filename}8"}
+	.elif data == $39
+		.redefine filename {"{filename}9"}
+	.elif data == $61
+		.redefine filename {"{filename}a"}
+	.elif data == $62
+		.redefine filename {"{filename}b"}
+	.elif data == $63
+		.redefine filename {"{filename}c"}
+	.elif data == $64
+		.redefine filename {"{filename}d"}
+	.elif data == $65
+		.redefine filename {"{filename}e"}
+	.elif data == $66
+		.redefine filename {"{filename}f"}
 	.else
-		.assert NARGS == 1
-		\1: .incbin {"{BUILD_DIR}/gfx/\1.cmp"} SKIP 3
+		.fail "Invalid character in hashed gfx filename: {data}"
 	.endif
+	.undefine data
+.endm
+
+; Same as last, but doesn't support inter-bank stuff or deduplication, so
+; DATA_ADDR and DATA_BANK don't need to be defined beforehand.
+.macro m_GfxDataSimple
+	m_ReadGfxDataHashedFilename \1
+
+	.ifndef HASHED_GFX_{filename}
+		{filename}:
+		.if NARGS == 2
+			.incbin {"{BUILD_DIR}/gfx/\1.cmp"} SKIP 3+(\2)
+		.else
+			.assert NARGS == 1
+			.incbin {"{BUILD_DIR}/gfx/\1.cmp"} SKIP 3
+		.endif
+		.define HASHED_GFX_{filename}
+	.endif
+
+	.undefine filename
 .endm
 
 ; Same as m_GfxData, except it ensures the data is aligned
@@ -22,29 +106,30 @@
 .macro m_GfxDataAligned
 	.assert NARGS == 1
 
-	.fopen {"{BUILD_DIR}/gfx/\1.cmp"} file
-	.fsize file SIZE
-	.fclose file
+	.ifndef HASHED_GFX_\1
+		.fopen {"{BUILD_DIR}/gfx/\1.cmp"} file
+		.fsize file SIZE
+		.fclose file
 
-	.define PAD_AMOUNT ((DATA_ADDR+$0f)&$fff0)-DATA_ADDR
+		.define PAD_AMOUNT ((DATA_ADDR+$0f)&$fff0)-DATA_ADDR
 
-	.if DATA_ADDR+PAD_AMOUNT+(SIZE-3) > $8000
-		.redefine DATA_BANK DATA_BANK+1
-		.BANK DATA_BANK SLOT 1
-		.ORGA $4000
+		.if DATA_ADDR+PAD_AMOUNT+(SIZE-3) > $8000
+			.redefine DATA_BANK DATA_BANK+1
+			.BANK DATA_BANK SLOT 1
+			.ORGA $4000
 
-		.redefine PAD_AMOUNT $8000-DATA_ADDR
-		.redefine DATA_ADDR $4000
+			.redefine PAD_AMOUNT $8000-DATA_ADDR
+			.redefine DATA_ADDR $4000
+		.endif
+
+		.repeat PAD_AMOUNT index COUNT
+			.db $00
+		.endr
+
+		.redefine DATA_ADDR DATA_ADDR+PAD_AMOUNT
+		.undefine PAD_AMOUNT
+		.undefine SIZE
 	.endif
-
-	.repeat PAD_AMOUNT index COUNT
-		.db $00
-	.endr
-
-	.redefine DATA_ADDR DATA_ADDR+PAD_AMOUNT
-	.undefine PAD_AMOUNT
-	.undefine SIZE
-
 	m_GfxData \1
 .endm
 
@@ -101,8 +186,11 @@
 	.define m_GfxHeaderMode \1
 	.shift
 
+	; make a define to direct to the actual gfx file
+	m_ReadGfxDataHashedFilename \1
+
 	; Read metadata from .cmp file
-	.fopen {"{BUILD_DIR}/gfx/\1.cmp"} m_GfxHeaderFile
+	.fopen {"{BUILD_DIR}/gfx/{filename}.cmp"} m_GfxHeaderFile
 	.fread m_GfxHeaderFile cmp_mode ; First byte of .cmp file is compression mode
 	.fread m_GfxHeaderFile decompressed_size_l ; Bytes 2-3 are the decompressed size
 	.fread m_GfxHeaderFile decompressed_size_h
@@ -111,16 +199,16 @@
 
 	; Byte 1: Source bank number & compression mode
 	.if m_GfxHeaderMode == GFX_HEADER_MODE_FORCE
-		.db (:\1) | ((\4)<<6)
+		.db (:{filename}) | ((\4)<<6)
 	.else
-		.db (:\1) | (cmp_mode<<6)
+		.db (:{filename}) | (cmp_mode<<6)
 	.endif
 
 	; Bytes 2-3: Source address
 	.if m_GfxHeaderMode != GFX_HEADER_MODE_FORCE && NARGS >= 4
-		dwbe (\1)+(\4)
+		dwbe ({filename})+(\4)
 	.else
-		dwbe \1
+		dwbe {filename}
 	.endif
 
 	; Bytes 4-5: Destination address & destination bank
@@ -136,7 +224,7 @@
 	.if NARGS < 3
 		.define size_byte (decompressed_size / 16) - 1
 		.if size_byte < 0 || size_byte >= 0x80
-			.fail "GFX file \1 is too large?"
+			.fail {"GFX file {filename} is too large?"}
 		.endif
 	.elif m_GfxHeaderMode == GFX_HEADER_MODE_FORCE
 		; Just set the continue bit on these. They're malformed, they're only used once, we
@@ -144,7 +232,7 @@
 		.define size_byte ((\3) - 1) | $80
 	.else
 		.if !((\3) >= 1 && (\3) <= $80)
-			.fail "\1: GFX Header size byte must be between $01 and $80, inclusive."
+			.fail {"{filename}: GFX Header size byte must be between $01 and $80, inclusive."}
 		.endif
 		.define size_byte (\3) - 1
 	.endif
@@ -162,6 +250,7 @@
 	.undefine decompressed_size_h
 	.undefine decompressed_size
 	.undefine size_byte
+	.undefine filename
 .endm
 
 ; Define a gfx header entry (a reference to graphics paired with a destination to load it to).
@@ -236,11 +325,14 @@
 .macro m_ObjectGfxHeader
 	.assert NARGS >= 1 && NARGS <= 3
 
-	.fopen {"{BUILD_DIR}/gfx/\1.cmp"} m_GfxHeaderFile
+	; make a define to direct to the actual gfx file
+	m_ReadGfxDataHashedFilename \1
+
+	.fopen {"{BUILD_DIR}/gfx/{filename}.cmp"} m_GfxHeaderFile
 	.fread m_GfxHeaderFile mode ; First byte of .cmp file is compression mode
 	.fclose m_GfxHeaderFile
 
-	.db (:\1) | (mode<<6)
+	.db (:{filename}) | (mode<<6)
 
 	.if NARGS == 1
 		.define m_ObjectGfxHeader_Cont 0
@@ -249,13 +341,14 @@
 	.endif
 
 	.if NARGS >= 3
-		dwbe ((\1)+(\3)) | ((m_ObjectGfxHeader_Cont)<<15)
+		dwbe (({filename})+(\3)) | ((m_ObjectGfxHeader_Cont)<<15)
 	.else
-		dwbe (\1) | ((m_ObjectGfxHeader_Cont)<<15)
+		dwbe ({filename}) | ((m_ObjectGfxHeader_Cont)<<15)
 	.endif
 
 	.undefine mode
 	.undefine m_ObjectGfxHeader_Cont
+	.undefine filename
 .endm
 
 ; ==================================================================================================

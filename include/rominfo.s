@@ -21,8 +21,8 @@
 
 .else ; Seasons
 
-.rombanks 256
-.romsize $07
+.rombanks 128
+.romsize $06
 
 .endif
 

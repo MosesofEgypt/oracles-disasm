@@ -462,9 +462,10 @@
 		.dw \2
 	.ELSE
 		.assert NARGS == 4
+		m_ReadGfxDataHashedFilename \2
 
 		.db \1
-		.dw (\2)+(\3) | (\4) | ((:\2) - :gfxDataBank1a)
+		.dw ({filename})+(\3) | (\4) | ((:{filename}) - :gfxDataBank1a)
 	.ENDIF
 .endm
 

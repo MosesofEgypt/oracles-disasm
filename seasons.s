@@ -900,7 +900,8 @@ m_section_free Seasons_Interactions_Bank15 NAMESPACE seasonsInteractionsBank15
 	; included in the rom. In order to get the offsets correct, use
 	; gfx_font_start as the label instead of gfx_font.
 
-	.define gfx_font_start gfx_font-$e0
+	m_ReadGfxDataHashedFilename gfx_font
+	.define gfx_font_start {filename}-$e0
 	.export gfx_font_start
 
 	m_GfxDataSimple gfx_font_jp ; $70000

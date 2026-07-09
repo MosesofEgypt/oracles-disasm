@@ -67,12 +67,12 @@ seasons:
 # One of ROM_AGES or ROM_SEASONS must be defined for the below stuff to make any
 # sense.
 ifneq ($(filter 1, $(ROM_AGES) $(ROM_SEASONS)),)
+# load the bare minimum redux config
+include redux_config/config.env
 
 # defines for wla-gb
 DEFINES = $(ORACLE_EXTRA_DEFINES) # Can specify this on commandline
 CFLAGS =
-# load the bare minimum redux config
-include redux_config/config.env
 ORACLE_REDUX_DEFINES =
 ifdef ENABLE_SETTINGS_MENU
 ifndef MORE_MESSAGE_SPEEDS
@@ -200,6 +200,14 @@ UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/sprites -name '*.png')
 # List of all gfx files in their final form, ie. $(BUILD_DIR)/gfx/spr_link.cmp
 GFXFILES := $(foreach file, $(CMP_GFX_FILES) $(UNCMP_GFX_FILES), \
               $(BUILD_DIR)/gfx/$(basename $(notdir $(file))).cmp)
+HASHFILES := $(foreach file, $(CMP_GFX_FILES) $(UNCMP_GFX_FILES), \
+              $(BUILD_DIR)/gfx/$(basename $(notdir $(file))).hash)
+OLDHASHFILES := $(wildcard $(BUILD_DIR)/gfx/*.hash)
+HASHEDGFXFILES := $(foreach file, $(OLDHASHFILES), $(shell cat $(file)))
+
+FILES_TO_SEARCH := $(GFXFILES)
+FILES_TO_SEARCH += $(foreach hash, $(HASHEDGFXFILES), \
+					$(BUILD_DIR)/gfx/$(hash).cmp)
 
 # List of gfx files from the last build.
 OLD_GFXFILES := $(wildcard $(BUILD_DIR)/gfx/*.cmp)
@@ -210,7 +218,7 @@ OLD_GFXFILES := $(wildcard $(BUILD_DIR)/gfx/*.cmp)
 # This could happen with other types of files but gfx files are the biggest
 # concern.
 ORPHANED_GFXFILES := $(filter-out '', $(foreach oldfile, $(OLD_GFXFILES), \
-              $(if $(findstring $(oldfile), $(GFXFILES)), '', $(oldfile))))
+              $(if $(findstring $(oldfile), $(FILES_TO_SEARCH)), '', $(oldfile))))
 
 # Delete the orphaned files
 ifneq ($(ORPHANED_GFXFILES),)
@@ -254,6 +262,7 @@ $(BUILD_DIR)/linkfile: linkfile_$(GAME)
 $(BUILD_DIR)/$(GAME).o: $(MAIN_ASM_FILES) $(COMMONDATAFILES) $(GAMEDATAFILES)
 $(BUILD_DIR)/$(GAME).o: $(GFXFILES) $(ROOMLAYOUTFILES)
 $(BUILD_DIR)/$(GAME).o: rooms/$(GAME)/*.bin
+$(BUILD_DIR)/$(GAME).o: $(HASHFILES)
 
 $(BUILD_DIR)/audio.o: $(AUDIO_FILES)
 $(BUILD_DIR)/*.o: $(COMMON_INCLUDE_FILES) Makefile
@@ -308,6 +317,13 @@ $(BUILD_DIR)/gfx/$(basename $(notdir $(1))).cmp: $(BUILD_DIR)/gfx/$(basename $(n
 	@$$(PYTHON) tools/build/compressGfx.py $$< $$@
 endef
 
+# Rule for hashing files for data deduplication
+define define_hash_gfx_rules
+$(BUILD_DIR)/gfx/$(basename $(notdir $(1))).hash: $(BUILD_DIR)/gfx/$(basename $(notdir $(1))).cmp
+	@echo "Hashing $$<..."
+	@$$(PYTHON) tools/build/hashBinaryData.py $$< $$@
+endef
+
 # Define the gfx rules for the specific files which need them
 $(foreach filename,$(BIN_GFX_FILES),  $(eval $(call define_copy_gfx_rules,$(filename))))
 $(foreach filename,$(PNG_GFX_FILES),  $(eval $(call define_png_gfx_rules,$(filename))))
@@ -325,6 +341,7 @@ $(foreach filename,$(CMP_GFX_FILES),$(eval $(call define_cmp_gfx_rules,$(filenam
 
 endif
 
+$(foreach filename,$(GFXFILES),$(eval $(call define_hash_gfx_rules,$(filename))))
 
 # ================================================================================
 
