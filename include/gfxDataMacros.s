@@ -82,7 +82,7 @@
 	.undefine data
 .endm
 
-; Same as last, but doesn't support inter-bank stuff or deduplication, so
+; Same as last, but doesn't support inter-bank stuff, so
 ; DATA_ADDR and DATA_BANK don't need to be defined beforehand.
 .macro m_GfxDataSimple
 	m_ReadGfxDataHashedFilename \1
