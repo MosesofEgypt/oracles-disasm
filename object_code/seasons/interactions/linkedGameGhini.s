@@ -234,7 +234,7 @@ table_7c4d:
 	.db $f0 $b4 $78
 
 func_7c50:
-	ld hl,$cee0
+	ld hl,wRoomCollisions+$e0
 	xor a
 -
 	ldi (hl),a
@@ -259,7 +259,7 @@ func_7c62:
 	jr nc,-
 	add b
 	ld c,a
-	ld hl,$cee0
+	ld hl,wRoomCollisions+$e0
 	rst_addAToHl
 	ld a,(hl)
 	ld e,$7e

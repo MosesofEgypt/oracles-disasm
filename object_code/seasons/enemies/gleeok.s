@@ -190,7 +190,7 @@ enemyCode06:
 	ld (hl),a
 	ld l,$a9
 	ld (hl),a
-	ld hl,$ce16
+	ld hl,wRoomCollisions+$16
 	xor a
 	ldi (hl),a
 	ldi (hl),a
@@ -1001,7 +1001,7 @@ func_6c8a:
 	ld (hl),$20
 	ld l,$8d
 	ld (hl),$78
-	ld hl,$ce16
+	ld hl,wRoomCollisions+$16
 	ld a,$0f
 	ldi (hl),a
 	ldi (hl),a

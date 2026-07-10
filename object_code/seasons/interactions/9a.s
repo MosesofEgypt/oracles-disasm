@@ -177,7 +177,7 @@ interactionCode9a:
 	xor a
 	call func_5a82
 	ret nz
-	ld hl,$cc69
+	ld hl,wSeedTreeRefilledBitset
 	res 1,(hl)
 	xor a
 	ld (wDisabledObjects),a

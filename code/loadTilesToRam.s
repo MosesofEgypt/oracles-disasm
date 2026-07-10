@@ -189,7 +189,7 @@ setInterleavedTile_body:
 
 	ldh a,(<hFF8F)
 	call setHlToTileMappingDataPlusATimes8
-	ld de,$cec8
+	ld de,wTmpcec0+$08
 	ld b,$08
 -
 	ldi a,(hl)
@@ -200,7 +200,7 @@ setInterleavedTile_body:
 
 	ldh a,(<hFF8E)
 	call setHlToTileMappingDataPlusATimes8
-	ld de,$cec8
+	ld de,wTmpcec0+$08
 	ldh a,(<hFF8B)
 	bit 0,a
 	jr nz,@interleaveDiagonally
@@ -263,10 +263,10 @@ setInterleavedTile_body:
 
 ;;
 ; @param	hFF8C	The position of the tile to refresh
-; @param	$cec8	The data to write for that tile
+; @param	wTmpcec0+$08	The data to write for that tile
 @queueWrite:
 	ldh a,(<hFF8C)
-	ld hl,$cec8
+	ld hl,wTmpcec0+$08
 	call queueTileWriteAtVBlank
 	pop af
 	ld ($ff00+R_SVBK),a

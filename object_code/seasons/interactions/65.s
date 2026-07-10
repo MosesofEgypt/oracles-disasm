@@ -387,13 +387,13 @@ func_5440:
 	ld a,$03
 	ld ($ff00+R_SVBK),a
 	push de
-	ld de,$cd40
+	ld de,wTmpVramBuffer
 	ld b,$20
 	call copyMemory
 	pop de
 	ld a,$02
 	ld ($ff00+R_SVBK),a
-	ld hl,$cd40
+	ld hl,wTmpVramBuffer
 	ld b,$20
 	jp copyMemory
 
@@ -404,7 +404,7 @@ func_545a:
 	push de
 	push hl
 	ld hl,$d0c0
-	ld de,$cd40
+	ld de,wTmpVramBuffer
 	ld b,$40
 	ld c,$02
 	call func_553a
@@ -414,12 +414,12 @@ func_545a:
 	ldi a,(hl)
 	ld d,(hl)
 	ld e,a
-	ld hl,$cd40
+	ld hl,wTmpVramBuffer
 	ld b,$40
 	ld c,$03
 	call func_553a
 	ld hl,$d100
-	ld de,$cd40
+	ld de,wTmpVramBuffer
 	ld b,$40
 	ld c,$02
 	call func_553a
@@ -429,12 +429,12 @@ func_545a:
 	ldi a,(hl)
 	ld d,(hl)
 	ld e,a
-	ld hl,$cd40
+	ld hl,wTmpVramBuffer
 	ld b,$40
 	ld c,$03
 	call func_553a
 	ld hl,$d4c0
-	ld de,$cd40
+	ld de,wTmpVramBuffer
 	ld b,$40
 	ld c,$02
 	call func_553a
@@ -446,12 +446,12 @@ func_545a:
 	ld a,(hl)
 	add $04
 	ld d,a
-	ld hl,$cd40
+	ld hl,wTmpVramBuffer
 	ld b,$40
 	ld c,$03
 	call func_553a
 	ld hl,$d500
-	ld de,$cd40
+	ld de,wTmpVramBuffer
 	ld b,$40
 	ld c,$02
 	call func_553a
@@ -463,7 +463,7 @@ func_545a:
 	ld a,(hl)
 	add $04
 	ld d,a
-	ld hl,$cd40
+	ld hl,wTmpVramBuffer
 	ld b,$40
 	ld c,$03
 	call func_553a

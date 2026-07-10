@@ -691,7 +691,7 @@ blackTowerExplanationCutsceneHandler:
 	call fadeinFromWhite
 	ld a,$70
 	ld (wScreenOffsetY),a
-	ld hl,$cc10
+	ld hl,wLoadedObjectGfx+$08
 	ld b,$08
 	call clearMemory
 	ld a,$09

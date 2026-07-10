@@ -2988,7 +2988,7 @@ linkedFunc_15_6430:
 ; INTERAC_TROY
 ; ==================================================================================================
 seasonsFunc_15_6443:
-	ld hl,$ccf7
+	ld hl,wcce1
 	xor a
 	ldi (hl),a
 	ldi (hl),a
@@ -3204,7 +3204,7 @@ masterDiver_forceLinkState:
 	ret
 
 masterDiver_checkIfDoneIn30Seconds:
-	ld hl,$ccf9
+	ld hl,wcce3
 	ldd a,(hl)
 	or a
 	jr nz,+

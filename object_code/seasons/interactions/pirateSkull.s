@@ -105,7 +105,7 @@ interactionCode4d:
 	call interactionSetAnimation
 	jp objectSetVisiblec1
 @@@substate1:
-	ld hl,$ccc1
+	ld hl,wPirateSkullRandomNumber
 	bit 7,(hl)
 	ld e,$78
 	ld a,(de)

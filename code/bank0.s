@@ -1976,7 +1976,7 @@ _mainLoop_nextThread:
 	callfrombank0 bank3f.refreshDirtyPalettes
 	xor a
 	ld ($ff00+R_SVBK),a
-	ld hl,$c49e
+	ld hl,wc49e
 	inc (hl)
 	ld hl,wGfxRegs1
 	ld de,wGfxRegsFinal

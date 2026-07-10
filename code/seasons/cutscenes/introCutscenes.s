@@ -959,7 +959,7 @@ seasonsTable_03_79e9:
 	.db $ff $01 $00 $01 $00 $00 $ff $00
 
 seasonsFunc_03_7a01:
-	ld hl,$cbd5
+	ld hl,wGfxRegs4.LCDC
 	ld de,wGfxRegs1.LCDC
 	ld b,$0c
 -
@@ -974,7 +974,7 @@ seasonsFunc_03_7a01:
 	ret
 
 seasonsFunc_03_7a17:
-	ld hl,$cbd5
+	ld hl,wGfxRegs4.LCDC
 	ld de,wGfxRegs1.LCDC
 	ld b,$0c
 -

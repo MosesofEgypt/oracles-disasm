@@ -46,13 +46,13 @@ seasonsFunc_0f_6f75:
 	call clearMemoryBc
 
 	; clear part of wRoomCollisions
-	ld hl,$cea0
+	ld hl,wRoomCollisions+$a0
 	ld b,$10
 	ld a,$0f
 	call fillMemory
 
 	; load data back into wRoomCollisions
-	ld hl,$ce0a
+	ld hl,wRoomCollisions+$0a
 	ld bc,$0b02
 -
 	ld (hl),$0f
@@ -61,7 +61,7 @@ seasonsFunc_0f_6f75:
 	ld l,a
 	dec b
 	jr nz,-
-	ld hl,$ce0f
+	ld hl,wRoomCollisions+$0f
 	ld b,$0b
 	dec c
 	jr nz,-
@@ -260,7 +260,7 @@ seasons_func_0f_712a:
 	ld a,$06
 	ld (wTmpcfc0.normal.cfc0+$08),a
 	; Onox phase 1 room flags
-	ld hl,$ca91
+	ld hl,wGroup5RoomFlags+$91
 	set 7,(hl)
 	; game beaten / season always spring?
 	ld a,GLOBALFLAG_SEASON_ALWAYS_SPRING
@@ -529,7 +529,7 @@ seasons_func_0f_72dc:
 +
 	ld a,$03
 	ld ($ff00+$70),a
-	ld de,$cd4f
+	ld de,wTmpVramBuffer+$4f
 --
 	ld b,$10
 -
@@ -582,7 +582,7 @@ seasons_func_0f_7325:
 +
 	ld a,$03
 	ld ($ff00+R_SVBK),a
-	ld de,$cd47
+	ld de,wTmpVramBuffer+$47
 --
 	ld b,$04
 -

@@ -347,7 +347,7 @@ func_7931:
 	ld e,$79
 	ld a,(de)
 	call cpOreChunkValue
-	ld hl,$cba8
+	ld hl,wTextNumberSubstitution
 	ld (hl),c
 	inc l
 	ld (hl),b

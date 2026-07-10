@@ -581,7 +581,7 @@ func_6a18:
 	jp setShortPosition_paramC
 
 interactionCodedc_subidA:
-	ld hl,$c904
+	ld hl,wGroup4RoomFlags+$04
 	set 4,(hl)
 	jp interactionDelete
 

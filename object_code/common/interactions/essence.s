@@ -379,7 +379,7 @@ interaction7f_subid01:
 	ld a,(wDungeonIndex)
 	cp $06
 	jr nz,+
-	ld hl,$ce24
+	ld hl,wRoomCollisions+$24
 	ld (hl),$05
 	inc l
 	ld (hl),$0a

@@ -451,7 +451,7 @@ func_4c88:
 func_4cb6:
 	call objectGetTileAtPosition
 	ld c,l
-	ld hl,$cf00
+	ld hl,wRoomLayout
 	ld e,$b1
 	ld b,$ff
 -

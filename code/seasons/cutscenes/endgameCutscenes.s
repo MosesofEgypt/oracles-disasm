@@ -867,10 +867,10 @@ endgameCutsceneHandler_09_stage1_body:
 	ld a,CUTSCENE_S_CREDITS
 	ld (wCutsceneIndex),a
 	call seasonsFunc_03_646a
-	ld hl,$cf00
+	ld hl,wRoomLayout
 	ld bc,$00c0
 	call clearMemoryBc
-	ld hl,$ce00
+	ld hl,wRoomCollisions
 	ld bc,$00c0
 	call clearMemoryBc
 	ldh (<hCameraY),a
@@ -1250,10 +1250,10 @@ endgameCutsceneHandler_0f_stage1_body:
 	ld a,CUTSCENE_S_CREDITS
 	ld (wCutsceneIndex),a
 	call seasonsFunc_03_646a
-	ld hl,$cf00
+	ld hl,wRoomLayout
 	ld bc,$00c0
 	call clearMemoryBc
-	ld hl,$ce00
+	ld hl,wRoomCollisions
 	ld bc,$00c0
 	call clearMemoryBc
 	xor a
