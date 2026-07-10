@@ -205,7 +205,7 @@ D7randomlyPlaceNonEnemyArmos_body:
 	ld (hl),$25
 	ld a,$03
 	ld ($ff00+R_SVBK),a
-	ld h,$df
+	ld h,LAST_ENEMY_INDEX
 	ld (hl),$25
 
 	xor a

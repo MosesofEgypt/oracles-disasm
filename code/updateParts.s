@@ -1,5 +1,5 @@
 label_11_212:
-	ld d,$d0
+	ld d,FIRST_PART_INDEX
 	ld a,d
 -
 	ldh (<hActiveObject),a

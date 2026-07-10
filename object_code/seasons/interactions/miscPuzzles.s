@@ -55,7 +55,7 @@ interactionCodedc_subidF:
 	ret nz
 	ld a,$03
 	ld ($ff00+$70),a
-	ld b,$df
+	ld b,LAST_INTERACTION_INDEX
 	ld a,(bc)
 	ld l,a
 	xor a

@@ -58,7 +58,7 @@ interactionCode66:
 	ld c,a
 	ld a,$03
 	ld ($ff00+R_SVBK),a
-	ld b,$df
+	ld b,LAST_INTERACTION_INDEX
 	ld a,(bc)
 	ld b,a
 	xor a
@@ -78,7 +78,7 @@ interactionCode66:
 	ld (de),a
 	ld a,$03
 	ld ($ff00+R_SVBK),a
-	ld b,$df
+	ld b,LAST_INTERACTION_INDEX
 	ld hl,@@table_5610
 	ld a,$a3
 -

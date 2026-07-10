@@ -157,7 +157,7 @@ refreshDirtyPalettes:
 	pop hl
 	ld c,h
 	res 7,l
-	ld h,$df
+	ld h,LAST_ITEM_INDEX
 	ldi (hl),a
 	ld a,b
 	ldi (hl),a

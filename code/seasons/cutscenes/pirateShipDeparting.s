@@ -154,7 +154,7 @@ seasonsFunc_03_681a:
 	cp $ff
 	ret z
 	ld l,a
-	ld h,$d0
+	ld h,FIRST_INTERACTION_INDEX
 	push hl
 	ld de,$9c00
 	ld bc,$0f02

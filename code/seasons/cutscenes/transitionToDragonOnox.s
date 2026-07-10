@@ -439,7 +439,7 @@ seasons_func_0f_722f:
 	ldh a,(<hFF8B)
 	add $40
 	ld l,a
-	ld h,$d9
+	ld h,FIRST_INTERACTION_INDEX+$09
 	call seasons_func_0f_731a
 	pop bc
 	ld hl,$db00
@@ -449,7 +449,7 @@ seasons_func_0f_722f:
 	ldh a,(<hFF8B)
 	add $40
 	ld l,a
-	ld h,$dd
+	ld h,FIRST_INTERACTION_INDEX+$0d
 	call seasons_func_0f_7325
 	ld a,UNCMP_GFXH_2f
 	jp loadUncompressedGfxHeader

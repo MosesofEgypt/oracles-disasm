@@ -149,7 +149,7 @@ _findPirateSkullAddress:
 	ld e,Interaction.var3a
 	jr _moveObjectIfGrounded
 _findItemDropAddress:
-	ld h,$d0
+	ld h,FIRST_INTERACTION_INDEX
 -
 	ld l,Part.id
 	ld a,(hl)
