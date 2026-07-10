@@ -21,7 +21,7 @@ partCode2e:
 	call objectGetTileAtPosition
 	cp $f3
 	jp z,partDelete
-	ld h,$ce
+	ld h,>wRoomCollisions
 	ld a,(hl)
 	or a
 	jp nz,partDelete

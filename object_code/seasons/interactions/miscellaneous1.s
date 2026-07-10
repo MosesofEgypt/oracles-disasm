@@ -279,7 +279,7 @@ tarmArmosWallByStump:
 	ld e,$4d
 	ld a,(de)
 	ld l,a
-	ld h,$cf
+	ld h,>wRoomLayout
 	ld a,$9c
 	cp (hl)
 	ret nz

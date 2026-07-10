@@ -288,7 +288,7 @@ cutsceneDinDancing_loadListOfTiles:
 	ld c,(hl)
 	inc hl
 	ld e,c
-	ld d,$cf
+	ld d,>wRoomLayout
 	ld a,(de)
 	push bc
 	push hl

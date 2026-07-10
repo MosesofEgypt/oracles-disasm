@@ -317,7 +317,7 @@ func_53a1:
 func_53bb:
 	ld e,a
 	ld b,$10
-	ld h,$ce
+	ld h,>wRoomCollisions
 -
 	ld a,(hl)
 	or e
@@ -346,7 +346,7 @@ func_53c7:
 	ld a,$b2
 func_53e7:
 	ld b,$10
-	ld h,$cf
+	ld h,>wRoomLayout
 -
 	ldi (hl),a
 	dec b

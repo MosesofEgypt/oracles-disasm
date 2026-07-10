@@ -201,7 +201,7 @@ D7randomlyPlaceNonEnemyArmos_body:
 	ld hl,@armosPositions
 	rst_addAToHl
 	ld l,(hl)
-	ld h,$cf
+	ld h,>wRoomLayout
 	ld (hl),$25
 	ld a,$03
 	ld ($ff00+R_SVBK),a
@@ -1666,7 +1666,7 @@ putAwayLinksItems:
 
 @storeItemInInventory:
 	push de
-	ld d,$cf
+	ld d,>wRoomLayout
 	ld l,<wInventoryStorage
 -
 	ld a,(hl)

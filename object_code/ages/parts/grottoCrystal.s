@@ -32,6 +32,6 @@ partCode24:
 	call partSetAnimation
 +
 	call objectMakeTileSolid
-	ld h,$cf
+	ld h,>wRoomLayout
 	ld (hl),$0a
 	jp objectSetVisible83

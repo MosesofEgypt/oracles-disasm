@@ -51,7 +51,7 @@ partCode33:
 	ld (de),a
 	call @func_6588
 	call objectMakeTileSolid
-	ld h,$cf
+	ld h,>wRoomLayout
 	ld (hl),$0a
 	call objectSetVisible83
 	call getFreePartSlot

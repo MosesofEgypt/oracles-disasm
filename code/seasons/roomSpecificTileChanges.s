@@ -200,7 +200,7 @@ tileReplacement_group0Mape4:
 	ret
 +
 	ld hl,@table_group0Mape4
-	ld d,$cf
+	ld d,>wRoomLayout
 -
 	ldi a,(hl)
 	or a
@@ -911,7 +911,7 @@ tileReplacement_group2_3Mapab:
 ;			* starts with tile to replace with
 ;			* fills every YX specified until $ff found
 d8LavaRoomsFillTilesWithLava:
-	ld d,$cf
+	ld d,>wRoomLayout
 	ldi a,(hl)
 	ld c,a
 -

@@ -224,7 +224,7 @@ func_5ea3:
 	ld hl,table_5f37
 	rst_addAToHl
 	ld l,(hl)
-	ld h,$cf
+	ld h,>wRoomLayout
 	ld a,(hl)
 	cp $09
 	jr nz,-
@@ -413,7 +413,7 @@ poeSister5fc2:
 	jr z,+
 	ld l,$b3
 	ld l,(hl)
-	ld h,$cf
+	ld h,>wRoomLayout
 	ld (hl),$09
 +
 	call poeSister5f3b
