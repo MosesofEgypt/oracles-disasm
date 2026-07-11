@@ -932,16 +932,17 @@ m_section_free Seasons_Interactions_Bank15 NAMESPACE seasonsInteractionsBank15
 	; including bank $3e could be used for the above data (text, room layouts, graphics).
 
 
-.ifdef ENABLE_SETTINGS_MENU
 .BANK $3d SLOT 1
 .ORG 0
 
-m_section_free settingsMenuCode NAMESPACE settingsMenuCode
+m_section_free bank3dCode NAMESPACE bank3d
 	.define BANK_3d $3d
 
+.ifdef ENABLE_SETTINGS_MENU
 	.include "code/settingsMenu.s"
-.ends
 .endif
+	.include "code/bank0Ext.s"
+.ends
 
 .ifdef ENABLE_NEW_GAME_PLUS
 .BANK $3e SLOT 1

@@ -5936,7 +5936,7 @@ func_02_55b2:
 @subScreen3:
 	xor a
 	ld (wInventory.itemSubmenuIndex),a
-	jpab settingsMenuCode.inventorySubscreen3_draw
+	jpab bank3d.inventorySubscreen3_draw
 .endif
 
 ;;
@@ -6353,10 +6353,10 @@ inventoryMenuState1:
 
 .ifdef ENABLE_SETTINGS_MENU
 @subscreen3:
-	callab settingsMenuCode.updateSettingsMenu
+	callab bank3d.updateSettingsMenu
 	ld a,(wInventorySubmenu3CursorPos)
 	call showItemText1
-	jpab settingsMenuCode.inventorySubmenu3_drawCursors
+	jpab bank3d.inventorySubmenu3_drawCursors
 .endif
 
 ;;

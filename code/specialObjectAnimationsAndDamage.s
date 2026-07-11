@@ -884,10 +884,14 @@ linkUpdateDamageToApplyForRings:
 	add MAX_RING_DEF_MOD
 
 	; applyMultipliers
-	call fractionOf8Multiply
+	push bc
+	ld b,a
+	ld c,e
+	callab bank3d.fractionOf8Multiply
 	ld a,$ff
 	cp b
 	ld a,c ; use the low byte of the result
+	pop bc
 	jr z,+
 		; result is over -128, so set to -128
 		ld a,$80
@@ -1124,7 +1128,10 @@ linkApplyDamage:
 		ld a,FAIRYS_RING
 		call cpActiveRing
 		jr nz,+
-			call removeRing
+			push bc
+			ld b,a
+			callab bank2.removeRing
+			pop bc
 			scf
 			jr +++
 		+

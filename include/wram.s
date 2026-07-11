@@ -1120,22 +1120,19 @@ wGroup5RoomFlags: ; $ca00
 
 
 ; Per-game aliases for room flags
-.ifdef ROM_AGES
-	.define wPresentRoomFlags, wGroup0RoomFlags
-	.define wPastRoomFlags,    wGroup1RoomFlags
+.define wPresentRoomFlags, wGroup0RoomFlags
+.define wPastRoomFlags,    wGroup1RoomFlags
 
-	; Steal 6 of the past room flags for vine seed positions.
-	; (Only 5 vines exist, but 6 bytes are used?)
-	.define wVinePositions, wPastRoomFlags+$f0
+; Steal 6 of the past room flags for vine seed positions.
+; (Only 5 vines exist, but 6 bytes are used?)
+.define wVinePositions, wPastRoomFlags+$f0
 
-.else ;ROM_SEASONS
-	.define wOverworldRoomFlags, wGroup0RoomFlags
-	.define wSubrosiaRoomFlags,  wGroup1RoomFlags
+.define wOverworldRoomFlags, wGroup0RoomFlags
+.define wSubrosiaRoomFlags,  wGroup1RoomFlags
 
-	; Steal 16 of subrosia's room flags for rupee room rupees gotten
-	.define wD2RupeeRoomRupees, wSubrosiaRoomFlags+$f0
-	.define wD6RupeeRoomRupees, wSubrosiaRoomFlags+$f8
-.endif
+; Steal 16 of subrosia's room flags for rupee room rupees gotten
+.define wD2RupeeRoomRupees, wSubrosiaRoomFlags+$f0
+.define wD6RupeeRoomRupees, wSubrosiaRoomFlags+$f8
 
 
 ; ==================================================================================================

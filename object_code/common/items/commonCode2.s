@@ -272,10 +272,14 @@ itemCalculateSwordDamage:
 		ld a,MAX_RING_ATK_MOD
 	+
 	; applyMultipliers
-	call fractionOf8Multiply
+	push bc
+	ld b,a
+	ld c,e
+	callab bank3d.fractionOf8Multiply
 	ld a,$ff
 	cp b
 	ld a,c ; use the low byte of the result
+	pop bc
 	jr z,+
 		; result is over -128, so set to -128
 		ld a,$80

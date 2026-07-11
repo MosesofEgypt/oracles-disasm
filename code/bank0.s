@@ -42,6 +42,16 @@
 	setrombank
 	ret
 
+.ORGA $0030
+; rst_isSeasons
+	push hl
+	ld h,a
+	ldh a,($fe)
+	or a
+	ld a,h
+	pop hl
+	ret
+
 .ORGA $0038
 ; Not used as rst $38
 	nop
@@ -230,23 +240,8 @@ bitTable:
 ; ROM title / manufacturer code
 .ORGA $134
 
-.ifdef ROM_SEASONS
-	.asc "ZELDA DIN" 0 0
-
-	.ifdef REGION_JP
-		.ASC "AZ7J"
-	.else
-		.asc "AZ7E"
-	.endif
-.else ; ROM_AGES
-	.asc "ZELDA NAYRU"
-
-	.ifdef REGION_JP
-		.ASC "AZ8J"
-	.else
-		.asc "AZ8E"
-	.endif
-.endif
+.asc "ZELDA_OOA&S"
+.asc "AZ7E"
 
 
 .ORGA $150
@@ -854,7 +849,6 @@ gfxRegisterStates:
 	.db $ff $30 $00 $60 $07 $18 ; 0x16: farore's secret list
 	.db $ff $30 $00 $60 $07 $c7
 
-.ifdef ROM_AGES
 	.db $ef $00 $00 $90 $07 $00 ; 0x17: intro cinematic screen 1
 	.db $e7 $00 $00 $90 $07 $c7
 
@@ -863,7 +857,6 @@ gfxRegisterStates:
 
 	.db $ef $00 $00 $90 $07 $30 ; 0x19
 	.db $e7 $98 $00 $60 $07 $c7
-.endif
 
 
 ;;
@@ -1886,9 +1879,7 @@ _nextThread:
 quickstartSpawn:
 	.db <wDeathRespawnBuffer.group,     QUICKSTART_GROUP
 	.db <wDeathRespawnBuffer.room,      QUICKSTART_ROOM
-.ifdef ROM_SEASONS
 	.db <wDeathRespawnBuffer.stateModifier, QUICKSTART_SEASON
-.endif
 	.db <wDeathRespawnBuffer.facingDir, DIR_DOWN
 	.db <wDeathRespawnBuffer.y,         QUICKSTART_Y
 	.db <wDeathRespawnBuffer.x,         QUICKSTART_X
@@ -2052,7 +2043,7 @@ _initialThreadStates:
 
 ; Upper bytes of addresses of flags for each group
 flagLocationGroupTable:
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 	.db >wPresentRoomFlags, >wPastRoomFlags
 	.db >wPresentRoomFlags, >wPastRoomFlags
 	.db >wGroup4RoomFlags,  >wGroup5RoomFlags
@@ -3340,7 +3331,7 @@ _drawObjectTerrainEffects:
 	ld b,>wRoomLayout
 	ld a,(bc)
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS)
 	; CROSSITEMS: Cane of Somaria uses tile index $f9 indoors. It behaves like a grass tile, but
 	; it's never used indoors, so disable the grass animation on that tile.
 	; (Even though the somaria block is solid, the grass animation can be seen when item drops
@@ -3833,12 +3824,12 @@ updateRoomFlagsForBrokenTile:
 	ld bc,bitTable
 	add c
 	ld c,a
-	ld a,(wActiveGroup)
-	ld hl, flagLocationGroupTable
-	rst_addAToHl
-	ld h,(hl)
+	push bc
 	ld a,(wActiveRoom)
-	ld l,a
+	ld b,a
+	ld a,(wActiveGroup)
+	call getRoomFlags
+	pop bc
 	ld a,(bc)
 	or (hl)
 	ld (hl),a
@@ -4109,7 +4100,7 @@ loadTilesetAnimation:
 ; Called when displaying D4 entrance after water shuts off in screen above
 func_1383:
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS)
 	push de
 	ld (wActiveRoom),a
 	ld a,b
@@ -4999,7 +4990,7 @@ checkTreasureObtained:
 	ret
 
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS)
 ;;
 ; Same as below but for ore chunks.
 cpOreChunkValue:
@@ -5040,7 +5031,7 @@ cpRupeeValue:
 	ret
 
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS)
 ;;
 removeOreChunkValue:
 	ld hl,wNumOreChunks
@@ -5502,6 +5493,13 @@ getARoomFlags:
 ; @param[out]	a	Room flags
 ; @param[out]	hl	Address of room flags
 getRoomFlags:
+.ifdef ROM_SEASONS
+	cp $02
+	jr nz,+
+		; this is the only diff between ages and seasons here
+		inc a
+	+
+.endif
 	ld hl, flagLocationGroupTable
 	rst_addAToHl
 	ld h,(hl)
@@ -5932,127 +5930,24 @@ objectRemoveFromAButtonSensitiveObjectList:
 ;
 ; @param[out]	cflag	Set if Link just pressed A next to the object
 linkInteractWithAButtonSensitiveObjects:
-	ld a,(wGameKeysJustPressed)
-	and BTN_A
-	ret z
-
-	; If he's in a shop, he can interact while holding something
-	ld a,(wInShop)
+	push bc
+	push af
+	ldh a,(<hRomBank)
+	push af
+	callfrombank0 bank3d.linkInteractWithAButtonSensitiveObjects_body
+	ld a,c
 	or a
-	jr nz,+
-
-	; If he's not in a shop, this should return if he's holding something
-	ld a,(wLinkGrabState)
-	or a
-	ret nz
-+
-	push de
-	ld e,SpecialObject.direction
-	ld a,(de)
-	ld hl,@positionOffsets
-	rst_addDoubleIndex
-
-	; Store y + offset into [hFF8D]
-	ld e,SpecialObject.yh
-	ld a,(de)
-	add (hl)
-	ldh (<hFF8D),a
-
-	; Store x + offset into [hFF8C]
-	inc hl
-	ld e,SpecialObject.xh
-	ld a,(de)
-	add (hl)
-	ldh (<hFF8C),a
-
-	; Check all objects in the list
-	ld de,wAButtonSensitiveObjectList
----
-	; Get the object in hl
-	ld a,(de)
-	ld h,a
-	inc e
-	ld a,(de)
-	ld l,a
-	or h
-	jr z,+
-
-	; Check if link is directly in front of the object
-	push hl
-	ldh a,(<hFF8D)
-	ld b,a
-	ldh a,(<hFF8C)
-	ld c,a
-	call objectHCheckContainsPoint
-	pop hl
-	jr nc,+
-
-	; Link is next to the object; only trigger it if the "pressedAButton" variable is
-	; not already set.
-	bit 0,(hl)
-	jr z,@foundObject
-+
-	inc e
-	ld a,e
-	cp <wAButtonSensitiveObjectListEnd
-	jr c,---
-
-	; No object found
-	pop de
-	ret
-
-@foundObject:
-	; Set the object's "pressedAButton" variable.
-	set 0,(hl)
-
-	; For some reason, set Link's invincibility whenever triggering an object?
-	ld hl,w1Link.invincibilityCounter
-	ld a,(hl)
-	or a
-	ld a,$fc
-	jr z,++
-
-	bit 7,(hl)
-	jr nz,@negativeValue
-
-	; Link's invincibility already has a positive value ($01-$7f), meaning he's
-	; flashing red from damage.
-	; Make sure he stays invincible for at least 4 more frames?
-	ld a,$04
-	cp (hl)
-	jr c,@doneWithInvincibility
-	jr ++
-
-	; Negative value for invincibility means he isn't flashing red.
-	; Again, this makes sure he stays invincible for at least 4 more frames.
-@negativeValue:
-	cp (hl)
-	jr nc,@doneWithInvincibility
-++
-	ld (hl),a
-
-@doneWithInvincibility:
-	; Disable ring transformations for 8 frames? (He can't normally interact with
-	; objects while transformed... so what's the point of this?)
-	ld a,$08
-	ld (wDisableRingTransformations),a
-
-	; Disable pushing animation
-	ld a,$80
-	ld (wForceLinkPushAnimation),a
-
-	ld hl,wLinkTurningDisabled
-	set 7,(hl)
-
 	scf
-	pop de
+	jr nz,+
+		ccf
+	+
+	pop bc
+	ld a,b
+	rst_setrombank
+	pop bc
+	ld a,b
+	pop bc
 	ret
-
-@positionOffsets:
-	.db $f6 $00 ; DIR_UP
-	.db $00 $0a ; DIR_RIGHT
-	.db $0a $00 ; DIR_DOWN
-	.db $00 $f6 ; DIR_LEFT
 
 ;;
 objectCheckContainsPoint:
@@ -7874,7 +7769,7 @@ objectCheckIsOnHazard:
 objectCheckIsOverHazard:
 	ld bc,$0500
 	call objectGetRelativeTile
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 	ld (wObjectTileIndex),a
 .endif
 	ld hl,hazardCollisionTable
@@ -8370,7 +8265,7 @@ cpActiveRing:
 	push hl
 	ld hl,wEquippedRingFlags
 	push af
-	call optimizedFlagCheck
+	call checkFlag
 .else
 cpActiveRing:
 	push hl
@@ -8421,48 +8316,6 @@ eitherRingActive:
 	pop de
 	ld a,d
 	pop de
-	ret
-
-;;
-;
-; @param	a	Flag to check
-; @param	hl	Start address of flags
-; @param[out]	a	AND result
-; @param[out]	zflag	Set if the flag is not set.
-optimizedFlagCheck:
-	push bc
-	ld b,a
-	srl a
-	srl a
-	srl a
-	add l
-	ld l,a
-	ld a,(hl)
-	ld c,a		; the byte containing the flags
-	ld a,b
-	and $07 	; the bit offset within the byte
-	ld hl,bitTable
-	add l
-	ld l,a
-	ld a,(hl) 	; the flag mask
-	and c		; get whether the flag is set or not
-	pop bc
-	ret
-
-;;
-; Removes the specified ring from the players ring list and unequips it
-;
-; @param	a	The ring to remove
-;
-removeRing:
-	push bc
-	ld b,a
-	ldh a,(<hRomBank)
-	push af
-	callfrombank0 bank2.removeRing
-	pop af
-	rst_setrombank
-	pop bc
 	ret
 
 .endif
@@ -8868,128 +8721,23 @@ getLinkMaxHealth:
 ; @param	zflag	Equip item if set. Otherwise unequip.
 ; @param[out]	zflag	Set if swap occurred.
 handleAutoEquipItem:
+	push bc
 	push hl
 	push af
-.ifdef MORE_MESSAGE_SPEEDS
-	ld hl,wMiscSettings
-	bit 4,(hl)
-	jr z,++
-.endif
-		bit 5,(hl)
-		ld hl,wInventoryB
-		jr z,+
-			inc l
-		+
-		pop af
-		push af
-		push de
-		ld d,a
-		jr nz,+
-			; equipping. only swap if not already equipped
-			cp (hl)
-			jr z,++++
-				ld a,(wAutoEquipInvSlot)
-				cp $ff
-				jr nz,++++
-					call @swapItemWithInventory
-				jr +++
-			++++
-				or $01
-				jr +++
-		+
-		; unequipping. only swap if it was auto-equipped
-		cp (hl)
-		jr nz,+++
-			ld a,(wAutoEquipInvSlot)
-			cp $ff
-			jr z,++++
-				call @swapItemWithInventory
-				ld a,$ff
-				ld (wAutoEquipInvSlot),a
-				jr +++
-		++++
-			or $01
-		+++
-			pop de
-	++
+	ld b,a
+	ldh a,(<hRomBank)
+	push af
+	callfrombank0 bank3d.handleAutoEquipItem_body
+	pop af
+	rst_setrombank
 	pop hl
 	ld a,h
 	pop hl
-	ret
-
-;;
-; @param d                 The item to auto-equip or un-equip.
-; @param hl                The equipped item slot to swap out
-; @param wAutoEquipInvSlot The inventory item slot to swap with.
-;                          If this is $ff, it must be searched for.
-@swapItemWithInventory:
-	ld a,(wAutoEquipInvSlot)
-	cp $ff
-	jr nz,+
-		push hl
-		; find d in wInventoryStorage
-		ld hl,wInventoryStorage
-		ld e,$10
-		-
-			ldi a,(hl)
-			cp d
-			jr z,++
-				dec e
-				jr nz,-
-					; failed to find it
-					pop hl
-					ret
-			++
-		dec l
-		ld a,l
-		ld (wAutoEquipInvSlot),a
-		pop hl
-	+
-	ld a,(wAutoEquipInvSlot)
-	ld e,a
-	ld d,>wInventoryStorage
-
-	ld a,(de)
-.ifndef ONE_HANDED_BIGGORON_SWORD
-	cp ITEM_BIGGORON_SWORD
-	jr nz,+
-		; biggoron sword being equipped. put it in both slots
-		ld d,(hl)
-		push hl
-		ld l,<wInventoryB
-		ldi (hl),a
-		ldi (hl),a
-		pop hl
-		ld (hl),d
-	+
-.endif
-	ld d,a
-	ld a,(hl)
-.ifndef ONE_HANDED_BIGGORON_SWORD
-	cp ITEM_BIGGORON_SWORD
-	jr nz,+
-		; biggoron sword being unequipped. remove from both slots
-		push hl
-		ld l,<wInventoryB
-		xor a
-		ldi (hl),a
-		ldi (hl),a
-		ld a,ITEM_BIGGORON_SWORD
-		pop hl
-	+
-.endif
-	ld (hl),d
-	ld d,>wInventoryStorage
-	ld (de),a
-
-	ld hl,(wStatusBarNeedsRefresh)
-	set 0,(hl)
-	set 1,(hl)
-	xor a ; set flag indicating swap occurred
+	pop bc
 	ret
 .endif
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 isDeepUnderwater:
 	ldh (<hFFBD),a	; store temporarily for restoring later
 	ld a,(wTilesetFlags)
@@ -9042,7 +8790,7 @@ isValidTargetForJudo:
 
 @isValidTarget:
 	push af
-	call optimizedFlagCheck
+	call checkFlag
 	pop hl
 	ld a,h
 	pop hl
@@ -9220,97 +8968,6 @@ victoryRingIncLevel:
 	inc a
 	ret
 
-fractionOf8Multiply:
-	push hl
-	push de
-
-	; store the number of whole increments of 8 in h
-	ld h,a
-	srl h
-	srl h
-	srl h
-
-	; copy the fractional-multiples into l for decrementing
-	and $07
-	ld l,a
-
-	; store the base as a positive value in d
-	ld a,e
-	bit 7,a
-	jr z,+
-		cpl
-		inc a
-	+
-	ld d,a
-
-	ld b,$00
-	ld c,b
-
-	; add fractions if there are any
-	ld a,l
-	or a
-	ld a,c
-	jr z,+
-		-
-			add d
-			jr nc,++
-				inc b
-			++
-			dec l
-			jr nz,-
-
-		; convert the whole multiples into fractions
-		srl a
-		srl a
-		srl a
-		ld c,a
-
-		ld a,b
-		swap a
-		sla a
-		and $e0
-		or c
-		ld c,a
-
-		srl b
-		srl b
-		srl b
-	+
-
-	; add the whole multiples
-	ld a,h
-	or a
-	ld a,c
-	jr z,+
-		-
-			add d
-			jr nc,++
-				inc b
-			++
-			dec h
-			jr nz,-
-		ld c,a
-	+
-
-	bit 7,e
-	jr z,+
-		; fix the sign
-		ld a,c
-		cpl
-		inc a
-		ld c,a
-		ld a,b
-		cpl
-		jr nc,++
-			inc a
-		++
-		ld b,a
-	+
-
-	pop de
-	pop hl
-	ret
-
 applyCurseArmorDamageCap:
 	; if wearing blue curse, all damage becomes 1/4 heart
 	push af
@@ -9408,7 +9065,7 @@ setRingComboFlag:
 getRingComboFlag:
 	push hl
 	ld hl,wRingComboCacheFlags
-	call optimizedFlagCheck
+	call checkFlag
 	pop hl
 	ldh a,(<hFFBD)	; restore a from temp var
 	ret
@@ -9630,7 +9287,7 @@ objectCreateFallingDownHoleInteraction:
 	xor a
 	ret
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 
 ;;
 ; Makes the object invisible if (wFrameCounter&b) == 0.
@@ -9917,12 +9574,12 @@ scriptCmd_loadScript:
 	ld e,a
 	ldi a,(hl)
 	ld c,a
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 	ldh (<hScriptAddressL),a
 .endif
 	ldi a,(hl)
 	ld b,a
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 	ldh (<hScriptAddressH),a
 .endif
 	ldh a,(<hRomBank)
@@ -10262,7 +9919,7 @@ interactionCheckAdjacentTileIsSolid_viaDirection:
 
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 
 ;;
 ; @param[out]	zflag	z when counter1 reaches 0 (and text is inactive)
@@ -11865,7 +11522,7 @@ specialObjectCode_companionCutscene:
 ;;
 specialObjectCode_linkInCutscene:
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS)
 
 	ldh a,(<hRomBank)
 	push af
@@ -11973,7 +11630,7 @@ getRoomInDungeon:
 	ret
 
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS)
 	.include "code/code_3035.s"
 .endif
 
@@ -12197,7 +11854,7 @@ updateEnemy:
 	ld e,Enemy.id
 	ld a,(de)
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 	; Calculate bank number in 'b'
 .ifdef ENABLE_NEW_GAME_PLUS
 	ld b,$10
@@ -12285,7 +11942,7 @@ updateEnemy:
 	ld h,a
 
 	rst_derefHl
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 	ld a,b
 	rst_setrombank
 .endif
@@ -12305,7 +11962,7 @@ updateEnemy:
 .include "data/enemyCodeTable.s"
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 	.include "code/code_3035.s"
 .endif
 
@@ -12422,7 +12079,7 @@ clearStaticObjects:
 ; @param[out]	zflag	Set on success
 findFreeStaticObjectSlot:
 	ld hl,wStaticObjects
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 	ld b,$08
 .endif
 --
@@ -12433,7 +12090,7 @@ findFreeStaticObjectSlot:
 	ld a,$08
 	add l
 	ld l,a
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 	dec b
 .endif
 	jr nz,--
@@ -12540,7 +12197,7 @@ unsetGlobalFlag:
 ;
 clearEnemiesKilledList:
 	ld h,$00
-	.ifdef ROM_AGES
+	.if defined(ROM_AGES)
 	jr ++
 	.else
 	jp ++
@@ -12551,7 +12208,7 @@ clearEnemiesKilledList:
 ;
 addRoomToEnemiesKilledList:
 	ld h,$01
-	.ifdef ROM_AGES
+	.if defined(ROM_AGES)
 	jr ++
 	.else
 	jp ++
@@ -12563,7 +12220,7 @@ addRoomToEnemiesKilledList:
 ;
 markEnemyAsKilledInRoom:
 	ld h,$02
-	.ifdef ROM_AGES
+	.if defined(ROM_AGES)
 	jr ++
 	.else
 	jp ++
@@ -12575,7 +12232,7 @@ markEnemyAsKilledInRoom:
 ;
 generateRandomBuffer:
 	ld h,$04
-	.ifdef ROM_AGES
+	.if defined(ROM_AGES)
 	jr ++
 	.else
 	jp ++
@@ -12588,14 +12245,14 @@ generateRandomBuffer:
 ; @param	hFF8B	"Flags" (set when placing an enemy in the editor)
 getRandomPositionForEnemy:
 	ld h,$05
-	.ifdef ROM_AGES
+	.if defined(ROM_AGES)
 	jr ++
 	.else
 	jp ++
 	.endif
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 
 ;;
 ; Calls bank2._checkSpawnTimeportalInteraction.
@@ -12982,7 +12639,7 @@ mainThreadStart:
 
 
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS)
 
 updateAnimationsAfterCutscene:
 	ldh a,(<hRomBank)
@@ -13107,7 +12764,7 @@ dismountCompanionAndSetRememberedPositionToScreenCenter:
 	rst_setrombank
 	ret
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS)
 
 seasonsFunc_331b:
 	ldh a,(<hRomBank)
@@ -13243,7 +12900,7 @@ func_3539:
 	rst_setrombank
 	ret
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS)
 
 ;;
 seasonsFunc_34a0:
@@ -13408,7 +13065,7 @@ setEnemyTargetToLinkPosition:
 	ldh (<hFFB3),a
 	ret
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 
 ;;
 getEntryFromObjectTable2:
@@ -13424,7 +13081,9 @@ getEntryFromObjectTable2:
 	rst_setrombank
 	ret
 
-.else ; ROM_SEASONS
+.endif
+
+.if defined(ROM_SEASONS)
 
 ;;
 multiIntroCutsceneCaller:
@@ -13439,7 +13098,7 @@ multiIntroCutsceneCaller:
 .endif
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 
 ;;
 ; Check if a dungeon uses those toggle blocks with the orbs.
@@ -13455,7 +13114,9 @@ checkDungeonUsesToggleBlocks:
 
 	.include "data/ages/dungeonsUsingToggleBlocks.s"
 
-.else ; ROM_SEASONS
+.endif
+
+.if defined(ROM_SEASONS)
 seasonsFunc_35cc:
 	ld a,($ff00+R_SVBK)
 	ld c,a
@@ -13533,7 +13194,7 @@ loadAnimationData:
 	ret
 
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS)
 
 roomTileChangesAfterLoad02:
 	ldh a,(<hRomBank)
@@ -13568,7 +13229,7 @@ getIndexOfGashaSpotInRoom:
 	ret
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 
 ;;
 ; The name is a bit of a guess.
@@ -14391,7 +14052,7 @@ setTile:
 	ret
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 ;;
 ; Calls "setTile" and "setTileInRoomLayoutBuffer".
 ;
@@ -14442,7 +14103,7 @@ setInterleavedTile:
 	pop de
 	ret
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS)
 
 setSeason:
 	ld b,a
@@ -14496,7 +14157,7 @@ getFreeInteractionSlot:
 
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 ;;
 interactionDeleteAndUnmarkSolidPosition:
 	call objectUnmarkSolidPosition
@@ -14628,7 +14289,7 @@ updateInteraction:
 
 .include "data/interactionCodeTable.s"
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS)
 
 createSokraSnore:
 	ld a,(wFrameCounter)
@@ -14648,7 +14309,9 @@ checkGotMakuSeedDidNotSeeZeldaKidnapped:
 	rst_setrombank
 	ret
 
-.else ; ROM_AGES
+.endif
+
+.if defined(ROM_AGES)
 
 ;;
 ; Checks that an object is within [hFF8B] pixels of a position on both axes.
@@ -14767,7 +14430,7 @@ interactionRunSimpleScript:
 	.dw @command2
 	.dw @command3
 	.dw @command4
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS)
 	.dw @command5
 	.dw @command6
 	.dw @command7
@@ -14831,7 +14494,7 @@ interactionRunSimpleScript:
 	ret
 
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS)
 
 @command5:
 	pop hl
@@ -14889,7 +14552,7 @@ interactionRunSimpleScript:
 .endif
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 
 ;;
 ; Gets object data for tokays in the wild tokay game.
@@ -14942,7 +14605,9 @@ setLinkDirection:
 	ld (hl),b
 	ret
 
-.else ; ROM_SEASONS
+.endif
+
+.if defined(ROM_SEASONS)
 
 ;;
 ; @param	b	index into _conditionalHoronNPCLookupTable
@@ -15026,7 +14691,7 @@ interactionFunc_3e6d:
 	ret
 
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS)
 
 getLinkedHerosCaveSideEntranceRoom:
 	ldh a,(<hRomBank)
@@ -15080,7 +14745,7 @@ partDelete:
 	ret
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 
 ;;
 ; @param[out]	cflag
@@ -15131,7 +14796,7 @@ func_3ee4:
 .endif
 
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS)
 ;;
 ; CROSSITEMS: For Seasons only, determine which tile index is the cane of somaria (varies based on
 ; which group we're in).

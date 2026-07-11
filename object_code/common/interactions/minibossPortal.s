@@ -26,12 +26,11 @@ interactionCode7e:
 	ld a,(wDungeonIndex)
 	ld hl,@dungeonRoomTable
 	rst_addDoubleIndex
-	ld c,(hl)
+	push bc
+	ld b,(hl)
 	ld a,(wActiveGroup)
-	ld hl,flagLocationGroupTable
-	rst_addAToHl
-	ld h,(hl)
-	ld l,c
+	call getRoomFlags
+	pop bc
 
 	; hl now points to room flags for the miniboss room
 	; Delete if miniboss is not dead.
