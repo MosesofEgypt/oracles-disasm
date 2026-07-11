@@ -7731,7 +7731,7 @@ inventorySubscreen2_drawTreasures:
 	call fillRectangleInTilemap
 	pop bc
 	ld a,b
-	ld hl,$d3df
+	ld hl,w4TmpRingBuffer+$3f
 	rst_addAToHl
 	ld (hl),$00
 @nextEssence:

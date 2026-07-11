@@ -27,17 +27,17 @@ interactionCode65:
 	ld ($ff00+R_SVBK),a
 
 	ld a,$80
-	ld hl,w1Link.enabled
+	ld hl,w2TmpGfxBuffer
 	call @func_51c0
 
-	ld hl,$d0a0
+	ld hl,w2TmpGfxBuffer+$a0
 	call @func_51c0
 
 	ld a,$0b
-	ld hl,$d400
+	ld hl,w2TmpAttrBuffer
 	call @func_51c0
 
-	ld hl,$d4a0
+	ld hl,w2TmpAttrBuffer+$a0
 	call @func_51c0
 
 	xor a
@@ -183,14 +183,14 @@ func_5293:
 	add hl,bc
 	jr func_52c6
 table_52a6:
-	.dw $d020 $d0c0
-	.dw $d040 $d0e0
-	.dw $d060 $d100
-	.dw $d080 $d120
-	.dw $d420 $d4c0
-	.dw $d440 $d4e0
-	.dw $d460 $d500
-	.dw $d480 $d520
+	.dw w2TmpGfxBuffer+$20 w2TmpGfxBuffer+$c0
+	.dw w2TmpGfxBuffer+$40 w2TmpGfxBuffer+$e0
+	.dw w2TmpGfxBuffer+$60 w2TmpGfxBuffer+$100
+	.dw w2TmpGfxBuffer+$80 w2TmpGfxBuffer+$120
+	.dw w2TmpAttrBuffer+$20 w2TmpAttrBuffer+$c0
+	.dw w2TmpAttrBuffer+$40 w2TmpAttrBuffer+$e0
+	.dw w2TmpAttrBuffer+$60 w2TmpAttrBuffer+$100
+	.dw w2TmpAttrBuffer+$80 w2TmpAttrBuffer+$120
 func_52c6:
 	ld b,$20
 --
@@ -219,7 +219,7 @@ func_52d9:
 	ld e,a
 	inc hl
 	push hl
-	ld hl,$d400
+	ld hl,w2TmpAttrBuffer
 	ld b,$05
 	ld c,$02
 	call queueDmaTransfer
@@ -227,7 +227,7 @@ func_52d9:
 	ldi a,(hl)
 	ld d,(hl)
 	ld e,a
-	ld hl,w1Link.enabled
+	ld hl,w2TmpGfxBuffer
 	ld b,$05
 	ld c,$02
 	call queueDmaTransfer
@@ -240,7 +240,7 @@ func_52d9:
 	ld e,a
 	inc hl
 	push hl
-	ld hl,$d460
+	ld hl,w2TmpAttrBuffer+$60
 	ld b,$05
 	ld c,$02
 	call queueDmaTransfer
@@ -248,7 +248,7 @@ func_52d9:
 	ldi a,(hl)
 	ld d,(hl)
 	ld e,a
-	ld hl,$d060
+	ld hl,w2TmpGfxBuffer+$60
 	ld b,$05
 	ld c,$02
 	call queueDmaTransfer
@@ -356,31 +356,32 @@ func_53e7:
 ;;
 ; $02: D6 wall-closing room
 roomTileChangesAfterLoad02_body:
+	; NOTE: this function expects SVBK to have already been set to 3
 	call func_537e
 	call func_53c7
-	ld hl,$d800
-	ld de,$d0c0
+	ld hl,w3VramTiles
+	ld de,w3TileMappingData+$c0
 	call func_5440
-	ld hl,$d820
-	ld de,$d0e0
+	ld hl,w3VramTiles+$20
+	ld de,w3TileMappingData+$e0
 	call func_5440
-	ld hl,$dc00
-	ld de,$d4c0
+	ld hl,w3VramAttributes
+	ld de,w3TileMappingData+$4c0
 	call func_5440
-	ld hl,$dc20
-	ld de,$d4e0
+	ld hl,w3VramAttributes+$20
+	ld de,w3TileMappingData+$4e0
 	call func_5440
-	ld hl,$da80
-	ld de,$d100
+	ld hl,w3VramTiles+$280
+	ld de,w3TileMappingData+$100
 	call func_5440
-	ld hl,$daa0
-	ld de,$d120
+	ld hl,w3VramTiles+$2a0
+	ld de,w3TileMappingData+$120
 	call func_5440
-	ld hl,$de80
-	ld de,$d500
+	ld hl,w3Filler2+$80
+	ld de,w3TileMappingData+$500
 	call func_5440
-	ld hl,$dea0
-	ld de,$d520
+	ld hl,w3Filler2+$a0
+	ld de,w3TileMappingData+$520
 	call func_5440
 	jr func_545a
 func_5440:
@@ -403,7 +404,7 @@ func_545a:
 	ret z
 	push de
 	push hl
-	ld hl,$d0c0
+	ld hl,w2TmpGfxBuffer+$c0
 	ld de,wTmpVramBuffer
 	ld b,$40
 	ld c,$02
@@ -418,7 +419,7 @@ func_545a:
 	ld b,$40
 	ld c,$03
 	call func_553a
-	ld hl,$d100
+	ld hl,w2TmpGfxBuffer+$100
 	ld de,wTmpVramBuffer
 	ld b,$40
 	ld c,$02
@@ -433,7 +434,7 @@ func_545a:
 	ld b,$40
 	ld c,$03
 	call func_553a
-	ld hl,$d4c0
+	ld hl,w2TmpAttrBuffer+$4c0
 	ld de,wTmpVramBuffer
 	ld b,$40
 	ld c,$02
@@ -450,7 +451,7 @@ func_545a:
 	ld b,$40
 	ld c,$03
 	call func_553a
-	ld hl,$d500
+	ld hl,w2TmpAttrBuffer+$100
 	ld de,wTmpVramBuffer
 	ld b,$40
 	ld c,$02
@@ -469,10 +470,10 @@ func_545a:
 	call func_553a
 	ld a,$03
 	ld ($ff00+R_SVBK),a
-	ld hl,$d800
+	ld hl,w3VramTiles
 	ld a,$80
 	call func_552a
-	ld hl,$dc00
+	ld hl,w3VramAttributes
 	ld a,$0b
 	call func_552a
 	ld a,(wTmpcfc0.genericCutscene.cfd0)
@@ -485,7 +486,7 @@ func_545a:
 	call multiplyAByC
 	ld c,l
 	ld b,h
-	ld hl,$d800
+	ld hl,w3VramTiles
 	add hl,bc
 	ld a,$80
 	push hl

@@ -54,12 +54,12 @@ interactionCodedc_subidF:
 	cp $f1
 	ret nz
 	ld a,$03
-	ld ($ff00+$70),a
+	ld ($ff00+R_SVBK),a
 	ld b,LAST_INTERACTION_INDEX
 	ld a,(bc)
 	ld l,a
 	xor a
-	ld ($ff00+$70),a
+	ld ($ff00+R_SVBK),a
 	ld a,l
 	call setTile
 @func_66d2:

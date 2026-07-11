@@ -850,8 +850,8 @@ func_44ac:
 	ldh (<SVBK),a
 
 	xor a
-	ld hl,$d980
-	ldi (hl),a ; $d980
+	ld hl,w4d980
+	ldi (hl),a ; w4d980
 	ldi (hl),a ; w4PacketByteIndex
 	ldi (hl),a ; w4PacketChecksum
 	ldi (hl),a ; w4d983

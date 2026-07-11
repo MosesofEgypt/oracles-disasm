@@ -19,8 +19,8 @@ initTextbox:
 ++
 	ld a,$07
 	ld ($ff00+R_SVBK),a
-	ld hl,w1Link.enabled
-	ld bc,w7TextVariablesEnd - w1Link.enabled
+	ld hl,w7TextboxMap
+	ld bc,w7TextVariablesEnd - w7TextboxMap
 	call clearMemoryBc
 	jp initTextboxStuff
 

@@ -1050,10 +1050,10 @@ seasonsFunc_03_7a88:
 	push af
 	ld a,$04
 	ld ($ff00+R_SVBK),a
-	ld hl,w1Link.enabled
+	ld hl,w4TileMap
 	ld bc,$0240
 	call clearMemoryBc
-	ld hl,$d400
+	ld hl,w4AttributeMap
 	ld bc,$0024
 	ldh a,(<hFF8B)
 	call fillMemoryBc16ByteBlocks
@@ -1402,7 +1402,7 @@ cutscene0dFunca:
 	push af
 	ld a,$02
 	ld ($ff00+R_SVBK),a
-	ld hl,$de80
+	ld hl,w2TilesetBgPalettes
 	ld b,$40
 	call clearMemory
 	pop af
@@ -1456,10 +1456,10 @@ seasonsFunc_03_7db8:
 	push af
 	ld a,$03
 	ld ($ff00+R_SVBK),a
-	ld hl,$d800
+	ld hl,w3VramTiles
 	ld bc,$0240
 	call clearMemoryBc
-	ld hl,$dc00
+	ld hl,w3TileMappingIndices
 	ld bc,$0024
 	ld a,$02
 	call fillMemoryBc16ByteBlocks

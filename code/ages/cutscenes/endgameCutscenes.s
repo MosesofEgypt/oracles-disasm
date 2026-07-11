@@ -875,7 +875,7 @@ endgameCutsceneHandler_20:
 	call hideStatusBar
 	ld a,$02
 	ld ($ff00+R_SVBK),a
-	ld hl,$de90
+	ld hl,w2TilesetBgPalettes+$10
 	ld b,$08
 	ld a,$ff
 	call fillMemory

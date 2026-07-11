@@ -134,7 +134,7 @@ seasonsFunc_0f_704d:
 	res 7,(hl)
 	call seasons_func_0f_722f
 	xor a
-	ld ($ff00+$70),a
+	ld ($ff00+R_SVBK),a
 	ld a,$02
 	call loadGfxRegisterStateIndex
 	ld a,(wTmpcfc0.fallDownHoleEvent.filler+$0e)
@@ -357,20 +357,20 @@ table_71cb:
 seasonsFunc_0f_71cf_copyw6Filler1IntoWramBank3:
 	call load5aIntoBc
 	push bc
-	ld hl,w1Link.enabled
+	ld hl,w6DragonOnoxTileMap1
 	add hl,bc
 	ld b,$50
 	call seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer
-	ld hl,$d802
+	ld hl,w6DragonOnoxTileMap2+$02
 	ld c,$00
 	call seasonsFunc_0f_72a5_copyFromwTmpVramBufferIntoBank3
 	pop bc
 
-	ld hl,$d400
+	ld hl,w6DragonOnoxTileAttr1
 	add hl,bc
 	ld b,$50
 	call seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer
-	ld hl,$dc02
+	ld hl,w6TileBuffer+$02
 	ld c,$20
 	call seasonsFunc_0f_72a5_copyFromwTmpVramBufferIntoBank3
 	ld a,UNCMP_GFXH_2e
@@ -386,29 +386,29 @@ seasons_func_0f_71fb:
 	add a
 	call load5aIntoBc
 	push bc
-	ld hl,$d1e0
+	ld hl,w6DragonOnoxTileMap1+$1e0
 	add hl,bc
 	ld b,$a0
 	call seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer
-	ld hl,$d802
+	ld hl,w6DragonOnoxTileMap2+$02
 	call seasons_func_0f_72d1
 	pop bc
-	ld hl,$d5e0
+	ld hl,w6DragonOnoxTileAttr1+$1e0
 	add hl,bc
 	ld b,$a0
 	call seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer
-	ld hl,$dc02
+	ld hl,w6TileBuffer+$02
 	call seasons_func_0f_72dc
 	ld a,UNCMP_GFXH_2e
 	jp loadUncompressedGfxHeader
 
 seasons_func_0f_722f:
 	ld a,$03
-	ld ($ff00+$70),a
-	ld hl,$d940
+	ld ($ff00+R_SVBK),a
+	ld hl,w3VramTiles+$140
 	ld b,$e0
 	call clearMemory
-	ld hl,$dd40
+	ld hl,w3TileMappingIndices+$140
 	ld b,$e0
 	ld a,$0d
 	call fillMemory
@@ -432,7 +432,7 @@ seasons_func_0f_722f:
 	rst_addAToHl
 	ld a,(hl)
 	ldh (<hFF8B),a
-	ld hl,$d800
+	ld hl,w3TileMappingData
 	add hl,bc
 	ld b,$40
 	call seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer
@@ -442,7 +442,7 @@ seasons_func_0f_722f:
 	ld h,FIRST_INTERACTION_INDEX+$09
 	call seasons_func_0f_731a
 	pop bc
-	ld hl,$db00
+	ld hl,w6DragonOnoxTileAttr2
 	add hl,bc
 	ld b,$40
 	call seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer
@@ -458,7 +458,7 @@ table_7291:
 	
 ;;
 ; @param	b	number of bytes to copy
-; @param	hl	a few values between w1Link.enabled-$db00 in bank 6 (w6Filler1, etc)
+; @param	hl	a few values between w6DragonOnoxTileMap1-$db00 in bank 6 (w6Filler1, etc)
 seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer:
 	ld a,$06
 	ld ($ff00+R_SVBK),a
@@ -528,7 +528,7 @@ seasons_func_0f_72dc:
 	ld c,$20
 +
 	ld a,$03
-	ld ($ff00+$70),a
+	ld ($ff00+R_SVBK),a
 	ld de,wTmpVramBuffer+$4f
 --
 	ld b,$10

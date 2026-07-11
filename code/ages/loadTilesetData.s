@@ -263,15 +263,15 @@ func_04_6e9b:
 	ld a,$02
 	ld ($ff00+R_SVBK),a
 	ld hl,wRoomLayout
-	ld de,w1Link.enabled
+	ld de,w2TmpGfxBuffer
 	ld b,$c0
 	call copyMemory
 	ld hl,wRoomCollisions
-	ld de,$d100
+	ld de,w2TmpGfxBuffer+$100
 	ld b,$c0
 	call copyMemory
-	ld hl,$df00
-	ld de,$d200
+	ld hl,w2BgPalettesBuffer
+	ld de,w2TmpGfxBuffer+$200
 	ld b,$c0
 --
 	ld a,$03
@@ -295,15 +295,15 @@ func_04_6ed1:
 	ld a,$02
 	ld ($ff00+R_SVBK),a
 	ld hl,wRoomLayout
-	ld de,w1Link.enabled
+	ld de,w2TmpGfxBuffer
 	ld b,$c0
 	call copyMemoryReverse
 	ld hl,wRoomCollisions
-	ld de,$d100
+	ld de,w2TmpGfxBuffer+$100
 	ld b,$c0
 	call copyMemoryReverse
-	ld hl,$df00
-	ld de,$d200
+	ld hl,w2BgPalettesBuffer
+	ld de,w2TmpGfxBuffer+$200
 	ld b,$c0
 --
 	ld a,$02
@@ -324,12 +324,12 @@ func_04_6ed1:
 
 ;;
 func_04_6f07:
-	ld hl,$d800
-	ld de,$dc00
+	ld hl,w3VramTiles
+	ld de,w3TileMappingIndices
 	ld bc,$0200
 	call @locFunc
-	ld hl,$dc00
-	ld de,$de00
+	ld hl,w3TileMappingIndices
+	ld de,w3Filler2
 	ld bc,$0200
 @locFunc:
 	ld a,$03
@@ -349,12 +349,12 @@ func_04_6f07:
 
 ;;
 func_04_6f31:
-	ld hl,$dc00
-	ld de,$d800
+	ld hl,w6TileBuffer
+	ld de,w6DragonOnoxTileMap2
 	ld bc,$0200
 	call @locFunc
-	ld hl,$de00
-	ld de,$dc00
+	ld hl,w6AttributeBuffer
+	ld de,w6TileBuffer
 	ld bc,$0200
 @locFunc:
 	ld a,$06

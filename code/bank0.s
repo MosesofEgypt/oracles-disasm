@@ -240,8 +240,23 @@ bitTable:
 ; ROM title / manufacturer code
 .ORGA $134
 
-.asc "ZELDA_OOA&S"
-.asc "AZ7E"
+.ifdef ROM_SEASONS
+	.asc "ZELDA DIN" 0 0
+
+	.ifdef REGION_JP
+		.ASC "AZ7J"
+	.else
+		.asc "AZ7E"
+	.endif
+.else ; ROM_AGES
+	.asc "ZELDA NAYRU"
+
+	.ifdef REGION_JP
+		.ASC "AZ8J"
+	.else
+		.asc "AZ8E"
+	.endif
+.endif
 
 
 .ORGA $150
@@ -849,6 +864,7 @@ gfxRegisterStates:
 	.db $ff $30 $00 $60 $07 $18 ; 0x16: farore's secret list
 	.db $ff $30 $00 $60 $07 $c7
 
+.ifdef ROM_AGES
 	.db $ef $00 $00 $90 $07 $00 ; 0x17: intro cinematic screen 1
 	.db $e7 $00 $00 $90 $07 $c7
 
@@ -857,6 +873,7 @@ gfxRegisterStates:
 
 	.db $ef $00 $00 $90 $07 $30 ; 0x19
 	.db $e7 $98 $00 $60 $07 $c7
+.endif
 
 
 ;;
@@ -1879,7 +1896,9 @@ _nextThread:
 quickstartSpawn:
 	.db <wDeathRespawnBuffer.group,     QUICKSTART_GROUP
 	.db <wDeathRespawnBuffer.room,      QUICKSTART_ROOM
+.ifdef ROM_SEASONS
 	.db <wDeathRespawnBuffer.stateModifier, QUICKSTART_SEASON
+.endif
 	.db <wDeathRespawnBuffer.facingDir, DIR_DOWN
 	.db <wDeathRespawnBuffer.y,         QUICKSTART_Y
 	.db <wDeathRespawnBuffer.x,         QUICKSTART_X
@@ -2043,7 +2062,7 @@ _initialThreadStates:
 
 ; Upper bytes of addresses of flags for each group
 flagLocationGroupTable:
-.if defined(ROM_AGES)
+.ifdef ROM_AGES
 	.db >wPresentRoomFlags, >wPastRoomFlags
 	.db >wPresentRoomFlags, >wPastRoomFlags
 	.db >wGroup4RoomFlags,  >wGroup5RoomFlags
@@ -3331,7 +3350,7 @@ _drawObjectTerrainEffects:
 	ld b,>wRoomLayout
 	ld a,(bc)
 
-.if defined(ROM_SEASONS)
+.ifdef ROM_SEASONS
 	; CROSSITEMS: Cane of Somaria uses tile index $f9 indoors. It behaves like a grass tile, but
 	; it's never used indoors, so disable the grass animation on that tile.
 	; (Even though the somaria block is solid, the grass animation can be seen when item drops
@@ -4100,7 +4119,7 @@ loadTilesetAnimation:
 ; Called when displaying D4 entrance after water shuts off in screen above
 func_1383:
 
-.if defined(ROM_SEASONS)
+.ifdef ROM_SEASONS
 	push de
 	ld (wActiveRoom),a
 	ld a,b
@@ -4990,7 +5009,7 @@ checkTreasureObtained:
 	ret
 
 
-.if defined(ROM_SEASONS)
+.ifdef ROM_SEASONS
 ;;
 ; Same as below but for ore chunks.
 cpOreChunkValue:
@@ -5031,7 +5050,7 @@ cpRupeeValue:
 	ret
 
 
-.if defined(ROM_SEASONS)
+.ifdef ROM_SEASONS
 ;;
 removeOreChunkValue:
 	ld hl,wNumOreChunks
@@ -5493,13 +5512,6 @@ getARoomFlags:
 ; @param[out]	a	Room flags
 ; @param[out]	hl	Address of room flags
 getRoomFlags:
-.ifdef ROM_SEASONS
-	cp $02
-	jr nz,+
-		; this is the only diff between ages and seasons here
-		inc a
-	+
-.endif
 	ld hl, flagLocationGroupTable
 	rst_addAToHl
 	ld h,(hl)
@@ -7769,7 +7781,7 @@ objectCheckIsOnHazard:
 objectCheckIsOverHazard:
 	ld bc,$0500
 	call objectGetRelativeTile
-.if defined(ROM_AGES)
+.ifdef ROM_AGES
 	ld (wObjectTileIndex),a
 .endif
 	ld hl,hazardCollisionTable
@@ -8737,7 +8749,7 @@ handleAutoEquipItem:
 	ret
 .endif
 
-.if defined(ROM_AGES)
+.ifdef ROM_AGES
 isDeepUnderwater:
 	ldh (<hFFBD),a	; store temporarily for restoring later
 	ld a,(wTilesetFlags)
@@ -9287,7 +9299,7 @@ objectCreateFallingDownHoleInteraction:
 	xor a
 	ret
 
-.if defined(ROM_AGES)
+.ifdef ROM_AGES
 
 ;;
 ; Makes the object invisible if (wFrameCounter&b) == 0.
@@ -9574,12 +9586,12 @@ scriptCmd_loadScript:
 	ld e,a
 	ldi a,(hl)
 	ld c,a
-.if defined(ROM_AGES)
+.ifdef ROM_AGES
 	ldh (<hScriptAddressL),a
 .endif
 	ldi a,(hl)
 	ld b,a
-.if defined(ROM_AGES)
+.ifdef ROM_AGES
 	ldh (<hScriptAddressH),a
 .endif
 	ldh a,(<hRomBank)
@@ -9919,7 +9931,7 @@ interactionCheckAdjacentTileIsSolid_viaDirection:
 
 
 
-.if defined(ROM_AGES)
+.ifdef ROM_AGES
 
 ;;
 ; @param[out]	zflag	z when counter1 reaches 0 (and text is inactive)
@@ -11522,7 +11534,7 @@ specialObjectCode_companionCutscene:
 ;;
 specialObjectCode_linkInCutscene:
 
-.if defined(ROM_SEASONS)
+.ifdef ROM_SEASONS
 
 	ldh a,(<hRomBank)
 	push af
@@ -11630,7 +11642,7 @@ getRoomInDungeon:
 	ret
 
 
-.if defined(ROM_SEASONS)
+.ifdef ROM_SEASONS
 	.include "code/code_3035.s"
 .endif
 
@@ -11854,7 +11866,7 @@ updateEnemy:
 	ld e,Enemy.id
 	ld a,(de)
 
-.if defined(ROM_AGES)
+.ifdef ROM_AGES
 	; Calculate bank number in 'b'
 .ifdef ENABLE_NEW_GAME_PLUS
 	ld b,$10
@@ -11942,7 +11954,7 @@ updateEnemy:
 	ld h,a
 
 	rst_derefHl
-.if defined(ROM_AGES)
+.ifdef ROM_AGES
 	ld a,b
 	rst_setrombank
 .endif
@@ -11962,7 +11974,7 @@ updateEnemy:
 .include "data/enemyCodeTable.s"
 
 
-.if defined(ROM_AGES)
+.ifdef ROM_AGES
 	.include "code/code_3035.s"
 .endif
 
@@ -12079,7 +12091,7 @@ clearStaticObjects:
 ; @param[out]	zflag	Set on success
 findFreeStaticObjectSlot:
 	ld hl,wStaticObjects
-.if defined(ROM_AGES)
+.ifdef ROM_AGES
 	ld b,$08
 .endif
 --
@@ -12090,7 +12102,7 @@ findFreeStaticObjectSlot:
 	ld a,$08
 	add l
 	ld l,a
-.if defined(ROM_AGES)
+.ifdef ROM_AGES
 	dec b
 .endif
 	jr nz,--
@@ -12197,7 +12209,7 @@ unsetGlobalFlag:
 ;
 clearEnemiesKilledList:
 	ld h,$00
-	.if defined(ROM_AGES)
+	.ifdef ROM_AGES
 	jr ++
 	.else
 	jp ++
@@ -12208,7 +12220,7 @@ clearEnemiesKilledList:
 ;
 addRoomToEnemiesKilledList:
 	ld h,$01
-	.if defined(ROM_AGES)
+	.ifdef ROM_AGES
 	jr ++
 	.else
 	jp ++
@@ -12220,7 +12232,7 @@ addRoomToEnemiesKilledList:
 ;
 markEnemyAsKilledInRoom:
 	ld h,$02
-	.if defined(ROM_AGES)
+	.ifdef ROM_AGES
 	jr ++
 	.else
 	jp ++
@@ -12232,7 +12244,7 @@ markEnemyAsKilledInRoom:
 ;
 generateRandomBuffer:
 	ld h,$04
-	.if defined(ROM_AGES)
+	.ifdef ROM_AGES
 	jr ++
 	.else
 	jp ++
@@ -12245,14 +12257,14 @@ generateRandomBuffer:
 ; @param	hFF8B	"Flags" (set when placing an enemy in the editor)
 getRandomPositionForEnemy:
 	ld h,$05
-	.if defined(ROM_AGES)
+	.ifdef ROM_AGES
 	jr ++
 	.else
 	jp ++
 	.endif
 
 
-.if defined(ROM_AGES)
+.ifdef ROM_AGES
 
 ;;
 ; Calls bank2._checkSpawnTimeportalInteraction.
@@ -12639,7 +12651,7 @@ mainThreadStart:
 
 
 
-.if defined(ROM_SEASONS)
+.ifdef ROM_SEASONS
 
 updateAnimationsAfterCutscene:
 	ldh a,(<hRomBank)
@@ -12764,7 +12776,7 @@ dismountCompanionAndSetRememberedPositionToScreenCenter:
 	rst_setrombank
 	ret
 
-.if defined(ROM_SEASONS)
+.ifdef ROM_SEASONS
 
 seasonsFunc_331b:
 	ldh a,(<hRomBank)
@@ -12900,7 +12912,7 @@ func_3539:
 	rst_setrombank
 	ret
 
-.if defined(ROM_SEASONS)
+.ifdef ROM_SEASONS
 
 ;;
 seasonsFunc_34a0:
@@ -13065,7 +13077,7 @@ setEnemyTargetToLinkPosition:
 	ldh (<hFFB3),a
 	ret
 
-.if defined(ROM_AGES)
+.ifdef ROM_AGES
 
 ;;
 getEntryFromObjectTable2:
@@ -13083,7 +13095,7 @@ getEntryFromObjectTable2:
 
 .endif
 
-.if defined(ROM_SEASONS)
+.ifdef ROM_SEASONS
 
 ;;
 multiIntroCutsceneCaller:
@@ -13098,7 +13110,7 @@ multiIntroCutsceneCaller:
 .endif
 
 
-.if defined(ROM_AGES)
+.ifdef ROM_AGES
 
 ;;
 ; Check if a dungeon uses those toggle blocks with the orbs.
@@ -13116,7 +13128,7 @@ checkDungeonUsesToggleBlocks:
 
 .endif
 
-.if defined(ROM_SEASONS)
+.ifdef ROM_SEASONS
 seasonsFunc_35cc:
 	ld a,($ff00+R_SVBK)
 	ld c,a
@@ -13194,7 +13206,7 @@ loadAnimationData:
 	ret
 
 
-.if defined(ROM_SEASONS)
+.ifdef ROM_SEASONS
 
 roomTileChangesAfterLoad02:
 	ldh a,(<hRomBank)
@@ -13229,7 +13241,7 @@ getIndexOfGashaSpotInRoom:
 	ret
 
 
-.if defined(ROM_AGES)
+.ifdef ROM_AGES
 
 ;;
 ; The name is a bit of a guess.
@@ -14052,7 +14064,7 @@ setTile:
 	ret
 
 
-.if defined(ROM_AGES)
+.ifdef ROM_AGES
 ;;
 ; Calls "setTile" and "setTileInRoomLayoutBuffer".
 ;
@@ -14103,7 +14115,7 @@ setInterleavedTile:
 	pop de
 	ret
 
-.if defined(ROM_SEASONS)
+.ifdef ROM_SEASONS
 
 setSeason:
 	ld b,a
@@ -14157,7 +14169,7 @@ getFreeInteractionSlot:
 
 
 
-.if defined(ROM_AGES)
+.ifdef ROM_AGES
 ;;
 interactionDeleteAndUnmarkSolidPosition:
 	call objectUnmarkSolidPosition
@@ -14289,7 +14301,7 @@ updateInteraction:
 
 .include "data/interactionCodeTable.s"
 
-.if defined(ROM_SEASONS)
+.ifdef ROM_SEASONS
 
 createSokraSnore:
 	ld a,(wFrameCounter)
@@ -14311,7 +14323,7 @@ checkGotMakuSeedDidNotSeeZeldaKidnapped:
 
 .endif
 
-.if defined(ROM_AGES)
+.ifdef ROM_AGES
 
 ;;
 ; Checks that an object is within [hFF8B] pixels of a position on both axes.
@@ -14430,7 +14442,7 @@ interactionRunSimpleScript:
 	.dw @command2
 	.dw @command3
 	.dw @command4
-.if defined(ROM_SEASONS)
+.ifdef ROM_SEASONS
 	.dw @command5
 	.dw @command6
 	.dw @command7
@@ -14494,7 +14506,7 @@ interactionRunSimpleScript:
 	ret
 
 
-.if defined(ROM_SEASONS)
+.ifdef ROM_SEASONS
 
 @command5:
 	pop hl
@@ -14552,7 +14564,7 @@ interactionRunSimpleScript:
 .endif
 
 
-.if defined(ROM_AGES)
+.ifdef ROM_AGES
 
 ;;
 ; Gets object data for tokays in the wild tokay game.
@@ -14607,7 +14619,7 @@ setLinkDirection:
 
 .endif
 
-.if defined(ROM_SEASONS)
+.ifdef ROM_SEASONS
 
 ;;
 ; @param	b	index into _conditionalHoronNPCLookupTable
@@ -14691,7 +14703,7 @@ interactionFunc_3e6d:
 	ret
 
 
-.if defined(ROM_SEASONS)
+.ifdef ROM_SEASONS
 
 getLinkedHerosCaveSideEntranceRoom:
 	ldh a,(<hRomBank)
@@ -14745,7 +14757,7 @@ partDelete:
 	ret
 
 
-.if defined(ROM_AGES)
+.ifdef ROM_AGES
 
 ;;
 ; @param[out]	cflag
@@ -14796,7 +14808,7 @@ func_3ee4:
 .endif
 
 
-.if defined(ROM_SEASONS)
+.ifdef ROM_SEASONS
 ;;
 ; CROSSITEMS: For Seasons only, determine which tile index is the cane of somaria (varies based on
 ; which group we're in).

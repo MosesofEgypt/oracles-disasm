@@ -1192,7 +1192,7 @@ blackTowerCompleteCutsceneHandler:
 	push af
 	ld a,$02
 	ld ($ff00+R_SVBK),a
-	ld hl,$de90
+	ld hl,w2TilesetBgPalettes+$10
 	ld b,$30
 	call clearMemory
 	pop af
@@ -1715,7 +1715,7 @@ pregameIntroCutsceneHandler:
 	push af
 	ld a,$02
 	ld ($ff00+R_SVBK),a
-	ld hl,$de80
+	ld hl,w2TilesetBgPalettes
 	ld b,$40
 	call clearMemory
 	pop af
@@ -1804,10 +1804,10 @@ func_6ed6:
 	push af
 	ld a,$04
 	ld ($ff00+R_SVBK),a
-	ld hl,w1Link.enabled
+	ld hl,w4TileMap
 	ld bc,$0240
 	call clearMemoryBc
-	ld hl,$d400
+	ld hl,w4AttributeMap
 	ld bc,$0024
 	ldh a,(<hFF8B)
 	call fillMemoryBc16ByteBlocks
@@ -1918,7 +1918,7 @@ func_6f9e:
 	push af
 	ld a,$02
 	ld ($ff00+R_SVBK),a
-	ld hl,$de90
+	ld hl,w2TilesetBgPalettes+$10
 	ld b,$30
 	call clearMemory
 	pop af
@@ -2135,11 +2135,11 @@ func_70f7:
 	ldh (<hFF8E),a
 	push hl
 	ld c,d
-	ld de,w1Link.enabled
+	ld de,w2TmpGfxBuffer
 	call func_712f
 	pop hl
 	set 2,h
-	ld de,$d400
+	ld de,w2TmpAttrBuffer
 func_712f:
 	ldh a,(<hFF93)
 	ld c,a
@@ -2355,27 +2355,27 @@ func_03_7244:
 	.dw @@cbb3_04
 	.dw @@cbb3_05
 @@cbb3_00:
-	ld hl,w1Link.enabled
+	ld hl,w5NameEntryCharacterGfx
 --
 	call func_7431
 	call func_745c
 	jr timewarpCutscene_incCBB3
 @@cbb3_01:
-	ld hl,$d400
+	ld hl,w5NameEntryCharacterGfx+$400
 	jr --
 @@cbb3_02:
-	ld hl,$d800
+	ld hl,w5NameEntryCharacterGfx+$800
 	jr --
 @@cbb3_03:
-	ld hl,$dc00
+	ld hl,w5NameEntryCharacterGfx+$c00
 	jr --
 @@cbb3_04:
-	ld hl,w1Link.enabled
+	ld hl,w3TileMappingData
 	call func_7431
 	call func_7456
 	jp timewarpCutscene_incCBB3
 @@cbb3_05:
-	ld hl,$d400
+	ld hl,w6DragonOnoxTileAttr1
 	call func_7431
 	call func_7450
 	ld hl,wGenericCutscene.cbb7
@@ -2395,7 +2395,7 @@ func_03_7244:
 	call clearParts
 	call clearReservedInteraction0
 	call clearDynamicInteractions
-	ld de,$d100
+	ld de,w1Companion.enabled
 	call objectDelete_de
 .ifndef REGION_JP
 	ld a,>w1Link
@@ -2425,10 +2425,10 @@ func_03_7244:
 	ld a,$03
 	ld ($ff00+R_SVBK),a
 	ld bc,$02c0
-	ld hl,$d800
+	ld hl,w3VramTiles
 	call clearMemoryBc
 	ld bc,$02c0
-	ld hl,$dc00
+	ld hl,w3VramAttributes
 	call clearMemoryBc
 	call reloadTileMap
 	jp timewarpCutscene_incCBB3
