@@ -432,7 +432,7 @@ seasons_func_0f_722f:
 	rst_addAToHl
 	ld a,(hl)
 	ldh (<hFF8B),a
-	ld hl,w3TileMappingData
+	ld hl,w3VramTiles
 	add hl,bc
 	ld b,$40
 	call seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer
@@ -529,7 +529,7 @@ seasons_func_0f_72dc:
 +
 	ld a,$03
 	ld ($ff00+R_SVBK),a
-	ld de,wTmpVramBuffer+$4f
+	ld de,wTmpVramBuffer+$0f
 --
 	ld b,$10
 -
@@ -582,7 +582,7 @@ seasons_func_0f_7325:
 +
 	ld a,$03
 	ld ($ff00+R_SVBK),a
-	ld de,wTmpVramBuffer+$47
+	ld de,wTmpVramBuffer+$07
 --
 	ld b,$04
 -

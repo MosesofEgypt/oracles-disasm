@@ -3,7 +3,7 @@
 ;;
 ; CUTSCENE_S_DIN_CRYSTAL_DESCENDING
 endgameCutsceneHandler_09:
-	ld de,wGenericCutscene.wGenericCutscene
+	ld de,wGenericCutscene.cbc1
 	ld a,(de)
 	rst_jumpTable
 	.dw endgameCutsceneHandler_09_stage0
@@ -278,7 +278,7 @@ endgameCutsceneHandler_09_stage0_body:
 	ret nz
 	call seasonsFunc_03_646a
 	ld a,$01
-	ld (wGenericCutscene.wGenericCutscene),a
+	ld (wGenericCutscene.cbc1),a
 	call disableActiveRing
 	jp fadeoutToWhite
 
@@ -883,7 +883,7 @@ endgameCutsceneHandler_09_stage1_body:
 ;;
 ; CUTSCENE_S_ROOM_OF_RITES_COLLAPSE
 endgameCutsceneHandler_0f:
-	ld de,wGenericCutscene.wGenericCutscene
+	ld de,wGenericCutscene.cbc1
 	ld a,(de)
 	rst_jumpTable
 	.dw endgameCutsceneHandler_0f_stage0
@@ -1271,7 +1271,7 @@ endgameCutsceneHandler_0a:
 	jp func_3539
 
 endgameCutsceneHandler_0a_body:
-	ld de,wGenericCutscene.wGenericCutscene
+	ld de,wGenericCutscene.cbc1
 	ld a,(de)
 	rst_jumpTable
 	.dw endgameCutsceneHandler_0a_stage0
@@ -1525,7 +1525,7 @@ endgameCutsceneHandler_0a_stage1:
 	call seasonsFunc_03_646a
 	call enableActiveRing
 	ld a,$02
-	ld (wGenericCutscene.wGenericCutscene),a
+	ld (wGenericCutscene.cbc1),a
 	ld hl,wLinkMaxHealth
 	ldd a,(hl)
 	ld (hl),a ; [wLinkHealth]
@@ -1603,7 +1603,7 @@ endgameCutsceneHandler_0a_stage2:
 	jr nz,+
 	call seasonsFunc_03_646a
 	ld a,$03
-	ld (wGenericCutscene.wGenericCutscene),a
+	ld (wGenericCutscene.cbc1),a
 	ld a,$04
 	jp fadeoutToWhiteWithDelay
 +
@@ -1753,7 +1753,7 @@ endgameCutsceneHandler_0a_stage2:
 	ret nz
 	call seasonsFunc_03_646a
 	ld a,$03
-	ld (wGenericCutscene.wGenericCutscene),a
+	ld (wGenericCutscene.cbc1),a
 	ld a,$04
 	jp fadeoutToWhiteWithDelay
 

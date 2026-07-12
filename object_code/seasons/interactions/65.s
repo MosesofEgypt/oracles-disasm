@@ -434,7 +434,7 @@ func_545a:
 	ld b,$40
 	ld c,$03
 	call func_553a
-	ld hl,w2TmpAttrBuffer+$4c0
+	ld hl,w2TmpAttrBuffer+$c0
 	ld de,wTmpVramBuffer
 	ld b,$40
 	ld c,$02
