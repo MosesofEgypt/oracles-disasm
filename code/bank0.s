@@ -42,16 +42,6 @@
 	setrombank
 	ret
 
-.ORGA $0030
-; rst_isSeasons
-	push hl
-	ld h,a
-	ldh a,($fe)
-	or a
-	ld a,h
-	pop hl
-	ret
-
 .ORGA $0038
 ; Not used as rst $38
 	nop

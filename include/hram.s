@@ -146,3 +146,14 @@
 
 	hSoundData3				db	; $fff2
 .ende
+
+.enum $fffc export
+	; function to set carry flag if seasons, or clear
+	; it if ages. exists in hram so it can be modified.
+	; will contain a variant of this function:
+	;	scf
+	;	ccf		; this may be replaced with a return
+	;	ret
+	; the cflag will be cleared if ages and set if seasons
+	hIsSeasons				dsb $03
+.ende

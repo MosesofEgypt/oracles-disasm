@@ -420,6 +420,21 @@ fileSelectMode1:
 	; Fade done
 	xor a
 	ld (wLastSecretInputLength),a
+	; insert a small 3-byte program into hRAM for
+	; quickly determining which game is being run
+	ld a,(wWhichGame)
+	ld hl,hIsSeasons
+	ld (hl),$37 		; scf
+	inc hl
+	or a
+	jr z,+
+		ld (hl),$3f 	; ccf
+		inc hl
+	+
+	ld (hl),$c9			; ret
+
+	; this is where the game switches from the intro/file
+	; select thread to the main game logic thread.
 	ld bc,mainThreadStart
 	jp restartThisThread
 
@@ -2865,10 +2880,21 @@ updateFileLinkPaletteForNewGamePlus:
 
 @newGamePlusPalettes:
 	; colors are RGB555 LE with high bit ignored, and R in lower bits
-	.dw $7fff $0000 (($08<<10)|($15<<5)|$02) (($11<<10)|($1a<<5)|$1f)	; green
-	.dw $7fff $0000 (($1f<<10)|($0b<<5)|$03) (($11<<10)|($1a<<5)|$1f)	; blue
-	.dw $7fff $0000 (($05<<10)|($01<<5)|$1f) (($11<<10)|($1a<<5)|$1f)	; red
-	.dw $7fff $0000 (($01<<10)|($0f<<5)|$1f) (($11<<10)|($1a<<5)|$1f)	; gold
+	.dw $ffff $0000 ; pure white and black
+	m_RGB16 02 21 08	; green
+	m_RGB16 31 26 17
+
+	.dw $ffff $0000 ; pure white and black
+	m_RGB16 03 11 31	; blue
+	m_RGB16 31 26 17
+
+	.dw $ffff $0000 ; pure white and black
+	m_RGB16 31 01 05	; red
+	m_RGB16 31 26 17
+
+	.dw $ffff $0000 ; pure white and black
+	m_RGB16 31 15 01	; gold
+	m_RGB16 31 26 17
 .endif
 
 secretTextTable:
