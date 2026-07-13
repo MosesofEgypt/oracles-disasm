@@ -316,10 +316,6 @@ likelike_stateB:
 
 	ld l,Enemy.counter1
 	ld a,(hl)
-	; if the count is over 50, it's basically guaranteed
-	; they're using autofire, and we're preventing that
-	cp 50
-	jr nc,+
 	cp b
 	jr nc,++
 		+

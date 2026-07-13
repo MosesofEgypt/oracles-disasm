@@ -1299,7 +1299,7 @@ queueDmaTransfer:
 	push hl
 	ld a,c
 	ld ($ff00+R_SVBK),a
-	rst_setrombank
+	setrombank
 	pop de
 	ld hl, HDMA1
 	ld (hl),d
@@ -1316,7 +1316,7 @@ queueDmaTransfer:
 	pop af
 	ld ($ff00+R_SVBK),a
 	pop af
-	rst_setrombank
+	setrombank
 	xor a
 	ret
 
@@ -2749,11 +2749,11 @@ _startSound:
 	ld a,:audio.b39_initSound
 	ldh (<hSoundDataBaseBank),a
 	ldh (<hSoundDataBaseBank2),a
-	rst_setrombank
+	setrombank
 	call jpBc
 	call enableTimer
 	pop af
-	rst_setrombank
+	setrombank
 	pop de
 	ret
 
@@ -3116,7 +3116,9 @@ drawAllSpritesUnconditionally:
 	ldh (<hFF8E),a
 
 	; Object.oamDataAddress
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 
 	; Get address, bank of animation frame data
 	ld a,h
@@ -3124,7 +3126,7 @@ drawAllSpritesUnconditionally:
 	rlca
 	rlca
 	add BASE_OAM_DATA_BANK
-	rst_setrombank
+	setrombank
 	set 6,h
 	res 7,h
 
@@ -3376,7 +3378,9 @@ _drawObjectTerrainEffects:
 @walkingInPuddle:
 	inc e
 	ld hl,wPuddleAnimationPointer
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 	jr @grassOrWater
 
 @walkingInGrass:
@@ -4213,7 +4217,7 @@ func_13c6:
 	call extractColorComponents
 	pop de
 	pop af
-	rst_setrombank
+	setrombank
 	xor a
 	ld ($ff00+R_SVBK),a
 	jp startFadeBetweenTwoPalettes
@@ -4228,7 +4232,7 @@ extractColorComponents:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:paletteDataStart
-	rst_setrombank
+	setrombank
 	ld b,$30
 --
 	ld c,(hl)
@@ -4258,7 +4262,7 @@ extractColorComponents:
 	jr nz,--
 
 	pop af
-	rst_setrombank
+	setrombank
 	ret
 
 ;;
@@ -4991,7 +4995,7 @@ checkTreasureObtained:
 	push af
 	callfrombank0 bank3f.checkTreasureObtained_body
 	pop af
-	rst_setrombank
+	setrombank
 	ld a,l
 	srl h
 ++
@@ -5345,16 +5349,18 @@ retrieveTextCharacter:
 	ld a,(w7TextGfxSource)
 	ld hl,@data
 	rst_addDoubleIndex
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 	add hl,bc
 	pop bc
 	m_ReadGfxDataHashedFilename gfx_font
 	ld a,:{filename}
-	rst_setrombank
+	setrombank
 	call @func_18fd
 
 	ld a,BANK_3f
-	rst_setrombank
+	setrombank
 
 	xor a
 	ld (w7TextGfxSource),a
@@ -5606,7 +5612,7 @@ copyTextCharacterGfx:
 	push af
 	m_ReadGfxDataHashedFilename gfx_font
 	ld a,:{filename}
-	rst_setrombank
+	setrombank
 	ld a,(wFileSelect.fontXor)
 	ld c,a
 	ld b,$10
@@ -5621,7 +5627,7 @@ copyTextCharacterGfx:
 	jr nz,-
 
 	pop af
-	rst_setrombank
+	setrombank
 	pop bc
 	pop hl
 	ret
@@ -6585,7 +6591,9 @@ lookupCollisionTable:
 lookupCollisionTable_paramE:
 	ld a,(wActiveCollisions)
 	rst_addDoubleIndex
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 	jr lookupKey
 
 ;;
@@ -6599,7 +6607,9 @@ findByteInCollisionTable:
 findByteInCollisionTable_paramE:
 	ld a,(wActiveCollisions)
 	rst_addDoubleIndex
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 	jr findByteAtHl
 
 ;;
@@ -7219,7 +7229,7 @@ getPositionOffsetForVelocityOrig:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:bank3.objectSpeedTable
-	rst_setrombank
+	setrombank
 
 	; Get Y values
 	ld bc,wTmpcec0
@@ -7241,7 +7251,7 @@ getPositionOffsetForVelocityOrig:
 	ld (bc),a
 
 	pop af
-	rst_setrombank
+	setrombank
 
 	ld hl,wTmpcec0
 	or h
@@ -8095,7 +8105,7 @@ updateLinkPositionGivenVelocity:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:bank5.specialObjectUpdatePositionGivenVelocity
-	rst_setrombank
+	setrombank
 
 	; Update Link's position
 	push de
@@ -8106,7 +8116,7 @@ updateLinkPositionGivenVelocity:
 	pop de
 
 	pop af
-	rst_setrombank
+	setrombank
 	scf
 	ret
 
@@ -8517,7 +8527,9 @@ tryNgpUpgradeUncapped:
 	; determine which table to use for upgrade values
 	dec a	; NG+0 has no upgrade table
 	rst_addDoubleIndex
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 	pop af
 	push bc
 	ld b,a
@@ -8731,7 +8743,7 @@ handleAutoEquipItem:
 	push af
 	callfrombank0 bank3d.handleAutoEquipItem_body
 	pop af
-	rst_setrombank
+	setrombank
 	pop hl
 	ld a,h
 	pop hl
@@ -8776,7 +8788,9 @@ getHeldObject:
 	+
 	; get the object held by w1Link
 	ld hl,w1Link.relatedObj2
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 	; test that the object is enabled
 	xor a
 	or (hl)
@@ -9611,7 +9625,7 @@ interactionAnimate:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:interactionAnimationTable
-	rst_setrombank
+	setrombank
 	ld l,Interaction.animPointer
 	jr _interactionNextAnimationFrame
 
@@ -9624,17 +9638,21 @@ interactionSetAnimation:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:interactionAnimationTable
-	rst_setrombank
+	setrombank
 	ld e,Interaction.id
 	ld a,(de)
 	ld hl,interactionAnimationTable
 	rst_addDoubleIndex
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 	add hl,bc
 
 ;;
 _interactionNextAnimationFrame:
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 
 	; Byte 0: how many frames to hold it (or $ff to loop)
 	ldi a,(hl)
@@ -9690,7 +9708,7 @@ _interactionNextAnimationFrame:
 	ld (de),a
 
 	pop af
-	rst_setrombank
+	setrombank
 	ret
 
 ;;
@@ -10156,7 +10174,7 @@ enemyAnimate:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:enemyAnimationTable
-	rst_setrombank
+	setrombank
 	ld l,Enemy.animPointer
 	jr _enemyNextAnimationFrame
 
@@ -10175,12 +10193,16 @@ enemySetAnimation:
 	ld a,(de)
 	ld hl,enemyAnimationTable
 	rst_addDoubleIndex
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 	add hl,bc
 
 ;;
 _enemyNextAnimationFrame:
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 
 	; Byte 0: how many frames to hold it (or $ff to loop)
 	ldi a,(hl)
@@ -10219,7 +10241,9 @@ _enemyNextAnimationFrame:
 	ld a,(de)
 	ld hl,enemyOamDataTable
 	rst_addDoubleIndex
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 	add hl,bc
 
 	; Set the address of the oam data
@@ -10232,7 +10256,7 @@ _enemyNextAnimationFrame:
 	ld (de),a
 
 	pop af
-	rst_setrombank
+	setrombank
 	ret
 
 ;;
@@ -10546,7 +10570,7 @@ partAnimate:
 	dec (hl)
 	ret nz
 	ld a,:partAnimationTable
-	rst_setrombank
+	setrombank
 	ld l,Part.animPointer
 	jr _partNextAnimationFrame
 
@@ -10561,14 +10585,18 @@ partSetAnimation:
 	ld a,(de)
 	ld hl,partAnimationTable
 	rst_addDoubleIndex
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 	add hl,bc
 
 ;;
 ; Note: this sets the ROM bank to $11 before returning.
 ;
 _partNextAnimationFrame:
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 
 	; Byte 0: how many frames to hold it (or $ff to loop)
 	ldi a,(hl)
@@ -10607,7 +10635,9 @@ _partNextAnimationFrame:
 	ld a,(de)
 	ld hl,partOamDataTable
 	rst_addDoubleIndex
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 	add hl,bc
 
 	; Set the address of the oam data
@@ -10621,7 +10651,7 @@ _partNextAnimationFrame:
 	ld (de),a
 
 	ld a,PART_BANK
-	rst_setrombank
+	setrombank
 	ret
 
 ;;
@@ -10853,7 +10883,7 @@ linkApplyDamage:
 	ld d,>w1Link
 	callfrombank0 bank5.linkApplyDamage_b5
 	pop af
-	rst_setrombank
+	setrombank
 	pop de
 	ret
 
@@ -10905,11 +10935,11 @@ specialObjectAnimate:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:bank6.specialObjectNextAnimationFrame
-	rst_setrombank
+	setrombank
 	ld l,SpecialObject.animPointer
 	call bank6.specialObjectNextAnimationFrame
 	pop af
-	rst_setrombank
+	setrombank
 	ret
 
 ;;
@@ -10925,7 +10955,7 @@ specialObjectSetAnimation:
 	push af
 	callfrombank0 bank6.specialObjectSetAnimation_body
 	pop af
-	rst_setrombank
+	setrombank
 	ret
 
 ;;
@@ -10934,7 +10964,7 @@ loadLinkAndCompanionAnimationFrame:
 	push af
 	callfrombank0 bank6.loadLinkAndCompanionAnimationFrame_body
 	pop af
-	rst_setrombank
+	setrombank
 	ret
 
 ;;
@@ -11163,7 +11193,7 @@ tryToBreakTile:
 .endif
 	rl e
 	pop af
-	rst_setrombank
+	setrombank
 	rr e
 	ret
 
@@ -11194,7 +11224,7 @@ checkUseItems:
 	push af
 	callfrombank0 bank6.functionCaller
 	pop af
-	rst_setrombank
+	setrombank
 	ret
 
 ;;
@@ -11918,7 +11948,7 @@ updateEnemy:
 	; Seasons sets the rom bank here instead of later, for no particular reason...?
 	ld e,a
 	ld a,b
-	rst_setrombank
+	setrombank
 	ld a,e
 .endif
 
@@ -11943,10 +11973,12 @@ updateEnemy:
 	adc >enemyCodeTable
 	ld h,a
 
-	rst_derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 .ifdef ROM_AGES
 	ld a,b
-	rst_setrombank
+	setrombank
 .endif
 	ld a,c
 	or a
@@ -12828,13 +12860,13 @@ updateAllObjects:
 
 	; Call func_410d if Link is riding something
 	ld a,:bank5.func_410d
-	rst_setrombank
+	setrombank
 	ld a,(wLinkObjectIndex)
 	rrca
 	call c,bank5.func_410d
 
 	ld a,:bank6.updateGrabbedObjectPosition
-	rst_setrombank
+	setrombank
 	ld a,(wLinkGrabState)
 	rlca
 	call c,bank6.updateGrabbedObjectPosition
@@ -12850,7 +12882,7 @@ updateAllObjects:
 	xor a
 	ld (wc4b6),a
 	pop af
-	rst_setrombank
+	setrombank
 	ret
 
 ;;
@@ -12863,7 +12895,7 @@ updateSpecialObjectsAndInteractions:
 	xor a
 	ld (wc4b6),a
 	pop af
-	rst_setrombank
+	setrombank
 	ret
 
 ;;
@@ -12875,7 +12907,7 @@ updateInteractionsAndDrawAllSprites:
 	xor a
 	ld (wc4b6),a
 	pop af
-	rst_setrombank
+	setrombank
 	ret
 
 ;;
