@@ -81,15 +81,8 @@ func_11_5e8a:
 .ifdef ENABLE_NEW_GAME_PLUS
 	ldh a,(<hRomBank)
 	push af
-	ldi a,(hl)
-	setrombank
-	call @execPartCode
-	pop af
-	setrombank
-	ret
-
-@execPartCode:
-.endif
+	jp updatePart
+.else
 	ldi a,(hl)
 	ld h,(hl)
 	ld l,a
@@ -97,3 +90,5 @@ func_11_5e8a:
 	ld a,c
 	or a
 	jp hl
+
+.endif

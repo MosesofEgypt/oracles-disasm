@@ -8333,6 +8333,25 @@ eitherRingActive:
 .endif
 
 .ifdef ENABLE_NEW_GAME_PLUS
+updatePart:
+	call @execPartCode
+	pop af
+	setrombank
+	ret
+
+@execPartCode:
+	ldi a,(hl)
+	push af
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
+	pop af
+	setrombank
+
+	ld a,c
+	or a
+	jp hl
+
 getFlaskChargePrice:
 	ldh a,(<hRomBank)
 	push af
