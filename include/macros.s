@@ -986,4 +986,15 @@
 .macro m_ngp_upgrade_d_s_term
 	m_ngp_upgrade_term $14 $00 $00 \1 $00 \2
 .endm
+
+; Args:
+;   \1 - byte: newDamage
+.macro m_ngp_upgrade_d
+	m_ngp_upgrade $04 $00 $00 \1 $00 $00
+.endm
+
+; same args as above, but with terminator flag set
+.macro m_ngp_upgrade_d_term
+	m_ngp_upgrade_term $04 $00 $00 \1 $00 $00
+.endm
 .endif

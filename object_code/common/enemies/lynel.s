@@ -57,6 +57,10 @@ enemyCode0d:
 	bit 3,(hl)
 	jp nz,enemyDelete
 ++
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld hl,@ngpUpgradeTable
+	call tryNgpUpgradeStrongEnemy
+.endif
 	ld e,Enemy.subid
 	ld a,(de)
 	ld hl,@var30Vals
@@ -80,6 +84,31 @@ enemyCode0d:
 
 @var30Vals:
 	.db $07 $03 $01
+.ifdef ENABLE_NEW_GAME_PLUS
+	.db $00
+
+@ngpUpgradeTable:
+	.dw @ngpUpgradeSubtable
+	.dw @ngpUpgradeSubtable
+	.dw @ngpUpgradeSubtable
+
+@ngpUpgradeSubtable:
+	.dw @ngpRedLynelUpgrades
+	.dw @ngpBlueLynelUpgrades
+	.dw @ngpGoldLynelUpgrades
+
+	@ngpRedLynelUpgrades:
+		m_ngp_upgrade_p_si_d_h		PALETTE_RED   0 12 12
+		m_ngp_upgrade_p_si_d_h		PALETTE_RED   0 12 12
+
+	@ngpBlueLynelUpgrades:
+		m_ngp_upgrade_p_si_d_h		PALETTE_BLUE  1 12 16
+		m_ngp_upgrade_p_si_d_h		PALETTE_BLUE  1 12 16
+		m_ngp_upgrade_p_si_d_h_term	PALETTE_GREEN 2 16 20
+
+	@ngpGoldLynelUpgrades:
+		m_ngp_upgrade_d_term		                16
+.endif
 
 
 @state_scentSeed:
