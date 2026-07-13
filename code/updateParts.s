@@ -61,16 +61,35 @@ updateParts:
 func_11_5e8a:
 	call partCommon_standardUpdate
 
-	; hl = partCodeTable + [Part.id] * 2
 	ld e,Part.id
 	ld a,(de)
+.ifdef ENABLE_NEW_GAME_PLUS
+	; hl = partCodeTable + [Part.id] * 3
+	ld l,a
 	add a
+	add l
+.else
+	; hl = partCodeTable + [Part.id] * 2
+	add a
+.endif
 	add <partCodeTable
 	ld l,a
 	ld a,$00
 	adc >partCodeTable
 	ld h,a
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	ldh a,(<hRomBank)
+	push af
+	ldi a,(hl)
+	setrombank
+	call @execPartCode
+	pop af
+	setrombank
+	ret
+
+@execPartCode:
+.endif
 	ldi a,(hl)
 	ld h,(hl)
 	ld l,a

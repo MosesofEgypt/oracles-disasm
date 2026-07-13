@@ -64,8 +64,7 @@ octorok_state_uninitialized:
 ++
 .ifdef ENABLE_NEW_GAME_PLUS
 	ld hl,@ngpUpgradeTable
-	xor a	; indicate this is a weak enemy
-	call tryNgpUpgrade
+	call tryNgpUpgradeWeakEnemy
 	; if the octorok was upgraded, don't let the speed be changed below
 	jr nc,++
 		ld e,Enemy.speed

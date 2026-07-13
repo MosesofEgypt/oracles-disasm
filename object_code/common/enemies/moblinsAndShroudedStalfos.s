@@ -76,8 +76,7 @@ moblin_state_uninitialized:
 		ld hl,@ngpEnemy22UpgradeTable
 	+
 
-	xor a	; indicate this is a weak enemy
-	jp tryNgpUpgrade
+	jp tryNgpUpgradeWeakEnemy
 
 @ngpEnemy0CUpgradeTable:
 	.dw @ngpEnemy0CUpgradeSubtable1

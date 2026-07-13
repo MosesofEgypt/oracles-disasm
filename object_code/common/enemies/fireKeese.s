@@ -122,9 +122,7 @@ fireKeese_state_uninitialized:
 	++
 	ld hl,@ngpUpgradeTable
 
-	xor a
-	inc a	; indicate this is a strong enemy
-	jp tryNgpUpgrade
+	jp tryNgpUpgradeStrongEnemy
 
 @ngpUpgradeTable:
 	.dw @ngpUpgradeSubtable1

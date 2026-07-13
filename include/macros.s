@@ -851,6 +851,20 @@
 
 ; Args:
 ;   \1 - 3bit: newPalette
+;   \2 - byte: newDamage
+;   \3 - byte: newHealth
+;	\4 - byte: newSpeed
+.macro m_ngp_upgrade_p_d_h_s
+	m_ngp_upgrade $1d \1 $00 \2 \3 \4
+.endm
+
+; same args as above, but with terminator flag set
+.macro m_ngp_upgrade_p_d_h_s_term
+	m_ngp_upgrade_term $1d \1 $00 \2 \3 \4
+.endm
+
+; Args:
+;   \1 - 3bit: newPalette
 ;   \2 - 5bit: newSubId
 ;   \3 - byte: newDamage
 ;   \4 - byte: newHealth
@@ -947,6 +961,18 @@
 ; same args as above, but with terminator flag set
 .macro m_ngp_upgrade_p_d_h_term
 	m_ngp_upgrade_term $0d \1 $00 \2 \3 $00
+.endm
+
+; Args:
+;   \1 - 3bit: newPalette
+;   \2 - byte: newDamage
+.macro m_ngp_upgrade_p_d
+	m_ngp_upgrade $05 \1 $00 \2 $00 $00
+.endm
+
+; same args as above, but with terminator flag set
+.macro m_ngp_upgrade_p_d_term
+	m_ngp_upgrade_term $05 \1 $00 \2 $00 $00
 .endm
 
 ; Args:

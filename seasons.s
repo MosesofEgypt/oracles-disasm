@@ -683,6 +683,7 @@ m_section_free Part_Code_2 NAMESPACE partCode
 	.include "code/updateParts.s"
 	.include "data/partCodeTable.s"
 
+.ifndef ENABLE_NEW_GAME_PLUS
 	.include "object_code/seasons/parts/holesFloortrap.s"
 	.include "object_code/seasons/parts/slingshotEyeStatue.s"
 	.include "object_code/seasons/parts/16.s"
@@ -715,8 +716,8 @@ m_section_free Part_Code_2 NAMESPACE partCode
 	.include "object_code/seasons/parts/49.s"
 	.include "object_code/seasons/parts/4a.s"
 	.include "object_code/seasons/parts/dinCrystal.s"
+.endif
 .ends
-
 
 .BANK $11 SLOT 1
 .ORG 0
@@ -934,15 +935,51 @@ m_section_free Seasons_Interactions_Bank15 NAMESPACE seasonsInteractionsBank15
 
 .BANK $3d SLOT 1
 .ORG 0
+.define BANK_3d $3d
 
 m_section_free bank3dCode NAMESPACE bank3d
-	.define BANK_3d $3d
-
-.ifdef ENABLE_SETTINGS_MENU
-	.include "code/settingsMenu.s"
-.endif
+	.ifdef ENABLE_SETTINGS_MENU
+		.include "code/settingsMenu.s"
+	.endif
 	.include "code/bank0Ext.s"
 .ends
+
+.ifdef ENABLE_NEW_GAME_PLUS
+m_section_free Part_Code_3 NAMESPACE partCode
+	.include "object_code/seasons/parts/holesFloortrap.s"
+	.include "object_code/seasons/parts/slingshotEyeStatue.s"
+	.include "object_code/seasons/parts/16.s"
+	.include "object_code/seasons/parts/shootingDragonHead.s"
+	.include "object_code/seasons/parts/arrowShooter.s"
+	.include "object_code/seasons/parts/wallFlameShooterFlames.s"
+	.include "object_code/seasons/parts/buriedMoldorm.s"
+	.include "object_code/seasons/parts/kingMoblinsCannons.s"
+	.include "object_code/seasons/parts/2e.s"
+	.include "object_code/seasons/parts/2f.s"
+	.include "object_code/seasons/parts/poppableBubble.s"
+	.include "object_code/seasons/parts/33.s"
+	.include "object_code/seasons/parts/38.s"
+	.include "object_code/seasons/parts/39.s"
+	.include "object_code/common/parts/vireProjectile.s"
+	.include "object_code/seasons/parts/3b.s"
+	.include "object_code/seasons/parts/poeSisterFlame.s"
+	.include "object_code/seasons/parts/3d.s"
+	.include "object_code/seasons/parts/3e.s"
+	.include "object_code/seasons/parts/kingMoblinBomb.s"
+	.include "object_code/seasons/parts/aquamentusProjectile.s"
+	.include "object_code/seasons/parts/dodongoFireball.s"
+	.include "object_code/seasons/parts/mothulaProjectile2.s"
+	.include "object_code/seasons/parts/43.s"
+	.include "object_code/seasons/parts/44.s"
+	.include "object_code/seasons/parts/45.s"
+	.include "object_code/seasons/parts/46.s"
+	.include "object_code/seasons/parts/47.s"
+	.include "object_code/seasons/parts/48.s"
+	.include "object_code/seasons/parts/49.s"
+	.include "object_code/seasons/parts/4a.s"
+	.include "object_code/seasons/parts/dinCrystal.s"
+.ends
+.endif
 
 .ifdef ENABLE_NEW_GAME_PLUS
 .BANK $3e SLOT 1

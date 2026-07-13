@@ -8556,10 +8556,25 @@ tryNgpUpgradeUncapped:
 	scf
 	ret
 
+tryNgpUpgradeStrongEnemyIgnoreSubids:
+	ld a,$03
+	jr tryNgpUpgrade
+
+tryNgpUpgradeWeakEnemyIgnoreSubids:
+	ld a,$02
+	jr tryNgpUpgrade
+
+tryNgpUpgradeStrongEnemy:
+	ld a,$01
+	jr tryNgpUpgrade
+
+tryNgpUpgradeWeakEnemy:
+	xor a
+
 ;;
 ;
 ; @param	a	Each bit indicates various things about the upgrade.
-;               Bit 0: Is string enemy if 1, otherwise is enemy.
+;               Bit 0: Is strong enemy if 1, otherwise is weak.
 ;               Bit 1: Ignore subid tables if 1, otherwise use them.
 ; @param	d	The enemy to possibly upgrade
 ; @param	hl	Start address of the upgrades table

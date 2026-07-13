@@ -82,11 +82,44 @@ spikedBall_head_state0:
 	set 7,(hl)
 	call objectSetVisible81
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld hl,@ngpUpgradeTable
+	call tryNgpUpgradeProjectileIgnoreSubids
+	jr spikedBall_head_state1
+
+@ngpUpgradeTable:
+	.dw @ngpEnemyUpgrades1
+	.dw @ngpEnemyUpgrades2
+	.dw @ngpEnemyUpgrades3
+
+@ngpEnemyUpgrades1:
+	m_ngp_upgrade_p_d_term	PALETTE_RED   6
+
+@ngpEnemyUpgrades2:
+	m_ngp_upgrade_p_d_term	PALETTE_BLUE  12
+
+@ngpEnemyUpgrades3:
+	m_ngp_upgrade_p_d_term	PALETTE_GOLD  16
+.endif
 
 ; Rotating slowly
 spikedBall_head_state1:
+.ifdef ENABLE_NEW_GAME_PLUS
+	call getNewGamePlusCycle
+	cp $02
 	ld e,Part.angle
 	ld a,(de)
+	jr c,+
+		ld hl,wFrameCounter
+		bit 0,(hl)
+		jr z,+
+			; increment every other frame, so 50% faster
+			inc a
+	+
+.else
+	ld e,Part.angle
+	ld a,(de)
+.endif
 	inc a
 	and $1f
 	ld (de),a
@@ -95,8 +128,18 @@ spikedBall_head_state1:
 
 ; Rotating faster
 spikedBall_head_state2:
+.ifdef ENABLE_NEW_GAME_PLUS
+	call getNewGamePlusCycle
+	cp $02
 	ld e,Part.angle
 	ld a,(de)
+	jr c,+
+		inc a
+	+
+.else
+	ld e,Part.angle
+	ld a,(de)
+.endif
 	add $02
 	and $1f
 	ld (de),a
@@ -110,8 +153,21 @@ spikedBall_head_setDefaultDistanceAway:
 ; @param	b	Enemy object
 spikedBall_updatePosition:
 	call spikedBall_copyParentPosition
+.ifdef ENABLE_NEW_GAME_PLUS
+	call getNewGamePlusCycle
+	cp $02
 	ld e,Part.var30
 	ld a,(de)
+	ld e,a
+	jr c,+
+		add e
+	+
+	add e
+	srl a
+.else
+	ld e,Part.var30
+	ld a,(de)
+.endif
 	ld e,Part.angle
 	jp objectSetPositionInCircleArc
 

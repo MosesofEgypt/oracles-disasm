@@ -84,8 +84,7 @@ swordEnemy_state_uninitialized:
 	jr nz,+
 		ld hl,@ngpEnemy4AUpgradeTable
 	+
-	ld a,$01	; indicate this is a strong enemy
-	jp tryNgpUpgrade
+	jp tryNgpUpgradeStrongEnemy
 
 @ngpEnemy3DUpgradeTable:
 	.dw @ngpEnemy3DUpgradeSubtable1

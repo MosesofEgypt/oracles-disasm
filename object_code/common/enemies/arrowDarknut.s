@@ -38,8 +38,7 @@ arrowDarknut_state_uninitialized:
 	ld (de),a
 .ifdef ENABLE_NEW_GAME_PLUS
 	ld hl,@ngpUpgradeTable
-	xor a	; indicate this is a weak enemy
-	call tryNgpUpgrade
+	call tryNgpUpgradeWeakEnemy
 .endif
 	call ecom_setRandomCardinalAngle
 	call arrowDarknut_setState8WithRandomAngleAndCounter

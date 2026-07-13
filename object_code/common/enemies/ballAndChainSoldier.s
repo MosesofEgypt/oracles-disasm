@@ -48,7 +48,28 @@ ballAndChain_state_uninitialized:
 
 	ld l,Enemy.var31
 	ld (hl),$08
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld hl,@ngpUpgradeTable
+	jp tryNgpUpgradeStrongEnemyIgnoreSubids
+.else
 	ret
+.endif
+
+.ifdef ENABLE_NEW_GAME_PLUS
+@ngpUpgradeTable:
+	.dw @ngpEnemyUpgrades1
+	.dw @ngpEnemyUpgrades2
+	.dw @ngpEnemyUpgrades3
+
+@ngpEnemyUpgrades1:
+	m_ngp_upgrade_p_d_h_term	PALETTE_RED   6  10
+
+@ngpEnemyUpgrades2:
+	m_ngp_upgrade_p_d_h_s_term	PALETTE_BLUE  12 13 SPEED_40
+
+@ngpEnemyUpgrades3:
+	m_ngp_upgrade_p_d_h_s_term	PALETTE_GOLD  16 16 SPEED_40
+.endif
 
 
 ballAndChain_state_switchHook:
@@ -162,7 +183,11 @@ ballAndChain_stateA:
 ballAndChain_spawnSpikedBall:
 	; BUG: This checks for 4 enemy slots, but we actually need 4 part slots...
 	ld b,$04
+.ifdef ENABLE_BUGFIXES
+	call checkBPartSlotsAvailable
+.else
 	call checkBEnemySlotsAvailable
+.endif
 	ret nz
 
 	; Spawn the ball
