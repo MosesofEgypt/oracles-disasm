@@ -27,7 +27,24 @@ enemyCode08:
 @state_uninitialized:
 	ld a,$09
 	ld (de),a
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld hl,@ngpUpgradeTable
+	jp tryNgpUpgradeUncappedEnemyIgnoreSubids
+.else
 	ret
+.endif
+
+.ifdef ENABLE_NEW_GAME_PLUS
+@ngpUpgradeTable:
+	.dw @ngpEnemyUpgrades
+	.dw @ngpEnemyUpgrades
+	.dw @ngpEnemyUpgrades
+
+@ngpEnemyUpgrades:
+	m_ngp_upgrade_p_h			PALETTE_RED    5
+	m_ngp_upgrade_p_d_h			PALETTE_BLUE   8  6
+	m_ngp_upgrade_p_d_h_term	PALETTE_GREEN  8  8
+.endif
 
 @state_stub:
 	ret
@@ -66,8 +83,18 @@ enemyCode08:
 	; Tile is water; spawn here.
 	ld c,l
 	call objectSetShortPosition
+.ifdef ENABLE_NEW_GAME_PLUS
+	call getNewGamePlusCycle
+	ld hl,@surfaceTimers
+	rst_addAToHl
+	ld a,(hl)
+	ld h,d
+	ld l,Enemy.counter1
+	ld (hl),a
+.else
 	ld l,Enemy.counter1
 	ld (hl),48
+.endif
 
 	ld l,Enemy.state
 	inc (hl) ; [state] = $0a
@@ -76,11 +103,19 @@ enemyCode08:
 	call enemySetAnimation
 	jp objectSetVisible83
 
+.ifdef ENABLE_NEW_GAME_PLUS
+@surfaceTimers:
+	.db 48 30 24 16
+.endif
 
 ; In the process of surfacing.
 @state_0a:
 	call ecom_decCounter1
+.ifdef ENABLE_NEW_GAME_PLUS
+	jp nz,enemyAnimate
+.else
 	jr nz,@animate
+.endif
 
 	; Surfaced; enable collisions & set animation.
 	ld l,e
@@ -111,6 +146,19 @@ enemyCode08:
 	inc (hl)
 
 @animate:
+.ifdef ENABLE_NEW_GAME_PLUS
+	call getNewGamePlusCycle
+	push af
+	call enemyAnimate
+	pop af
+	cp $02
+	ret c
+	ld h,d
+	ld l,Enemy.animCounter
+	ld a,(hl)
+	or a
+	ret z
+.endif
 	jp enemyAnimate
 
 @disappear:

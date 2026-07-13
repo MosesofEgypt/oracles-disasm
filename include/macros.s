@@ -926,6 +926,18 @@
 
 ; Args:
 ;   \1 - 3bit: newPalette
+;   \2 - byte: newHealth
+.macro m_ngp_upgrade_p_h
+	m_ngp_upgrade $09 \1 $00 $00 \2 $00
+.endm
+
+; same args as above, but with terminator flag set
+.macro m_ngp_upgrade_p_h_term
+	m_ngp_upgrade_term $09 \1 $00 $00 \2 $00
+.endm
+
+; Args:
+;   \1 - 3bit: newPalette
 ;   \2 - byte: newDamage
 ;   \3 - byte: newHealth
 .macro m_ngp_upgrade_p_d_h

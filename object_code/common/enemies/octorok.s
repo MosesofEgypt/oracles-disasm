@@ -146,7 +146,7 @@ octorok_state_uninitialized:
 		m_ngp_upgrade_p_si_d_h_s_term	PALETTE_GREEN 6 10 10 SPEED_e0
 
 	@ngpGoldOctorokUpgrades1:
-		m_ngp_upgrade_p_d_s_term		PALETTE_GOLD  14 SPEED_120
+		m_ngp_upgrade_d_s_term							   14 SPEED_120
 
 @ngpUpgradeSubtable2:
 	.dw @ngpSlowRedOctorokUpgrades2

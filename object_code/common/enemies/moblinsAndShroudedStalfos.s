@@ -103,7 +103,7 @@ moblin_state_uninitialized:
 		m_ngp_upgrade_p_si_d_h_s_term	PALETTE_GREEN 1 08 08 SPEED_c0
 
 	@ngpEnemy0CGoldUpgrades:
-		m_ngp_upgrade_p_d_s_term		PALETTE_GOLD  16 SPEED_120
+		m_ngp_upgrade_d_s_term						  16 SPEED_120
 
 @ngpEnemy20UpgradeTable:
 	.dw @ngpEnemy20UpgradeSubtable1

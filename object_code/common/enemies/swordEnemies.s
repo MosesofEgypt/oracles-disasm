@@ -141,7 +141,7 @@ swordEnemy_state_uninitialized:
 		m_ngp_upgrade_p_si_d_h_s_term	PALETTE_GREEN 1 16 13 SPEED_c0
 
 	@ngpEnemy48GoldUpgrades:
-		m_ngp_upgrade_p_d_s_term		PALETTE_GOLD  16 SPEED_120
+		m_ngp_upgrade_d_s_term						  16 SPEED_120
 
 @ngpEnemy49UpgradeTable:
 	.dw @ngpEnemy49UpgradeSubtable1
