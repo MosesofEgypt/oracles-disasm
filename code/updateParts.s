@@ -66,6 +66,8 @@ func_11_5e8a:
 .ifdef ENABLE_NEW_GAME_PLUS
 	; hl = partCodeTable + [Part.id] * 3
 	ld l,a
+	; NOTE: this code will break if more than $55 part ids exist.
+	;       currently it's limited to $54, but 2 more will break it
 	add a
 	add l
 .else

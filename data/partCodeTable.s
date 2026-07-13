@@ -1,3 +1,5 @@
+; NOTE: the code that calls these functions will break if the count goes over $80.
+;       in NG+ it'll break if it goes over $55, so be careful about adding more.
 .define NUM_PARTS $54
 
 partCodeTable:
