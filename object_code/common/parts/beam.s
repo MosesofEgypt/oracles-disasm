@@ -36,6 +36,11 @@ partCode29:
 .else
 	ld b,$50
 .endif
+
+.ifdef ENABLE_EVIL_BULLSHIT_BEAMOS
+	ld l,Part.var2f
+	ld (hl),b
+.endif
 	ld a,$04
 	call objectSetComponentSpeedByScaledVelocity
 	ld e,Part.angle
@@ -82,6 +87,26 @@ partCode29:
 	ret
 
 func_5758:
+.ifdef ENABLE_EVIL_BULLSHIT_BEAMOS
+	call objectGetAngleTowardLink
+	call objectNudgeAngleTowards
+
+	ld e,Part.angle
+	ld a,(de)
+	ld c,a
+	ld e,Part.var2f
+	ld a,(de)
+	ld b,a
+	ld a,$04
+	call objectSetComponentSpeedByScaledVelocity
+	ld e,Part.angle
+	ld a,(de)
+	and $0f
+	ld hl,partCode29@table_5737
+	rst_addAToHl
+	ld a,(hl)
+	call partSetAnimation
+.endif
 	call objectApplyComponentSpeed
 	ld e,Part.subid
 	ld a,(de)

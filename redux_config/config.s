@@ -119,6 +119,11 @@
 		; being able to push them away is a nice feature sometimes.
 		.define MAGNET_GLOVES_CAN_PUSH_ENEMIES	1
 	.endif
+	.ifndef ENABLE_EVIL_BULLSHIT_BEAMOS
+		; makes beamos fire homing beams.
+		; trust me, just don't. it's bullshit
+;		.define ENABLE_EVIL_BULLSHIT_BEAMOS	1
+	.endif
 .endif
 
 .ifdef RESIZE_RING_BOX
