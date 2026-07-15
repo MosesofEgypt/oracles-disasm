@@ -61,7 +61,7 @@ armMimic_uninitialized:
 @ngpEnemyUpgrades:
 	m_ngp_upgrade_p_d_h				PALETTE_GOLD      10  7
 	m_ngp_upgrade_p_d_h				PALETTE_RED       10  7
-	m_ngp_upgrade_p_si_d_h			PALETTE_BLUE   01 10  7
+	m_ngp_upgrade_p_si_d_h_s		PALETTE_BLUE   01 10  7 SPEED_180
 	m_ngp_upgrade_p_si_d_h_s_term	PALETTE_GREEN  02 16 12 SPEED_140
 .endif
 
