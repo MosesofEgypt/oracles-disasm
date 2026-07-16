@@ -35,30 +35,31 @@
 	SPEED_300	dsb 5 ; 0x78
 	SPEED_320	dsb 5 ; 0x7d
 	SPEED_340	dsb 5 ; 0x82
-	SPEED_360	dsb 5 ; 0x8c
-	SPEED_380	dsb 5 ; 0x91
-	SPEED_3a0	dsb 5 ; 0x96
-	SPEED_3c0	dsb 5 ; 0x9b
-	SPEED_3e0	dsb 5 ; 0xa0
-	SPEED_400	dsb 5 ; 0xa5
-	SPEED_420	dsb 5 ; 0xaa
-	SPEED_440	dsb 5 ; 0xaf
-	SPEED_460	dsb 5 ; 0xb4
-	SPEED_480	dsb 5 ; 0xb9
-	SPEED_4a0	dsb 5 ; 0xbe
-	SPEED_4c0	dsb 5 ; 0xc3
-	SPEED_4e0	dsb 5 ; 0xc8
-	SPEED_500	dsb 5 ; 0xcd
-	SPEED_520	dsb 5 ; 0xd2
-	SPEED_540	dsb 5 ; 0xd7
-	SPEED_560	dsb 5 ; 0xdc
-	SPEED_580	dsb 5 ; 0xe1
-	SPEED_5a0	dsb 5 ; 0xe6
-	SPEED_5c0	dsb 5 ; 0xeb
-	SPEED_5e0	dsb 5 ; 0xf0
-	SPEED_600	dsb 5 ; 0xf5
-	SPEED_620	dsb 5 ; 0xfa
-	SPEED_640	dsb 5 ; 0xff
+	SPEED_360	dsb 5 ; 0x87
+	SPEED_380	dsb 5 ; 0x8c
+	SPEED_3a0	dsb 5 ; 0x91
+	SPEED_3c0	dsb 5 ; 0x96
+	SPEED_3e0	dsb 5 ; 0x9b
+	SPEED_400	dsb 5 ; 0xa0
+	SPEED_420	dsb 5 ; 0xa5
+	SPEED_440	dsb 5 ; 0xaa
+	SPEED_460	dsb 5 ; 0xaf
+	SPEED_480	dsb 5 ; 0xb4
+	SPEED_4a0	dsb 5 ; 0xb9
+	SPEED_4c0	dsb 5 ; 0xbe
+	SPEED_4e0	dsb 5 ; 0xc3
+	SPEED_500	dsb 5 ; 0xc8
+	SPEED_520	dsb 5 ; 0xcd
+	SPEED_540	dsb 5 ; 0xd2
+	SPEED_560	dsb 5 ; 0xd7
+	SPEED_580	dsb 5 ; 0xdc
+	SPEED_5a0	dsb 5 ; 0xe1
+	SPEED_5c0	dsb 5 ; 0xe6
+	SPEED_5e0	dsb 5 ; 0xeb
+	SPEED_600	dsb 5 ; 0xf0
+	SPEED_620	dsb 5 ; 0xf5
+	SPEED_640	dsb 5 ; 0xfa
+	SPEED_660	dsb 5 ; 0xff
 .ende
 
 .define SPEED_00	SPEED_0

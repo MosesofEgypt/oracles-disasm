@@ -167,6 +167,12 @@ bladeTrap_subid02:
 +
 	ld l,Enemy.var30
 	ld (hl),a
+.ifdef ENABLE_NEW_GAME_PLUS
+	call getBaseSpeed
+	sub SPEED_200
+	add (hl)
+	ld (hl),a
+.endif
 
 
 ; Waiting for Link to walk into range
@@ -283,14 +289,18 @@ bladeTrap_subid05:
 	.dw @stateB
 	.dw @stateC
 
-
 ; Initialization
 @state8:
 	ld h,d
 	ld l,e
 	inc (hl)
 	ld l,Enemy.var30
+.ifdef ENABLE_NEW_GAME_PLUS
+	call getBaseSpeed
+	ld (hl),a
+.else
 	ld (hl),SPEED_200
+.endif
 
 
 ; Waiting for Link to walk into range
@@ -552,3 +562,26 @@ bladeTrap_decAngle:
 	and $1f
 	ld (de),a
 	ret
+
+
+.ifdef ENABLE_NEW_GAME_PLUS
+getBaseSpeed:
+	push hl
+	call getNewGamePlusCycle
+	ld l,a
+	or a
+	ld a,SPEED_200
+	jr z,+
+		dec l
+		jr z,+
+			add SPEED_80
+			dec l
+			jr z,+
+				add SPEED_80
+				dec l
+				jr z,+
+					add SPEED_80
+	+
+	pop hl
+	ret
+.endif
