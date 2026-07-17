@@ -247,6 +247,11 @@ parentItemCode_bracelet:
 	or $80
 	ld (wBraceletGrabbingNothing),a
 .ifdef ENABLE_RING_REDUX
+.ifdef MORE_MESSAGE_SPEEDS
+	ld a,(wMiscSettings+1)
+	bit 6,a
+	ret z
+.endif
 	jr @tryPunching
 .endif
 	ret

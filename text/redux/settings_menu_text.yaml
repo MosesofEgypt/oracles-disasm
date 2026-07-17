@@ -23,6 +23,15 @@ groups:
       upon entering or
       exiting a dungeon.
 
+  - name: TX_09_BRACELET_PUNCH
+    index: auto
+    text: |-
+      Bracelet Punch
+      Bracelet usage
+      becomes punch if
+      nothing grabbable
+      (requires ring).
+
   - name: TX_09_CONTEXT_SENSITIVE_ITEMS
     index: auto
     text: |-

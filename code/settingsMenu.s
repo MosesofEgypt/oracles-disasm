@@ -64,19 +64,6 @@ updateSettingsMenu:
 			jr c,++
 				xor a
 			++
-			cp $05
-			jr nz,++
-				; NOTE: this is temporary until another setting is added
-				push hl
-				ld hl,(wKeysJustPressed)
-				bit BTN_BIT_UP,(hl)
-				pop hl
-				jr z,+++
-					dec a
-					dec a
-				+++
-				inc a
-			++
 			ld (hl),a
 
 			call inventorySubmenu3InitSelection
@@ -106,11 +93,11 @@ optionValuesAndOffsets:
 	.db $02, 1<<3
 	.dw wMiscSettings
 
-	.db $02, 1<<7
+	.db $02, 1<<6
 	.dw wMiscSettings+1
 
-	.db $00, $00
-	.dw $0000
+	.db $02, 1<<7
+	.dw wMiscSettings+1
 
 	.db $02, 1<<7
 	.dw wMiscSettings
@@ -247,13 +234,6 @@ inventorySubmenu3_drawCursors:
         pop hl
 		pop af
 
-		; NOTE: this is temporary until another setting is added
-		cp $04
-		jr nz,+
-			inc a
-			dec l
-		+
-
 		inc a
 		dec l
 		jr z,+
@@ -286,8 +266,8 @@ inventorySubmenu3_drawCursors:
 	.dw @drawCursorContextSensitiveButton
 
 	.dw @drawCursorPassiveShield
+	.dw @drawCursorBraceletPunch
 	.dw @drawCursorDungeonAutosaving
-	.dw $0000
 
 	.dw @drawCursorLowHeartWarning
 	.dw @drawCursorMessageSpeed
@@ -300,11 +280,12 @@ inventorySubmenu3_drawCursors:
 	jr @drawCursor2
 
 @drawCursorContextSensitiveItems:
-@drawCursorDungeonAutosaving:
+@drawCursorBraceletPunch:
 	ld b,$50
 	jr @drawCursor2
 
 @drawCursorContextSensitiveButton:
+@drawCursorDungeonAutosaving:
 	ld b,$68
 	jr @drawCursor2
 
@@ -419,8 +400,8 @@ itemSubmenu3TextIndices:
 	.db <TX_09_CONTEXT_SENSITIVE_ITEMS
 	.db <TX_09_CONTEXT_SENSITIVE_BUTTON
 	.db <TX_09_PASSIVE_SHIELD
+	.db <TX_09_BRACELET_PUNCH
 	.db <TX_09_DUNGEON_AUTOSAVE
-	.db $00
 	.db <TX_09_LOW_HEART_WARNING
 	.db <TX_09_MESSAGE_SPEED
 	.db $00

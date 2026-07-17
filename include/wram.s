@@ -590,7 +590,8 @@ wMiscSettings: ; $c629
 	; Bit     6: Set if quick-swap should be enabled.
 	; Bit     7: Set if low-heart warning should be enabled.
 	; Bits 8-10: Active language
-	; Bit    15: Set ig dungeon entrance autosaving should be enabled
+	; Bit    14: Set if punching with bracelet should be enabled
+	; Bit    15: Set if dungeon entrance autosaving should be enabled
 	dw
 
 .else
