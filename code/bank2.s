@@ -13835,12 +13835,18 @@ quickSwapHeldItems_body:
 
 .ifndef ONE_HANDED_BIGGORON_SWORD
 @swapFromBiggoron:
+	; swap with the overflowed item
+	ld a,(wBiggoronSwordOverflowItem)
+	inc e
+	ld (de),a
+	dec e
+	xor a
+	ld (wBiggoronSwordOverflowItem),a
+
 	call @swapItems
 	inc de
 	inc hl
 	call @swapItems
-	xor a
-	ld (hl),a
 	ret
 
 @swapToBiggoron:
@@ -13869,9 +13875,22 @@ quickSwapHeldItems_body:
 	ld c,a
 	ld l,<wInventoryStorage
 -
+	ld a,<wInventoryStorage+$10
+	cp l
+	jr nz,+
+		; overflowing out of inventory.
+		; put in overflow location
+		ld a,c
+		ld (wBiggoronSwordOverflowItem),a
+		ret
+	+
 	ldi a,(hl)
 	or a
 	jr nz,-
+
+	; clear this
+	xor a
+	ld (wBiggoronSwordOverflowItem),a
 
 	dec l
 	ld (hl),c
