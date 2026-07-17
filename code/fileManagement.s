@@ -459,6 +459,7 @@ initialFileVariablesTable:
 initialFileVariables:
 .ifdef MORE_MESSAGE_SPEEDS
 	.db <wMiscSettings,			$9d
+	.db <wMiscSettings+1,		$80
 .else
 	.db <wTextSpeed,			$04
 .endif

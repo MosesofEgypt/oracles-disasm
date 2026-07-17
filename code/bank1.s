@@ -3562,6 +3562,7 @@ standardGameState:
 .endif
 .ifdef ENABLE_NEW_GAME_PLUS
 	call updateRingsDisabled
+	call processAutosaveUpdate
 .endif
 .ifdef ENABLE_RING_REDUX
 	call processDmgPaletteUpdate
@@ -3785,6 +3786,35 @@ clearExtendedRingBox:
 .endif
 
 .ifdef ENABLE_NEW_GAME_PLUS
+processAutosaveUpdate:
+	; don't save if transitioning
+	ld a,(wDisableLinkCollisionsAndMenu)
+	ld hl,wTextIsActive
+	or (hl)
+	ld hl,wMenuDisabled
+	or (hl)
+	ret nz
+
+	ld a,(wDungeonIndex)
+	.ifdef ROM_AGES
+		cp $0e ; treat lots of non-dungeon areas as overworld
+		jr nz,+
+			ld a,$ff
+		+
+	.endif
+
+	ld hl,wDungeonIndexPreviousFrame
+	cp (hl)
+	ld (hl),a
+	ret z
+
+	; only autosave if flag is set
+	ld hl,wMiscSettings+1
+	bit 7,(hl)
+	ret z
+
+	jp saveFile
+
 updateRingsDisabled:
 	ld a,(wTextIsActive)
 	or a

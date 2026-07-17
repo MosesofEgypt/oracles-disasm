@@ -1,4 +1,4 @@
-.define SETTINGS_COUNT      $06
+.define SETTINGS_COUNT      $08
 .define SETTINGS_PER_PAGE   $03
 
 updateSettingsMenu:
@@ -29,8 +29,10 @@ updateSettingsMenu:
 		ret nz
 
         push af
-        ld a,(wInventorySubmenu3CursorPos)
-        ld hl,@optionCounts
+        call getSelectedSettingIndex
+		add a
+		add a
+        ld hl,optionValuesAndOffsets
         rst_addAToHl
         pop af
 
@@ -62,6 +64,19 @@ updateSettingsMenu:
 			jr c,++
 				xor a
 			++
+			cp $05
+			jr nz,++
+				; NOTE: this is temporary until another setting is added
+				push hl
+				ld hl,(wKeysJustPressed)
+				bit BTN_BIT_UP,(hl)
+				pop hl
+				jr z,+++
+					dec a
+					dec a
+				+++
+				inc a
+			++
 			ld (hl),a
 
 			call inventorySubmenu3InitSelection
@@ -77,56 +92,52 @@ updateSettingsMenu:
 		+
 	+++
 	ret
-	
 
-@optionCounts:
-	.db $02 $02 $02 $02 $02 $08
+optionValuesAndOffsets:
+	.db $02, 1<<6
+	.dw wMiscSettings
+
+	.db $02, 1<<4
+	.dw wMiscSettings
+
+	.db $02, 1<<5
+	.dw wMiscSettings
+
+	.db $02, 1<<3
+	.dw wMiscSettings
+
+	.db $02, 1<<7
+	.dw wMiscSettings+1
+
+	.db $00, $00
+	.dw $0000
+
+	.db $02, 1<<7
+	.dw wMiscSettings
+
+	.db $08, $00
+	.dw wMiscSettings
+
+	.db $00, $00
+	.dw $0000
 
 inventorySubmenu3SelectOption:
 	ld a,(wInventory.itemSubmenuIndex)
 	ld b,a
-	ld hl,wMiscSettings
-	ld a,(wInventorySubmenu3CursorPos)
-	and $7f
-	cp SETTINGS_COUNT
-	jr c,+
-		xor a
-	+
-	inc a
-	dec a
-	jr nz,+
-		; quick-swap selected
-		ld c,1<<6
-		jr +++
-	+
+	call getSelectedSettingIndex
+	add a
+	add a
+	ld hl,optionValuesAndOffsets
+	rst_addAToHl
+	inc hl
+	ld c,(hl)
+	inc hl
+	rst_derefHl
+	ld a,c
 
-	dec a
-	jr nz,+
-		; context sensitive items selected
-		ld c,1<<4
-		jr +++
-	+
-
-	dec a
-	jr nz,+
-		; context sensitive button selected
-		ld c,1<<5
-		jr +++
-	+
-
-	dec a
-	jr nz,+
-		; passive shield selected
-		ld c,1<<3
-		jr +++
-	+
-
-	dec a
-	jr nz,+
-		; low-heart warning selected
-		ld c,1<<7
-		+++
-		ld a,c
+	or a
+	jr z,+
+		; there's a bitmask, so treat as binary option
 		cpl
 		and (hl)
 		bit 0,b
@@ -134,69 +145,44 @@ inventorySubmenu3SelectOption:
 			or c
 		jr ++
 	+
-
-	; message speed selected
-	ld a,(hl)
-	and $f8
-	or b
-
+		; no bitmask. message speed selected
+		ld a,b
+		and $07
+		ld b,a
+		ld a,(hl)
+		and $f8
+		or b
 	++
+
 	ld (hl),a
 	ret
 
 inventorySubmenu3InitSelection:
-	ld a,(wInventorySubmenu3CursorPos)
-	and $7f
-	cp SETTINGS_COUNT
-	jr c,+
-		xor a
-	+
-	inc a
-	dec a
-	ld hl,wMiscSettings
-	jr nz,+
-		; quick-swap selected
-		bit 6,(hl)
-		jr +++
-	+
+	call getSelectedSettingIndex
+	add a
+	add a
+	ld hl,optionValuesAndOffsets
+	rst_addAToHl
+	inc hl
+	ld c,(hl)
+	inc hl
+	rst_derefHl
+	ld a,c
 
-	dec a
-	jr nz,+
-		; context sensitive items selected
-		bit 4,(hl)
-		jr +++
-	+
-
-	dec a
-	jr nz,+
-		; context sensitive button selected
-		bit 5,(hl)
-		jr +++
-	+
-
-	dec a
-	jr nz,+
-		; passive shield selected
-		bit 3,(hl)
-		jr +++
-	+
-
-	dec a
-	jr nz,+
-		; low-heart warning selected
-		bit 7,(hl)
-		+++
+	or a
+	jr z,+
+		; there's a bitmask, so treat as binary option
+		and (hl)
 		ld a,$00
 		jr z,++
 			inc a
 		jr ++
 	+
-
-	; message speed selected
-	ld a,(hl)
-	and $07
-
+		; no bitmask. message speed selected
+		ld a,(hl)
+		and $07
 	++
+
 	ld (wInventory.itemSubmenuIndex),a
 	ret
 
@@ -204,8 +190,7 @@ inventorySubmenu3_drawCursors:
 	ld a,(wFrameCounter)
 	bit 3,a
 	jr z,+
-		ld a,(wInventorySubmenu3CursorPos)
-		call determinePageForSetting
+		call getCurrentPage
 
 		ld hl,@arrowUpSpritesBlue
 		push af
@@ -215,11 +200,11 @@ inventorySubmenu3_drawCursors:
 		pop af
 
 		ld hl,@arrowDownSpritesRed
-		cp $01
+		cp $02
 		call c,addSpritesToOam
 	+
 
-	ld a,(wInventorySubmenu3CursorPos)
+	call getSelectedSettingIndex
     add SETTINGS_PER_PAGE
     -
         sub SETTINGS_PER_PAGE
@@ -234,20 +219,14 @@ inventorySubmenu3_drawCursors:
 	ld hl,@bracketSprites
 	call addSpritesToOam_withOffset
 
-	ld a,(wInventorySubmenu3CursorPos)
-	and $7f
-	cp SETTINGS_COUNT
-	jr c,+
-		xor a
-	+
+	call getSelectedSettingIndex
 	ld b,a
 	ld a,(wInventory.itemSubmenuIndex)
 	ld c,a
 
 	push bc
 	; draw each setting's cursor where it should be
-	ld a,(wInventorySubmenu3CursorPos)
-	call determinePageForSetting
+	call getCurrentPage
 	ld l,a
 	add l
 	add l
@@ -267,6 +246,14 @@ inventorySubmenu3_drawCursors:
 		call @drawSettingCursor
         pop hl
 		pop af
+
+		; NOTE: this is temporary until another setting is added
+		cp $04
+		jr nz,+
+			inc a
+			dec l
+		+
+
 		inc a
 		dec l
 		jr z,+
@@ -292,25 +279,39 @@ inventorySubmenu3_drawCursors:
 	.db $71 $97 $0e $45
 
 @drawSettingCursor:
-	ld a,(wInventorySubmenu3CursorPos)
+	call getSelectedSettingIndex
 	rst_jumpTable
 	.dw @drawCursorQuickSwap
 	.dw @drawCursorContextSensitiveItems
 	.dw @drawCursorContextSensitiveButton
+
 	.dw @drawCursorPassiveShield
+	.dw @drawCursorDungeonAutosaving
+	.dw $0000
+
 	.dw @drawCursorLowHeartWarning
 	.dw @drawCursorMessageSpeed
+	.dw $0000
 
 @drawCursorQuickSwap:
+@drawCursorPassiveShield:
+@drawCursorLowHeartWarning:
 	ld b,$38
 	jr @drawCursor2
 
 @drawCursorContextSensitiveItems:
+@drawCursorDungeonAutosaving:
 	ld b,$50
 	jr @drawCursor2
 
 @drawCursorContextSensitiveButton:
 	ld b,$68
+	jr @drawCursor2
+
+@drawCursorMessageSpeed:
+	ld hl,@cursorOffsets8
+	ld b,$51
+	jr @drawCursor
 
 @drawCursor2:
 	ld hl,@cursorOffsets2
@@ -322,19 +323,6 @@ inventorySubmenu3_drawCursors:
 	ld hl,@arrowSprite
 	call addSpritesToOam_withOffset
 	ret
-
-@drawCursorPassiveShield:
-	ld b,$38
-	jr @drawCursor2
-
-@drawCursorLowHeartWarning:
-	ld b,$50
-	jr @drawCursor2
-
-@drawCursorMessageSpeed:
-	ld hl,@cursorOffsets8
-	ld b,$69
-	jr @drawCursor
 
 @cursorOffsets2:
 	.db $18
@@ -370,26 +358,16 @@ inventorySubscreen3_draw:
 	ld b,SETTINGS_COUNT
 	call copyMemory
 
-    ld a,(wInventorySubmenu3CursorPos)
-	and $7f
-	cp SETTINGS_COUNT
-	jr c,+
-		xor a
-	+
-    ld (wInventorySubmenu3CursorPos),a
-
 	call inventorySubmenu3InitSelection
 
-    ld a,(wInventorySubmenu3CursorPos)
-	call determinePageForSetting
+    call getCurrentPage
 	jr inventorySubscreen3_forceReloadGfx
 
 inventorySubscreen3_fixupTiles:
-	call determinePageForSetting
+	call getPageForSetting
 	ld b,a
 
-	ld a,(wInventorySubmenu3CursorPos)
-	call determinePageForSetting
+	call getCurrentPage
 	cp b
 	; don't reload page if already loaded
 	ret z
@@ -408,20 +386,32 @@ inventorySubscreen3_forceReloadGfx:
 	add UNCMP_GFXH_04
 	jp loadUncompressedGfxHeader
 
-determinePageForSetting:
+getCurrentPage:
+	call getSelectedSettingIndex
+
+getPageForSetting:
 	or a
 	ld c,a
 	ld a,$00
 	ret z
 	-
-		; only 3 settings per page. determine the page
-		dec c
-		ret z
-		dec c
-		ret z
+		; x settings per page. determine the page
+		.rept SETTINGS_PER_PAGE-1
+			dec c
+			ret z
+		.endr
+
 		inc a
 		dec c
 		jr nz,-
+	ret
+
+getSelectedSettingIndex:
+    ld a,(wInventorySubmenu3CursorPos)
+	and $7f
+	cp SETTINGS_COUNT
+	ret c
+	xor a
 	ret
 
 itemSubmenu3TextIndices:
@@ -429,8 +419,11 @@ itemSubmenu3TextIndices:
 	.db <TX_09_CONTEXT_SENSITIVE_ITEMS
 	.db <TX_09_CONTEXT_SENSITIVE_BUTTON
 	.db <TX_09_PASSIVE_SHIELD
+	.db <TX_09_DUNGEON_AUTOSAVE
+	.db $00
 	.db <TX_09_LOW_HEART_WARNING
 	.db <TX_09_MESSAGE_SPEED
+	.db $00
 
 .undefine SETTINGS_COUNT
 .undefine SETTINGS_PER_PAGE

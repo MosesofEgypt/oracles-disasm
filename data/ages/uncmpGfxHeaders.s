@@ -66,6 +66,7 @@ uncmpGfxHeaderTable:
 	.dw uncmpGfxHeader_inventorySubscreen4GfxRevert
 	.dw uncmpGfxHeader_inventorySubscreen4Page0Gfx
 	.dw uncmpGfxHeader_inventorySubscreen4Page1Gfx
+	.dw uncmpGfxHeader_inventorySubscreen4Page2Gfx
 .endif
 
 
@@ -531,5 +532,9 @@ uncmpGfxHeader_inventorySubscreen4Page0Gfx:
 
 uncmpGfxHeader_inventorySubscreen4Page1Gfx:
 	m_GfxHeader gfx_settings_text_page_1, $8a00
+	m_GfxHeaderEnd
+
+uncmpGfxHeader_inventorySubscreen4Page2Gfx:
+	m_GfxHeader gfx_settings_text_page_2, $8a00
 	m_GfxHeaderEnd
 .endif

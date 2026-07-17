@@ -2702,6 +2702,13 @@ serialFunc_0c8d:
 	pop de
 	ret
 
+.ifdef MORE_MESSAGE_SPEEDS
+getActiveLanguage:
+	ld a,(wMiscSettings+1)
+	and $07
+	ret
+.endif
+
 ;;
 ; @param	a	Sound to play
 playSound:
@@ -5874,6 +5881,9 @@ thread_1b10:
 	call clearMemory
 	ld a,$01
 	ld (wTmpcbb4),a
+.ifdef ENABLE_NEW_GAME_PLUS
+thread_runSaveAndQuit:
+.endif
 -
 	callfrombank0 bank2.runSaveAndQuitMenu
 	call resumeThreadNextFrame

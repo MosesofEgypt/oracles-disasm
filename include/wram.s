@@ -416,6 +416,13 @@ wAutoEquipInvSlot:
 	db
 .endif
 
+.ifdef ENABLE_NEW_GAME_PLUS
+wDungeonIndexPreviousFrame:
+	; Indicates which dungeon index link was in during the previous frame.
+	; Used to determine if the game should be autosaved when it changes.
+	db
+.endif
+
 .ifdef ENABLE_RING_REDUX
 wShieldParryTimers:
 	; Bits 0-4: Cooldown frames before parry can be reattempted
@@ -570,27 +577,30 @@ wTotalRupeesCollected: ; $c627
 
 .ifdef MORE_MESSAGE_SPEEDS
 wMiscSettings: ; $c629
-	; Bits 0-2: Text speed(0-7)
-	; Bit 3:    Set if passive shield should be enabled
-	; Bit 4:    Set if context-sensitive items should be enabled.
-	;           This includes rod of seasons on stumps, the harp
-	;           when on warp tiles, the bracelet when pushing on a
-	;           wall tile, the shovel when pushing on a dirt tile,
-	;           the magnetic gloves when facing a magnetic tile, and
-	;           the switch hook when facing a diamond switch hook tile
-	; Bit 5:    Set if context-sensitive item should go in A.
-	;           Unset if context-sensitive item should go in B.
-	; Bit 6:    Set if quick-swap should be enabled.
-	; Bit 7:    Set if low-heart warning should be enabled.
-	db
+	; Bits  0-2: Text speed(0-7)
+	; Bit     3: Set if passive shield should be enabled
+	; Bit     4: Set if context-sensitive items should be enabled.
+	;            This includes rod of seasons on stumps, the harp
+	;            when on warp tiles, the bracelet when pushing on a
+	;            wall tile, the shovel when pushing on a dirt tile,
+	;            the magnetic gloves when facing a magnetic tile, and
+	;            the switch hook when facing a diamond switch hook tile
+	; Bit     5: Set if context-sensitive item should go in A.
+	;            Unset if context-sensitive item should go in B.
+	; Bit     6: Set if quick-swap should be enabled.
+	; Bit     7: Set if low-heart warning should be enabled.
+	; Bits 8-10: Active language
+	; Bit    15: Set ig dungeon entrance autosaving should be enabled
+	dw
+
 .else
 wTextSpeed: ; $c629
 	db
-.endif
 
 wActiveLanguage: ; $c62a
 ; Doesn't do anything on the US version
 	db
+.endif
 
 wDeathRespawnBuffer: ; $c62b
 ; $0c bytes

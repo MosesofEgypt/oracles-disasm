@@ -15,6 +15,14 @@ groups:
       Shield is passively
       held at all times.
 
+  - name: TX_09_DUNGEON_AUTOSAVE
+    index: auto
+    text: |-
+      Dungeon Autosave
+      Game is saved
+      upon entering or
+      exiting a dungeon.
+
   - name: TX_09_CONTEXT_SENSITIVE_ITEMS
     index: auto
     text: |-

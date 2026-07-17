@@ -106,30 +106,39 @@
 .macro m_GfxDataAligned
 	.assert NARGS == 1
 
-	.ifndef HASHED_GFX_\1
-		.fopen {"{BUILD_DIR}/gfx/\1.cmp"} file
+	m_ReadGfxDataHashedFilename \1
+
+	.ifndef HASHED_GFX_{filename}
+		.fopen {"{BUILD_DIR}/gfx/{filename}.cmp"} file
 		.fsize file SIZE
 		.fclose file
+		.redefine SIZE SIZE-3
 
 		.define PAD_AMOUNT ((DATA_ADDR+$0f)&$fff0)-DATA_ADDR
-
-		.if DATA_ADDR+PAD_AMOUNT+(SIZE-3) > $8000
-			.redefine DATA_BANK DATA_BANK+1
-			.BANK DATA_BANK SLOT 1
-			.ORGA $4000
-
-			.redefine PAD_AMOUNT $8000-DATA_ADDR
-			.redefine DATA_ADDR $4000
-		.endif
 
 		.repeat PAD_AMOUNT index COUNT
 			.db $00
 		.endr
 
 		.redefine DATA_ADDR DATA_ADDR+PAD_AMOUNT
+
+		.if DATA_ADDR+SIZE > $8000
+			.redefine PAD_AMOUNT $8000-DATA_ADDR
+			.redefine DATA_ADDR $4000
+			.repeat PAD_AMOUNT index COUNT
+				.db $00
+			.endr
+
+			.redefine DATA_BANK DATA_BANK+1
+			.BANK DATA_BANK SLOT 1
+			.ORGA $4000
+		.endif
+
 		.undefine PAD_AMOUNT
 		.undefine SIZE
 	.endif
+
+	.undefine filename
 	m_GfxData \1
 .endm
 

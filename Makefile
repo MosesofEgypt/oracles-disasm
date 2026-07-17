@@ -74,6 +74,12 @@ include redux_config/config.env
 DEFINES = $(ORACLE_EXTRA_DEFINES) # Can specify this on commandline
 CFLAGS =
 ORACLE_REDUX_DEFINES =
+ifdef ENABLE_NEW_GAME_PLUS
+ifndef ENABLE_SETTINGS_MENU
+	ENABLE_SETTINGS_MENU = 1
+endif
+	ORACLE_REDUX_DEFINES += -D ENABLE_NEW_GAME_PLUS
+endif
 ifdef ENABLE_SETTINGS_MENU
 ifndef MORE_MESSAGE_SPEEDS
 	MORE_MESSAGE_SPEEDS = 1
@@ -91,9 +97,6 @@ ifdef ENABLE_REDUX_EXTRAS
 endif
 ifdef ENABLE_RING_REDUX
 	ORACLE_REDUX_DEFINES += -D ENABLE_RING_REDUX
-endif
-ifdef ENABLE_NEW_GAME_PLUS
-	ORACLE_REDUX_DEFINES += -D ENABLE_NEW_GAME_PLUS
 endif
 ifdef MORE_MESSAGE_SPEEDS
 	ORACLE_REDUX_DEFINES += -D MORE_MESSAGE_SPEEDS
@@ -173,28 +176,29 @@ PRECMP_GFX_FILES = $(shell find $(GFX_PRECMP_DIR)/common $(GFX_PRECMP_DIR)/$(GAM
 
 ifdef ENABLE_RING_REDUX
 # overriding ring gfx
-BIN_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name 'map_rings.bin')
+BIN_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux -name 'map_rings.bin')
 UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name 'map_rings.bin')
 endif
 ifdef ENABLE_SETTINGS_MENU
-BIN_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/settings_menu -name '*.bin')
+BIN_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux/settings_menu -name '*.bin')
 UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/settings_menu -name '*.bin' -or -name '*.png')
-PNG_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/settings_menu -name '*.png')
+PNG_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux/settings_menu -name '*.png')
 endif
 ifdef ENABLE_DX_TITLE_SCREEN
-PNG_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name 'spr_titlescreen_sprites.png')
+PNG_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux -name 'spr_titlescreen_sprites.png')
 UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name 'spr_titlescreen_sprites.png')
 endif
 ifdef MORE_MESSAGE_SPEEDS
-BIN_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/more_msg_speeds -name '*.bin')
+BIN_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux/more_msg_speeds -name '*.bin')
 UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/more_msg_speeds -name '*.bin' -or -name '*.png')
-PNG_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/more_msg_speeds -name '*.png')
+PNG_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux/more_msg_speeds -name '*.png')
 endif
 ifdef ENABLE_NEW_GAME_PLUS
-PNG_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/ngp -name '*.png')
-UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/ngp -name '*.png')
+BIN_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux/ngp -name '*.bin')
+UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/ngp -name '*.bin' -or -name '*.png')
+PNG_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux/ngp -name '*.png')
 endif
-PNG_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/sprites -name '*.png')
+PNG_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux/sprites -name '*.png')
 UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/sprites -name '*.png')
 
 # List of all gfx files in their final form, ie. $(BUILD_DIR)/gfx/spr_link.cmp

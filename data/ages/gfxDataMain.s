@@ -524,6 +524,9 @@
 	m_GfxData flg_pick_a_file_menu_bottom ; ????
 	m_GfxData gfx_startnewgameplus ; ????
 	m_GfxData gfx_newgameplus ; ????
+	m_GfxData gfx_savescreen_dungeon_ngp ; ????
+	m_GfxData flg_save_menu_middle_dungeon_ngp_gameover ; ????
+	m_GfxData map_save_menu_middle_dungeon_ngp_gameover ; ????
 	m_GfxData gfx_make ; ????
 .endif
 
@@ -532,8 +535,11 @@
 	m_GfxData flg_inventory_screen_4_page_0
 	m_GfxData map_inventory_screen_4_page_1
 	m_GfxData flg_inventory_screen_4_page_1
+	m_GfxData map_inventory_screen_4_page_2
+	m_GfxData flg_inventory_screen_4_page_2
 	m_GfxDataAligned gfx_settings_text_page_0
 	m_GfxDataAligned gfx_settings_text_page_1
+	m_GfxDataAligned gfx_settings_text_page_2
 	m_GfxDataAligned gfx_rings_uncomp
 .endif
 

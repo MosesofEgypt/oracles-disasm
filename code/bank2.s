@@ -2077,6 +2077,16 @@ loadFileDisplayVariables:
 	ldi (hl),a
 .ifdef FILE_MENU_SHOW_CURRENT_HEARTS
 	ld a,(wLinkHealth)
+	or a
+	jr nz,+
+		ld a,(wLinkMaxHealth)
+		srl a
+		and $fc
+		cp $0c
+		jr nc,++
+			ld a,$0c
+		++
+	+
 	ldi (hl),a
 	ld a,(wLinkMaxHealth)
 .else
@@ -13189,6 +13199,12 @@ saveQuitMenu_state0:
 	ld a,GFXH_SAVE_MENU_GFX
 	call loadGfxHeader
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	call getIsInNgpDungeon
+	ld a,GFXH_SAVE_MENU_GFX_DUNGEON_NGP
+	call nz,loadGfxHeader
+.endif
+
 	call saveQuitMenu_checkIsGameOver
 	jr z,@notGameOver
 
@@ -13206,6 +13222,11 @@ saveQuitMenu_state0:
 	inc l
 	ld (hl),$09
 +
+.ifdef ENABLE_NEW_GAME_PLUS
+	call getIsInNgpDungeon
+	ld a,GFXH_SAVE_MENU_LAYOUT_DUNGEON_NGP_GAMEOVER
+	call nz,loadGfxHeader
+.endif
 	ld a,GFXH_GAME_OVER_GFX
 	call loadGfxHeader
 
@@ -13232,6 +13253,27 @@ saveQuitMenu_state0:
 	ld a,$05
 	jp loadGfxRegisterStateIndex
 
+
+.ifdef ENABLE_NEW_GAME_PLUS
+getIsInNgpDungeon:
+	push hl
+	ld h,a
+	call getIsNewGamePlus
+	jr z,+
+		ld a,(wDungeonIndex)
+		cp $ff ; overworld
+		jr z,+
+		.ifdef ROM_AGES
+			cp $0e ; lots of non-dungeon areas
+			jr z,+
+		.endif
+		or $01
+	+
+	ld a,h
+	pop hl
+	ret
+.endif
+
 ;;
 ; State 1: processing input
 saveQuitMenu_state1:
@@ -13254,27 +13296,17 @@ saveQuitMenu_state1:
 	ret z
 
 	; A pressed
-	ld a,(wSaveQuitMenu.cursorIndex)
-	or a
-
 .ifdef ENABLE_NEW_GAME_PLUS
-	jr z,+
-		; cannot save in NG+ dungeons
-		call getIsNewGamePlus
-		jr z,++
-			ld a,(wDungeonIndex)
-			cp $ff ; overworld
-			jr z,++
-			.ifdef ROM_AGES
-				cp $0e ; lots of non-dungeon areas
-			.endif
-			jr z,++
-				ld a,SND_ERROR
-				jp playSound
-		++
-		call saveFile
+	call getIsInNgpDungeon
+	jr nz,+
+		; no saving in NGP dungeon
+		ld a,(wSaveQuitMenu.cursorIndex)
+		or a
+		call nz,saveFile ; Save for options 2 and 3
 	+
 .else
+	ld a,(wSaveQuitMenu.cursorIndex)
+	or a
 	call nz,saveFile ; Save for options 2 and 3
 .endif
 
@@ -13292,6 +13324,20 @@ saveQuitMenu_state1:
 	add c
 	cp $03
 	ret nc
+.ifdef ENABLE_NEW_GAME_PLUS
+	call getIsInNgpDungeon
+	jr z,+
+		; only 2 options in NGP dungeon game over screen
+		push hl
+		ld h,a
+		call saveQuitMenu_checkIsGameOver
+		ld a,h
+		pop hl
+		jr z,+
+			cp $02
+			ret nc
+	+
+.endif
 	ld (hl),a
 	ld a,SND_MENU_MOVE
 	jp playSound
@@ -13308,6 +13354,34 @@ saveQuitMenu_state2:
 	dec (hl)
 	ret nz
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	call getIsInNgpDungeon
+	jr z,+
+		call saveQuitMenu_checkIsGameOver
+		ld a,(wSaveQuitMenu.cursorIndex)
+		jr z,++
+			; continue option(opt 0) is removed from game over screen
+			inc a
+		++
+		; check if selected continue
+		or a
+		jp z,closeMenu
+
+		; check if selected quit
+		dec a
+		jp nz,resetGame
+
+		; must have selected reload
+		call loadFile
+		call initSound
+		ld a,$01
+		ld (wSaveQuitMenu.delayCounter),a
+		ld a,THREAD_0
+		ld bc,thread_runSaveAndQuit
+		call threadRestart
+		jr ++
+	+
+.endif
 	ld a,(wSaveQuitMenu.cursorIndex)
 	cp $02
 	jp z,resetGame
@@ -13315,6 +13389,9 @@ saveQuitMenu_state2:
 	call saveQuitMenu_checkIsGameOver
 	jp z,closeMenu
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	++
+.endif
 	; Reset game
 	ld a,THREAD_1
 	ld bc,mainThreadStart

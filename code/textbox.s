@@ -809,7 +809,11 @@ inventoryTextCode:
 ;;
 ; Initializes text stuff, particularly position variables for the textbox.
 initTextboxStuff:
+.ifdef MORE_MESSAGE_SPEEDS
+	call getActiveLanguage
+.else
 	ld a,(wActiveLanguage)
+.endif
 	ld b,a
 	add a
 	add b
@@ -996,7 +1000,11 @@ getTextAddress:
 	ld b,a
 
 ; If wTextIndexH < TEXT_OFFSET_SPLIT_INDEX, text is relative to TEXT_OFFSET_1
+.ifdef MORE_MESSAGE_SPEEDS
+	call getActiveLanguage
+.else
 	ld a,(wActiveLanguage)
+.endif
 	add a
 	ld hl,textOffset1Table
 	rst_addDoubleIndex
@@ -1007,7 +1015,11 @@ getTextAddress:
 	cp TEXT_OFFSET_SPLIT_INDEX
 	jr c,+
 ; Else, text is relative to TEXT_OFFSET_2
+.ifdef MORE_MESSAGE_SPEEDS
+	call getActiveLanguage
+.else
 	ld a,(wActiveLanguage)
+.endif
 	add a
 	ld hl,textOffset2Table
 	rst_addDoubleIndex
