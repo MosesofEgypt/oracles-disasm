@@ -139,6 +139,22 @@ moldorm_state_uninitialized:
 	jr moldorm_state1
 
 @notSpawner:
+.ifdef ENABLE_NEW_GAME_PLUS
+	push af
+	ld e,Enemy.subid
+	ld a,(de)
+	; in NG+2/3 only the tail tip is vulnerable
+	cp $03
+	jr z,+
+		call getNewGamePlusCycle
+		cp $02
+		jr c,+
+			ld e,Enemy.enemyCollisionMode
+			ld a,ENEMYCOLLISION_HARDHAT_BEETLE
+			ld (de),a
+	+
+	pop af
+.endif
 	call ecom_setSpeedAndState8AndVisible
 	ld a,b
 	dec a
@@ -220,8 +236,29 @@ moldorm_head:
 	ld l,Enemy.var33
 	ld (hl),$02
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	push hl
+	ld hl,@ngpUpgradeTable
+	call tryNgpUpgradeStrongEnemyIgnoreSubids
+	pop hl
+.endif
+
 	call ecom_setRandomAngle
 	jp moldorm_head_updateAnimationFromAngle
+
+.ifdef ENABLE_NEW_GAME_PLUS
+@ngpUpgradeTable:
+	.dw @ngpEnemyUpgrades1
+	.dw @ngpEnemyUpgrades2
+	.dw @ngpEnemyUpgrades2
+
+@ngpEnemyUpgrades1:
+	m_ngp_upgrade_p_d_h_term	PALETTE_GREEN   6 10
+@ngpEnemyUpgrades2
+	m_ngp_upgrade_p_d_h			PALETTE_BLUE    6 10
+	m_ngp_upgrade_p_d_h			PALETTE_BLUE    8 12
+	m_ngp_upgrade_p_d_h_s_term	PALETTE_RED    10 16 SPEED_140
+.endif
 
 
 ; Main state for head
@@ -286,6 +323,15 @@ moldorm_tail:
 	ld a,(hl)
 	ld (de),a
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld l,Enemy.oamFlags
+	ld e,l
+	ld a,(hl)
+	ld (de),a
+	dec de
+	ld (de),a
+.endif
+
 	jp moldorm_tail_clearOffsetBuffer
 
 
@@ -296,7 +342,66 @@ moldorm_tail:
 	call objectGetRelatedObject1Var
 	ld a,(hl)
 	or a
-	jr z,moldorm_tail_delete
+	jp z,moldorm_tail_delete
+
+.ifdef ENABLE_NEW_GAME_PLUS
+	call getNewGamePlusCycle
+	cp $02
+	jr c,+
+		; make tip flash in NG+
+		ld e,Enemy.subid
+		ld a,(de)
+		cp $03
+		jr nz,+
+			ld e,Enemy.oamFlagsBackup
+			ld a,(de)
+			and $07
+			cp $01
+			jr c,++
+				; don't flash tip on green moldorm
+				cp $04
+				jr nc,+++
+					dec a
+					jr ++++
+				+++
+					sub $04
+				++++
+
+				push hl
+				ld hl,wFrameCounter
+				bit 2,(hl)
+				pop hl
+				jr z,++++
+					inc a
+					jr +++
+				++++
+					add $04
+				+++
+				ld l,a
+				ld a,(de)
+				and $f8
+				or l
+				ld (de),a
+				inc de
+				ld (de),a
+			++
+
+			; this is the tail tip. in NG+2/3 this
+			; is the part that can be hurt, so damage
+			; flashing is controlled from this enemy
+			push hl
+			ld l,Enemy.invincibilityCounter
+			ld e,l
+			ld a,(de)
+			ld (hl),a
+			ld l,Enemy.relatedObj1
+			rst_derefHl
+			ld l,e
+			ld a,(de)
+			ld (hl),a
+			pop hl
+	+
+.endif
 
 	; Get distance between parent's last and current Y position in high nibble of 'b'.
 	; (Add 8 so it's positive.)
@@ -367,6 +472,17 @@ moldorm_tail:
 
 ;;
 moldorm_tail_delete:
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld a,Object.enabled
+	call objectGetRelatedObject1Var
+	ld a,(hl)
+	or a
+	jr z,+
+		xor a
+		ld l,Enemy.health
+		ld (hl),a
+	+
+.endif
 	call decNumEnemies
 	jp enemyDelete
 

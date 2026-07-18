@@ -64,11 +64,12 @@ partCode31:
 
 .ifdef ENABLE_NEW_GAME_PLUS
 @ngpUpgradeTable:
-	.dw @ngpProjectileUpgrades
-	.dw @ngpProjectileUpgrades
-	.dw @ngpProjectileUpgrades
+	.dw @ngpProjectileUpgrades1
+	.dw @ngpProjectileUpgrades2
+	.dw @ngpProjectileUpgrades2
 
-	@ngpProjectileUpgrades:
-		m_ngp_upgrade_d_s			04 SPEED_200
-		m_ngp_upgrade_p_d_s_term	PALETTE_BLUE_INV  08 SPEED_300
+	@ngpProjectileUpgrades1:
+		m_ngp_upgrade_d_s_term		04 SPEED_280
+	@ngpProjectileUpgrades2:
+		m_ngp_upgrade_p_d_s_term	PALETTE_BLUE_INV  08 SPEED_400
 .endif
