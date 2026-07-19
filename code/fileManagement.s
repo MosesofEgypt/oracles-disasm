@@ -44,8 +44,25 @@ initializeNgpFile:
 	ld b,(wSecretType+1)-wKilledGoldenEnemies
 	call fillMemory
 
+	; we want to clear all the room flags EXCEPT the one
+	; indicating if the screen was seen or not. this way
+	; the minimap discovery carries over between games
 	ld hl,wGroup0RoomFlags
-	ld bc,(wGroup5RoomFlags+$100)-wGroup0RoomFlags
+	ld bc,$200
+	-
+		ld a,(hl)
+		and $10
+		ldi (hl),a
+		dec bc
+		xor a
+		or c
+		jr nz,-
+		or b
+		jr nz,-
+
+	xor a
+	ld hl,wGroup4RoomFlags
+	ld bc,$200
 	call fillMemoryBc
 
 	ld (wFluteIcon),a
