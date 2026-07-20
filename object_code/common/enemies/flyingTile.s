@@ -113,9 +113,9 @@ flyingTile_state_spawner:
 	call getNewGamePlusCycle
 	ld l,a
 	inc l
-	ld a,70
+	ld a,67
 	-
-		sub 10
+		sub 7
 		dec l
 		jr nz,-
 	ld l,Enemy.counter1
