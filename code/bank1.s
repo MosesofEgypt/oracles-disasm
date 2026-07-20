@@ -3563,6 +3563,7 @@ standardGameState:
 .ifdef ENABLE_NEW_GAME_PLUS
 	call updateRingsDisabled
 	call processAutosaveUpdate
+	call processPoisonTicks
 .endif
 .ifdef ENABLE_RING_REDUX
 	call processDmgPaletteUpdate
@@ -3786,6 +3787,52 @@ clearExtendedRingBox:
 .endif
 
 .ifdef ENABLE_NEW_GAME_PLUS
+processPoisonTicks:
+	ld hl,wLinkPoisonCounter
+	ld a,(hl)
+	and $1f
+	jr nz,+
+		; poison done. remove flags
+		ld (hl),a
+		ret
+	+
+
+	ld a,(wFrameCounter)
+	and $1f
+	jr nz,+
+		; decrement ticks remaining
+		dec (hl)
+
+		; process a tick every 32 frames(roughly every second)
+		bit 5,(hl)
+		jr z,+
+			; health poisoned (lose 1/4 heart)
+			ld de,wLinkHealth
+			ld a,(de)
+			or a
+			ret z
+			dec a
+			bit 7,(hl)
+			jr z,++
+				; defense halved, so double poison damage
+				dec a
+			++
+			ld (de),a
+	+
+
+	bit 6,(hl)
+	jr z,+
+		; speed poisoned
+		ld a,(wFrameCounter)
+		bit 0,a
+		jr z,+
+			; disable movement every other frame
+			ld hl,wLinkImmobilized
+			set 5,(hl)
+	+
+
+	ret
+
 processAutosaveUpdate:
 	; don't save if transitioning
 	ld a,(wDisableLinkCollisionsAndMenu)

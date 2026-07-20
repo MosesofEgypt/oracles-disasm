@@ -8,6 +8,24 @@ enemyCode2a:
 	dec a
 	ret z
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	call getIsNewGamePlus
+	jr z,+
+		; in NG+ the traps will do 1/4 your current health, or 1 heart minimum
+		ld a,(wLinkHealth)
+		srl a
+		srl a
+		cp $08
+		jr nc,++
+			ld a,$08
+		++
+		cpl a
+		inc a
+		ld e,Enemy.damage
+		ld (de),a
+	+
+.endif
+
 	call ecom_getSubidAndCpStateTo08
 	jr c,@commonState
 	ld a,b

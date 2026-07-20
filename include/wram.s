@@ -421,6 +421,13 @@ wDungeonIndexPreviousFrame:
 	; Indicates which dungeon index link was in during the previous frame.
 	; Used to determine if the game should be autosaved when it changes.
 	db
+
+wLinkPoisonCounter:
+	; Bits 0-4: Number of poison ticks remaining in the timer
+	; Bit    5: Health poisoned
+	; Bit    6: Speed poisoned
+	; Bit    7: Strength poison(attack and defense halved)
+	db
 .endif
 
 .ifdef ENABLE_RING_REDUX

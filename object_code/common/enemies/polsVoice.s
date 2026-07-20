@@ -22,7 +22,8 @@ enemyCode23:
 	push af
 	ld e,Enemy.var2a
 	ld a,(de)
-	cp $80|ITEMCOLLISION_L3_SHIELD
+	and $7f
+	cp ITEMCOLLISION_L3_SHIELD
 	; L-3/4 shield can block them
 	jr nc,+
 		ld e,Enemy.state

@@ -902,6 +902,18 @@ linkUpdateDamageToApplyForRings:
 		ld a,$ff
 	+
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	push af
+	ld a,(wLinkPoisonCounter)
+	ld e,a
+	pop af
+	bit 6,e
+	jr z,+
+		; poisoned, so double damage
+		sla a
+	+
+.endif
+
 	; calculate and apply dodge chance
 	; for each luck ring, give a 25% chance to reduce damage taken to 1/4 heart
 	ld e,$01

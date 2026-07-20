@@ -295,6 +295,20 @@ itemCalculateSwordDamage:
 		ld a,$ff
 	+
 	call applyCurseArmorDamageCap
+.ifdef ENABLE_NEW_GAME_PLUS
+	push af
+	ld a,(wLinkPoisonCounter)
+	ld e,a
+	pop af
+	bit 6,e
+	jr z,+
+		; poisoned, so halve damage
+		sra a
+		or a
+		jr nz,+
+			inc a
+	+
+.endif
 	ld e,Item.damage
 	ld (hl),a
 @done
