@@ -354,8 +354,19 @@ giveTreasure_body:
 		ld a,h
 		pop hl
 		jr nz,+
-			; ensure link's max health doesn't overflow
+			; if link's max health would overflow, instead
+			; give some more flask charges and fill them
 			ld a,$80
+		.ifdef ENABLE_NEW_GAME_PLUS
+			ld (de),a
+			ld c,$03
+			ld hl,wStatusBarNeedsRefresh
+			set 1,(hl)
+			ld de,(wLifeVialCharges)
+			call @mode4
+			inc de
+			jr @mode4
+		.endif
 		+
 	+
 	ld (de),a

@@ -1192,6 +1192,8 @@ m_section_free enemyCode_Bank3e NAMESPACE bank3e
 m_section_free roomGfxChanges NAMESPACE roomGfxChanges
 	.include "code/ages/roomGfxChanges.s"
 .ends
+
+.include "object_code/ages/interactions/tuniNutMain.s"
 .endif
 
 
@@ -1442,7 +1444,9 @@ oamData_7249:
 
 .include "object_code/ages/interactions/monkeyMain.s"
 .include "object_code/ages/interactions/rabbitMain.s"
+.ifndef ENABLE_NEW_GAME_PLUS
 .include "object_code/ages/interactions/tuniNutMain.s"
+.endif
 
 .include "code/ages/garbage/bank3fEnd.s"
 
