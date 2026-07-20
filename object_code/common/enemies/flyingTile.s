@@ -37,13 +37,35 @@ flyingTile_state_uninitialized:
 	ld a,(de)
 	rlca
 	ld a,SPEED_1c0
+.ifdef ENABLE_NEW_GAME_PLUS
+	jr nc,+
+		call ecom_setSpeedAndState8
+		ld hl,@ngpUpgradeTable
+		jp tryNgpUpgradeUncappedEnemyIgnoreSubids
+	+
+.else
 	jp c,ecom_setSpeedAndState8
+.endif
 
 	; Subids $00-$7f only
 	ld e,Enemy.state
 	ld a,$01
 	ld (de),a
 	ret
+
+.ifdef ENABLE_NEW_GAME_PLUS
+@ngpUpgradeTable:
+	.dw @ngpEnemyUpgrades1
+	.dw @ngpEnemyUpgrades2
+	.dw @ngpEnemyUpgrades3
+
+@ngpEnemyUpgrades1:
+	m_ngp_upgrade_d_s_term		4  SPEED_200
+@ngpEnemyUpgrades2:
+	m_ngp_upgrade_d_s_term		6  SPEED_280
+@ngpEnemyUpgrades3:
+	m_ngp_upgrade_d_s_term		8  SPEED_300
+.endif
 
 
 flyingTile_state_spawner:
@@ -87,7 +109,20 @@ flyingTile_state_spawner:
 	call ecom_decCounter1
 	ret nz
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	call getNewGamePlusCycle
+	ld l,a
+	inc l
+	ld a,70
+	-
+		sub 10
+		dec l
+		jr nz,-
+	ld l,Enemy.counter1
+	ld (hl),a
+.else
 	ld (hl),60
+.endif
 
 	; Retrieve address in flyingTile_layoutData
 	ld l,Enemy.var30
@@ -183,6 +218,29 @@ flyingTile_stateB:
 
 ;;
 flyingTile_dead:
+.ifdef ENABLE_NEW_GAME_PLUS
+	call getNewGamePlusCycle
+	jr z,+
+		call getFreeItemSlot
+		jr nz,+
+			; create a bomb that's exploding at the point of impact
+			call objectCopyPosition
+			ld l,Item.enabled
+			ld a,$03
+			ldi (hl),a
+			ld a,ITEM_BOMB
+			ld (hl),a
+			ld l,Item.var2f
+			set 4,(hl)
+			ld e,Enemy.damage
+			ld a,(de)
+			; do double the tile's impact damage as an explosion
+			sla a
+			ld l,Item.damage
+			ld (hl),a
+			jr flyingTile_delete
+	+
+.endif
 	ld b,INTERAC_ROCKDEBRIS
 	call objectCreateInteractionWithSubid00
 
