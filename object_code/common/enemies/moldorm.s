@@ -308,8 +308,18 @@ moldorm_tail:
 	ld l,e
 	inc (hl) ; [state]
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	; keep tail collidable in NG+
+	call getNewGamePlusCycle
+	cp $02
+	jr nc,+
+		ld l,Enemy.collisionType
+		res 7,(hl)
+	+
+.else
 	ld l,Enemy.collisionType
 	res 7,(hl)
+.endif
 
 	; Copy parent's current position into var31/var32
 	ld l,Enemy.relatedObj1+1
