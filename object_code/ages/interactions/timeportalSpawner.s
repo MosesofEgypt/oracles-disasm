@@ -144,17 +144,33 @@ autoEquipHarp:
 	call @getCoordDist
 	pop hl
 	add h
+	ld h,d
 	cp $0a
 	jr nc,+
 		; close enough to autoequip, so set flag
 		xor a
+		jr ++
 	+
+		; don't unequip if this isn't the portal that did the equip
+		ld l,Interaction.var2a
+		bit 0,(hl)
+		ret z
+	++
+
 	ld a,ITEM_HARP
 
 	call handleAutoEquipItem
 	jr nz,+
-		ld a,$01
-		ld (wSelectedHarpSong),a
+		ld l,Interaction.var2a
+		res 0,(hl)
+
+		ld a,(wAutoEquipInvSlot)
+		; if it was unequipped, the slot will be $ff
+		cp $ff
+		jr z,+
+			set 0,(hl)
+			ld a,$01
+			ld (wSelectedHarpSong),a
 	+
 	ret
 

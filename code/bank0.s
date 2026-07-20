@@ -8786,7 +8786,8 @@ handleAutoEquipItem:
 	ldh a,(<hRomBank)
 	push af
 	callfrombank0 bank3d.handleAutoEquipItem_body
-	pop af
+	pop hl
+	ld a,h
 	setrombank
 	pop hl
 	ld a,h
