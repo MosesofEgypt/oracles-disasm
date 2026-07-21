@@ -121,14 +121,14 @@ enemyCodeTable:
 	.dw bank0f.enemyCode75 ; 0x75
 	.dw bank0f.enemyCode76 ; 0x76
 	.dw bank0f.enemyCode77 ; 0x77
-	.dw bank0f.enemyCode78 ; 0x78
-	.dw bank0f.enemyCode79 ; 0x79
-	.dw bank0f.enemyCode7a ; 0x7a
-	.dw bank0f.enemyCode7b ; 0x7b
-	.dw bank0f.enemyCode7c ; 0x7c
-	.dw bank0f.enemyCode7d ; 0x7d
-	.dw bank0f.enemyCode7e ; 0x7e
-	.dw bank0f.enemyCode7f ; 0x7f
+	.dw bank3c.enemyCode78 ; 0x78
+	.dw bank3c.enemyCode79 ; 0x79
+	.dw bank3c.enemyCode7a ; 0x7a
+	.dw bank3c.enemyCode7b ; 0x7b
+	.dw bank3c.enemyCode7c ; 0x7c
+	.dw bank3c.enemyCode7d ; 0x7d
+	.dw bank3c.enemyCode7e ; 0x7e
+	.dw bank3c.enemyCode7f ; 0x7f
 .else
 	.dw bank10.enemyCode00 ; 0x00
 	.dw bank10.enemyCode01 ; 0x01

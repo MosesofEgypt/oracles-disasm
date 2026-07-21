@@ -302,11 +302,11 @@ itemCalculateSwordDamage:
 	pop af
 	bit 6,e
 	jr z,+
-		; poisoned, so halve damage
-		sra a
-		or a
-		jr nz,+
-			inc a
+		; poisoned, so drastically reduce damage
+		cp $ff
+		jr z,+
+			; reduce to 2 damage
+			ld a,$fe
 	+
 .endif
 	ld e,Item.damage

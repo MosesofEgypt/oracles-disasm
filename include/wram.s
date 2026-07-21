@@ -423,10 +423,11 @@ wDungeonIndexPreviousFrame:
 	db
 
 wLinkPoisonCounter:
-	; Bits 0-4: Number of poison ticks remaining in the timer
-	; Bit    5: Health poisoned
-	; Bit    6: Speed poisoned
-	; Bit    7: Strength poison(attack and defense halved)
+	; Bits 0-4: Number of poison ticks(~1sec each) remaining in the timer
+	;           Additional hits add to timer till it caps at 31
+	; Bit    5: Health poisoned(lose 1/4 heart each tick)
+	; Bit    6: Speed poisoned(immobilized every other frame)
+	; Bit    7: Strength poisoned(attack halved, and damage received doubled)
 	db
 .endif
 

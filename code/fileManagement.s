@@ -238,6 +238,10 @@ loadFile:
 	ld h,b
 	ld de,wFileStart
 	call copyFileFromHlToDe
+.ifdef ENABLE_NEW_GAME_PLUS
+	xor a
+	ld (wLinkPoisonCounter),a
+.endif
 	pop af
 	ret
 

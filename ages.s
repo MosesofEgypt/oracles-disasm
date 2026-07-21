@@ -648,7 +648,6 @@ m_section_free Enemy_Code_Bank0f NAMESPACE bank0f
 
 	.include "object_code/common/enemies/commonCode.s"
 	.include "object_code/common/enemies/commonBossCode.s"
-
 	.include "object_code/ages/enemies/giantGhini.s"
 	.include "object_code/ages/enemies/swoop.s"
 	.include "object_code/ages/enemies/subterror.s"
@@ -657,6 +656,7 @@ m_section_free Enemy_Code_Bank0f NAMESPACE bank0f
 	.include "object_code/common/enemies/vire.s"
 	.include "object_code/ages/enemies/anglerFish.s"
 	.include "object_code/ages/enemies/blueStalfos.s"
+.ifndef ENABLE_NEW_GAME_PLUS
 	.include "object_code/ages/enemies/pumpkinHead.s"
 	.include "object_code/ages/enemies/headThwomp.s"
 	.include "object_code/ages/enemies/shadowHag.s"
@@ -665,6 +665,7 @@ m_section_free Enemy_Code_Bank0f NAMESPACE bank0f
 	.include "object_code/ages/enemies/octogon.s"
 	.include "object_code/ages/enemies/plasmarine.s"
 	.include "object_code/ages/enemies/kingMoblin.s"
+.endif
 
 .ends
 
@@ -1089,6 +1090,24 @@ m_section_free Gfx_1b ALIGN $20
 	; data in the above includes, it's been relocated. So now, banks all the way up to and
 	; including bank $3e could be used for the above data (text, room layouts, graphics).
 
+
+.BANK $3c SLOT 1
+.ORG 0
+
+m_section_free Enemy_Code_Bank3c NAMESPACE bank3c
+.ifdef ENABLE_NEW_GAME_PLUS
+	.include "object_code/common/enemies/commonCode.s"
+	.include "object_code/common/enemies/commonBossCode.s"
+	.include "object_code/ages/enemies/pumpkinHead.s"
+	.include "object_code/ages/enemies/headThwomp.s"
+	.include "object_code/ages/enemies/shadowHag.s"
+	.include "object_code/ages/enemies/eyesoar.s"
+	.include "object_code/ages/enemies/smog.s"
+	.include "object_code/ages/enemies/octogon.s"
+	.include "object_code/ages/enemies/plasmarine.s"
+	.include "object_code/ages/enemies/kingMoblin.s"
+.endif
+.ends
 
 .BANK $3d SLOT 1
 .ORG 0

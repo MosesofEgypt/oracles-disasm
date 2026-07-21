@@ -11937,6 +11937,9 @@ updateEnemy:
 	ld b,$10
 	cp $08
 	jr c,++
+	ld b,$3c
+	cp $78
+	jr nc,++
 	ld b,$0f
 	cp $70
 	jr nc,++

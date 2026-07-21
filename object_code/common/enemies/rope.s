@@ -7,6 +7,31 @@
 ; ==================================================================================================
 enemyCode10:
 	call rope_checkHazardsIfApplicable
+.ifdef ENABLE_NEW_GAME_PLUS
+	push af
+	ld e,Enemy.var2a
+	ld a,(de)
+	cp $80|ITEMCOLLISION_LINK
+	jr nz,+
+		; link hit. maybe apply poison
+		ld e,Enemy.subid
+		ld a,(de)
+		srl a
+		jr z,+
+		srl a
+		jr z,+
+		bit 1,a
+
+		ld a,$64 ; number of ticks to add | health and speed poison flags
+		jr z,++
+			; change flags to strength and health
+			xor $c0
+		++
+		call applyPoisonEffect
+	+
+	pop af
+.endif
+
 	or a
 	jr z,@normalStatus
 
@@ -43,6 +68,10 @@ enemyCode10:
 
 @normalState:
 	ld a,b
+.ifdef ENABLE_NEW_GAME_PLUS
+	; mask out the poison-type flags
+	and $03
+.endif
 	rst_jumpTable
 	.dw rope_subid00
 	.dw rope_subid01
@@ -51,6 +80,23 @@ enemyCode10:
 
 
 @state_uninitialized:
+.ifdef ENABLE_NEW_GAME_PLUS
+	; ensure the subid can't be out of bounds
+	ld a,b
+	and $03
+	ld b,a
+	ld e,Enemy.subid
+	ld (de),a
+
+	ld hl,@ngpUpgradeTable
+	call tryNgpUpgradeUncappedEnemyIgnoreSubids
+
+	; fix the subid to include the original 2 bits
+	ld e,Enemy.subid
+	ld a,(de)
+	or b
+	ld (de),a
+.endif
 	ld e,Enemy.direction
 	ld a,$ff
 	ld (de),a
@@ -66,6 +112,20 @@ enemyCode10:
 	set 4,(hl)
 
 	jp ecom_setSpeedAndState8AndVisible
+
+.ifdef ENABLE_NEW_GAME_PLUS
+@ngpUpgradeTable:
+	.dw @ngpUpgradeSubtable1
+	.dw @ngpUpgradeSubtable1
+	.dw @ngpUpgradeSubtable2
+
+@ngpUpgradeSubtable1:
+	m_ngp_upgrade_p_h			PALETTE_GREEN     4
+@ngpUpgradeSubtable2:
+	m_ngp_upgrade_p_si_h		PALETTE_RED    4  4
+	m_ngp_upgrade_p_si_h		PALETTE_RED    4  4
+	m_ngp_upgrade_p_si_h_term	PALETTE_BLUE   8  5
+.endif
 
 
 @state_switchHook:
@@ -85,6 +145,10 @@ enemyCode10:
 @@substate3:
 	ld e,Enemy.subid
 	ld a,(de)
+.ifdef ENABLE_NEW_GAME_PLUS
+	; mask out the poison-type flags
+	and $03
+.endif
 	ld hl,@defaultStates
 	rst_addAToHl
 	ld b,(hl)
@@ -98,6 +162,10 @@ enemyCode10:
 
 	ld e,Enemy.subid
 	ld a,(de)
+.ifdef ENABLE_NEW_GAME_PLUS
+	; mask out the poison-type flags
+	and $03
+.endif
 	ld hl,@defaultStates
 	rst_addAToHl
 	ld e,Enemy.state

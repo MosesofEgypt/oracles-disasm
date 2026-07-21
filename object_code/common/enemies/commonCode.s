@@ -1245,6 +1245,39 @@ ecom_fallToGroundAndSetState:
 	ld (hl),b
 	ret
 
+.ifdef ENABLE_NEW_GAME_PLUS
+applyPoisonEffect:
+	push hl
+	push bc
+	ld hl,wLinkPoisonCounter
+
+	; update the flags
+	ld b,a
+	or (hl)
+	and $e0
+	ld c,a
+
+	; add to the counter
+	ld a,$1f
+	and b
+	ld b,a
+
+	ld a,(hl)
+	and $1f
+	add b
+	cp $20
+	jr c,+
+		ld a,$1f
+	+
+
+	or c
+	ld (hl),a
+
+	pop bc
+	pop hl
+	ret
+.endif
+
 .ifdef ENABLE_RING_REDUX
 ecom_stateHeld:
 	inc e

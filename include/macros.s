@@ -908,6 +908,19 @@
 ; Args:
 ;   \1 - 3bit: newPalette
 ;   \2 - 5bit: newSubId
+;   \3 - byte: newHealth
+.macro m_ngp_upgrade_p_si_h
+	m_ngp_upgrade $0b \1 \2 $00 \3 $00
+.endm
+
+; same args as above, but with terminator flag set
+.macro m_ngp_upgrade_p_si_h_term
+	m_ngp_upgrade_term $0b \1 \2 $00 \3 $00
+.endm
+
+; Args:
+;   \1 - 3bit: newPalette
+;   \2 - 5bit: newSubId
 ;   \3 - byte: newSpeed
 .macro m_ngp_upgrade_p_si_s
 	m_ngp_upgrade $13 \1 \2 $00 $00 \3
