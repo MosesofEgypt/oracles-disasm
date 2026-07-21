@@ -769,21 +769,37 @@ loadGfxRegisterStateIndex:
 	add l
 	add a
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld hl,bank3d.gfxRegisterStates
+.else
 	ld hl,gfxRegisterStates
+.endif
 	rst_addDoubleIndex
 	ld b,GfxRegsStruct.size*2
 	ld de,wGfxRegs1
+.ifdef ENABLE_NEW_GAME_PLUS
+	ldh a,(<hRomBank)
+	push af
+	ld a,:bank3d.gfxRegisterStates
+	rst_setrombank
+.endif
 -
 	ldi a,(hl)
 	ld (de),a
 	inc e
 	dec b
 	jr nz,-
+
+.ifdef ENABLE_NEW_GAME_PLUS
+	pop af
+	rst_setrombank
+.endif
 	ld a,(wGfxRegs1.LCDC)
 	ld (wGfxRegsFinal.LCDC),a
 	ld ($ff00+R_LCDC),a
 	ret
 
+.ifndef ENABLE_NEW_GAME_PLUS
 gfxRegisterStates:
 	.db $c3 $00 $00 $c7 $c7 $c7 ; 0x00: DMG mode screen, capcom intro, ...
 	.db $c3 $00 $00 $c7 $c7 $c7
@@ -864,7 +880,7 @@ gfxRegisterStates:
 	.db $ef $00 $00 $90 $07 $30 ; 0x19
 	.db $e7 $98 $00 $60 $07 $c7
 .endif
-
+.endif
 
 ;;
 ; @param[out]	a	Random number
@@ -3769,6 +3785,13 @@ getChestData:
 ;;
 ; Set Link's death respawn point based on the current room / position variables.
 setDeathRespawnPoint:
+.ifdef ENABLE_NEW_GAME_PLUS
+	ldh a,(<hRomBank)
+	push af
+	callfrombank0 bank3d.setDeathRespawnPoint
+	pop af
+	rst_setrombank
+.else
 	ld hl,wDeathRespawnBuffer
 	ld a,(wActiveGroup)
 	ldi (hl),a
@@ -3795,6 +3818,7 @@ setDeathRespawnPoint:
 	ldi (hl),a
 	ld a,(wRememberedCompanionX)
 	ldi (hl),a
+.endif
 	ret
 
 ;;

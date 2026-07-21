@@ -352,3 +352,113 @@ fractionOf8Multiply:
 	pop hl
 	ret
 .endif
+
+;;
+; Set Link's death respawn point based on the current room / position variables.
+setDeathRespawnPoint:
+	ld hl,wDeathRespawnBuffer
+	ld a,(wActiveGroup)
+	ldi (hl),a
+	ld a,(wActiveRoom)
+	ldi (hl),a
+	ld a,(wRoomStateModifier)
+	ldi (hl),a
+	ld a,(w1Link.direction)
+	ldi (hl),a
+	ld a,(w1Link.yh)
+	ldi (hl),a
+	ld a,(w1Link.xh)
+	ldi (hl),a
+	ld a,(wRememberedCompanionId)
+	ldi (hl),a
+	ld a,(wRememberedCompanionGroup)
+	ldi (hl),a
+	ld a,(wRememberedCompanionRoom)
+	ldi (hl),a
+	ld a,(wLinkObjectIndex)
+	ldi (hl),a
+	inc l
+	ld a,(wRememberedCompanionY)
+	ldi (hl),a
+	ld a,(wRememberedCompanionX)
+	ldi (hl),a
+	ret
+
+gfxRegisterStates:
+	.db $c3 $00 $00 $c7 $c7 $c7 ; 0x00: DMG mode screen, capcom intro, ...
+	.db $c3 $00 $00 $c7 $c7 $c7
+
+	.db $c7 $00 $00 $c7 $c7 $c7 ; 0x01
+	.db $00 $00 $00 $c7 $c7 $c7
+
+	.db $ef $f0 $00 $8f $8f $0f ; 0x02: Post-d3 cutscene, twinrova/ganon fight, CUTSCENE_BLACK_TOWER_ESCAPE
+	.db $e7 $00 $00 $c7 $c7 $c7
+
+	.db $ef $f0 $00 $10 $c7 $0f ; 0x03
+	.db $f7 $f0 $00 $10 $c7 $75
+
+	.db $c7 $00 $00 $c7 $c7 $c7 ; 0x04: titlescreen
+	.db $00 $00 $00 $c7 $c7 $c7
+
+	.db $cf $00 $00 $c7 $c7 $c7 ; 0x05
+	.db $00 $00 $00 $c7 $c7 $c7
+
+	.db $a7 $00 $b0 $c7 $c7 $1f ; 0x06
+	.db $8f $00 $00 $c7 $c7 $c7
+
+	.db $c7 $00 $00 $c7 $c7 $c7 ; 0x07: map screens (both overworld and dungeon)?
+	.db $00 $00 $00 $c7 $c7 $c7
+
+	.db $a7 $00 $00 $90 $07 $00 ; 0x08
+	.db $a7 $40 $00 $90 $07 $c7
+
+	.db $c7 $70 $00 $c7 $c7 $c7 ; 0x09: temple in intro
+	.db $c7 $00 $00 $c7 $c7 $c7
+
+	.db $cf $70 $00 $c7 $c7 $c7 ; 0x0a: scrolling up the tree in the intro
+	.db $cf $00 $00 $c7 $c7 $c7
+
+	.db $cf $00 $20 $c7 $c7 $c7 ; 0x0b
+	.db $cf $00 $00 $c7 $c7 $c7
+
+	.db $a7 $00 $00 $78 $07 $27 ; 0x0c
+	.db $af $f0 $00 $78 $07 $c7
+
+	.db $c7 $10 $30 $c7 $c7 $c7 ; 0x0d
+	.db $c7 $00 $00 $c7 $c7 $c7
+
+	.db $e7 $01 $00 $4c $4c $c7 ; 0x0e
+	.db $c7 $00 $00 $c7 $c7 $c7
+
+	.db $af $f0 $00 $10 $07 $17 ; 0x0f: ring appraisal menu
+	.db $f7 $f0 $00 $10 $c7 $57
+
+	.db $b7 $f0 $00 $10 $07 $1f ; 0x10: ring list menu
+	.db $f7 $f0 $00 $10 $c7 $47
+
+	.db $ef $f0 $00 $8f $8f $0f ; 0x11
+	.db $e7 $00 $00 $40 $57 $c7
+
+	.db $ef $f0 $00 $8f $8f $0f ; 0x12
+	.db $e7 $00 $00 $90 $47 $c7
+
+	.db $e7 $00 $28 $c7 $c7 $c7 ; 0x13
+	.db $e7 $00 $28 $c7 $c7 $c7
+
+	.db $ef $f0 $00 $8f $8f $00 ; 0x14
+	.db $e7 $00 $00 $c7 $c7 $c7
+
+	.db $e7 $00 $00 $c7 $c7 $c7 ; 0x15
+	.db $e7 $00 $00 $c7 $c7 $c7
+
+	.db $ff $30 $00 $60 $07 $18 ; 0x16: farore's secret list
+	.db $ff $30 $00 $60 $07 $c7
+
+	.db $ef $00 $00 $90 $07 $00 ; 0x17: intro cinematic screen 1
+	.db $e7 $00 $00 $90 $07 $c7
+
+	.db $ef $98 $00 $68 $07 $40 ; 0x18
+	.db $ef $98 $00 $68 $07 $c7
+
+	.db $ef $00 $00 $90 $07 $30 ; 0x19
+	.db $e7 $98 $00 $60 $07 $c7
