@@ -322,7 +322,13 @@ sendFileHeader:
 	dec b
 	jr nz,--
 
-.ifdef ROM_AGES
+.ifdef ROM_COMBO
+	call hIsSeasons
+	ld a,SERIAL_UPPER_NIBBLE + $90
+	jr c,+
+		inc a
+	+
+.elif defined(ROM_AGES)
 	ld a,SERIAL_UPPER_NIBBLE + $91
 .else
 	ld a,SERIAL_UPPER_NIBBLE + $90
@@ -806,7 +812,13 @@ gameLink_getFile3:
 ; Ignore file (mark as "blank") if wrong game, or if not completed
 @gameLink:
 	ld a,(w4PacketBuffer+31)
-.ifdef ROM_AGES
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr c,+
+		dec a
+	+
+	cp SERIAL_UPPER_NIBBLE + $90
+.elif defined(ROM_AGES)
 	cp SERIAL_UPPER_NIBBLE + $90
 .else
 	cp SERIAL_UPPER_NIBBLE + $91

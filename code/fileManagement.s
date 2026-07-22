@@ -177,7 +177,11 @@ initializeFile:
 	ld (wUnappraisedRings),a
 ++
 	callab commonInteractions5.initializeChildOnGameStart
-.ifdef ROM_AGES
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr c,saveFile
+.endif
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	callab roomTileChanges.initializeVinePositions
 .endif
 
@@ -187,15 +191,28 @@ initializeFile:
 saveFile:
 	; Write $01 here for "ages", $00 for "seasons"
 	ld hl,wWhichGame
-.ifdef ROM_AGES
+.ifdef ROM_COMBO
+	ld (hl),$01
+	call hIsSeasons
+	jr nc,+
+		dec (hl)
+	+
+.elif defined(ROM_AGES)
 	ld (hl),$01
 .else
 	ld (hl),$00
 .endif
-
 	; String to verify save integrity (unique between ages/seasons)
 	ld hl,wSavefileString
-	ld de,saveVerificationString
+	.ifdef ROM_COMBO
+		call hIsSeasons
+		ld de,saveVerificationStringSeasons
+		jr c,+
+			ld de,saveVerificationStringAges
+		+
+	.else
+		ld de,saveVerificationString
+	.endif
 	ld b,$08
 	call copyMemoryReverse
 
@@ -363,7 +380,15 @@ verifyFileAtHl:
 	jr nz,@verifyFailed
 
 	; Verify the savefile string
-	ld de,saveVerificationString
+	.ifdef ROM_COMBO
+		call hIsSeasons
+		ld de,saveVerificationStringSeasons
+		jr c,+
+			ld de,saveVerificationStringAges
+		+
+	.else
+		ld de,saveVerificationString
+	.endif
 	ld b,$08
 @nextChar:
 	ld a,(de)
@@ -528,7 +553,7 @@ initialFileVariables_standardGame:
 initialFileVariables_heroGame:
 	.db <wChildStatus,			$00
 	.db <wShieldLevel,			$01
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.db <wAnimalCompanion,			$00
 .else
 	.db <wAnimalCompanion,			SPECIALOBJECT_RICKY
@@ -572,9 +597,16 @@ initialNgpFileVariables_biggoronsword:
 .endif
 
 ; This string is different in ages and seasons.
+.ifdef ROM_COMBO
+saveVerificationStringAges:
+	.ASC "Z21216-0"
+saveVerificationStringSeasons:
+	.ASC "Z11216-0"
+.else
 saveVerificationString:
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 	.ASC "Z21216-0"
 .else
 	.ASC "Z11216-0"
+.endif
 .endif

@@ -306,7 +306,15 @@ updateTextbox:
 	ld (hl),$00
 
 	; You got 4 pieces of heart. That's 1 heart container
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	ld a,<TX_0024
+	jr c,+
+		ld a,<TX_0049
+	+
+	ld (wTextIndexL),a
+	ld a,$00
+.elif defined(ROM_AGES)
 	ld a,<TX_0049
 	ld (wTextIndexL),a
 	ld a,>TX_0049
@@ -958,7 +966,13 @@ initTextboxStuff:
 	; If TEXTBOXFLAG_ALTPALETTE2 is set, use PALH_bd
 	ld a,(wTextboxFlags)
 	and TEXTBOXFLAG_ALTPALETTE2
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	ld a,PALH_SEASONS_bd
+	jr c,+
+		ld a,PALH_bd
+	+
+.elif defined(ROM_AGES)
 	ld a,PALH_bd
 .else
 	ld a,PALH_SEASONS_bd
@@ -3156,7 +3170,7 @@ nameAddressTable:
 ; a shop, it checks the given variable (wcbad) and displays one of these pieces
 ; of text depending on the value.
 ;
-.ifdef ROM_AGES
+.if defined(ROM_AGES) && !defined(ROM_COMBO)
 extraTextIndices:
 	.dw $0000
 	.dw $0000
@@ -3196,7 +3210,9 @@ extraTextIndices:
 @index11:
 	.dw wcbad
 	.db <TX_0d0c, <TX_0d08, <TX_0d07, <TX_0d03
-.else
+.endif
+
+.if !defined(ROM_AGES) || defined(ROM_COMBO)
 extraTextIndices:
 	.dw @index00
 	.dw @index01

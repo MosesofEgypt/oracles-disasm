@@ -5,7 +5,9 @@
 objectLoadMovementScript:
 	ldh a,(<hRomBank)
 	push af
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	callfrombank0 bank0e.objectLoadMovementScript_body
+.elif defined(ROM_AGES)
 	callfrombank0 bank0e.objectLoadMovementScript_body
 .else
 	callfrombank0 bank0d.objectLoadMovementScript_body
@@ -18,7 +20,9 @@ objectLoadMovementScript:
 objectRunMovementScript:
 	ldh a,(<hRomBank)
 	push af
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	callfrombank0 bank0e.objectRunMovementScript_body
+.elif defined(ROM_AGES)
 	callfrombank0 bank0e.objectRunMovementScript_body
 .else
 	callfrombank0 bank0d.objectRunMovementScript_body
@@ -81,7 +85,7 @@ fileSelect_redrawDecorations:
 	ret
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 ;;
 ; Does a lot of initialization, sets wActiveGroup/wActiveRoom to the given values. This
 ; does not load the room's objects.
@@ -131,7 +135,7 @@ addSpritesFromBankToOam_withOffset:
 	ret
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 ;;
 ; Same as "addSpritesToOam", except this changes the bank first.

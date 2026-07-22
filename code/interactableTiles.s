@@ -20,7 +20,18 @@ interactWithTileBeforeLink:
 	; Note: The function that's called must set or unset the carry flag on returning.
 	; Setting it disables some of Link's per-frame update code?
 	ld hl,interactableTilesTable
-.ifdef ROM_AGES
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr nc,+
+		call getSomariaBlockIndex
+		ld a,b
+		cp e
+		jr nz,+
+			ld a,$80
+			jr ++
+	+
+	call lookupCollisionTable_paramE
+.elif defined(ROM_AGES)
 	call lookupCollisionTable_paramE
 .else
 	call getSomariaBlockIndex
@@ -36,6 +47,7 @@ interactWithTileBeforeLink:
 +
 .endif
 	jp nc,resetPushingAgainstTileCounter
+	++
 	ld b,a
 	and $0f
 	rst_jumpTable
@@ -239,7 +251,15 @@ checkFacingBottomOfTile:
 ;;
 ; Deals with pushing blocks, pots, etc.
 nextToPushableBlock:
-.ifdef ROM_AGES
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr c,+
+		; No pushing underwater
+		ld a,(wTilesetFlags)
+		and TILESETFLAG_UNDERWATER
+		ret nz
+	+
+.elif defined(ROM_AGES)
 	; No pushing underwater
 	ld a,(wTilesetFlags)
 	and TILESETFLAG_UNDERWATER
@@ -277,7 +297,13 @@ nextToPushableBlock:
 	call checkTileAfterNext
 	jr nc,@end
 
-.ifdef ROM_AGES
+.ifdef ROM_COMBO
+	ldh a,(<hFF8B)
+	call hIsSeasons
+	ld b,TILEINDEX_SOMARIA_BLOCK
+	call c,getSomariaBlockIndex
+	cp b
+.elif defined(ROM_AGES)
 	ldh a,(<hFF8B)
 	cp TILEINDEX_SOMARIA_BLOCK
 .else
@@ -319,7 +345,11 @@ nextToPushableBlock:
 	dec (hl)
 	dec (hl)
 
-.ifdef ROM_AGES
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr c,+
+.endif
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	; If the tile being pushed is a grave hiding a door, disable link's movement
 	; temporarily
 	ldh a,(<hFF8B)
@@ -332,6 +362,7 @@ nextToPushableBlock:
 	; Note: this assumes that TILESETFLAG_OUTDOORS == 1.
 	ld (wDisabledObjects),a
 .endif
++
 
 @end:
 	xor a
@@ -487,6 +518,12 @@ nextToOverworldKeyhole:
 +
 	ld a,(wActiveRoom)
 	ld hl,@roomsWithKeyholesTable
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr nc,+
+		ld hl,@roomsWithKeyholesTableSeasons
+	+
+.endif
 	call findRoomSpecificData
 	ld b,a
 	jr nc,jumpToShowInfoText
@@ -528,7 +565,18 @@ nextToOverworldKeyhole:
 	ret
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+
+.ifdef ROM_COMBO
+@roomsWithKeyholesTableSeasons:
+	.dw @group0Seasons
+
+@group0Seasons:
+	.db <ROOM_SEASONS_096 TREASURE_GNARLED_KEY
+	.db <ROOM_SEASONS_081 TREASURE_FLOODGATE_KEY
+	.db <ROOM_SEASONS_00d TREASURE_DRAGON_KEY
+	.db $00
+.endif
 
 @roomsWithKeyholesTable:
 	.dw @group0
@@ -594,7 +642,12 @@ createKeySpriteInteraction:
 
 ;;
 nextToSubrosiaKeydoor:
-.ifdef ROM_SEASONS
+.ifdef ROM_COMBO
+	call hIsSeasons
+	ccf
+	ret c
+.endif
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	call specialObjectCheckPushingAgainstTile
 	jp z,resetPushingAgainstTileCounter
 	call checkFacingBottomOfTile
@@ -795,7 +848,14 @@ specialObjectCheckPushingAgainstTile:
 ;			door is a boss key door.
 ; @param[out]	zflag	Set if you have no keys, or don't have the boss key
 checkAndDecKeyCount:
-.ifdef ROM_SEASONS
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr nc,+
+		ld a,GLOBALFLAG_DATING_ROSA
+		call checkGlobalFlag
+		ret nz
+	+
+.elif defined(ROM_SEASONS)
 	ld a,GLOBALFLAG_DATING_ROSA
 	call checkGlobalFlag
 	ret nz

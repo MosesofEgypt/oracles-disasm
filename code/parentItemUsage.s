@@ -35,12 +35,17 @@ clearAllParentItems_body:
 
 .ifdef ENABLE_PASSIVE_SHIELD
 setupPassiveShield:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	; no passive shield underwater
+	.ifdef ROM_COMBO
+		call hIsSeasons
+		jr c,++
+	.endif
 	ld a,(wTilesetFlags)
 	and TILESETFLAG_UNDERWATER
 	ld a,$00
 	jr nz,+
+	++
 .endif
 .ifdef MORE_MESSAGE_SPEEDS
 	ld a,(wMiscSettings)
@@ -155,7 +160,11 @@ checkUseItems:
 	bit TILESETFLAG_BIT_SIDESCROLL,a
 	jr nz,@sidescroll
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+	.ifdef ROM_COMBO
+		call hIsSeasons
+		jr c,@normal
+	.endif
 	bit TILESETFLAG_BIT_UNDERWATER,a
 	jr z,@normal
 .ifdef ENABLE_RING_REDUX
@@ -187,7 +196,18 @@ checkUseItems:
 	ld a,(wLinkSwimmingState)
 	or a
 
-.ifdef ROM_AGES
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr nc,+
+		jr nz,@checkB
+		jr ++
+	+
+		jr z,@checkAB
+		ld hl,w1Link.var2f
+		bit 7,(hl)
+		jr z,@checkB
+	++
+.elif defined(ROM_AGES)
 	jr z,@checkAB
 
 	ld hl,w1Link.var2f
@@ -254,10 +274,15 @@ checkItemUsed:
 	or a
 	jr nz,@checkItem
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr nc,+
+.endif
 	ld a,(wInBoxingMatch)
 	or a
 	jr nz,@forcePunch
+	+
 .endif
 
 	; Nothing equipped; return unless Link is wearing a punching ring

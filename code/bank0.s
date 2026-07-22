@@ -230,7 +230,16 @@ bitTable:
 ; ROM title / manufacturer code
 .ORGA $134
 
-.ifdef ROM_SEASONS
+.ifdef ROM_COMBO
+	.asc "ZELDA OOA&S"
+
+	.ifdef REGION_JP
+		.ASC "AZ7J"
+	.else
+		.asc "AZ7E"
+	.endif
+
+.elif defined(ROM_SEASONS)
 	.asc "ZELDA DIN" 0 0
 
 	.ifdef REGION_JP
@@ -1902,7 +1911,7 @@ _nextThread:
 quickstartSpawn:
 	.db <wDeathRespawnBuffer.group,     QUICKSTART_GROUP
 	.db <wDeathRespawnBuffer.room,      QUICKSTART_ROOM
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	.db <wDeathRespawnBuffer.stateModifier, QUICKSTART_SEASON
 .endif
 	.db <wDeathRespawnBuffer.facingDir, DIR_DOWN
@@ -2068,7 +2077,12 @@ _initialThreadStates:
 
 ; Upper bytes of addresses of flags for each group
 flagLocationGroupTable:
-.ifdef ROM_AGES
+.ifdef ROM_COMBO
+	.db >wGroup0RoomFlags,  >wGroup1RoomFlags
+	.db >wGroup0RoomFlags,  >wGroup1RoomFlags
+	.db >wGroup4RoomFlags,  >wGroup5RoomFlags
+	.db >wGroup4RoomFlags,  >wGroup5RoomFlags
+.elif defined(ROM_AGES)
 	.db >wPresentRoomFlags, >wPastRoomFlags
 	.db >wPresentRoomFlags, >wPastRoomFlags
 	.db >wGroup4RoomFlags,  >wGroup5RoomFlags
@@ -5540,6 +5554,14 @@ getARoomFlags:
 ; @param[out]	hl	Address of room flags
 getRoomFlags:
 	ld hl, flagLocationGroupTable
+.ifdef ROM_COMBO
+	cp $02
+	jr nz,+
+		call hIsSeasons
+		jr nc,+
+			inc a
+	+
+.endif
 	rst_addAToHl
 	ld h,(hl)
 	ld l,b

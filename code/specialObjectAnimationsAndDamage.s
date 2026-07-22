@@ -97,7 +97,7 @@ loadLinkAndCompanionAnimationFrame_body:
 	ld hl,@data
 	rst_addAToHl
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	; CROSSITEMS: The cape animation was added at index 256. It must account for link's
 	; direction.
 	ld a,(w1Link.id)
@@ -190,7 +190,7 @@ getSpecialObjectGraphicsFrame:
 	ld a,(hl)
 	ld e,a
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	; CROSSITEMS: Because there are already 256 gfx definitions for Link in Ages, we need to
 	; manually handle this case for the added roc's cape animation to read animation 256 and
 	; beyond.
@@ -313,7 +313,11 @@ func_4553:
 ;
 ; @param[out]	a	Value written to w1Link.var34
 @getLinkWalkingAnimation:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr c,@notUnderwater
+.endif
 	ld c,$0a
 	ld a,(wTilesetFlags)
 	and TILESETFLAG_UNDERWATER
@@ -572,7 +576,7 @@ getTransformedLinkID:
 +
 	; Rings do nothing in sidescrolling, underwater areas
 	ld a,(wTilesetFlags)
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	and TILESETFLAG_UNDERWATER | TILESETFLAG_SIDESCROLL
 .else
 	and TILESETFLAG_40 | TILESETFLAG_SIDESCROLL

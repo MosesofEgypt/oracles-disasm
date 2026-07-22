@@ -53,7 +53,7 @@ objectRunMovementScript_body:
 	.dw @moveDown
 	.dw @moveLeft
 	.dw @wait
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.dw @setstate
 .endif
 
@@ -151,7 +151,7 @@ objectRunMovementScript_body:
 	add Object.counter1
 	ld l,a
 	ld a,(bc)
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ldd (hl),a
 
 	dec l
@@ -166,7 +166,7 @@ objectRunMovementScript_body:
 
 @storePointer:
 	inc bc
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld a,l
 .endif
 	add Object.var30-Object.state
@@ -176,7 +176,7 @@ objectRunMovementScript_body:
 	ld (hl),b
 	ret
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 @setstate:
 	pop bc
 	ld h,d

@@ -21,7 +21,7 @@
 
 	hRomBank			db	; $ff97
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	hScriptAddressL			db	; $ff98
 	hScriptAddressH			db	; $ff99
 .endif

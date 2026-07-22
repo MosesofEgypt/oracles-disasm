@@ -32,7 +32,7 @@ loadRememberedCompanion:
 
 	ld a,c
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	cp SPECIALOBJECT_RAFT
 	jr z,@raft
 .endif
@@ -43,22 +43,29 @@ loadRememberedCompanion:
 	inc l
 
 	; Set Y/X positions to [wRememberedCompanionY/X]
-.ifdef ROM_AGES
 	ldi a,(hl)
 	ld (w1Companion.yh),a
-	ldi a,(hl)
-	ld (w1Companion.xh),a
-.else; ROM_SEASONS
-	ldi a,(hl)
-	ld (w1Companion.yh),a
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+	.ifdef ROM_COMBO
+		call hIsSeasons
+		jr c,+
+	.endif
 	ld (wLastAnimalMountPointY),a
+	+
+.endif
 	ldi a,(hl)
 	ld (w1Companion.xh),a
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+	.ifdef ROM_COMBO
+		call hIsSeasons
+		jr c,+
+	.endif
 	ld (wLastAnimalMountPointX),a
+	+
 .endif
 	ret
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 @raft:
 	ld a,(wTilesetFlags)
 	and TILESETFLAG_PAST
@@ -90,28 +97,30 @@ checkAndSpawnMaple:
 	or a
 	ret nz
 
-.ifdef ROM_AGES
 	ld a,(wActiveGroup)
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.ifdef ROM_COMBO
+	or a
+	call hIsSeasons
+	jr c,+
+.endif
 	ld hl,maplePastLocations
 	dec a
 	jr z,@startCheck
 
 	inc a
-	ret nz
-
++
 .else; ROM_SEASONS
-
-	ld a,(wActiveGroup)
 	or a
-	ret nz
 .endif
+	ret nz
 
 	ld a,(w1Companion.enabled)
 	or a
 	ret nz
 
 	ld a,(wAnimalCompanion)
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	or a
 	jr z,+
 .endif
@@ -157,7 +166,7 @@ checkAndSpawnMaple:
 .include {"{GAME_DATA_DIR}/mapleLocations.s"}
 
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 updateRosaDateStatus:
 	ld a,GLOBALFLAG_DATING_ROSA
@@ -219,7 +228,7 @@ functionCaller:
 	.dw stub_02_77f4
 	.dw generateRandomBuffer
 	.dw getRandomPositionForEnemy
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.dw checkSpawnTimeportalInteraction
 .endif
 
@@ -639,7 +648,7 @@ checkEnemyPlacedAtPosition:
 	ret
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 ;;
 ; Checks if the timeportal exists in the current room, and loads the interaction if so.

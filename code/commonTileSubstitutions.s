@@ -3,7 +3,14 @@
 ;;
 ; Replaces a shutter link is about to walk on to with empty floor.
 replaceShutterForLinkEntering:
-.ifdef ROM_SEASONS
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr nc,+
+		ld a,(wDungeonIndex)
+		inc a
+		ret z
+	+
+.elif defined(ROM_SEASONS)
 	ld a,(wDungeonIndex)
 	inc a
 	ret z
@@ -189,7 +196,7 @@ replaceSwitchTiles:
 	jr @next
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	; Data format:
 	;   b0: Room
 	;   b1: Switch bit

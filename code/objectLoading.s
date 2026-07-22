@@ -21,7 +21,7 @@ parseObjectData:
 	call addRoomToEnemiesKilledList
 	call generateRandomBuffer
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	callab getObjectDataAddress
 .else; ROM_SEASONS
 	ld a,(wActiveGroup)
@@ -209,11 +209,16 @@ skipToOpEnd_4byte:
 ; the pointer from being read if link enters from a certain direction.
 ; @param[out] @zflag Set if the pointer should be skipped.
 checkSkipPointer:
-.ifdef ROM_AGES
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr c,+
+.endif
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld a,(wcc05)
 	bit 1,a
 	ret z
 .endif
++
 
 	ld a,(wcc85)
 	bit 7,a

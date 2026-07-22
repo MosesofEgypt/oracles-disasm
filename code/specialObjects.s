@@ -18,7 +18,11 @@ updateSpecialObjects:
 	jr nc,+
 	set 6,(hl)
 +
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr c,+
+.endif
 	ld a,(wTilesetFlags)
 	and TILESETFLAG_UNDERWATER
 	jr z,+
@@ -46,7 +50,7 @@ updateSpecialObjects:
 
 	xor a
 	ld (wLinkClimbingVine),a
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld (wDisallowMountingCompanion),a
 .endif
 
@@ -95,7 +99,7 @@ updateSpecialObjects:
 	ld a,(hl)
 	rst_jumpTable
 	.dw specialObjectCode_link
-.ifdef ROM_AGES
+.if defined(ROM_AGES) && !defined(ROM_COMBO)
 	.dw specialObjectCode_transformedLink
 .else
 	.dw specialObjectCode_subrosiaDanceLink
@@ -353,7 +357,7 @@ func_410d:
 
 ;;
 @ridingRaft:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld a,(wLinkForceState)
 	cp LINK_STATE_RESPAWNING
 	ret z
@@ -402,6 +406,6 @@ specialObjectCode_minecart:
 
 
 specialObjectCode_raft:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	jpab bank6.specialObjectCode_raft
 .endif
