@@ -8410,97 +8410,23 @@ getNewGamePlusCycle:
 	ret
 
 getUncappedUpgradeCount:
-	push de
-	push bc
-	push hl
-	ld de,wNgpUncappedUpgradesThisRoom
-	ld hl,@ngpEnemyUpgradeTimes
-	jr getEnemyUpgradeCount@doTheThing
-
-@ngpEnemyUpgradeTimes:
-	; same structure and function as @ngpEnemyUpgradeTimes
-	; under the getEnemyUpgradeCount function. the difference
-	; is that since this is for respawning objects, the count
-	; should be more or less consistent since we're going to
-	; loop back around to the beginning once we hit the end
-	.db $11 $21 $11 $21 $11 $21 $11 $21; NG+1 enemy
-	.db $23 $41 $21 $31 $21 $31 $21 $31; NG+2 enemy
-	.db $42 $31 $32 $31 $42 $31 $32 $31; NG+3 enemy
-
-	.db $11 $11 $11 $11 $11 $11 $11 $11; NG+1 projectile
-	.db $11 $21 $11 $21 $11 $21 $11 $21; NG+2 projectile
-	.db $21 $21 $21 $21 $21 $21 $21 $21; NG+3 projectile
+	scf
+	ccf
+	jr +
 
 getEnemyUpgradeCount:
-	push de
+	scf
+	+
+	ldh a,(<hRomBank)
 	push bc
-	push hl
-	ld de,wNgpEnemiesUpgradedThisRoom
-	ld hl,@ngpEnemyUpgradeTimes
-@doTheThing:
+	push af
+	callfrombank0 bank3d.getNgpUpgradeCount
 	ld b,a
-	call getNewGamePlusCycle
-	dec a	; NG+0 doesn't have values
-	; multiply NG+ cycle by 8
-	add a
-	add a
-	add a
-	bit 0,b
-	jr z,+
-		; strong enemy, so skip the first set of 24 values
-		add $18
-	+
-	rst_addAToHl
-	ld a,(de)
-	bit 0,b
-	jr z,+
-		; strong enemy, so grab upper nibble for count
-		swap a
-	+
-	and $0f
-	ld c,a
-	srl a
-	rst_addAToHl
-	ld a,(hl)
-	; if count is even, use upper nibble as the times
-	bit 0,c
-	jr nz,+
-		swap a
-	+
-	and $0f
-	pop hl
+	pop af
+	rst_setrombank
+	ld a,b
 	pop bc
-	pop de
 	ret
-
-@ngpEnemyUpgradeTimes:
-	; dictates how many times an enemy can be upgraded.
-	; each set of 8 bytes corresponds to how many times
-	; enemies have already been upgraded this screen.
-
-	; each nibble corresponds to one of the 16 times an
-    ; upgrade occurs per screen. to make it easy to read,
-    ; the high nibble represents an even numbered count
-    ; while low nibble represents an odd numbered count.
-
-	; this table is critical to creating variety in how
-	; many enemies are upgraded per screen. this helps
-	; prevent straight converting a room of red darknuts
-	; into a room of a blue/green.
-
-	; to prevent players killing weak enemies to get weak
-	; ones to spawn on reloading the room, the low indices
-	; should be the highest upgrade counts. these values
-	; should approach and reach 0 at higher indices, but
-	; take longer to do so on higher NG+ cycles.
-	.db $22 $22 $31 $11 $00 $00 $00 $00; NG+1 weak enemy
-	.db $33 $22 $23 $22 $11 $11 $00 $00; NG+2 weak enemy
-	.db $43 $14 $21 $32 $11 $11 $11 $10; NG+3 weak enemy
-
-	.db $21 $11 $00 $00 $00 $00 $00 $00; NG+1 strong enemy
-	.db $21 $22 $10 $00 $00 $00 $00 $00; NG+2 strong enemy
-	.db $43 $23 $21 $10 $00 $00 $00 $00; NG+3 strong enemy
-
 
 incrementUncappedUpgraded:
 	push bc
@@ -8595,7 +8521,6 @@ tryNgpUpgradeUncapped:
 	ld e,a
 
 	; figure out how many times we're upgrading
-	ld a,b
 	call getUncappedUpgradeCount
 	or a
 
@@ -8655,7 +8580,6 @@ tryNgpUpgrade:
 	ld e,Enemy.subid
 
 	; figure out how many times we're upgrading
-	ld a,b
 	call getEnemyUpgradeCount
 	or a
 
