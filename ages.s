@@ -169,23 +169,7 @@ m_section_free Bank_6 NAMESPACE bank6
 	.include {"{GAME_DATA_DIR}/tile_properties/breakableTiles.s"}
 .endif
 
-;;
-specialObjectLoadAnimationFrameToBuffer:
-	ld hl,w1Companion.visible
-	bit 7,(hl)
-	ret z
-
-	ld l,<w1Companion.var32
-	ld a,(hl)
-	call getSpecialObjectGraphicsFrame
-	ret z
-
-	ld a,l
-	and $f0
-	ld l,a
-	ld de,w6SpecialObjectGfxBuffer|(:w6SpecialObjectGfxBuffer)
-	jp copy256BytesFromBank
-
+	.include "object_code/ages/specialObjects/timeWarp.s"
 
 	.include "code/ages/garbage/bank06End.s"
 
@@ -885,23 +869,7 @@ m_section_superfree Terrain_Effects NAMESPACE terrainEffects
 
 	 m_section_free Object_Pointers namespace objectData
 
-	;;
-	getObjectDataAddress:
-		ld a,(wActiveGroup)
-		ld hl,objectDataGroupTable
-		rst_addDoubleIndex
-		rst_derefHl
-		ld a,(wActiveRoom)
-		ld e,a
-		ld d,$00
-		add hl,de
-		add hl,de
-		ldi a,(hl)
-		ld d,(hl)
-		ld e,a
-		ret
-
-
+		.include "code/ages/objectData.s"
 		.include "objects/ages/pointers.s"
 
 	.ENDS
@@ -929,75 +897,7 @@ m_section_superfree Terrain_Effects NAMESPACE terrainEffects
 	.include {"{GAME_DATA_DIR}/treasureObjectData.s"}
 
 m_section_free Bank16_2 NAMESPACE bank16
-
-;;
-; Used in the room in present Mermaid's Cave with the changing floor
-;
-; @param	b	Floor state (0/1)
-loadD6ChangingFloorPatternToBigBuffer:
-	ld a,b
-	add a
-	ld hl,@changingFloorData
-	rst_addDoubleIndex
-	push hl
-	ldi a,(hl)
-	ld d,(hl)
-	ld e,a
-	ld b,$41
-	ld hl,wBigBuffer
-	call copyMemoryReverse
-
-	pop hl
-	inc hl
-	inc hl
-	ldi a,(hl)
-	ld d,(hl)
-	ld e,a
-	ld b,$41
-	ld hl,wBigBuffer+$80
-	call copyMemoryReverse
-
-	ldh a,(<hActiveObject)
-	ld d,a
-	ret
-
-@changingFloorData:
-	.dw @tiles0_bottomHalf
-	.dw @tiles0_topHalf
-
-	.dw @tiles1
-	.dw @tiles1
-
-@tiles0_bottomHalf:
-	.db $a0 $a0 $a0 $1d $a0 $1d $f4 $f4 $f4 $ff
-	.db $f4 $f4 $f4 $f4 $a0 $a0 $a0 $a0 $a0 $ff
-	.db $a0 $a0 $a0 $f4 $f4 $f4 $f4 $f4 $f4 $ff
-	.db $f4 $f4 $f4 $f4 $f4 $f4 $f4 $a0 $a0 $ff
-	.db $a0 $f4 $f4 $f4 $f4 $f4 $f4 $f4 $f4 $ff
-	.db $f4 $f4 $f4 $f4 $f4 $f4 $f4 $f4 $f4 $ff
-	.db $f4 $f4 $f4 $f4
-	.db $00
-
-@tiles0_topHalf:
-	.db $a0 $a0 $a0 $1d $a0 $1d $f4 $f4 $f4 $ff
-	.db $a0 $f4 $f4 $f4 $a0 $a0 $a0 $a0 $a0 $ff
-	.db $a0 $a0 $a0 $a0 $f4 $f4 $f4 $f4 $a0 $ff
-	.db $a0 $f4 $f4 $f4 $f4 $f4 $a0 $a0 $a0 $ff
-	.db $a0 $a0 $f4 $f4 $f4 $f4 $f4 $f4 $f4 $ff
-	.db $f4 $f4 $f4 $f4 $f4 $f4 $f4 $f4 $a0 $ff
-	.db $f4 $f4 $f4 $f4
-	.db $00
-
-@tiles1:
-	.db $a0 $a0 $f4 $1d $a0 $1d $f4 $f4 $f4 $ff
-	.db $a0 $f4 $f4 $f4 $f4 $f4 $f4 $a0 $a0 $ff
-	.db $a0 $f4 $f4 $f4 $f4 $f4 $f4 $a0 $a0 $ff
-	.db $a0 $a0 $a0 $f4 $f4 $f4 $f4 $f4 $a0 $ff
-	.db $a0 $f4 $f4 $f4 $f4 $a0 $a0 $a0 $a0 $ff
-	.db $a0 $a0 $a0 $a0 $a0 $a0 $f4 $f4 $a0 $ff
-	.db $a0 $a0 $f4 $a0
-	.db $00
-
+	.include "code/ages/d6FloorUpdateCode.s"
 .ends
 
 	.include {"{GAME_DATA_DIR}/interactionAnimations.s"}
@@ -1051,25 +951,7 @@ m_section_free Gfx_1b ALIGN $20
 
 .BANK $1c SLOT 1
 .ORG 0
-
-	; The first $e characters of gfx_font are blank, so they aren't
-	; included in the rom. In order to get the offsets correct, use
-	; gfx_font_start as the label instead of gfx_font.
-
-	m_ReadGfxDataHashedFilename gfx_font
-	.define gfx_font_start {filename}-$e0
-	.export gfx_font_start
-
-	m_GfxDataSimple gfx_font_jp ; $70000
-	m_GfxDataSimple gfx_font_tradeitems ; $70600
-	m_GfxDataSimple gfx_font $e0 ; $70800
-	m_GfxDataSimple gfx_font_heartpiece ; $71720
-
-	m_GfxDataSimple map_rings ; $717a0
-
-.ifdef ENABLE_DOUBLE_HEART_CAP
-	m_GfxDataSimple gfx_overlap_hearts
-.endif
+	.include "data/gfxDataBank1c.s"
 
 	.include {"{GAME_DATA_DIR}/largeRoomLayoutTables.s"} ; $719c0
 	.include "code/ages/garbage/bank1cEnd.s"
@@ -1227,107 +1109,12 @@ m_section_free Bank3f NAMESPACE bank3f
 .include "code/treasureAndDrops.s"
 .include "code/textbox.s"
 
-data_5951:
-	.db $3c $b4 $3c $50 $78 $b4 $3c $3c
-	.db $3c $70 $78 $78
-
-
-; In Seasons these sprites are located elsewhere
-
-titlescreenMakuSeedSprite:
-	.db $13
-	.db $48 $90 $62 $06
-	.db $42 $8e $68 $06
-	.db $51 $7a $56 $04
-	.db $50 $82 $74 $04
-	.db $58 $7a $6a $07
-	.db $58 $82 $6c $07
-	.db $58 $8a $6e $07
-	.db $54 $8a $54 $03
-	.db $54 $82 $52 $03
-	.db $54 $7a $50 $03
-	.db $64 $7a $70 $03
-	.db $64 $82 $72 $03
-	.db $64 $8a $70 $23
-	.db $40 $86 $66 $06
-	.db $40 $7f $64 $06
-	.db $41 $70 $60 $06
-	.db $55 $76 $5a $06
-	.db $44 $68 $5e $26
-	.db $74 $00 $46 $02
-
-titlescreenPressStartSprites:
-	.db $0a
-	.db $80 $2c $38 $00
-	.db $80 $34 $3a $00
-	.db $80 $3c $3c $00
-	.db $80 $44 $3e $00
-	.db $80 $4c $3e $00
-	.db $80 $5c $3e $00
-	.db $80 $64 $40 $00
-	.db $80 $6c $42 $00
-	.db $80 $74 $3a $00
-	.db $80 $7c $40 $00
-
-; Sprites used on the closeup shot of Link on the horse in the intro
-linkOnHorseCloseupSprites_2:
-	.db $26
-	.db $80 $80 $40 $06
-	.db $80 $50 $42 $00
-	.db $80 $58 $44 $00
-	.db $68 $40 $46 $06
-	.db $b8 $3d $20 $02
-	.db $b8 $45 $22 $02
-	.db $b8 $4d $24 $02
-	.db $b8 $55 $26 $02
-	.db $b8 $5d $28 $02
-	.db $90 $28 $2c $02
-	.db $90 $30 $2e $02
-	.db $80 $30 $2a $02
-	.db $20 $78 $48 $05
-	.db $58 $68 $00 $02
-	.db $58 $70 $02 $02
-	.db $68 $68 $04 $02
-	.db $48 $70 $06 $02
-	.db $5a $40 $08 $01
-	.db $5a $48 $0a $01
-	.db $5a $50 $0c $01
-	.db $38 $88 $0e $04
-	.db $30 $78 $10 $04
-	.db $30 $80 $12 $04
-	.db $40 $80 $14 $04
-	.db $50 $76 $16 $04
-	.db $50 $7e $18 $04
-	.db $41 $62 $1a $03
-	.db $80 $28 $1c $02
-	.db $a8 $59 $1e $02
-	.db $98 $20 $30 $02
-	.db $98 $28 $32 $02
-	.db $8c $38 $34 $07
-	.db $a8 $41 $36 $02
-	.db $a8 $49 $38 $02
-	.db $a8 $51 $3a $02
-	.db $90 $40 $3e $07
-	.db $8a $5c $4a $00
-	.db $8a $64 $4c $00
-
-; Sprites used to touch up the appearance of the temple in the intro (the scene where
-; Link's on a cliff with his horse)
-introTempleSprites:
-	.db $05
-	.db $30 $28 $48 $02
-	.db $30 $30 $4a $02
-	.db $18 $38 $4c $03
-	.db $10 $40 $4e $03
-	.db $18 $48 $50 $03
-
-
-; Used in intro (ages only)
-linkOnHorseFacingCameraSprite:
-	.db $02
-	.db $70 $08 $58 $02
-	.db $70 $10 $5a $02
-
+.include "data/gfxDataIntro/triforceMovementData.s"
+.include "data/gfxDataIntro/makuSeed.s"
+.include "data/gfxDataIntro/pressStart.s"
+.include "data/gfxDataIntro/linkOnHorse2.s"
+.include "data/gfxDataIntro/templeTouchUp.s"
+.include "data/gfxDataIntro/linkOnHorse3.s"
 
 
 .include {"{GAME_DATA_DIR}/objectGfxHeaders.s"}
@@ -1341,124 +1128,8 @@ linkOnHorseFacingCameraSprite:
 .include {"{GAME_DATA_DIR}/treasureCollectionBehaviours.s"}
 .include {"{GAME_DATA_DIR}/treasureDisplayData.s"}
 
-oamData_714c:
-	.db $10
-	.db $c8 $38 $2e $0e
-	.db $c8 $40 $30 $0e
-	.db $c8 $48 $32 $0e
-	.db $c8 $60 $34 $0f
-	.db $c8 $68 $36 $0f
-	.db $c8 $70 $38 $0f
-	.db $d8 $78 $06 $2e
-	.db $e8 $80 $00 $0d
-	.db $e8 $78 $08 $0e
-	.db $e0 $90 $00 $0d
-	.db $d8 $a0 $00 $0d
-	.db $e8 $30 $04 $0e
-	.db $d8 $30 $06 $0e
-	.db $f8 $28 $02 $0e
-	.db $f0 $18 $00 $2d
-	.db $e8 $08 $00 $2d
-
-oamData_718d:
-	.db $10
-	.db $a8 $38 $12 $0a
-	.db $b8 $38 $0e $0f
-	.db $c8 $38 $0a $0f
-	.db $a8 $70 $14 $0a
-	.db $b8 $70 $10 $0a
-	.db $c8 $70 $0c $0f
-	.db $e8 $80 $00 $0d
-	.db $d8 $78 $06 $2e
-	.db $e8 $78 $08 $0e
-	.db $e0 $90 $00 $0d
-	.db $d8 $a0 $00 $0d
-	.db $f8 $28 $02 $0e
-	.db $f0 $18 $00 $2d
-	.db $e8 $08 $00 $2d
-	.db $d8 $30 $06 $0e
-	.db $e8 $30 $08 $2e
-
-oamData_71ce:
-	.db $0a
-	.db $50 $40 $40 $0b
-	.db $50 $48 $42 $0b
-	.db $50 $50 $44 $0b
-	.db $50 $58 $46 $0b
-	.db $50 $60 $48 $0b
-	.db $50 $68 $4a $0b
-	.db $70 $70 $3c $0c
-	.db $60 $70 $3e $2c
-	.db $70 $38 $3a $0c
-	.db $60 $38 $3e $0c
-
-oamData_71f7:
-	.db $0a
-	.db $10 $40 $22 $08
-	.db $10 $68 $22 $28
-	.db $60 $38 $16 $0c
-	.db $70 $38 $1a $0c
-	.db $60 $70 $18 $0c
-	.db $70 $70 $1a $2c
-	.db $40 $40 $1c $08
-	.db $40 $68 $1e $08
-	.db $50 $40 $20 $08
-	.db $50 $68 $20 $28
-
-oamData_7220:
-	.db $0a
-	.db $e0 $48 $24 $0b
-	.db $e0 $60 $24 $2b
-	.db $e0 $50 $26 $0b
-	.db $e0 $58 $26 $2b
-	.db $f0 $48 $28 $0b
-	.db $f0 $60 $28 $2b
-	.db $00 $48 $2a $0b
-	.db $00 $60 $2a $2b
-	.db $f8 $50 $2c $0b
-	.db $f8 $58 $2c $2b
-
-oamData_7249:
-	.db $27
-	.db $38 $38 $00 $01
-	.db $38 $58 $02 $00
-	.db $30 $48 $04 $00
-	.db $30 $50 $06 $00
-	.db $40 $48 $08 $00
-	.db $58 $38 $0a $00
-	.db $50 $40 $0c $02
-	.db $50 $48 $0e $04
-	.db $58 $50 $10 $03
-	.db $60 $57 $12 $03
-	.db $60 $5f $14 $03
-	.db $60 $30 $16 $00
-	.db $72 $38 $18 $00
-	.db $70 $30 $1a $03
-	.db $88 $28 $1c $00
-	.db $3b $9a $1e $04
-	.db $4b $9a $20 $04
-	.db $58 $90 $22 $05
-	.db $58 $98 $24 $05
-	.db $22 $a0 $26 $06
-	.db $22 $a8 $28 $06
-	.db $32 $a0 $2a $06
-	.db $32 $a8 $2c $06
-	.db $12 $a0 $2e $06
-	.db $12 $a8 $30 $06
-	.db $12 $b0 $32 $06
-	.db $6c $b0 $34 $03
-	.db $70 $c0 $36 $01
-	.db $80 $c0 $38 $05
-	.db $90 $58 $3a $03
-	.db $30 $90 $3c $00
-	.db $90 $c0 $3e $05
-	.db $90 $78 $40 $05
-	.db $80 $70 $42 $05
-	.db $80 $78 $44 $05
-	.db $80 $88 $46 $05
-	.db $90 $80 $48 $05
-	.db $48 $50 $4a $02
-	.db $60 $40 $4c $00
+.include "data/ages/blackTowerOamData.s"
+.include "data/ages/nayruSingingOamData.s"
 
 
 .include "object_code/ages/interactions/monkeyMain.s"

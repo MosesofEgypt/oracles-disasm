@@ -652,43 +652,8 @@ intro_titlescreen_state3:
 	jp stubThreadStart
 
 .ifdef ROM_SEASONS
-
-; In Ages these sprites are located elsewhere
-
-titlescreenMakuSeedSprite:
-	.db $12
-	.db $51 $7a $56 $04
-	.db $50 $82 $74 $04
-	.db $58 $7a $6a $07
-	.db $58 $82 $6c $07
-	.db $58 $8a $6e $07
-	.db $48 $90 $62 $06
-	.db $44 $8d $68 $06
-	.db $54 $8a $54 $03
-	.db $54 $82 $52 $03
-	.db $54 $7a $50 $03
-	.db $40 $85 $66 $06
-	.db $40 $7f $64 $06
-	.db $41 $70 $60 $06
-	.db $54 $76 $5a $06
-	.db $44 $68 $5e $26
-	.db $64 $7a $70 $03
-	.db $64 $82 $72 $03
-	.db $64 $8a $70 $23
-
-titlescreenPressStartSprites:
-	.db $0a
-	.db $80 $2c $38 $00
-	.db $80 $34 $3a $00
-	.db $80 $3c $3c $00
-	.db $80 $44 $3e $00
-	.db $80 $4c $3e $00
-	.db $80 $5c $3e $00
-	.db $80 $64 $40 $00
-	.db $80 $6c $42 $00
-	.db $80 $74 $3a $00
-	.db $80 $7c $40 $00
-
+	.include "data/gfxDataIntro/makuSeed.s"
+	.include "data/gfxDataIntro/pressStart.s"
 .endif
 
 ;;
@@ -2045,82 +2010,9 @@ createInteraction:
 
 
 ; In Ages these sprites are located elsewhere
-
-; Sprites used on the closeup shot of Link on the horse in the intro
-linkOnHorseCloseupSprites_2:
-	.db $26
-	.db $80 $80 $40 $06
-	.db $80 $50 $42 $00
-	.db $80 $58 $44 $00
-	.db $68 $40 $46 $06
-	.db $b8 $3d $20 $02
-	.db $b8 $45 $22 $02
-	.db $b8 $4d $24 $02
-	.db $b8 $55 $26 $02
-	.db $b8 $5d $28 $02
-	.db $90 $28 $2c $02
-	.db $90 $30 $2e $02
-	.db $80 $30 $2a $02
-	.db $20 $78 $48 $05
-	.db $58 $68 $00 $02
-	.db $58 $70 $02 $02
-	.db $68 $68 $04 $02
-	.db $48 $70 $06 $02
-	.db $5a $40 $08 $01
-	.db $5a $48 $0a $01
-	.db $5a $50 $0c $01
-	.db $38 $88 $0e $04
-	.db $30 $78 $10 $04
-	.db $30 $80 $12 $04
-	.db $40 $80 $14 $04
-	.db $50 $76 $16 $04
-	.db $50 $7e $18 $04
-	.db $41 $62 $1a $03
-	.db $80 $28 $1c $02
-	.db $a8 $59 $1e $02
-	.db $98 $20 $30 $02
-	.db $98 $28 $32 $02
-	.db $8c $38 $34 $07
-	.db $a8 $41 $36 $02
-	.db $a8 $49 $38 $02
-	.db $a8 $51 $3a $02
-	.db $90 $40 $3e $07
-	.db $8a $5c $4a $00
-	.db $8a $64 $4c $00
-
-linkOnHorseCloseupSprites_1:
-	.db $15
-	.db $28 $78 $9c $08
-	.db $20 $58 $80 $08
-	.db $20 $60 $82 $08
-	.db $20 $68 $84 $0a
-	.db $20 $70 $d0 $09
-	.db $20 $70 $86 $0d
-	.db $20 $78 $88 $09
-	.db $20 $80 $8a $09
-	.db $30 $58 $90 $0c
-	.db $30 $80 $9e $09
-	.db $4e $60 $94 $0c
-	.db $58 $68 $96 $0c
-	.db $68 $78 $98 $09
-	.db $60 $80 $9a $0a
-	.db $20 $88 $8c $09
-	.db $20 $90 $8e $09
-	.db $40 $72 $92 $0e
-	.db $42 $62 $a0 $0e
-	.db $70 $30 $b4 $0f
-	.db $70 $38 $b6 $0f
-	.db $78 $68 $b8 $0c
-
-; Sprites used to touch up the appearance of the temple in the intro (the scene where
-; Link's on a cliff with his horse)
-introTempleSprites:
-	.db $05
-	.db $30 $28 $48 $02
-	.db $30 $30 $4a $02
-	.db $18 $38 $4c $03
-	.db $10 $40 $4e $03
-	.db $18 $48 $50 $03
+	.include "data/gfxDataIntro/linkOnHorse2.s"
+	.include "data/gfxDataIntro/linkOnHorse1.s"
+	.include "data/gfxDataIntro/templeTouchUp.s"
 
 templeIntro_simulatedInput:
 	dwb   45  $00
@@ -2143,9 +2035,7 @@ templeIntro_simulatedInput:
 	dwb   12  BTN_UP
 	.dw $ffff
 
-data_5951:
-	.db $3c $b4 $3c $50 $78 $b4 $3c $3c
-	.db $3c $70 $78 $78
+.include "data/gfxDataIntro/triforceMovementData.s"
 
 .endif; ROM_SEASONS
 

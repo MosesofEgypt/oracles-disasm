@@ -784,50 +784,7 @@ m_section_free Interaction_Code_Group8 NAMESPACE commonInteractions8
 	.include "object_code/common/interactions/ringHelpBook.s"
 .ends
 
-
-oamData_15_4da3:
-	.db $1a
-	.db $40 $d0 $00 $02
-	.db $50 $e8 $02 $02
-	.db $f8 $50 $08 $06
-	.db $f8 $58 $0a $06
-	.db $f8 $60 $0c $06
-	.db $f8 $68 $0e $06
-	.db $40 $10 $10 $07
-	.db $50 $18 $12 $07
-	.db $50 $28 $14 $07
-	.db $50 $30 $16 $07
-	.db $50 $38 $1e $00
-	.db $40 $20 $18 $07
-	.db $38 $28 $1a $07
-	.db $28 $2b $1c $07
-	.db $40 $38 $20 $07
-	.db $30 $38 $22 $00
-	.db $30 $30 $24 $07
-	.db $10 $28 $26 $01
-	.db $10 $30 $28 $01
-	.db $10 $38 $2a $01
-	.db $10 $40 $2c $01
-	.db $00 $40 $2e $01
-	.db $2b $02 $30 $02
-	.db $30 $50 $32 $00
-	.db $30 $58 $34 $00
-	.db $1d $55 $36 $00
-
-
-oamData_15_4e0c:
-	.db $0a
-	.db $46 $4a $88 $03
-	.db $46 $52 $8a $03
-	.db $49 $4c $80 $02
-	.db $49 $54 $82 $02
-	.db $47 $42 $84 $03
-	.db $47 $4a $86 $03
-	.db $39 $4e $90 $03
-	.db $43 $59 $8c $03
-	.db $39 $46 $8e $03
-	.db $3b $3c $92 $03
-
+	.include "data/seasons/endgameCutsceneOamData.s"
 
 	.include "code/staticObjects.s"
 	.include {"{GAME_DATA_DIR}/staticDungeonObjects.s"}
@@ -897,24 +854,7 @@ m_section_free Seasons_Interactions_Bank15 NAMESPACE seasonsInteractionsBank15
 
 .BANK $1c SLOT 1
 .ORG 0
-	; The first $e characters of gfx_font are blank, so they aren't
-	; included in the rom. In order to get the offsets correct, use
-	; gfx_font_start as the label instead of gfx_font.
-
-	m_ReadGfxDataHashedFilename gfx_font
-	.define gfx_font_start {filename}-$e0
-	.export gfx_font_start
-
-	m_GfxDataSimple gfx_font_jp ; $70000
-	m_GfxDataSimple gfx_font_tradeitems ; $70600
-	m_GfxDataSimple gfx_font $e0 ; $70800
-	m_GfxDataSimple gfx_font_heartpiece ; $71720
-
-	m_GfxDataSimple map_rings ; $717a0
-
-.ifdef ENABLE_DOUBLE_HEART_CAP
-	m_GfxDataSimple gfx_overlap_hearts
-.endif
+	.include "data/gfxDataBank1c.s"
 
 	; "${BUILD_DIR}/textData.s" will determine where this data starts.
 	;   Ages:    1d:4000
