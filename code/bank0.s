@@ -790,7 +790,7 @@ loadGfxRegisterStateIndex:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:bank3d.gfxRegisterStates
-	rst_setrombank
+	setrombank
 .endif
 -
 	ldi a,(hl)
@@ -801,7 +801,7 @@ loadGfxRegisterStateIndex:
 
 .ifdef ENABLE_NEW_GAME_PLUS
 	pop af
-	rst_setrombank
+	setrombank
 .endif
 	ld a,(wGfxRegs1.LCDC)
 	ld (wGfxRegsFinal.LCDC),a
@@ -2383,20 +2383,20 @@ vblankFunction0ad9:
 ;;
 vblankDmaFunction:
 	pop hl
-	ldi a,(hl)
+	ldi a,(hl) 		; src bank
 	ld ($ff00+R_SVBK),a
 	ld ($2222),a
-	ldi a,(hl)
+	ldi a,(hl) 		; src start addr high
 	ld ($ff00+R_HDMA1),a
-	ldi a,(hl)
+	ldi a,(hl) 		; src start addr low
 	ld ($ff00+R_HDMA2),a
-	ldi a,(hl)
+	ldi a,(hl) 		; dst start addr low
 	ld ($ff00+R_VBK),a
-	ldi a,(hl)
+	ldi a,(hl) 		; dst start addr high
 	ld ($ff00+R_HDMA3),a
-	ldi a,(hl)
+	ldi a,(hl) 		; dst end addr low
 	ld ($ff00+R_HDMA4),a
-	ldi a,(hl)
+	ldi a,(hl) 		; dst end addr high
 	ld ($ff00+R_HDMA5),a
 	jp vblankFunctionRet
 

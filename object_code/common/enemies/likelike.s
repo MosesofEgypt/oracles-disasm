@@ -132,6 +132,7 @@ likelike_state_uninitialized:
 	ld a,(de)
 	or b
 	ld (de),a
+	ret
 .else
 	jp ecom_setSpeedAndState8
 .endif

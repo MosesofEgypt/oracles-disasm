@@ -204,6 +204,14 @@ wBigBuffer: ; $c300
 	dsb $100
 
 wVBlankFunctionQueue: ; $c400
+	; Byte 0: func offset
+	; Byte 1: src bank
+	; Byte 2: src start addr high
+	; Byte 3: src start addr low
+	; Byte 4: dst start addr low
+	; Byte 5: dst start addr high
+	; Byte 6: dst end addr low
+	; Byte 7: dst end addr high
 	dsb $80
 
 wKeysPressedLastFrame: ; $c480
