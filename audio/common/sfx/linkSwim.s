@@ -18,8 +18,8 @@ sndLinkSwimChannel2:
 	note b3  $05
 	cmdff
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
 .ifdef BUILD_VANILLA
-	.db $ff
+	cmdff
 .endif
 .endif

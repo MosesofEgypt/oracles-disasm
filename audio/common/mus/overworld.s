@@ -1585,9 +1585,11 @@ musiced0a3:
 	goto musiced0a3
 	cmdff
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
 .ifdef BUILD_VANILLA
-	.db $ff $ff $ff
+	cmdff
+	cmdff
+	cmdff
 .endif
 .endif
 

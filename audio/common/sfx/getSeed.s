@@ -26,8 +26,8 @@ sndGetSeedChannel2:
 	note as7 $04
 	cmdff
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
 .ifdef BUILD_VANILLA
-	.db $ff
+	cmdff
 .endif
 .endif

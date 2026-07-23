@@ -168,7 +168,7 @@ sndTeleportChannel2:
 	note d6  $01
 	cmdff
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) && !defined(ROM_COMBO)
 .ifdef BUILD_VANILLA
 	cmdff
 .endif

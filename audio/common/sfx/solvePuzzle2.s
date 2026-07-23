@@ -28,7 +28,7 @@ sndSolvePuzzle2Channel3:
 	note b6  $23
 	cmdff
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) && !defined(ROM_COMBO)
 .ifdef BUILD_VANILLA
 	cmdff
 .endif

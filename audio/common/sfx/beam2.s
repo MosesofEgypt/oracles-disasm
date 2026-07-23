@@ -39,8 +39,9 @@ sndBeam2Channel7:
 	note $36 $02
 	cmdff
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
 .ifdef BUILD_VANILLA
-	.db $ff $ff
+	cmdff
+	cmdff
 .endif
 .endif

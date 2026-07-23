@@ -766,7 +766,9 @@ musicf5280:
 
 musPiratesChannel6:
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
+; NOTE: This audio is effectively the same as musicf5400, except
+;       it has a lot of redundant volume setting commands removed.
 musicf5403:
 	rest $ff
 	rest $ff

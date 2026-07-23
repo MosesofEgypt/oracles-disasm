@@ -4,7 +4,7 @@ musSyrupChannel1:
 musicf8251:
 	vibrato $00
 	env $0 $05
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
 	cmdf2
 .endif
 	duty $00
@@ -85,7 +85,7 @@ musSyrupChannel0:
 musicf82e1:
 	vibrato $00
 	env $0 $02
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
 	cmdf2
 .endif
 	duty $02
@@ -184,7 +184,7 @@ musicf82e1:
 	cmdff
 
 musSyrupChannel4:
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
 	cmdf2
 .endif
 musicf8380:

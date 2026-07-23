@@ -301,9 +301,10 @@ musice92cc:
 	goto musice92cc
 	cmdff
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
 .ifdef BUILD_VANILLA
-	.db $ff $ff
+	cmdff
+	cmdff
 .endif
 .endif
 

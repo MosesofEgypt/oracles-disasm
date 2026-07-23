@@ -3,7 +3,7 @@ musLadxSideviewStart:
 musLadxSideviewChannel1:
 	vibrato $00
 	env $0 $00
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
 	cmdf2
 .endif
 	duty $02
@@ -59,9 +59,11 @@ musicf8204:
 	goto musicf8204
 	cmdff
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
 .ifdef BUILD_VANILLA
-	.db $ff $ff $ff
+	cmdff
+	cmdff
+	cmdff
 .endif
 .endif
 
