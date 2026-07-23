@@ -38,8 +38,11 @@ mooshState0:
 	ld a,$80
 	and (hl)
 	jr nz,@setAnimation
-
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+	.if defined(ROM_COMBO)
+		call hIsSeasons
+		jr c,+
+	.endif
 	; Check for the screen with the bridge near the forest?
 	ld a,(wActiveRoom)
 	cp $54
@@ -59,7 +62,12 @@ mooshState0:
 	ld a,(wActiveRoom)
 	cp $6b
 	jr nz,@setAnimation
-.else
+	.if defined(ROM_COMBO)
+		jr @gotoCutsceneStateA
+		+
+	.endif
+.endif
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	ld a,(wAnimalCompanion)
 	cp SPECIALOBJECT_MOOSH
 	jr nz,@gotoCutsceneStateA
@@ -628,10 +636,18 @@ mooshStateC:
 	.db $00 $f8 ; DIR_LEFT
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 ;;
 ; State A: cutscene stuff
+.if defined(ROM_COMBO)
 mooshStateA:
+	call hIsSeasons
+	jp c,mooshStateA_seasons
+
+mooshStateA_ages:
+.else
+mooshStateA:
+.endif
 	ld e,SpecialObject.var03
 	ld a,(de)
 	rst_jumpTable
@@ -772,8 +788,15 @@ mooshStateASubstate6:
 	ld hl,wMooshState
 	set 6,(hl)
 	jp itemDelete
+.endif
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+;;
+; State A: cutscene stuff
+.if defined(ROM_COMBO)
+mooshStateA_seasons:
 .else
 mooshStateA:
+.endif
 	ld e,SpecialObject.var03
 	ld a,(de)
 	rst_jumpTable
