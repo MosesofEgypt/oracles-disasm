@@ -112,7 +112,7 @@ linkCutscene0:
 	ld (de),a
 ++
 	ld hl,linkCutscene_zOscillation0
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	jr linkCutscene_oscillateZ
 .else
 	jp linkCutscene_oscillateZ
@@ -152,7 +152,7 @@ linkCutscene_oscillateZ_1:
 ;;
 linkCutscene_oscillateZ:
 	ld a,(wGenericCutscene.cbb7)
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
 	ld b,a
 	and $07
 	jr nz,++
@@ -169,7 +169,7 @@ linkCutscene_oscillateZ:
 	rlca
 	rst_addAToHl
 	ld e,SpecialObject.zh
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld a,(hl)
 	ld b,a
 	ld a,(de)
@@ -931,7 +931,11 @@ linkCutsceneA:
 	ret nz
 
 	call itemIncSubstate
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jp c,objectSetVisible
+	jp objectSetVisible82
+.elif defined(ROM_AGES)
 	jp objectSetVisible82
 .else
 	jp objectSetVisible
@@ -1016,7 +1020,13 @@ linkCutsceneB:
 	xor a
 	ld (wTmpcbb9),a
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	ldbc INTERAC_SPARKLE, $0d
+	jr nc,+
+		ldbc INTERAC_SPARKLE, $09
+	+
+.elif defined(ROM_AGES)
 	ldbc INTERAC_SPARKLE, $0d
 .else
 	ldbc INTERAC_SPARKLE, $09
@@ -1054,7 +1064,13 @@ linkCutsceneB:
 	ret nz
 
 	call itemIncSubstate
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	ld bc,TX_1213
+	jr nc,+
+		ld bc,TX_0c16
+	+
+.elif defined(ROM_AGES)
 	ld bc,TX_1213
 .else
 	ld bc,TX_0c16

@@ -152,7 +152,7 @@ pincer_head_stateA:
 	ld c,(hl)
 	ld a,BREAKABLETILESOURCE_SHOVEL
 	call tryToBreakTile
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	; If in water, create a splash
 	call objectCheckTileAtPositionIsWater
 	jr nc,++

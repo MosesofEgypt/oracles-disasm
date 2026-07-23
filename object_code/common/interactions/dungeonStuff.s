@@ -10,7 +10,7 @@ interactionCode12:
 	.dw @subid02
 	.dw @subid03
 	.dw @subid04
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	.dw @subid05
 .endif
 
@@ -196,7 +196,7 @@ interactionCode12:
 	ld l,Interaction.yh
 	jp setShortPosition_paramC
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 @subid05:
 	ld e,Interaction.state
 	ld a,(de)

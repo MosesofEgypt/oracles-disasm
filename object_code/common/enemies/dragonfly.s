@@ -15,10 +15,15 @@ enemyCode53:
 
 ; Initialization
 dragonfly_state0:
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+.endif
 	ld a,(wRoomStateModifier)
 	cp SEASON_AUTUMN
 	jp nz,enemyDelete
+	+
 .endif
 	ld h,d
 	ld l,e

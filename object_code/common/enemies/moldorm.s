@@ -85,7 +85,11 @@ enemyCode4f:
 	ld h,a
 	call ecom_killObjectH
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+.endif
 	; moldorm guarding jewel
 	ld a,(wActiveRoom)
 	cp <ROOM_SEASONS_0f4

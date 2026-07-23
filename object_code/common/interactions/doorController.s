@@ -4,10 +4,15 @@
 interactionCode1e:
 	call interactionDeleteAndRetIfEnabled02
 	call returnIfScrollMode01Unset
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	ld a,(wSwitchHookState)
 	cp $02
 	ret z
+	+
 .endif
 
 	ld e,Interaction.state
@@ -142,7 +147,16 @@ interactionCode1e:
 @state3Substate0:
 	; The tile at this position must not be solid
 	call objectGetTileAtPosition
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	ld b,TILEINDEX_SOMARIA_BLOCK
+	jr nc,+
+		push af
+		call getSomariaBlockIndex
+		pop af
+	+
+	cp b
+.elif defined(ROM_AGES) 
 	cp TILEINDEX_SOMARIA_BLOCK
 .else
 	push af
@@ -297,7 +311,7 @@ interactionCode1e:
 	/* $13 */ .dw mainScripts.doorController_closeAfterLinkEnters_left
 	/* $14 */ .dw mainScripts.doorController_openWhenTorchesLit_up_2Torches
 	/* $15 */ .dw mainScripts.doorController_openWhenTorchesLit_left_2Torches
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	/* $16 */ .dw mainScripts.doorController_openWhenTorchesLit_down_1Torch
 	/* $17 */ .dw mainScripts.doorController_openWhenTorchesLit_left_1Torch
 .endif

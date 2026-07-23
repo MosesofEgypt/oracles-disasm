@@ -1,6 +1,6 @@
 
 titlescreenMakuSeedSprite:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_SEASONS)
 	.db $13
 	.db $48 $90 $62 $06
 	.db $42 $8e $68 $06

@@ -106,7 +106,13 @@ interactionCodedf:
 	or a
 	call z,interactionAnimate
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	ld l,Interaction.var37
+	jr c,+
+		inc l
+	+
+.elif defined(ROM_AGES)
 	ld l,Interaction.var38
 .else
 	ld l,Interaction.var37
@@ -130,7 +136,13 @@ interactionCodedf:
 	and $03
 	swap a
 	add $20
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	ld e,Interaction.var37
+	jr c,+
+		inc e
+	+
+.elif defined(ROM_AGES)
 	ld e,Interaction.var38
 .else
 	ld e,Interaction.var37

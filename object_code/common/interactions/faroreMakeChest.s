@@ -85,7 +85,13 @@ interac11_subid00:
 	ld (wTmpcfc0.shootingGallery.cfd9),a
 
 	; Create a large, blue-and-red sparkle, and set its "related object" to this.
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	ldbc INTERAC_SPARKLE, $04
+	jr c,+
+		ldbc INTERAC_SPARKLE, $0c
+	+
+.elif defined(ROM_AGES)
 	ldbc INTERAC_SPARKLE, $0c
 .else
 	ldbc INTERAC_SPARKLE, $04

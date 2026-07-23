@@ -26,7 +26,7 @@ interactionCode5f:
 	.dw @subid03
 	.dw @subid04
 	.dw @subid05
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	.dw @subid06
 .endif
 
@@ -178,7 +178,7 @@ interactionCode5f:
 	push hl
 	pop de
 	ld hl,wLastAnimalMountPointY
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld (hl),d
 	inc l
 	ld (hl),e
@@ -195,7 +195,7 @@ interactionCode5f:
 	ld hl,w1Companion.direction
 	ldi (hl),a
 	swap a
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	rrca
 .else
 	srl a

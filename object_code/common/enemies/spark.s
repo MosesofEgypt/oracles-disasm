@@ -11,7 +11,7 @@ enemyCode13:
 	ld a,(de)
 	res 7,a
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	; CROSSITEMS: In Ages, the boomerang collisions aren't adjacent values, so this code must be
 	; changed.
 	cp ITEMCOLLISION_L1_BOOMERANG

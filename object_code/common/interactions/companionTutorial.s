@@ -125,7 +125,7 @@ interactionCoded0:
 @goToDelete:
 	jr @delete
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 @setFlagAndDeleteWhenCompanionIsAboveAndLinkInXRange:
 	call @checkLinkInXRange
 	ret nz

@@ -294,7 +294,12 @@ objectOscillateZ_body:
 
 	ld hl,@zOffsets
 	rst_addAToHl
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+	; The difference between the ages and seasons code is that the
+	; ages code treats the offsets as actual offsets from the initial
+	; z-position, while seasons treats it as the whole offset itself.
+	; this means the actual movement is larger in ages, as the offsets
+	; are cumulative and add together over time.
 	ldh a,(<hActiveObjectType)
 	add Object.zh
 	ld e,a

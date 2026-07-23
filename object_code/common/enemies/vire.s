@@ -243,7 +243,7 @@ vire_mainForm_state8:
 	ld (wDisabledObjects),a
 	ld (wDisableLinkCollisionsAndMenu),a
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	call ecom_incState
 .else
 	ld h,d
@@ -869,7 +869,7 @@ vire_batForm_stateA:
 	or a
 	jr nz,++
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	call ecom_incState
 .else
 	ld h,d

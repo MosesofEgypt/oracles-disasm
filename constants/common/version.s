@@ -60,7 +60,9 @@
 
 
 ; Define to help with building directory strings, maybe other stuff
-.ifdef ROM_SEASONS
+.if defined(ROM_COMBO)
+	.define GAME "combo"
+.elif defined(ROM_SEASONS)
 	.define GAME "seasons"
 .else
 	.define GAME "ages"

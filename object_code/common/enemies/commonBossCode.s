@@ -114,7 +114,13 @@ enemyBoss_initializeRoomWithoutExtraGfx:
 	ld a,LINK_STATE_FORCE_MOVEMENT
 	ld (wLinkForceState),a
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	ld a,$1a
+	jr c,+
+		ld a,$16
+	+
+.elif defined(ROM_AGES)
 	ld a,$16
 .else; ROM_SEASONS
 	ld a,$1a
@@ -130,7 +136,7 @@ enemyBoss_initializeRoomWithoutExtraGfx:
 	ret
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 ;;
 ; Plays miniboss music, enables controls.

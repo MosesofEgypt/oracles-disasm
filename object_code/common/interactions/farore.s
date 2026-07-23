@@ -37,7 +37,7 @@ interactionCode10:
 	jp interactionAnimate
 
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 ; Indirect caller for INTERAC_FARORE_MAKECHEST
 interactionCode11_caller:

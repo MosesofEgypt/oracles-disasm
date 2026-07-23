@@ -33,7 +33,7 @@ interactionCode28:
 	.dw @bipin1
 	.dw @bipin1
 	.dw @bipin1
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.dw @bipin3
 .endif
 
@@ -68,7 +68,7 @@ interactionCode28:
 	jp @updateCollisionAndVisibility
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 ; "Past" version of Bipin who gives you a gasha seed
 @bipin3:
 	ld a,$09
@@ -91,7 +91,7 @@ interactionCode28:
 	.dw @runScriptAndAnimate
 	.dw @runScriptAndAnimate
 	.dw @runScriptAndAnimate
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.dw @runScriptAndAnimate
 .endif
 
@@ -144,6 +144,6 @@ interactionCode28:
 	.dw mainScripts.bipinScript1
 	.dw mainScripts.bipinScript1
 	.dw mainScripts.bipinScript1
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.dw mainScripts.bipinScript3
 .endif

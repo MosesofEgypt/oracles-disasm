@@ -88,7 +88,13 @@ interactionCodec1:
 	dec (hl)
 	ret nz
 	ld (hl),$06 ; [var36]
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	ldbc INTERAC_SPARKLE, $05
+	jr c,+
+		ldbc INTERAC_SPARKLE, $09
+	+
+.elif defined(ROM_AGES)
 	ldbc INTERAC_SPARKLE, $09
 .else
 	ldbc INTERAC_SPARKLE, $05

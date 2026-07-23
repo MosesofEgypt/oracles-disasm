@@ -85,7 +85,15 @@ flyingTile_state_spawner:
 
 	ld e,Enemy.subid
 	ld a,(de)
+.if defined(ROM_COMBO)
+	ld hl,flyingTile_layoutDataSeasons
+	call hIsSeasons
+	jr c,+
+		ld hl,flyingTile_layoutDataAges
+	+
+.else
 	ld hl,flyingTile_layoutData
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 
@@ -268,8 +276,12 @@ flyingTile_overwriteTileHere:
 	.db $a0 $f3 $f4 $4c $a4
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+flyingTile_layoutDataAges:
+.else
 flyingTile_layoutData:
+.endif
 	.dw @subid0
 	.dw @subid1
 	.dw @subid2
@@ -313,8 +325,14 @@ flyingTile_layoutData:
 	.db $67 $54 $5a $47 $34 $3a $76 $38
 	.db $78 $36 $58 $45 $49 $56 $65 $69
 	.db $00
+.endif
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+flyingTile_layoutDataSeasons:
 .else
 flyingTile_layoutData:
+.endif
 	.dw @subid0
 	.dw @subid1
 	.dw @subid2

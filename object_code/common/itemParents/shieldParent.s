@@ -89,7 +89,7 @@ parentItemCode_shield:
 	rlca
 	jr c,@@disallowShield
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	; Can't use underwater
 	call isLinkUnderwater
 	jr nz,@@disallowShield

@@ -15,7 +15,7 @@ parentItemCode_magnetGloves:
 	or a
 	jr nz,@deleteSelf
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	; CROSSITEMS: Don't allow using magnet gloves while underwater. (Animations look off.)
 	call isLinkUnderwater
 	jr nz,@deleteSelf

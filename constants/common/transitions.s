@@ -35,12 +35,13 @@
 .define TRANSITION_DEST_FALL		$5
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 ;;
 ; Warp in and create a portal. Doesn't update respawn. Ages only.
 .define TRANSITION_DEST_TIMEWARP	$6
 
-.else; ROM_SEASONS
+.endif
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 ;;
 ; Jumped in from a trampoline. Seasons only.

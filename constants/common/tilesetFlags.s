@@ -1,6 +1,6 @@
 ; Bits for the wTilesetFlags variable.
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 .define TILESETFLAG_PAST $80 ; Past or Subrosia (depending on game)
 .DEFINE TILESETFLAG_BIT_PAST 7
@@ -8,7 +8,8 @@
 .define TILESETFLAG_UNDERWATER $40
 .DEFINE TILESETFLAG_BIT_UNDERWATER 6
 
-.else; ROM_SEASONS
+.endif
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 .define TILESETFLAG_SUBROSIA $80
 .DEFINE TILESETFLAG_BIT_SUBROSIA 7

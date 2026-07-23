@@ -17,7 +17,7 @@ parentItemCode_rodOfSeasons:
 parentItemCode_biggoronSword:
 	call clearParentItemIfCantUseSword
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	call isLinkUnderwater
 	jp nz,clearParentItem
 .endif
@@ -131,10 +131,7 @@ parentItemCode_punch:
 	pop af
 .endif
 
-.ifdef ROM_SEASONS
-	ret nz
-
-.else; ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	jr z,@expertsRing
 
 	; If link is underwater with fist ring equipped, set animation to LINK_ANIM_MODE_37
@@ -142,6 +139,8 @@ parentItemCode_punch:
 	ret z
 	ld a,LINK_ANIM_MODE_37
 	jp specialObjectSetAnimationWithLinkData
+.else
+	ret nz
 .endif
 
 @expertsRing:
@@ -149,7 +148,7 @@ parentItemCode_punch:
 	inc (hl)
 	ld c,LINK_ANIM_MODE_34
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	; Check if riding something
 	ld a,(wLinkObjectIndex)
 	rrca

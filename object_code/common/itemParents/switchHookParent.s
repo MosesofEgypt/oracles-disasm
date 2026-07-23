@@ -27,7 +27,7 @@ parentItemCode_switchHook:
 
 	call parentItemLoadAnimationAndIncState
 	call itemCreateChild
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	; If underwater, use a different animation
 	call isLinkUnderwater
 	ret z

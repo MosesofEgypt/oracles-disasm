@@ -5,7 +5,11 @@ initializeAnimations:
 	ret z
 
 	call loadAnimationData
-.ifdef ROM_AGES
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr c,@locFunc
+.endif
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	call @locFunc
 	ld hl,wAnimationState
 	set 7,(hl)

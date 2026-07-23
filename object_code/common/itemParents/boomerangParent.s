@@ -10,7 +10,7 @@ parentItemCode_boomerang:
 	.dw @state2
 
 @state0:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	call isLinkUnderwater
 	jp nz,clearParentItem
 .endif

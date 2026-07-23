@@ -43,7 +43,13 @@ enemyCode01:
 	ld (hl),a
 
 	ld l,Enemy.collisionType
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	ld (hl),$87
+	jr c,+
+		ld (hl),$ff
+	+
+.elif defined(ROM_AGES)
 	ld (hl),$ff
 .else
 	ld (hl),$87

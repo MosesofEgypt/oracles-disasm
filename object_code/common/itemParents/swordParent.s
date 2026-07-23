@@ -220,7 +220,7 @@ parentItemCode_sword:
 	ld l,Item.var3f
 	ld (hl),$0f
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	call isLinkUnderwater
 	ld c,LINK_ANIM_MODE_28
 	jr z,+
@@ -414,7 +414,7 @@ parentItemCode_sword:
 
 	call itemDisableLinkMovement
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	call isLinkUnderwater
 	ld a,LINK_ANIM_MODE_1f
 	jr z,+

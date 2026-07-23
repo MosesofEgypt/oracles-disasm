@@ -56,7 +56,7 @@ parentItemCode_slingshot:
 	push bc
 	call parentItemLoadAnimationAndIncState
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	; CROSSITEMS: If underwater, use a different animation. (Implemented kind of hackily by
 	; checking how the seed shooter does it, but it seems to work)
 	call isLinkUnderwater
@@ -265,7 +265,7 @@ parentItemCode_shooter:
 .endif
 
 @determineBaseAnimation:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	call isLinkUnderwater
 	ld a,$48
 	jr nz,++
@@ -316,7 +316,7 @@ parentItemCode_satchel:
 	.dw parentItemGenericState1
 
 @state0:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld a,(w1Companion.id)
 	cp SPECIALOBJECT_RAFT
 	jp z,clearParentItem

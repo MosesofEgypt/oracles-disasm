@@ -2,7 +2,10 @@
 ; INTERAC_BOMB_FLOWER
 ; ==================================================================================================
 interactionCode6f:
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jp nc,interactionDelete
+.elif defined(ROM_AGES)
 	jp interactionDelete
 .else
 	ld e,Interaction.subid

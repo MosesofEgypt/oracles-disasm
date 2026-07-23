@@ -3,7 +3,7 @@
 ; ENEMY_HARMLESS_HARDHAT_BEETLE (ages only)
 ; ==================================================================================================
 enemyCode4d:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 enemyCode5f:
 .endif
 	call ecom_checkHazards
@@ -34,7 +34,7 @@ enemyCode5f:
 	.dw @state8
 
 @state_uninitialized:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld e,Enemy.id
 	ld a,(de)
 	cp ENEMY_HARMLESS_HARDHAT_BEETLE

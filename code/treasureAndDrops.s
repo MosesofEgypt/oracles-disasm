@@ -105,6 +105,11 @@ giveTreasure_body:
 
 	; Check if adding this item requires the removal of another item.
 	ld hl,@itemsToRemoveTable
+.if defined(ROM_COMBO)
+	; nothing to remove in ages
+	call hIsSeasons
+	jr nc,+
+.endif
 	call @findItemInTable
 	jr z,+
 
@@ -234,7 +239,7 @@ giveTreasure_body:
 ; This is similar to above, except whenever Link obtains an item in the first column, the
 ; game takes away the items in the next two columns. Apparently unused in ages.
 @itemsToRemoveTable:
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	.db TREASURE_RIBBON	TREASURE_STAR_ORE	$00
 	.db TREASURE_HARD_ORE	TREASURE_RED_ORE	TREASURE_BLUE_ORE
 	.db TREASURE_FEATHER	TREASURE_FOOLS_ORE	$00
@@ -881,9 +886,18 @@ decideItemDrop_body:
 	ld e,a
 	ld a,(de)
 +
+.if defined(ROM_COMBO)
+	ld hl,itemDropTableDiffsForSeasons
+	push de
+	ld e,a
+	call lookupKey
+	pop de
+	jr c,+
+.endif
 	ld hl,itemDropTables
 	rst_addAToHl
 	ld a,(hl)
+	+
 	ld c,a
 	cp $ff
 	jr z,checkItemDropAvailable_body@done
@@ -936,7 +950,11 @@ decideItemDrop_body:
 ; @param	c	Item drop index (see constants/common/itemDrops.s)
 ; @param[out]	c	$ff if item cannot spawn (Link doesn't have it), otherwise the item itself
 checkItemDropAvailable_body:
-.ifdef ROM_SEASONS
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+.endif
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	; different drop table for subrosia
 	ld a,(wMinimapGroup)
 	dec a
@@ -953,6 +971,13 @@ checkItemDropAvailable_body:
 	ld hl,itemDropAvailabilityTable
 	rst_addDoubleIndex
 	ldi a,(hl)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+		cp <wMinimapGroup
+		jr z,@done
+	+
+.endif
 	ld b,(hl)
 	ld l,a
 	ld h,>wc600Block
@@ -1387,7 +1412,7 @@ itemDropAvailabilityTable:
 	.db <wLinkNameNullTerminator, $00	; ITEM_DROP_0a
 	.db <wLinkNameNullTerminator, $00	; ITEM_DROP_0b
 .endif
-.ifdef ROM_AGES
+.if defined(ROM_AGES) && !defined(ROM_COMBO)
 	.db <wLinkNameNullTerminator, $00	; ITEM_DROP_1_ORE_CHUNK
 	.db <wLinkNameNullTerminator, $00	; ITEM_DROP_10_ORE_CHUNKS
 	.db <wLinkNameNullTerminator, $00	; ITEM_DROP_50_ORE_CHUNKS
@@ -1432,7 +1457,7 @@ itemDropProbabilityTable:
 @probability7:
 	.db $ff $ff $ff $ff $ff $ff $ff $ff
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 subrosiaDropSet:
 	.db ITEM_DROP_HEART
 	.db ITEM_DROP_1_ORE_CHUNK
@@ -1632,7 +1657,7 @@ itemDropSetF:
 ; Or it can be $ff for no item drop.
 ; Comments show changes in Seasons
 itemDropTables:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.db $ff $ef $ff $ff $ff $ff $ff $ff
 	.db $a6 $8e $86 $c1 $ac $86 $ff $85 ; index 7: $85 -> $ff
 	.db $81 $ff $8e $ef $8e $c0 $ff $60
@@ -1672,6 +1697,16 @@ itemDropTables:
 	.db $ff $41 $87 $65 $86 $8e $a7 $ae
 	.db $a0 $63 $69 $a5 $6e $ff $ff $ff
 
+.if defined(ROM_COMBO)
+itemDropTableDiffsForSeasons:
+	.db $0f $ff
+	.db $34 $ae
+	.db $42 $44
+	.db $64 $ff
+	.db $7e $ef
+	.db $00
+.endif
+
 ;;
 ; @param	a	Treasure index
 ; @param	c	Treasure "parameter"
@@ -1705,7 +1740,9 @@ checkIncreaseGashaMaturityForGettingTreasure:
 	.db TREASURE_HEART_REFILL	  2
 .else
 	.db TREASURE_ESSENCE		150
-.ifdef ROM_AGES
+.if defined(COMBO_ROM)
+	.db TREASURE_HEART_PIECE	150
+.elif defined(ROM_AGES)
 	.db TREASURE_HEART_PIECE	 36
 .else
 	.db TREASURE_HEART_PIECE	100

@@ -50,7 +50,7 @@
 	SPECIALOBJECT_MOOSH_CUTSCENE		db ; $11
 	SPECIALOBJECT_MAPLE_CUTSCENE		db ; $12
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	SPECIALOBJECT_RAFT			db ; $13
 .endif
 

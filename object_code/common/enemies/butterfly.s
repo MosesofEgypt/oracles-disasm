@@ -12,11 +12,16 @@ enemyCode37:
 .endif
 
 @state0:
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+.endif
 	; spring-only
 	ld a,(wRoomStateModifier)
 	or a
 	jp nz,enemyDelete
+	+
 .endif
 	ld h,d
 	ld l,e
