@@ -414,7 +414,7 @@ doorController_openWhenTorchesLit_left_2Torches:
 	setspeed $02
 	scriptjump doorController_shutUntilTorchesLit
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 ; Subid $16
 doorController_openWhenTorchesLit_down_1Torch:
 	setcollisionradii $0a, $08
@@ -435,7 +435,7 @@ doorController_openWhenTorchesLit_left_1Torch:
 ; INTERAC_SHOPKEEPER
 ; ==================================================================================================
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 shopkeeperScript_blockLinkAccess:
 	setspeed SPEED_200
 	setdisabledobjectsto11
@@ -498,7 +498,7 @@ shopkeeperScript_purchaseItem:
 	.dw @buyL2Shield
 	.dw @buyL3Shield
 	.dw @buyNormalShopGashaSeed
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.dw @buyUpgradeableItem
 	.dw @buyHiddenShopHeartPiece
 .endif
@@ -615,7 +615,7 @@ shopkeeperScript_purchaseItem:
 	ormemory wBoughtShopItems1, $20
 	scriptend
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 @buyHiddenShopHeartPiece:
 	showtextnonexitablelowindex <TX_0e01
 	callscript shopkeeperConfirmPurchase
@@ -695,7 +695,7 @@ shopkeeperSubid1Script_stopLink:
 	enableallobjects
 	scriptend
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 ; Lynna city shopkeeper prevents Link from stealing something
 shopkeeperSubid0Script_stopLink:
 	setspeed SPEED_200
@@ -862,7 +862,7 @@ shopkeeperScript_notOpenYet:
 	scriptend
 
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 ; ==================================================================================================
 ; INTERAC_BOMB_FLOWER
 ; ==================================================================================================

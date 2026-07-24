@@ -333,7 +333,11 @@ def read_filename_arguments(filename, read_properties=True):
     """
     parsed_arguments = {}
 
-    if os.path.basename(filename).startswith('spr_'):
+    name = os.path.basename(filename)
+    if (name.startswith('spr_') or 
+        name.startswith('ages_spr_') or 
+        name.startswith('seasons_spr_')
+        ):
         parsed_arguments['interleave'] = True
         parsed_arguments['invert'] = True
     else:

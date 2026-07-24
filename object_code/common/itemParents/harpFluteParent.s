@@ -108,7 +108,7 @@ parentItemCode_harp:
 	jp clearParentItem
 
 
-.ifdef ROM_AGES ; Harp code
+.if defined(ROM_AGES) || defined(ROM_COMBO) ; Harp code
 
 @tuneEchoesInVain:
 	ld bc,TX_5110
@@ -118,7 +118,7 @@ parentItemCode_harp:
 .endif
 
 @harp:
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
 	jr @clearSelf
 .else
 	; Only allow harp playing on overworld, non-maku tree screens
@@ -165,7 +165,7 @@ parentItemCode_harp:
 	.db SND_FLUTE_RICKY
 	.db SND_FLUTE_DIMITRI
 	.db SND_FLUTE_MOOSH
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.db SND_TUNE_OF_ECHOES
 	.db SND_TUNE_OF_CURRENTS
 	.db SND_TUNE_OF_AGES

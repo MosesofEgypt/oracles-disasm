@@ -62,7 +62,11 @@ partCode13:
 	call getFreeInteractionSlot
 	ret nz
 	ld (hl),INTERAC_SPARKLE
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jp nc,objectCopyPositionWithOffset
+.endif
 	; substate
 	inc l
 	ld (hl),$05

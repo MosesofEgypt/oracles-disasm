@@ -12,7 +12,7 @@
 ;   var34: horizontal friction
 itemCode29:
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	ld e,Item.state
 	ld a,(de)
 	rst_jumpTable

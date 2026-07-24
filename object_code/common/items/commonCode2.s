@@ -70,7 +70,7 @@ tryBreakTileWithExpertsRing:
 	ld a,TREASURE_SHOVEL
 	call checkTreasureObtained
 	jr nz,+
-	.ifdef ROM_AGES
+	.if defined(ROM_AGES) || defined(ROM_COMBO)
 		; no destroying dirt while deep underwater
 		call isDeepUnderwater
 		jr z,+

@@ -114,7 +114,7 @@ bipin_showText_subid1To9:
 	.db <TX_4308
 	.db <TX_4308
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 ; Script for the "past" version of bipin
 bipinScript3:
 	initcollisions

@@ -616,7 +616,11 @@ switchHookState3:
 	ld c,l
 	ld e,Item.var3d
 	ld a,(de)
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	cp TILEINDEX_SWITCH_DIAMOND
 	jr nz,+
 .else

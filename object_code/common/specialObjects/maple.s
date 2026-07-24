@@ -513,7 +513,11 @@ mapleState5:
 	ld a,(hl)
 	ld (de),a
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,@normalEncounter
+.endif
 	; Check if this is the past. She says something about coming through a "weird
 	; tunnel", which is probably their justification for her being in the past? She
 	; only says this the first time she's encountered in the past.
@@ -572,8 +576,13 @@ mapleState5:
 
 	ld l,SpecialObject.speed
 	ld (hl),SPEED_100
-
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	ld bc,TX_0709
+	jr c,+
+		ld bc,TX_070d
+	+
+.elif defined(ROM_AGES)
 	ld bc,TX_070d
 .else
 	ld bc,TX_0709
@@ -1193,7 +1202,11 @@ mapleStateB:
 
 @substate0:
 	call mapleUpdateOscillation
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	ld e,SpecialObject.direction
 	ld a,(de)
 	bit 7,a
@@ -1237,7 +1250,13 @@ mapleStateB:
 	ld (de),a ; [substate] -= 1
 	ret nz
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+	call hIsSeasons
+	ld bc,TX_070b
+	jr c,+
+		ld bc,TX_0711
+	+
+.elif defined(ROM_AGES)
 	ld bc,TX_0711
 .else
 	ld bc,TX_070b
@@ -1325,14 +1344,27 @@ mapleSpawnItemDrops:
 	ld a,TREASURE_TRADEITEM
 	call checkTreasureObtained
 	jr nc,@noTradeItem
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	ld e,$01
+	jr c,+
+		ld e,$08
+	+
+	cp e
+.elif defined(ROM_AGES)
 	cp $08
 .else
 	cp $01
 .endif
 	jr nz,@noTradeItem
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	ld b,INTERAC_LON_LON_EGG
+	jr c,+
+		ld b,INTERAC_TOUCHING_BOOK
+	+
+.elif defined(ROM_AGES)
 	ld b,INTERAC_TOUCHING_BOOK
 .else
 	ld b,INTERAC_LON_LON_EGG

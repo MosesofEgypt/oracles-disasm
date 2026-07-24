@@ -236,7 +236,7 @@ itemInitializeFromLinkPosition:
 .endif
 
 	; Y
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld a,(wLinkRaisedFloorOffset)
 	ld b,a
 	ld a,(w1Link.yh)

@@ -122,6 +122,13 @@ wChannelWaitCounters: ; $c075
 wChannelVolumes: ; $c07d
 	dsb 8
 
+.if defined(ROM_COMBO)
+wGrabbableObjectBuffer:
+	dsb $10
+wGrabbableObjectBufferEnd:
+	.db
+.endif
+
 ; $c085-$c09f unused?
 
 .ENDS
@@ -643,6 +650,7 @@ wMinimapDungeonMapPosition: ; $c63c
 wMinimapDungeonFloor: ; $c63d
 	db
 
+.ifndef ROM_COMBO
 .ifdef ROM_AGES
 
 wPortalGroup: ; $c63e
@@ -653,6 +661,7 @@ wPortalRoom: ; $c63f
 wPortalPos: ; $c640
 	db
 
+.endif
 .endif
 
 wMapleKillCounter: ; $c641/$c63e
@@ -774,12 +783,14 @@ wGashaMaturity: ; $c65f/$c65c
 ; decreased by 200 when a gasha nut is harvested.
 	dw
 
+.ifndef ROM_COMBO
 .ifdef ROM_AGES
 wc661: ; $c661
 	db
 .else
 ws_c65d: ; TODO: figure out what this is
 	dsb 4
+.endif
 .endif
 
 wDungeonVisitedFloors: ; $c662/$c662
@@ -824,9 +835,11 @@ wNumHeartPieces: ; $c6ac/$c6a4
 wNumRupees: ; $c6ad/$c6a5
 	dw
 
+.ifndef ROM_COMBO
 .ifdef ROM_SEASONS
 wNumOreChunks: ; $c6a7
 	dw
+.endif
 .endif
 
 wShieldLevel: ; $c6af/$c6a9
@@ -846,6 +859,7 @@ wFluteIcon: ; $c6b5/$c6af
 ; Determines icon + song, but not companion
 	db
 
+.ifndef ROM_COMBO
 .ifdef ROM_AGES
 
 wSwitchHookLevel: ; $c6b6
@@ -873,6 +887,7 @@ wFeatherLevel: ; $c6b4
 	db
 
 .endif
+.endif
 
 wNumEmberSeeds: ; $c6b9/$c6b5
 	db
@@ -891,6 +906,7 @@ wEssencesObtained: ; $c6bf/$c6bb
 wTradeItem: ; $c6c0
 	db
 
+.ifndef ROM_COMBO
 .ifdef ROM_AGES
 
 wc6c1: ; $c6c1
@@ -908,6 +924,7 @@ wNumSlates: ; $c6c3
 
 wPirateBellState: ; -/$c6bd
 	db
+.endif
 .endif
 
 wUnusedc6c4:
@@ -989,6 +1006,7 @@ wChildPersonality: ; $c6e4/$c6de
 wc6e5: ; $c6e5/$c6df ; In seasons, growth of Maku tree
 	db
 
+.ifndef ROM_COMBO
 .ifdef ROM_SEASONS
 
 ws_c6e0: ; TODO: figure out what this is
@@ -1011,12 +1029,14 @@ wTalkedToPirationCaptainState: ; -/$c6e4
 	db
 
 .endif
+.endif
 
 
 wMakuMapTextPresent: ; $c6e6/$c6e5
 ; Low byte of text index (05XX) of text to show when selecting maku tree on map
 	db
 
+.ifndef ROM_COMBO
 .ifdef ROM_AGES
 
 wMakuMapTextPast: ; $c6e7
@@ -1058,6 +1078,7 @@ wc6f0: ; $c6f0
 	dsb $1
 
 .endif ; ROM_AGES
+.endif
 
 wShortSecretIndex: ; $c6fb/$c6e6
 ; bits 0-3: index of a small secret?
@@ -1079,6 +1100,7 @@ wSecretType: ; $c6fe
 ; 3: 5-letter secret
 	db
 
+.ifndef ROM_COMBO
 .ifdef ROM_SEASONS
 
 wSwitchHookLevel: ; -/$c6ea
@@ -1099,6 +1121,7 @@ wFeatherLevel:
 wObtainedSeasons:
 	db
 
+.endif
 .endif
 
 wSatchelSelectedSeeds:
@@ -1124,6 +1147,84 @@ wUnusedc6fe: ; $c6fe/$c6f1
 
 wBiggoronSwordOverflowItem: ; $c6ff/$c6f2
 	db
+
+
+.if defined(ROM_COMBO)
+
+; appear in both games with cross-items, so they can't be union'd
+wSwitchHookLevel:
+	db
+wSelectedHarpSong:
+	db
+wBraceletLevel:
+	db
+wObtainedSeasons:
+	db
+wBoomerangLevel:
+	db
+wMagnetGlovePolarity:
+	db
+wSlingshotLevel:
+	db
+wFeatherLevel:
+	db
+
+.union
+	; seasons variables
+	ws_c65d:
+		dsb 4
+	wNumOreChunks:
+		dw
+	wPirateBellState:
+		db
+	ws_c6e0:
+		db
+	wInsertedJewels:
+		db
+	wNumTimesPlayedSubrosianDance:
+		db
+	wNumTimesPlayedStrangeBrothersGame:
+		db
+	wTalkedToPirationCaptainState:
+		db
+.nextu
+	; ages variables
+	wPortalGroup:
+		db
+	wPortalRoom:
+		db
+	wPortalPos:
+		db
+	wc661:
+		db
+	wc6c1:
+		db
+	wTuniNutState:
+		db
+	wNumSlates:
+		db
+	wMakuMapTextPast:
+		db
+	wMakuTreeState:
+		db
+	wJabuWaterLevel:
+		db
+	wWildTokayGameLevel:
+		db
+	wMakuTreeSeedSatchelXPosition:
+		db
+	wPirateShipRoom:
+		db
+	wPirateShipY:
+		db
+	wPirateShipX:
+		db
+	wPirateShipAngle:
+		db
+	wc6f0:
+		dsb $1
+.endu
+.endif
 
 .ENDS
 
@@ -1714,7 +1815,7 @@ wExtraBgPaletteHeader: ; $cbe3
 wDisplayedHearts: ; $cbe4
 	db
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 wDisplayedMoneyAddress: ; $cbe5
 ; Lower byte of "money" variable to print (either wNumRupees or wNumOreChunks)
 	db
@@ -1811,6 +1912,7 @@ wCutsceneTrigger: ; $cc04/$cc04
 ; (See constants/common/cutsceneIndices.s)
 	db
 
+.ifndef ROM_COMBO
 .ifdef ROM_AGES
 wcc05: ; $cc05
 ; bit 0: if unset, prevents the room's object data from loading
@@ -1818,6 +1920,7 @@ wcc05: ; $cc05
 ; bit 2: if unset, prevents remembered Companions from loading
 ; bit 3: if unset, prevents Maple from loading
 	db
+.endif
 .endif
 
 wLoadedObjectGfxIndex: ; $cc06/$cc05
@@ -1865,8 +1968,17 @@ wInteractionIDToLoadExtraGfx: ; $cc1e/$cc1d
 ; Same as above, but for interactions.
 	db
 
-.ifdef ROM_SEASONS
-
+.if defined(ROM_COMBO)
+.union
+	; seasons variables
+	wcc1e:
+		db
+.nextu
+	; ages variables
+	wcc05:
+		db
+.endu
+.elif defined(ROM_SEASONS)
 wcc1e: ; -/$cc1e
 	db
 .endif
@@ -2078,8 +2190,10 @@ wWarpDestVariablesEnd: ; $cc4c/$cc68
 wcc4c: ; $cc4c/$cc68
 	db
 
+.ifndef ROM_COMBO
 wSeedTreeRefilledBitset: ; $cc4d/$cc69
 	dsb NUM_SEED_TREES/8
+.endif
 
 wLinkForceState: ; $cc4f/$cc6a
 ; When this is nonzero, Link's state (w1Link.state) is changed to this value.  Write $0b
@@ -2229,12 +2343,14 @@ wLinkClimbingVine: ; $cc68/$cc83
 ; Set to $ff when link climbs certain ladders. Forces him to face upwards.
 	db
 
+.ifndef ROM_COMBO
 .ifdef ROM_AGES
 wLinkRaisedFloorOffset: ; $cc69
 ; This shifts the Y position at which link is drawn.
 ; Used by the raisable platforms in various dungeons.
 ; If nonzero, Link is allowed to walk on raised floors.
 	db
+.endif
 .endif
 
 wPushingAgainstTileCounter: ; $cc6a/$cc84
@@ -2272,6 +2388,7 @@ wShieldHeight: ; $cc72
 wShieldWidth: ; $cc73
 	db
 
+.if !defined(ROM_COMBO)
 wGrabbableObjectBuffer: ; $cc74
 ; $10 bytes (8 objects)
 ; List of pick-upable items. Used by shops, cane of somaria block.
@@ -2286,6 +2403,7 @@ wGrabbableObjectBuffer: ; $cc74
 	dsb $10
 wGrabbableObjectBufferEnd: ; $cc84
 	.db
+.endif
 
 wcc84: ; $cc84/$cc9e
 	db
@@ -2458,6 +2576,7 @@ wBlockPushAngle: ; $cca6/$ccc0
 ; The angle a block is being pushed toward? bit 7 does something?
 	db
 
+.ifndef ROM_COMBO
 .ifdef ROM_SEASONS
 
 wPirateSkullRandomNumber: ; -/$ccc1
@@ -2472,13 +2591,16 @@ wcca7: ; $cca7
 ; Probably unused
 	db
 .endif
+.endif
 
 wUpgradesObtained: ; $cca8/$ccc2
 	db
 
+.ifndef ROM_COMBO
 .ifdef ROM_SEASONS ;
 wSpringBloomFlowerState: ; -/$ccc3
 	db
+.endif
 .endif
 
 wTwinrovaTileReplacementMode: ; $cca9/$ccc4
@@ -2492,6 +2614,7 @@ wccaa: ; $ccaa/$ccc5
 	db
 
 
+.ifndef ROM_COMBO
 .ifdef ROM_AGES
 
 wLever1PullDistance: ; $ccab
@@ -2509,6 +2632,7 @@ wRotatingCubePos: ; $ccae
 	db
 
 .endif
+.endif
 
 
 wccaf: ; $ccaf/$ccc6
@@ -2522,15 +2646,15 @@ wccb1: ; $ccb1
 ; Disables PART_BUTTON when nonzero?
 	db
 
+.ifndef ROM_COMBO
 .ifdef ROM_AGES
 wDisableWarps: ; $ccb2
 ; Used by INTERAC_BLACK_TOWER_DOOR_HANDLER to stop the warp from sending you anywhere.
 	db
-.endif
-
-.ifdef ROM_SEASONS
+.else
 wInBoxingMatch: ; -/$ccc9
 	db
+.endif
 .endif
 
 wAButtonSensitiveObjectList: ; $ccb3/$ccca
@@ -2610,10 +2734,12 @@ wIsLinkBeingShocked: ; $ccdb/$ccf2
 wLinkShockCounter: ; $ccdc
 	db
 
+.ifndef ROM_COMBO
 .ifdef ROM_AGES
 wSwitchHookState: ; $ccdd
 ; Used when swapping with the switch hook
 	db
+.endif
 .endif
 
 wDiggingUpEnemiesForbidden: ; $ccde/$ccf4
@@ -2650,12 +2776,46 @@ wFollowingLinkObjectType: ; $cce7/$ccfd
 wFollowingLinkObject: ; $cce8/$ccfe
 	db
 
+.ifndef ROM_COMBO
 .ifdef ROM_SEASONS
 wSwitchHookState: ; -/$ccff
 ; Used when swapping with the switch hook.
 	db
 .endif
+.endif
 
+.if defined(ROM_COMBO)
+wSwitchHookState:
+    db
+wSeedTreeRefilledBitset:
+	dsb $02
+
+.union
+	; seasons variables
+    wPirateSkullRandomNumber:
+        db
+    wSpringBloomFlowerState:
+        db
+    wInBoxingMatch:
+        db
+.nextu
+	; ages variables
+    wLever1PullDistance:
+        db
+    wLever2PullDistance:
+        db
+    wRotatingCubeColor:
+        db
+    wRotatingCubePos:
+        db
+	wDisableWarps:
+		db
+	wcca7:
+		db
+	wLinkRaisedFloorOffset:
+		db
+.endu
+.endif
 
 wcce9: ; $cce9/$cd00
 ; This might be a marker for the end of data in the $cc00 block?
@@ -2874,7 +3034,7 @@ wTmpVramBuffer: ; $cd40
 
 
 ; Size of this differs between games.
-.ifdef ROM_AGES
+.if defined(ROM_AGES) && !defined(ROM_COMBO)
 wStaticObjects: ; $cd80
 	dsb $40
 .else
@@ -2948,8 +3108,33 @@ wIsMaplePresent: ; $cdda/$cc3a
 ; Nonzero while maple is on the screen.
 	db
 
-
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+.union
+	; seasons variables
+    ws_cc39:
+        db
+.nextu
+	; ages variables
+    wcddb:
+        db
+    wLinkTimeWarpTile:
+        db
+    wcddd:
+        db
+    wSentBackByStrangeForce:
+        db
+    wcddf:
+        db
+    wcde0:
+        db
+    wPirateShipChangedTile:
+        db
+    wMamamuDogLocation:
+        db
+    wcde3:
+        dw
+.endu
+.elif defined(ROM_AGES)
 
 wcddb: ; $cddb
 ; Scratch variable for scripts?

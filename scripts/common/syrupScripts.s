@@ -49,7 +49,7 @@ syrupScript_showClosedText:
 	scriptend
 
 syrupScript_purchaseItem:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	jumptable_objectbyte Interaction.var37
 .else
 	jumptable_objectbyte Interaction.var38
@@ -70,7 +70,7 @@ syrupScript_purchaseItem:
 
 @buyBombchus:
 	showtextnonexitable TX_0d0a
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
 	scriptjump @checkAcceptPurchase
 .endif
 
@@ -78,7 +78,7 @@ syrupScript_purchaseItem:
 	jumpiftextoptioneq $00, @tryToPurchase
 
 	; Said "no" when asked to purchase
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	writeobjectbyte Interaction.var3a, $ff
 .else
 	writeobjectbyte Interaction.var3b, $ff
@@ -88,7 +88,7 @@ syrupScript_purchaseItem:
 	scriptend
 
 @tryToPurchase:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	jumpifmemoryeq wShopHaveEnoughRupees, $00, @enoughRupees
 	writeobjectbyte Interaction.var3a, $ff
 .else
@@ -103,7 +103,7 @@ syrupScript_purchaseItem:
 	scriptend
 
 @enoughRupees:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	jumptable_objectbyte Interaction.var38
 	.dw @buy
 	.dw shopkeeperCantBuy
@@ -119,7 +119,7 @@ syrupScript_purchaseItem:
 	writememory wcbad, $00
 	writememory wTextIsActive, $01
 	scriptend
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS)
 @shopkeeperCantBuy:
 	writeobjectbyte Interaction.var3b, $ff
 	writememory wcbad, $02

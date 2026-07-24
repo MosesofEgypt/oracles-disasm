@@ -156,7 +156,7 @@ itemCode10:
 
 	; revert to slow speed
 	ld a,SPEED_160
-	.ifdef ROM_AGES
+	.if defined(ROM_AGES) || defined(ROM_COMBO)
 		; slower movement while deep underwater
 		call isDeepUnderwater
 		jr nz,+
@@ -346,7 +346,7 @@ itemCode0d:
 		ld (hl),SPEED_160
 	+
 
-	.ifdef ROM_AGES
+	.if defined(ROM_AGES) || defined(ROM_COMBO)
 		; slower movement while deep underwater
 		call isDeepUnderwater
 		jr nz,+
@@ -1048,7 +1048,7 @@ bombchuCheckForEnemyTarget:
 	ld l,Item.speedTmp
 	ld (hl),SPEED_1c0
 .ifdef ENABLE_RING_REDUX
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	; slower movement while deep underwater
 	call isDeepUnderwater
 	jr nz,+

@@ -1,0 +1,305 @@
+# defines for wla-gb
+DEFINES = $(ORACLE_EXTRA_DEFINES) # Can specify this on commandline
+CFLAGS =
+
+AGES_BUILD_DIR = build_ages_h
+SEASONS_BUILD_DIR = build_seasons_h
+
+GAME_DEFINE = ROM_COMBO
+GAME = combo
+TEXT_INSERT_ADDRESS = 0x74000
+BUILD_DIR = build_combo_h
+GAME_COLOR = $(GREEN)
+
+# Can use ORACLE_FORCE_REBUILD environment variable to force the assembler to rerun
+ifeq ($(ORACLE_FORCE_REBUILD), 1)
+    $(shell rm $(BUILD_DIR)/*.o)
+endif
+
+DEFINES += $(ORACLE_REDUX_DEFINES)
+DEFINES += -D ENABLE_BUGFIXES
+DEFINES += -D $(GAME_DEFINE) -D BUILD_DIR="$(BUILD_DIR)/"
+CFLAGS += $(DEFINES)
+
+# Locations for gfx files: uncompressible and compressible
+GFX_UNCMP_DIR = 'gfx'
+GFX_CMP_DIR = 'gfx_compressible'
+
+
+OBJS = $(BUILD_DIR)/$(GAME).o $(BUILD_DIR)/audio.o
+
+
+# All .bin gfx files
+BIN_GFX_FILES         = $(shell find $(GFX_UNCMP_DIR)/common  $(GFX_CMP_DIR)/common  -name '*.bin')
+BIN_GFX_FILES_AGES    = $(shell find $(GFX_UNCMP_DIR)/ages    $(GFX_CMP_DIR)/ages    -name '*.bin')
+BIN_GFX_FILES_SEASONS = $(shell find $(GFX_UNCMP_DIR)/seasons $(GFX_CMP_DIR)/seasons -name '*.bin')
+
+# All .png gfx files
+PNG_GFX_FILES         = $(shell find $(GFX_UNCMP_DIR)/common  $(GFX_CMP_DIR)/common  -name '*.png')
+PNG_GFX_FILES_AGES    = $(shell find $(GFX_UNCMP_DIR)/ages    $(GFX_CMP_DIR)/ages    -name '*.png')
+PNG_GFX_FILES_SEASONS = $(shell find $(GFX_UNCMP_DIR)/seasons $(GFX_CMP_DIR)/seasons -name '*.png')
+
+# All .bin & .png gfx files by category (uncompressible and compressible)
+UNCMP_GFX_FILES         = $(shell find $(GFX_UNCMP_DIR)/common  -name '*.bin' -or -name '*.png')
+UNCMP_GFX_FILES_AGES    = $(shell find $(GFX_UNCMP_DIR)/ages    -name '*.bin' -or -name '*.png')
+UNCMP_GFX_FILES_SEASONS = $(shell find $(GFX_UNCMP_DIR)/seasons -name '*.bin' -or -name '*.png')
+
+CMP_GFX_FILES         = $(shell find $(GFX_CMP_DIR)/common  -name '*.bin' -or -name '*.png')
+CMP_GFX_FILES_AGES    = $(shell find $(GFX_CMP_DIR)/ages    -name '*.bin' -or -name '*.png')
+CMP_GFX_FILES_SEASONS = $(shell find $(GFX_CMP_DIR)/seasons -name '*.bin' -or -name '*.png')
+
+ifdef ENABLE_RING_REDUX
+# overriding ring gfx
+BIN_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux -name 'map_rings.bin')
+UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name 'map_rings.bin')
+endif
+ifdef ENABLE_SETTINGS_MENU
+BIN_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux/settings_menu -name '*.bin')
+UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/settings_menu -name '*.bin' -or -name '*.png')
+PNG_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux/settings_menu -name '*.png')
+endif
+ifdef ENABLE_DX_TITLE_SCREEN
+PNG_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux -name 'spr_titlescreen_sprites.png')
+UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name 'spr_titlescreen_sprites.png')
+endif
+ifdef MORE_MESSAGE_SPEEDS
+BIN_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux/more_msg_speeds -name '*.bin')
+UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/more_msg_speeds -name '*.bin' -or -name '*.png')
+PNG_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux/more_msg_speeds -name '*.png')
+endif
+ifdef ENABLE_NEW_GAME_PLUS
+BIN_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux/ngp -name '*.bin')
+UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/ngp -name '*.bin' -or -name '*.png')
+PNG_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux/ngp -name '*.png')
+endif
+PNG_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux/sprites -name '*.png')
+UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/sprites -name '*.png')
+
+# List of all gfx files in their final form, ie. $(BUILD_DIR)/gfx/spr_link.cmp
+GFXFILES := $(foreach file, $(CMP_GFX_FILES) $(UNCMP_GFX_FILES), \
+              $(BUILD_DIR)/gfx/$(basename $(notdir $(file))).cmp)
+GFXFILES += $(foreach file, $(CMP_GFX_FILES_AGES) $(UNCMP_GFX_FILES_AGES), \
+              $(BUILD_DIR)/gfx/ages_$(basename $(notdir $(file))).cmp)
+GFXFILES += $(foreach file, $(CMP_GFX_FILES_SEASONS) $(UNCMP_GFX_FILES_SEASONS), \
+              $(BUILD_DIR)/gfx/seasons_$(basename $(notdir $(file))).cmp)
+
+HASHFILES := $(foreach file, $(CMP_GFX_FILES) $(UNCMP_GFX_FILES), \
+               $(BUILD_DIR)/gfx/$(basename $(notdir $(file))).hash)
+HASHFILES += $(foreach file, $(CMP_GFX_FILES_AGES) $(UNCMP_GFX_FILES_AGES), \
+               $(BUILD_DIR)/gfx/ages_$(basename $(notdir $(file))).hash)
+HASHFILES += $(foreach file, $(CMP_GFX_FILES_SEASONS) $(UNCMP_GFX_FILES_SEASONS), \
+               $(BUILD_DIR)/gfx/seasons_$(basename $(notdir $(file))).hash)
+
+OLDHASHFILES := $(wildcard $(BUILD_DIR)/gfx/*.hash)
+HASHEDGFXFILES := $(foreach file, $(OLDHASHFILES), $(shell cat $(file)))
+
+FILES_TO_SEARCH := $(GFXFILES)
+FILES_TO_SEARCH += $(foreach hash, $(HASHEDGFXFILES), \
+					$(BUILD_DIR)/gfx/$(hash).cmp)
+
+# List of gfx files from the last build.
+OLD_GFXFILES := $(wildcard $(BUILD_DIR)/gfx/*.cmp)
+
+# gfx files with no corresponding source file: these must be deleted.
+# If they're not deleted then they could cause builds to succeed while depending
+# on files that can no longer be properly generated.
+# This could happen with other types of files but gfx files are the biggest
+# concern.
+ORPHANED_GFXFILES := $(filter-out '', $(foreach oldfile, $(OLD_GFXFILES), \
+              $(if $(findstring $(oldfile), $(FILES_TO_SEARCH)), '', $(oldfile))))
+
+# Delete the orphaned files
+ifneq ($(ORPHANED_GFXFILES),)
+$(shell rm $(ORPHANED_GFXFILES))
+endif
+
+ROOMLAYOUTFILES_AGES     = $(wildcard rooms/ages/small/*.bin)
+ROOMLAYOUTFILES_AGES    += $(wildcard rooms/ages/large/*.bin)
+ROOMLAYOUTFILES_SEASONS  = $(wildcard rooms/seasons/small/*.bin)
+ROOMLAYOUTFILES_SEASONS += $(wildcard rooms/seasons/large/*.bin)
+ROOMLAYOUTFILES_AGES    := $(ROOMLAYOUTFILES_AGES:.bin=.cmp)
+ROOMLAYOUTFILES_SEASONS := $(ROOMLAYOUTFILES_SEASONS:.bin=.cmp)
+ROOMLAYOUTFILES := $(foreach file, $(ROOMLAYOUTFILES_AGES), \
+                    $(BUILD_DIR)/rooms/ages_$(notdir $(file)))
+ROOMLAYOUTFILES += $(foreach file, $(ROOMLAYOUTFILES_SEASONS), \
+                    $(BUILD_DIR)/rooms/seasons_$(notdir $(file)))
+
+# Common data files (for both games)
+COMMONDATAFILES = $(shell find data/ -name '*.s' | grep -v '/ages/\|/seasons/')
+
+# Game-specific data files
+GAMEDATAFILES = $(shell find data/$(GAME)/ -name '*.s')
+
+MAIN_ASM_FILES = 
+AUDIO_FILES =
+#MAIN_ASM_FILES = $(shell find code/ object_code/ objects/ scripts/ -name '*.s' | grep -v '/ages/' | grep -v '/seasons/')
+#AUDIO_FILES  = $(shell find audio/ -name '*.s')
+#AUDIO_FILES += $(shell find audio/combo/ -name '*.bin')
+COMMON_INCLUDE_FILES = $(shell find constants/ include/ -name '*.s' | grep -v '/ages/' | grep -v '/seasons/')
+
+OPTIMIZE := -o
+
+
+$(GAME).gbc: $(OBJS) $(BUILD_DIR)/linkfile
+	$(LD) -S $(BUILD_DIR)/linkfile $@
+	@echo -e "$(BOLD)Built $(GAME_COLOR)$@$(NC)."
+
+$(BUILD_DIR)/linkfile: linkfile_$(GAME)
+	sed 's/BUILD_DIR/${BUILD_DIR}/' $< > $@
+
+$(BUILD_DIR)/$(GAME).o: $(MAIN_ASM_FILES) $(COMMONDATAFILES) $(GAMEDATAFILES)
+$(BUILD_DIR)/$(GAME).o: $(GFXFILES) $(ROOMLAYOUTFILES)
+$(BUILD_DIR)/$(GAME).o: rooms/ages/*.bin
+$(BUILD_DIR)/$(GAME).o: rooms/seasons/*.bin
+$(BUILD_DIR)/$(GAME).o: $(HASHFILES)
+
+$(BUILD_DIR)/audio.o: $(AUDIO_FILES)
+$(BUILD_DIR)/*.o: $(COMMON_INCLUDE_FILES) Makefile
+
+# HACK-BASE: $(GAME).o depends on new expanded tileset layout files.
+$(BUILD_DIR)/$(GAME).o: tileset_layouts_expanded/ages/*.bin
+$(BUILD_DIR)/$(GAME).o: tileset_layouts_expanded/seasons/*.bin
+
+#$(BUILD_DIR)/$(GAME).o: $(GAME).s $(BUILD_DIR)/ages_textData.s $(BUILD_DIR)/ages_textDefines.s $(BUILD_DIR)/seasons_textData.s $(BUILD_DIR)/seasons_textDefines.s Makefile | $(BUILD_DIR)
+#	$(CC) -o $@ $(CFLAGS) $<
+$(GAME).gbc:  $(BUILD_DIR)/$(GAME).o $(BUILD_DIR)/ages_textData.s $(BUILD_DIR)/ages_textDefines.s $(BUILD_DIR)/seasons_textData.s $(BUILD_DIR)/seasons_textDefines.s Makefile | $(BUILD_DIR)
+	@echo -e "Test complete."
+
+#$(BUILD_DIR)/%.o: code/%.s | $(BUILD_DIR)
+#	$(CC) -o $@ $(CFLAGS) $<
+
+$(BUILD_DIR)/rooms/ages_%.cmp: rooms/ages/small/%.bin | $(BUILD_DIR)/rooms
+	@echo "Compressing $< to $@..."
+	@$(PYTHON) tools/build/compressRoomLayout.py $< $@ $(OPTIMIZE)
+
+$(BUILD_DIR)/rooms/seasons_%.cmp: rooms/seasons/small/%.bin | $(BUILD_DIR)/rooms
+	@echo "Compressing $< to $@..."
+	@$(PYTHON) tools/build/compressRoomLayout.py $< $@ $(OPTIMIZE)
+
+
+
+# GFX rules
+# ================================================================================
+
+# I'm using defines and 'eval'ing them due to difficulties constructing rules when the source
+# graphics file could be in any number of locations. Kind of ugly, but it works.
+
+
+# Rule for copying GFX files to $(BUILD_DIR)/gfx directory
+define define_copy_gfx_rules
+$(BUILD_DIR)/gfx/$(2)$(notdir $(1)): $(1) | $(BUILD_DIR)/gfx
+	@echo "Copying $$< to $(BUILD_DIR)/gfx/..."
+	@cp $$< $$@
+endef
+
+# Rule for conversion of .PNG files to .BIN files
+define define_png_gfx_rules
+$(BUILD_DIR)/gfx/$(2)$(basename $(notdir $(1))).bin: $(1) $(wildcard $(basename $(1)).properties) | $(BUILD_DIR)/gfx
+	@echo "Converting $$<..."
+	@$$(PYTHON) tools/gfx/gfx.py --out $$@ auto $$<
+endef
+
+# Rule for handling uncompressible files
+define define_uncmp_gfx_rules
+$(BUILD_DIR)/gfx/$(2)$(basename $(notdir $(1))).cmp: $(BUILD_DIR)/gfx/$(2)$(basename $(notdir $(1))).bin
+	@echo "Converting $$<..."
+	@$$(PYTHON) tools/build/compressGfx.py --mode 0 $$< $$@
+endef
+
+# Rule for handling compressible files
+define define_cmp_gfx_rules
+$(BUILD_DIR)/gfx/$(2)$(basename $(notdir $(1))).cmp: $(BUILD_DIR)/gfx/$(2)$(basename $(notdir $(1))).bin
+	@echo "Compressing $$<..."
+	@$$(PYTHON) tools/build/compressGfx.py $$< $$@
+endef
+
+# Rule for hashing files for data deduplication
+define define_hash_gfx_rules
+$(BUILD_DIR)/gfx/$(basename $(notdir $(1))).hash: $(BUILD_DIR)/gfx/$(basename $(notdir $(1))).cmp
+	@echo "Hashing $$<..."
+	@$$(PYTHON) tools/build/hashBinaryData.py $$< $$@
+endef
+
+# Define the gfx rules for the specific files which need them
+$(foreach filename,$(CMP_GFX_FILES),  $(eval $(call define_cmp_gfx_rules,$(filename),)))
+$(foreach filename,$(BIN_GFX_FILES),  $(eval $(call define_copy_gfx_rules,$(filename),)))
+$(foreach filename,$(PNG_GFX_FILES),  $(eval $(call define_png_gfx_rules,$(filename),)))
+$(foreach filename,$(UNCMP_GFX_FILES),$(eval $(call define_uncmp_gfx_rules,$(filename),)))
+
+$(foreach filename,$(CMP_GFX_FILES_AGES),  $(eval $(call define_cmp_gfx_rules,$(filename),ages_)))
+$(foreach filename,$(BIN_GFX_FILES_AGES),  $(eval $(call define_copy_gfx_rules,$(filename),ages_)))
+$(foreach filename,$(PNG_GFX_FILES_AGES),  $(eval $(call define_png_gfx_rules,$(filename),ages_)))
+$(foreach filename,$(UNCMP_GFX_FILES_AGES),$(eval $(call define_uncmp_gfx_rules,$(filename),ages_)))
+
+$(foreach filename,$(CMP_GFX_FILES_SEASONS),  $(eval $(call define_cmp_gfx_rules,$(filename),seasons_)))
+$(foreach filename,$(BIN_GFX_FILES_SEASONS),  $(eval $(call define_copy_gfx_rules,$(filename),seasons_)))
+$(foreach filename,$(PNG_GFX_FILES_SEASONS),  $(eval $(call define_png_gfx_rules,$(filename),seasons_)))
+$(foreach filename,$(UNCMP_GFX_FILES_SEASONS),$(eval $(call define_uncmp_gfx_rules,$(filename),seasons_)))
+
+$(foreach filename,$(GFXFILES),$(eval $(call define_hash_gfx_rules,$(filename))))
+
+# ================================================================================
+
+# HACK-BASE: Not compressing large rooms at all anymore. Using the pre-built dictionary could cause
+# problems down the line, and regenerating it on each build would be kind of costly, so we're just
+# not going to bother.
+$(BUILD_DIR)/rooms/ages_room04%.cmp: rooms/ages/large/room04%.bin | $(BUILD_DIR)/rooms
+	@echo "Copying $< to $@..."
+	@dd if=/dev/zero bs=1 count=1 of=$@ 2>/dev/null
+	@cat $< >> $@
+$(BUILD_DIR)/rooms/ages_room05%.cmp: rooms/ages/large/room05%.bin | $(BUILD_DIR)/rooms
+	@echo "Copying $< to $@..."
+	@dd if=/dev/zero bs=1 count=1 of=$@ 2>/dev/null
+	@cat $< >> $@
+$(BUILD_DIR)/rooms/ages_room06%.cmp: rooms/ages/large/room06%.bin | $(BUILD_DIR)/rooms
+	@echo "Copying $< to $@..."
+	@dd if=/dev/zero bs=1 count=1 of=$@ 2>/dev/null
+	@cat $< >> $@
+
+$(BUILD_DIR)/rooms/seasons_room04%.cmp: rooms/seasons/large/room04%.bin | $(BUILD_DIR)/rooms
+	@echo "Copying $< to $@..."
+	@dd if=/dev/zero bs=1 count=1 of=$@ 2>/dev/null
+	@cat $< >> $@
+$(BUILD_DIR)/rooms/seasons_room05%.cmp: rooms/seasons/large/room05%.bin | $(BUILD_DIR)/rooms
+	@echo "Copying $< to $@..."
+	@dd if=/dev/zero bs=1 count=1 of=$@ 2>/dev/null
+	@cat $< >> $@
+$(BUILD_DIR)/rooms/seasons_room06%.cmp: rooms/seasons/large/room06%.bin | $(BUILD_DIR)/rooms
+	@echo "Copying $< to $@..."
+	@dd if=/dev/zero bs=1 count=1 of=$@ 2>/dev/null
+	@cat $< >> $@
+
+# create a temp text.yaml by layering the base with any redux yamls needed
+$(BUILD_DIR)/ages_textLayered.yaml: text/ages/text.yaml tools/build/layerText.py | $(BUILD_DIR)
+	@echo "Layering yamls..."
+	@$(PYTHON) tools/build/layerText.py $< text/redux text/redux/ages $@ "$(ORACLE_REDUX_DEFINES)"
+
+$(BUILD_DIR)/seasons_textLayered.yaml: text/seasons/text.yaml tools/build/layerText.py | $(BUILD_DIR)
+	@echo "Layering yamls..."
+	@$(PYTHON) tools/build/layerText.py $< text/redux text/redux/seasons $@ "$(ORACLE_REDUX_DEFINES)"
+
+# Parse & compress text
+$(BUILD_DIR)/ages_textData.s: $(BUILD_DIR)/ages_textLayered.yaml text/ages/dict.yaml tools/build/parseText.py | $(BUILD_DIR)
+	@echo "Compressing text..."
+	@$(PYTHON) tools/build/parseText.py text/ages/dict.yaml $< $@ $$(($(TEXT_INSERT_ADDRESS)))
+
+$(BUILD_DIR)/seasons_textData.s: $(BUILD_DIR)/seasons_textLayered.yaml text/seasons/dict.yaml tools/build/parseText.py | $(BUILD_DIR)
+	@echo "Compressing text..."
+	@$(PYTHON) tools/build/parseText.py text/seasons/dict.yaml $< $@ $$(($(TEXT_INSERT_ADDRESS)))
+
+$(BUILD_DIR)/ages_textDefines.s: $(BUILD_DIR)/ages_textData.s
+$(BUILD_DIR)/seasons_textDefines.s: $(BUILD_DIR)/seasons_textData.s
+
+
+$(BUILD_DIR)/gfx: | $(BUILD_DIR)
+	mkdir $(BUILD_DIR)/gfx
+$(BUILD_DIR)/rooms: | $(BUILD_DIR)
+	mkdir $(BUILD_DIR)/rooms
+$(BUILD_DIR)/debug: | $(BUILD_DIR)
+	mkdir $(BUILD_DIR)/debug
+$(BUILD_DIR)/tileset_layouts: | $(BUILD_DIR)
+	mkdir $(BUILD_DIR)/tileset_layouts
+$(BUILD_DIR)/doc: | $(BUILD_DIR)
+	mkdir $(BUILD_DIR)/doc
+$(BUILD_DIR):
+	mkdir $(BUILD_DIR)

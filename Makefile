@@ -12,9 +12,10 @@ BUILD_VANILLA = false
 BOLD=\033[1;37m
 RED=\033[1;31m
 BLUE=\033[1;34m
+GREEN=\033[1;92m
 NC=\033[0m
 
-# Sets the default target. Can be "ages", "seasons", or "all" (both).
+# Sets the default target. Can be "ages", "seasons", "combo", or "all" (both).
 .DEFAULT_GOAL = all
 
 SHELL := /bin/bash
@@ -43,12 +44,13 @@ MAKEFLAGS += --no-print-directory
 .SUFFIXES:
 
 # Rules which don't correspond to filenames
-.PHONY: all ages seasons clean test-gfx
+.PHONY: all ages seasons combo clean test-gfx
 
 
 all:
 	@$(MAKE) ages
 	@$(MAKE) seasons
+	@$(MAKE) combo
 
 ages:
 	@echo -e "$(BOLD)====================$(NC)"
@@ -62,17 +64,15 @@ seasons:
 	@echo -e "$(BOLD)====================$(NC)"
 	@ROM_SEASONS=1 $(MAKE) $@.gbc
 
+combo:
+	@echo -e "$(BOLD)====================$(NC)"
+	@echo -e "$(BOLD)Building $(GREEN)Ages & Seasons Combo$(BOLD)...$(NC)"
+	@echo -e "$(BOLD)====================$(NC)"
+	@ROM_COMBO=1 $(MAKE) $@.gbc
 
-# Skip the majority of this makefile if we haven't specified the game yet.
-# One of ROM_AGES or ROM_SEASONS must be defined for the below stuff to make any
-# sense.
-ifneq ($(filter 1, $(ROM_AGES) $(ROM_SEASONS)),)
 # load the bare minimum redux config
 include redux_config/config.env
 
-# defines for wla-gb
-DEFINES = $(ORACLE_EXTRA_DEFINES) # Can specify this on commandline
-CFLAGS =
 ORACLE_REDUX_DEFINES =
 ifdef ENABLE_NEW_GAME_PLUS
 ifndef ENABLE_SETTINGS_MENU
@@ -101,8 +101,20 @@ endif
 ifdef MORE_MESSAGE_SPEEDS
 	ORACLE_REDUX_DEFINES += -D MORE_MESSAGE_SPEEDS
 endif
-DEFINES += $(ORACLE_REDUX_DEFINES)
 
+ifeq ($(ROM_COMBO), 1)
+include comboMakefile
+endif
+
+# Skip the majority of this makefile if we haven't specified the game yet.
+# One of ROM_AGES or ROM_SEASONS must be defined for the below stuff to make any
+# sense.
+ifneq ($(filter 1, $(ROM_AGES) $(ROM_SEASONS)),)
+
+# defines for wla-gb
+DEFINES  = $(ORACLE_EXTRA_DEFINES) # Can specify this on commandline
+DEFINES += $(ORACLE_REDUX_DEFINES)
+CFLAGS =
 
 ifeq ($(BUILD_VANILLA), true)
 	DEFINES += -D BUILD_VANILLA
@@ -421,8 +433,9 @@ endif # End of check for either ROM_AGES or ROM_SEASONS being defined
 
 
 clean:
-	-rm -R build build_ages_* build_seasons_* \
-		ages.gbc ages.sym seasons.gbc seasons.sym
+	-rm -R build build_ages_* build_seasons_* build_combo_* \
+		ages.gbc ages.sym seasons.gbc seasons.sym \
+		combo.gbc combo.sym
 
 # --------------------------------------------------------------------------------
 # Testing graphics encoding: ensure that pngs are encoded correctly.

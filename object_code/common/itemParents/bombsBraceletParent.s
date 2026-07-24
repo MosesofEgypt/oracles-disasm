@@ -8,7 +8,7 @@ parentItemCode_bombchu:
 	.dw parentItemGenericState1
 
 @state0:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	; Must be above water
 	call isLinkUnderwater
 	jp nz,clearParentItem
@@ -62,7 +62,7 @@ parentItemCode_bomb:
 .endif
 
 @state0:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	call isLinkUnderwater
 	jp nz,clearParentItem
 	; If Link is riding something other than a raft, don't allow usage of bombs
@@ -213,10 +213,15 @@ parentItemCode_bracelet:
 	call checkLinkOnGround
 	jp nz,clearParentItem
 
-.ifdef ROM_SEASONS
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,++
+.endif
 	ld a,(wActiveTileType)
 	cp TILETYPE_STUMP
 	jp z,clearParentItem
+++
 .endif
 
 	ld a,(w1ReservedItemC.enabled)
@@ -612,11 +617,16 @@ parentItemCode_bracelet:
 
 	ld c,LINK_ANIM_MODE_THROW
 
-.ifdef ROM_AGES ; TODO: why does only ages check this?
+.if defined(ROM_AGES) || defined(ROM_COMBO) ; TODO: why does only ages check this?
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,++
+.endif
 	; Load animation depending on whether Link's riding a minecart
 	ld a,(w1Companion.id)
 	cp SPECIALOBJECT_MINECART
 	jr nz,+
+++
 .endif
 
 	ld a,(wLinkObjectIndex)

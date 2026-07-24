@@ -39,11 +39,16 @@ interactionCode43:
 
 	ld e,Interaction.pressedAButton
 	call objectAddToAButtonSensitiveObjectList
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,++
+.endif
 	call getThisRoomFlags
 	and $40
 	ld hl,mainScripts.syrupScript_notTradedMushroomYet
 	jr z,+
+++
 .endif
 	ld hl,mainScripts.syrupScript_spawnShopItems
 +
@@ -70,7 +75,7 @@ interactionCode43:
 	; Get the object that Link is holding
 	ld a,(w1Link.relatedObj2+1)
 	ld h,a
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld e,Interaction.var3b
 .else
 	ld e,Interaction.var3c
@@ -84,7 +89,7 @@ interactionCode43:
 	ld b,a
 	sub $07
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld e,Interaction.var37
 .else
 	ld e,Interaction.var38
@@ -97,7 +102,7 @@ interactionCode43:
 	rst_addAToHl
 	ld a,(hl)
 	call cpRupeeValue
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld (wShopHaveEnoughRupees),a
 .else
 	ld e,Interaction.var39
@@ -139,7 +144,7 @@ interactionCode43:
 
 @setCanPurchase:
 	; Set var38 to 1 if Link can't purchase the item because he has too much of it
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld e,Interaction.var38
 .else
 	ld e,Interaction.var3a
@@ -177,7 +182,7 @@ interactionCode43:
 	ld (wDisabledObjects),a
 
 	; Check response from script (was purchase successful?)
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld e,Interaction.var3a
 .else
 	ld e,Interaction.var3b
@@ -198,7 +203,7 @@ interactionCode43:
 ++
 	xor a
 	ld (de),a
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld e,Interaction.var3b
 .else
 	ld e,Interaction.var3c
