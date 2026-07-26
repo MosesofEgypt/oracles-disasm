@@ -1,4 +1,4 @@
-.ifndef ROM_COMBO
+.ifdef ROM_COMBO
 musMakuTreeStart_seasons:
 
 musMakuTreeChannel1_seasons:
@@ -199,7 +199,7 @@ musicf0001:
 	goto musicf0001
 	cmdff
 
-.ifndef ROM_COMBO
+.ifdef ROM_COMBO
 musMakuTreeChannel0_seasons:
 .else
 musMakuTreeChannel0:
@@ -398,7 +398,7 @@ musicf0156:
 	goto musicf0156
 	cmdff
 
-.ifndef ROM_COMBO
+.ifdef ROM_COMBO
 musMakuTreeChannel4_seasons:
 .else
 musMakuTreeChannel4:
@@ -441,7 +441,7 @@ musicf02ac:
 	goto musicf02ac
 	cmdff
 
-.ifndef ROM_COMBO
+.ifdef ROM_COMBO
 .define musMakuTreeChannel6_seasons MUSIC_CHANNEL_FALLBACK EXPORT
 .else
 .define musMakuTreeChannel6 MUSIC_CHANNEL_FALLBACK EXPORT

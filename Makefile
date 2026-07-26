@@ -50,7 +50,6 @@ MAKEFLAGS += --no-print-directory
 all:
 	@$(MAKE) ages
 	@$(MAKE) seasons
-	@$(MAKE) combo
 
 ages:
 	@echo -e "$(BOLD)====================$(NC)"

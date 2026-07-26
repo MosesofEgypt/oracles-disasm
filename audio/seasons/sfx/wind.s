@@ -1,4 +1,4 @@
-.ifndef ROM_COMBO
+.ifdef ROM_COMBO
 sndWindStart_seasons:
 
 sndWindChannel7_seasons:
