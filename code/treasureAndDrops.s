@@ -1740,7 +1740,7 @@ checkIncreaseGashaMaturityForGettingTreasure:
 	.db TREASURE_HEART_REFILL	  2
 .else
 	.db TREASURE_ESSENCE		150
-.if defined(COMBO_ROM)
+.if defined(ROM_COMBO)
 	.db TREASURE_HEART_PIECE	150
 .elif defined(ROM_AGES)
 	.db TREASURE_HEART_PIECE	 36

@@ -1,6 +1,12 @@
+.ifdef ROM_COMBO
+sndWindStart_ages:
+
+sndWindChannel7_ages:
+.else
 sndWindStart:
 
 sndWindChannel7:
+.endif
 	cmdf0 $40
 	note $37 $01
 	note $36 $01

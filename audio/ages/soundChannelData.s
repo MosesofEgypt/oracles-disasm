@@ -1,5 +1,10 @@
+.ifdef ROM_COMBO
+m_section_superfree AudioData7
+.else
 m_section_superfree AudioData1
+.endif
 
+.ifndef ROM_COMBO
 snddeStart:
 
 snddeChannel0:
@@ -21,8 +26,11 @@ bank39ChannelFallback:
 .ifdef BUILD_VANILLA
 	.dsb 11 $ff
 .endif
+.endif
 
 .include "audio/ages/sfx/monkey.s"
+
+.ifndef ROM_COMBO
 .include "audio/common/sfx/beam.s"
 .include "audio/common/sfx/wave.s"
 .include "audio/common/sfx/swordObtained.s"
@@ -64,14 +72,17 @@ sndbdChannel2:
 .include "audio/common/mus/mapleGame.s"
 .include "audio/common/mus/finalBoss.s"
 .include "audio/common/mus/essence.s"
+.endif
 .include "audio/ages/sfx/echoes.s"
 .include "audio/ages/mus/underwater.s"
 .include "audio/ages/mus/makuTree.s"
 
+.ifndef ROM_COMBO
 .include "audio/seasons/sfx/magnetGloves.s" ; CROSSITEMS: Added this
 
 .ifdef BUILD_VANILLA
 	.dsb 162 $ff
+.endif
 .endif
 
 .ends
@@ -79,9 +90,13 @@ sndbdChannel2:
 
 .BANK $73 SLOT 1
 .ORG 0
-
+.ifdef ROM_COMBO
+m_section_superfree AudioData8
+.else
 m_section_superfree AudioData2
+.endif
 
+.ifndef ROM_COMBO
 bank3aChannelFallback:
 	cmdff
 
@@ -117,7 +132,9 @@ bank3aChannelFallback:
 .include "audio/common/sfx/unknown4.s"
 .include "audio/common/sfx/bossDead.s"
 .include "audio/common/sfx/lightning.s"
+.endif
 .include "audio/ages/sfx/wind.s"
+.ifndef ROM_COMBO
 .include "audio/common/sfx/pirateBell.s"
 .include "audio/common/sfx/magicPowder.s"
 .include "audio/common/sfx/menuMove.s"
@@ -136,11 +153,13 @@ sndd5Channel2:
 
 .include "audio/common/sfx/transform.s"
 .include "audio/common/sfx/blueStalfosCharge.s"
+.endif
 
 snd92Start:
 snd92Channel2:
 	cmdff
 
+.ifndef ROM_COMBO
 .include "audio/common/sfx/fluteRicky.s"
 .include "audio/common/sfx/fluteDimitri.s"
 .include "audio/common/sfx/fluteMoosh.s"
@@ -148,11 +167,13 @@ snd92Channel2:
 .include "audio/common/mus/twinrova.s"
 .include "audio/common/sfx/makuTreePast.s"
 .include "audio/common/sfx/restore.s"
+.endif
 
 sndcfStart:
 sndcfChannel2:
 	cmdff
 
+.ifndef ROM_COMBO
 .include "audio/common/sfx/moosh.s"
 .include "audio/common/sfx/ding.s"
 .include "audio/common/sfx/dekuScrub.s"
@@ -161,10 +182,14 @@ sndcfChannel2:
 .include "audio/common/sfx/circling.s"
 .include "audio/common/sfx/dig.s"
 .include "audio/ages/sfx/switch2.s"
+.endif
+
 .include "audio/ages/sfx/openGate.s"
 .include "audio/ages/sfx/moveBlock2.s"
 .include "audio/ages/sfx/tokay.s"
 .include "audio/ages/sfx/tingle.s"
+
+.ifndef ROM_COMBO
 .include "audio/common/sfx/dimitri.s"
 .include "audio/common/sfx/whistle.s"
 .include "audio/common/sfx/goronDanceB.s"
@@ -172,8 +197,12 @@ sndcfChannel2:
 .include "audio/common/sfx/slash.s"
 .include "audio/common/sfx/shield.s"
 .include "audio/common/sfx/unknown5.s"
+.endif
+
 .include "audio/ages/sfx/timewarpInitiated.s"
 .include "audio/ages/sfx/timewarpCompleted.s"
+
+.ifndef ROM_COMBO
 .include "audio/common/sfx/goron.s"
 .include "audio/common/sfx/ghost.s"
 .include "audio/common/sfx/becomeBaby.s"
@@ -183,15 +212,20 @@ sndcfChannel2:
 .ifdef BUILD_VANILLA
 	.db $ff $ff
 .endif
+.endif
 
 .ends
 
 
 .BANK $74 SLOT 1
 .ORG 0
-
+.ifdef ROM_COMBO
+m_section_superfree AudioData9
+.else
 m_section_superfree AudioData3
+.endif
 
+.ifndef ROM_COMBO
 bank3bChannelFallback:
 	cmdff
 
@@ -204,6 +238,8 @@ bank3bChannelFallback:
 .include "audio/common/mus/overworld.s"
 .include "audio/common/mus/essenceRoom.s"
 .include "audio/common/mus/ganon.s"
+.endif
+
 .include "audio/ages/mus/overworldPast.s"
 .include "audio/ages/mus/nayru.s"
 .include "audio/ages/mus/crescent.s"
@@ -211,6 +247,8 @@ bank3bChannelFallback:
 .include "audio/ages/mus/lynnaVillage.s"
 .include "audio/ages/mus/makuPath.s"
 .include "audio/ages/mus/symmetryPresent.s"
+
+.ifndef ROM_COMBO
 .include "audio/common/sfx/splash.s"
 .include "audio/common/sfx/text2.s"
 .include "audio/common/sfx/filledHeartContainer.s"
@@ -218,6 +256,7 @@ bank3bChannelFallback:
 .include "audio/common/sfx/unknown7.s"
 .include "audio/common/sfx/enemyJump.s"
 .include "audio/common/sfx/galeSeed.s"
+.endif
 
 sndcaStart:
 sndcaChannel2:
@@ -225,6 +264,7 @@ sndcaChannel2:
 sndcaChannel7:
 	cmdff
 
+.ifndef ROM_COMBO
 .include "audio/common/sfx/selectItem.s"
 .include "audio/common/sfx/solvePuzzle.s"
 .include "audio/common/sfx/getItem.s"
@@ -232,25 +272,35 @@ sndcaChannel7:
 .ifdef BUILD_VANILLA
 	.dsb 152 $ff
 .endif
+.endif
 
 .ends
 
 
 .BANK $75 SLOT 1
 .ORG 0
-
+.ifdef ROM_COMBO
+m_section_superfree AudioData10
+.else
 m_section_superfree AudioData4
+.endif
 
+.ifndef ROM_COMBO
 bank3cChannelFallback:
 	cmdff
 
 .redefine MUSIC_CHANNEL_FALLBACK bank3cChannelFallback
+.endif
 
 
 .include "audio/ages/mus/moonlitGrotto.s"
+
+.ifndef ROM_COMBO
 .include "audio/common/mus/onoxCastle.s"
 .include "audio/common/mus/sadness.s"
 .include "audio/common/mus/intro2.s"
+.endif
+
 .include "audio/ages/mus/ambiPalace.s"
 .include "audio/ages/mus/tokayHouse.s"
 .include "audio/ages/mus/mermaidsCave.s"
@@ -262,6 +312,8 @@ bank3cChannelFallback:
 .include "audio/ages/mus/wingDungeon.s"
 .include "audio/ages/mus/crownDungeon.s"
 .include "audio/ages/mus/jabuJabusBelly.s"
+
+.ifndef ROM_COMBO
 .include "audio/common/sfx/damageEnemy.s"
 .include "audio/common/sfx/chargeSword.s"
 .include "audio/common/sfx/clink.s"
@@ -271,6 +323,8 @@ bank3cChannelFallback:
 .include "audio/common/sfx/gainHeart.s"
 .include "audio/common/sfx/breakRock.s"
 .include "audio/common/sfx/fairyCutscene.s"
+.endif
+
 .include "audio/ages/sfx/currents.s"
 .include "audio/ages/sfx/ages.s"
 
@@ -283,9 +337,13 @@ bank3cChannelFallback:
 
 .BANK $76 SLOT 1
 .ORG 0
-
+.ifdef ROM_COMBO
+m_section_superfree AudioData11
+.else
 m_section_superfree AudioData5
+.endif
 
+.ifndef ROM_COMBO
 bank3dChannelFallback:
 	cmdff
 
@@ -303,16 +361,21 @@ bank3dChannelFallback:
 .include "audio/common/mus/mapleTheme.s"
 .include "audio/common/mus/intro1.s"
 .include "audio/common/mus/crazyDance.s"
+.endif
+
 .include "audio/ages/mus/ancientTomb.s"
 
+.ifndef ROM_COMBO
 snd93Start:
 snd93Channel2:
 	cmdff
+.endif
 
 snd94Start:
 snd94Channel2:
 	cmdff
 
+.ifndef ROM_COMBO
 .include "audio/common/sfx/compass.s"
 .include "audio/common/sfx/land.s"
 .include "audio/common/sfx/switchHook.s"
@@ -323,6 +386,7 @@ snd94Channel2:
 .include "audio/common/sfx/solvePuzzle2.s"
 .include "audio/common/sfx/damageLink.s"
 .include "audio/common/sfx/gohmaSpawnGel.s"
+.endif
 
 .ifdef BUILD_VANILLA
 	.dsb 93 $ff
@@ -333,9 +397,13 @@ snd94Channel2:
 
 .BANK $77 SLOT 1
 .ORG 0
-
+.ifdef ROM_COMBO
+m_section_superfree AudioData12
+.else
 m_section_superfree AudioData6
+.endif
 
+.ifndef ROM_COMBO
 bank3eChannelFallback:
 	cmdff
 
@@ -346,7 +414,11 @@ bank3eChannelFallback:
 mus37Start:
 mus3aStart:
 mus3bStart:
+.endif
+
 mus3dStart:
+
+.ifndef ROM_COMBO
 mus41Start:
 mus42Start:
 mus43Start:
@@ -368,7 +440,11 @@ sndddStart:
 mus37Channel1:
 mus3aChannel1:
 mus3bChannel1:
+.endif
+
 mus3dChannel1:
+
+.ifndef ROM_COMBO
 mus41Channel1:
 mus42Channel1:
 mus43Channel1:
@@ -386,12 +462,18 @@ snddaChannel1:
 snddbChannel1:
 snddcChannel1:
 sndddChannel1:
+.endif
 	cmdff
 
+.ifndef ROM_COMBO
 mus37Channel0:
 mus3aChannel0:
 mus3bChannel0:
+.endif
+
 mus3dChannel0:
+
+.ifndef ROM_COMBO
 mus41Channel0:
 mus42Channel0:
 mus43Channel0:
@@ -409,12 +491,18 @@ snddaChannel0:
 snddbChannel0:
 snddcChannel0:
 sndddChannel0:
+.endif
 	cmdff
 
+.ifndef ROM_COMBO
 mus37Channel4:
 mus3aChannel4:
 mus3bChannel4:
+.endif
+
 mus3dChannel4:
+
+.ifndef ROM_COMBO
 mus41Channel4:
 mus42Channel4:
 mus43Channel4:
@@ -432,12 +520,18 @@ snddaChannel4:
 snddbChannel4:
 snddcChannel4:
 sndddChannel4:
+.endif
 	cmdff
 
+.ifndef ROM_COMBO
 mus37Channel6:
 mus3aChannel6:
 mus3bChannel6:
+.endif
+
 mus3dChannel6:
+
+.ifndef ROM_COMBO
 mus41Channel6:
 mus42Channel6:
 mus43Channel6:
@@ -455,6 +549,7 @@ snddaChannel6:
 snddbChannel6:
 snddcChannel6:
 sndddChannel6:
+.endif
 	cmdff
 
 .ifdef BUILD_VANILLA
@@ -462,6 +557,7 @@ sndddChannel6:
 .endif
 
 
+.ifndef ROM_COMBO
 .include "audio/common/mus/greatMoblin.s"
 .include "audio/common/mus/ladxSideview.s"
 .include "audio/common/mus/syrup.s"
@@ -469,8 +565,10 @@ sndddChannel6:
 .include "audio/common/mus/credits2.s"
 .include "audio/common/mus/boss.s"
 .include "audio/common/mus/credits1.s"
+.endif
 .include "audio/ages/mus/symmetryPast.s"
 .include "audio/ages/mus/zoraVillage.s"
+.ifndef ROM_COMBO
 .include "audio/common/sfx/heartBeep.s"
 .include "audio/common/sfx/rupee.s"
 .include "audio/common/sfx/swordSpin.s"
@@ -481,6 +579,7 @@ sndddChannel6:
 .include "audio/common/sfx/boomerang.s"
 .include "audio/common/sfx/dropEssence.s"
 .include "audio/common/sfx/text.s"
+.endif
 
 .ifdef BUILD_VANILLA
 	.dsb 3 $ff
@@ -489,4 +588,6 @@ sndddChannel6:
 .ends
 
 
+.ifndef ROM_COMBO
 .undefine MUSIC_CHANNEL_FALLBACK
+.endif

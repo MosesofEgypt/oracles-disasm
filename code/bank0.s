@@ -12708,11 +12708,23 @@ updateAnimationsAfterCutscene:
 loadScreenMusic:
 	ldh a,(<hRomBank)
 	push af
+.ifdef ROM_COMBO
+	call hIsSeasons
+	ld a,:bank4Data1.musicAssignmentGroupTable_seasons
+	ld hl,bank4Data1.musicAssignmentGroupTable_seasons
+	jr c,+
+		ld a,:bank4Data1.musicAssignmentGroupTable_ages
+		ld hl,bank4Data1.musicAssignmentGroupTable_ages
+	+
+	rst_setrombank
+	ld a,(wActiveGroup)
+.else
 	ld a,:bank4Data1.musicAssignmentGroupTable
 	rst_setrombank
 
 	ld a,(wActiveGroup)
 	ld hl,bank4Data1.musicAssignmentGroupTable
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 	ld a,(wActiveRoom)

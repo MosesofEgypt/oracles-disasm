@@ -1,6 +1,12 @@
+.ifdef ROM_COMBO
+musMakuTreeStart_ages:
+
+musMakuTreeChannel1_ages:
+.else
 musMakuTreeStart:
 
 musMakuTreeChannel1:
+.endif
 	vol $0
 	note gs3 $14
 musice7c68:
@@ -194,7 +200,11 @@ musice7c68:
 	goto musice7c68
 	cmdff
 
+.ifdef ROM_COMBO
+musMakuTreeChannel0_ages:
+.else
 musMakuTreeChannel0:
+.endif
 	vol $0
 	note gs3 $14
 musice7dbf:
@@ -390,7 +400,11 @@ musice7dbf:
 	goto musice7dbf
 	cmdff
 
+.ifdef ROM_COMBO
+musMakuTreeChannel4_ages:
+.else
 musMakuTreeChannel4:
+.endif
 	rest $14
 musice7f16:
 	duty $17
@@ -430,4 +444,8 @@ musice7f16:
 	goto musice7f16
 	cmdff
 
+.ifdef ROM_COMBO
+.define musMakuTreeChannel6_ages MUSIC_CHANNEL_FALLBACK EXPORT
+.else
 .define musMakuTreeChannel6 MUSIC_CHANNEL_FALLBACK EXPORT
+.endif

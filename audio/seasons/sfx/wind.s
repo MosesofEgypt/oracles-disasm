@@ -1,6 +1,12 @@
+.ifndef ROM_COMBO
+sndWindStart_seasons:
+
+sndWindChannel7_seasons:
+.else
 sndWindStart:
 
 sndWindChannel7:
+.endif
 	cmdf0 $40
 	note $37 $01
 	note $36 $01

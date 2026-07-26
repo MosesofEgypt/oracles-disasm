@@ -133,8 +133,8 @@ GAMEDATAFILES = $(shell find data/$(GAME)/ -name '*.s')
 MAIN_ASM_FILES = 
 AUDIO_FILES =
 #MAIN_ASM_FILES = $(shell find code/ object_code/ objects/ scripts/ -name '*.s' | grep -v '/ages/' | grep -v '/seasons/')
-#AUDIO_FILES  = $(shell find audio/ -name '*.s')
-#AUDIO_FILES += $(shell find audio/combo/ -name '*.bin')
+AUDIO_FILES  = $(shell find audio/ -name '*.s')
+AUDIO_FILES += $(shell find audio/combo/ -name '*.bin')
 COMMON_INCLUDE_FILES = $(shell find constants/ include/ -name '*.s' | grep -v '/ages/' | grep -v '/seasons/')
 
 OPTIMIZE := -o
@@ -160,13 +160,16 @@ $(BUILD_DIR)/*.o: $(COMMON_INCLUDE_FILES) Makefile
 $(BUILD_DIR)/$(GAME).o: tileset_layouts_expanded/ages/*.bin
 $(BUILD_DIR)/$(GAME).o: tileset_layouts_expanded/seasons/*.bin
 
-#$(BUILD_DIR)/$(GAME).o: $(GAME).s $(BUILD_DIR)/ages_textData.s $(BUILD_DIR)/ages_textDefines.s $(BUILD_DIR)/seasons_textData.s $(BUILD_DIR)/seasons_textDefines.s Makefile | $(BUILD_DIR)
-#	$(CC) -o $@ $(CFLAGS) $<
-$(GAME).gbc:  $(BUILD_DIR)/$(GAME).o $(BUILD_DIR)/ages_textData.s $(BUILD_DIR)/ages_textDefines.s $(BUILD_DIR)/seasons_textData.s $(BUILD_DIR)/seasons_textDefines.s Makefile | $(BUILD_DIR)
-	@echo -e "Test complete."
-
 #$(BUILD_DIR)/%.o: code/%.s | $(BUILD_DIR)
 #	$(CC) -o $@ $(CFLAGS) $<
+#$(BUILD_DIR)/$(GAME).o: $(GAME).s $(BUILD_DIR)/ages_textData.s $(BUILD_DIR)/ages_textDefines.s $(BUILD_DIR)/seasons_textData.s $(BUILD_DIR)/seasons_textDefines.s Makefile | $(BUILD_DIR)
+#	$(CC) -o $@ $(CFLAGS) $<
+
+$(BUILD_DIR)/audio.o: code/audio.s | $(BUILD_DIR)
+	$(CC) -o $@ $(CFLAGS) $<
+$(GAME).gbc:  $(BUILD_DIR)/$(GAME).o $(BUILD_DIR)/audio.o $(BUILD_DIR)/ages_textData.s $(BUILD_DIR)/ages_textDefines.s $(BUILD_DIR)/seasons_textData.s $(BUILD_DIR)/seasons_textDefines.s Makefile | $(BUILD_DIR)
+	@echo -e "Test complete."
+
 
 $(BUILD_DIR)/rooms/ages_%.cmp: rooms/ages/small/%.bin | $(BUILD_DIR)/rooms
 	@echo "Compressing $< to $@..."

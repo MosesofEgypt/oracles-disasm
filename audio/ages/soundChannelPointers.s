@@ -1,3 +1,4 @@
+.ifndef ROM_COMBO
 musNone:
 musTitlescreen:
 	.db $00
@@ -31,11 +32,17 @@ musOverworld:
 	.db $06
 	.dw musOverworldChannel6
 	.db $ff
+.endif
 
+.ifndef ROM_COMBO
 mus37:
 mus3a:
 mus3b:
+.endif
+
 mus3d:
+
+.ifndef ROM_COMBO
 mus41:
 mus42:
 mus43:
@@ -53,6 +60,7 @@ sndda:
 snddb:
 snddc:
 snddd:
+.endif
 	.db $00
 	.dw mus37Channel0
 	.db $01
@@ -63,6 +71,7 @@ snddd:
 	.dw mus37Channel6
 	.db $ff
 
+.ifndef ROM_COMBO
 musGameover:
 	.db $00
 	.dw musGameoverChannel0
@@ -73,6 +82,7 @@ musGameover:
 	.db $06
 	.dw musGameoverChannel6
 	.db $ff
+.endif
 
 musZoraVillage:
 	.db $00
@@ -85,6 +95,7 @@ musZoraVillage:
 	.dw musZoraVillageChannel6
 	.db $ff
 
+.ifndef ROM_COMBO
 musEssenceRoom:
 	.db $00
 	.dw musEssenceRoomChannel0
@@ -172,7 +183,20 @@ musRoomOfRites:
 	.db $06
 	.dw musRoomOfRitesChannel6
 	.db $ff
+.endif
 
+.ifdef ROM_COMBO
+musMakuTree_ages:
+	.db $00
+	.dw musMakuTreeChannel0_ages
+	.db $01
+	.dw musMakuTreeChannel1_ages
+	.db $04
+	.dw musMakuTreeChannel4_ages
+	.db $06
+	.dw musMakuTreeChannel6_ages
+	.db $ff
+.else
 musMakuTree:
 	.db $00
 	.dw musMakuTreeChannel0
@@ -183,7 +207,9 @@ musMakuTree:
 	.db $06
 	.dw musMakuTreeChannel6
 	.db $ff
+.endif
 
+.ifndef ROM_COMBO
 musSadness:
 	.db $00
 	.dw musSadnessChannel0
@@ -469,6 +495,7 @@ musEssence:
 	.db $06
 	.dw musEssenceChannel6
 	.db $ff
+.endif
 
 musOverworldPast:
 	.db $00
@@ -725,6 +752,7 @@ musSymmetryPast:
 	.db $ff
 .endif
 
+.ifndef ROM_COMBO
 sndGetItem:
 	.db $72
 	.dw sndGetItemChannel2
@@ -1088,12 +1116,14 @@ snd93:
 	.db $02
 	.dw snd93Channel2
 	.db $ff
+.endif
 
 snd94:
 	.db $02
 	.dw snd94Channel2
 	.db $ff
 
+.ifndef ROM_COMBO
 sndWarpStart:
 	.db $b2
 	.dw sndWarpStartChannel2
@@ -1169,6 +1199,7 @@ sndChicken:
 	.db $02
 	.dw sndChickenChannel2
 	.db $ff
+.endif
 
 sndMonkey:
 	.db $02
@@ -1177,6 +1208,7 @@ sndMonkey:
 	.dw sndMonkeyChannel7
 	.db $ff
 
+.ifndef ROM_COMBO
 sndCompass:
 	.db $b2
 	.dw sndCompassChannel2
@@ -1270,6 +1302,7 @@ sndFadeout:
 	.db $07
 	.dw sndFadeoutChannel7
 	.db $ff
+.endif
 
 sndb7:
 	.db $02
@@ -1278,6 +1311,7 @@ sndb7:
 	.dw sndb7Channel7
 	.db $ff
 
+.ifndef ROM_COMBO
 sndRumble2:
 	.db $02
 	.dw sndRumble2Channel2
@@ -1304,12 +1338,14 @@ sndBigExplosion2:
 	.db $87
 	.dw sndBigExplosion2Channel7
 	.db $ff
+.endif
 
 sndbd:
 	.db $02
 	.dw sndbdChannel2
 	.db $ff
 
+.ifndef ROM_COMBO
 sndVeranProjectile:
 	.db $02
 	.dw sndVeranProjectileChannel2
@@ -1371,6 +1407,7 @@ sndCircling:
 	.db $02
 	.dw sndCirclingChannel2
 	.db $ff
+.endif
 
 sndca:
 	.db $02
@@ -1379,6 +1416,7 @@ sndca:
 	.dw sndcaChannel7
 	.db $ff
 
+.ifndef ROM_COMBO
 sndSeedShooter:
 	.db $02
 	.dw sndSeedShooterChannel2
@@ -1408,12 +1446,14 @@ sndMakuTreePast:
 	.db $07
 	.dw sndMakuTreePastChannel7
 	.db $ff
+.endif
 
 sndcf:
 	.db $02
 	.dw sndcfChannel2
 	.db $ff
 
+.ifndef ROM_COMBO
 sndPirateBell:
 	.db $02
 	.dw sndPirateBellChannel2
@@ -1425,22 +1465,33 @@ sndLightning:
 	.db $87
 	.dw sndLightningChannel7
 	.db $ff
+.endif
 
+.ifdef ROM_COMBO
+sndWind_ages:
+	.db $07
+	.dw sndWindChannel7_ages
+	.db $ff
+.else
 sndWind:
 	.db $07
 	.dw sndWindChannel7
 	.db $ff
+.endif
 
+.ifndef ROM_COMBO
 sndd5:
 	.db $02
 	.dw sndd5Channel2
 	.db $ff
+.endif
 
 snd92:
 	.db $02
 	.dw snd92Channel2
 	.db $ff
 
+.ifndef ROM_COMBO
 sndFluteRicky:
 	.db $f3
 	.dw sndFluteRickyChannel3
@@ -1473,6 +1524,7 @@ sndFluteMoosh:
 	.db $f7
 	.dw sndFluteMooshChannel7
 	.db $ff
+.endif
 
 sndEchoes:
 	.db $f2
@@ -1507,6 +1559,7 @@ sndAges:
 	.dw sndAgesChannel7
 	.db $ff
 
+.ifndef ROM_COMBO
 sndMagnetGloves: ; CROSSITEMS: Replaced snd7a with this
 	.db $02
 	.dw sndMagnetGlovesChannel2
@@ -1516,6 +1569,7 @@ sndSwitch2:
 	.db $a2
 	.dw sndSwitch2Channel2
 	.db $ff
+.endif
 
 sndOpenGate:
 	.db $a2

@@ -1,6 +1,12 @@
+.ifndef ROM_COMBO
+musMakuTreeStart_seasons:
+
+musMakuTreeChannel1_seasons:
+.else
 musMakuTreeStart:
 
 musMakuTreeChannel1:
+.endif
 musicf0001:
 	vibrato $e1
 	env $0 $00
@@ -193,7 +199,11 @@ musicf0001:
 	goto musicf0001
 	cmdff
 
+.ifndef ROM_COMBO
+musMakuTreeChannel0_seasons:
+.else
 musMakuTreeChannel0:
+.endif
 musicf0156:
 	vibrato $e1
 	env $0 $00
@@ -388,7 +398,11 @@ musicf0156:
 	goto musicf0156
 	cmdff
 
+.ifndef ROM_COMBO
+musMakuTreeChannel4_seasons:
+.else
 musMakuTreeChannel4:
+.endif
 musicf02ac:
 	duty $17
 	note a3  $1c
@@ -427,4 +441,8 @@ musicf02ac:
 	goto musicf02ac
 	cmdff
 
+.ifndef ROM_COMBO
+.define musMakuTreeChannel6_seasons MUSIC_CHANNEL_FALLBACK EXPORT
+.else
 .define musMakuTreeChannel6 MUSIC_CHANNEL_FALLBACK EXPORT
+.endif

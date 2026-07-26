@@ -325,6 +325,18 @@ musRoomOfRites:
 	.dw musRoomOfRitesChannel6
 	.db $ff
 
+.ifdef ROM_COMBO
+musMakuTree_seasons:
+	.db $00
+	.dw musMakuTreeChannel0_seasons
+	.db $01
+	.dw musMakuTreeChannel1_seasons
+	.db $04
+	.dw musMakuTreeChannel4_seasons
+	.db $06
+	.dw musMakuTreeChannel6_seasons
+	.db $ff
+.else
 musMakuTree:
 	.db $00
 	.dw musMakuTreeChannel0
@@ -335,6 +347,7 @@ musMakuTree:
 	.db $06
 	.dw musMakuTreeChannel6
 	.db $ff
+.endif
 
 musSadness:
 	.db $00
@@ -1603,10 +1616,17 @@ sndLightning:
 	.dw sndLightningChannel7
 	.db $ff
 
+.ifdef ROM_COMBO
+sndWind_seasons:
+	.db $07
+	.dw sndWindChannel7_seasons
+	.db $ff
+.else
 sndWind:
 	.db $07
 	.dw sndWindChannel7
 	.db $ff
+.endif
 
 sndd4:
 	.db $02

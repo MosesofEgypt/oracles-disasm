@@ -1962,7 +1962,15 @@ playSound:
 	ld d,h
 	ld e,l
 
+.ifdef ROM_COMBO
+	call hIsSeasons
+	ld hl,soundPointers_seasons
+	jr c,+
+		ld hl,soundPointers_ages
+	+
+.else
 	ld hl,soundPointers
+.endif
 	add hl,de
 
 	; Wrapping this in a BUILD_VANILLA check because: A) it's unused, B) it can cause problems
