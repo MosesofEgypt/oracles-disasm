@@ -353,6 +353,13 @@ inventorySubscreen3_fixupTiles:
 	; don't reload page if already loaded
 	ret z
 
+	call inventorySubscreen3_forceReloadGfx
+
+	ld a,(wInventory.cbba)
+	and $01
+	add UNCMP_GFXH_04
+	jp loadUncompressedGfxHeader
+
 inventorySubscreen3_forceReloadGfx:
 	push af
 	add GFXH_INVENTORY_SUBSCREEN_4_PAGE_0
@@ -361,11 +368,6 @@ inventorySubscreen3_forceReloadGfx:
 
 	add GFXH_INVENTORY_SUBSCREEN_4_PAGE_0_GFX
 	call loadUncompressedGfxHeader
-
-	ld a,(wInventory.cbba)
-	and $01
-	add UNCMP_GFXH_04
-	jp loadUncompressedGfxHeader
 
 getCurrentPage:
 	call getSelectedSettingIndex
