@@ -9,7 +9,11 @@
 ; Note: the bits are reversed to make it easier to look at (ie. collisionType 0 is at the
 ; far left)
 
-enemyActiveCollisions:
+.ifdef ROM_COMBO
+enemyActiveCollisions_ages:
+.else
+enemyActiveCollisions
+.endif
 	dbrev %00000000 %00000000 %00000000 %00000000 ; 0x00
 	dbrev %11111111 %11110100 %00010111 %11111110 ; 0x01
 	dbrev %11111111 %11110100 %00011111 %11111110 ; 0x02
