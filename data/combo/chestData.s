@@ -1,0 +1,304 @@
+m_section_free chestData NAMESPACE chestData
+
+; m_ChestData macro takes 3 parameters:
+;   1: Y/X position of chest (byte); an opened chest tile will be placed here when the room is
+;      loaded, if ROOMFLAG_ITEM has been set in that room.
+;   2: Low byte of room index
+;   3: Treasure object to get from the chest (see "data/{game}/treasureObjectData.s")
+
+chestDataGroupTable_ages:
+	.dw chestGroup0Data_ages
+	.dw chestGroup1Data_ages
+	.dw chestGroup2Data_ages
+	.dw chestGroup3Data_ages
+	.dw chestGroup4Data_ages
+	.dw chestGroup5Data_ages
+	.dw chestGroupData_null
+	.dw chestGroupData_null
+
+chestDataGroupTable_seasons:
+	.dw chestGroup0Data_seasons
+	.dw chestGroup1Data_seasons
+	.dw chestGroup2Data_seasons
+	.dw chestGroup3Data_seasons
+	.dw chestGroup4Data_seasons
+	.dw chestGroup5Data_seasons
+	.dw chestGroupData_null
+	.dw chestGroupData_null
+
+chestGroup0Data_ages:
+	m_ChestData $49, $51, TREASURE_OBJECT_RUPEES_04
+	m_ChestData $51, $49, TREASURE_OBJECT_RUPEES_04
+	m_ChestData $36, $84, TREASURE_OBJECT_RUPEES_05
+	m_ChestData $35, $91, TREASURE_OBJECT_RING_21
+	m_ChestData $25, $d4, TREASURE_OBJECT_RING_23
+	m_ChestData $25, $d5, TREASURE_OBJECT_RING_25
+	m_ChestData $12, $63, TREASURE_OBJECT_GASHA_SEED_01
+	.db $ff
+
+chestGroup1Data_ages:
+	m_ChestData $43, $6d, TREASURE_OBJECT_RING_27
+	.db $ff
+
+chestGroup2Data_ages:
+	m_ChestData $14, $f7, TREASURE_OBJECT_RING_11
+	m_ChestData $16, $f7, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $45, $be, TREASURE_OBJECT_RING_17
+	m_ChestData $22, $fc, TREASURE_OBJECT_RUPEES_06
+	m_ChestData $15, $ce, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $34, $ec, TREASURE_OBJECT_RING_19
+	m_ChestData $34, $f4, TREASURE_OBJECT_RING_19
+	m_ChestData $18, $4f, TREASURE_OBJECT_RING_22
+	m_ChestData $14, $c0, TREASURE_OBJECT_GASHA_SEED_01
+	.db $ff
+
+chestGroup3Data_ages:
+	m_ChestData $24, $0e, TREASURE_OBJECT_RING_26
+	m_ChestData $18, $1f, TREASURE_OBJECT_RUPEES_06
+	m_ChestData $35, $e8, TREASURE_OBJECT_NONE_00
+	m_ChestData $35, $ff, TREASURE_OBJECT_NONE_00
+	m_ChestData $18, $f9, TREASURE_OBJECT_RING_20
+	m_ChestData $34, $fd, TREASURE_OBJECT_HEART_PIECE_01
+	.db $ff
+
+chestGroup4Data_ages:
+	m_ChestData $57, $08, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $5a, $15, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $17, $16, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $2c, $1a, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $59, $1c, TREASURE_OBJECT_RING_0e
+	m_ChestData $53, $1d, TREASURE_OBJECT_COMPASS_02
+	m_ChestData $73, $1f, TREASURE_OBJECT_RING_04
+	m_ChestData $16, $23, TREASURE_OBJECT_BOSS_KEY_03
+	m_ChestData $12, $25, TREASURE_OBJECT_MAP_02
+	m_ChestData $57, $30, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $58, $3e, TREASURE_OBJECT_BOSS_KEY_03
+	m_ChestData $87, $40, TREASURE_OBJECT_MAP_02
+	m_ChestData $59, $41, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $1d, $45, TREASURE_OBJECT_COMPASS_02
+	m_ChestData $57, $48, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $8c, $4e, TREASURE_OBJECT_RUPEES_03
+	m_ChestData $28, $50, TREASURE_OBJECT_BOSS_KEY_03
+	m_ChestData $4c, $55, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $69, $56, TREASURE_OBJECT_COMPASS_02
+	m_ChestData $59, $58, TREASURE_OBJECT_SHOOTER_00
+	m_ChestData $27, $5c, TREASURE_OBJECT_RUPEES_04
+	m_ChestData $57, $60, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $58, $65, TREASURE_OBJECT_MAP_02
+	m_ChestData $67, $6f, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $54, $74, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $39, $7a, TREASURE_OBJECT_BOSS_KEY_03
+	m_ChestData $65, $87, TREASURE_OBJECT_SWITCH_HOOK_00
+	m_ChestData $41, $8b, TREASURE_OBJECT_COMPASS_02
+	m_ChestData $57, $8f, TREASURE_OBJECT_MAP_02
+	m_ChestData $84, $90, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $62, $92, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $19, $99, TREASURE_OBJECT_RUPEES_05
+	m_ChestData $54, $9b, TREASURE_OBJECT_BOSS_KEY_03
+	m_ChestData $47, $9e, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $57, $9f, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $57, $a3, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $53, $a5, TREASURE_OBJECT_CANE_OF_SOMARIA_00
+	m_ChestData $8b, $ad, TREASURE_OBJECT_COMPASS_02
+	m_ChestData $57, $ba, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $57, $bc, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $17, $be, TREASURE_OBJECT_MAP_02
+	m_ChestData $47, $c1, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $27, $c3, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $47, $c4, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $27, $c5, TREASURE_OBJECT_RING_1f
+	m_ChestData $47, $c6, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $8b, $c7, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $47, $c8, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $8c, $c9, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $3b, $ca, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $47, $cb, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $66, $cc, TREASURE_OBJECT_RUPEES_08
+	m_ChestData $57, $cf, TREASURE_OBJECT_SMALL_KEY_03
+	.db $ff
+
+chestGroup5Data_ages:
+	m_ChestData $17, $13, TREASURE_OBJECT_MERMAID_SUIT_00
+	m_ChestData $25, $14, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $53, $1b, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $17, $1c, TREASURE_OBJECT_BOSS_KEY_03
+	m_ChestData $13, $1d, TREASURE_OBJECT_MAP_02
+	m_ChestData $13, $1f, TREASURE_OBJECT_RUPEES_02
+	m_ChestData $67, $21, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $3d, $25, TREASURE_OBJECT_COMPASS_02
+	m_ChestData $57, $2c, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $24, $2e, TREASURE_OBJECT_RUPEES_04
+	m_ChestData $57, $31, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $55, $3c, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $53, $3f, TREASURE_OBJECT_COMPASS_02
+	m_ChestData $52, $41, TREASURE_OBJECT_MAP_02
+	m_ChestData $57, $45, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $31, $4c, TREASURE_OBJECT_RING_28
+	m_ChestData $18, $4d, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $12, $4e, TREASURE_OBJECT_SWITCH_HOOK_01
+	m_ChestData $28, $53, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $47, $54, TREASURE_OBJECT_COMPASS_02
+	m_ChestData $56, $5f, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $57, $64, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $42, $65, TREASURE_OBJECT_MAP_02
+	m_ChestData $27, $6a, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $57, $6c, TREASURE_OBJECT_BOSS_KEY_03
+	m_ChestData $6c, $72, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $57, $50, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $12, $79, TREASURE_OBJECT_BOSS_KEY_03
+	m_ChestData $16, $7b, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $27, $7c, TREASURE_OBJECT_SLATE_00
+	m_ChestData $27, $7e, TREASURE_OBJECT_SLATE_00
+	m_ChestData $1b, $85, TREASURE_OBJECT_MAP_02
+	m_ChestData $27, $92, TREASURE_OBJECT_SLATE_00
+	m_ChestData $25, $94, TREASURE_OBJECT_SLATE_00
+	m_ChestData $16, $97, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $2c, $9f, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $1d, $a3, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $1a, $a4, TREASURE_OBJECT_COMPASS_02
+	m_ChestData $6d, $a7, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $37, $a6, TREASURE_OBJECT_BRACELET_02
+	m_ChestData $27, $91, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $15, $b5, TREASURE_OBJECT_RUPEES_04
+	m_ChestData $74, $bd, TREASURE_OBJECT_RING_16
+	m_ChestData $47, $b9, TREASURE_OBJECT_RUPEES_05
+	m_ChestData $15, $ee, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $15, $dd, TREASURE_OBJECT_BOMBS_00
+	m_ChestData $81, $c0, TREASURE_OBJECT_RUPEES_04
+	m_ChestData $24, $c0, TREASURE_OBJECT_RUPEES_04
+	m_ChestData $83, $e1, TREASURE_OBJECT_RUPEES_05
+	m_ChestData $22, $e0, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $47, $b3, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $57, $cb, TREASURE_OBJECT_RING_1c
+	m_ChestData $43, $c7, TREASURE_OBJECT_RING_1a
+	m_ChestData $12, $ca, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $22, $b8, TREASURE_OBJECT_RING_19
+	m_ChestData $14, $ac, TREASURE_OBJECT_RUPEES_08
+	m_ChestData $12, $f7, TREASURE_OBJECT_RING_1b
+	.db $ff
+
+chestGroup0Data_seasons:
+	m_ChestData $11, $f5, TREASURE_OBJECT_RUPEES_03
+	m_ChestData $58, $f9, TREASURE_OBJECT_RUPEES_03
+	m_ChestData $11, $8e, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $45, $f4, TREASURE_OBJECT_X_SHAPED_JEWEL_00
+	m_ChestData $15, $5b, TREASURE_OBJECT_HEART_PIECE_01
+	m_ChestData $33, $b8, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $11, $e3, TREASURE_OBJECT_RING_07
+	m_ChestData $18, $ff, TREASURE_OBJECT_RING_08
+	.db $ff
+
+chestGroup1Data_seasons:
+	m_ChestData $11, $41, TREASURE_OBJECT_BLUE_ORE_00
+	m_ChestData $22, $58, TREASURE_OBJECT_RED_ORE_00
+	.db $ff
+
+chestGroup2Data_seasons:
+chestGroup3Data_seasons:
+	m_ChestData $34, $9b, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $13, $88, TREASURE_OBJECT_BOMBS_00
+	.db $ff
+
+chestGroup4Data_seasons:
+	m_ChestData $5b, $03, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $5d, $05, TREASURE_OBJECT_RUPEES_04
+	m_ChestData $27, $06, TREASURE_OBJECT_SWORD_00
+	m_ChestData $11, $0d, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $3b, $0f, TREASURE_OBJECT_COMPASS_02
+	m_ChestData $67, $10, TREASURE_OBJECT_BOMBS_00
+	m_ChestData $2c, $11, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $57, $14, TREASURE_OBJECT_BOSS_KEY_03
+	m_ChestData $23, $17, TREASURE_OBJECT_RING_04
+	m_ChestData $57, $19, TREASURE_OBJECT_MAP_02
+	m_ChestData $7b, $1f, TREASURE_OBJECT_RUPEES_02
+	m_ChestData $6d, $24, TREASURE_OBJECT_BOSS_KEY_03
+	m_ChestData $5b, $2a, TREASURE_OBJECT_BRACELET_00
+	m_ChestData $27, $2b, TREASURE_OBJECT_MAP_02
+	m_ChestData $57, $2d, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $44, $31, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $57, $36, TREASURE_OBJECT_COMPASS_02
+	m_ChestData $42, $38, TREASURE_OBJECT_RUPEES_01
+	m_ChestData $18, $41, TREASURE_OBJECT_RUPEES_04
+	m_ChestData $28, $46, TREASURE_OBJECT_BOSS_KEY_03
+	m_ChestData $86, $44, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $68, $4c, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $57, $4d, TREASURE_OBJECT_COMPASS_02
+	m_ChestData $29, $4f, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $54, $51, TREASURE_OBJECT_MAP_02
+	m_ChestData $57, $50, TREASURE_OBJECT_FEATHER_00
+	m_ChestData $55, $54, TREASURE_OBJECT_BOMBS_00
+	m_ChestData $22, $63, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $95, $64, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $54, $69, TREASURE_OBJECT_MAP_02
+	m_ChestData $59, $6d, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $2c, $73, TREASURE_OBJECT_SLINGSHOT_00
+	m_ChestData $88, $7f, TREASURE_OBJECT_BOMBS_00
+	m_ChestData $57, $83, TREASURE_OBJECT_COMPASS_02
+	m_ChestData $57, $8f, TREASURE_OBJECT_MAP_02
+	m_ChestData $25, $89, TREASURE_OBJECT_MAGNET_GLOVES_00
+	m_ChestData $11, $97, TREASURE_OBJECT_RUPEES_06
+	m_ChestData $46, $99, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $57, $9d, TREASURE_OBJECT_COMPASS_02
+	m_ChestData $42, $9f, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $34, $a3, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $7b, $a5, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $11, $ad, TREASURE_OBJECT_COMPASS_02
+	m_ChestData $1d, $af, TREASURE_OBJECT_RUPEES_02
+	m_ChestData $71, $b0, TREASURE_OBJECT_MAP_02
+	m_ChestData $5c, $b3, TREASURE_OBJECT_RUPEES_01
+	m_ChestData $53, $bf, TREASURE_OBJECT_BOMBS_00
+	m_ChestData $75, $c1, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $21, $c2, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $57, $c3, TREASURE_OBJECT_RUPEES_01
+	m_ChestData $66, $c4, TREASURE_OBJECT_BOSS_KEY_03
+	m_ChestData $5d, $d0, TREASURE_OBJECT_BOOMERANG_01
+	m_ChestData $57, $e0, TREASURE_OBJECT_RING_09
+	m_ChestData $25, $e1, TREASURE_OBJECT_RING_0a
+	m_ChestData $7d, $f7, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $57, $fa, TREASURE_OBJECT_NONE_00
+	m_ChestData $57, $fb, TREASURE_OBJECT_NONE_00
+	m_ChestData $57, $f1, TREASURE_OBJECT_GASHA_SEED_01
+	.db $ff
+
+chestGroup5Data_seasons:
+	m_ChestData $87, $43, TREASURE_OBJECT_RUPEES_00
+	m_ChestData $47, $44, TREASURE_OBJECT_FEATHER_01
+	m_ChestData $61, $47, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $57, $48, TREASURE_OBJECT_BOSS_KEY_03
+	m_ChestData $3b, $52, TREASURE_OBJECT_COMPASS_02
+	m_ChestData $46, $54, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $57, $58, TREASURE_OBJECT_MAP_02
+	m_ChestData $2b, $5a, TREASURE_OBJECT_RING_0e
+	m_ChestData $75, $6a, TREASURE_OBJECT_BOMBS_00
+	m_ChestData $5c, $6b, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $74, $70, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $47, $7d, TREASURE_OBJECT_RING_06
+	m_ChestData $43, $80, TREASURE_OBJECT_BOSS_KEY_03
+	m_ChestData $73, $8a, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $3b, $8b, TREASURE_OBJECT_COMPASS_02
+	m_ChestData $33, $8c, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $34, $8d, TREASURE_OBJECT_SLINGSHOT_01
+	m_ChestData $87, $8e, TREASURE_OBJECT_MAP_02
+	m_ChestData $11, $2c, TREASURE_OBJECT_RUPEES_03
+	m_ChestData $6c, $31, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $77, $2f, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $62, $29, TREASURE_OBJECT_SMALL_KEY_03
+	m_ChestData $1d, $28, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $38, $24, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $27, $34, TREASURE_OBJECT_RING_0f
+	m_ChestData $19, $b3, TREASURE_OBJECT_RING_05
+	m_ChestData $2b, $b4, TREASURE_OBJECT_RUPEES_04
+	m_ChestData $16, $b5, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $1c, $bc, TREASURE_OBJECT_MASTERS_PLAQUE_00
+	m_ChestData $22, $bd, TREASURE_OBJECT_RUPEES_05
+	m_ChestData $45, $c0, TREASURE_OBJECT_HEART_PIECE_01
+	m_ChestData $47, $c6, TREASURE_OBJECT_GASHA_SEED_01
+	m_ChestData $1d, $c8, TREASURE_OBJECT_RING_0b
+	m_ChestData $4a, $b6, TREASURE_OBJECT_RING_10
+	m_ChestData $5c, $0e, TREASURE_OBJECT_RUPEES_05
+	m_ChestData $32, $12, TREASURE_OBJECT_NONE_00
+	.db $ff
+
+chestGroupData_null:
+	.db $ff
+.ends

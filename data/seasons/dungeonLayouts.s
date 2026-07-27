@@ -4,10 +4,13 @@
 ;
 ; If adding or removing floors from a dungeon, remember to update the "num floors" variable in
 ; "data/{game}/dungeonData.s".
-
+.ifdef ROM_COMBO
+dungeonLayoutDataStart_seasons:
+dungeon00Layout_seasons:
+.else
 dungeonLayoutDataStart:
-
 dungeon00Layout:
+.endif
 	.db $01 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $02 $03 $00 $00 $00
@@ -17,7 +20,11 @@ dungeon00Layout:
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon01Layout_seasons:
+.else
 dungeon01Layout:
+.endif
 	.db $09 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $0a $0b $00 $00 $00 $00
 	.db $00 $00 $00 $0c $00 $00 $00 $00
@@ -27,7 +34,11 @@ dungeon01Layout:
 	.db $00 $00 $00 $1c $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon02Layout_seasons:
+.else
 dungeon02Layout:
+.endif
 	.db $1d $1e $1f $20 $00 $00 $00 $00
 	.db $00 $00 $00 $21 $22 $23 $24 $00
 	.db $00 $00 $00 $00 $25 $26 $27 $00
@@ -37,7 +48,11 @@ dungeon02Layout:
 	.db $00 $33 $34 $35 $36 $37 $00 $00
 	.db $00 $00 $38 $39 $00 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon03Layout_seasons:
+.else
 dungeon03Layout:
+.endif
 	.db $3a $3b $3c $3d $00 $00 $00 $00
 	.db $00 $00 $3e $00 $3f $00 $00 $00
 	.db $00 $00 $00 $40 $00 $00 $00 $00
@@ -56,7 +71,11 @@ dungeon03Layout:
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon04Layout_seasons:
+.else
 dungeon04Layout:
+.endif
 	.db $5c $5d $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $5e $5f $60 $00 $00
 	.db $00 $00 $61 $62 $00 $00 $00 $00
@@ -84,7 +103,11 @@ dungeon04Layout:
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon05Layout_seasons:
+.else
 dungeon05Layout:
+.endif
 	.db $84 $85 $86 $87 $88 $00 $00 $00
 	.db $89 $8a $00 $8b $8c $00 $00 $00
 	.db $00 $8d $8e $8f $90 $00 $00 $00
@@ -94,7 +117,11 @@ dungeon05Layout:
 	.db $00 $a3 $a4 $a5 $00 $00 $00 $00
 	.db $00 $a6 $a7 $a8 $a9 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon06Layout_seasons:
+.else
 dungeon06Layout:
+.endif
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $aa $ab $ac $ad $ae $00 $00
@@ -140,7 +167,11 @@ dungeon06Layout:
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon0bLayout_seasons:
+.else
 dungeon0bLayout:
+.endif
 	.db $20 $21 $00 $00 $22 $23 $00 $00
 	.db $24 $25 $00 $00 $26 $27 $00 $00
 	.db $00 $00 $28 $29 $00 $00 $00 $00
@@ -150,7 +181,11 @@ dungeon0bLayout:
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $34
 
+.ifdef ROM_COMBO
+dungeon07Layout_seasons:
+.else
 dungeon07Layout:
+.endif
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $35 $36 $37 $00 $00 $00
 	.db $00 $38 $00 $39 $00 $3a $00 $00
@@ -178,7 +213,11 @@ dungeon07Layout:
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon08Layout_seasons:
+.else
 dungeon08Layout:
+.endif
 	.db $5c $5d $00 $5e $5f $00 $00 $00
 	.db $60 $61 $62 $63 $64 $00 $00 $00
 	.db $00 $00 $00 $65 $66 $00 $00 $00
@@ -197,7 +236,11 @@ dungeon08Layout:
 	.db $00 $00 $00 $8d $8e $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon09Layout_seasons:
+.else
 dungeon09Layout:
+.endif
 	.db $90 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $91 $00 $00 $00 $00
 	.db $00 $00 $00 $92 $00 $00 $00 $00
@@ -207,7 +250,11 @@ dungeon09Layout:
 	.db $00 $00 $96 $97 $98 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon0aLayout_seasons:
+.else
 dungeon0aLayout:
+.endif
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $99 $9a $00 $00 $00 $00
@@ -216,4 +263,3 @@ dungeon0aLayout:
 	.db $00 $00 $00 $9d $9e $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
-

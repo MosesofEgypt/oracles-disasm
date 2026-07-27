@@ -1,7 +1,11 @@
 ; Each bit is set if a companion is callable in the corresponding room.
 ; In ages, this is for the present only (companions never callable in the past).
 
+.ifdef ROM_COMBO
+companionCallableRooms_seasons:
+.else
 companionCallableRooms:
+.endif
 	dbrev %00000000 %00000000
 	dbrev %00000000 %00000000
 	dbrev %00000000 %00000000

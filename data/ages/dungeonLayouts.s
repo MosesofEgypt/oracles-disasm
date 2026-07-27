@@ -4,10 +4,13 @@
 ;
 ; If adding or removing floors from a dungeon, remember to update the "num floors" variable in
 ; "data/{game}/dungeonData.s".
-
+.ifdef ROM_COMBO
+dungeonLayoutDataStart_ages:
+dungeon00Layout_ages:
+.else
 dungeonLayoutDataStart:
-
 dungeon00Layout:
+.endif
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $01 $00 $00 $00 $00
 	.db $00 $00 $00 $02 $00 $00 $00 $00
@@ -17,7 +20,11 @@ dungeon00Layout:
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon0dLayout_ages:
+.else
 dungeon0dLayout:
+.endif
 	.db $05 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $06 $07 $08 $00 $00 $00
 	.db $00 $00 $09 $0a $0b $00 $00 $00
@@ -27,7 +34,11 @@ dungeon0dLayout:
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon01Layout_ages:
+.else
 dungeon01Layout:
+.endif
 	.db $10 $00 $00 $11 $00 $00 $00 $00
 	.db $00 $00 $12 $13 $00 $00 $00 $00
 	.db $00 $00 $14 $15 $16 $00 $00 $00
@@ -37,7 +48,11 @@ dungeon01Layout:
 	.db $00 $22 $23 $24 $25 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon02Layout_ages:
+.else
 dungeon02Layout:
+.endif
 	.db $27 $28 $29 $2a $2b $00 $00 $00
 	.db $00 $2c $2d $2e $2f $30 $00 $00
 	.db $00 $00 $31 $32 $33 $00 $00 $00
@@ -56,7 +71,11 @@ dungeon02Layout:
 	.db $00 $00 $00 $00 $00 $48 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon03Layout_ages:
+.else
 dungeon03Layout:
+.endif
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $49 $4a $4b $00 $00 $00 $00
 	.db $00 $00 $00 $4c $4d $00 $00 $00
@@ -75,7 +94,11 @@ dungeon03Layout:
 	.db $00 $64 $65 $66 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon04Layout_ages:
+.else
 dungeon04Layout:
+.endif
 	.db $68 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $69 $00 $00 $00 $6a $00 $00
 	.db $00 $6b $6c $00 $6d $6e $00 $00
@@ -94,7 +117,11 @@ dungeon04Layout:
 	.db $00 $90 $00 $91 $00 $92 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon05Layout_ages:
+.else
 dungeon05Layout:
+.endif
 	.db $93 $94 $95 $96 $97 $98 $00 $00
 	.db $00 $00 $99 $9a $00 $00 $00 $00
 	.db $00 $9b $00 $00 $9c $00 $00 $00
@@ -113,7 +140,11 @@ dungeon05Layout:
 	.db $b9 $ba $bb $bc $bd $be $bf $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon0bLayout_ages:
+.else
 dungeon0bLayout:
+.endif
 	.db $c0 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $c1 $00 $00 $00
@@ -132,7 +163,11 @@ dungeon0bLayout:
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon0fLayout_ages:
+.else
 dungeon0fLayout:
+.endif
 	.db $e0 $e1 $e2 $e3 $e4 $e5 $00 $00
 	.db $e6 $e7 $e8 $e9 $ea $eb $00 $00
 	.db $ec $ed $ee $ef $f0 $f1 $00 $00
@@ -142,7 +177,11 @@ dungeon0fLayout:
 	.db $00 $fe $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon06Layout_ages:
+.else
 dungeon06Layout:
+.endif
 	.db $10 $11 $12 $13 $00 $00 $00 $00
 	.db $14 $15 $16 $00 $00 $00 $00 $00
 	.db $17 $18 $00 $00 $00 $00 $00 $00
@@ -152,7 +191,11 @@ dungeon06Layout:
 	.db $00 $00 $26 $27 $28 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon0cLayout_ages:
+.else
 dungeon0cLayout:
+.endif
 	.db $29 $2a $2b $2c $00 $00 $00 $00
 	.db $2d $2e $2f $00 $00 $00 $00 $00
 	.db $00 $30 $00 $00 $00 $00 $00 $00
@@ -171,7 +214,11 @@ dungeon0cLayout:
 	.db $00 $00 $44 $45 $46 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon07Layout_ages:
+.else
 dungeon07Layout:
+.endif
 	.db $47 $48 $49 $4a $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
@@ -199,7 +246,11 @@ dungeon07Layout:
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon08Layout_ages:
+.else
 dungeon08Layout:
+.endif
 	.db $73 $74 $75 $76 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
@@ -236,7 +287,11 @@ dungeon08Layout:
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 
+.ifdef ROM_COMBO
+dungeon0eLayout_ages:
+.else
 dungeon0eLayout:
+.endif
 	.db $b0 $b1 $b2 $b3 $b4 $b5 $b6 $b7
 	.db $b8 $b9 $ba $bb $bc $bd $be $bf
 	.db $c0 $c1 $c2 $c3 $c4 $c5 $c6 $c7
@@ -246,7 +301,11 @@ dungeon0eLayout:
 	.db $e0 $e1 $e2 $e3 $e4 $e5 $e6 $e7
 	.db $e8 $e9 $ea $eb $ec $ed $ee $ef
 
+.ifdef ROM_COMBO
+dungeon0aLayout_ages:
+.else
 dungeon0aLayout:
+.endif
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $f0 $f1 $00 $00 $00 $00
@@ -258,7 +317,11 @@ dungeon0aLayout:
 
 ; HACK-BASE: This used to point to the same data as "dungeon00Layout". To avoid problems in
 ; LynnaLab, a fresh copy of the data has been created.
+.ifdef ROM_COMBO
+dungeon09Layout_ages:
+.else
 dungeon09Layout:
+.endif
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $01 $00 $00 $00 $00
 	.db $00 $00 $00 $02 $00 $00 $00 $00
@@ -267,4 +330,3 @@ dungeon09Layout:
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
 	.db $00 $00 $00 $00 $00 $00 $00 $00
-

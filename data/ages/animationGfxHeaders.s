@@ -1,4 +1,8 @@
+.ifdef ROM_COMBO
+animationGfxHeaders_ages:
+.else
 animationGfxHeaders:
+.endif
 	m_GfxHeaderAnim gfx_animations_1, $8841, $02, $000
 	m_GfxHeaderAnim gfx_animations_1, $8841, $02, $020
 	m_GfxHeaderAnim gfx_animations_1, $8841, $02, $040
