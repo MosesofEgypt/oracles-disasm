@@ -1,5 +1,13 @@
 ; TODO: update this with a macro for ages and seasons exclusive gfx
 ;       which removes the prefix, but locates the files using it.
+m_GfxData ages_gfx_animations_1
+m_GfxData ages_gfx_animations_2
+m_GfxData ages_gfx_animations_3
+m_GfxData ages_gfx_past_chest
+m_GfxData ages_gfx_past_sign
+m_GfxData ages_spr_impa_fainted
+m_GfxData ages_spr_raft
+m_GfxData flg_ancient_tomb_wall_retraction
 m_GfxData flg_appraised_ring_list
 m_GfxData flg_black_tower_base
 m_GfxData flg_black_tower_middle
@@ -59,11 +67,14 @@ m_GfxData flg_inventory_screen_1
 m_GfxData flg_inventory_screen_2
 m_GfxData flg_inventory_screen_3
 m_GfxData flg_inventory_textbar
+m_GfxData flg_jabu_opening_1
+m_GfxData flg_jabu_opening_2
 m_GfxData flg_jp_intro_screen_1
 m_GfxData flg_link_on_horse_closeup
 m_GfxData flg_link_with_oracle
 m_GfxData flg_link_with_oracle_and_twinrova_1
 m_GfxData flg_link_with_oracle_and_twinrova_2
+m_GfxData flg_mermaids_cave_wall_retraction
 m_GfxData flg_name_entry_bottom
 m_GfxData flg_name_entry_middle
 m_GfxData flg_name_entry_top
@@ -344,6 +355,7 @@ m_GfxData gfx_titlescreen_tree_2
 m_GfxData gfx_tobecontinued
 m_GfxData gfx_twinrova_closeup_1
 m_GfxData gfx_twinrova_closeup_2
+m_GfxData map_ancient_tomb_wall_retraction
 m_GfxData map_appraised_ring_list
 m_GfxData map_black_tower_base
 m_GfxData map_black_tower_middle
@@ -404,11 +416,14 @@ m_GfxData map_inventory_screen_1
 m_GfxData map_inventory_screen_2
 m_GfxData map_inventory_screen_3
 m_GfxData map_inventory_textbar
+m_GfxData map_jabu_opening_1
+m_GfxData map_jabu_opening_2
 m_GfxData map_jp_intro_screen_1
 m_GfxData map_link_on_horse_closeup
 m_GfxData map_link_with_oracle
 m_GfxData map_link_with_oracle_and_twinrova_1
 m_GfxData map_link_with_oracle_and_twinrova_2
+m_GfxData map_mermaids_cave_wall_retraction
 m_GfxData map_name_entry_bottom
 m_GfxData map_name_entry_middle
 m_GfxData map_name_entry_top
@@ -443,8 +458,17 @@ m_GfxData map_titlescreen_scroll_2
 m_GfxData map_tobecontinued
 m_GfxData map_twinrova_closeup
 m_GfxData map_unappraised_ring_list
+m_GfxData map_wing_dungeon_collapsed
+m_GfxData map_wing_dungeon_collapsing_1
+m_GfxData map_wing_dungeon_collapsing_2
+m_GfxData map_wing_dungeon_collapsing_3
 m_GfxData oth_twinrova_lava_layout
 m_GfxData oth_twinrova_normal_layout
+m_GfxData seasons_gfx_063940
+m_GfxData seasons_gfx_animations_1
+m_GfxData seasons_gfx_animations_2
+m_GfxData seasons_gfx_animations_3
+m_GfxData seasons_spr_credits_sprites_2
 m_GfxData spr_agahnim_1
 m_GfxData spr_agahnim_2
 m_GfxData spr_agahnim_3
@@ -718,6 +742,8 @@ m_GfxData spr_spiderveran
 m_GfxData spr_spinner_seedbouncer
 m_GfxData spr_spinner_trampoline
 m_GfxData spr_springflower_makuleaf_farorebook
+m_GfxData ages_spr_subrosian
+m_GfxData seasons_spr_subrosian
 m_GfxData spr_subrosian_2
 m_GfxData spr_subterror_1
 m_GfxData spr_subterror_2

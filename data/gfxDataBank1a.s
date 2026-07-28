@@ -1,7 +1,9 @@
 gfxDataBank1a:
 	m_GfxDataSimple spr_link			; $068000
+.ifndef ROM_COMBO
 	m_GfxDataSimple spr_dungeon_sprites		; $06a2e0
 	m_GfxDataSimple spr_subrosian			; $06a4e0
+.endif
 	m_GfxDataSimple spr_link_retro			; $06a6e0
 	m_GfxDataSimple spr_octorok_leever_tektite_zora	; $06a7e0
 	m_GfxDataSimple spr_moblin			; $06a9e0
@@ -17,7 +19,10 @@ gfxDataBank1a:
 	m_GfxDataSimple spr_seed_shooter		; $06b160
 	m_GfxDataSimple spr_magnet_gloves
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	m_GfxDataSimple ages_spr_dungeon_sprites		; $06a2e0
+	m_GfxDataSimple seasons_spr_dungeon_sprites		; $06a2e0
+.elif defined(ROM_AGES)
 	m_GfxDataSimple gfx_animations_1		; $06b200
 .endif
 

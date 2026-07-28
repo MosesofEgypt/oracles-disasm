@@ -12,16 +12,17 @@
 .ifdef ROM_AGES
 	m_GfxDataSimple spr_raft		; $06f620
 	m_GfxDataSimple spr_impa_fainted	; $06f6a0
-
 	m_GfxDataSimple gfx_animations_2	; $06f6e0
-
 	m_GfxDataSimple gfx_key
 
 .else; ROM_SEASONS
-
 	m_GfxDataSimple spr_item_icons_1
 	m_GfxDataSimple spr_item_icons_2
 	m_GfxDataSimple spr_item_icons_3
 
-	m_GfxDataSimple gfx_key_orechunk
+	.if defined(ROM_COMBO)
+		m_GfxDataSimple seasons_gfx_key_orechunk
+	.else
+		m_GfxDataSimple gfx_key_orechunk
+	.endif
 .endif

@@ -7,7 +7,12 @@ m_ReadGfxDataHashedFilename gfx_font
 .export gfx_font_start
 
 m_GfxDataSimple gfx_font_jp ; $70000
-m_GfxDataSimple gfx_font_tradeitems ; $70600
+.ifdef ROM_COMBO
+	m_GfxDataSimple ages_gfx_font_tradeitems
+	m_GfxDataSimple seasons_gfx_font_tradeitems
+.else
+	m_GfxDataSimple gfx_font_tradeitems ; $70600
+.endif
 m_GfxDataSimple gfx_font $e0 ; $70800
 m_GfxDataSimple gfx_font_heartpiece ; $71720
 
