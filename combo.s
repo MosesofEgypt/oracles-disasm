@@ -15,7 +15,8 @@
 .include "include/gfxDataMacros.s"
 .include "include/musicMacros.s"
 
-;.include {"{BUILD_DIR}/textDefines.s"}
+.include {"{BUILD_DIR}/ages_textDefines.s"}
+.include {"{BUILD_DIR}/seasons_textDefines.s"}
 
 
 .BANK $00 SLOT 0
@@ -770,8 +771,8 @@ m_section_superfree Terrain_Effects NAMESPACE terrainEffects
 
 ;	.include "code/staticObjects.s"
 ;	.include {"{GAME_DATA_DIR}/staticDungeonObjects.s"}
-;	.include {"{GAME_DATA_DIR}/chestData.s"}
-;	.include {"{GAME_DATA_DIR}/treasureObjectData.s"}
+	.include {"{GAME_DATA_DIR}/chestData.s"}
+	.include {"{GAME_DATA_DIR}/treasureObjectData.s"}
 
 m_section_free Bank16_2 NAMESPACE bank16
 ;	.include "code/ages/d6FloorUpdateCode.s"
@@ -834,7 +835,8 @@ m_section_free Gfx_1b ALIGN $20
 	;   Ages:    1d:4000
 	;   Seasons: 1c:5c00
 
-;	.include {"{BUILD_DIR}/textData.s"}
+;	.include {"{BUILD_DIR}/ages_textData.s"}
+;	.include {"{BUILD_DIR}/seasons_textData.s"}
 
 ;	.REDEFINE DATA_ADDR TEXT_END_ADDR
 ;	.REDEFINE DATA_BANK TEXT_END_BANK

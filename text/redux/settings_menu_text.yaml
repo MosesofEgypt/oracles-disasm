@@ -2,21 +2,21 @@ groups:
 - group: 0x09
   data:
   - name: TX_09_MESSAGE_SPEED
-    index: auto
+    index: 0x6e
     text: |-
       Message Speed
       How quickly text appears.
       Speed 8 is instantaneous.
 
   - name: TX_09_PASSIVE_SHIELD
-    index: auto
+    index: 0x6f
     text: |-
       Passive Shield
       Shield is passively
       held at all times.
 
   - name: TX_09_DUNGEON_AUTOSAVE
-    index: auto
+    index: 0x70
     text: |-
       Dungeon Autosave
       Game is saved
@@ -24,7 +24,7 @@ groups:
       exiting a dungeon.
 
   - name: TX_09_BRACELET_PUNCH
-    index: auto
+    index: 0x71
     text: |-
       Bracelet Punch
       Bracelet usage
@@ -33,7 +33,7 @@ groups:
       (requires ring).
 
   - name: TX_09_CONTEXT_SENSITIVE_ITEMS
-    index: auto
+    index: 0x72
     text: |-
       Contextual Items
       Items are auto-equipped
@@ -41,7 +41,7 @@ groups:
       an area they can be used.
 
   - name: TX_09_CONTEXT_SENSITIVE_BUTTON
-    index: auto
+    index: 0x73
     text: |-
       Context Button
       The button that all
@@ -49,7 +49,7 @@ groups:
       are equipped to.
 
   - name: TX_09_LOW_HEART_WARNING
-    index: auto
+    index: 0x74
     text: |-
       Low-Heart Beep
       A warning sound will play
@@ -57,7 +57,7 @@ groups:
       less of your max health.
 
   - name: TX_09_QUICK_SWAP
-    index: auto
+    index: 0x75
     text: |-
       Quick Swapping
       Hold Select to swap

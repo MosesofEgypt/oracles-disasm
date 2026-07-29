@@ -171,8 +171,6 @@ $(BUILD_DIR)/audio.o: code/audio.s | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
 $(BUILD_DIR)/$(GAME).o: $(GAME).s $(BUILD_DIR)/ages_textData.s $(BUILD_DIR)/ages_textDefines.s $(BUILD_DIR)/seasons_textData.s $(BUILD_DIR)/seasons_textDefines.s Makefile | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
-#$(GAME).gbc:  $(BUILD_DIR)/$(GAME).o $(BUILD_DIR)/audio.o $(BUILD_DIR)/ages_textData.s $(BUILD_DIR)/ages_textDefines.s $(BUILD_DIR)/seasons_textData.s $(BUILD_DIR)/seasons_textDefines.s Makefile | $(BUILD_DIR)
-#	@echo -e "Test complete."
 
 
 $(BUILD_DIR)/rooms/ages_%.cmp: rooms/ages/small/%.bin | $(BUILD_DIR)/rooms
@@ -288,11 +286,11 @@ $(BUILD_DIR)/seasons_textLayered.yaml: text/seasons/text.yaml tools/build/layerT
 # Parse & compress text
 $(BUILD_DIR)/ages_textData.s: $(BUILD_DIR)/ages_textLayered.yaml text/ages/dict.yaml tools/build/parseText.py | $(BUILD_DIR)
 	@echo "Compressing text..."
-	@$(PYTHON) tools/build/parseText.py text/ages/dict.yaml $< $@ $$(($(TEXT_INSERT_ADDRESS)))
+	@$(PYTHON) tools/build/parseText.py text/ages/dict.yaml $< $@ $$(($(TEXT_INSERT_ADDRESS))) --combo
 
 $(BUILD_DIR)/seasons_textData.s: $(BUILD_DIR)/seasons_textLayered.yaml text/seasons/dict.yaml tools/build/parseText.py | $(BUILD_DIR)
 	@echo "Compressing text..."
-	@$(PYTHON) tools/build/parseText.py text/seasons/dict.yaml $< $@ $$(($(TEXT_INSERT_ADDRESS)))
+	@$(PYTHON) tools/build/parseText.py text/seasons/dict.yaml $< $@ $$(($(TEXT_INSERT_ADDRESS))) --combo
 
 $(BUILD_DIR)/ages_textDefines.s: $(BUILD_DIR)/ages_textData.s
 $(BUILD_DIR)/seasons_textDefines.s: $(BUILD_DIR)/seasons_textData.s

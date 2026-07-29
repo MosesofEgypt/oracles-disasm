@@ -2,7 +2,7 @@ groups:
 - group: 0x00
   data:
   - name: TX_00_LIFE_VIAL
-    index: auto
+    index: 0x88
     text: |-
       You got a
       \col(1)Flask Charge\col(0)!\stop
@@ -11,14 +11,14 @@ groups:
       more times!
 
   - name: TX_00_BUTTER_SWORD
-    index: auto
+    index: 0x89
     text: |-
       The Master Sword
       awakened as the
       \col(1)Golden Sword\col(0)!
 
   - name: TX_00_BUTTER_SHIELD
-    index: auto
+    index: 0x8a
     text: |-
       You got the
       \col(1)Golden Shield\col(0)!
@@ -26,14 +26,14 @@ groups:
 - group: 0x51
   data:
   - name: TX_51_ITEMS_EATEN
-    index: auto
+    index: 0x13
     text: |-
       Your \col(1)bombchu\col(0), 
       \col(1)bombs\col(0), and \col(1)seeds\col(0)
       were eaten!
 
   - name: TX_51_RINGS_DISABLED
-    index: auto
+    index: 0x14
     text: |-
       Your \col(1)rings\col(0)
       were disabled!
@@ -41,21 +41,21 @@ groups:
 - group: 0x09
   data:
   - name: TX_09_LIFE_VIAL
-    index: auto
+    index: 0x76
     text: |-
       Fairy Flask
       Elixir of life.
       Refill at a Great Fairy.
 
   - name: TX_09_BUTTER_SWORD
-    index: auto
+    index: 0x77
     text: |-
       Golden Sword
       The Master Sword
       in its awakened form.
 
   - name: TX_09_BUTTER_SHIELD
-    index: auto
+    index: 0x78
     text: |-
       Golden Shield
       Its luster wards

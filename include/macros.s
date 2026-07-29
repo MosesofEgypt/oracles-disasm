@@ -643,11 +643,19 @@
 		; Within the "treasureObjectData" table, "CURRENT_TREASURE_INDEX" corresponds to
 		; values from "constants/common/treasure.s". (We add $10000 just to make it easy to
 		; differentiate which mode we're in.)
-		.define \5, (CURRENT_TREASURE_INDEX - $10000) << 8
+		.IFDEF ROM_COMBO
+			.redefine \5, (CURRENT_TREASURE_INDEX - $10000) << 8
+		.ELSE
+			.define \5, (CURRENT_TREASURE_INDEX - $10000) << 8
+		.ENDIF
 	.ELSE
 		; Within a subid table, "CURRENT_TREASURE_INDEX" corresponds to a treasure object
 		; index (2-byte number)
-		.define \5, CURRENT_TREASURE_INDEX
+		.IFDEF ROM_COMBO
+			.redefine \5, CURRENT_TREASURE_INDEX
+		.ELSE
+			.define \5, CURRENT_TREASURE_INDEX
+		.ENDIF
 	.ENDIF
 
 	.export \5
