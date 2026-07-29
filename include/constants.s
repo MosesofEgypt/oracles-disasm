@@ -42,20 +42,20 @@
 .include "constants/common/treeGfxHeaders.s"
 .include "constants/common/uncmpGfxHeaders.s"
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 .include "constants/ages/interactions.s"
 .include "constants/ages/enemies.s"
 .include "constants/ages/parts.s"
+.endif
 
-.else ;ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 .include "constants/seasons/interactions.s"
 .include "constants/seasons/enemies.s"
 .include "constants/seasons/parts.s"
 
 .include "constants/seasons/seasons.s"
-
 .endif
 
 .include "redux_config/ringConfig.s"

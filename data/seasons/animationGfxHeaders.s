@@ -1,8 +1,4 @@
-.ifdef ROM_COMBO
-animationGfxHeaders_seasons:
-.else
 animationGfxHeaders:
-.endif
 	m_GfxHeaderAnim gfx_animations_1, $8881, $04, $140
 	m_GfxHeaderAnim gfx_animations_1, $8881, $04, $180
 	m_GfxHeaderAnim gfx_animations_1, $8881, $04, $1c0

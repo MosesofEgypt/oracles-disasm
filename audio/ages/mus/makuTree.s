@@ -1,5 +1,5 @@
 .ifdef ROM_COMBO
-musMakuTreeStart_ages:
+musAgesMakuTreeStart:
 
 musMakuTreeChannel1_ages:
 .else

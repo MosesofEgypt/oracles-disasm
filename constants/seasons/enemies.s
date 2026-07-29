@@ -23,7 +23,11 @@
 .define ENEMY_GLEEOK $06
 
 ;;
+.ifdef ROM_COMBO
+.define ENEMY_KING_MOBLIN_SEASONS $07
+.else
 .define ENEMY_KING_MOBLIN $07
+.endif
 
 ;;
 .define ENEMY_ROLLING_SPIKE_TRAP $0f

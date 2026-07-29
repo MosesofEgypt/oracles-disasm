@@ -186,7 +186,7 @@ musRoomOfRites:
 .endif
 
 .ifdef ROM_COMBO
-musMakuTree_ages:
+musAgesMakuTree:
 	.db $00
 	.dw musMakuTreeChannel0_ages
 	.db $01
@@ -1047,12 +1047,14 @@ sndScentSeed:
 	.db $02
 	.dw sndScentSeedChannel2
 	.db $ff
+.endif
 
 snd86:
 	.db $f2
 	.dw snd86Channel2
 	.db $ff
 
+.ifndef ROM_COMBO
 sndSplash:
 	.db $42
 	.dw sndSplashChannel2
@@ -1111,12 +1113,12 @@ sndFairyCutscene:
 	.dw $5a00
 	.db $ff
 .endif
+.endif
 
 snd93:
 	.db $02
 	.dw snd93Channel2
 	.db $ff
-.endif
 
 snd94:
 	.db $02
@@ -1468,7 +1470,7 @@ sndLightning:
 .endif
 
 .ifdef ROM_COMBO
-sndWind_ages:
+sndAgesWind:
 	.db $07
 	.dw sndWindChannel7_ages
 	.db $ff

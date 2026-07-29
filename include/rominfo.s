@@ -14,12 +14,17 @@
 
 ; HACK-BASE: Ages is expanded to 2MB, Seasons to 4MB to accommodate expanded tilesets.
 ; Seasons takes more space due to the extra deduplication from each of the season tilesets.
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+
+.rombanks 256
+.romsize $07
+
+.elif defined(ROM_AGES)
 
 .rombanks 128
 .romsize $06
 
-.else ; Seasons
+.else ; ROM_SEASONS
 
 .rombanks 128
 .romsize $06

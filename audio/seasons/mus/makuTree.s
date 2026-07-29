@@ -1,5 +1,5 @@
 .ifdef ROM_COMBO
-musMakuTreeStart_seasons:
+musSeasonsMakuTreeStart:
 
 musMakuTreeChannel1_seasons:
 .else

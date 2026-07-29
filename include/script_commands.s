@@ -77,20 +77,22 @@
 ;
 ; param1:	The index of the secret (see constants/common/secrets.s or wShortSecretIndex).
 .MACRO generatesecret
-	.ifdef ROM_AGES
-		.IF \1 < $10
-			.FAIL
-		.ENDIF
-		.IF \1 >= $20
-			.FAIL
-		.ENDIF
-	.else; ROM_SEASONS
-		.IF \1 < $30
-			.FAIL
-		.ENDIF
-		.IF \1 >= $40
-			.FAIL
-		.ENDIF
+	.ifndef ROM_COMBO
+		.ifdef ROM_AGES
+			.IF \1 < $10
+				.FAIL
+			.ENDIF
+			.IF \1 >= $20
+				.FAIL
+			.ENDIF
+		.else; ROM_SEASONS
+			.IF \1 < $30
+				.FAIL
+			.ENDIF
+			.IF \1 >= $40
+				.FAIL
+			.ENDIF
+		.endif
 	.endif
 	.db $86, \1
 .ENDM
@@ -103,17 +105,19 @@
 .MACRO askforsecret
 	.IF \1 == $ff
 	.ELSE
-	.ifdef ROM_AGES
-		.IF \1 >= $10
-			.FAIL
-		.ENDIF
-	.else; ROM_SEASONS
-		.IF \1 < $20
-			.FAIL
-		.ENDIF
-		.IF \1 >= $30
-			.FAIL
-		.ENDIF
+	.ifndef ROM_COMBO
+		.ifdef ROM_AGES
+			.IF \1 >= $10
+				.FAIL
+			.ENDIF
+		.else; ROM_SEASONS
+			.IF \1 < $20
+				.FAIL
+			.ENDIF
+			.IF \1 >= $30
+				.FAIL
+			.ENDIF
+		.endif
 	.endif
 	.ENDIF
 	.db $86, \1
@@ -526,7 +530,7 @@
 ; param1:	First choice of address to jump to.
 ; param2:	Second choice.
 .MACRO jumprandom
-	.ifdef ROM_AGES
+	.if defined(ROM_AGES) && !defined(ROM_COMBO)
 		.PRINTT "Can't use 'jumprandom' script opcode in ages."
 		.FAIL
 	.endif

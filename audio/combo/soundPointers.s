@@ -31,7 +31,7 @@ soundPointers_ages:
 	/* 0x1b */ m_soundPointer musFinalDungeon
 	/* 0x1c */ m_soundPointer musOnoxCastle
 	/* 0x1d */ m_soundPointer musRoomOfRites
-	/* 0x1e */ m_soundPointer musMakuTree_ages
+	/* 0x1e */ m_soundPointer musAgesMakuTree
 	/* 0x1f */ m_soundPointer musSadness
 	/* 0x20 */ m_soundPointer musTriumphant
 	/* 0x21 */ m_soundPointer musDisaster
@@ -213,7 +213,7 @@ soundPointers_ages:
 	/* 0xd0 */ m_soundPointer sndPirateBell
 	/* 0xd1 */ m_soundPointer sndTimewarpInitiated
 	/* 0xd2 */ m_soundPointer sndLightning
-	/* 0xd3 */ m_soundPointer sndWind_ages
+	/* 0xd3 */ m_soundPointer sndAgesWind
 	/* 0xd4 */ m_soundPointer sndTimewarpCompleted
 	/* 0xd5 */ m_soundPointer sndd5
 	/* 0xd6 */ m_soundPointer sndd6
@@ -257,7 +257,7 @@ soundPointers_seasons:
 	/* 0x1b */ m_soundPointer musFinalDungeon
 	/* 0x1c */ m_soundPointer musOnoxCastle
 	/* 0x1d */ m_soundPointer musRoomOfRites
-	/* 0x1e */ m_soundPointer musMakuTree_seasons
+	/* 0x1e */ m_soundPointer musSeasonsMakuTree
 	/* 0x1f */ m_soundPointer musSadness
 	/* 0x20 */ m_soundPointer musTriumphant
 	/* 0x21 */ m_soundPointer musDisaster
@@ -439,7 +439,7 @@ soundPointers_seasons:
 	/* 0xd0 */ m_soundPointer sndPirateBell
 	/* 0xd1 */ m_soundPointer sndUnknownd1
 	/* 0xd2 */ m_soundPointer sndLightning
-	/* 0xd3 */ m_soundPointer sndWind_seasons
+	/* 0xd3 */ m_soundPointer sndSeasonsWind
 	/* 0xd4 */ m_soundPointer sndd4
 	/* 0xd5 */ m_soundPointer sndd5
 	/* 0xd6 */ m_soundPointer sndd6

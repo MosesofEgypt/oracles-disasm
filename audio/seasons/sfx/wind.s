@@ -1,5 +1,5 @@
 .ifdef ROM_COMBO
-sndWindStart_seasons:
+sndSeasonsWindStart:
 
 sndWindChannel7_seasons:
 .else

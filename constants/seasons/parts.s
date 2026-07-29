@@ -68,8 +68,11 @@
 ; created by agunima - the balls?
 .define PART_39 $39
 
+.ifndef ROM_COMBO
+; NOTE: already defined in ages, with the same id
 ;;
 .define PART_3b $3b
+.endif
 
 ;;
 ; created by Poe sister 2
@@ -79,8 +82,11 @@
 ; created by frypolar
 .define PART_3d $3d
 
+.ifndef ROM_COMBO
+; NOTE: already defined in ages, with the same id
 ;;
 .define PART_3e $3e
+.endif
 
 ;;
 .define PART_AQUAMENTUS_PROJECTILE $40

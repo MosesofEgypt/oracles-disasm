@@ -31,7 +31,7 @@
 	.db $04 \1 \2 \3 \4
 .endm
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 ; param1: number of tiles
 ; param2: first tile position
 ; param3: tile

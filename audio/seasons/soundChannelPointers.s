@@ -326,7 +326,7 @@ musRoomOfRites:
 	.db $ff
 
 .ifdef ROM_COMBO
-musMakuTree_seasons:
+musSeasonsMakuTree:
 	.db $00
 	.dw musMakuTreeChannel0_seasons
 	.db $01
@@ -1617,7 +1617,7 @@ sndLightning:
 	.db $ff
 
 .ifdef ROM_COMBO
-sndWind_seasons:
+sndSeasonsWind:
 	.db $07
 	.dw sndWindChannel7_seasons
 	.db $ff
@@ -1677,3 +1677,16 @@ sndFluteMoosh:
 	.db $f7
 	.dw sndFluteMooshChannel7
 	.db $ff
+
+.ifdef ROM_COMBO
+sndde:
+	.db $00
+	.dw snddeChannel0
+	.db $01
+	.dw snddeChannel1
+	.db $04
+	.dw snddeChannel4
+	.db $06
+	.dw snddeChannel6
+	.db $ff
+.endif

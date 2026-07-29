@@ -78,7 +78,11 @@
 ; @subid_00-09{Know-it-all birds}
 ; @subid_0a{Bird with Impa when Zelda gets kidnapped}
 ; @subid_0b{Panicking bird in Horon village entrance screen}
+.ifdef ROM_COMBO
+.define INTERAC_BIRD_SEASONS $2a
+.else
 .define INTERAC_BIRD $2a
+.endif
 
 ;;
 .define INTERAC_MR_WRITE $2c
@@ -138,14 +142,21 @@
 ; @subid_24{Top-right screen of subrosian beach}
 ; @subid_25{Golden subrosian giving secret}
 ; @subid_26{Signs guy}
+.ifdef ROM_COMBO
+.define INTERAC_SUBROSIAN_SEASONS $30
+.else
 .define INTERAC_SUBROSIAN $30
+.endif
 
 ;;
 ; @subid_00{Rosa}
 ; @subid_01{Rosa following you}
 ; @subid_02{Spawns star ore}
-; @subid_03{same code as subid_00???}
+.ifdef ROM_COMBO
+.define INTERAC_ROSA_SEASONS $31
+.else
 .define INTERAC_ROSA $31
+.endif
 
 ;;
 ; @subid_00{South of autumn temple}
@@ -207,7 +218,11 @@
 ; @subid_15{Regular goron - 2F}
 ; @subid_16{Red goron who upgrades ringbox}
 ; @subid_07{Red goron giving secret}
+.ifdef ROM_COMBO
+.define INTERAC_GORON_SEASONS $3b
+.else
 .define INTERAC_GORON $3b
+.endif
 
 ;;
 .define INTERAC_OLD_LADY_FARMER $3c
@@ -257,7 +272,11 @@
 .define INTERAC_PIRATE_HOUSE_SUBROSIAN $42
 
 ;;
+.ifdef ROM_COMBO
+.define INTERAC_SYRUP_SEASONS $43
+.else
 .define INTERAC_SYRUP $43
+.endif
 
 ;;
 ; @subid_00{In Room of Rites}
@@ -270,7 +289,11 @@
 ; @subid_07{After Zelda Villagers cutscene, she's there with animals}
 ; @subid_08{By Maku tree, before fighting Onox}
 ; @subid_09{In Impa's house after saving her from vire}
+.ifdef ROM_COMBO
+.define INTERAC_ZELDA_SEASONS $44
+.else
 .define INTERAC_ZELDA $44
+.endif
 
 ;;
 ; @subid_00{In cave, sleeping}
@@ -284,7 +307,11 @@
 ;;
 ; Cucco in Syrup's hut that prevents you from stealing. (Not to be confused with ENEMY_CUCCO,
 ; which is a more normal cucco.)
+.ifdef ROM_COMBO
+.define INTERAC_SYRUP_CUCCO_SEASONS $49
+.else
 .define INTERAC_SYRUP_CUCCO $49
+.endif
 
 ;;
 ; @subid_00{}
@@ -395,7 +422,11 @@
 ; subid_05{Leads to SE samasa treasure chest}
 .define INTERAC_QUICKSAND $5e
 
+.ifdef ROM_COMBO
+.define INTERAC_COMPANION_SPAWNER_SEASONS $5f
+.else
 .define INTERAC_COMPANION_SPAWNER $5f
+.endif
 
 .define INTERAC_STUB_61 $61
 
@@ -483,7 +514,10 @@
 ; @subid_24{TODO:}
 ; @subid_25{TODO:}
 ; @subid_26{TODO:}
+.ifndef ROM_COMBO
+; NOTE: already defined in ages, with the same id
 .define INTERAC_MISCELLANEOUS_1 $6b
+.endif
 
 ;;
 ; @subid_00{Event starter}
@@ -523,7 +557,10 @@
 ; @subid_07{Moblin rest house - point where bullies will appear}
 ; @subid_08{Leaving Sunken City with Dimitri}
 ; @subid_09{1st screen of North Horon from eyeglass lake - determining animal companion}
+.ifndef ROM_COMBO
+; NOTE: already defined in ages, with the same id
 .define INTERAC_COMPANION_SCRIPTS $71
+.endif
 
 ;;
 .define INTERAC_BLAINO $72
@@ -553,7 +590,10 @@
 ; @subid_00{}
 ; @subid_01{}
 ; @subid_02{}
+.ifndef ROM_COMBO
+; NOTE: already defined in ages, with the same id
 .define INTERAC_INTRO_SPRITE $75
+.endif
 
 ;;
 ; @subid_00-02{The 3 bullies}
@@ -611,7 +651,10 @@
 
 ;;
 ; Maku tree. TODO: subids
+.ifndef ROM_COMBO
+; NOTE: already defined in ages, with the same id
 .define INTERAC_MAKU_TREE $87
+.endif
 
 ;;
 ; clouds above Onox castle?
@@ -632,7 +675,11 @@
 
 ;;
 ; @subid_00-04{}
+.ifdef ROM_COMBO
+.define INTERAC_MASTER_DIVER_SEASONS $8d
+.else
 .define INTERAC_MASTER_DIVER $8d
+.endif
 
 ;;
 ; Bubbles?
@@ -659,7 +706,11 @@
 ;;
 ; @subid_00{Hanging on Maku tree}
 ; @subid_01{Given by Maku tree}
-.define INTERAC_MAKU_SEED $93
+.ifdef ROM_COMBO
+.define INTERAC_MAKU_SEED_SEASONS $8d
+.else
+.define INTERAC_MAKU_SEED $8d
+.endif
 
 ;;
 ; Given to Maple
@@ -683,15 +734,22 @@
 ; @subid_00-03{}
 ; @subid04{Spawned by INTERAC_MOBLIN_KEEP_SCENES}
 ; @subid05-06{Spawned by interactionCodec3 as part of the spawned minions}
+.ifndef ROM_COMBO
+; NOTE: already defined in ages, with the same id
 .define INTERAC_MOBLIN $96
 
 ;;
 ; moblin house-related?
 .define INTERAC_97 $97
+.endif
 
 ;;
 ; @subid_00-07{}
+.ifdef ROM_COMBO
+.define INTERAC_OLD_MAN_WITH_RUPEES_SEASONS $99
+.else
 .define INTERAC_OLD_MAN_WITH_RUPEES $99
+.endif
 
 ;;
 ; Same room as moblin rest house - event when moblin house explodes?
@@ -715,8 +773,11 @@
 ;;
 .define INTERAC_SAMASA_DESERT_GATE $9e
 
+.ifndef ROM_COMBO
+; NOTE: already defined in ages, with the same id
 ;;
 .define INTERAC_DISAPPEARING_SIDESCROLL_PLATFORM $a3
+.endif
 
 ;;
 .define INTERAC_SUBROSIAN_SMITHY $a4
@@ -728,7 +789,11 @@
 ; @subid_06{TODO: part of intro cutscenes (after being captured by Onox?)
 ; @subid_08{Horon village field, after game beat}
 ; @subid_09{1st Din (sees you collapsed)}
+.ifdef ROM_COMBO
+.define INTERAC_DIN_SEASONS $a5
+.else
 .define INTERAC_DIN $a5
+.endif
 
 ;;
 ; @subid_00-04{subid determines angle that each of the 4 fade towards}
@@ -764,7 +829,11 @@
 ; @subid_00-02{?}
 ; @subid_03-05{?}
 ; @subid_06-09{?}
+.ifdef ROM_COMBO
+.define INTERAC_TWINROVA_FLAME_SEASONS $b0
+.else
 .define INTERAC_TWINROVA_FLAME $b0
+.endif
 
 ;;
 ; Regular piratian in cutscene?
@@ -818,7 +887,11 @@
 ; @subid_02{On the way to Samasa desert gate}
 ; @subid_03{When pirates are leaving for West Coast}
 ; @subid_04{Pirate house 1F}
+.ifdef ROM_COMBO
+.define INTERAC_AMBI_SEASONS $b8
+.else
 .define INTERAC_AMBI $b8
+.endif
 
 ; TODO: the following people are 5 that hang around Zelda
 
@@ -880,6 +953,8 @@
 ;;
 .define INTERAC_BOOMERANG $c9
 
+.ifndef ROM_COMBO
+; NOTE: already defined in ages, with the same id
 ;;
 .define INTERAC_TROY $ca
 
@@ -889,6 +964,7 @@
 ; @subid_02{Red/Blue(?) ghini during minigame}
 ; @subid_03{In Western Coast house, giving secret}
 .define INTERAC_LINKED_GAME_GHINI $cb
+.endif
 
 ;;
 .define INTERAC_GOLDEN_CAVE_SUBROSIAN $cc
@@ -899,6 +975,8 @@
 ; @subid_02{Shows treasure inside swimming challenge cave}
 .define INTERAC_LINKED_MASTER_DIVER $cd
 
+.ifndef ROM_COMBO
+; NOTE: already defined in ages, with the same id
 ;;
 ; @subid_00{In Temple of Seasons, awaiting a secret}
 ; @subid_01{Linked game NPC near d2 (gives a secret)}
@@ -906,6 +984,7 @@
 
 ;;
 .define INTERAC_DEKU_SCRUB $d6
+.endif
 
 .define INTERAC_STUB_d7 $d7
 
@@ -939,7 +1018,10 @@
 ; @subid_0d{Linked hero's cave, room above entrance - initializes dungeon on side entrance entry}
 ; @subid_0e{In most screens of Temple Remains, replaces some lava tiles with animated lava?}
 ; @subid_0f{Creates a chest on a purple tile in a linked hero's cave room}
+.ifndef ROM_COMBO
+; NOTE: already defined in ages, with the same id
 .define INTERAC_MISCELLANEOUS_2 $dc
+.endif
 
 ;;
 .define INTERAC_GOLDEN_BEAST_OLD_MAN $dd
@@ -950,7 +1032,11 @@
 ;
 ; @subid_00{Maku seed (spawns the other subids)}
 ; @subid_01-08{Essences}
+.ifdef ROM_COMBO
+.define INTERAC_MAKU_SEED_AND_ESSENCES_SEASONS $de
+.else
 .define INTERAC_MAKU_SEED_AND_ESSENCES $de
+.endif
 
 ;;
 ; @subid_00{To and from Subrosia}
@@ -959,7 +1045,11 @@
 
 ;;
 ; In linked game, places pyramid jewel
+.ifdef ROM_COMBO
+.define INTERAC_VIRE_SEASONS $e3
+.else
 .define INTERAC_VIRE $e3
+.endif
 
 ;;
 .define INTERAC_LINKED_HEROS_CAVE_OLD_MAN $e4

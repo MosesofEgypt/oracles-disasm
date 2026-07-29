@@ -1,5 +1,5 @@
 .ifdef ROM_COMBO
-sndWindStart_ages:
+sndAgesWindStart:
 
 sndWindChannel7_ages:
 .else

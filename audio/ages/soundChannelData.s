@@ -17,10 +17,12 @@ snddeChannel6:
 bank39ChannelFallback:
 	cmdff
 	cmdff
+.endif
 
 .redefine MUSIC_CHANNEL_FALLBACK bank39ChannelFallback
 
 
+.ifndef ROM_COMBO
 .include "audio/common/sfx/baseball.s"
 
 .ifdef BUILD_VANILLA
@@ -52,6 +54,7 @@ snd97Channel2:
 .include "audio/common/sfx/chicken.s"
 .include "audio/common/sfx/makuDisappear.s"
 .include "audio/common/sfx/beam2.s"
+.endif
 
 sndb7Start:
 sndb7Channel2:
@@ -59,16 +62,19 @@ sndb7Channel2:
 sndb7Channel7:
 	cmdff
 
+.ifndef ROM_COMBO
 .include "audio/common/sfx/veranFairyAttack.s"
 .include "audio/common/sfx/rumble2.s"
 .include "audio/common/sfx/warpStart.s"
 .include "audio/common/sfx/endless.s"
 .include "audio/common/sfx/bigExplosion2.s"
+.endif
 
 sndbdStart:
 sndbdChannel2:
 	cmdff
 
+.ifndef ROM_COMBO
 .include "audio/common/mus/mapleGame.s"
 .include "audio/common/mus/finalBoss.s"
 .include "audio/common/mus/essence.s"
@@ -99,10 +105,12 @@ m_section_superfree AudioData2
 .ifndef ROM_COMBO
 bank3aChannelFallback:
 	cmdff
+.endif
 
 .redefine MUSIC_CHANNEL_FALLBACK bank3aChannelFallback
 
 
+.ifndef ROM_COMBO
 .include "audio/common/mus/indoors.s"
 .include "audio/common/mus/titlescreen.s"
 .include "audio/common/mus/miniboss.s"
@@ -139,11 +147,13 @@ bank3aChannelFallback:
 .include "audio/common/sfx/magicPowder.s"
 .include "audio/common/sfx/menuMove.s"
 .include "audio/common/sfx/scentSeed.s"
+.endif
 
 snd86Start:
 snd86Channel2:
 	cmdff
 
+.ifndef ROM_COMBO
 .include "audio/common/sfx/teleport.s"
 
 sndd5Start:
@@ -228,10 +238,11 @@ m_section_superfree AudioData3
 .ifndef ROM_COMBO
 bank3bChannelFallback:
 	cmdff
+.endif
 
 .redefine MUSIC_CHANNEL_FALLBACK bank3bChannelFallback
 
-
+.ifndef ROM_COMBO
 .include "audio/common/mus/minigame.s"
 .include "audio/common/mus/fileSelect.s"
 .include "audio/common/mus/fairyFountain.s"
@@ -288,9 +299,9 @@ m_section_superfree AudioData4
 .ifndef ROM_COMBO
 bank3cChannelFallback:
 	cmdff
+.endif
 
 .redefine MUSIC_CHANNEL_FALLBACK bank3cChannelFallback
-.endif
 
 
 .include "audio/ages/mus/moonlitGrotto.s"
@@ -346,10 +357,12 @@ m_section_superfree AudioData5
 .ifndef ROM_COMBO
 bank3dChannelFallback:
 	cmdff
+.endif
 
 .redefine MUSIC_CHANNEL_FALLBACK bank3dChannelFallback
 
 
+.ifndef ROM_COMBO
 .include "audio/common/mus/triumphant.s"
 .include "audio/common/mus/disaster.s"
 .include "audio/common/mus/pirates.s"
@@ -365,11 +378,9 @@ bank3dChannelFallback:
 
 .include "audio/ages/mus/ancientTomb.s"
 
-.ifndef ROM_COMBO
 snd93Start:
 snd93Channel2:
 	cmdff
-.endif
 
 snd94Start:
 snd94Channel2:
@@ -406,10 +417,12 @@ m_section_superfree AudioData6
 .ifndef ROM_COMBO
 bank3eChannelFallback:
 	cmdff
+.endif
 
 .redefine MUSIC_CHANNEL_FALLBACK bank3eChannelFallback
 
 
+.ifndef ROM_COMBO
 ; Undefined sounds
 mus37Start:
 mus3aStart:
@@ -588,6 +601,4 @@ sndddChannel6:
 .ends
 
 
-.ifndef ROM_COMBO
 .undefine MUSIC_CHANNEL_FALLBACK
-.endif

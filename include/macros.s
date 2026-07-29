@@ -150,13 +150,9 @@
 
 ; Include something from the "rooms" directory based on the game
 .macro m_IncRoomData
-	.assert NARGS == 1
+	.assert NARGS == 2
 
-	.ifdef ROM_AGES
-		.incbin "rooms/ages/\1"
-	.else
-		.incbin "rooms/seasons/\1"
-	.endif
+	.incbin "rooms/\1/\2"
 .endm
 
 ; ==================================================================================================
@@ -776,7 +772,7 @@
 .macro m_TreeRefillData
 	.assert NARGS == 2
 
-	.ifdef ROM_AGES
+	.if defined(ROM_AGES) || defined(ROM_COMBO)
 		.assert \1 >= 0 && \1 <= 0x1ff
 	.else
 		.assert \1 >= 0 && \1 <= 0xff

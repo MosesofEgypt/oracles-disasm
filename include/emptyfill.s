@@ -1,5 +1,5 @@
 ; In Seasons, the "empty" byte is the bank number, while in ages, it's 0.
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.emptyfill $00
 .else
 ; My custom mod of wla will see this define and use the bank number as "emptyfill" when it
