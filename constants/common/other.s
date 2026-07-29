@@ -18,7 +18,34 @@
 .endif
 
 ; Overworld size
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	.define OVERWORLD_WIDTH_AGES		14
+	.define OVERWORLD_HEIGHT_AGES		14
+	.define OVERWORLD_WIDTH_SEASONS		16
+	.define OVERWORLD_HEIGHT_SEASONS	16
+
+	.define OVERWORLD_MAP_START_X_AGES		3
+	.define OVERWORLD_MAP_START_Y_AGES		2
+	.define OVERWORLD_MAP_START_X_SEASONS	2
+	.define OVERWORLD_MAP_START_Y_SEASONS	1
+
+	.define OVERWORD_MAP_POPUP_SHIFT_INDEX_X	8
+	.define OVERWORD_MAP_POPUP_SHIFT_INDEX_Y	8
+
+	; Subrosia size (seasons only)
+	.define SUBROSIA_WIDTH	11
+	.define SUBROSIA_HEIGHT	8
+
+	.define SUBROSIA_MAP_START_X	4
+	.define SUBROSIA_MAP_START_Y	5
+
+	.define SUBROSIA_MAP_POPUP_SHIFT_INDEX_X	5
+	.define SUBROSIA_MAP_POPUP_SHIFT_INDEX_Y	4
+
+	; using the higher of the 2 values to pad RAM offsets to the same values
+	.define NUM_DUNGEONS		$10
+	.define NUM_DUNGEONS_DIV_8	2
+.elif defined(ROM_AGES) ; Ages only
 	.define OVERWORLD_WIDTH		14
 	.define OVERWORLD_HEIGHT	14
 
@@ -35,7 +62,7 @@
 	.define NUM_DUNGEONS		$10
 	.define NUM_DUNGEONS_DIV_8	2 ; Above value divided by 8, rounded up
 
-.else; ROM_SEASONS
+.else
 	.define OVERWORLD_WIDTH		16
 	.define OVERWORLD_HEIGHT	16
 
@@ -76,10 +103,10 @@
 .define INVENTORY_CAPACITY	$10
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	; Should be multiple of 8. Used for seed tree refill stuff
 	.define NUM_SEED_TREES $10
-.else; ROM_SEASONS
+.else
 	.define NUM_SEED_TREES $08
 .endif
 

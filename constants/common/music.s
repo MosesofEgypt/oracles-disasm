@@ -5,7 +5,12 @@
 	MUS_MINIGAME              db ; $02
 	MUS_OVERWORLD             db ; $03
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	MUS_TEMPLE_REMAINS        .db
+	MUS_OVERWORLD_PAST        db ; $04
+	MUS_TARM_RUINS            .db
+	MUS_CRESCENT              db ; $05
+.elif defined(ROM_AGES)
 	MUS_OVERWORLD_PAST        db ; $04
 	MUS_CRESCENT              db ; $05
 .else
@@ -15,7 +20,12 @@
 
 	MUS_ESSENCE               db ; $06
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	MUS_UNUSED_1              .db
+	MUS_AMBI_PALACE           db ; $07
+	MUS_CARNIVAL              .db
+	MUS_NAYRU                 db ; $08
+.elif defined(ROM_AGES)
 	MUS_AMBI_PALACE           db ; $07
 	MUS_NAYRU                 db ; $08
 .else
@@ -25,7 +35,14 @@
 
 	MUS_GAMEOVER              db ; $09
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	MUS_HORON_VILLAGE         .db
+	MUS_LYNNA_CITY            db ; $0a
+	MUS_HIDE_AND_SEEK         .db
+	MUS_LYNNA_VILLAGE         db ; $0b
+	MUS_SUNKEN_CITY          .db
+	MUS_ZORA_VILLAGE          db ; $0c
+.elif defined(ROM_AGES)
 	MUS_LYNNA_CITY            db ; $0a
 	MUS_LYNNA_VILLAGE         db ; $0b
 	MUS_ZORA_VILLAGE          db ; $0c
@@ -41,7 +58,26 @@
 	MUS_GET_ESSENCE           db ; $10
 	MUS_FILE_SELECT           db ; $11
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	MUS_HEROS_CAVE               .db
+	MUS_MAKU_PATH                db ; $12
+	MUS_GNARLED_ROOT_DUNGEON     .db
+	MUS_SPIRITS_GRAVE            db ; $13
+	MUS_SNAKES_REMAINS           .db
+	MUS_WING_DUNGEON             db ; $14
+	MUS_POISON_MOTHS_LAIR        .db
+	MUS_MOONLIT_GROTTO           db ; $15
+	MUS_DANCING_DRAGON_DUNGEON   .db
+	MUS_SKULL_DUNGEON            db ; $16
+	MUS_UNICORNS_CAVE            .db
+	MUS_CROWN_DUNGEON            db ; $17
+	MUS_ANCIENT_RUINS            .db
+	MUS_MERMAIDS_CAVE            db ; $18
+	MUS_EXPLORERS_CRYPT          .db
+	MUS_JABU_JABUS_BELLY         db ; $19
+	MUS_SWORD_AND_SHIELD_MAZE    .db
+	MUS_ANCIENT_TOMB             db ; $1a
+.elif defined(ROM_AGES)
 	MUS_MAKU_PATH             db ; $12
 	MUS_SPIRITS_GRAVE         db ; $13
 	MUS_WING_DUNGEON          db ; $14
@@ -71,7 +107,10 @@
 	MUS_TRIUMPHANT            db ; $20
 	MUS_DISASTER              db ; $21
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	MUS_UNDERWATER            .db
+	MUS_SUBROSIAN_DANCE       db ; $22
+.elif defined(ROM_AGES)
 	MUS_UNDERWATER            db ; $22
 .else
 	MUS_SUBROSIAN_DANCE       db ; $22
@@ -79,7 +118,14 @@
 
 	MUS_PIRATES               db ; $23
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	MUS_24                    .db
+	MUS_SYMMETRY_PRESENT      db ; $24
+	MUS_UNUSED_2              .db
+	MUS_SYMMETRY_PAST         db ; $25
+	MUS_SUBROSIAN_SHOP        .db
+	MUS_TOKAY_HOUSE           db ; $26
+.elif defined(ROM_AGES)
 	MUS_SYMMETRY_PRESENT      db ; $24
 	MUS_SYMMETRY_PAST         db ; $25
 	MUS_TOKAY_HOUSE           db ; $26
@@ -91,7 +137,10 @@
 
 	MUS_ROSA_DATE             db ; $27
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	MUS_SUBROSIA              .db
+	MUS_BLACK_TOWER           db ; $28
+.elif defined(ROM_AGES)
 	MUS_BLACK_TOWER           db ; $28
 .else
 	MUS_SUBROSIA              db ; $28
@@ -105,7 +154,10 @@
 	MUS_BOSS                  db ; $2e
 	MUS_LADX_SIDEVIEW         db ; $2f
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	MUS_30                    .db
+	MUS_FAIRY_FOREST          db ; $30
+.elif defined(ROM_AGES)
 	MUS_FAIRY_FOREST          db ; $30
 .else
 	MUS_30                    db ; $30 (blank)
@@ -116,7 +168,10 @@
 	MUS_TWINROVA              db ; $33
 	MUS_GANON                 db ; $34
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	MUS_SAMASA_DESERT         .db
+	MUS_RALPH                 db ; $35
+.elif defined(ROM_AGES)
 	MUS_RALPH                 db ; $35
 .else
 	MUS_SAMASA_DESERT         db ; $35
@@ -130,7 +185,10 @@
 	MUS_3b                    db ; $3b (blank)
 	MUS_SYRUP                 db ; $3c
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	MUS_SONG_OF_STORMS        .db
+	MUS_3d                    db ; $3d
+.elif defined(ROM_AGES)
 	MUS_3d                    db ; $3d (blank)
 .else
 	MUS_SONG_OF_STORMS        db ; $3d
@@ -207,7 +265,7 @@
 	SND_BOOMERANG           db ; $78
 	SND_BIG_EXPLOSION       db ; $79
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 	SND_MAGNET_GLOVES       db ; $7a (CROSSITEMS: Added magnet glove sound to ages)
 .else
 	SND_FREEZE_LAVA         db ; $7a (used in Sword & Shield dungeon)
@@ -216,7 +274,10 @@
 	SND_MYSTERY_SEED        db ; $7b
 	SND_AQUAMENTUS_HOVER    db ; $7c
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	SND_UNKNOWN_7d          .db
+	SND_OPEN_GATE           db ; $7d
+.elif defined(ROM_AGES)
 	SND_OPEN_GATE           db ; $7d ; When a colored cube opens a gate
 .else
 	SND_UNKNOWN_7d          db ; $7d ; Not blank, but unknown
@@ -224,7 +285,10 @@
 
 	SND_SWITCH              db ; $7e
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	SND_MOVE_BLOCK_2        .db
+	SND_DODONGO_OPEN_MOUTH  db ; $7f
+.elif defined(ROM_AGES)
 	SND_MOVE_BLOCK_2        db ; $7f ; Used for colored cubes?
 .else
 	SND_DODONGO_OPEN_MOUTH  db ; $7f
@@ -237,7 +301,10 @@
 	SND_MENU_MOVE           db ; $84
 	SND_SCENT_SEED          db ; $85
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	SND_86                  .db
+	SND_UNKNOWN_86          db ; $86
+.elif defined(ROM_AGES)
 	SND_86                  db ; $86 (blank)
 .else
 	SND_UNKNOWN_86          db ; $86 (not blank in Seasons...)
@@ -251,7 +318,10 @@
 	SND_FAIRY_HEAL          db ; $8c
 	SND_TELEPORT            db ; $8d
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	SND_SWITCH2             .db
+	SND_UNKNOWN_8e          db ; $8e
+.elif defined(ROM_AGES)
 	SND_SWITCH2             db ; $8e
 .else
 	SND_UNKNOWN_8e          db ; $8e ; Not blank, but unknown
@@ -261,7 +331,14 @@
 	SND_GALE_SEED           db ; $90
 	SND_FAIRYCUTSCENE       db ; $91 ; When the diseased waters go away in the fairy cutscene
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	SND_92                  .db
+	SND_MAKU_TREE_SNORE     db ; $92
+	SND_93                  .db
+	SND_UNKNOWN_93          db ; $93
+	SND_94                  .db
+	SND_DODONGO_EAT         db ; $94
+.elif defined(ROM_AGES)
 	SND_92                  db ; $92 (blank)
 	SND_93                  db ; $93 (blank)
 	SND_94                  db ; $94 (blank)
@@ -284,7 +361,7 @@
 	SND_FLUTE_MOOSH         db ; $9f
 	SND_CHICKEN             db ; $a0
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	SND_MONKEY              db ; $a1 ; Monkey from LADX?
 .else
 	SND_SWITCH2             db ; $a1 (CROSSITEMS: Added switch hook sound to seasons)
@@ -302,7 +379,14 @@
 	SND_SWORD_OBTAINED      db ; $ab
 	SND_SHOCK               db ; $ac
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	SND_ad                  .db
+	SND_TUNE_OF_ECHOES      db ; $ad
+	SND_FRYPOLAR_MOVEMENT   .db
+	SND_TUNE_OF_CURRENTS    db ; $ae
+	SND_MAGNET_GLOVES       .db
+	SND_TUNE_OF_AGES        db ; $af
+.elif defined(ROM_AGES)
 	SND_TUNE_OF_ECHOES      db ; $ad ; Tune of echos
 	SND_TUNE_OF_CURRENTS    db ; $ae
 	SND_TUNE_OF_AGES        db ; $af
@@ -318,7 +402,14 @@
 	SND_RUMBLE              db ; $b3 ; Like a short version of MAKUDISAPPEAR; used for cracked floors
 	SND_FADEOUT             db ; $b4 ; Subrosia transition
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	SND_UNKNOWN_b5          .db
+	SND_TINGLE              db ; $b5
+	SND_b6                  .db
+	SND_TOKAY               db ; $b6
+	SND_UNKNOWN_b7          .db
+	SND_b7                  db ; $b7
+.elif defined(ROM_AGES)
 	SND_TINGLE              db ; $b5
 	SND_TOKAY               db ; $b6
 	SND_b7                  db ; $b7 (blank)
@@ -334,7 +425,10 @@
 	SND_BEAM2               db ; $bb ; Not sure. Kinda sounds like another beam
 	SND_BIG_EXPLOSION_2     db ; $bc ; Something massive getting destroyed
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	SND_bd                  .db
+	SND_UNKNOWN_bd          db ; $bd
+.elif defined(ROM_AGES)
 	SND_bd                  db ; $bd (blank)
 .else
 	SND_UNKNOWN_bd          db ; $bd ; A single sound slowly lowering in pitch
@@ -353,7 +447,10 @@
 	SND_DING                db ; $c8 ; Used as the bell in matches with Blaino
 	SND_CIRCLING            db ; $c9 ; Used in the cutscene where Veran possesses Ambi (veran is circling around)
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	SND_CA                  .db
+	SND_DANCE_MOVE          db ; $ca
+.elif defined(ROM_AGES)
 	SND_CA                  db ; $ca (blank)
 .else
 	SND_DANCE_MOVE          db ; $ca ; Moved left or right in subrosian dance
@@ -364,7 +461,10 @@
 	SND_GORON_DANCE_B       db ; $cd ; Goron dance, B button pressed
 	SND_MAKU_TREE_PAST      db ; $ce ; Used when Maku Tree communicates with Link in the past
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	SND_CF                  .db
+	SND_CREEPY_LAUGH        db ; $cf
+.elif defined(ROM_AGES)
 	SND_CF                  db ; $cf (blank)
 .else
 	SND_CREEPY_LAUGH        db ; $cf ; Used in Explorer's Crypt
@@ -372,7 +472,10 @@
 
 	SND_PIRATE_BELL         db ; $d0 ; Also used by scent seeds
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	SND_TIMEWARP_INITIATED  .db
+	SND_UNKNOWN_d1          db ; $d1
+.elif defined(ROM_AGES)
 	SND_TIMEWARP_INITIATED  db ; $d1
 .else
 	SND_UNKNOWN_d1          db ; $d1 ; Not blank, but unknown
@@ -381,7 +484,10 @@
 	SND_LIGHTNING           db ; $d2
 	SND_WIND                db ; $d3 ; This is a bit different in Ages/Seasons.
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	SND_TIMEWARP_COMPLETED  .db
+	SND_d4                  db ; $d4
+.elif defined(ROM_AGES)
 	SND_TIMEWARP_COMPLETED  db ; $d4
 .else
 	SND_d4                  db ; $d4 (blank)

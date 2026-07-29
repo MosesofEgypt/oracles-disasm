@@ -39,7 +39,7 @@
 	OBJ_GFXH_22                     db
 	OBJ_GFXH_23                     db
 
-.ifdef ROM_AGES ; Ages only
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	AGES_OBJ_GFXH_24    db
 	AGES_OBJ_GFXH_25    db
 	AGES_OBJ_GFXH_26    db
@@ -396,3 +396,9 @@
 .endif
 
 .ende
+
+.if defined(ROM_COMBO)
+.REPT $c8-$24 START $24 index tmpi
+	.define SEASONS_OBJ_GFXH_{%.2x{tmpi}}	AGES_OBJ_GFXH_{%.2x{tmpi}}
+.ENDR
+.endif

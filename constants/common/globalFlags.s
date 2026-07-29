@@ -19,7 +19,7 @@
 	GLOBALFLAG_APPRAISED_HUNDREDTH_RING	db ; $09
 	GLOBALFLAG_INTRO_DONE			db ; $0a: Once set, start/select are usable
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 
 	GLOBALFLAG_0b				db ; $0b: Set when getting bombs from ambi
 	GLOBALFLAG_0c				db ; $0c: Maku tree disappeared?
@@ -103,7 +103,7 @@
 	GLOBALFLAG_4e				db ; $4e
 	GLOBALFLAG_4f				db ; $4f
 
-.else; ROM_SEASONS
+.else
 
 	GLOBALFLAG_DATING_ROSA			db ; $0b
 	GLOBALFLAG_DATED_ROSA			db ; $0c
@@ -262,3 +262,91 @@
 	GLOBALFLAG_7e				db ; $7e
 	GLOBALFLAG_7f				db ; $7f
 .ENDE
+
+.if defined(ROM_COMBO)
+; this is a copy of the ages flags for use in the combo rom
+.ENUM $0b
+	GLOBALFLAG_0b				db ; $0b: Set when getting bombs from ambi
+	GLOBALFLAG_0c				db ; $0c: Maku tree disappeared?
+	GLOBALFLAG_0d				db ; $0d
+	GLOBALFLAG_WON_FAIRY_HIDING_GAME	db ; $0e
+	GLOBALFLAG_D3_CRYSTALS			db ; $0f
+	GLOBALFLAG_10				db ; $10: Set when ambi's guard escorts you?
+	GLOBALFLAG_SAVED_NAYRU			db ; $11
+	GLOBALFLAG_MAKU_TREE_SAVED		db ; $12
+
+	; Saw the twinrova cutscene right after getting the maku seed
+	GLOBALFLAG_SAW_TWINROVA_BEFORE_ENDGAME	db ; $13
+.ENDE
+
+.ENUM $15
+	GLOBALFLAG_GAVE_ROPE_TO_RAFTON		db ; $15
+	GLOBALFLAG_16				db ; $16: Prevents era info from displaying once
+	GLOBALFLAG_17				db ; $17
+	GLOBALFLAG_BEGAN_POSSESSED_NAYRU_FIGHT	db ; $18
+	GLOBALFLAG_BEAT_POSSESSED_NAYRU		db ; $19
+	GLOBALFLAG_MOBLINS_KEEP_DESTROYED_AGES	db ; $1a: Moblin's keep destroyed?
+	GLOBALFLAG_MET_TINGLE			db ; $1b: Talked to tingle, don't necessarily have chart yet
+	GLOBALFLAG_GOT_BOMB_UPGRADE_FROM_FAIRY	db ; $1c
+	GLOBALFLAG_CAN_BUY_FLUTE		db ; $1d
+	GLOBALFLAG_1e				db ; $1e
+	GLOBALFLAG_PATCH_REPAIRED_EVERYTHING	db ; $1f
+	GLOBALFLAG_TALKED_TO_OCTOROK_FAIRY	db ; $20
+.ENDE
+
+.ENUM $22
+	GLOBALFLAG_TALKED_TO_HEAD_CARPENTER	db ; $22: talked to carpenter first time
+	GLOBALFLAG_GOT_FLUTE			db ; $23: identified flute from companion
+	GLOBALFLAG_SAVED_COMPANION_FROM_FOREST	db ; $24
+	GLOBALFLAG_SYMMETRY_BRIDGE_BUILT	db ; $25
+	GLOBALFLAG_RAFTON_CHANGED_ROOMS		db ; $26: rafton's in right room, not left
+	GLOBALFLAG_KING_ZORA_CURED		db ; $27
+	GLOBALFLAG_RING_SECRET_GENERATED_AGES	db ; $28
+	GLOBALFLAG_TUNI_NUT_PLACED		db ; $29
+	GLOBALFLAG_TALKED_TO_SYMMETRY_BROTHER	db ; $2a: allows you to get tuni nut from other brother
+	GLOBALFLAG_FOREST_UNSCRAMBLED		db ; $2b
+.ENDE
+
+.ENUM $2d
+	GLOBALFLAG_2d				db ; $2d
+	GLOBALFLAG_TALKED_TO_SYMMETRY_SISTER	db ; $2e
+	GLOBALFLAG_SAVED_GORON_ELDER		db ; $2f
+	GLOBALFLAG_WATER_POLLUTION_FIXED	db ; $30
+	GLOBALFLAG_GOT_PERMISSION_TO_ENTER_JABU	db ; $31
+	GLOBALFLAG_RALPH_ENTERED_AMBIS_PALACE	db ; $32
+
+	; The cutscene where Impa explains Ralph's heritage
+	GLOBALFLAG_PRE_BLACK_TOWER_CUTSCENE_DONE	db ; $33
+
+	GLOBALFLAG_PIRATES_GONE			db ; $34
+	GLOBALFLAG_GOT_MAKU_SEED_AGES		db ; $35
+	GLOBALFLAG_BOUGHT_FEATHER_FROM_TOKAY	db ; $36
+	GLOBALFLAG_BOUGHT_BRACELET_FROM_TOKAY	db ; $37
+	GLOBALFLAG_GOT_RING_FROM_ZELDA		db ; $38
+	GLOBALFLAG_IMPA_MOVED_AFTER_ZELDA_KIDNAPPED	db ; $39
+	GLOBALFLAG_FLAME_OF_DESPAIR_LIT		db ; $3a: Beaten veran in a linked game
+	GLOBALFLAG_RETURNED_DOG			db ; $3b
+	GLOBALFLAG_ZELDA_SAVED_FROM_VIRE_AGES	db ; $3c
+	GLOBALFLAG_3d_AGES				db ; $3d: "Link summoned" cutscene viewed
+	GLOBALFLAG_MAKU_GIVES_ADVICE_FROM_PRESENT_MAP		db ; $3e: Met present maku tree?
+	GLOBALFLAG_MAKU_GIVES_ADVICE_FROM_PAST_MAP		db ; $3f: Met past maku tree?
+	GLOBALFLAG_RALPH_ENTERED_PORTAL		db ; $40
+	GLOBALFLAG_ENTER_PAST_CUTSCENE_DONE	db ; $41: Saw cutscene with surprised npc
+	GLOBALFLAG_COMPANION_LOST_IN_FOREST	db ; $42
+	GLOBALFLAG_TALKED_TO_CHEVAL		db ; $43
+	GLOBALFLAG_44				db ; $44: Maple's been met in the past
+	GLOBALFLAG_RALPH_ENTERED_BLACK_TOWER	db ; $45
+	GLOBALFLAG_GOT_SATCHEL_UPGRADE		db ; $46
+
+	; Unused?
+	GLOBALFLAG_47				db ; $47
+	GLOBALFLAG_48				db ; $48
+	GLOBALFLAG_49				db ; $49
+	GLOBALFLAG_4a				db ; $4a
+	GLOBALFLAG_4b				db ; $4b
+	GLOBALFLAG_4c				db ; $4c
+	GLOBALFLAG_4d				db ; $4d
+	GLOBALFLAG_4e				db ; $4e
+	GLOBALFLAG_4f				db ; $4f
+.ende
+.endif

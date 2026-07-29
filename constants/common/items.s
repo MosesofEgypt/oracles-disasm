@@ -72,11 +72,15 @@
 	; animal companion attack? (includes moosh's attack, ricky's punch)
 	ITEM_28				db ; 0x28
 
-.ifdef ROM_AGES
-	ITEM_29				db ; 0x29
+.if defined(ROM_COMBO)
+	ITEM_29					.db ; 0x29
+	ITEM_MAGNET_BALL		db ; 0x29
+.elif defined(ROM_AGES)
+	ITEM_29					db ; 0x29
 .else
 	ITEM_MAGNET_BALL		db ; 0x29
 .endif
+
 	ITEM_RICKY_TORNADO		db ; 0x2a
 	ITEM_DIMITRI_MOUTH		db ; 0x2b: invisible item
 .ende

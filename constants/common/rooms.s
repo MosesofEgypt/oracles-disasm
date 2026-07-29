@@ -5,7 +5,7 @@
 ; in Ages and Seasons but have different numbers. In this case they are renamed to "ROOM_X" instead
 ; of "ROOM_AGES_X" or "ROOM_SEASONS_X".
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.enum 0
 
 	ROOM_AGES_000		db
@@ -2066,7 +2066,7 @@
 
 	.ende
 
-.else; ROM_SEASONS
+.else
 
 	.enum 0
 
@@ -4127,4 +4127,20 @@
 	ROOM_SEASONS_7ff	db
 
 	.ende
+.endif
+
+.if defined(ROM_COMBO)
+.REPT $800 index tmpi
+	.if tmpi == $59a
+		.define ROOM_ZELDA_IN_FINAL_DUNGEON_SEASONS		ROOM_AGES_{%.3x{tmpi}}
+	.elif tmpi == $59e
+		.define ROOM_TWINROVA_FIGHT_SEASONS				ROOM_AGES_{%.3x{tmpi}}
+	.elif tmpi == $5f1
+		.define ROOM_SEASONS_{%.3x{tmpi}}				ROOM_ZELDA_IN_FINAL_DUNGEON
+	.elif tmpi == $5f5
+		.define ROOM_SEASONS_{%.3x{tmpi}}				ROOM_TWINROVA_FIGHT
+	.else
+		.define ROOM_SEASONS_{%.3x{tmpi}}				ROOM_AGES_{%.3x{tmpi}}
+	.endif
+.ENDR
 .endif

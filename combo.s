@@ -1,5 +1,3 @@
-; Main file for Oracle of Ages, US version
-
 .include "include/constants.s"
 .include "include/rominfo.s"
 .include "include/emptyfill.s"
@@ -29,6 +27,12 @@
 .ORG 0
 
 ;	.include "code/bank1.s"
+
+; NOTE: temporary code until bank1 can be included
+	;.include {"{GAME_DATA_DIR}/paletteHeaders.s"}
+	;.include {"{GAME_DATA_DIR}/uncmpGfxHeaders.s"}
+	.include {"{GAME_DATA_DIR}/gfxHeaders.s"}
+; NOTE: temporary code until bank1 can be included
 
 
 .BANK $02 SLOT 1
@@ -792,17 +796,6 @@ m_section_free Bank16_2 NAMESPACE bank16
 
 ;	.include {"{GAME_DATA_DIR}/smallRoomLayoutTables.s"}
 
-.BANK $19 SLOT 1
-.ORG 0
-
-m_section_free Gfx_19_1 ALIGN $10
-;	.include {"{GAME_DATA_DIR}/gfxDataBank19_1.s"}
-.ends
-
-m_section_free Gfx_19_2 ALIGN $10
-;	.include {"{GAME_DATA_DIR}/gfxDataBank19_2.s"}
-.ends
-
 
 .BANK $1a SLOT 1
 .ORG 0
@@ -988,8 +981,8 @@ m_section_free Bank3f NAMESPACE bank3f
 ;.include {"{GAME_DATA_DIR}/treasureCollectionBehaviours.s"}
 ;.include {"{GAME_DATA_DIR}/treasureDisplayData.s"}
 
-;.include "data/ages/blackTowerOamData.s"
-;.include "data/ages/nayruSingingOamData.s"
+.include "data/ages/blackTowerOamData.s"
+.include "data/ages/nayruSingingOamData.s"
 
 
 ;.include "object_code/ages/interactions/monkeyMain.s"

@@ -20,12 +20,15 @@
 	; Link stays in this state as long as [wDisabledObjects] is nonzero.
 	LINK_STATE_08				db ; $08
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	LINK_STATE_AMBI_UNPOSSESSED_CUTSCENE	.db ; 0x09
+	LINK_STATE_BOUNCING_ON_TRAMPOLINE		db ; 0x09
+.elif defined(ROM_AGES)
 	; State for the cutscene where Ambi is unpossessed, Link moves back, then jumps to
 	; avoid Veran.
-	LINK_STATE_AMBI_UNPOSSESSED_CUTSCENE	db ; $09
+	LINK_STATE_AMBI_UNPOSSESSED_CUTSCENE	db ; 0x09
 .else
-	LINK_STATE_BOUNCING_ON_TRAMPOLINE	db ; $09
+	LINK_STATE_BOUNCING_ON_TRAMPOLINE		db ; 0x09
 .endif
 
 	; Link is in this state while doing a screen transition.

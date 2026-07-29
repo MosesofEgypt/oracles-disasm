@@ -211,7 +211,7 @@
 	TREASURE_ROCK_BRISKET		db ; $5e
 	TREASURE_5f			db ; $5f
 
-.else; ROM_SEASONS
+.else
 
 	TREASURE_FIRST_KEY		.db
 
@@ -248,7 +248,7 @@
 	TREASURE_5e			db ; $5e
 	TREASURE_5f			db ; $5f
 
-.endif ; ROM_SEASONS
+.endif
 
 
 	; Upgrades

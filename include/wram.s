@@ -3744,7 +3744,20 @@ w2TmpAttrBuffer:		dsb $0400
 ; Memory layout of this part differs a fair bit between games, as Seasons uses a chunk of this
 ; memory for the pirate ship escape cutscene. With that not being present in Ages,
 ; "wxSeedTreeRefillData" was moved to the space it was occupying in Ages.
-.ifdef ROM_SEASONS
+.if defined(ROM_COMBO)
+	.union
+	w2WaveScrollValues:			dsb $80		; $d800/$d800
+	w2Filler7:					dsb $80
+	; NOTE: this is technically going to cause a bug, as the refill data
+	;       will get clobbered when this is filled with the ship tiles.
+	;       it shouldnt cause any problems other than throwing off when
+	;       refills happen though, so we're do this to simplify the reorg
+	wxSeedTreeRefillData:		dsb NUM_SEED_TREES*8 ; 2:d900/3:dfc0
+	.nextu
+	w2PirateShipBgTiles:		dsb $180	; -/$d800
+	.endu
+
+.elif defined(ROM_SEASONS)
 
 	.union
 	w2WaveScrollValues:	dsb $80		; $d800/$d800

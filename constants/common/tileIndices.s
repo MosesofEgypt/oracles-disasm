@@ -24,7 +24,14 @@
 .define TILEINDEX_GRAVE_STATIONARY	$02 ; Overworld only
 .define TILEINDEX_UNLIT_TORCH		$08
 .define TILEINDEX_LIT_TORCH		$09
-.ifdef ROM_AGES
+
+.if defined(ROM_COMBO)
+	; Overworld only
+	.define TILEINDEX_OVERWORLD_SWITCH_OFF_AGES	$9e
+	.define TILEINDEX_OVERWORLD_SWITCH_ON_AGES	$9f
+	.define TILEINDEX_OVERWORLD_SWITCH_OFF_SEASONS	$b1
+	.define TILEINDEX_OVERWORLD_SWITCH_ON_SEASONS	$b0
+.elif defined(ROM_AGES) ; Ages only
 	.define TILEINDEX_OVERWORLD_SWITCH_OFF	$9e ; Overworld only
 	.define TILEINDEX_OVERWORLD_SWITCH_ON	$9f ; Overworld only
 .else
@@ -60,13 +67,23 @@
 .define TILEINDEX_OVERWORLD_ROCK	$c0 ; outdoors only
 .define TILEINDEX_DUG_HOLE		$e1 ; outdoors only
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	.define TILEINDEX_STAIRS		$d0
+
+	.define TILEINDEX_VINE_TOP_AGES		$d4
+	.define TILEINDEX_VINE_MIDDLE_AGES		$d5
+	.define TILEINDEX_VINE_BOTTOM_AGES		$d6
+
+	.define TILEINDEX_VINE_TOP_SEASONS		$dd
+	.define TILEINDEX_VINE_MIDDLE_SEASONS		$de
+	.define TILEINDEX_VINE_BOTTOM_SEASONS		$df
+.elif defined(ROM_AGES) ; Ages only
 	.define TILEINDEX_OVERWORLD_BUSH_1	$c5 ; Overworld only
 	.define TILEINDEX_STAIRS		$d0
 	.define TILEINDEX_VINE_TOP		$d4
 	.define TILEINDEX_VINE_MIDDLE		$d5
 	.define TILEINDEX_VINE_BOTTOM		$d6
-.else; ROM_SEASONS
+.else;
 	.define TILEINDEX_OVERWORLD_BUSH_1	$c4 ; Overworld only
 	.define TILEINDEX_STAIRS		$d0
 	.define TILEINDEX_VINE_TOP		$dd
@@ -159,7 +176,34 @@
 
 .define TILEINDEX_INDOOR_DOOR		$af ; indoors only
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	.define TILEINDEX_GASHA_TREE_TL_AGES	$4e
+	.define TILEINDEX_SOFT_SOIL_AGES		$d2
+
+	.define TILEINDEX_PUDDLE_AGES			$f9
+	.define TILEINDEX_WATER_AGES			$fa
+
+	.define TILEINDEX_GASHA_TREE_TL_SEASONS	$75
+	.define TILEINDEX_SOFT_SOIL_SEASONS		$e0
+
+	; For seasons, $f8-$f9 count as grass, $fa-$fc count as puddles
+	.define TILEINDEX_PUDDLE_SEASONS	$fa
+	.define TILEINDEX_WATER_SEASONS		$fd
+
+	; ages-exclusive
+	.define TILEINDEX_RAISED_FLOOR_1	$0e
+	.define TILEINDEX_LOWERED_FLOOR_1	$0f
+	.define TILEINDEX_RAISED_FLOOR_2	$28
+	.define TILEINDEX_LOWERED_FLOOR_2	$29
+
+	; seasons-exclusive
+	.define TILEINDEX_TRAMPOLINE		$07 ; dungeons
+	.define TILEINDEX_STUMP			$20 ; overworld
+	.define TILEINDEX_COLLAPSING_SAMASA_GATE	$a0
+	.define TILEINDEX_SAND			$af
+	.define TILEINDEX_OPEN_CAVE_DOOR	$e8
+
+.elif defined(ROM_AGES) ; Ages only
 	.define TILEINDEX_RAISED_FLOOR_1	$0e
 	.define TILEINDEX_LOWERED_FLOOR_1	$0f
 	.define TILEINDEX_RAISED_FLOOR_2	$28
@@ -172,7 +216,7 @@
 	.define TILEINDEX_PUDDLE		$f9
 	.define TILEINDEX_WATER			$fa
 
-.else ; ROM_SEASONS
+.else
 	; Trampolines overwrite the tile index they're on with this value.
 	.define TILEINDEX_TRAMPOLINE		$07 ; dungeons
 
@@ -191,8 +235,13 @@
 	.define TILEINDEX_WATER		$fd
 .endif
 
-.define TILEINDEX_DEEP_WATER		$fc
-.define TILERANGE_WATER             $fd-TILEINDEX_PUDDLE+1 ; number of puddle/water tiles
+.define TILEINDEX_DEEP_WATER			$fc
+.if defined(ROM_COMBO)
+	.define TILERANGE_WATER_AGES		$fd-TILEINDEX_PUDDLE_AGES+1
+	.define TILERANGE_WATER_SEASONS		$fd-TILEINDEX_PUDDLE_SEASONS+1
+.else
+	.define TILERANGE_WATER				$fd-TILEINDEX_PUDDLE+1 ; number of puddle/water tiles
+.endif
 
 ; Tiles in sidescrolling tilesets
 .define TILEINDEX_SS_EMPTY		$01

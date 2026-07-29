@@ -28,7 +28,20 @@
 	UNCMP_GFXH_1a:    db ; $1a
 	UNCMP_GFXH_1b:    db ; $1b
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	UNCMP_GFXH_AGES_1c:       .db
+	UNCMP_GFXH_SEASONS_1c:    db ; $1c
+
+	UNCMP_GFXH_AGES_1d:       .db
+	UNCMP_GFXH_SEASONS_1d:    db ; $1d
+
+	UNCMP_GFXH_AGES_1e:       .db
+	UNCMP_GFXH_SEASONS_1e:    db ; $1e
+
+	UNCMP_GFXH_AGES_1f:       .db
+	UNCMP_GFXH_SEASONS_1f:    db ; $1f
+
+.elif defined(ROM_AGES) ; Ages only
 	UNCMP_GFXH_AGES_1c:       db ; $1c
 	UNCMP_GFXH_AGES_1d:       db ; $1d
 	UNCMP_GFXH_AGES_1e:       db ; $1e
@@ -63,7 +76,7 @@
 	UNCMP_GFXH_34:    db ; $34
 	UNCMP_GFXH_35:    db ; $35
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 
 	UNCMP_GFXH_AGES_36:              db ; $36
 	UNCMP_GFXH_AGES_37:              db ; $37
@@ -87,7 +100,20 @@
 	UNCMP_GFXH_AGES_ROD_OF_SEASONS	 db
 	UNCMP_GFXH_AGES_FOOLS_ORE	 db
 
-.else; ROM_SEASONS
+.else;
+
+.if defined(ROM_COMBO)
+	UNCMP_GFXH_AGES_36:              db ; $36
+	UNCMP_GFXH_AGES_37:              db ; $37
+	UNCMP_GFXH_AGES_38:              db ; $38
+	UNCMP_GFXH_AGES_39:              db ; $39 ; Same as below?
+	UNCMP_GFXH_AGES_IMPA_FAINTED:    db ; $3a
+	UNCMP_GFXH_AGES_3b:              db ; $3b
+	UNCMP_GFXH_AGES_3c:              db ; $3c
+	UNCMP_GFXH_AGES_3d:              db ; $3d
+	UNCMP_GFXH_AGES_3e:              db ; $3e
+	UNCMP_GFXH_AGES_3f:              db ; $3f
+.endif
 
 .ifndef WIDE_INVENTORY_SPRITES
 	UNCMP_GFXH_MAGIC_BOOMERANG_INV   db
@@ -96,6 +122,15 @@
 	UNCMP_GFXH_CANE_OF_SOMARIA       db
 	UNCMP_GFXH_SEASONS_SWITCH_HOOK   db
 	UNCMP_GFXH_SEASONS_SEED_SHOOTER  db
+
+.if defined(ROM_COMBO)
+	UNCMP_GFXH_AGES_MAGNETGLOVES	 db
+	UNCMP_GFXH_AGES_SLINGSHOT	 db
+	UNCMP_GFXH_AGES_L1_BOOMERANG     db
+	UNCMP_GFXH_AGES_L2_BOOMERANG     db
+	UNCMP_GFXH_AGES_ROD_OF_SEASONS	 db
+	UNCMP_GFXH_AGES_FOOLS_ORE	 db
+.endif
 
 .endif
 
