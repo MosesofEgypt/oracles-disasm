@@ -792,16 +792,12 @@ m_section_free Bank16_2 NAMESPACE bank16
 
 ;	.include {"{GAME_DATA_DIR}/smallRoomLayoutTables.s"}
 
-; HACK-BASE: Bank $18 is repurposed for the expanded tilesets patch.
-
 .BANK $19 SLOT 1
 .ORG 0
 
 m_section_free Gfx_19_1 ALIGN $10
 ;	.include {"{GAME_DATA_DIR}/gfxDataBank19_1.s"}
 .ends
-
-; HACK-BASE: Deleted tileMappings.s include for expanded tilesets patch.
 
 m_section_free Gfx_19_2 ALIGN $10
 ;	.include {"{GAME_DATA_DIR}/gfxDataBank19_2.s"}
@@ -830,28 +826,13 @@ m_section_free Gfx_1b ALIGN $20
 	.include "data/gfxDataBank1c.s"
 
 ;	.include {"{GAME_DATA_DIR}/largeRoomLayoutTables.s"} ; $719c0
-
-	; "${BUILD_DIR}/textData.s" will determine where this data starts.
-	;   Ages:    1d:4000
-	;   Seasons: 1c:5c00
-
-;	.include {"{BUILD_DIR}/ages_textData.s"}
-;	.include {"{BUILD_DIR}/seasons_textData.s"}
-
-;	.REDEFINE DATA_ADDR TEXT_END_ADDR
-;	.REDEFINE DATA_BANK TEXT_END_BANK
-
-.BANK $1e SLOT 1
-.ORG 0
-	.REDEFINE DATA_ADDR $4000
-	.REDEFINE DATA_BANK $1e
-
 ;	.include {"{GAME_DATA_DIR}/roomLayoutData.s"}
-	.include {"{GAME_DATA_DIR}/gfxDataMain.s"}
 
-	; HACK-BASE: Normally audio code would start in bank $39. But to give more space for the
-	; data in the above includes, it's been relocated. So now, banks all the way up to and
-	; including bank $3e could be used for the above data (text, room layouts, graphics).
+	.include {"{BUILD_DIR}/ages_textData.s"}
+	.include {"{BUILD_DIR}/seasons_textData.s"}
+
+	.REDEFINE DATA_ADDR $4000
+	.REDEFINE DATA_BANK $2b
 
 
 .BANK $3b SLOT 1
@@ -1017,6 +998,12 @@ m_section_free Bank3f NAMESPACE bank3f
 ;.include "object_code/ages/interactions/tuniNutMain.s"
 .endif
 .ends
+
+.BANK $40 SLOT 1
+.ORG 0
+	.REDEFINE DATA_ADDR $4000
+	.REDEFINE DATA_BANK $40
+	.include {"{GAME_DATA_DIR}/gfxDataMain.s"}
 
 
 ; HACK-BASE: Expanded tileset data

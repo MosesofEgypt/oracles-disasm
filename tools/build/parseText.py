@@ -838,28 +838,39 @@ definesFile.close()
 
 # Print tables
 
-outFile.write('.BANK ' + wlahex(bank, 2) + '\n')
-outFile.write('.ORGA ' + wlahex(address, 4) + '\n\n')
+text_table_name  = "textTableENG"
+text_offset_name = "TEXT_OFFSET"
+addr_suffix      = "ADDR"
+text_address     = wlahex(address, 4)
+text_bank        = wlahex(bank, 2)
+if suffix:
+    text_table_name  += "_" + suffix
+    text_offset_name += "_" + suffix.upper()
+    addr_suffix      += "_" + suffix.upper()
 
-outFile.write('textTableENG:\n')
+
+outFile.write('.BANK %s\n' % text_bank)
+outFile.write('.ORGA %s\n\n' % text_address)
+outFile.write('%s:\n' % text_table_name)
 
 for i in range(0, numGroups):
-    outFile.write('\t.dw textTableENG_' + myhex(i, 2) + ' - textTableENG\n')
+    outFile.write('\t.dw %s_%s - %s\n' % (
+        text_table_name, myhex(i, 2), text_table_name
+        ))
     address += 2
 
 # All skipped groups reference group 0
-outFile.write('\ntextTableENG_00:\n')
+outFile.write('\n%s_00:\n' % text_table_name)
 for g in sorted(skippedGroups):
-    outFile.write('textTableENG_' + myhex(g, 2) + ':\n')
+    outFile.write('%s_%s:\n' % (text_table_name, myhex(g, 2)))
 
 for group in groupDict.values():
     if group.index != 0:
-        outFile.write('textTableENG_' + myhex(group.index, 2) + ':\n')
+        outFile.write('%s_%s:\n' % (text_table_name, myhex(group.index, 2)))
 
-    if group.index < textOffsetSplitIndex:
-        textOffset = 'TEXT_OFFSET_1'
-    else:
-        textOffset = 'TEXT_OFFSET_2'
+    textOffset = '%s_%s' % (
+        text_offset_name, 1 + (group.index >= textOffsetSplitIndex)
+        )
 
     for i in range(0, group.lastTextIndex+1):
         textName = group.getTextName(i)
@@ -869,7 +880,8 @@ for group in groupDict.values():
             address += 2
         else:
             outFile.write(
-                '\tm_RelativePointer ' + textName + '_ADDR  ' + textOffset + '\n')
+                '\t%s %s_%s  %s\n' % ("m_RelativePointer", textName, addr_suffix, textOffset)
+                )
             address += 2
 
 
@@ -881,12 +893,12 @@ for group in groupDict.values():
         data = textStruct.getFinalData() # Uncompressed if dictionary, compressed otherwise
 
         if textOffset1 == textStruct:
-            outFile.write('TEXT_OFFSET_1:\n')
+            outFile.write('%s_1:\n' % text_offset_name)
         elif textOffset2 == textStruct:
-            outFile.write('TEXT_OFFSET_2:\n')
+            outFile.write('%s_2:\n' % text_offset_name)
 
         for name in textStruct.names:
-            outFile.write(name + '_ADDR:\n')
+            outFile.write('%s_%s:\n' % (name, addr_suffix))
         i = 0
         lineEntries = 0
         while i < len(data):
@@ -915,8 +927,8 @@ for group in groupDict.values():
 #                 outFile2.close()
 
 
-outFile.write('\n.DEFINE TEXT_END_ADDR ' + wlahex(address, 4) + '\n')
-outFile.write('.DEFINE TEXT_END_BANK ' + wlahex(bank, 2))
+outFile.write('\n.%s TEXT_END_ADDR %s\n' % (define_directive, wlahex(address, 4)))
+outFile.write(  '.%s TEXT_END_BANK %s\n' % (define_directive, wlahex(bank, 2)))
 outFile.close()
 
 # Debug output: if this is equivalent to the debug output from "dumpText.py", then the text was at

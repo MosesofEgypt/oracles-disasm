@@ -113,11 +113,11 @@ tilesetMappings{%.2x{tmpi}}_winter:
     m_TilesetMappingSection {"{%.2x{tmpi}}"}
 .ENDR
 
-.BANK $50 SLOT 1
+.BANK $60 SLOT 1
 .ORGA $4000
 
+.redefine DATA_BANK $60
 .redefine DATA_ADDR $4000
-.redefine DATA_BANK $50
 
 	; For simplicity I'm using the "m_GfxData" macro, which can handle data crossing banks.
 	; But since each tileset is exactly 0x1000 bytes (and is uncompressed) it doesn't actually

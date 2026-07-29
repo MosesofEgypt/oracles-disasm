@@ -7,7 +7,8 @@ SEASONS_BUILD_DIR = build_seasons_h
 
 GAME_DEFINE = ROM_COMBO
 GAME = combo
-TEXT_INSERT_ADDRESS = 0x74000
+TEXT_INSERT_ADDRESS_AGES = 0x74000
+TEXT_INSERT_ADDRESS_SEASONS = 0x94000
 BUILD_DIR = build_combo_h
 GAME_COLOR = $(GREEN)
 
@@ -286,11 +287,11 @@ $(BUILD_DIR)/seasons_textLayered.yaml: text/seasons/text.yaml tools/build/layerT
 # Parse & compress text
 $(BUILD_DIR)/ages_textData.s: $(BUILD_DIR)/ages_textLayered.yaml text/ages/dict.yaml tools/build/parseText.py | $(BUILD_DIR)
 	@echo "Compressing text..."
-	@$(PYTHON) tools/build/parseText.py text/ages/dict.yaml $< $@ $$(($(TEXT_INSERT_ADDRESS))) --combo
+	@$(PYTHON) tools/build/parseText.py text/ages/dict.yaml $< $@ $$(($(TEXT_INSERT_ADDRESS_AGES))) --combo
 
 $(BUILD_DIR)/seasons_textData.s: $(BUILD_DIR)/seasons_textLayered.yaml text/seasons/dict.yaml tools/build/parseText.py | $(BUILD_DIR)
 	@echo "Compressing text..."
-	@$(PYTHON) tools/build/parseText.py text/seasons/dict.yaml $< $@ $$(($(TEXT_INSERT_ADDRESS))) --combo
+	@$(PYTHON) tools/build/parseText.py text/seasons/dict.yaml $< $@ $$(($(TEXT_INSERT_ADDRESS_SEASONS))) --combo
 
 $(BUILD_DIR)/ages_textDefines.s: $(BUILD_DIR)/ages_textData.s
 $(BUILD_DIR)/seasons_textDefines.s: $(BUILD_DIR)/seasons_textData.s
