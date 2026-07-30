@@ -15,8 +15,13 @@ objectGfxHeaderTable:
 	/* $06 */ m_ObjectGfxHeader gfx_capcom_nintendo
 	/* $07 */ m_ObjectGfxHeader gfx_capcom_nintendo
 	/* $08 */ m_ObjectGfxHeader gfx_capcom_nintendo
+.ifdef ROM_COMBO
+	/* $09 */ m_ObjectGfxHeader ages_spr_kingmoblin_1
+	/* $0a */ m_ObjectGfxHeader ages_spr_kingmoblin_2
+.else
 	/* $09 */ m_ObjectGfxHeader spr_kingmoblin_1
 	/* $0a */ m_ObjectGfxHeader spr_kingmoblin_2
+.endif
 	/* $0b */ m_ObjectGfxHeader spr_kingmoblin_3
 	/* $0c */ m_ObjectGfxHeader spr_kingmoblin_4, 1
 	/* $0d */ m_ObjectGfxHeader spr_bunny_parrot
@@ -26,7 +31,11 @@ objectGfxHeaderTable:
 	/* $11 */ m_ObjectGfxHeader spr_zelda_1
 	/* $12 */ m_ObjectGfxHeader spr_zelda_2, 1
 	/* $13 */ m_ObjectGfxHeader spr_din_1
+.ifdef ROM_COMBO
+	/* $14 */ m_ObjectGfxHeader ages_spr_din_2, 1
+.else
 	/* $14 */ m_ObjectGfxHeader spr_din_2, 1
+.endif
 	/* $15 */ m_ObjectGfxHeader spr_din_1, 1
 	/* $16 */ m_ObjectGfxHeader spr_ganon_1
 	/* $17 */ m_ObjectGfxHeader spr_ganon_2
@@ -78,7 +87,11 @@ objectGfxHeaderTable:
 	/* $45 */ m_ObjectGfxHeader spr_zz_bubble_exclamation_heart_kid
 	/* $46 */ m_ObjectGfxHeader spr_bipin_glassesguy
 	/* $47 */ m_ObjectGfxHeader spr_blossom_otherlady
+.ifdef ROM_COMBO
+	/* $48 */ m_ObjectGfxHeader ages_spr_bipsom_1
+.else
 	/* $48 */ m_ObjectGfxHeader spr_bipsom_1
+.endif
 	/* $49 */ m_ObjectGfxHeader spr_bipsom_2_old_lady
 	/* $4a */ m_ObjectGfxHeader spr_lady_butterfly_pickaxeworker
 	/* $4b */ m_ObjectGfxHeader spr_fairy_toilethand
@@ -92,7 +105,11 @@ objectGfxHeaderTable:
 	/* $53 */ m_ObjectGfxHeader spr_mamamu_dog
 	/* $54 */ m_ObjectGfxHeader spr_goron
 	/* $55 */ m_ObjectGfxHeader spr_gorondance_tingle_write
+.ifdef ROM_COMBO
+	/* $56 */ m_ObjectGfxHeader ages_spr_seasonfairy_ambi
+.else
 	/* $56 */ m_ObjectGfxHeader spr_seasonfairy_ambi
+.endif
 	/* $57 */ m_ObjectGfxHeader spr_farore_1
 	/* $58 */ m_ObjectGfxHeader spr_lady_guitarist
 	/* $59 */ m_ObjectGfxHeader spr_oldzora_cheval
@@ -105,9 +122,15 @@ objectGfxHeaderTable:
 	/* $60 */ m_ObjectGfxHeader spr_carpenters
 	/* $61 */ m_ObjectGfxHeader spr_pirateship
 	/* $62 */ m_ObjectGfxHeader spr_shopkeeper_adlar_veranmask
+.ifdef ROM_COMBO
+	/* $63 */ m_ObjectGfxHeader ages_spr_piratians
+	/* $64 */ m_ObjectGfxHeader spr_swords
+	/* $65 */ m_ObjectGfxHeader ages_spr_subrosian
+.else
 	/* $63 */ m_ObjectGfxHeader spr_piratians
 	/* $64 */ m_ObjectGfxHeader spr_swords
 	/* $65 */ m_ObjectGfxHeader spr_subrosian
+.endif
 	/* $66 */ m_ObjectGfxHeader spr_jabuchild
 	/* $67 */ m_ObjectGfxHeader spr_maku_child
 	/* $68 */ m_ObjectGfxHeader spr_gorondance_tingle_write
@@ -119,25 +142,41 @@ objectGfxHeaderTable:
 	/* $6e */ m_ObjectGfxHeader spr_lightning
 	/* $6f */ m_ObjectGfxHeader spr_fountain
 	/* $70 */ m_ObjectGfxHeader spr_present_past_symbols
+.ifdef ROM_COMBO
+	/* $71 */ m_ObjectGfxHeader ages_spr_woodentunnel_seasonsymbols
+.else
 	/* $71 */ m_ObjectGfxHeader spr_woodentunnel_seasonsymbols
+.endif
 	/* $72 */ m_ObjectGfxHeader spr_dungeon_sprites
 	/* $73 */ m_ObjectGfxHeader spr_spinner_seedbouncer
 	/* $74 */ m_ObjectGfxHeader spr_roller_owl_barrier_orb
 	/* $75 */ m_ObjectGfxHeader spr_rollingplatform_d8stuff
 	/* $76 */ m_ObjectGfxHeader spr_pedestal_flame_crystal
 	/* $77 */ m_ObjectGfxHeader spr_colored_cube
+.ifdef ROM_COMBO
+	/* $78 */ m_ObjectGfxHeader ages_spr_common_items
+.else
 	/* $78 */ m_ObjectGfxHeader spr_common_items
+.endif
 	/* $79 */ m_ObjectGfxHeader spr_quest_items_5
 	/* $7a */ m_ObjectGfxHeader spr_map_compass_keys_bookofseals
 	/* $7b */ m_ObjectGfxHeader gfx_blank
 	/* $7c */ m_ObjectGfxHeader spr_item_icons_1_spr
 	/* $7d */ m_ObjectGfxHeader spr_item_icons_2
 	/* $7e */ m_ObjectGfxHeader spr_item_icons_3
+.ifdef ROM_COMBO
+	/* $7f */ m_ObjectGfxHeader ages_spr_essences
+	/* $80 */ m_ObjectGfxHeader ages_spr_quest_items_1
+	/* $81 */ m_ObjectGfxHeader ages_spr_quest_items_2
+	/* $82 */ m_ObjectGfxHeader ages_spr_quest_items_3
+	/* $83 */ m_ObjectGfxHeader ages_spr_quest_items_4
+.else
 	/* $7f */ m_ObjectGfxHeader spr_essences
 	/* $80 */ m_ObjectGfxHeader spr_quest_items_1
 	/* $81 */ m_ObjectGfxHeader spr_quest_items_2
 	/* $82 */ m_ObjectGfxHeader spr_quest_items_3
 	/* $83 */ m_ObjectGfxHeader spr_quest_items_4
+.endif
 	/* $84 */ m_ObjectGfxHeader spr_boomerang
 	/* $85 */ m_ObjectGfxHeader spr_obj_intro_tree
 	/* $86 */ m_ObjectGfxHeader spr_obj_intro_clouds
@@ -172,6 +211,15 @@ objectGfxHeaderTable:
 	/* $a3 */ m_ObjectGfxHeader spr_thwomps
 	/* $a4 */ m_ObjectGfxHeader spr_fireball_cheepcheep
 	/* $a5 */ m_ObjectGfxHeader spr_waterbubble
+.ifdef ROM_COMBO
+	/* $a6 */ m_ObjectGfxHeader ages_spr_projectiles_2
+	/* $a7 */ m_ObjectGfxHeader spr_projectiles_3
+	/* $a8 */ m_ObjectGfxHeader spr_fireballs
+	/* $a9 */ m_ObjectGfxHeader ages_spr_kingmoblin_2
+	/* $aa */ m_ObjectGfxHeader spr_kingmoblin_3
+	/* $ab */ m_ObjectGfxHeader spr_kingmoblin_4
+	/* $ac */ m_ObjectGfxHeader ages_spr_kingmoblin_5, 1
+.else
 	/* $a6 */ m_ObjectGfxHeader spr_projectiles_2
 	/* $a7 */ m_ObjectGfxHeader spr_projectiles_3
 	/* $a8 */ m_ObjectGfxHeader spr_fireballs
@@ -179,6 +227,7 @@ objectGfxHeaderTable:
 	/* $aa */ m_ObjectGfxHeader spr_kingmoblin_3
 	/* $ab */ m_ObjectGfxHeader spr_kingmoblin_4
 	/* $ac */ m_ObjectGfxHeader spr_kingmoblin_5, 1
+.endif
 	/* $ad */ m_ObjectGfxHeader spr_giantghini_1
 	/* $ae */ m_ObjectGfxHeader spr_giantghini_2, 1
 	/* $af */ m_ObjectGfxHeader spr_swoop

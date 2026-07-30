@@ -50,10 +50,10 @@ paletteTransitionSeasonData:
 
 
 paletteTransitionIndexData:
-	.dw paletteTransitionGroup0
-	.dw paletteTransitionGroup1
+	.dw paletteTransitionGroupOverworld
+	.dw paletteTransitionGroupSubrosia
 
-paletteTransitionGroup0: ; Overworld
+paletteTransitionGroupOverworld:
 	.db $e0 DIR_UP   $00 $03 ; Graveyard
 	.db $f0 DIR_DOWN $03 $00
 	.db $63 DIR_UP   $01 $02 ; Tarm ruins (unused due to fadeout transition)
@@ -64,5 +64,5 @@ paletteTransitionGroup0: ; Overworld
 	.db $33 DIR_DOWN $05 $04
 	.db $00 $ff
 
-paletteTransitionGroup1: ; Subrosia
+paletteTransitionGroupSubrosia:
 	.db $00 $ff

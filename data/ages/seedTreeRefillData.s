@@ -9,7 +9,11 @@
 ;   Param 1: group / room (ie. $05b for group 0 room $5b, 18a for group 1 room $8a)
 ;   Param 2: low byte of data location
 
+.ifdef ROM_COMBO
+seedTreeRefillLocations_ages:
+.else
 seedTreeRefillLocations:
+.endif
 	m_TreeRefillData $10b, (<wxSeedTreeRefillData+$00)
 	m_TreeRefillData $047, (<wxSeedTreeRefillData+$08)
 	m_TreeRefillData $000, (<wxSeedTreeRefillData+$10)

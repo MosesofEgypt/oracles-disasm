@@ -9,7 +9,11 @@
 ;   Param 1: room index
 ;   Param 2: low byte of data location
 
+.ifdef ROM_COMBO
+seedTreeRefillLocations_seasons:
+.else
 seedTreeRefillLocations:
+.endif
 	m_TreeRefillData $f8, (<wxSeedTreeRefillData+$00)
 	m_TreeRefillData $9e, (<wxSeedTreeRefillData+$08)
 	m_TreeRefillData $67, (<wxSeedTreeRefillData+$10)

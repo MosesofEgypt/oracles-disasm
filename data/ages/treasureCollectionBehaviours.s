@@ -32,7 +32,11 @@
 ;                  maximum value. (Seed drops)
 ; b2: Sound effect to play when Link gets the item
 
+.ifdef ROM_COMBO
+treasureCollectionBehaviourTable_ages:
+.else
 treasureCollectionBehaviourTable:
+.endif
 	; TREASURE_NONE (0x00)
 	.db $00
 	.db $00

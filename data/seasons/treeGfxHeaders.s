@@ -1,8 +1,16 @@
+.ifdef ROM_COMBO
+treeGfxHeaderTable_seasons:
+.else
 treeGfxHeaderTable:
+.endif
 	/* $00 */ m_ObjectGfxHeader gfx_capcom_nintendo
 	/* $01 */ m_ObjectGfxHeader gfx_tileset_blaino_gym_outside
 	/* $02 */ m_ObjectGfxHeader spr_caravan
+.ifdef ROM_COMBO
+	/* $03 */ m_ObjectGfxHeader seasons_gfx_inventory_hud_1
+.else
 	/* $03 */ m_ObjectGfxHeader gfx_inventory_hud_1
+.endif
 	/* $04 */ m_ObjectGfxHeader spr_grass_tuft
 	/* $05 */ m_ObjectGfxHeader gfx_sand
 	/* $06 */ m_ObjectGfxHeader gfx_dirt

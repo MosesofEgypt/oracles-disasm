@@ -1,6 +1,10 @@
 ; See data/ages/treasureCollectionBehaviours.s for documentation
 
+.ifdef ROM_COMBO
+treasureCollectionBehaviourTable_seasons:
+.else
 treasureCollectionBehaviourTable:
+.endif
 	; TREASURE_NONE (0x00)
 	.db $00
 	.db $00

@@ -73,7 +73,7 @@
 	; Must be in the same bank as "Tileset_Loading_2".
 	 m_section_free Tileset_Loading_1 NAMESPACE tilesets
 ;		.include {"{GAME_DATA_DIR}/tilesets.s"}
-;		.include {"{GAME_DATA_DIR}/tilesetAssignments.s"}
+		.include {"{GAME_DATA_DIR}/tilesetAssignments.s"}
 	.ends
 
 	 m_section_free animationAndUniqueGfxData NAMESPACE animationAndUniqueGfxData
@@ -970,15 +970,15 @@ m_section_free Bank3f NAMESPACE bank3f
 .include "data/gfxDataIntro/linkOnHorse3.s"
 
 
-;.include {"{GAME_DATA_DIR}/objectGfxHeaders.s"}
-;.include {"{GAME_DATA_DIR}/treeGfxHeaders.s"}
+.include {"{GAME_DATA_DIR}/objectGfxHeaders.s"}
+.include {"{GAME_DATA_DIR}/treeGfxHeaders.s"}
 
 .include {"{GAME_DATA_DIR}/enemyData.s"}
 .include {"{GAME_DATA_DIR}/partData.s"}
 .include {"{GAME_DATA_DIR}/itemData.s"}
 ;.include {"{GAME_DATA_DIR}/interactionData.s"}
 
-;.include {"{GAME_DATA_DIR}/treasureCollectionBehaviours.s"}
+.include {"{GAME_DATA_DIR}/treasureCollectionBehaviours.s"}
 ;.include {"{GAME_DATA_DIR}/treasureDisplayData.s"}
 
 .include "data/ages/blackTowerOamData.s"

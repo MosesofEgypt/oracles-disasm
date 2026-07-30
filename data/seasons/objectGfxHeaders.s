@@ -12,10 +12,17 @@ objectGfxHeaderTable:
 	/* $04 */ m_ObjectGfxHeader spr_maku_tree_1
 	/* $05 */ m_ObjectGfxHeader spr_maku_tree_2
 	/* $06 */ m_ObjectGfxHeader spr_maku_tree_3, 1
+.ifdef ROM_COMBO
+	/* $07 */ m_ObjectGfxHeader seasons_spr_subrosian
+	/* $08 */ m_ObjectGfxHeader spr_subrosian_2, 1
+	/* $09 */ m_ObjectGfxHeader seasons_spr_kingmoblin_1
+	/* $0a */ m_ObjectGfxHeader seasons_spr_kingmoblin_2
+.else
 	/* $07 */ m_ObjectGfxHeader spr_subrosian
 	/* $08 */ m_ObjectGfxHeader spr_subrosian_2, 1
 	/* $09 */ m_ObjectGfxHeader spr_kingmoblin_1
 	/* $0a */ m_ObjectGfxHeader spr_kingmoblin_2
+.endif
 	/* $0b */ m_ObjectGfxHeader spr_kingmoblin_3
 	/* $0c */ m_ObjectGfxHeader spr_kingmoblin_4, 1
 	/* $0d */ m_ObjectGfxHeader gfx_tileset_subrosia_pirate_ship_1
@@ -25,7 +32,11 @@ objectGfxHeaderTable:
 	/* $11 */ m_ObjectGfxHeader spr_zelda_1
 	/* $12 */ m_ObjectGfxHeader spr_zelda_2, 1
 	/* $13 */ m_ObjectGfxHeader spr_din_1
+.ifdef ROM_COMBO
+	/* $14 */ m_ObjectGfxHeader seasons_spr_din_2
+.else
 	/* $14 */ m_ObjectGfxHeader spr_din_2
+.endif
 	/* $15 */ m_ObjectGfxHeader spr_din_crystal, 1
 	/* $16 */ m_ObjectGfxHeader spr_ganon_1
 	/* $17 */ m_ObjectGfxHeader spr_ganon_2
@@ -64,7 +75,11 @@ objectGfxHeaderTable:
 	/* $38 */ m_ObjectGfxHeader spr_zz_bubble_exclamation_heart
 	/* $39 */ m_ObjectGfxHeader spr_bipin
 	/* $3a */ m_ObjectGfxHeader spr_blossom
+.ifdef ROM_COMBO
+	/* $3b */ m_ObjectGfxHeader seasons_spr_bipsom_1
+.else
 	/* $3b */ m_ObjectGfxHeader spr_bipsom_1
+.endif
 	/* $3c */ m_ObjectGfxHeader spr_bipsom_2
 	/* $3d */ m_ObjectGfxHeader spr_secretnpcs_butterfly_dragonfly
 	/* $3e */ m_ObjectGfxHeader spr_fairy_artist
@@ -76,9 +91,15 @@ objectGfxHeaderTable:
 	/* $44 */ m_ObjectGfxHeader spr_ingo
 	/* $45 */ m_ObjectGfxHeader spr_talon_sunkencitygirl
 	/* $46 */ m_ObjectGfxHeader spr_goron_parrot
+.ifdef ROM_COMBO
+	/* $47 */ m_ObjectGfxHeader seasons_spr_piratians
+	/* $48 */ m_ObjectGfxHeader spr_troupe
+	/* $49 */ m_ObjectGfxHeader seasons_spr_seasonfairy_ambi
+.else
 	/* $47 */ m_ObjectGfxHeader spr_piratians
 	/* $48 */ m_ObjectGfxHeader spr_troupe
 	/* $49 */ m_ObjectGfxHeader spr_seasonfairy_ambi
+.endif
 	/* $4a */ m_ObjectGfxHeader spr_nayru
 	/* $4b */ m_ObjectGfxHeader spr_farore_ralph
 	/* $4c */ m_ObjectGfxHeader spr_villagezora
@@ -91,23 +112,39 @@ objectGfxHeaderTable:
 	/* $53 */ m_ObjectGfxHeader spr_moblinflag_fountain_orb
 	/* $54 */ m_ObjectGfxHeader spr_pirate_ship
 	/* $55 */ m_ObjectGfxHeader spr_season_symbols
+.ifdef ROM_COMBO
+	/* $56 */ m_ObjectGfxHeader seasons_spr_woodentunnel_seasonsymbols
+.else
 	/* $56 */ m_ObjectGfxHeader spr_woodentunnel_seasonsymbols
+.endif
 	/* $57 */ m_ObjectGfxHeader spr_dungeon_sprites
 	/* $58 */ m_ObjectGfxHeader spr_spinner_trampoline
 	/* $59 */ m_ObjectGfxHeader spr_roller_owl_magnetspinner
 	/* $5a */ m_ObjectGfxHeader spr_conveyorplatform
 	/* $5b */ m_ObjectGfxHeader spr_pedestal_ice
+.ifdef ROM_COMBO
+	/* $5c */ m_ObjectGfxHeader seasons_spr_common_items
+.else
 	/* $5c */ m_ObjectGfxHeader spr_common_items
+.endif
 	/* $5d */ m_ObjectGfxHeader spr_quest_items_5
 	/* $5e */ m_ObjectGfxHeader spr_map_compass_keys
 	/* $5f */ m_ObjectGfxHeader spr_item_icons_1_spr
 	/* $60 */ m_ObjectGfxHeader spr_item_icons_2
 	/* $61 */ m_ObjectGfxHeader spr_item_icons_3
+.ifdef ROM_COMBO
+	/* $62 */ m_ObjectGfxHeader seasons_spr_essences
+	/* $63 */ m_ObjectGfxHeader seasons_spr_quest_items_1
+	/* $64 */ m_ObjectGfxHeader seasons_spr_quest_items_2
+	/* $65 */ m_ObjectGfxHeader seasons_spr_quest_items_3
+	/* $66 */ m_ObjectGfxHeader seasons_spr_quest_items_4
+.else
 	/* $62 */ m_ObjectGfxHeader spr_essences
 	/* $63 */ m_ObjectGfxHeader spr_quest_items_1
 	/* $64 */ m_ObjectGfxHeader spr_quest_items_2
 	/* $65 */ m_ObjectGfxHeader spr_quest_items_3
 	/* $66 */ m_ObjectGfxHeader spr_quest_items_4
+.endif
 	/* $67 */ m_ObjectGfxHeader spr_boomerang
 	/* $68 */ m_ObjectGfxHeader spr_obj_intro_tree
 	/* $69 */ m_ObjectGfxHeader spr_obj_intro_clouds
@@ -147,13 +184,24 @@ objectGfxHeaderTable:
 	/* $8b */ m_ObjectGfxHeader spr_magunesu
 	/* $8c */ m_ObjectGfxHeader spr_thwomps
 	/* $8d */ m_ObjectGfxHeader spr_fireball_cheepcheep
+.ifdef ROM_COMBO
+	/* $8e */ m_ObjectGfxHeader seasons_spr_projectiles_2
+.else
 	/* $8e */ m_ObjectGfxHeader spr_projectiles_2
+.endif
 	/* $8f */ m_ObjectGfxHeader spr_projectiles_3
 	/* $90 */ m_ObjectGfxHeader spr_gleeok_flames
+.ifdef ROM_COMBO
+	/* $91 */ m_ObjectGfxHeader seasons_spr_kingmoblin_2
+	/* $92 */ m_ObjectGfxHeader spr_kingmoblin_3
+	/* $93 */ m_ObjectGfxHeader spr_kingmoblin_4
+	/* $94 */ m_ObjectGfxHeader seasons_spr_kingmoblin_5, 1
+.else
 	/* $91 */ m_ObjectGfxHeader spr_kingmoblin_2
 	/* $92 */ m_ObjectGfxHeader spr_kingmoblin_3
 	/* $93 */ m_ObjectGfxHeader spr_kingmoblin_4
 	/* $94 */ m_ObjectGfxHeader spr_kingmoblin_5, 1
+.endif
 	/* $95 */ m_ObjectGfxHeader spr_goriyabros
 	/* $96 */ m_ObjectGfxHeader spr_omuai_1
 	/* $97 */ m_ObjectGfxHeader spr_omuai_2, 1
