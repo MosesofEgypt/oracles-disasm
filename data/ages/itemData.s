@@ -5,7 +5,11 @@
 ; b1: value for Item.oamTileIndexBase
 ; b2: value for Item.oamFlags
 
+.ifdef ROM_COMBO
+itemData_ages:
+.else
 itemData:
+.endif
 	.db $00 $00 $00 ; $00: ITEM_NONE
 	.db $00 $00 $00 ; $01: ITEM_SHIELD
 	.db $00 $00 $00 ; $02: ITEM_PUNCH

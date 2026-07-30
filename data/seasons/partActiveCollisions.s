@@ -1,6 +1,10 @@
 ; See notes in data/ages/enemyActiveCollisions.s.
 
+.ifdef ROM_COMBO
+partActiveCollisions_seasons:
+.else
 partActiveCollisions:
+.endif
 	dbrev %00000000 %00000000 %00000000 %00000000 ; 0x00
 	dbrev %00001111 %11111110 %00000110 %00000000 ; 0x01
 	dbrev %00000000 %00000000 %00000000 %00000000 ; 0x02

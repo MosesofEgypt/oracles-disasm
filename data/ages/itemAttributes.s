@@ -1,12 +1,16 @@
 ; See constants/common/items.s.
 
-; b0: Item.collisionType (see constants/common/collisionTypes.s)
+; b0: Item.collisionType (see constants/common/itemCollisionTypes.s)
 ;     bit 7 set if collisions should be enabled?
 ; b1: Item.collisionRadiusY/X (1st digit is Y, 2nd is X)
 ; b2: Item.damage (how much it deals to enemies)
 ; b3: Item.health
 
+.ifdef ROM_COMBO
+itemAttributes_ages:
+.else
 itemAttributes:
+.endif
 	.db $80 $11 $ff $03 ; $00: ITEM_NONE
 	.db $01 $00 $00 $00 ; $01: ITEM_SHIELD
 	.db $8a $55 $ff $00 ; $02: ITEM_PUNCH

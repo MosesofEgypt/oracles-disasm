@@ -1,7 +1,11 @@
 ; To find which objects are using which of these graphics, look in the files "interactionData.s",
 ; "enemyData.s", and "partData.s".
 
+.ifdef ROM_COMBO
+objectGfxHeaderTable_ages:
+.else
 objectGfxHeaderTable:
+.endif
 	/* $00 */ m_ObjectGfxHeader gfx_capcom_nintendo
 	/* $01 */ m_ObjectGfxHeader gfx_capcom_nintendo
 	/* $02 */ m_ObjectGfxHeader gfx_capcom_nintendo

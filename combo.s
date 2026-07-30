@@ -141,7 +141,7 @@ m_section_free Bank_6 NAMESPACE bank6
 
 ;	.include "object_code/common/itemParents/commonCode.s"
 
-;	.include {"{GAME_DATA_DIR}/itemUsageTables.s"}
+	.include {"{GAME_DATA_DIR}/itemUsageTables.s"}
 
 ;	.include "object_code/common/specialObjects/minecart.s"
 ;	.include "object_code/ages/specialObjects/raft.s"
@@ -205,7 +205,7 @@ m_section_free Bank_6 NAMESPACE bank6
 ;		.include "object_code/common/items/magnetGloves.s"
 ;		.include "object_code/common/items/rodOfSeasons.s"
 
-;		.include {"{GAME_DATA_DIR}/itemAttributes.s"}
+		.include {"{GAME_DATA_DIR}/itemAttributes.s"}
 ;		.include "data/itemAnimations.s"
 	.ends
 
@@ -213,7 +213,7 @@ m_section_free Bank_6 NAMESPACE bank6
 	 ; "Enemy_Part_Collisions".
 	 m_section_free Bank_7_Data namespace bank7
 		.include {"{GAME_DATA_DIR}/enemyActiveCollisions.s"}
-;		.include {"{GAME_DATA_DIR}/partActiveCollisions.s"}
+		.include {"{GAME_DATA_DIR}/partActiveCollisions.s"}
 		.include {"{GAME_DATA_DIR}/objectCollisionTable.s"}
 	.ends
 
@@ -975,7 +975,7 @@ m_section_free Bank3f NAMESPACE bank3f
 
 .include {"{GAME_DATA_DIR}/enemyData.s"}
 .include {"{GAME_DATA_DIR}/partData.s"}
-;.include {"{GAME_DATA_DIR}/itemData.s"}
+.include {"{GAME_DATA_DIR}/itemData.s"}
 ;.include {"{GAME_DATA_DIR}/interactionData.s"}
 
 ;.include {"{GAME_DATA_DIR}/treasureCollectionBehaviours.s"}

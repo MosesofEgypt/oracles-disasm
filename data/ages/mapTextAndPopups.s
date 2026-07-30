@@ -1,6 +1,10 @@
 ; Each number corresponds to TX_03XX (see text.txt).
 ; If bit 7 is set, that indicates special behaviour; see the "mapGetRoomText" function.
+.ifdef ROM_COMBO
+presentMapTextIndices_ages:
+.else
 presentMapTextIndices:
+.endif
 	.db $02 $02 $03 $a1 $03 $04 $04 $04 $05 $82 $a9 $05 $05 $05
 	.db $02 $02 $03 $03 $03 $04 $04 $04 $05 $05 $05 $05 $05 $42
 	.db $02 $02 $03 $03 $03 $04 $04 $04 $06 $06 $06 $06 $05 $05
@@ -16,7 +20,11 @@ presentMapTextIndices:
 	.db $0e $0e $0f $0f $0f $0f $10 $10 $10 $11 $11 $11 $11 $11
 	.db $0e $0e $0f $0f $0f $0f $10 $10 $10 $11 $11 $11 $11 $11
 
+.ifdef ROM_COMBO
+pastMapTextIndices_ages:
+.else
 pastMapTextIndices:
+.endif
 	.db $30 $30 $03 $03 $03 $38 $38 $38 $05 $05 $05 $05 $05 $05
 	.db $02 $02 $03 $21 $03 $38 $38 $38 $05 $05 $05 $05 $05 $48
 	.db $02 $02 $03 $31 $03 $38 $38 $38 $06 $06 $06 $06 $05 $05
@@ -39,7 +47,11 @@ pastMapTextIndices:
 ; b0: room index
 ; b1: popup behaviour. Each digit represents a different popup; screens with only one
 ;     popup use the same digit twice. (see the "mapMenu_LoadPopupData" function)
+.ifdef ROM_COMBO
+presentMinimapPopups_ages:
+.else
 presentMinimapPopups:
+.endif
 	.db $48 $88 ; 0x00
 	.db $8d $88 ; 0x02
 	.db $83 $88 ; 0x04
@@ -92,7 +104,11 @@ presentMinimapPopups:
 	.db $d7 $99
 	.db $ff
 
+.ifdef ROM_COMBO
+pastMinimapPopups_ages:
+.else
 pastMinimapPopups:
+.endif
 	.db $3c $88
 	.db $5c $88
 	.db $48 $a8

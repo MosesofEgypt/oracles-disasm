@@ -1,6 +1,10 @@
 ; Each number corresponds to TX_03XX (see text.txt).
 ; If bit 7 is set, that indicates special behaviour; see the "mapGetRoomText" function.
+.ifdef ROM_COMBO
+presentMapTextIndices_seasons: ; Actually "overworld"
+.else
 presentMapTextIndices: ; Actually "overworld"
+.endif
 	.db $b1 $2b $2b $c9 $03 $03 $03 $03 $18 $04 $04 $05 $05 $05 $05 $05
 	.db $2b $2b $2b $02 $03 $03 $03 $03 $04 $04 $04 $05 $05 $a1 $05 $05
 	.db $2b $2b $2b $02 $03 $03 $03 $03 $04 $04 $04 $05 $05 $05 $05 $05
@@ -19,7 +23,11 @@ presentMapTextIndices: ; Actually "overworld"
 	.db $13 $13 $13 $13 $13 $2a $27 $2a $2a $28 $15 $15 $15 $16 $16 $16
 
 
+.ifdef ROM_COMBO
+pastMapTextIndices_seasons: ; Actually "subrosia"
+.else
 pastMapTextIndices: ; Actually "subrosia"
+.endif
 	.db $c1 $30 $30 $30 $30 $30 $30 $31 $39 $31 $3a
 	.db $30 $30 $30 $30 $30 $30 $30 $31 $31 $31 $31
 	.db $30 $30 $3d $30 $3e $32 $32 $31 $38 $31 $3b
@@ -36,7 +44,11 @@ pastMapTextIndices: ; Actually "subrosia"
 ; b0: room index
 ; b1: popup behaviour. Each digit represents a different popup; screens with only one
 ;     popup use the same digit twice. (see the "mapMenu_LoadPopupData" function)
+.ifdef ROM_COMBO
+presentMinimapPopups_seasons:
+.else
 presentMinimapPopups:
+.endif
 	.db $d4 $88
 	.db $96 $88
 	.db $8d $88
@@ -118,7 +130,11 @@ presentMinimapPopups:
 	.db $f9 $11
 	.db $ff
 
+.ifdef ROM_COMBO
+pastMinimapPopups_seasons:
+.else
 pastMinimapPopups:
+.endif
 	.db $00 $88
 	.db $05 $aa
 	.db $08 $ee

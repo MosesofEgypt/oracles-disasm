@@ -1,6 +1,10 @@
 ; See data/ages/objectGfxHeaders.s for documentation.
 
+.ifdef ROM_COMBO
+objectGfxHeaderTable_seasons:
+.else
 objectGfxHeaderTable:
+.endif
 	/* $00 */ m_ObjectGfxHeader gfx_capcom_nintendo
 	/* $01 */ m_ObjectGfxHeader gfx_pirate_ship_tiles_1
 	/* $02 */ m_ObjectGfxHeader gfx_pirate_ship_tiles_2
