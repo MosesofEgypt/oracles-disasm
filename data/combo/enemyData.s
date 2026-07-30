@@ -1,3 +1,13 @@
+; Data format:
+;   b0: object gfx header to use (see data/objectGfxHeaders.s)
+;   b1: Value for Enemy.enemyCollisionMode (bit 7 must be set for collisions to work)
+;   b2: Bits 0-6 are an index for the extraEnemyData table below.
+;   b3: bits 4-7: palette + bank bit
+;       bits 0-3: oamTileIndexBase/2
+;
+;   Or, parameters 2/3 can be replaced with a pointer to subid data (see below).
+
+; TODO: retarget all enemyCollisionMode values to merged ones
 enemyData_ages:
 	/* 0x00 */ m_EnemyData $00 $00 $00 $00
 	/* 0x01 */ m_EnemyData $db $08 $34 $00
