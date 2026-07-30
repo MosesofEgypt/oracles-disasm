@@ -7,109 +7,108 @@
 ;
 ;   Or, parameters 2/3 can be replaced with a pointer to subid data (see below).
 
-; TODO: retarget all enemyCollisionMode values to merged ones
 enemyData_ages:
 	/* 0x00 */ m_EnemyData $00 $00 $00 $00
 	/* 0x01 */ m_EnemyData $db $08 $34 $00
-	/* 0x02 */ m_EnemyData $d7 $ea $30 $60
-	/* 0x03 */ m_EnemyData $33 $8a $33 $00
-	/* 0x04 */ m_EnemyData $16 $8b $35 $10
-	/* 0x05 */ m_EnemyData $cf $8c $02 $60
-	/* 0x06 */ m_EnemyData $d4 $8d $2f $10
-	/* 0x07 */ m_EnemyData $ce $8e $2b $60
-	/* 0x08 */ m_EnemyData $8f $0f $0c $2d
-	/* 0x09 */ m_EnemyData $8f $90 enemy09SubidData
-	/* 0x0a */ m_EnemyData $91 $91 enemy0aSubidData
-	/* 0x0b */ m_EnemyData $8f $10 enemy0bSubidData
-	/* 0x0c */ m_EnemyData $91 $91 enemy0cSubidData
-	/* 0x0d */ m_EnemyData $95 $92 enemy0dSubidData
-	/* 0x0e */ m_EnemyData $9e $93 enemy0eSubidData
-	/* 0x0f */ m_EnemyData $d3 $10 $0e $75
-	/* 0x10 */ m_EnemyData $9b $14 $0a $06
-	/* 0x11 */ m_EnemyData $c4 $95 $2d $39
-	/* 0x12 */ m_EnemyData $9b $96 $17 $20
-	/* 0x13 */ m_EnemyData $9b $97 $03 $0a
-	/* 0x14 */ m_EnemyData $8c $98 $0a $14
-	/* 0x15 */ m_EnemyData $9b $99 $01 $2b
+	/* 0x02 */ m_EnemyData $d7 $d5 $30 $60
+	/* 0x03 */ m_EnemyData $33 $89 $33 $00
+	/* 0x04 */ m_EnemyData $16 $8a $35 $10
+	/* 0x05 */ m_EnemyData $cf $dc $02 $60
+	/* 0x06 */ m_EnemyData $d4 $dd $2f $10
+	/* 0x07 */ m_EnemyData $ce $de $2b $60
+	/* 0x08 */ m_EnemyData $8f $0b $0c $2d
+	/* 0x09 */ m_EnemyData $8f $8c enemy09SubidData
+	/* 0x0a */ m_EnemyData $91 $8d enemy0aSubidData
+	/* 0x0b */ m_EnemyData $8f $0c enemy0bSubidData
+	/* 0x0c */ m_EnemyData $91 $8d enemy0cSubidData
+	/* 0x0d */ m_EnemyData $95 $8e enemy0dSubidData
+	/* 0x0e */ m_EnemyData $9e $8f enemy0eSubidData
+	/* 0x0f */ m_EnemyData $d3 $0c $0e $75
+	/* 0x10 */ m_EnemyData $9b $4b $0a $06
+	/* 0x11 */ m_EnemyData $c4 $df $2d $39
+	/* 0x12 */ m_EnemyData $9b $90 $17 $20
+	/* 0x13 */ m_EnemyData $9b $91 $03 $0a
+	/* 0x14 */ m_EnemyData $8c $92 $0a $14
+	/* 0x15 */ m_EnemyData $9b $93 $01 $2b
 	/* 0x16 */ m_EnemyData $8c $00 $00 $18
-	/* 0x17 */ m_EnemyData $90 $9a enemy17SubidData_ages
-	/* 0x18 */ m_EnemyData $93 $9b $0a $08
-	/* 0x19 */ m_EnemyData $9b $9c $03 $09
-	/* 0x1a */ m_EnemyData $94 $90 $0a $30
-	/* 0x1b */ m_EnemyData $94 $90 $0a $2c
-	/* 0x1c */ m_EnemyData $a0 $9d $0a $20
+	/* 0x17 */ m_EnemyData $90 $94 enemy17SubidData_ages
+	/* 0x18 */ m_EnemyData $93 $95 $0a $08
+	/* 0x19 */ m_EnemyData $9b $96 $03 $09
+	/* 0x1a */ m_EnemyData $94 $8c $0a $30
+	/* 0x1b */ m_EnemyData $94 $8c $0a $2c
+	/* 0x1c */ m_EnemyData $a0 $97 $0a $20
 	/* 0x1d */ m_EnemyData $92 $82 $40 $09
 	/* 0x1e */ m_EnemyData $94 $84 $0c $32
-	/* 0x1f */ m_EnemyData $da $9f $0e $68
-	/* 0x20 */ m_EnemyData $90 $91 enemy20SubidData
-	/* 0x21 */ m_EnemyData $98 $a0 enemy21SubidData
-	/* 0x22 */ m_EnemyData $9c $fe $0e $00
-	/* 0x23 */ m_EnemyData $8c $a1 $0c $30
-	/* 0x24 */ m_EnemyData $99 $22 $11 $36
-	/* 0x25 */ m_EnemyData $94 $a3 $0a $28
-	/* 0x26 */ m_EnemyData $a5 $a4 $02 $28
+	/* 0x1f */ m_EnemyData $da $a2 $0e $68
+	/* 0x20 */ m_EnemyData $90 $8d enemy20SubidData
+	/* 0x21 */ m_EnemyData $98 $99 enemy21SubidData
+	/* 0x22 */ m_EnemyData $9c $b4 $0e $00
+	/* 0x23 */ m_EnemyData $8c $9a $0c $30
+	/* 0x24 */ m_EnemyData $99 $1b $11 $36
+	/* 0x25 */ m_EnemyData $94 $9c $0a $28
+	/* 0x26 */ m_EnemyData $a5 $e7 $02 $28
 	/* 0x27 */ m_EnemyData $8d $80 $3b $50
-	/* 0x28 */ m_EnemyData $a0 $25 $11 $2c
+	/* 0x28 */ m_EnemyData $a0 $1d $11 $2c
 	/* 0x29 */ m_EnemyData $a4 $04 $03 $20
-	/* 0x2a */ m_EnemyData $9e $a6 enemy2aSubidData
+	/* 0x2a */ m_EnemyData $9e $9e enemy2aSubidData
 	/* 0x2b */ m_EnemyData $00 $00 $00 $00
-	/* 0x2c */ m_EnemyData $a4 $94 $0a $33
-	/* 0x2d */ m_EnemyData $a4 $0f $11 $50
-	/* 0x2e */ m_EnemyData $a3 $a7 $03 $1d
-	/* 0x2f */ m_EnemyData $a3 $a8 $3c $40
-	/* 0x30 */ m_EnemyData $8f $91 enemy30SubidData
-	/* 0x31 */ m_EnemyData $9b $fd enemy31SubidData
-	/* 0x32 */ m_EnemyData $9d $9f $07 $00
+	/* 0x2c */ m_EnemyData $a4 $cb $0a $33
+	/* 0x2d */ m_EnemyData $a4 $0b $11 $50
+	/* 0x2e */ m_EnemyData $a3 $9f $03 $1d
+	/* 0x2f */ m_EnemyData $a3 $a0 $3c $40
+	/* 0x30 */ m_EnemyData $8f $8d enemy30SubidData
+	/* 0x31 */ m_EnemyData $9b $a1 enemy31SubidData
+	/* 0x32 */ m_EnemyData $9d $a2 $07 $00
 	/* 0x33 */ m_EnemyData $4c $00 $01 $37
-	/* 0x34 */ m_EnemyData $97 $29 enemy34SubidData
-	/* 0x35 */ m_EnemyData $a2 $25 $11 $10
-	/* 0x36 */ m_EnemyData $4c $aa $41 $20
+	/* 0x34 */ m_EnemyData $97 $23 enemy34SubidData
+	/* 0x35 */ m_EnemyData $a2 $1d $11 $10
+	/* 0x36 */ m_EnemyData $4c $a4 $41 $20
 	/* 0x37 */ m_EnemyData $4a $00 $00 $14
 	/* 0x38 */ m_EnemyData $4b $00 $00 $20
-	/* 0x39 */ m_EnemyData $9d $ab $09 $50
-	/* 0x3a */ m_EnemyData $97 $94 $0c $05
-	/* 0x3b */ m_EnemyData $9a $ac $3e $20
-	/* 0x3c */ m_EnemyData $a1 $ad enemy3cSubidData
-	/* 0x3d */ m_EnemyData $91 $91 enemy3dSubidData
-	/* 0x3e */ m_EnemyData $97 $d8 $0c $23
-	/* 0x3f */ m_EnemyData $ad $af $44 $50
-	/* 0x40 */ m_EnemyData $9f $30 enemy40SubidData
-	/* 0x41 */ m_EnemyData $93 $31 $3d $30
-	/* 0x42 */ m_EnemyData $c3 $b2 $08 $2a
-	/* 0x43 */ m_EnemyData $97 $b3 $06 $20
+	/* 0x39 */ m_EnemyData $9d $a5 $09 $50
+	/* 0x3a */ m_EnemyData $97 $cb $0c $05
+	/* 0x3b */ m_EnemyData $9a $a6 $3e $20
+	/* 0x3c */ m_EnemyData $a1 $e2 enemy3cSubidData
+	/* 0x3d */ m_EnemyData $91 $8d enemy3dSubidData
+	/* 0x3e */ m_EnemyData $97 $c0 $0c $23
+	/* 0x3f */ m_EnemyData $ad $e9 $44 $50
+	/* 0x40 */ m_EnemyData $9f $28 enemy40SubidData
+	/* 0x41 */ m_EnemyData $93 $29 $3d $30
+	/* 0x42 */ m_EnemyData $c3 $ea $08 $2a
+	/* 0x43 */ m_EnemyData $97 $aa $06 $20
 	/* 0x44 */ m_EnemyData $a5 $00 $00 $10
-	/* 0x45 */ m_EnemyData $92 $34 $11 $20
+	/* 0x45 */ m_EnemyData $92 $2b $11 $20
 	/* 0x46 */ m_EnemyData $00 $00 $00 $00
-	/* 0x47 */ m_EnemyData $97 $ee $06 $2e
-	/* 0x48 */ m_EnemyData $98 $a0 enemy48SubidData
-	/* 0x49 */ m_EnemyData $9c $fe $0e $00
-	/* 0x4a */ m_EnemyData $90 $b6 enemy4aSubidData
-	/* 0x4b */ m_EnemyData $99 $b7 $16 $20
-	/* 0x4c */ m_EnemyData $93 $31 $11 $14
-	/* 0x4d */ m_EnemyData $8c $b8 $0e $32
-	/* 0x4e */ m_EnemyData $a1 $b9 $13 $30
-	/* 0x4f */ m_EnemyData $97 $ba $16 $07
+	/* 0x47 */ m_EnemyData $97 $d9 $06 $2e
+	/* 0x48 */ m_EnemyData $98 $99 enemy48SubidData
+	/* 0x49 */ m_EnemyData $9c $b4 $0e $00
+	/* 0x4a */ m_EnemyData $90 $ad enemy4aSubidData
+	/* 0x4b */ m_EnemyData $99 $ae $16 $20
+	/* 0x4c */ m_EnemyData $93 $29 $11 $14
+	/* 0x4d */ m_EnemyData $8c $af $0e $32
+	/* 0x4e */ m_EnemyData $a1 $b0 $13 $30
+	/* 0x4f */ m_EnemyData $97 $b1 $16 $07
 	/* 0x50 */ m_EnemyData $00 $00 $00 $00
-	/* 0x51 */ m_EnemyData $9b $3b $07 $0d
-	/* 0x52 */ m_EnemyData $9c $3c $0a $5b
+	/* 0x51 */ m_EnemyData $9b $32 $07 $0d
+	/* 0x52 */ m_EnemyData $9c $33 $0a $5b
 	/* 0x53 */ m_EnemyData $4a $00 $00 $26
-	/* 0x54 */ m_EnemyData $4d $da $1a $00
-	/* 0x55 */ m_EnemyData $9c $be $17 $1d
+	/* 0x54 */ m_EnemyData $4d $f5 $1a $00
+	/* 0x55 */ m_EnemyData $9c $e0 $17 $1d
 	/* 0x56 */ m_EnemyData $90 $00 $00 $30
-	/* 0x57 */ m_EnemyData $00 $3f $00 $00
-	/* 0x58 */ m_EnemyData $00 $c0 $0a $00
+	/* 0x57 */ m_EnemyData $00 $35 $00 $00
+	/* 0x58 */ m_EnemyData $00 $b6 $0a $00
 	/* 0x59 */ m_EnemyData $00 $00 $00 $88
 	/* 0x5a */ m_EnemyData $00 $00 $01 $00
 	/* 0x5b */ m_EnemyData $00 $00 $00 $00
 	/* 0x5c */ m_EnemyData $00 $00 $00 $00
-	/* 0x5d */ m_EnemyData $de $8e $0a $16
-	/* 0x5e */ m_EnemyData $9d $c1 $42 $20
-	/* 0x5f */ m_EnemyData $8c $c2 $0e $62
+	/* 0x5d */ m_EnemyData $de $de $0a $16
+	/* 0x5e */ m_EnemyData $9d $b7 $42 $20
+	/* 0x5f */ m_EnemyData $8c $e3 $0e $62
 	/* 0x60 */ m_EnemyData $a7 $00 $00 $02
-	/* 0x61 */ m_EnemyData $d0 $43 $2e $60
-	/* 0x62 */ m_EnemyData $6b $90 $2c $09
+	/* 0x61 */ m_EnemyData $d0 $64 $2e $60
+	/* 0x62 */ m_EnemyData $6b $8c $2c $09
 	/* 0x63 */ m_EnemyData $78 $82 $01 $46
-	/* 0x64 */ m_EnemyData $d5 $b9 $1b $66
+	/* 0x64 */ m_EnemyData $d5 $b0 $1b $66
 	/* 0x65 */ m_EnemyData $00 $00 $00 $00
 	/* 0x66 */ m_EnemyData $00 $00 $00 $00
 	/* 0x67 */ m_EnemyData $00 $00 $00 $00
@@ -121,120 +120,120 @@ enemyData_ages:
 	/* 0x6d */ m_EnemyData $00 $00 $00 $00
 	/* 0x6e */ m_EnemyData $00 $00 $00 $00
 	/* 0x6f */ m_EnemyData $00 $00 $00 $00
-	/* 0x70 */ m_EnemyData $ad $ff $1c $50
-	/* 0x71 */ m_EnemyData $af $c4 $1d $20
-	/* 0x72 */ m_EnemyData $b1 $c4 $1e $10
-	/* 0x73 */ m_EnemyData $b4 $c4 enemy73SubidData
-	/* 0x74 */ m_EnemyData $b7 $c5 $20 $30
-	/* 0x75 */ m_EnemyData $3c $46 $21 $20
-	/* 0x76 */ m_EnemyData $b8 $e4 $22 $10
-	/* 0x77 */ m_EnemyData $b9 $c8 $23 $10
-	/* 0x78 */ m_EnemyData $bc $c9 $24 $30
-	/* 0x79 */ m_EnemyData $bf $ca $25 $00
-	/* 0x7a */ m_EnemyData $c2 $4b $26 $30
-	/* 0x7b */ m_EnemyData $c4 $ed $27 $10
-	/* 0x7c */ m_EnemyData $c5 $cd $28 $30
-	/* 0x7d */ m_EnemyData $c8 $ce $29 $20
-	/* 0x7e */ m_EnemyData $cb $4f $2a $10
-	/* 0x7f */ m_EnemyData $a9 $d0 $36 $00
+	/* 0x70 */ m_EnemyData $ad $d1 $1c $50
+	/* 0x71 */ m_EnemyData $af $e5 $1d $20
+	/* 0x72 */ m_EnemyData $b1 $e5 $1e $10
+	/* 0x73 */ m_EnemyData $b4 $e5 enemy73SubidData
+	/* 0x74 */ m_EnemyData $b7 $e6 $20 $30
+	/* 0x75 */ m_EnemyData $3c $38 $21 $20
+	/* 0x76 */ m_EnemyData $b8 $ff $22 $10
+	/* 0x77 */ m_EnemyData $b9 $eb $23 $10
+	/* 0x78 */ m_EnemyData $bc $ec $24 $30
+	/* 0x79 */ m_EnemyData $bf $ed $25 $00
+	/* 0x7a */ m_EnemyData $c2 $6e $26 $30
+	/* 0x7b */ m_EnemyData $c4 $d8 $27 $10
+	/* 0x7c */ m_EnemyData $c5 $f0 $28 $30
+	/* 0x7d */ m_EnemyData $c8 $f1 $29 $20
+	/* 0x7e */ m_EnemyData $cb $72 $2a $10
+	/* 0x7f */ m_EnemyData $a9 $f3 $36 $00
 
 enemyData_seasons:
 	/* 0x00 */ m_EnemyData $00 $00 $00 $00
 	/* 0x01 */ m_EnemyData $c2 $08 $34 $00
-	/* 0x02 */ m_EnemyData $bd $89 $31 $60
-	/* 0x03 */ m_EnemyData $24 $8a $33 $00
-	/* 0x04 */ m_EnemyData $16 $8b $35 $10
-	/* 0x05 */ m_EnemyData $c0 $0c $32 $60
-	/* 0x06 */ m_EnemyData $b8 $8d $2f $60
-	/* 0x07 */ m_EnemyData $91 $8e $36 $00
-	/* 0x08 */ m_EnemyData $74 $0f $0c $2d
-	/* 0x09 */ m_EnemyData $74 $90 enemy09SubidData
-	/* 0x0a */ m_EnemyData $76 $91 enemy0aSubidData
-	/* 0x0b */ m_EnemyData $74 $10 enemy0bSubidData
-	/* 0x0c */ m_EnemyData $76 $91 enemy0cSubidData
-	/* 0x0d */ m_EnemyData $7a $92 enemy0dSubidData
-	/* 0x0e */ m_EnemyData $85 $93 enemy0eSubidData
-	/* 0x0f */ m_EnemyData $88 $93 $03 $18
-	/* 0x10 */ m_EnemyData $82 $73 $0a $06
-	/* 0x11 */ m_EnemyData $77 $94 $11 $07
-	/* 0x12 */ m_EnemyData $82 $95 $17 $20
-	/* 0x13 */ m_EnemyData $82 $96 $03 $0a
-	/* 0x14 */ m_EnemyData $72 $97 $0a $14
-	/* 0x15 */ m_EnemyData $82 $98 $01 $2b
+	/* 0x02 */ m_EnemyData $bd $cf $31 $60
+	/* 0x03 */ m_EnemyData $24 $89 $33 $00
+	/* 0x04 */ m_EnemyData $16 $8a $35 $10
+	/* 0x05 */ m_EnemyData $c0 $50 $32 $60
+	/* 0x06 */ m_EnemyData $b8 $d1 $2f $60
+	/* 0x07 */ m_EnemyData $91 $d2 $36 $00
+	/* 0x08 */ m_EnemyData $74 $0b $0c $2d
+	/* 0x09 */ m_EnemyData $74 $8c enemy09SubidData
+	/* 0x0a */ m_EnemyData $76 $8d enemy0aSubidData
+	/* 0x0b */ m_EnemyData $74 $0c enemy0bSubidData
+	/* 0x0c */ m_EnemyData $76 $8d enemy0cSubidData
+	/* 0x0d */ m_EnemyData $7a $8e enemy0dSubidData
+	/* 0x0e */ m_EnemyData $85 $8f enemy0eSubidData
+	/* 0x0f */ m_EnemyData $88 $8f $03 $18
+	/* 0x10 */ m_EnemyData $82 $4b $0a $06
+	/* 0x11 */ m_EnemyData $77 $d3 $11 $07
+	/* 0x12 */ m_EnemyData $82 $90 $17 $20
+	/* 0x13 */ m_EnemyData $82 $91 $03 $0a
+	/* 0x14 */ m_EnemyData $72 $92 $0a $14
+	/* 0x15 */ m_EnemyData $82 $93 $01 $2b
 	/* 0x16 */ m_EnemyData $72 $00 $00 $18
-	/* 0x17 */ m_EnemyData $75 $99 enemy17SubidData_seasons
-	/* 0x18 */ m_EnemyData $78 $9a $0a $08
-	/* 0x19 */ m_EnemyData $82 $9b $03 $09
-	/* 0x1a */ m_EnemyData $79 $90 $0a $30
-	/* 0x1b */ m_EnemyData $79 $90 $0a $2c
-	/* 0x1c */ m_EnemyData $87 $9c $0a $20
+	/* 0x17 */ m_EnemyData $75 $94 enemy17SubidData_seasons
+	/* 0x18 */ m_EnemyData $78 $95 $0a $08
+	/* 0x19 */ m_EnemyData $82 $96 $03 $09
+	/* 0x1a */ m_EnemyData $79 $8c $0a $30
+	/* 0x1b */ m_EnemyData $79 $8c $0a $2c
+	/* 0x1c */ m_EnemyData $87 $97 $0a $20
 	/* 0x1d */ m_EnemyData $77 $82 $40 $09
 	/* 0x1e */ m_EnemyData $79 $84 $0c $32
 	/* 0x1f */ m_EnemyData $00 $00 $00 $00
-	/* 0x20 */ m_EnemyData $75 $91 enemy20SubidData
-	/* 0x21 */ m_EnemyData $7e $9f enemy21SubidData
-	/* 0x22 */ m_EnemyData $83 $a0 $0e $00
-	/* 0x23 */ m_EnemyData $72 $a1 $0c $30
-	/* 0x24 */ m_EnemyData $7f $22 $11 $36
-	/* 0x25 */ m_EnemyData $79 $a3 $0a $28
+	/* 0x20 */ m_EnemyData $75 $8d enemy20SubidData
+	/* 0x21 */ m_EnemyData $7e $99 enemy21SubidData
+	/* 0x22 */ m_EnemyData $83 $b4 $0e $00
+	/* 0x23 */ m_EnemyData $72 $9a $0c $30
+	/* 0x24 */ m_EnemyData $7f $1b $11 $36
+	/* 0x25 */ m_EnemyData $79 $9c $0a $28
 	/* 0x26 */ m_EnemyData $00 $00 $00 $00
 	/* 0x27 */ m_EnemyData $71 $80 $3b $50
-	/* 0x28 */ m_EnemyData $87 $24 $11 $2c
+	/* 0x28 */ m_EnemyData $87 $1d $11 $2c
 	/* 0x29 */ m_EnemyData $8d $04 $03 $20
-	/* 0x2a */ m_EnemyData $85 $a5 enemy2aSubidData
+	/* 0x2a */ m_EnemyData $85 $9e enemy2aSubidData
 	/* 0x2b */ m_EnemyData $00 $84 $03 $a5
-	/* 0x2c */ m_EnemyData $8d $8f $0a $33
-	/* 0x2d */ m_EnemyData $8d $0f $11 $50
-	/* 0x2e */ m_EnemyData $8c $a6 $03 $1d
-	/* 0x2f */ m_EnemyData $8c $a7 $3c $40
-	/* 0x30 */ m_EnemyData $74 $91 enemy30SubidData
-	/* 0x31 */ m_EnemyData $82 $a8 enemy31SubidData
-	/* 0x32 */ m_EnemyData $84 $a9 $07 $00
+	/* 0x2c */ m_EnemyData $8d $8b $0a $33
+	/* 0x2d */ m_EnemyData $8d $0b $11 $50
+	/* 0x2e */ m_EnemyData $8c $9f $03 $1d
+	/* 0x2f */ m_EnemyData $8c $a0 $3c $40
+	/* 0x30 */ m_EnemyData $74 $8d enemy30SubidData
+	/* 0x31 */ m_EnemyData $82 $a1 enemy31SubidData
+	/* 0x32 */ m_EnemyData $84 $a2 $07 $00
 	/* 0x33 */ m_EnemyData $3f $00 $01 $37
-	/* 0x34 */ m_EnemyData $7d $2a enemy34SubidData
-	/* 0x35 */ m_EnemyData $89 $24 $11 $10
-	/* 0x36 */ m_EnemyData $3f $ab $41 $20
+	/* 0x34 */ m_EnemyData $7d $23 enemy34SubidData
+	/* 0x35 */ m_EnemyData $89 $1d $11 $10
+	/* 0x36 */ m_EnemyData $3f $a4 $41 $20
 	/* 0x37 */ m_EnemyData $3d $00 $00 $14
 	/* 0x38 */ m_EnemyData $3e $00 $00 $20
-	/* 0x39 */ m_EnemyData $84 $ac $09 $50
-	/* 0x3a */ m_EnemyData $7d $f3 $0c $05
-	/* 0x3b */ m_EnemyData $81 $ad $3e $20
-	/* 0x3c */ m_EnemyData $8b $9e $0e $00
-	/* 0x3d */ m_EnemyData $76 $91 enemy3dSubidData
-	/* 0x3e */ m_EnemyData $7d $d5 $0c $23
+	/* 0x39 */ m_EnemyData $84 $a5 $09 $50
+	/* 0x3a */ m_EnemyData $7d $cb $0c $05
+	/* 0x3b */ m_EnemyData $81 $a6 $3e $20
+	/* 0x3c */ m_EnemyData $8b $d4 $0e $00
+	/* 0x3d */ m_EnemyData $76 $8d enemy3dSubidData
+	/* 0x3e */ m_EnemyData $7d $c0 $0c $23
 	/* 0x3f */ m_EnemyData $7b $00 $00 $50
-	/* 0x40 */ m_EnemyData $86 $2f enemy40SubidData
-	/* 0x41 */ m_EnemyData $78 $30 $3d $30
+	/* 0x40 */ m_EnemyData $86 $28 enemy40SubidData
+	/* 0x41 */ m_EnemyData $78 $29 $3d $30
 	/* 0x42 */ m_EnemyData $79 $00 $00 $2c
-	/* 0x43 */ m_EnemyData $7d $b1 $06 $20
+	/* 0x43 */ m_EnemyData $7d $aa $06 $20
 	/* 0x44 */ m_EnemyData $00 $00 $00 $00
-	/* 0x45 */ m_EnemyData $77 $32 $11 $20
-	/* 0x46 */ m_EnemyData $b1 $b3 enemy46SubidData
-	/* 0x47 */ m_EnemyData $af $29 $0a $30
-	/* 0x48 */ m_EnemyData $7e $9f enemy48SubidData
-	/* 0x49 */ m_EnemyData $83 $a0 $0e $00
-	/* 0x4a */ m_EnemyData $75 $b4 enemy4aSubidData
-	/* 0x4b */ m_EnemyData $7f $b5 $16 $20
-	/* 0x4c */ m_EnemyData $78 $30 $0c $14
-	/* 0x4d */ m_EnemyData $72 $b6 $0e $32
-	/* 0x4e */ m_EnemyData $88 $b7 $13 $30
-	/* 0x4f */ m_EnemyData $7d $b8 $16 $07
+	/* 0x45 */ m_EnemyData $77 $2b $11 $20
+	/* 0x46 */ m_EnemyData $b1 $ac enemy46SubidData
+	/* 0x47 */ m_EnemyData $af $22 $0a $30
+	/* 0x48 */ m_EnemyData $7e $99 enemy48SubidData
+	/* 0x49 */ m_EnemyData $83 $b4 $0e $00
+	/* 0x4a */ m_EnemyData $75 $ad enemy4aSubidData
+	/* 0x4b */ m_EnemyData $7f $ae $16 $20
+	/* 0x4c */ m_EnemyData $78 $29 $0c $14
+	/* 0x4d */ m_EnemyData $72 $af $0e $32
+	/* 0x4e */ m_EnemyData $88 $b0 $13 $30
+	/* 0x4f */ m_EnemyData $7d $b1 $16 $07
 	/* 0x50 */ m_EnemyData $00 $00 $00 $00
-	/* 0x51 */ m_EnemyData $82 $39 $07 $0d
-	/* 0x52 */ m_EnemyData $83 $3a $0a $5b
+	/* 0x51 */ m_EnemyData $82 $32 $07 $0d
+	/* 0x52 */ m_EnemyData $83 $33 $0a $5b
 	/* 0x53 */ m_EnemyData $3d $02 $00 $26
-	/* 0x54 */ m_EnemyData $80 $bb $01 $10
-	/* 0x55 */ m_EnemyData $b5 $bc $16 $67
+	/* 0x54 */ m_EnemyData $80 $d5 $01 $10
+	/* 0x55 */ m_EnemyData $b5 $d6 $16 $67
 	/* 0x56 */ m_EnemyData $05 $82 $3a $35
-	/* 0x57 */ m_EnemyData $7c $3d $39 $10
-	/* 0x58 */ m_EnemyData $00 $be $0a $00
+	/* 0x57 */ m_EnemyData $7c $35 $39 $10
+	/* 0x58 */ m_EnemyData $00 $b6 $0a $00
 	/* 0x59 */ m_EnemyData $00 $00 $00 $88
 	/* 0x5a */ m_EnemyData $00 $01 $01 $00
 	/* 0x5b */ m_EnemyData $4f $00 $00 $68
 	/* 0x5c */ m_EnemyData $00 $00 $00 $00
-	/* 0x5d */ m_EnemyData $c5 $c9 $0a $16
-	/* 0x5e */ m_EnemyData $84 $bf $42 $20
-	/* 0x5f */ m_EnemyData $80 $c0 $41 $58
+	/* 0x5d */ m_EnemyData $c5 $df $0a $16
+	/* 0x5e */ m_EnemyData $84 $b7 $42 $20
+	/* 0x5f */ m_EnemyData $80 $d7 $41 $58
 	/* 0x60 */ m_EnemyData $8f $00 $00 $02
 	/* 0x61 */ m_EnemyData $00 $00 $00 $00
 	/* 0x62 */ m_EnemyData $00 $00 $00 $00
@@ -251,22 +250,22 @@ enemyData_seasons:
 	/* 0x6d */ m_EnemyData $00 $00 $00 $00
 	/* 0x6e */ m_EnemyData $00 $00 $00 $00
 	/* 0x6f */ m_EnemyData $00 $00 $00 $00
-	/* 0x70 */ m_EnemyData $95 $41 enemy70SubidData
-	/* 0x71 */ m_EnemyData $8a $0f $1d $10
-	/* 0x72 */ m_EnemyData $96 $42 $1e $10
-	/* 0x73 */ m_EnemyData $98 $43 $1f $20
-	/* 0x74 */ m_EnemyData $9b $c4 $20 $30
-	/* 0x75 */ m_EnemyData $30 $45 $21 $20
-	/* 0x76 */ m_EnemyData $9e $46 $22 $20
-	/* 0x77 */ m_EnemyData $a0 $47 $23 $20
-	/* 0x78 */ m_EnemyData $a3 $c8 $24 $00
-	/* 0x79 */ m_EnemyData $a8 $c9 $25 $60
-	/* 0x7a */ m_EnemyData $ad $ca $26 $60
-	/* 0x7b */ m_EnemyData $b0 $cb enemy7bSubidData
-	/* 0x7c */ m_EnemyData $b3 $8a enemy7cSubidData
-	/* 0x7d */ m_EnemyData $b6 $e1 enemy7dSubidData
-	/* 0x7e */ m_EnemyData $9e $46 $22 $30
-	/* 0x7f */ m_EnemyData $ba $4d $30 $00
+	/* 0x70 */ m_EnemyData $95 $58 enemy70SubidData
+	/* 0x71 */ m_EnemyData $8a $0b $1d $10
+	/* 0x72 */ m_EnemyData $96 $59 $1e $10
+	/* 0x73 */ m_EnemyData $98 $5a $1f $20
+	/* 0x74 */ m_EnemyData $9b $db $20 $30
+	/* 0x75 */ m_EnemyData $30 $38 $21 $20
+	/* 0x76 */ m_EnemyData $9e $5c $22 $20
+	/* 0x77 */ m_EnemyData $a0 $5d $23 $20
+	/* 0x78 */ m_EnemyData $a3 $de $24 $00
+	/* 0x79 */ m_EnemyData $a8 $df $25 $60
+	/* 0x7a */ m_EnemyData $ad $e0 $26 $60
+	/* 0x7b */ m_EnemyData $b0 $e1 enemy7bSubidData
+	/* 0x7c */ m_EnemyData $b3 $89 enemy7cSubidData
+	/* 0x7d */ m_EnemyData $b6 $ef enemy7dSubidData
+	/* 0x7e */ m_EnemyData $9e $5c $22 $30
+	/* 0x7f */ m_EnemyData $ba $63 $30 $00
 
 enemy09SubidData:
 	m_EnemySubidData $08 $20
