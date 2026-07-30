@@ -371,6 +371,22 @@
 	paletteHeader{%.2x{\1}}:
 .endm
 
+.if defined(ROM_COMBO)
+.macro m_PaletteHeaderStart_ages
+	.assert NARGS == 2
+
+	.define \2 (\1) EXPORT
+	paletteHeader{%.2x{\1}}_ages:
+.endm
+
+.macro m_PaletteHeaderStart_seasons
+	.assert NARGS == 2
+
+	.define \2 (\1) EXPORT
+	paletteHeader{%.2x{\1}}_seasons:
+.endm
+.endif
+
 ; Macro to define palette headers for the background
 ; ARG 1: index of first palette to load the data into
 ; ARG 2: number of palettes to load

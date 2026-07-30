@@ -131,6 +131,10 @@ COMMONDATAFILES = $(shell find data/ -name '*.s' | grep -v '/ages/\|/seasons/')
 # Game-specific data files
 GAMEDATAFILES = $(shell find data/$(GAME)/ -name '*.s')
 
+# These will be auto-generated, so they don't necessarily exist atm
+GAMEDATAFILES += $(BUILD_DIR)/paletteData.s
+GAMEDATAFILES += $(BUILD_DIR)/paletteHeaders.s
+
 MAIN_ASM_FILES = 
 AUDIO_FILES =
 #MAIN_ASM_FILES = $(shell find code/ object_code/ objects/ scripts/ -name '*.s' | grep -v '/ages/' | grep -v '/seasons/')
@@ -173,6 +177,13 @@ $(BUILD_DIR)/audio.o: code/audio.s | $(BUILD_DIR)
 $(BUILD_DIR)/$(GAME).o: $(GAME).s $(BUILD_DIR)/ages_textData.s $(BUILD_DIR)/ages_textDefines.s $(BUILD_DIR)/seasons_textData.s $(BUILD_DIR)/seasons_textDefines.s Makefile | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
 
+$(BUILD_DIR)/paletteData.s: data/ages/paletteData.s data/seasons/paletteData.s | $(BUILD_DIR)
+	@echo "Combining palettes into $@..."
+	@$(PYTHON) tools/build/makeComboPalettes.py $@ $^
+
+$(BUILD_DIR)/paletteHeaders.s: data/ages/paletteHeaders.s data/seasons/paletteHeaders.s | $(BUILD_DIR)
+	@echo "Combining palette headers into $@..."
+	@$(PYTHON) tools/build/makeComboPaletteHeaders.py $@ $^
 
 $(BUILD_DIR)/rooms/ages_%.cmp: rooms/ages/small/%.bin | $(BUILD_DIR)/rooms
 	@echo "Compressing $< to $@..."

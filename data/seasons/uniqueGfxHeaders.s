@@ -76,12 +76,20 @@ m_UniqueGfxHeaderStart $11, UNIQUE_GFXH_SAMASA_DESERT_PIRATE_SHIP
 
 m_UniqueGfxHeaderStart $12, UNIQUE_GFXH_WESTERN_COAST
 	m_GfxHeader gfx_tileset_western_coast, $9601
+.ifdef ROM_COMBO
+	m_GfxHeader seasons_gfx_animations_2, $88c1, $04
+.else
 	m_GfxHeader gfx_animations_2, $88c1, $04
+.endif
 	m_GfxHeaderEnd
 
 m_UniqueGfxHeaderStart $13, UNIQUE_GFXH_EXPLORERS_CRYPT_ENTRANCE
 	m_GfxHeader gfx_tileset_explorers_crypt_entrance, $9601
+.ifdef ROM_COMBO
+	m_GfxHeader seasons_gfx_animations_2, $88c1, $04
+.else
 	m_GfxHeader gfx_animations_2, $88c1, $04
+.endif
 	m_GfxHeaderEnd
 
 m_UniqueGfxHeaderStart $14, UNIQUE_GFXH_BLACK_BEAST
@@ -141,7 +149,11 @@ m_UniqueGfxHeaderStart $1e, UNIQUE_GFXH_MAKU_TREE_TOP
 	m_GfxHeaderEnd PALH_SPR_MAKU_TREE
 
 m_UniqueGfxHeaderStart $1f, UNIQUE_GFXH_BIGGORON
+.ifdef ROM_COMBO
+	m_GfxHeader seasons_gfx_animations_1, $8881, $08, $40
+.else
 	m_GfxHeader gfx_animations_1, $8881, $08, $40
+.endif
 	m_GfxHeaderEnd
 
 m_UniqueGfxHeaderStart $20, UNIQUE_GFXH_GNARLED_ROOT_ENTRANCE_CLOSED

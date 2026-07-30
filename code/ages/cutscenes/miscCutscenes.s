@@ -415,7 +415,11 @@ nayruSingingCutsceneHandler:
 	ret nz
 	call cutscene_incCutsceneState
 	ld hl,$de90
+.if defined(ROM_COMBO)
+	ld bc,paletteData44a8_ages
+.else
 	ld bc,paletteData44a8
+.endif
 	jp func_13c6
 @state5:
 	ld a,(wPaletteThread_mode)
@@ -575,7 +579,11 @@ nayruSingingState10:
 	ret nz
 	call cutscene_incCutsceneState
 	ld hl,$de90
+.if defined(ROM_COMBO)
+	ld bc,paletteData4a30_ages
+.else
 	ld bc,paletteData4a30
+.endif
 	jp func_13c6
 	
 nayruSingingState11:

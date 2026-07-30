@@ -29,8 +29,9 @@
 ;	.include "code/bank1.s"
 
 ; NOTE: temporary code until bank1 can be included
-	;.include {"{GAME_DATA_DIR}/paletteHeaders.s"}
-	;.include {"{GAME_DATA_DIR}/uncmpGfxHeaders.s"}
+	.include {"{BUILD_DIR}/paletteHeaders.s"}
+	.include {"{GAME_DATA_DIR}/paletteTransitions.s"}
+;	.include {"{GAME_DATA_DIR}/uncmpGfxHeaders.s"}
 	.include {"{GAME_DATA_DIR}/gfxHeaders.s"}
 ; NOTE: temporary code until bank1 can be included
 
@@ -79,7 +80,7 @@
 	 m_section_free animationAndUniqueGfxData NAMESPACE animationAndUniqueGfxData
 ;		.include "code/animations.s"
 
-;		.include {"{GAME_DATA_DIR}/uniqueGfxHeaders.s"}
+		.include {"{GAME_DATA_DIR}/uniqueGfxHeaders.s"}
 		.include {"{GAME_DATA_DIR}/animationGroups.s"}
 		.include {"{GAME_DATA_DIR}/animationGfxHeaders.s"}
 		.include {"{GAME_DATA_DIR}/animationData.s"}
@@ -710,7 +711,7 @@ m_section_free Objects_2 namespace objectData
 m_section_superfree Underwater_Surface_Data namespace underwaterSurfacing
 
 ;	.include "code/ages/underwaterSurfacing.s"
-;	.include "data/ages/underwaterSurfaceData.s"
+	.include "data/ages/underwaterSurfaceData.s"
 
 .ENDS
 
@@ -789,11 +790,7 @@ m_section_free Bank16_2 NAMESPACE bank16
 .BANK $17 SLOT 1
 .ORG 0
 
-;	.include {"{GAME_DATA_DIR}/paletteData.s"}
-
-	; HACK-BASE: Removed for expanded tilesets patch
-	;.include {"{GAME_DATA_DIR}/tilesetCollisions.s"}
-
+	.include {"{BUILD_DIR}/paletteData.s"}
 ;	.include {"{GAME_DATA_DIR}/smallRoomLayoutTables.s"}
 
 

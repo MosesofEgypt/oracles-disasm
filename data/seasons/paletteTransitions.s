@@ -11,6 +11,37 @@
 
 
 paletteTransitionSeasonData:
+.if defined(ROM_COMBO)
+	.dw paletteData49b0_seasons
+	.dw paletteData49e0_seasons
+	.dw paletteData4a10_seasons
+	.dw paletteData4a40_seasons
+
+	.dw paletteData4a70_seasons
+	.dw paletteData4aa0_seasons
+	.dw paletteData4ad0_seasons
+	.dw paletteData4b00_seasons
+
+	.dw paletteData4da0_seasons
+	.dw paletteData4dd0_seasons
+	.dw paletteData4e00_seasons
+	.dw paletteData4e30_seasons
+
+	.dw paletteData4f20_seasons
+	.dw paletteData4f50_seasons
+	.dw paletteData4f80_seasons
+	.dw paletteData4fb0_seasons
+
+	.dw paletteData50a0_seasons
+	.dw paletteData50d0_seasons
+	.dw paletteData5100_seasons
+	.dw paletteData5130_seasons
+
+	.dw paletteData5160_seasons
+	.dw paletteData5190_seasons
+	.dw paletteData51c0_seasons
+	.dw paletteData51f0_seasons
+.else
 	; $00
 	.dw paletteData49b0 ; SEASON_SPRING
 	.dw paletteData49e0 ; SEASON_SUMMER
@@ -46,6 +77,7 @@ paletteTransitionSeasonData:
 	.dw paletteData5190
 	.dw paletteData51c0
 	.dw paletteData51f0
+.endif
 
 
 
