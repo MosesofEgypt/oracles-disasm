@@ -34,7 +34,7 @@
 ; NOTE: temporary code until bank1 can be included
 	.include {"{BUILD_DIR}/paletteHeaders.s"}
 	.include {"{GAME_DATA_DIR}/paletteTransitions.s"}
-;	.include {"{GAME_DATA_DIR}/uncmpGfxHeaders.s"}
+	.include {"{GAME_DATA_DIR}/uncmpGfxHeaders.s"}
 	.include {"{GAME_DATA_DIR}/gfxHeaders.s"}
 	.include "data/seasons/roomPackSeasonTable.s"
 ; NOTE: temporary code until bank1 can be included
@@ -104,7 +104,7 @@
 		; Must be in same bank as "code/bank4.s"
 	 m_section_free Warp_Data NAMESPACE bank4
 ;		.include {"{GAME_DATA_DIR}/warpDestinations.s"}
-;		.include {"{GAME_DATA_DIR}/warpSources.s"}
+		.include {"{GAME_DATA_DIR}/warpSources.s"}
 	.ends
 
 

@@ -146,7 +146,7 @@ breakableTileCollisionTable:
 .if defined(ROM_COMBO)
 breakableTileModes_ages:
 .else
-@breakableTileModes:
+breakableTileModes:
 .endif
 	m_BreakableTileData %01101001 %00001100 %0100 $1 $10 $3a ; $00
 	m_BreakableTileData %11101101 %10001101 %0110 $1 $00 $3a ; $01

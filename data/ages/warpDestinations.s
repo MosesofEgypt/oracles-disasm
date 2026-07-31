@@ -8,17 +8,21 @@
 ;            bottom of screen)
 ;   Param 4: Transition dest type (see constants/common/transitions.s).
 
+.ifdef ROM_COMBO
+warpDestTable_ages:
+.else
 warpDestTable:
-	.dw group0WarpDestTable
-	.dw group1WarpDestTable
-	.dw group2WarpDestTable
-	.dw group3WarpDestTable
-	.dw group4WarpDestTable
-	.dw group5WarpDestTable
-	.dw group6WarpDestTable
-	.dw group7WarpDestTable
+.endif
+	.dw @group0WarpDestTable
+	.dw @group1WarpDestTable
+	.dw @group2WarpDestTable
+	.dw @group3WarpDestTable
+	.dw @group4WarpDestTable
+	.dw @group5WarpDestTable
+	.dw @group6WarpDestTable
+	.dw @group7WarpDestTable
 
-group0WarpDestTable:
+@group0WarpDestTable:
 	m_WarpDest $48 $21 $0 $1
 	m_WarpDest $8d $26 $0 $1
 	m_WarpDest $ba $55 $0 $1
@@ -97,7 +101,7 @@ group0WarpDestTable:
 	m_WarpDest $e2 $54 $0 $1
 	m_WarpDest $f1 $43 $0 $1
 
-group1WarpDestTable:
+@group1WarpDestTable:
 	m_WarpDest $48 $21 $0 $1
 	m_WarpDest $83 $25 $0 $1
 	m_WarpDest $5c $15 $0 $e
@@ -172,7 +176,7 @@ group1WarpDestTable:
 	m_WarpDest $e0 $11 $0 $4
 	m_WarpDest $e2 $32 $0 $4
 
-group2WarpDestTable:
+@group2WarpDestTable:
 	m_WarpDest $90 $45 $0 $e
 	m_WarpDest $0e $ff $9 $3
 	m_WarpDest $0f $ff $9 $3
@@ -251,7 +255,7 @@ group2WarpDestTable:
 	m_WarpDest $ff $f6 $9 $3
 	m_WarpDest $ff $48 $0 $4
 
-group3WarpDestTable:
+@group3WarpDestTable:
 	m_WarpDest $0f $f4 $9 $3
 	m_WarpDest $0f $f5 $9 $3
 	m_WarpDest $0f $f6 $9 $3
@@ -320,7 +324,7 @@ group3WarpDestTable:
 	m_WarpDest $fe $ff $9 $3
 	m_WarpDest $ff $ff $9 $3
 
-group4WarpDestTable:
+@group4WarpDestTable:
 	m_WarpDest $04 $ff $9 $3
 	m_WarpDest $0d $ff $9 $3
 	m_WarpDest $24 $ff $9 $3
@@ -400,7 +404,7 @@ group4WarpDestTable:
 	m_WarpDest $fe $ff $9 $3
 	m_WarpDest $fd $52 $0 $4
 
-group5WarpDestTable:
+@group5WarpDestTable:
 	m_WarpDest $26 $ff $9 $3
 	m_WarpDest $56 $ff $9 $3
 	m_WarpDest $aa $ff $9 $3
@@ -511,7 +515,7 @@ group5WarpDestTable:
 	m_WarpDest $f9 $ff $9 $3
 	m_WarpDest $fb $17 $0 $4
 
-group6WarpDestTable:
+@group6WarpDestTable:
 	m_WarpDest $05 $02 $f $3
 	m_WarpDest $10 $02 $f $3
 	m_WarpDest $27 $a1 $9 $3
@@ -532,7 +536,7 @@ group6WarpDestTable:
 	m_WarpDest $c0 $01 $f $3
 	m_WarpDest $c0 $0d $f $3
 
-group7WarpDestTable:
+@group7WarpDestTable:
 	m_WarpDest $01 $01 $f $3
 	m_WarpDest $01 $0d $f $3
 	m_WarpDest $02 $a1 $9 $3

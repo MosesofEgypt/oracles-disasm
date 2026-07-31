@@ -14760,9 +14760,9 @@ interactionFunc_3e6d:
 getLinkedHerosCaveSideEntranceRoom:
 	ldh a,(<hRomBank)
 	push af
-	ld a,:(bank4.warpSource7653+2)
+	ld a,:(bank4.warpSourcesTable@warpSource7653+2)
 	rst_setrombank
-	ld hl,bank4.warpSource7653+2
+	ld hl,bank4.warpSourcesTable@warpSource7653+2
 	ld a,(hl)
 	; ROOM_SEASONS_552
 	ld (wWarpDestRoom),a
