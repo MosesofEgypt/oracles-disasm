@@ -4907,7 +4907,6 @@ loadObjectGfx2:
 	ld c,:w4GfxBuf1
 	ld a,$01
 	ld ($ff00+R_SVBK),a
-	ld a,BANK_3f
 
 	ld b,$1f
 	jp queueDmaTransfer
@@ -4925,7 +4924,6 @@ loadObjectGfx2:
 	call decompressGraphics
 	ld a,$01
 	ld ($ff00+R_SVBK),a
-	ld a,BANK_3f
 
 	ret
 .endif
@@ -5378,8 +5376,6 @@ retrieveTextCharacter:
 
 	call @func_18fd
 
-	ld a,BANK_3f
-
 
 	xor a
 	ld (w7TextGfxSource),a
@@ -5474,8 +5470,6 @@ readByteFromW7ActiveBank:
 	ld a,(w7ActiveBank)
 
 	ld b,(hl)
-
-	ld a,BANK_3f
 
 
 	ld a,b
@@ -14732,5 +14726,7 @@ getSomariaBlockIndex:
 
 
 .include "code/debug.s"
+.include "data/enemyCodeTable.s"
+.include "data/interactionCodeTable.s"
 
 .ENDS

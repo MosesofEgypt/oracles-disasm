@@ -36,6 +36,7 @@
 	.include {"{GAME_DATA_DIR}/paletteTransitions.s"}
 ;	.include {"{GAME_DATA_DIR}/uncmpGfxHeaders.s"}
 	.include {"{GAME_DATA_DIR}/gfxHeaders.s"}
+	.include "data/seasons/roomPackSeasonTable.s"
 ; NOTE: temporary code until bank1 can be included
 
 
@@ -66,12 +67,12 @@
 
 	 m_section_superfree RoomPacksAndMusicAssignments NAMESPACE bank4Data1
 		; These 2 includes must be in the same bank
-;		.include {"{GAME_DATA_DIR}/roomPacks.s"}
+		.include {"{GAME_DATA_DIR}/roomPacks.s"}
 		.include {"{GAME_DATA_DIR}/musicAssignments.s"}
 	.ends
 
 	 m_section_superfree RoomLayouts NAMESPACE roomLayouts
-;		.include {"{GAME_DATA_DIR}/roomLayoutGroupTable.s"}
+		.include {"{GAME_DATA_DIR}/roomLayoutGroupTable.s"}
 	.ends
 
 	; Must be in the same bank as "Tileset_Loading_2".
@@ -689,7 +690,7 @@ m_section_free Bank_11 NAMESPACE partCode
 ;	.include "object_code/common/parts/blueEnergyBead.s"
 
 ;	.include "code/updateParts.s"
-;	.include "data/partCodeTable.s"
+	.include "data/partCodeTable.s"
 .ends
 
 
@@ -741,7 +742,7 @@ m_section_free Objects_3 namespace objectData
 .ORG 0
 
 m_section_superfree Terrain_Effects NAMESPACE terrainEffects
-;	.include "data/terrainEffects.s"
+	.include "data/terrainEffects.s"
 .ends
 
 ;	.include {"{GAME_DATA_DIR}/interactionOamData.s"}
@@ -794,7 +795,6 @@ m_section_free Bank16_2 NAMESPACE bank16
 .ORG 0
 
 	.include {"{BUILD_DIR}/paletteData.s"}
-;	.include {"{GAME_DATA_DIR}/smallRoomLayoutTables.s"}
 
 
 .BANK $1a SLOT 1
@@ -818,24 +818,27 @@ m_section_free Gfx_1b ALIGN $20
 .ORG 0
 	.include "data/gfxDataBank1c.s"
 
-;	.include {"{GAME_DATA_DIR}/largeRoomLayoutTables.s"} ; $719c0
-;	.include {"{GAME_DATA_DIR}/roomLayoutData.s"}
+	.include {"{GAME_DATA_DIR}/smallRoomLayoutTables.s"}
+	.include {"{GAME_DATA_DIR}/largeRoomLayoutTables.s"}
 
 	.include {"{BUILD_DIR}/ages_textData.s"}
 	.include {"{BUILD_DIR}/seasons_textData.s"}
 
+.BANK $2b SLOT 1
+.ORG 0
 	.REDEFINE DATA_ADDR $4000
 	.REDEFINE DATA_BANK $2b
+	.include {"{GAME_DATA_DIR}/roomLayoutData.s"}
 
 
-.BANK $3b SLOT 1
+.BANK $40 SLOT 1
 .ORG 0
 	.include "data/seasons/enemyOamData.s"
 
-.BANK $3c SLOT 1
+.BANK $41 SLOT 1
 .ORG 0
 
-m_section_free Enemy_Code_Bank3c NAMESPACE bank3c
+m_section_free Enemy_Code_Bank42 NAMESPACE bank42
 ;	.include "object_code/common/enemies/commonCode.s"
 ;	.include "object_code/common/enemies/commonBossCode.s"
 ;	.include "object_code/ages/enemies/pumpkinHead.s"
@@ -848,11 +851,11 @@ m_section_free Enemy_Code_Bank3c NAMESPACE bank3c
 ;	.include "object_code/ages/enemies/kingMoblin.s"
 .ends
 
-.BANK $3d SLOT 1
+.BANK $42 SLOT 1
 .ORG 0
-.define BANK_3d $3d
+.define BANK_42 $42
 
-m_section_free bank3dCode NAMESPACE bank3d
+m_section_free bank42Code NAMESPACE bank42
 	.ifdef ENABLE_SETTINGS_MENU
 ;		.include "code/settingsMenu.s"
 	.endif
@@ -905,11 +908,11 @@ m_section_free Part_Code_2 NAMESPACE partCode
 ;	.include "object_code/ages/parts/triforceStone.s"
 .ends
 
-.BANK $3e SLOT 1
+.BANK $43 SLOT 1
 .ORG 0
 
-m_section_free enemyCode_Bank3e NAMESPACE bank3e
-	.define BANK_3e $3e
+m_section_free enemyCode_Bank43 NAMESPACE bank43
+	.define BANK_43 $43
 
 ;	.include "object_code/common/enemies/commonCode.s"
 
@@ -951,12 +954,12 @@ m_section_free roomGfxChanges NAMESPACE roomGfxChanges
 ;.include "object_code/ages/interactions/tuniNutMain.s"
 
 
-.BANK $3f SLOT 1
+.BANK $44 SLOT 1
 .ORG 0
 
-m_section_free Bank3f NAMESPACE bank3f
+m_section_free Bank44 NAMESPACE bank44
 
-.define BANK_3f $3f
+.define BANK_44 $44
 
 ;.include "code/loadGraphics.s"
 ;.include "code/treasureAndDrops.s"
@@ -992,10 +995,10 @@ m_section_free Bank3f NAMESPACE bank3f
 .endif
 .ends
 
-.BANK $40 SLOT 1
+.BANK $45 SLOT 1
 .ORG 0
 	.REDEFINE DATA_ADDR $4000
-	.REDEFINE DATA_BANK $40
+	.REDEFINE DATA_BANK $45
 	.include {"{GAME_DATA_DIR}/gfxDataMain.s"}
 
 

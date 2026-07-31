@@ -1,5 +1,21 @@
 interactionCodeTable: ; $3b8b
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	.macro m_InteractionCodeRef
+		.db :\1
+		.dw \1
+	.endm
+
+	.rept 8 index SECT
+		.rept 8 index ID
+			.ifdef interactionCodeSection{%.2x{SECT}}.interactionCode{%.2x{ID}}
+				m_InteractionCodeRef interactionCodeSection{%.2x{SECT}}.interactionCode{%.2x{ID}}
+			.else
+				m_InteractionCodeRef interactionDelete
+			.endif
+		.endr
+	.endr
+
+.elif defined(ROM_AGES)
 	.dw    commonInteractions1.interactionCode00 ; 0x00
 	.dw    commonInteractions1.interactionCode01 ; 0x01
 	.dw    commonInteractions1.interactionCode02 ; 0x02

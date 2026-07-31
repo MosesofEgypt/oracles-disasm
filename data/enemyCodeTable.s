@@ -1,5 +1,22 @@
 enemyCodeTable:
-.ifdef ROM_AGES
+
+.if defined(ROM_COMBO)
+	.macro m_EnemyCodeRef
+		.db :\1
+		.dw \1
+	.endm
+
+	.rept 8 index SECT
+		.rept 8 index ID
+			.ifdef enemyCodeSection{%.2x{SECT}}.enemyCode{%.2x{ID}}
+				m_EnemyCodeRef enemyCodeSection{%.2x{SECT}}.enemyCode{%.2x{ID}}
+			.else
+				m_EnemyCodeRef enemyCodeNil
+			.endif
+		.endr
+	.endr
+
+.elif defined(ROM_AGES)
 .ifdef ENABLE_NEW_GAME_PLUS
 	.dw bank10.enemyCode00 ; 0x00
 	.dw bank10.enemyCode01 ; 0x01
