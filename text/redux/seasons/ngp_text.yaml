@@ -1,5 +1,6 @@
 groups:
 - group: 0x0e
+  allow_undefined: [0x2b]
   data:
   - name: TX_0e_LIFE_VIAL
     index: 0x2c

@@ -1,6 +1,6 @@
 ; See data/ages/uncmpGfxHeaders.s for documentation.
 
-.define NUM_UNCMP_GFX_HEADERS $36
+.redefine NUM_UNCMP_GFX_HEADERS $36
 
 .if defined(ROM_COMBO)
 uncmpGfxHeaderTable_seasons:

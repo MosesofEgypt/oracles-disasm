@@ -63,6 +63,11 @@ for filename in yaml_layers:
             if src_group["group"] != dst_group["group"]:
                 continue
 
+            if "allow_undefined" in src_group:
+                dst_group.setdefault("allow_undefined", []).extend(
+                    src_group["allow_undefined"]
+                )
+
             for src_data in src_group["data"]:
                 data_inserted = False
                 for dst_data in dst_group["data"]:

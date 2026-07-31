@@ -5,10 +5,21 @@
 
 ; HACK-BASE: Bank of sound engine (and of data in "audio/{game}/soundChannelData.s") changed to
 ; allocate more space to the compressed data section (text, graphics, room layouts).
+.ifdef ROM_COMBO
+.BANK $40 SLOT 1
+.else
 .BANK $39 SLOT 1
+.endif
 .ORG 0
 
+.ifdef ROM_COMBO
+; NOTE: doing this temporarily while combining games, as the audio data
+;       is getting stuffed into bank0, which is fucking up calculations
+;       for all m_soundPointer instances(they're going -135)
+m_section_free AudioCode NAMESPACE audio
+.else
 m_section_superfree AudioCode NAMESPACE audio
+.endif
 
 ;;
 b39_initSound:

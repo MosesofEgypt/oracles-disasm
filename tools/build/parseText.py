@@ -85,6 +85,7 @@ class GroupStruct:
         self.index = i
         self.isDict = isDict
         self.textStructs = []
+        self.allow_undefined = set()
         self.lastTextIndex = 0
 
     def addTextStruct(self, indices, names):
@@ -353,6 +354,7 @@ def parseTextFile(textFile, isDictionary):
         if textGroup.index in parsedGroups:
             print('WARNING: Parsing group 0x' + myhex(textGroup.index, 2) + ' more than once.')
 
+        textGroup.allow_undefined.update(yamlGroup.get('allow_undefined', []))
         for yamlTextData in yamlGroup['data']:
             indices = yamlTextData['index']
             if type(indices) != list:
@@ -876,7 +878,8 @@ for group in groupDict.values():
         textName = group.getTextName(i)
         if textName is None:
             outFile.write('\t.dw $0000 ; Undefined\n')
-            print('WARNING: Text index ' + myhex(((group.index-4) << 8) | i, 4) + ' undefined.')
+            if i not in group.allow_undefined:
+                print('WARNING: Text index ' + myhex(((group.index-4) << 8) | i, 4) + ' undefined.')
             address += 2
         else:
             outFile.write(

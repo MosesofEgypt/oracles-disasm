@@ -793,8 +793,22 @@ m_section_free Bank16_2 NAMESPACE bank16
 
 .BANK $17 SLOT 1
 .ORG 0
-
 	.include {"{BUILD_DIR}/paletteData.s"}
+
+
+.BANK $18 SLOT 1
+.ORG 0
+	.include "data/seasons/enemyOamData.s"
+
+.BANK $19 SLOT 1
+.ORG 0
+
+m_section_free bank19Code NAMESPACE bank19
+	.ifdef ENABLE_SETTINGS_MENU
+;		.include "code/settingsMenu.s"
+	.endif
+;	.include "code/bank0Ext.s"
+.ends
 
 
 .BANK $1a SLOT 1
@@ -830,14 +844,8 @@ m_section_free Gfx_1b ALIGN $20
 	.REDEFINE DATA_BANK $2b
 	.include {"{GAME_DATA_DIR}/roomLayoutData.s"}
 
-
-.BANK $40 SLOT 1
+.BANK $42 SLOT 1
 .ORG 0
-	.include "data/seasons/enemyOamData.s"
-
-.BANK $41 SLOT 1
-.ORG 0
-
 m_section_free Enemy_Code_Bank42 NAMESPACE bank42
 ;	.include "object_code/common/enemies/commonCode.s"
 ;	.include "object_code/common/enemies/commonBossCode.s"
@@ -849,17 +857,6 @@ m_section_free Enemy_Code_Bank42 NAMESPACE bank42
 ;	.include "object_code/ages/enemies/octogon.s"
 ;	.include "object_code/ages/enemies/plasmarine.s"
 ;	.include "object_code/ages/enemies/kingMoblin.s"
-.ends
-
-.BANK $42 SLOT 1
-.ORG 0
-.define BANK_42 $42
-
-m_section_free bank42Code NAMESPACE bank42
-	.ifdef ENABLE_SETTINGS_MENU
-;		.include "code/settingsMenu.s"
-	.endif
-;	.include "code/bank0Ext.s"
 .ends
 
 

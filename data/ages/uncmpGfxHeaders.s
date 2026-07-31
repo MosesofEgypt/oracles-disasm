@@ -4,7 +4,7 @@
 ; Sometimes these are used to load uncompressed graphics files, but more often they're used to move
 ; data from WRAM to VRAM.
 
-.define NUM_UNCMP_GFX_HEADERS $40
+.redefine NUM_UNCMP_GFX_HEADERS $40
 
 .if defined(ROM_COMBO)
 uncmpGfxHeaderTable_ages:
