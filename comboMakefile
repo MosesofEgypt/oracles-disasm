@@ -179,7 +179,7 @@ $(BUILD_DIR)/$(GAME).o: $(GAME).s $(BUILD_DIR)/ages_textData.s $(BUILD_DIR)/ages
 
 $(BUILD_DIR)/paletteData.s: data/ages/paletteData.s data/seasons/paletteData.s | $(BUILD_DIR)
 	@echo "Combining palettes into $@..."
-	@$(PYTHON) tools/build/makeComboPalettes.py $@ $^
+	@$(PYTHON) tools/build/makeComboPaletteData.py $@ $^
 
 $(BUILD_DIR)/paletteHeaders.s: data/ages/paletteHeaders.s data/seasons/paletteHeaders.s | $(BUILD_DIR)
 	@echo "Combining palette headers into $@..."

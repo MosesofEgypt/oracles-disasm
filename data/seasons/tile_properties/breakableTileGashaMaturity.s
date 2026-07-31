@@ -4,7 +4,11 @@
 ; b0: tile index
 ; b1: amount to add to wGashaMaturity
 
+.if defined(ROM_COMBO)
+tileIncreaseGashaMaturityOnBreakTable_seasons:
+.else
 tileIncreaseGashaMaturityOnBreakTable:
+.endif
 	.dw @overworld
 	.dw @subrosia
 	.dw @makutree

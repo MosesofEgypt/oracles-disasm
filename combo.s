@@ -21,6 +21,9 @@
 .ORG 0
 
 ;	.include "code/bank0.s"
+; NOTE: temporary code until bank0 can be included
+	.include "code/bank0Stub.s"
+; NOTE: temporary code until bank0 can be included
 
 
 .BANK $01 SLOT 1
@@ -938,7 +941,7 @@ m_section_free enemyCode_Bank3e NAMESPACE bank3e
 ;	.include "object_code/ages/enemies/anglerFishBubble.s"
 
 ;	.include "code/breakableTiles.s"
-;	.include {"{GAME_DATA_DIR}/tile_properties/breakableTiles.s"}
+	.include {"{GAME_DATA_DIR}/tile_properties/breakableTiles.s"}
 .ends
 
 m_section_free roomGfxChanges NAMESPACE roomGfxChanges

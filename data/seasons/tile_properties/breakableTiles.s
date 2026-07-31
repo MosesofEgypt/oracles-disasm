@@ -4,7 +4,11 @@
 ;   b0: Tile index that can be broken
 ;   b1: Method of breakage (an index for "breakableTileModes" table, see below)
 
+.if defined(ROM_COMBO)
+breakableTileCollisionTable_seasons:
+.else
 breakableTileCollisionTable:
+.endif
 	.dw @overworld
 	.dw @subrosia
 	.dw @makutree
@@ -189,7 +193,11 @@ breakableTileCollisionTable:
 ;  6th parameter:
 ;    The tile it should turn into when broken, or $00 for no change.
 
+.if defined(ROM_COMBO)
+breakableTileModes_seasons:
+.else
 breakableTileModes:
+.endif
 	m_BreakableTileData %01101001 %00001100 %0100 $1 $10 $04 ; $00
 	m_BreakableTileData %11101101 %10001101 %0110 $1 $00 $04 ; $01
 	m_BreakableTileData %11101101 %10001101 %0110 $0 $c0 $e6 ; $02

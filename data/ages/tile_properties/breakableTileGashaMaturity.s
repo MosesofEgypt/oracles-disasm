@@ -4,7 +4,11 @@
 ; b0: tile index
 ; b1: amount to add to wGashaMaturity
 
+.if defined(ROM_COMBO)
+tileIncreaseGashaMaturityOnBreakTable_ages:
+.else
 tileIncreaseGashaMaturityOnBreakTable:
+.endif
 	.dw @overworld
 	.dw @indoors
 	.dw @dungeons

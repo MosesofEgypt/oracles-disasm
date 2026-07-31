@@ -44,7 +44,7 @@ for line in seasons_palette_data.split("\n"):
         seasons_palettes[name] += (line, )
 
 
-combo_palette_data = ""
+combo_palette_data = "paletteDataStart:\n"
 for name in ages_palette_order:
     combo_palette_data += "%s_ages:\n" % name
     for line in ages_palettes[name]:

@@ -12,7 +12,11 @@
 ;               If bits 6 and 7 aren't set, this is the bit to set in the room flags (ie.
 ;               value of 2 will set bit 2).
 
+.if defined(ROM_COMBO)
+tileUpdateRoomFlagsOnBreakTable_ages:
+.else
 tileUpdateRoomFlagsOnBreakTable:
+.endif
 	.dw @overworld
 	.dw @indoors
 	.dw @dungeons

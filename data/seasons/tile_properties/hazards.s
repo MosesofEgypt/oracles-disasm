@@ -5,7 +5,11 @@
 ; Data format:
 ;   b0: Tile index
 ;   b1: $01 = water, $02 = hole, $04 = lava
+.if defined(ROM_COMBO)
+hazardCollisionTable_seasons:
+.else
 hazardCollisionTable:
+.endif
 	.dw @overworld
 	.dw @subrosia
 	.dw @makutree
