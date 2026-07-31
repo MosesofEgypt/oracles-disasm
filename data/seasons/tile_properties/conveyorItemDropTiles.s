@@ -1,6 +1,10 @@
 ; Lists tiles that behave as conveyors when item drops (PART_ITEM_DROP) are on them.
 
+.ifdef ROM_COMBO
+itemDropConveyorTilesTable_seasons:
+.else
 itemDropConveyorTilesTable:
+.endif
 	.dw @overworld
 	.dw @subrosia
 	.dw @makutree

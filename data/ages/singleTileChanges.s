@@ -1,12 +1,16 @@
+.ifdef ROM_COMBO
+singleTileChangeGroupTable_ages:
+.else
 singleTileChangeGroupTable:
-	.dw singleTileChangeGroup0Data
-	.dw singleTileChangeGroup1Data
-	.dw singleTileChangeGroup2Data
-	.dw singleTileChangeGroup3Data
-	.dw singleTileChangeGroup4Data
-	.dw singleTileChangeGroup5Data
-	.dw singleTileChangeGroup6Data
-	.dw singleTileChangeGroup7Data
+.endif
+	.dw @singleTileChangeGroup0Data
+	.dw @singleTileChangeGroup1Data
+	.dw @singleTileChangeGroup2Data
+	.dw @singleTileChangeGroup3Data
+	.dw @singleTileChangeGroup4Data
+	.dw @singleTileChangeGroup5Data
+	.dw @singleTileChangeGroup6Data
+	.dw @singleTileChangeGroup7Data
 
 ; Data format:
 ; b0: Room index
@@ -18,7 +22,7 @@ singleTileChangeGroupTable:
 ; b2: Position of tile to change
 ; b3: New tile to put at that position
 
-singleTileChangeGroup0Data:
+@singleTileChangeGroup0Data:
 	.db $39 $40 $22 $d7
 	.db $83 $80 $43 $1c
 	.db $13 $02 $42 $d7
@@ -32,7 +36,7 @@ singleTileChangeGroup0Data:
 	.db $64 $02 $67 $3a
 	.db $00 $00
 
-singleTileChangeGroup1Data:
+@singleTileChangeGroup1Data:
 	.db $0e $80 $16 $af
 	.db $48 $02 $48 $3a
 	.db $15 $80 $34 $9e
@@ -48,18 +52,18 @@ singleTileChangeGroup1Data:
 	.db $65 $02 $61 $3a
 	.db $00 $00
 
-singleTileChangeGroup2Data:
+@singleTileChangeGroup2Data:
 	.db $d7 $f0 $42 $e9
 	.db $00 $00
 
-singleTileChangeGroup3Data:
+@singleTileChangeGroup3Data:
 	.db $d6 $f1 $55 $e9
 	.db $0f $80 $16 $af
 	.db $9e $80 $31 $1c
 	.db $9e $80 $32 $a0
 	.db $00 $00
 
-singleTileChangeGroup4Data:
+@singleTileChangeGroup4Data:
 	.db $56 $20 $44 $a0
 	.db $59 $80 $a3 $a0
 	.db $4b $80 $54 $a0
@@ -67,7 +71,7 @@ singleTileChangeGroup4Data:
 	.db $c5 $20 $57 $52
 	.db $00 $00
 
-singleTileChangeGroup5Data:
+@singleTileChangeGroup5Data:
 	.db $19 $01 $08 $34
 	.db $26 $02 $5e $35
 	.db $87 $40 $7c $50
@@ -91,7 +95,7 @@ singleTileChangeGroup5Data:
 	.db $f5 $80 $9d $44
 	.db $00 $00
 
-singleTileChangeGroup6Data:
+@singleTileChangeGroup6Data:
 	.db $2b $80 $aa $19
-singleTileChangeGroup7Data:
+@singleTileChangeGroup7Data:
 	.db $00 $00

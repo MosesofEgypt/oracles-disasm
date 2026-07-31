@@ -11,7 +11,11 @@
 ;                             where XX = layout group, YY = room index for current overworld)
 ;   b7 (wTilesetAnimation):   Animation data index (see data/{game}/animationGroups.s)
 
+.ifdef ROM_COMBO
+tilesetData_ages:
+.else
 tilesetData:
+.endif
 	; 0x00
 	.db $0f, $01
 	.db UNIQUE_GFXH_LYNNA_CITY_1
@@ -254,21 +258,33 @@ tilesetData:
 	.db $0f, $02
 	.db UNIQUE_GFXH_NONE
 	.db GFXH_TILESET_MAKU_TREE
+.ifdef ROM_COMBO
+	.db PALH_TILESET_MAKU_TREE_AGES
+.else
 	.db PALH_TILESET_MAKU_TREE
+.endif
 	.db $11, $00, $07
 
 	; 0x23
 	.db $0f, $02
 	.db UNIQUE_GFXH_NONE
 	.db GFXH_TILESET_MAKU_TREE
+.ifdef ROM_COMBO
+	.db PALH_TILESET_MAKU_TREE_AGES
+.else
 	.db PALH_TILESET_MAKU_TREE
+.endif
 	.db $11, $01, $07
 
 	; 0x24
 	.db $0f, $02
 	.db UNIQUE_GFXH_NONE
 	.db GFXH_TILESET_MAKU_TREE
+.ifdef ROM_COMBO
+	.db PALH_TILESET_MAKU_TREE_AGES
+.else
 	.db PALH_TILESET_MAKU_TREE
+.endif
 	.db $11, $03, $07
 
 	; 0x25
@@ -282,7 +298,11 @@ tilesetData:
 	.db $0f, $82
 	.db UNIQUE_GFXH_NONE
 	.db GFXH_TILESET_MAKU_TREE
+.ifdef ROM_COMBO
+	.db PALH_TILESET_MAKU_TREE_AGES
+.else
 	.db PALH_TILESET_MAKU_TREE
+.endif
 	.db $11, $02, $07
 
 	; 0x27
@@ -331,21 +351,33 @@ tilesetData:
 	.db $1f, $04
 	.db UNIQUE_GFXH_NONE
 	.db GFXH_TILESET_CAVE
+.ifdef ROM_COMBO
+	.db PALH_TILESET_CAVE_AGES
+.else
 	.db PALH_TILESET_CAVE
+.endif
 	.db $16, $01, $10
 
 	; 0x2e
 	.db $1f, $04
 	.db UNIQUE_GFXH_NONE
 	.db GFXH_TILESET_CAVE
+.ifdef ROM_COMBO
+	.db PALH_TILESET_CAVE_AGES
+.else
 	.db PALH_TILESET_CAVE
+.endif
 	.db $16, $03, $10
 
 	; 0x2f
 	.db $1f, $04
 	.db UNIQUE_GFXH_NONE
 	.db GFXH_TILESET_GORON_CAVE
+.ifdef ROM_COMBO
+	.db PALH_TILESET_CAVE_AGES
+.else
 	.db PALH_TILESET_CAVE
+.endif
 	.db $16, $03, $10
 
 	; 0x30
@@ -513,14 +545,22 @@ tilesetData:
 	.db $2a, $08
 	.db UNIQUE_GFXH_NONE
 	.db GFXH_TILESET_ROOM_OF_RITES
+.ifdef ROM_COMBO
+	.db PALH_TILESET_ROOM_OF_RITES_ICE_AGES
+.else
 	.db PALH_TILESET_ROOM_OF_RITES_ICE
+.endif
 	.db $2a, $05, $10
 
 	; 0x48
 	.db $2b, $08
 	.db UNIQUE_GFXH_NONE
 	.db GFXH_TILESET_MAKU_PATH
+.ifdef ROM_COMBO
+	.db PALH_TILESET_HEROS_CAVE_AGES
+.else
 	.db PALH_TILESET_HEROS_CAVE
+.endif
 	.db $20, $04, $10
 
 	; 0x49
@@ -625,21 +665,33 @@ tilesetData:
 	.db $2f, $12
 	.db UNIQUE_GFXH_NONE
 	.db GFXH_TILESET_INDOORS
+.ifdef ROM_COMBO
+	.db PALH_TILESET_MAKU_TREE_INSIDE_AGES
+.else
 	.db PALH_TILESET_MAKU_TREE_INSIDE
+.endif
 	.db $15, $05, $10
 
 	; 0x58
 	.db $2e, $18
 	.db UNIQUE_GFXH_NONE
 	.db GFXH_TILESET_CAVE
+.ifdef ROM_COMBO
+	.db PALH_TILESET_CAVE_AGES
+.else
 	.db PALH_TILESET_CAVE
+.endif
 	.db $16, $05, $10
 
 	; 0x59
 	.db $2f, $10
 	.db UNIQUE_GFXH_NONE
 	.db GFXH_TILESET_CAVE
+.ifdef ROM_COMBO
+	.db PALH_TILESET_CAVE_AGES
+.else
 	.db PALH_TILESET_CAVE
+.endif
 	.db $16, $05, $10
 
 	; 0x5a
@@ -730,7 +782,11 @@ tilesetData:
 	.db $1f, $04
 	.db UNIQUE_GFXH_NONE
 	.db GFXH_TILESET_GORON_CAVE
+.ifdef ROM_COMBO
+	.db PALH_TILESET_CAVE_AGES
+.else
 	.db PALH_TILESET_CAVE
+.endif
 	.db $16, $02, $10
 
 	; HACK-BASE: Stub tilesets for expanded tilesets patch

@@ -11,7 +11,11 @@
 ;   b0: New tile index to use ($00 for end of list)
 ;   b1: Tile index to replace with value "b0" when corresponding room flag bit is set
 
+.ifdef ROM_COMBO
+standardTileSubstitutions_seasons:
+.else
 standardTileSubstitutions:
+.endif
 
 @bit0:
 	.dw @bit0Overworld

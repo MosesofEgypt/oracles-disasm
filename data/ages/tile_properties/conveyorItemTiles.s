@@ -6,7 +6,11 @@
 ; b0: tile index
 ; b1: angle to move in
 
+.ifdef ROM_COMBO
+itemConveyorTilesTable_ages:
+.else
 itemConveyorTilesTable:
+.endif
 	.dw @overworld
 	.dw @indoors
 	.dw @dungeons

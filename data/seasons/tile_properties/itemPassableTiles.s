@@ -4,7 +4,11 @@
 ;   b0: Tile index
 ;   b1: Specifies whether the item has to go up ($01) or down ($ff) a level of elevation in order to pass it.
 
+.ifdef ROM_COMBO
+itemPassableCliffTilesTable_seasons:
+.else
 itemPassableCliffTilesTable:
+.endif
 	.dw @overworld
 	.dw @subrosia
 	.dw @makutree
@@ -108,7 +112,11 @@ itemPassableCliffTilesTable:
 
 ; This lists the tiles that can be passed through by items (such as the switch hook or
 ; seeds) even if their collisions prevent link from passing them.
+.ifdef ROM_COMBO
+itemPassableTilesTable_seasons:
+.else
 itemPassableTilesTable:
+.endif
 	.dw @overworld
 	.dw @subrosia
 	.dw @makutree

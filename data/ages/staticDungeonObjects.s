@@ -6,57 +6,61 @@
 ; b4: Y
 ; b5: X
 
+.ifdef ROM_COMBO
+staticDungeonObjects_ages:
+.else
 staticDungeonObjects:
-	.dw dungeon0StaticObjects
-	.dw dungeon1StaticObjects
-	.dw dungeon2StaticObjects
-	.dw dungeon3StaticObjects
-	.dw dungeon4StaticObjects
-	.dw dungeon5StaticObjects
-	.dw dungeon6StaticObjects
-	.dw dungeon7StaticObjects
-	.dw dungeon8StaticObjects
-	.dw dungeon9StaticObjects
-	.dw dungeonaStaticObjects
-	.dw dungeonbStaticObjects
-	.dw dungeoncStaticObjects
-	.dw dungeondStaticObjects
-	.dw dungeoneStaticObjects
-	.dw dungeonfStaticObjects
+.endif
+	.dw @dungeon0StaticObjects
+	.dw @dungeon1StaticObjects
+	.dw @dungeon2StaticObjects
+	.dw @dungeon3StaticObjects
+	.dw @dungeon4StaticObjects
+	.dw @dungeon5StaticObjects
+	.dw @dungeon6StaticObjects
+	.dw @dungeon7StaticObjects
+	.dw @dungeon8StaticObjects
+	.dw @dungeon9StaticObjects
+	.dw @dungeonaStaticObjects
+	.dw @dungeonbStaticObjects
+	.dw @dungeoncStaticObjects
+	.dw @dungeondStaticObjects
+	.dw @dungeoneStaticObjects
+	.dw @dungeonfStaticObjects
 
 
-dungeon2StaticObjects:
+@dungeon2StaticObjects:
 	.db $03, $33, INTERAC_MINECART, $00, $38, $c8
 	.db $03, $35, INTERAC_MINECART, $00, $68, $b8
 	.db $03, $40, INTERAC_MINECART, $00, $58, $a8
 	.db $ff 
 
-dungeon4StaticObjects:
+@dungeon4StaticObjects:
 	.db $03, $73, INTERAC_MINECART, $00, $58, $48
 	.db $03, $75, INTERAC_MINECART, $00, $58, $a8
 	.db $03, $78, INTERAC_MINECART, $00, $88, $78
 	.db $03, $89, INTERAC_MINECART, $00, $88, $48
 	.db $ff 
 
-dungeon8StaticObjects:
+@dungeon8StaticObjects:
 	.db $03, $90, INTERAC_MINECART, $00, $38, $98
 	.db $03, $92, INTERAC_MINECART, $00, $88, $48
 	.db $ff 
 
-dungeonbStaticObjects:
+@dungeonbStaticObjects:
 	.db $03, $c3, INTERAC_MINECART, $00, $48, $28
 	.db $ff 
 
-dungeon0StaticObjects:
-dungeon1StaticObjects:
-dungeon3StaticObjects:
-dungeon5StaticObjects:
-dungeon6StaticObjects:
-dungeon7StaticObjects:
-dungeon9StaticObjects:
-dungeonaStaticObjects:
-dungeoncStaticObjects:
-dungeondStaticObjects:
-dungeoneStaticObjects:
-dungeonfStaticObjects:
+@dungeon0StaticObjects:
+@dungeon1StaticObjects:
+@dungeon3StaticObjects:
+@dungeon5StaticObjects:
+@dungeon6StaticObjects:
+@dungeon7StaticObjects:
+@dungeon9StaticObjects:
+@dungeonaStaticObjects:
+@dungeoncStaticObjects:
+@dungeondStaticObjects:
+@dungeoneStaticObjects:
+@dungeonfStaticObjects:
 	.db $ff

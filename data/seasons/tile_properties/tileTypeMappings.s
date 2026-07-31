@@ -7,7 +7,12 @@
 ; Data format:
 ;   b0: Tile index ($00 to end the list)
 ;   b1: Tile type
+
+.ifdef ROM_COMBO
+tileTypesTable_seasons:
+.else
 tileTypesTable:
+.endif
 	.dw @overworld
 	.dw @subrosia
 	.dw @makutree

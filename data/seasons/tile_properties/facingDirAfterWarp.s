@@ -4,7 +4,11 @@
 ;   b0: Tile index
 ;   b1: Direction to face when spawning onto that tile
 
+.ifdef ROM_COMBO
+facingDirAfterWarpTable_seasons:
+.else
 facingDirAfterWarpTable:
+.endif
 	.dw @overworld
 	.dw @subrosia
 	.dw @makutree

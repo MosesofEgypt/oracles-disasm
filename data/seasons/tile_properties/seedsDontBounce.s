@@ -4,7 +4,11 @@
 ;
 ; Not including most types of flowers in this table because some of them can be "fall leaves" in
 ; autumn (and then the seeds would stop when touching fall leaves which is obviously wrong)
+.ifdef ROM_COMBO
+seedsDontBounceTilesTable_seasons:
+.else
 seedsDontBounceTilesTable:
+.endif
 	.dw @overworld
 	.dw @subrosia
 	.dw @makutree

@@ -4,7 +4,11 @@
 ;   b0: Tile index
 ;   b1: Angle to move the enemy
 
+.ifdef ROM_COMBO
+enemyConveyorTilesTable_seasons:
+.else
 enemyConveyorTilesTable:
+.endif
 	.dw @overworld
 	.dw @subrosia
 	.dw @makutree

@@ -1,12 +1,16 @@
+.ifdef ROM_COMBO
+singleTileChangeGroupTable_seasons:
+.else
 singleTileChangeGroupTable:
-	.dw singleTileChangeGroup0Data
-	.dw singleTileChangeGroup1Data
-	.dw singleTileChangeGroup2Data
-	.dw singleTileChangeGroup3Data
-	.dw singleTileChangeGroup4Data
-	.dw singleTileChangeGroup5Data
-	.dw singleTileChangeGroup6Data
-	.dw singleTileChangeGroup7Data
+.endif
+	.dw @singleTileChangeGroup0Data
+	.dw @singleTileChangeGroup1Data
+	.dw @singleTileChangeGroup2Data
+	.dw @singleTileChangeGroup3Data
+	.dw @singleTileChangeGroup4Data
+	.dw @singleTileChangeGroup5Data
+	.dw @singleTileChangeGroup6Data
+	.dw @singleTileChangeGroup7Data
 
 ; Data format:
 ; b0: Room index
@@ -16,7 +20,7 @@ singleTileChangeGroupTable:
 ; b2: Position of tile to change
 ; b3: New tile to put at that position
 
-singleTileChangeGroup0Data:
+@singleTileChangeGroup0Data:
 	.db $9a $40 $33 $c5
 	.db $52 $40 $02 $d0
 	.db $52 $40 $01 $6b
@@ -29,7 +33,7 @@ singleTileChangeGroup0Data:
 	.db $01 $40 $67 $9c
 	.db $00 $00
 
-singleTileChangeGroup1Data:
+@singleTileChangeGroup1Data:
 	.db $0a $80 $32 $e1
 	.db $0a $80 $33 $e1
 	.db $0a $80 $34 $e1
@@ -45,15 +49,15 @@ singleTileChangeGroup1Data:
 	.db $69 $20 $28 $e1
 	.db $00 $00
 
-singleTileChangeGroup2Data:
-singleTileChangeGroup3Data:
-singleTileChangeGroup4Data:
+@singleTileChangeGroup2Data:
+@singleTileChangeGroup3Data:
+@singleTileChangeGroup4Data:
 	.db $39 $80 $07 $a0
 	.db $39 $80 $24 $09
 	.db $39 $80 $2a $09
 	.db $00 $00
 
-singleTileChangeGroup5Data:
+@singleTileChangeGroup5Data:
 	.db $f0 $40 $77 $6a
 	.db $bc $20 $2a $53
 	.db $3e $80 $5c $05
@@ -65,6 +69,6 @@ singleTileChangeGroup5Data:
 	.db $27 $80 $57 $4f
 	.db $00 $00
 
-singleTileChangeGroup6Data:
-singleTileChangeGroup7Data:
+@singleTileChangeGroup6Data:
+@singleTileChangeGroup7Data:
 	.db $00 $00

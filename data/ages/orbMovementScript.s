@@ -1,4 +1,8 @@
+.ifdef ROM_COMBO
+orbMovementScript_ages:
+.else
 orbMovementScript:
+.endif
 	.dw @subid00
 
 @subid00:

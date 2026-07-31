@@ -4,18 +4,22 @@
 ;   b1: Room index
 ;   b2: Text to show (always TX_2eXX)
 
+.ifdef ROM_COMBO
+signTextGroupTable_seasons:
+.else
 signTextGroupTable:
-	.dw signTextGroup0Data
-	.dw signTextGroup1Data
-	.dw signTextGroup2Data
-	.dw signTextGroup3Data
-	.dw signTextGroup4Data
-	.dw signTextGroup5Data
-	.dw signTextGroup6Data
-	.dw signTextGroup7Data
+.endif
+	.dw @signTextGroup0Data
+	.dw @signTextGroup1Data
+	.dw @signTextGroup2Data
+	.dw @signTextGroup3Data
+	.dw @signTextGroup4Data
+	.dw @signTextGroup5Data
+	.dw @signTextGroup6Data
+	.dw @signTextGroup7Data
 
-signTextGroup0Data:
-signTextGroup3Data:
+@signTextGroup0Data:
+@signTextGroup3Data:
 	.db $43, $d9, <TX_2e00
 	.db $52, $4d, <TX_2e01
 	.db $17, $0b, <TX_2e03
@@ -43,19 +47,19 @@ signTextGroup3Data:
 	.db $23, $68, <TX_2e1e
 	.db $00
 
-signTextGroup1Data:
+@signTextGroup1Data:
 	.db $27, $45, <TX_2e07
 	.db $42, $59, <TX_2e08
 	.db $46, $14, <TX_2e09
 	.db $00
 
-signTextGroup2Data:
-signTextGroup4Data:
+@signTextGroup2Data:
+@signTextGroup4Data:
 	.db $17, $04, <TX_2e02
 	.db $00
 
-signTextGroup5Data:
+@signTextGroup5Data:
 	.db $82, $12, <TX_2e1c
-signTextGroup6Data:
-signTextGroup7Data:
+@signTextGroup6Data:
+@signTextGroup7Data:
 	.db $00

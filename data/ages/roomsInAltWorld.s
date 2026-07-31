@@ -7,19 +7,22 @@
 ; being in the past.
 ;
 ; Note: group 0 is actually never checked.
-
+.ifdef ROM_COMBO
+roomsInAltWorldTable_ages:
+.else
 roomsInAltWorldTable:
-	.dw roomsInAltWorldGroup0
-	.dw roomsInAltWorldGroup1
-	.dw roomsInAltWorldGroup2
-	.dw roomsInAltWorldGroup3
-	.dw roomsInAltWorldGroup4
-	.dw roomsInAltWorldGroup5
-	.dw roomsInAltWorldGroup6
-	.dw roomsInAltWorldGroup7
+.endif
+	.dw @roomsInAltWorldGroup0
+	.dw @roomsInAltWorldGroup1
+	.dw @roomsInAltWorldGroup2
+	.dw @roomsInAltWorldGroup3
+	.dw @roomsInAltWorldGroup4
+	.dw @roomsInAltWorldGroup5
+	.dw @roomsInAltWorldGroup6
+	.dw @roomsInAltWorldGroup7
 
-roomsInAltWorldGroup0:
-roomsInAltWorldGroup1:
+@roomsInAltWorldGroup0:
+@roomsInAltWorldGroup1:
 	dbrev %00000000 %00000000
 	dbrev %00000000 %00000000
 	dbrev %00000000 %00000000
@@ -37,7 +40,7 @@ roomsInAltWorldGroup1:
 	dbrev %00000000 %00000000
 	dbrev %00000000 %00000000
 
-roomsInAltWorldGroup2:
+@roomsInAltWorldGroup2:
 	dbrev %00000000 %00000000
 	dbrev %00000000 %00000000
 	dbrev %00000000 %00000000
@@ -55,7 +58,7 @@ roomsInAltWorldGroup2:
 	dbrev %00010000 %10000001
 	dbrev %00000001 %10001001
 
-roomsInAltWorldGroup3:
+@roomsInAltWorldGroup3:
 	dbrev %00000000 %00000001
 	dbrev %00000000 %00000001
 	dbrev %00000000 %00000001
@@ -73,8 +76,8 @@ roomsInAltWorldGroup3:
 	dbrev %00000111 %01000000
 	dbrev %00000000 %00101011 
 
-roomsInAltWorldGroup4:
-roomsInAltWorldGroup6:
+@roomsInAltWorldGroup4:
+@roomsInAltWorldGroup6:
 	dbrev %00000000 %00000000
 	dbrev %00000000 %00000000 
 	dbrev %00000000 %00000000
@@ -92,8 +95,8 @@ roomsInAltWorldGroup6:
 	dbrev %11111101 %11111111
 	dbrev %11111111 %11111111 
 
-roomsInAltWorldGroup5:
-roomsInAltWorldGroup7:
+@roomsInAltWorldGroup5:
+@roomsInAltWorldGroup7:
 	dbrev %00000111 %11100000
 	dbrev %00000000 %00000000 
 	dbrev %00000000 %00000000

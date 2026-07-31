@@ -1,7 +1,11 @@
 ; List of tile indices which behave as magnet-able tiles.
 ;
 ; Can only have one tile per group number.
+.ifdef ROM_COMBO
+magnetTilesTable_seasons:
+.else
 magnetTilesTable:
+.endif
 	.db $00 ; Group 0 (overworld)
 	.db $e3 ; Group 1 (subrosia)
 	.db $00 ; Group 2 (maku tree)

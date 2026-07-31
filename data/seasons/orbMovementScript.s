@@ -1,4 +1,8 @@
+.ifdef ROM_COMBO
+orbMovementScript_seasons:
+.else
 orbMovementScript:
+.endif
 	.dw @subid00
 	.dw @subid01
 	.dw @subid02

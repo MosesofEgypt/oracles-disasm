@@ -7,7 +7,11 @@
 ; Data format:
 ;   b0: Tile index ($00 to end the list)
 ;   b1: Tile type
+.ifdef ROM_COMBO
+tileTypesTable_ages:
+.else
 tileTypesTable:
+.endif
 	.dw @overworld
 	.dw @indoors
 	.dw @dungeons

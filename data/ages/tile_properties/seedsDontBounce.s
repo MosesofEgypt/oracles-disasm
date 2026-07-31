@@ -1,5 +1,9 @@
 ; List of tiles which seed shooter seeds don't bounce off of. (Burnable stuff.)
+.ifdef ROM_COMBO
+seedsDontBounceTilesTable_ages:
+.else
 seedsDontBounceTilesTable:
+.endif
 	.dw @overworld
 	.dw @indoors
 	.dw @dungeons

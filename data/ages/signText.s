@@ -4,17 +4,21 @@
 ;   b1: Room index
 ;   b2: Text to show (always TX_2eXX)
 
+.ifdef ROM_COMBO
+signTextGroupTable_ages:
+.else
 signTextGroupTable:
-	.dw signTextGroup0Data
-	.dw signTextGroup1Data
-	.dw signTextGroup2Data
-	.dw signTextGroup3Data
-	.dw signTextGroup4Data
-	.dw signTextGroup5Data
-	.dw signTextGroup6Data
-	.dw signTextGroup7Data
+.endif
+	.dw @signTextGroup0Data
+	.dw @signTextGroup1Data
+	.dw @signTextGroup2Data
+	.dw @signTextGroup3Data
+	.dw @signTextGroup4Data
+	.dw @signTextGroup5Data
+	.dw @signTextGroup6Data
+	.dw @signTextGroup7Data
 
-signTextGroup0Data:
+@signTextGroup0Data:
 	.db $35, $2a, <TX_2e01
 	.db $51, $3d, <TX_2e05
 	.db $46, $19, <TX_2e06
@@ -32,7 +36,7 @@ signTextGroup0Data:
 	.db $36, $47, <TX_2e1d
 	.db $00
 
-signTextGroup1Data:
+@signTextGroup1Data:
 	.db $54, $39, <TX_2e03
 	.db $53, $33, <TX_2e04
 	.db $24, $1d, <TX_2e08
@@ -44,7 +48,7 @@ signTextGroup1Data:
 	.db $31, $49, <TX_2e1e
 	.db $00
 
-signTextGroup2Data:
+@signTextGroup2Data:
 	.db $52, $e9, <TX_2e00
 	.db $46, $fd, <TX_2e0a
 	.db $46, $ff, <TX_2e0a
@@ -54,7 +58,7 @@ signTextGroup2Data:
 	.db $38, $d1, <TX_2e1f
 	.db $00
 
-signTextGroup3Data:
+@signTextGroup3Data:
 	.db $15, $1e, <TX_2e0b
 	.db $34, $4e, <TX_2e0c
 	.db $44, $c4, <TX_2e19
@@ -63,15 +67,15 @@ signTextGroup3Data:
 	.db $38, $d1, <TX_2e1f
 	.db $00
 
-signTextGroup4Data:
+@signTextGroup4Data:
 	.db $62, $01, <TX_2e02
 	.db $3c, $02, <TX_2e02
 	.db $32, $02, <TX_2e02
 	.db $44, $03, <TX_2e02
 	.db $00
 
-signTextGroup5Data:
+@signTextGroup5Data:
 	.db $6c, $bf, <TX_2e20
-signTextGroup6Data:
-signTextGroup7Data:
+@signTextGroup6Data:
+@signTextGroup7Data:
 	.db $00

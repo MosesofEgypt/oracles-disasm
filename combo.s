@@ -77,11 +77,11 @@
 
 	; Must be in the same bank as "Tileset_Loading_2".
 	 m_section_free Tileset_Loading_1 NAMESPACE tilesets
-;		.include {"{GAME_DATA_DIR}/tilesets.s"}
+		.include {"{GAME_DATA_DIR}/tilesets.s"}
 		.include {"{GAME_DATA_DIR}/tilesetAssignments.s"}
 	.ends
 
-	 m_section_free animationAndUniqueGfxData NAMESPACE animationAndUniqueGfxData
+	 m_section_superfree animationAndUniqueGfxData NAMESPACE animationAndUniqueGfxData
 ;		.include "code/animations.s"
 
 		.include {"{GAME_DATA_DIR}/uniqueGfxHeaders.s"}
@@ -103,7 +103,7 @@
 
 		; Must be in same bank as "code/bank4.s"
 	 m_section_free Warp_Data NAMESPACE bank4
-;		.include {"{GAME_DATA_DIR}/warpDestinations.s"}
+		.include {"{GAME_DATA_DIR}/warpDestinations.s"}
 		.include {"{GAME_DATA_DIR}/warpSources.s"}
 	.ends
 
@@ -114,8 +114,8 @@
 	 m_section_free Bank_5 NAMESPACE bank5
 ;		.include "code/specialObjects.s"
 
-;		.include {"{GAME_DATA_DIR}/tile_properties/tileTypeMappings.s"}
-;		.include {"{GAME_DATA_DIR}/tile_properties/cliffTiles.s"}
+		.include {"{GAME_DATA_DIR}/tile_properties/tileTypeMappings.s"}
+		.include {"{GAME_DATA_DIR}/tile_properties/cliffTiles.s"}
 	.ends
 
 
@@ -154,7 +154,7 @@ m_section_free Bank_6 NAMESPACE bank6
 ;	.include {"{GAME_DATA_DIR}/specialObjectAnimationData.s"}
 ;	.include "object_code/ages/specialObjects/companionCutscene.s"
 ;	.include "object_code/ages/specialObjects/linkInCutscene.s"
-;	.include {"{GAME_DATA_DIR}/signText.s"}
+	.include {"{GAME_DATA_DIR}/signText.s"}
 
 ;	.include "object_code/ages/specialObjects/timeWarp.s"
 
@@ -178,8 +178,8 @@ m_section_free Bank_6 NAMESPACE bank6
 ;		.include "code/updateItems.s"
 ;		.include "object_code/common/items/commonCode1.s"
 
-;		.include {"{GAME_DATA_DIR}/tile_properties/conveyorItemTiles.s"}
-;		.include {"{GAME_DATA_DIR}/tile_properties/itemPassableTiles.s"}
+		.include {"{GAME_DATA_DIR}/tile_properties/conveyorItemTiles.s"}
+		.include {"{GAME_DATA_DIR}/tile_properties/itemPassableTiles.s"}
 
 ;		.include "object_code/common/items/seeds.s"
 ;		.include "object_code/common/items/dimitriMouth.s"
@@ -523,7 +523,7 @@ m_section_free Enemy_Code_Bank0d NAMESPACE bank0d
 .ends
 
 m_section_superfree Enemy_Animations
-	.include {"{GAME_DATA_DIR}/enemyAnimations.s"}
+;	.include {"{GAME_DATA_DIR}/enemyAnimations.s"}
 .ends
 
 
@@ -556,7 +556,7 @@ m_section_free Enemy_Code_Bank0e NAMESPACE bank0e
 ;	.include "object_code/common/enemies/twinrovaBat.s"
 ;	.include "object_code/common/enemies/ganonRevivalCutscene.s"
 
-;	.include {"{GAME_DATA_DIR}/orbMovementScript.s"}
+	.include {"{GAME_DATA_DIR}/orbMovementScript.s"}
 ;	.include "code/objectMovementScript.s"
 
 ;	.include "object_code/ages/enemies/bari.s"
@@ -570,7 +570,7 @@ m_section_free Enemy_Code_Bank0e NAMESPACE bank0e
 ;	.include "object_code/ages/enemies/vineSprout.s"
 ;	.include "object_code/ages/enemies/targetCartCrystal.s"
 
-;	.include {"{GAME_DATA_DIR}/movingSidescrollPlatform.s"}
+	.include {"{GAME_DATA_DIR}/movingSidescrollPlatform.s"}
 
 .ends
 
@@ -735,8 +735,6 @@ m_section_free Objects_3 namespace objectData
 ;	.include {"{GAME_DATA_DIR}/specialObjectOamData.s"}
 ;	.include "data/itemOamData.s"
 
-	.include "data/ages/enemyOamData.s"
-
 
 .BANK $15 SLOT 1
 .ORG 0
@@ -779,7 +777,7 @@ m_section_superfree Terrain_Effects NAMESPACE terrainEffects
 
 
 ;	.include "code/staticObjects.s"
-;	.include {"{GAME_DATA_DIR}/staticDungeonObjects.s"}
+	.include {"{GAME_DATA_DIR}/staticDungeonObjects.s"}
 	.include {"{GAME_DATA_DIR}/chestData.s"}
 	.include {"{GAME_DATA_DIR}/treasureObjectData.s"}
 
@@ -798,7 +796,7 @@ m_section_free Bank16_2 NAMESPACE bank16
 
 .BANK $18 SLOT 1
 .ORG 0
-	.include "data/seasons/enemyOamData.s"
+
 
 .BANK $19 SLOT 1
 .ORG 0
@@ -973,13 +971,13 @@ m_section_free Bank44 NAMESPACE bank44
 .include {"{GAME_DATA_DIR}/objectGfxHeaders.s"}
 .include {"{GAME_DATA_DIR}/treeGfxHeaders.s"}
 
-.include {"{GAME_DATA_DIR}/enemyData.s"}
-.include {"{GAME_DATA_DIR}/partData.s"}
+;.include {"{GAME_DATA_DIR}/enemyData.s"}
+;.include {"{GAME_DATA_DIR}/partData.s"}
 .include {"{GAME_DATA_DIR}/itemData.s"}
 ;.include {"{GAME_DATA_DIR}/interactionData.s"}
 
 .include {"{GAME_DATA_DIR}/treasureCollectionBehaviours.s"}
-;.include {"{GAME_DATA_DIR}/treasureDisplayData.s"}
+.include {"{GAME_DATA_DIR}/treasureDisplayData.s"}
 
 .include "data/ages/blackTowerOamData.s"
 .include "data/ages/nayruSingingOamData.s"

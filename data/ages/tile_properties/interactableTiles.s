@@ -24,7 +24,11 @@
 ;        7: Does nothing?
 ;        8: Spawns a ghini when approached. Used in the graveyard in Seasons.
 
+.ifdef ROM_COMBO
+interactableTilesTable_ages:
+.else
 interactableTilesTable:
+.endif
 	.dw @overworld
 	.dw @indoors
 	.dw @dungeons

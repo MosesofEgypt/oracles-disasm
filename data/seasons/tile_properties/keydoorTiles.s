@@ -7,7 +7,11 @@
 ;   b0: tile index
 ;   b1: key type (0=small key, 1=boss key)
 
+.ifdef ROM_COMBO
+keyDoorGraphicTable_seasons:
+.else
 keyDoorGraphicTable:
+.endif
 	.dw @overworld
 	.dw @subrosia
 	.dw @makutree

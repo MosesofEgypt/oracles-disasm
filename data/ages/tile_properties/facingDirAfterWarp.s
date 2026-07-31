@@ -4,7 +4,11 @@
 ;   b0: Tile index
 ;   b1: Direction to face when spawning onto that tile
 
+.ifdef ROM_COMBO
+facingDirAfterWarpTable_ages:
+.else
 facingDirAfterWarpTable:
+.endif
 	.dw @overworld
 	.dw @indoors
 	.dw @dungeons

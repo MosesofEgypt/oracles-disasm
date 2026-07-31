@@ -2,7 +2,11 @@
 ; b0: Treasure to apply this to
 ; b1: Address of "level" or similar variable, used as an index in a sub-table below
 ; b2: Which sub-table below to use
+.ifdef ROM_COMBO
+treasureDisplayData1_ages:
+.else
 treasureDisplayData1:
+.endif
 	.db TREASURE_SEED_SATCHEL, <wSatchelSelectedSeeds, $01
 	.db TREASURE_SWORD,        <wSwordLevel,           $02
 	.db TREASURE_SHIELD,       <wShieldLevel,          $03
@@ -20,23 +24,27 @@ treasureDisplayData1:
 	.db TREASURE_FEATHER,      <wFeatherLevel,          $0f
 	.db $00,                   $00,                    $00
 
+.ifdef ROM_COMBO
+treasureDisplayData2_ages:
+.else
 treasureDisplayData2:
-	.dw treasureDisplayData_standard
-	.dw treasureDisplayData_satchel
-	.dw treasureDisplayData_sword    - 7
-	.dw treasureDisplayData_shield   - 7
-	.dw treasureDisplayData_bracelet - 7
-	.dw treasureDisplayData_trade
-	.dw treasureDisplayData_flute
-	.dw treasureDisplayData_shooter
-	.dw treasureDisplayData_harp
-	.dw treasureDisplayData_tuniNut
-	.dw treasureDisplayData_switchHook-7
-	.dw treasureDisplayData_magnetGlove
-	.dw treasureDisplayData_slingshot
-	.dw treasureDisplayData_hyperSlingshot
-	.dw treasureDisplayData_boomerang-7
-	.dw treasureDisplayData_feather-7
+.endif
+	.dw @treasureDisplayData_standard
+	.dw @treasureDisplayData_satchel
+	.dw @treasureDisplayData_sword    - 7
+	.dw @treasureDisplayData_shield   - 7
+	.dw @treasureDisplayData_bracelet - 7
+	.dw @treasureDisplayData_trade
+	.dw @treasureDisplayData_flute
+	.dw @treasureDisplayData_shooter
+	.dw @treasureDisplayData_harp
+	.dw @treasureDisplayData_tuniNut
+	.dw @treasureDisplayData_switchHook-7
+	.dw @treasureDisplayData_magnetGlove
+	.dw @treasureDisplayData_slingshot
+	.dw @treasureDisplayData_hyperSlingshot
+	.dw @treasureDisplayData_boomerang-7
+	.dw @treasureDisplayData_feather-7
 
 
 ; The parts marked as "filler" in this table aren't actually used, since they have their
@@ -80,7 +88,7 @@ treasureDisplayData2:
 ;
 ; Rows marked with "X" are unused as they are multi-level items with separate tables.
 
-treasureDisplayData_standard:
+@treasureDisplayData_standard:
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_NONE (0x00)
 	.db $00,                         $07, $00, $00, $00, $00, <TX_0900 ; X TREASURE_SHIELD (0x01)
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_PUNCH (0x02)
@@ -226,7 +234,7 @@ treasureDisplayData_standard:
 	; Treasures $60-$67 don't have display data apparently? (they seem to represent
 	; upgrades)
 
-treasureDisplayData_satchel:
+@treasureDisplayData_satchel:
 .ifdef WIDE_INVENTORY_SPRITES
 	.db TREASURE_EMBER_SEEDS,        $88, $03, $89, $02, $08, <TX_092d ; Ember seeds
 	.db TREASURE_SCENT_SEEDS,        $88, $03, $89, $03, $18, <TX_092d ; Scent seeds
@@ -241,7 +249,7 @@ treasureDisplayData_satchel:
 	.db TREASURE_MYSTERY_SEEDS,      $80, $05, $87, $00, $01, <TX_092d ; Mystery seeds
 .endif
 
-treasureDisplayData_shooter:
+@treasureDisplayData_shooter:
 .ifdef WIDE_INVENTORY_SPRITES
 	.db TREASURE_EMBER_SEEDS,        $8e, $02, $8f, $02, $09, <TX_0940 ; Ember seeds
 	.db TREASURE_SCENT_SEEDS,        $8e, $02, $8f, $03, $19, <TX_0940 ; Scent seeds
@@ -256,7 +264,7 @@ treasureDisplayData_shooter:
 	.db TREASURE_MYSTERY_SEEDS,      $8a, $05, $87, $00, $01, <TX_0940 ; Mystery seeds
 .endif
 
-treasureDisplayData_sword:
+@treasureDisplayData_sword:
 .ifdef WIDE_INVENTORY_SPRITES
 	.db TREASURE_SWORD, $80, $00, $81, $00, $06, <TX_0923 ; L1
 	.db TREASURE_SWORD, $80, $05, $81, $02, $06, <TX_0924 ; L2
@@ -273,7 +281,7 @@ treasureDisplayData_sword:
 	.endif
 .endif
 
-treasureDisplayData_shield:
+@treasureDisplayData_shield:
 .ifdef WIDE_INVENTORY_SPRITES
 	.db TREASURE_SHIELD, $82, $00, $83, $00, $06, <TX_0920 ; L1
 	.db TREASURE_SHIELD, $82, $05, $83, $05, $06, <TX_0921 ; L2
@@ -290,7 +298,7 @@ treasureDisplayData_shield:
 	.endif
 .endif
 
-treasureDisplayData_bracelet:
+@treasureDisplayData_bracelet:
 .ifdef WIDE_INVENTORY_SPRITES
 	.db TREASURE_BRACELET, $86, $05, $87, $05, $06, <TX_092b ; L1
 	.db TREASURE_BRACELET, $86, $03, $87, $02, $06, <TX_093f ;
@@ -299,7 +307,7 @@ treasureDisplayData_bracelet:
 	.db TREASURE_BRACELET, $af, $05, $00, $00, $00, <TX_093f ;
 .endif
 
-treasureDisplayData_trade:
+@treasureDisplayData_trade:
 	.db TREASURE_TRADEITEM, $c0, $05, $c1, $05, $ff, <TX_0909 ; Poe clock
 	.db TREASURE_TRADEITEM, $c2, $02, $c2, $22, $ff, <TX_090a ; Stationery
 	.db TREASURE_TRADEITEM, $c3, $00, $c4, $00, $ff, <TX_090b ; Stink bag
@@ -314,7 +322,7 @@ treasureDisplayData_trade:
 	.db TREASURE_TRADEITEM, $d4, $01, $d5, $01, $ff, <TX_0914 ; Broken sword
 	.db TREASURE_TRADEITEM, $00, $00, $00, $00, $ff, <TX_0900 ; Nothing (sequence done)
 
-treasureDisplayData_flute:
+@treasureDisplayData_flute:
 .ifdef WIDE_INVENTORY_SPRITES
 	.db TREASURE_FLUTE, $a2, $00, $a3, $00, $ff, <TX_092e ; Strange flute
 	.db TREASURE_FLUTE, $a2, $03, $a3, $03, $ff, <TX_092f ; Ricky's flute
@@ -327,7 +335,7 @@ treasureDisplayData_flute:
 	.db TREASURE_FLUTE, $8b, $01, $8f, $01, $ff, <TX_0931 ; Moosh's flute
 .endif
 
-treasureDisplayData_harp:
+@treasureDisplayData_harp:
 .ifdef WIDE_INVENTORY_SPRITES
 	.db $00, $aa, $02, $ab, $01, $95, <TX_0941 ; No song?
 	.db $00, $aa, $02, $ab, $01, $85, <TX_0941 ; Tune of echoes
@@ -340,12 +348,12 @@ treasureDisplayData_harp:
 	.db $00, $ab, $01, $ac, $01, $05, <TX_0941 ; Tune of ages
 .endif
 
-treasureDisplayData_tuniNut:
+@treasureDisplayData_tuniNut:
 	.db TREASURE_TUNI_NUT, $f3, $05, $f4, $05, $ff, <TX_0957 ; Broken
 	.db TREASURE_TUNI_NUT, $00, $00, $00, $00, $ff, <TX_0900 ; Invisible (during the ceremony?)
 	.db TREASURE_TUNI_NUT, $f2, $05, $f2, $25, $ff, <TX_094b ; Fixed
 
-treasureDisplayData_switchHook:
+@treasureDisplayData_switchHook:
 .ifdef WIDE_INVENTORY_SPRITES
 	.db TREASURE_SWITCH_HOOK, $90, $05, $91, $04, $06, <TX_093d ; L1
 	.db TREASURE_SWITCH_HOOK, $90, $05, $91, $04, $06, <TX_093e ; L2
@@ -354,7 +362,7 @@ treasureDisplayData_switchHook:
 	.db TREASURE_SWITCH_HOOK, $9f, $04, $00, $00, $00, <TX_093e ; L2
 .endif
 
-treasureDisplayData_magnetGlove:
+@treasureDisplayData_magnetGlove:
 .ifdef WIDE_INVENTORY_SPRITES
 	.db TREASURE_MAGNET_GLOVES,      $98, $04, $99, $04, $ff, <TX_09_MAGNETGLOVES
 	.db TREASURE_MAGNET_GLOVES,      $98, $05, $99, $05, $ff, <TX_09_MAGNETGLOVES
@@ -363,7 +371,7 @@ treasureDisplayData_magnetGlove:
 	.db TREASURE_MAGNET_GLOVES,      $88, $02, $89, $00, $03, <TX_09_MAGNETGLOVES
 .endif
 
-treasureDisplayData_slingshot:
+@treasureDisplayData_slingshot:
 .ifdef WIDE_INVENTORY_SPRITES
 	.db TREASURE_EMBER_SEEDS,        $8a, $01, $8b, $02, $0a, <TX_09_SLINGSHOT
 	.db TREASURE_SCENT_SEEDS,        $8a, $01, $8b, $03, $1a, <TX_09_SLINGSHOT
@@ -378,7 +386,7 @@ treasureDisplayData_slingshot:
 	.db TREASURE_MYSTERY_SEEDS,      $81, $04, $87, $00, $01, <TX_09_SLINGSHOT
 .endif
 
-treasureDisplayData_hyperSlingshot:
+@treasureDisplayData_hyperSlingshot:
 .ifdef WIDE_INVENTORY_SPRITES
 	.db TREASURE_EMBER_SEEDS,        $8c, $00, $8d, $02, $0b, <TX_09_HYPERSLINGSHOT
 	.db TREASURE_SCENT_SEEDS,        $8c, $00, $8d, $03, $1b, <TX_09_HYPERSLINGSHOT
@@ -393,7 +401,7 @@ treasureDisplayData_hyperSlingshot:
 	.db TREASURE_MYSTERY_SEEDS,      $81, $05, $87, $00, $01, <TX_09_HYPERSLINGSHOT
 .endif
 
-treasureDisplayData_boomerang:
+@treasureDisplayData_boomerang:
 .ifdef WIDE_INVENTORY_SPRITES
 	.db TREASURE_BOOMERANG,          $92, $03, $93, $05, $06, <TX_0927
 	.db TREASURE_BOOMERANG,          $92, $04, $93, $04, $06, <TX_09_MAGICBOOMERANG
@@ -402,7 +410,7 @@ treasureDisplayData_boomerang:
 	.db TREASURE_BOOMERANG,          $9c, $04, $00, $00, $00, <TX_09_MAGICBOOMERANG
 .endif
 
-treasureDisplayData_feather:
+@treasureDisplayData_feather:
 .ifdef WIDE_INVENTORY_SPRITES
 	.db TREASURE_FEATHER, $84, $03, $85, $01, $06, <TX_092c
 	.db TREASURE_FEATHER, $84, $04, $85, $04, $06, <TX_09_ROCSCAPE

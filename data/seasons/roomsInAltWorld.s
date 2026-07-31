@@ -5,20 +5,24 @@
 ;
 ; Note: group 0 is actually never checked. Subrosia itself is group 1.
 
+.ifdef ROM_COMBO
+roomsInAltWorldTable_seasons:
+.else
 roomsInAltWorldTable:
-	.dw roomsInAltWorldGroup0
-	.dw roomsInAltWorldGroup1
-	.dw roomsInAltWorldGroup2
-	.dw roomsInAltWorldGroup3
-	.dw roomsInAltWorldGroup4
-	.dw roomsInAltWorldGroup5
-	.dw roomsInAltWorldGroup6
-	.dw roomsInAltWorldGroup7
+.endif
+	.dw @roomsInAltWorldGroup0
+	.dw @roomsInAltWorldGroup1
+	.dw @roomsInAltWorldGroup2
+	.dw @roomsInAltWorldGroup3
+	.dw @roomsInAltWorldGroup4
+	.dw @roomsInAltWorldGroup5
+	.dw @roomsInAltWorldGroup6
+	.dw @roomsInAltWorldGroup7
 
-roomsInAltWorldGroup0:
-roomsInAltWorldGroup1:
-roomsInAltWorldGroup2:
-roomsInAltWorldGroup3:
+@roomsInAltWorldGroup0:
+@roomsInAltWorldGroup1:
+@roomsInAltWorldGroup2:
+@roomsInAltWorldGroup3:
 	dbrev %00000000 %00000000
 	dbrev %00000000 %00000000
 	dbrev %00000000 %00000000
@@ -37,8 +41,8 @@ roomsInAltWorldGroup3:
 	dbrev %00000000 %00000000
 
 
-roomsInAltWorldGroup4:
-roomsInAltWorldGroup6:
+@roomsInAltWorldGroup4:
+@roomsInAltWorldGroup6:
 	dbrev %00000000 %00000000
 	dbrev %00000000 %00000000
 	dbrev %00000000 %00000000
@@ -56,8 +60,8 @@ roomsInAltWorldGroup6:
 	dbrev %00000000 %00000001
 	dbrev %11100000 %01000000
 
-roomsInAltWorldGroup5:
-roomsInAltWorldGroup7:
+@roomsInAltWorldGroup5:
+@roomsInAltWorldGroup7:
 	dbrev %00000000 %00000000
 	dbrev %00000000 %00000000
 	dbrev %00000000 %00000000

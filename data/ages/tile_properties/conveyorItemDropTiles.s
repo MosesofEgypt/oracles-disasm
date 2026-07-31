@@ -1,6 +1,10 @@
 ; Lists tiles that behave as conveyors when item drops (PART_ITEM_DROP) are on them.
 
+.ifdef ROM_COMBO
+itemDropConveyorTilesTable_ages:
+.else
 itemDropConveyorTilesTable:
+.endif
 	.dw @overworld
 	.dw @indoors
 	.dw @dungeons

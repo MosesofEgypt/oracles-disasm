@@ -8,7 +8,7 @@ if len(sys.argv) < 4:
 outputFile      = sys.argv[1]
 agesPalettes    = sys.argv[2]
 seasonsPalettes = sys.argv[3]
-debug = False
+debug = True
 
 with open(agesPalettes) as f:
     ages_data = f.read()
@@ -45,17 +45,22 @@ def parse_palette_data(data, headers, header_order):
             headers[name] += (line, )
 
 def make_header_names_unique(
-        headers, header_names, other_header_names, ages=False
+        headers, header_names, other_header_names, defines, ages=False
         ):
     suffix = "AGES" if ages else "SEASONS" 
     new_headers = {}
     new_header_order = []
-    for name in header_names:
+    for i, name in enumerate(header_names):
         new_name = name
         header_data = headers[name]
         new_header_data = ()
         if name in other_header_names:
             new_name += f"_{suffix}"
+            if other_header_names.index(name) == i:
+                # they're the same index, so we can use the
+                # original define to refer to both of them
+                defines[name] = new_name
+
             debug and print(f"Renamed {name} to {new_name}")
 
         for line in header_data:
@@ -88,11 +93,12 @@ def make_header_names_unique(
 parse_palette_data(ages_data, ages_headers, ages_header_order)
 parse_palette_data(seasons_data, seasons_headers, seasons_header_order)
 
+defines = {}
 new_ages_headers, new_ages_header_order = make_header_names_unique(
-    ages_headers, ages_header_order, set(seasons_header_order), True
+    ages_headers, ages_header_order, seasons_header_order, defines, True
     )
 new_seasons_headers, new_seasons_header_order = make_header_names_unique(
-    seasons_headers, seasons_header_order, set(ages_header_order)
+    seasons_headers, seasons_header_order, ages_header_order, defines
     )
 
 combo_headers_data = "\n".join([
@@ -122,6 +128,11 @@ for headers, names, is_ages in ([
             f"m_PaletteHeaderStart{macro_suffix} {i}, {name}",
             *header_data,
             ]) + ("\n\n" if header_data else "\n")
+
+
+combo_headers_data += "".join(
+    f".define {k}\t{defines[k]}\n" for k in sorted(defines)
+    )
 
 with open(outputFile, "w") as f:
     f.write(combo_headers_data)

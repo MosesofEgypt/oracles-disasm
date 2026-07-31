@@ -19,7 +19,11 @@
 ;                      "wDisabledObjects" to 0 (it would have been set to 1 previously
 ;                      from the "interactableTilesTable".
 
+.ifdef ROM_COMBO
+pushableTilePropertiesTable_ages:
+.else
 pushableTilePropertiesTable:
+.endif
 	dbrel @overworld
 	dbrel @indoors
 	dbrel @dungeons

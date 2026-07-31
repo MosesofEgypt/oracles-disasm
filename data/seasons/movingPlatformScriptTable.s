@@ -1,3 +1,4 @@
+.ifndef ROM_COMBO
 .macro plat_wait
 	.db $00, \1
 .endm
@@ -28,13 +29,22 @@
 .macro plat_left
 	.db $0b, \1
 .endm
+.endif
 
+.ifdef ROM_COMBO
+movingPlatform_nonDungeonScriptTable_seasons:
+.else
 movingPlatform_nonDungeonScriptTable:
+.endif
 	.dw movingPlatform_nonDungeon00
 	.dw movingPlatform_nonDungeon01
 	.dw movingPlatform_nonDungeon02
 
+.ifdef ROM_COMBO
+movingPlatform_scriptTable_seasons:
+.else
 movingPlatform_scriptTable:
+.endif
 	.dw @dungeon00
 	.dw @dungeon01
 	.dw @dungeon02

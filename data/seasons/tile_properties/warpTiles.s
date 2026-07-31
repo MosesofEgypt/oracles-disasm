@@ -4,7 +4,11 @@
 ;   b0: Tile index which triggers a warp
 ;   b1: Always $00 except for a special case for holly's chimney?
 
+.ifdef ROM_COMBO
+warpTileTable_seasons:
+.else
 warpTileTable:
+.endif
 	.dw @overworld
 	.dw @subrosia
 	.dw @makutree

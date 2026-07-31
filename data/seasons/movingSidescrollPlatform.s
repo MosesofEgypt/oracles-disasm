@@ -1,7 +1,11 @@
 ; ==================================================================================================
 ; Data for INTERAC_MOVING_SIDESCROLL_PLATFORM and INTERAC_MOVING_SIDESCROLL_CONVEYOR
 ; ==================================================================================================
+.ifdef ROM_COMBO
+movingSidescrollPlatformScriptTable_seasons:
+.else
 movingSidescrollPlatformScriptTable:
+.endif
 	.dw @subid00
 	.dw @subid01
 	.dw @subid02
@@ -220,7 +224,11 @@ movingSidescrollPlatformScriptTable:
 	ms_loop  --
 
 
+.ifdef ROM_COMBO
+movingSidescrollConveyorScriptTable_seasons:
+.else
 movingSidescrollConveyorScriptTable: ; INTERAC_MOVING_SIDESCROLL_CONVEYOR
+.endif
 	.dw @subid00
 	.dw @subid01
 	.dw @subid02

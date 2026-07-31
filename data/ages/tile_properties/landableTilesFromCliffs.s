@@ -1,6 +1,10 @@
 ; This is a list of tiles that can be landed on when jumping down a cliff, despite being
 ; solid. It is a list of tiles ending with the byte $00.
+.ifdef ROM_COMBO
+landableTileFromCliffExceptions_ages:
+.else
 landableTileFromCliffExceptions:
+.endif
 	.dw @overworld
 	.dw @indoors
 	.dw @dungeons

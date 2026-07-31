@@ -4,7 +4,11 @@
 ;   b0: Tile index
 ;   b1: Unused? (always $01)
 
+.ifdef ROM_COMBO
+enemyUnspawnableTilesTable_ages:
+.else
 enemyUnspawnableTilesTable:
+.endif
 	.dw @overworld
 	.dw @indoors
 	.dw @dungeons

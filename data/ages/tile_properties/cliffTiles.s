@@ -6,7 +6,11 @@
 ;
 ; See also "itemPassableTiles.s" which allows projectiles to pass through cliffs.
 
+.ifdef ROM_COMBO
+cliffTilesTable_ages:
+.else
 cliffTilesTable:
+.endif
 	.dw @overworld
 	.dw @indoors
 	.dw @dungeons

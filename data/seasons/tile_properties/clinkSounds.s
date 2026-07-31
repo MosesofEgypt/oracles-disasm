@@ -5,7 +5,11 @@
 ; bombable.
 ; - The second is a list of tiles which don't produce clinks at all.
 
+.ifdef ROM_COMBO
+clinkSoundTable_seasons:
+.else
 clinkSoundTable:
+.endif
 	.dw @overworld
 	.dw @subrosia
 	.dw @makutree

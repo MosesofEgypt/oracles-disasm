@@ -29,7 +29,11 @@
 	.db $0b, \1
 .endm
 
+.ifdef ROM_COMBO
+movingPlatform_scriptTable_ages:
+.else
 movingPlatform_scriptTable:
+.endif
 	.dw @dungeon00
 	.dw @dungeon01
 	.dw @dungeon02
