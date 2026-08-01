@@ -137,8 +137,22 @@ GAMEDATAFILES += $(BUILD_DIR)/paletteData.s
 GAMEDATAFILES += $(BUILD_DIR)/paletteHeaders.s
 GAMEDATAFILES += $(BUILD_DIR)/objectCollisionTable.s
 GAMEDATAFILES += $(BUILD_DIR)/enemyCollisionModesExt.s
+GAMEDATAFILES += $(BUILD_DIR)/animationData.s
+GAMEDATAFILES += $(BUILD_DIR)/animationGroups.s
 GAMEDATAFILES += $(BUILD_DIR)/partData.s
+GAMEDATAFILES += $(BUILD_DIR)/partOamData.s
+GAMEDATAFILES += $(BUILD_DIR)/partAnimations.s
 GAMEDATAFILES += $(BUILD_DIR)/enemyData.s
+GAMEDATAFILES += $(BUILD_DIR)/enemyOamData_ages.s
+GAMEDATAFILES += $(BUILD_DIR)/enemyOamData_seasons.s
+GAMEDATAFILES += $(BUILD_DIR)/enemyAnimations.s
+GAMEDATAFILES += $(BUILD_DIR)/interactionData.s
+GAMEDATAFILES += $(BUILD_DIR)/interactionOamData_ages.s
+GAMEDATAFILES += $(BUILD_DIR)/interactionOamData_seasons.s
+GAMEDATAFILES += $(BUILD_DIR)/interactionAnimations.s
+GAMEDATAFILES += $(BUILD_DIR)/specialObjectOamData.s
+GAMEDATAFILES += $(BUILD_DIR)/specialObjectAnimationData.s
+GAMEDATAFILES += $(BUILD_DIR)/specialObjectAnimationPointers.s
 
 MAIN_ASM_FILES = 
 AUDIO_FILES =
@@ -183,14 +197,6 @@ $(BUILD_DIR)/audio.o: code/audio.s | $(BUILD_DIR)
 $(BUILD_DIR)/$(GAME).o: $(GAME).s $(BUILD_DIR)/ages_textData.s $(BUILD_DIR)/ages_textDefines.s $(BUILD_DIR)/seasons_textData.s $(BUILD_DIR)/seasons_textDefines.s Makefile | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
 
-$(BUILD_DIR)/paletteData.s: data/ages/paletteData.s data/seasons/paletteData.s | $(BUILD_DIR)
-	@echo "Combining palettes into $@..."
-	@$(PYTHON) tools/build/makeComboPaletteData.py $@ $^
-
-$(BUILD_DIR)/paletteHeaders.s: data/ages/paletteHeaders.s data/seasons/paletteHeaders.s | $(BUILD_DIR)
-	@echo "Combining palette headers into $@..."
-	@$(PYTHON) tools/build/makeComboPaletteHeaders.py $@ $^
-
 GEN_FILES := data/ages/objectCollisionTable.s  data/seasons/objectCollisionTable.s
 GEN_FILES += data/ages/enemyData.s             data/seasons/enemyData.s
 GEN_FILES += data/ages/partData.s              data/seasons/partData.s
@@ -202,6 +208,70 @@ $(BUILD_DIR)/enemyData.s:              $(GEN_FILES) | $(BUILD_DIR)
 $(BUILD_DIR)/enemyCollisionModesExt.s: $(GEN_FILES) | $(BUILD_DIR)
 	@echo "Combining enemy, part, and collision data..."
 	@$(PYTHON) tools/build/makeComboCollisionModesAndEnemyPartData.py $(BUILD_DIR) data/ages data/seasons
+
+$(BUILD_DIR)/paletteData.s: data/ages/paletteData.s data/seasons/paletteData.s | $(BUILD_DIR)
+	@echo "Combining palettes into $@..."
+	@$(PYTHON) tools/build/makeComboPaletteData.py $@ $^
+
+$(BUILD_DIR)/paletteHeaders.s: data/ages/paletteHeaders.s data/seasons/paletteHeaders.s | $(BUILD_DIR)
+	@echo "Combining palette headers into $@..."
+	@$(PYTHON) tools/build/makeComboPaletteHeaders.py $@ $^
+
+$(BUILD_DIR)/animationGroups.s: data/ages/animationGroups.s data/seasons/animationGroups.s | $(BUILD_DIR)
+	@echo "Combining animation groups into $@..."
+	@$(PYTHON) tools/build/makeComboData.py $@ $^
+
+$(BUILD_DIR)/animationData.s: data/ages/animationData.s data/seasons/animationData.s | $(BUILD_DIR)
+	@echo "Combining animation data into $@..."
+	@$(PYTHON) tools/build/makeComboData.py $@ $^
+
+$(BUILD_DIR)/interactionData.s: data/ages/interactionData.s data/seasons/interactionData.s | $(BUILD_DIR)
+	@echo "Combining interaction data into $@..."
+	@$(PYTHON) tools/build/makeComboData.py $@ $^
+
+$(BUILD_DIR)/interactionAnimations.s: data/ages/interactionAnimations.s data/seasons/interactionAnimations.s | $(BUILD_DIR)
+	@echo "Combining interaction animations into $@..."
+	@$(PYTHON) tools/build/makeComboData.py $@ $^
+
+$(BUILD_DIR)/interactionOamData_ages.s: data/ages/interactionOamData.s | $(BUILD_DIR)
+	@echo "Combining ages interaction OAM data into $@..."
+	@$(PYTHON) tools/build/makeComboData.py $@ $^
+
+$(BUILD_DIR)/interactionOamData_seasons.s: data/seasons/interactionOamData.s | $(BUILD_DIR)
+	@echo "Combining seasons interaction OAM data into $@..."
+	@$(PYTHON) tools/build/makeComboData.py $@ $^
+
+$(BUILD_DIR)/enemyAnimations.s: data/ages/enemyAnimations.s data/seasons/enemyAnimations.s | $(BUILD_DIR)
+	@echo "Combining enemy animations into $@..."
+	@$(PYTHON) tools/build/makeComboData.py $@ $^
+
+$(BUILD_DIR)/enemyOamData_ages.s: data/ages/enemyOamData.s | $(BUILD_DIR)
+	@echo "Combining enemy OAM data into $@..."
+	@$(PYTHON) tools/build/makeComboData.py $@ $^
+
+$(BUILD_DIR)/enemyOamData_seasons.s: data/seasons/enemyOamData.s | $(BUILD_DIR)
+	@echo "Combining seasons enemy OAM data into $@..."
+	@$(PYTHON) tools/build/makeComboData.py $@ $^
+
+$(BUILD_DIR)/partAnimations.s: data/ages/partAnimations.s data/seasons/partAnimations.s | $(BUILD_DIR)
+	@echo "Combining part animations into $@..."
+	@$(PYTHON) tools/build/makeComboData.py $@ $^
+
+$(BUILD_DIR)/partOamData.s: data/ages/partOamData.s data/seasons/partOamData.s | $(BUILD_DIR)
+	@echo "Combining part OAM data into $@..."
+	@$(PYTHON) tools/build/makeComboData.py $@ $^
+
+$(BUILD_DIR)/specialObjectAnimationData.s: data/ages/specialObjectAnimationData.s data/seasons/specialObjectAnimationData.s | $(BUILD_DIR)
+	@echo "Combining special object animation data into $@..."
+	@$(PYTHON) tools/build/makeComboData.py $@ $^
+
+$(BUILD_DIR)/specialObjectAnimationPointers.s: data/ages/specialObjectAnimationPointers.s data/seasons/specialObjectAnimationPointers.s | $(BUILD_DIR)
+	@echo "Combining special object animation pointers into $@..."
+	@$(PYTHON) tools/build/makeComboData.py $@ $^
+
+$(BUILD_DIR)/specialObjectOamData.s: data/ages/specialObjectOamData.s data/seasons/specialObjectOamData.s | $(BUILD_DIR)
+	@echo "Combining special object OAM data into $@..."
+	@$(PYTHON) tools/build/makeComboData.py $@ $^
 
 $(BUILD_DIR)/rooms/ages_%.cmp: rooms/ages/small/%.bin | $(BUILD_DIR)/rooms
 	@echo "Compressing $< to $@..."

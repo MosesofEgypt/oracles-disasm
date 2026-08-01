@@ -9,51 +9,37 @@ outputFile      = sys.argv[1]
 agesPalettes    = sys.argv[2]
 seasonsPalettes = sys.argv[3]
 
-with open(agesPalettes) as f:
-    ages_palette_data = f.read()
+def read_and_combine_data(filepath, suffix):
+    with open(filepath) as f:
+        palette_data = f.read()
 
-with open(seasonsPalettes) as f:
-    seasons_palette_data = f.read()
+    entries = {}
+    entry_order = []
+    name = None
 
-ages_palettes = {}
-ages_palette_order = []
-ages_palettes_by_data = {}
-name = None
+    for line in palette_data.split("\n"):
+        line = line.split(";")[0].strip()
+        if line.endswith(":"):
+            name = line.strip(":").strip()
+            entry_order.append(name)
+            entries[name] = ()
+        elif name:
+            entries[name] += (line, )
 
-for line in ages_palette_data.split("\n"):
-    line = line.split(";")[0].strip()
-    if line.endswith(":"):
-        name = line.strip(":").strip()
-        ages_palette_order.append(name)
-        ages_palettes[name] = ()
-    elif name:
-        ages_palettes[name] += (line, )
+    data = ""
+    for name in entry_order:
+        data += f"{name}_{suffix}:\n"
+        for line in entries[name]:
+            data += ("\t%s\n" % line) if line else "\n"
 
-seasons_palettes = {}
-seasons_palette_order = []
-seasons_palettes_by_data = {}
-name = None
-
-for line in seasons_palette_data.split("\n"):
-    line = line.split(";")[0].strip()
-    if line.endswith(":"):
-        name = line.strip(":").strip()
-        seasons_palette_order.append(name)
-        seasons_palettes[name] = ()
-    elif name:
-        seasons_palettes[name] += (line, )
+    return data
 
 
-combo_palette_data = "paletteDataStart:\n"
-for name in ages_palette_order:
-    combo_palette_data += "%s_ages:\n" % name
-    for line in ages_palettes[name]:
-        combo_palette_data += ("\t%s\n" % line) if line else "\n"
-
-for name in seasons_palette_order:
-    combo_palette_data += "%s_seasons:\n" % name
-    for line in seasons_palettes[name]:
-        combo_palette_data += ("\t%s\n" % line) if line else "\n"
+combo_data = (
+    "paletteDataStart:\n" +
+    read_and_combine_data(agesPalettes, "ages") +
+    read_and_combine_data(seasonsPalettes, "seasons")
+    )
 
 with open(outputFile, "w") as f:
-    f.write(combo_palette_data)
+    f.write(combo_data)

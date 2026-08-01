@@ -19,12 +19,12 @@ animationData_04_5ca8:
 	.db $08 $13
 	m_AnimationLoop animationData_04_5ca8
 
-unknownAnimationData_04_5cb2:
+animationData_04_5cb2:
 	.db $0f $14
 	.db $0f $15
 	.db $0f $16
 	.db $0f $17
-	m_AnimationLoop unknownAnimationData_04_5cb2
+	m_AnimationLoop animationData_04_5cb2
 
 animationData_04_5cbc:
 	.db $0f $18

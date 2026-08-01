@@ -85,9 +85,9 @@
 ;		.include "code/animations.s"
 
 		.include {"{GAME_DATA_DIR}/uniqueGfxHeaders.s"}
-		.include {"{GAME_DATA_DIR}/animationGroups.s"}
+		.include {"{BUILD_DIR}/animationGroups.s"}
 		.include {"{GAME_DATA_DIR}/animationGfxHeaders.s"}
-		.include {"{GAME_DATA_DIR}/animationData.s"}
+		.include {"{BUILD_DIR}/animationData.s"}
 	.ends
 
 	 m_section_free roomTileChanges NAMESPACE roomTileChanges
@@ -128,6 +128,10 @@ m_section_free Bank_6 NAMESPACE bank6
 ;	.include "code/interactableTiles.s"
 ;	.include "code/specialObjectAnimationsAndDamage.s"
 
+; NOTE: temporary code until specialObjectAnimationsAndDamage can be included
+	.include {"{BUILD_DIR}/specialObjectAnimationPointers.s"}
+; NOTE: temporary code until specialObjectAnimationsAndDamage can be included
+
 ;	.include "code/parentItemUsage.s"
 
 ;	.include "object_code/common/itemParents/shieldParent.s"
@@ -151,7 +155,7 @@ m_section_free Bank_6 NAMESPACE bank6
 ;	.include "object_code/common/specialObjects/minecart.s"
 ;	.include "object_code/ages/specialObjects/raft.s"
 
-;	.include {"{GAME_DATA_DIR}/specialObjectAnimationData.s"}
+	.include {"{BUILD_DIR}/specialObjectAnimationData.s"}
 ;	.include "object_code/ages/specialObjects/companionCutscene.s"
 ;	.include "object_code/ages/specialObjects/linkInCutscene.s"
 	.include {"{GAME_DATA_DIR}/signText.s"}
@@ -211,7 +215,7 @@ m_section_free Bank_6 NAMESPACE bank6
 ;		.include "object_code/common/items/rodOfSeasons.s"
 
 		.include {"{GAME_DATA_DIR}/itemAttributes.s"}
-;		.include "data/itemAnimations.s"
+		.include "data/itemAnimations.s"
 	.ends
 
 	 ; This section can't be superfree, since it must be in the same bank as section
@@ -523,7 +527,7 @@ m_section_free Enemy_Code_Bank0d NAMESPACE bank0d
 .ends
 
 m_section_superfree Enemy_Animations
-;	.include {"{GAME_DATA_DIR}/enemyAnimations.s"}
+	.include {"{BUILD_DIR}/enemyAnimations.s"}
 .ends
 
 
@@ -732,23 +736,24 @@ m_section_free Objects_3 namespace objectData
 	.define BASE_OAM_DATA_BANK $13
 	.export BASE_OAM_DATA_BANK
 
-;	.include {"{GAME_DATA_DIR}/specialObjectOamData.s"}
-;	.include "data/itemOamData.s"
+	.include "data/itemOamData.s"
+	.include {"{BUILD_DIR}/enemyOamData_ages.s"}
+
+
+.BANK $14 SLOT 1
+.ORG 0
+	.include {"{BUILD_DIR}/specialObjectOamData.s"}
+	.include {"{BUILD_DIR}/enemyOamData_seasons.s"}
 
 
 .BANK $15 SLOT 1
 .ORG 0
+	.include {"{BUILD_DIR}/partOamData.s"}
 
+	.include {"{BUILD_DIR}/interactionOamData_seasons.s"}
 m_section_superfree Terrain_Effects NAMESPACE terrainEffects
 	.include "data/terrainEffects.s"
 .ends
-
-;	.include {"{GAME_DATA_DIR}/interactionOamData.s"}
-;	.include {"{GAME_DATA_DIR}/partOamData.s"}
-
-
-.BANK $15 SLOT 1
-.ORG 0
 
 ;	.include "scripts/common/scriptHelper.s"
 
@@ -785,8 +790,7 @@ m_section_free Bank16_2 NAMESPACE bank16
 ;	.include "code/ages/d6FloorUpdateCode.s"
 .ends
 
-;	.include {"{GAME_DATA_DIR}/interactionAnimations.s"}
-;	.include {"{GAME_DATA_DIR}/partAnimations.s"}
+	.include {"{BUILD_DIR}/partAnimations.s"}
 
 
 .BANK $17 SLOT 1
@@ -796,17 +800,12 @@ m_section_free Bank16_2 NAMESPACE bank16
 
 .BANK $18 SLOT 1
 .ORG 0
+	.include {"{BUILD_DIR}/interactionAnimations.s"}
 
 
 .BANK $19 SLOT 1
 .ORG 0
-
-m_section_free bank19Code NAMESPACE bank19
-	.ifdef ENABLE_SETTINGS_MENU
-;		.include "code/settingsMenu.s"
-	.endif
-;	.include "code/bank0Ext.s"
-.ends
+	.include {"{BUILD_DIR}/interactionOamData_ages.s"}
 
 
 .BANK $1a SLOT 1
@@ -974,7 +973,7 @@ m_section_free Bank44 NAMESPACE bank44
 .include {"{BUILD_DIR}/enemyData.s"}
 .include {"{BUILD_DIR}/partData.s"}
 .include {"{GAME_DATA_DIR}/itemData.s"}
-;.include {"{GAME_DATA_DIR}/interactionData.s"}
+.include {"{BUILD_DIR}/interactionData.s"}
 
 .include {"{GAME_DATA_DIR}/treasureCollectionBehaviours.s"}
 .include {"{GAME_DATA_DIR}/treasureDisplayData.s"}
@@ -992,8 +991,17 @@ m_section_free Bank44 NAMESPACE bank44
 
 .BANK $45 SLOT 1
 .ORG 0
+m_section_superfree bank19Code NAMESPACE bank19
+	.ifdef ENABLE_SETTINGS_MENU
+;		.include "code/settingsMenu.s"
+	.endif
+;	.include "code/bank0Ext.s"
+.ends
+
+.BANK $46 SLOT 1
+.ORG 0
 	.REDEFINE DATA_ADDR $4000
-	.REDEFINE DATA_BANK $45
+	.REDEFINE DATA_BANK $46
 	.include {"{GAME_DATA_DIR}/gfxDataMain.s"}
 
 
