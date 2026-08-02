@@ -34,14 +34,12 @@
 
 .define INTERAC_STUB_1d $1d
 
-.ifndef ROM_COMBO
 ;;
 ; @subid_00{Trigger a warp when Link dives here. (X should be 0 or 1, indicating where
 ;       to warp to, while Y is the short-form position.)}
 ; @subid_01{Trigger a warp at the top of a waterfall (only if riding dimitri)}
 ; @subid_02{Trigger a warp in a cave in a waterfall (only if riding Dimitri)}
 .define INTERAC_SPECIAL_WARP $1f
-.endif
 
 ;;
 ; Runs assembly code for specific dungeon events. Similar in purpose to INTERAC_MISC_PUZZLES?

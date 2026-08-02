@@ -17,6 +17,8 @@
 ; @subid_01{D6 rupee room}
 .define INTERAC_RUPEE_ROOM_RUPEES $1d
 
+.ifndef ROM_COMBO
+; NOTE: already defined in ages, with the same id
 ;;
 ; @subid_00{Holly's chimney}
 ; @subid_01{???}
@@ -33,6 +35,7 @@
 ; @subid_0c{ROOM_SEASONS_4f5, desert?}
 ; @subid_0d{Sunken City south dive spot}
 .define INTERAC_SPECIAL_WARP $1f
+.endif
 
 ;;
 .define INTERAC_GNARLED_KEYHOLE $21
