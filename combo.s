@@ -485,7 +485,7 @@ m_section_free Ages_Interactions_Bank0b NAMESPACE agesInteractionsBank0b
 	; TODO: "SIMPLE_SCRIPT_BANK" define should be tied to this section somehow
 	 m_section_free Scripts namespace mainScripts
 ;		.include "code/scripting.s"
-;		.include "scripts/ages/scripts.s"
+		.include {"{BUILD_DIR}/scripts.s"}
 	.ends
 
 
@@ -755,7 +755,7 @@ m_section_superfree Terrain_Effects NAMESPACE terrainEffects
 	.include "data/terrainEffects.s"
 .ends
 
-;	.include "scripts/common/scriptHelper.s"
+	.include {"{BUILD_DIR}/scriptHelper.s"}
 
 	 m_section_free Object_Pointers namespace objectData
 
@@ -763,10 +763,6 @@ m_section_superfree Terrain_Effects NAMESPACE terrainEffects
 ;		.include "objects/ages/pointers.s"
 
 	.ENDS
-
-	 m_section_free Bank_15_3 NAMESPACE scriptHelp
-;		.include "scripts/ages/scriptHelper.s"
-	.ends
 
 
 .BANK $16 SLOT 1

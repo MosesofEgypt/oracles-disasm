@@ -1,2 +1,2 @@
-.include "data/ages/movingPlatformScriptTable.s"
-.include "data/seasons/movingPlatformScriptTable.s"
+.include "data/ages/orbMovementScript.s"
+.include "data/seasons/orbMovementScript.s"

@@ -263,14 +263,14 @@ shopkeeper_take10Rupees:
 .ends
 
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	.include "code/loadTreasureData.s"
 .endif
 
 
 m_section_free Bank_15_2 NAMESPACE scriptHelp
 
-.ifdef ROM_SEASONS
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 createBossDeathExplosion:
 	call getFreePartSlot

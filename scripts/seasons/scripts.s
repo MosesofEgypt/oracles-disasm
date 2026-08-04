@@ -1,12 +1,17 @@
 ; Scripts for interactions are in this file. You may want to cross-reference with the corresponding
 ; assembly code to get the full picture (run "git grep INTERAC_X" to search for its code).
 
+.ifdef ROM_COMBO
+.include {"{BUILD_DIR}/commonScripts.s"}
+.include {"{BUILD_DIR}/dungeonScripts.s"}
+.else
 .include "scripts/common/commonScripts.s"
 
 ; ==================================================================================================
 ; INTERAC_DUNGEON_SCRIPT
 ; ==================================================================================================
 .include "scripts/seasons/dungeonScripts.s"
+.endif
 
 
 ; ==================================================================================================
@@ -979,7 +984,11 @@ sokraScript_needSummerForD3:
 	retscript
 
 
+.ifdef ROM_COMBO
+.include {"{BUILD_DIR}/bipinScripts.s"}
+.else
 .include "scripts/common/bipinScripts.s"
+.endif
 
 
 ; ==================================================================================================
@@ -1020,8 +1029,11 @@ panickingBirdScript:
 	enableallobjects
 	scriptjump @loop
 
-
+.ifdef ROM_COMBO
+.include {"{BUILD_DIR}/blossomScripts.s"}
+.else
 .include "scripts/common/blossomScripts.s"
+.endif
 
 
 ; ==================================================================================================
@@ -1462,7 +1474,11 @@ bucketSubrosianScript_text6:
 	rungenericnpc TX_3e15
 
 
+.ifdef ROM_COMBO
+.include {"{BUILD_DIR}/childScripts.s"}
+.else
 .include "scripts/common/childScripts.s"
+.endif
 
 
 ; ==================================================================================================
@@ -2057,7 +2073,11 @@ pirateHouseSubrosianScript_piratesLeft:
 	rungenericnpc TX_3a11
 
 
+.ifdef ROM_COMBO
+.include {"{BUILD_DIR}/syrupScripts.s"}
+.else
 .include "scripts/common/syrupScripts.s"
+.endif
 
 
 ; ==================================================================================================
