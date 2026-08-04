@@ -83,7 +83,11 @@ cutsceneHandler_0c_stage1:
 
 @state2:
 	call retIfTextIsActive
+.ifdef ROM_COMBO
+	ld hl,objectData_seasons.objectData_sandPuffsFromShipDigging
+.else
 	ld hl,objectData.objectData_sandPuffsFromShipDigging
+.endif
 	call parseGivenObjectData
 	ld a,MUS_TRIUMPHANT
 	call playSound
@@ -231,7 +235,11 @@ cutsceneHandler_0c_stage2:
 	or a
 	ret nz
 	call @seasonsFunc_03_688c
+.ifdef ROM_COMBO
+	ld hl,objectData_seasons.objectData_insidePirateShipLeavingSubrosia
+.else
 	ld hl,objectData.objectData_insidePirateShipLeavingSubrosia
+.endif
 	jp parseGivenObjectData
 
 @state1:
@@ -272,7 +280,11 @@ cutsceneHandler_0c_stage3:
 	call loadObjectGfxHeaderToSlot4
 	ld a,GFXH_PIRATE_SHIP_LEAVING_DESERT_LAYOUT
 	call loadGfxHeader
+.ifdef ROM_COMBO
+	ld hl,objectData_seasons.objectData_leavingSamasaDesert
+.else
 	ld hl,objectData.objectData_leavingSamasaDesert
+.endif
 	call parseGivenObjectData
 	ld a,$11
 	jr @state0Func1
@@ -388,7 +400,11 @@ cutsceneHandler_0c_stage4:
 	call cutsceneHandler_0c_stage2@seasonsFunc_03_688c
 	xor a
 	ld (wTmpcfc0.normal.cfc0),a
+.ifdef ROM_COMBO
+	ld hl,objectData_seasons.objectData_sickPiratiansInShip
+.else
 	ld hl,objectData.objectData_sickPiratiansInShip
+.endif
 	jp parseGivenObjectData
 
 @state1:
@@ -431,7 +447,11 @@ cutsceneHandler_0c_stage5:
 	call loadGfxHeader
 	ld a,GFXH_PIRATE_SHIP_MOVING_EXTRA_TILES
 	call loadGfxHeader
+.ifdef ROM_COMBO
+	ld hl,objectData_seasons.objectData_pirateShipEnteringWestCoast
+.else
 	ld hl,objectData.objectData_pirateShipEnteringWestCoast
+.endif
 	call parseGivenObjectData
 	ld a,$12
 	jp cutsceneHandler_0c_stage3@state0Func1

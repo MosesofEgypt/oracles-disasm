@@ -63,10 +63,22 @@ endgameCutsceneHandler:
 getEntryFromObjectTable1:
 	ldh a,(<hRomBank)
 	push af
+.ifdef ROM_COMBO
+	ld hl, objectData_seasons.objectTable1
+	ld a, :objectData_seasons.objectTable1
+	call hIsSeasons
+	jr c,+
+		ld hl, objectData.objectTable1
+		ld a, :objectData.objectTable1
+	+
+	rst_setrombank
+	ld a,b
+.else
 	ld a, :objectData.objectTable1
 	rst_setrombank
 	ld a,b
 	ld hl, objectData.objectTable1
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 	pop af

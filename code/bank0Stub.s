@@ -11578,10 +11578,18 @@ getRoomInDungeon:
 	ld a,l
 	ret
 
-
-.ifdef ROM_SEASONS
-	.include "code/code_3035.s"
-.endif
+; stubs
+objectLoadMovementScript:
+objectRunMovementScript:
+endgameCutsceneHandler:
+getEntryFromObjectTable1:
+disableLcdAndLoadRoom:
+fileSelect_redrawDecorations:
+playWaveSoundAtRandomIntervals:
+addSpritesFromBankToOam_withOffset:
+addSpritesFromBankToOam:
+	ret
+;.include "code/code_3035.s"
 
 
 ;;

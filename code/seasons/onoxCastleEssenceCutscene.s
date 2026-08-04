@@ -180,7 +180,11 @@ cutscene14:
 	ld a,LINK_STATE_NORMAL
 	ld (wLinkForceState),a
 
+.ifdef ROM_COMBO
+	ld hl,objectData_seasons.objectData7e40
+.else
 	ld hl,objectData.objectData7e40
+.endif
 	call parseGivenObjectData
 
 	ld a,CUTSCENE_S_INGAME

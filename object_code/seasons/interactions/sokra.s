@@ -49,7 +49,11 @@ interactionCode27:
 	call interactionSetScript
 	jr @@runScriptSetVisible
 +
+.ifdef ROM_COMBO
+	ld hl,objectData_seasons.objectData7e4a
+.else
 	ld hl,objectData.objectData7e4a
+.endif
 	call parseGivenObjectData
 	jp interactionDelete
 @@subid2:

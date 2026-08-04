@@ -1,3 +1,4 @@
+.ifndef ROM_COMBO
 m_section_free Objects_1 namespace objectData
 
 .ifdef ROM_AGES
@@ -8,6 +9,7 @@ m_section_free Objects_1 namespace objectData
 .include "objects/seasons/extraData1.s"
 .include "objects/seasons/enemyData.s"
 .include "objects/seasons/extraData2.s"
+.endif
 .endif
 
 ;;
@@ -21,9 +23,9 @@ parseObjectData:
 	call addRoomToEnemiesKilledList
 	call generateRandomBuffer
 
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 	callab getObjectDataAddress
-.else; ROM_SEASONS
+.else; ROM_SEASONS || ROM_COMBO
 	ld a,(wActiveGroup)
 	ld hl,objectDataGroupTable
 	rst_addDoubleIndex
@@ -679,4 +681,6 @@ checkEnemyKilled:
 	scf
 	ret
 
+.ifndef ROM_COMBO
 .ends
+.endif

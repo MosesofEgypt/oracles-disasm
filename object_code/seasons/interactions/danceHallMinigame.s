@@ -15,7 +15,11 @@ interactionCode6a:
 	ld b,$20
 	ld hl,wTmpcfc0.normal.cfc0
 	call clearMemory
+.ifdef ROM_COMBO
+	ld hl,objectData_seasons.objectData7e6c
+.else
 	ld hl,objectData.objectData7e6c
+.endif
 	call parseGivenObjectData
 	jp interactionDelete
 @subid1:

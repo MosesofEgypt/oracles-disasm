@@ -104,11 +104,12 @@ def remove_duplicates(entries, entry_order, symbol_info, entry_names):
 
                     entry[row_i] = cmd + " " + ", ".join(args)
 
+                orig_name = name
                 for suffix in dup_suffixes:
                     name += suffix
                     print(f"Added symbol '{name}'.")
                     entry_names.add(name)
-                    entry_order.append(name)
+                    entry_order.insert(entry_order.index(orig_name)+1, name)
                     for info in (jump_targets, asm_commands, script_commands):
                         if key in info:
                             info[(name, suffix)] = info[key]
@@ -153,15 +154,16 @@ def remove_duplicates(entries, entry_order, symbol_info, entry_names):
                             sym = f"{prefix}{sym}"
                             print("Redirected symbol ref "
                                   f"'{sym}' to '{sym + suffix}'.")
-                            args[col_i] = prefix + sym + suffix
+                            args[col_i] = sym + suffix
 
                     entry[row_i] = cmd + " " + ", ".join(args)
 
+                orig_name = name
                 if need_dup:
                     name += suffix
                     print(f"Added symbol '{name}'.")
                     entry_names.add(name)
-                    entry_order.append(name)
+                    entry_order.insert(entry_order.index(orig_name)+1, name)
 
                 entries[name] = tuple(entry)
 
@@ -221,9 +223,18 @@ def add_entry(name, entry, entries, entry_order, suffix):
     if name not in entries:
         pass
     elif entries[name] == entry:
-        print(f"Skipped dup symbol '{name}'")
-        return
-    elif entries[name] != entry:
+        # only skip if it doesn't contain any directives
+        can_skip = True
+        for line in entry:
+            cmd = line.split(" ")[0]
+            if cmd[0] == "." and cmd[:2] != ".d":
+                can_skip = False
+
+        if can_skip:
+            print(f"Skipped dup symbol '{name}'")
+            return
+
+    if entries.get(name, entry) != entry:
         new_name = name + suffix
         print(f"Renamed shared symbol '{name}' to '{new_name}'.")
         name = new_name

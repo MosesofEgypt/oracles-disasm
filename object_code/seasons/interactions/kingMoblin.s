@@ -56,7 +56,11 @@ interactionCode95:
 	ld (de),a
 +
 	call @state1@subid0@func_5517
+.ifdef ROM_COMBO
+	ld hl,objectData_seasons.objectData7ea0
+.else
 	ld hl,objectData.objectData7ea0
+.endif
 	call parseGivenObjectData
 	call objectSetVisible83
 	xor a

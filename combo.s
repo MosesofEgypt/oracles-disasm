@@ -534,7 +534,7 @@ m_section_free Ages_Interactions_Bank0b NAMESPACE agesInteractionsBank0b
 	; TODO: "SIMPLE_SCRIPT_BANK" define should be tied to this section somehow
 	 m_section_free Scripts namespace mainScripts
 ;		.include "code/scripting.s"
-		.include {"{BUILD_DIR}/scripts.s"}
+;		.include {"{BUILD_DIR}/scripts.s"}
 	.ends
 
 
@@ -610,7 +610,7 @@ m_section_free Enemy_Code_Bank0e NAMESPACE bank0e
 ;	.include "object_code/common/enemies/ganonRevivalCutscene.s"
 
 	.include {"{GAME_DATA_DIR}/orbMovementScript.s"}
-;	.include "code/objectMovementScript.s"
+	.include "code/objectMovementScript.s"
 
 ;	.include "object_code/ages/enemies/bari.s"
 ;	.include "object_code/ages/enemies/giantGhiniChild.s"
@@ -750,32 +750,13 @@ m_section_free Bank_11 NAMESPACE partCode
 .BANK $12 SLOT 1
 .ORG 0
 
-	.include "code/objectLoading.s"
-
-m_section_superfree Room_Code namespace roomSpecificCode
-
-;	.include "code/ages/roomSpecificCode.s"
-
-.ends
-
-m_section_free Objects_2 namespace objectData
-
-;	.include "objects/ages/mainData.s"
-;	.include "objects/ages/extraData3.s"
-
-.ends
-
 m_section_superfree Underwater_Surface_Data namespace underwaterSurfacing
-
-;	.include "code/ages/underwaterSurfacing.s"
+	.include "code/ages/underwaterSurfacing.s"
 	.include "data/ages/underwaterSurfaceData.s"
-
 .ENDS
 
-m_section_free Objects_3 namespace objectData
-
-;	.include "objects/ages/extraData4.s"
-
+m_section_superfree Room_Code namespace roomSpecificCode
+;	.include "code/ages/roomSpecificCode.s"
 .ends
 
 
@@ -787,15 +768,49 @@ m_section_free Objects_3 namespace objectData
 
 	.include "data/itemOamData.s"
 	.include {"{BUILD_DIR}/enemyOamData_ages.s"}
+	.include {"{BUILD_DIR}/specialObjectOamData.s"}
 
 
 .BANK $14 SLOT 1
 .ORG 0
-	.include {"{BUILD_DIR}/specialObjectOamData.s"}
 	.include {"{BUILD_DIR}/enemyOamData_seasons.s"}
+	.include {"{GAME_DATA_DIR}/data_4556.s"}
+
+	; TODO: "SIMPLE_SCRIPT_BANK" define should be tied to this section somehow
+	 m_section_free Scripts2 NAMESPACE scripts2
+;		.include "scripts/seasons/scripts2.s"
+	.ends
 
 
 .BANK $15 SLOT 1
+.ORG 0
+
+;	.include "code/serialFunctions.s"
+
+	 m_section_free Bank16 NAMESPACE bank16
+		.include {"{GAME_DATA_DIR}/endgameCutsceneOamData.s"}
+	.ends
+
+;	.include "code/staticObjects.s"
+	.include {"{GAME_DATA_DIR}/staticDungeonObjects.s"}
+
+;	.include "scripts/common/scriptHelper.s"
+	.include {"{GAME_DATA_DIR}/chestData.s"}
+	.include {"{GAME_DATA_DIR}/treasureObjectData.s"}
+
+	 m_section_free Bank_15_3 NAMESPACE scriptHelp
+;		.include "scripts/ages/scriptHelper.s"
+;		.include "scripts/seasons/scriptHelper.s"
+	.ends
+
+	m_section_free Bank16_2 NAMESPACE bank16
+		.include "code/ages/d6FloorUpdateCode.s"
+	.ends
+
+	.include {"{BUILD_DIR}/partAnimations.s"}
+
+
+.BANK $16 SLOT 1
 .ORG 0
 	.include {"{BUILD_DIR}/partOamData.s"}
 
@@ -803,32 +818,6 @@ m_section_free Objects_3 namespace objectData
 m_section_superfree Terrain_Effects NAMESPACE terrainEffects
 	.include "data/terrainEffects.s"
 .ends
-
-	m_section_free Object_Pointers namespace objectData
-		.include "code/ages/objectData.s"
-;		.include "objects/ages/pointers.s"
-	.ENDS
-
-
-.BANK $16 SLOT 1
-.ORG 0
-
-;	.include "code/serialFunctions.s"
-
-	 m_section_free Bank16 NAMESPACE bank16
-		.include {"{GAME_DATA_DIR}/data_4556.s"}
-		.include {"{GAME_DATA_DIR}/endgameCutsceneOamData.s"}
-	.ends
-
-
-;	.include "code/staticObjects.s"
-	.include {"{GAME_DATA_DIR}/staticDungeonObjects.s"}
-
-m_section_free Bank16_2 NAMESPACE bank16
-;	.include "code/ages/d6FloorUpdateCode.s"
-.ends
-
-	.include {"{BUILD_DIR}/partAnimations.s"}
 
 
 .BANK $17 SLOT 1
@@ -848,7 +837,6 @@ m_section_free Bank16_2 NAMESPACE bank16
 
 .BANK $1a SLOT 1
 .ORG 0
-
 
 m_section_free Gfx_1a ALIGN $20
 	.include "data/gfxDataBank1a.s"
@@ -1039,9 +1027,40 @@ m_section_superfree bank19Code NAMESPACE bank19
 
 .BANK $46 SLOT 1
 .ORG 0
-	.include {"{BUILD_DIR}/scriptHelper.s"}
-	.include {"{GAME_DATA_DIR}/chestData.s"}
-	.include {"{GAME_DATA_DIR}/treasureObjectData.s"}
+m_section_free Object_Pointers namespace objectData
+	.include "objects/ages/pointers.s"
+.ends
+
+m_section_free Object_Pointers_seasons namespace objectData_seasons
+	.include "objects/seasons/pointers.s"
+.ends
+
+
+.BANK $48 SLOT 1
+.ORG 0
+
+m_section_free Objects_2 namespace objectData
+	.include "code/objectLoading.s"
+	.include "objects/ages/mainData.s"
+	.include "objects/ages/enemyData.s"
+	.include "objects/ages/extraData1.s"
+	.include "objects/ages/extraData2.s"
+	.include "objects/ages/extraData3.s"
+	.include "objects/ages/extraData4.s"
+.ends
+
+.BANK $49 SLOT 1
+.ORG 0
+m_section_free Objects_3 namespace objectData_seasons
+	.define ROM_SEASONS
+	.include "code/objectLoading.s"
+	.include "objects/seasons/mainData.s"
+	.include "objects/seasons/enemyData.s"
+	.include "objects/seasons/extraData1.s"
+	.include "objects/seasons/extraData2.s"
+	.include "objects/seasons/extraData3.s"
+	.undefine ROM_SEASONS
+.ends
 
 .BANK $4a SLOT 1
 .ORG 0

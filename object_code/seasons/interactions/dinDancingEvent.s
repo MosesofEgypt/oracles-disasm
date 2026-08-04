@@ -17,7 +17,11 @@ interactionCode4e:
 	call getThisRoomFlags
 	and $40
 	jp nz,@seasonsFunc_08_754c
+.ifdef ROM_COMBO
+	ld hl,objectData_seasons.objectData7e4e
+.else
 	ld hl,objectData.objectData7e4e
+.endif
 	call parseGivenObjectData
 	ld hl,wInteractionIDToLoadExtraGfx
 	ld (hl),$4e

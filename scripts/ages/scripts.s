@@ -1,7 +1,6 @@
 ; Scripts for interactions are in this file. You may want to cross-reference with the corresponding
 ; assembly code to get the full picture (run "git grep INTERAC_X" to search for its code).
 
-.ifndef ROM_COMBO
 .include "scripts/common/commonScripts.s"
 
 ; ==================================================================================================
@@ -11,7 +10,6 @@
 
 
 .include "scripts/common/bipinScripts.s"
-.endif
 
 ; ==================================================================================================
 ; INTERAC_ADLAR
@@ -61,9 +59,7 @@ librarianScript:
 	scriptjump @loop
 
 
-.ifndef ROM_COMBO
 .include "scripts/common/blossomScripts.s"
-.endif
 
 
 ; ==================================================================================================
@@ -769,9 +765,7 @@ greatFairyOctorokScript:
 	scriptend
 
 
-.ifndef ROM_COMBO
 .include "scripts/common/childScripts.s"
-.endif
 
 
 ; ==================================================================================================
@@ -4093,9 +4087,7 @@ bearSubid02Script:
 	scriptjump @npcLoop
 
 
-.ifndef ROM_COMBO
 .include "scripts/common/syrupScripts.s"
-.endif
 
 
 ; ==================================================================================================

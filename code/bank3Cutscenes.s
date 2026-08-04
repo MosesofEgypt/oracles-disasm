@@ -63,7 +63,15 @@ twinrovaCutscene_state1:
 
 	call resetCamera
 
+.ifdef ROM_COMBO
+	ld hl,objectData_seasons.objectData4022
+	call hIsSeasons
+	jr c,+
+		ld hl,objectData.objectData4022
+	+
+.else
 	ld hl,objectData.objectData4022
+.endif
 	call parseGivenObjectData
 
 	ld a,PALH_ac
@@ -218,7 +226,15 @@ twinrovaCutscene_loadAngryFlames:
 	ld a,PALH_SEASONS_af
 .endif
 	call loadPaletteHeader
+.ifdef ROM_COMBO
+	ld hl,objectData_seasons.objectData402f
+	call hIsSeasons
+	jr c,+
+		ld hl,objectData.objectData402f
+	+
+.else
 	ld hl,objectData.objectData402f
+.endif
 	jp parseGivenObjectData
 
 ;;
@@ -738,7 +754,15 @@ introCinematic_ridingHorse_state0:
 	ld (hl),$01
 
 	; Load Link and Bird objects
+.ifdef ROM_COMBO
+	ld hl,objectData_seasons.objectData4037
+	call hIsSeasons
+	jr c,+
+		ld hl,objectData.objectData4037
+	+
+.else
 	ld hl,objectData.objectData4037
+.endif
 	call parseGivenObjectData
 
 	ld a,$17

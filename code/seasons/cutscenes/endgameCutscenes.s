@@ -1791,7 +1791,11 @@ endgameCutsceneHandler_0a_stage3:
 	call loadGfxHeader
 	ld a,$aa
 	call loadPaletteHeader
+.ifdef ROM_COMBO
+	ld hl,objectData_seasons.objectData5887
+.else
 	ld hl,objectData.objectData5887
+.endif
 	call parseGivenObjectData
 	jr +
 @state0Func0:

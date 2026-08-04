@@ -764,7 +764,11 @@ d4MinibossRoom:
 	call getThisRoomFlags
 	bit 7,(hl)
 	jp nz,interactionDelete
+.ifdef ROM_COMBO
+	ld hl,objectData_seasons.objectData7e96
+.else
 	ld hl,objectData.objectData7e96
+.endif
 	jp parseGivenObjectData
 +
 	ld a,(wNumTorchesLit)
