@@ -40,6 +40,55 @@
 ; NOTE: temporary code until bank1 can be included
 
 
+; NOTE: temporary code until many banks can be included
+m_section_free Bank_1_test NAMESPACE bank1
+checkUpdateDungeonMinimap:
+checkInitUnderwaterWaves:
+	nop
+.ends
+
+m_section_free Bank_3_test NAMESPACE bank3
+generateGameTransferSecret:
+	nop
+.ends
+
+m_section_free Bank_8_test NAMESPACE agesInteractionsBank08
+shootingGallery_removeAllTargets:
+shootingGallery_initializeGameRounds:
+interactionOscillateXRandomly:
+	nop
+.ends
+
+m_section_free Bank_9_test NAMESPACE agesInteractionsBank09
+linkEnterPalaceSimulatedInput:
+linkExitPalaceSimulatedInput:
+	nop
+.ends
+
+m_section_free Bank_a_test NAMESPACE agesInteractionsBank0a
+func_0a_7877:
+	nop
+.ends
+
+m_section_free Bank_15_test NAMESPACE seasonsInteractionsBank15
+checkGoldenBeastsKilled:
+giveRedRing:
+linkedHerosCaveOldMan_takeRupees:
+linkedHerosCaveOldMan_spawnChests:
+spawnRodOfSeasonsSparkles:
+forceLinksDirection:
+	nop
+.ends
+
+m_section_free RoomGfxChanges_test NAMESPACE roomGfxChanges
+drawCrownDungeonOpeningTiles:
+	nop
+.ends
+
+; NOTE: temporary code until many banks can be included
+
+
+
 .BANK $02 SLOT 1
 .ORG 0
 
@@ -701,7 +750,7 @@ m_section_free Bank_11 NAMESPACE partCode
 .BANK $12 SLOT 1
 .ORG 0
 
-;	.include "code/objectLoading.s"
+	.include "code/objectLoading.s"
 
 m_section_superfree Room_Code namespace roomSpecificCode
 
@@ -755,13 +804,9 @@ m_section_superfree Terrain_Effects NAMESPACE terrainEffects
 	.include "data/terrainEffects.s"
 .ends
 
-	.include {"{BUILD_DIR}/scriptHelper.s"}
-
-	 m_section_free Object_Pointers namespace objectData
-
-;		.include "code/ages/objectData.s"
+	m_section_free Object_Pointers namespace objectData
+		.include "code/ages/objectData.s"
 ;		.include "objects/ages/pointers.s"
-
 	.ENDS
 
 
@@ -769,7 +814,6 @@ m_section_superfree Terrain_Effects NAMESPACE terrainEffects
 .ORG 0
 
 ;	.include "code/serialFunctions.s"
-;	.include "code/loadTreasureData.s"
 
 	 m_section_free Bank16 NAMESPACE bank16
 		.include {"{GAME_DATA_DIR}/data_4556.s"}
@@ -779,8 +823,6 @@ m_section_superfree Terrain_Effects NAMESPACE terrainEffects
 
 ;	.include "code/staticObjects.s"
 	.include {"{GAME_DATA_DIR}/staticDungeonObjects.s"}
-	.include {"{GAME_DATA_DIR}/chestData.s"}
-	.include {"{GAME_DATA_DIR}/treasureObjectData.s"}
 
 m_section_free Bank16_2 NAMESPACE bank16
 ;	.include "code/ages/d6FloorUpdateCode.s"
@@ -994,10 +1036,17 @@ m_section_superfree bank19Code NAMESPACE bank19
 ;	.include "code/bank0Ext.s"
 .ends
 
+
 .BANK $46 SLOT 1
 .ORG 0
+	.include {"{BUILD_DIR}/scriptHelper.s"}
+	.include {"{GAME_DATA_DIR}/chestData.s"}
+	.include {"{GAME_DATA_DIR}/treasureObjectData.s"}
+
+.BANK $4a SLOT 1
+.ORG 0
 	.REDEFINE DATA_ADDR $4000
-	.REDEFINE DATA_BANK $46
+	.REDEFINE DATA_BANK $4a
 	.include {"{GAME_DATA_DIR}/gfxDataMain.s"}
 
 

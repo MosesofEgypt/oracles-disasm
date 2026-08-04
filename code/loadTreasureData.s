@@ -9,7 +9,15 @@ interactionLoadTreasureData:
 	ld a,(de)
 	ld e,Interaction.var30
 	ld (de),a
+.ifdef ROM_COMBO
+	call hIsSeasons
+	ld hl,treasureObjectData_seasons
+	jr c,+
+		ld hl,treasureObjectData_ages
+	+
+.else
 	ld hl,treasureObjectData
+.endif
 --
 	call multiplyABy4
 	add hl,bc

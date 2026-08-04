@@ -293,7 +293,13 @@ movingPlatform_loadScript:
 	jr nz,@inDungeon
 
 	; Not in dungeon
-.ifdef ROM_AGES
+.ifdef ROM_COMBO
+	ld hl,movingPlatform_nonDungeonScriptTable
+	call hIsSeasons
+	jr c,+
+		ld hl,movingPlatform_scriptTable_ages
+	+
+.elif defined(ROM_AGES)
 	ld hl,movingPlatform_scriptTable
 .else
 	ld hl,movingPlatform_nonDungeonScriptTable
@@ -302,7 +308,15 @@ movingPlatform_loadScript:
 
 @inDungeon:
 	ld a,b
+.ifdef ROM_COMBO
+	ld hl,movingPlatform_scriptTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,movingPlatform_scriptTable_ages
+	+
+.else
 	ld hl,movingPlatform_scriptTable
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 

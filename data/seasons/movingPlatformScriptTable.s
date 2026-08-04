@@ -31,11 +31,7 @@
 .endm
 .endif
 
-.ifdef ROM_COMBO
-movingPlatform_nonDungeonScriptTable_seasons:
-.else
 movingPlatform_nonDungeonScriptTable:
-.endif
 	.dw movingPlatform_nonDungeon00
 	.dw movingPlatform_nonDungeon01
 	.dw movingPlatform_nonDungeon02

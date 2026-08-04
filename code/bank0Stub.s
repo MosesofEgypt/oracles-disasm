@@ -5021,13 +5021,11 @@ checkTreasureObtained:
 	ret
 
 
-.ifdef ROM_SEASONS
 ;;
 ; Same as below but for ore chunks.
 cpOreChunkValue:
 	ld hl,wNumOreChunks
 	jr ++
-.endif
 
 ;;
 ; Compares the current total rupee count with the BCD count in bc
@@ -5062,12 +5060,10 @@ cpRupeeValue:
 	ret
 
 
-.ifdef ROM_SEASONS
 ;;
 removeOreChunkValue:
 	ld hl,wNumOreChunks
 	jr ++
-.endif
 
 ;;
 ; Remove the value of a kind of rupee from your wallet.
@@ -8726,7 +8722,6 @@ handleAutoEquipItem:
 	ret
 .endif
 
-.ifdef ROM_AGES
 isDeepUnderwater:
 	ldh (<hFFBD),a	; store temporarily for restoring later
 	ld a,(wTilesetFlags)
@@ -8734,7 +8729,6 @@ isDeepUnderwater:
 	and TILESETFLAG_UNDERWATER
 	ldh a,(<hFFBD)	; restore a from temp var
 	ret
-.endif
 
 wasOppositeItemButtonPressed:
 	; get the opposite button of the one this item is assigned
@@ -9278,7 +9272,6 @@ objectCreateFallingDownHoleInteraction:
 	xor a
 	ret
 
-.ifdef ROM_AGES
 
 ;;
 ; Makes the object invisible if (wFrameCounter&b) == 0.
@@ -9320,8 +9313,6 @@ objectUnmarkSolidPosition:
 	ld a,$00
 	ld ($ff00+R_SVBK),a
 	ret
-
-.endif
 
 ;;
 _interactionActuallyRunScript:
@@ -9905,8 +9896,6 @@ interactionCheckAdjacentTileIsSolid_viaDirection:
 
 
 
-.ifdef ROM_AGES
-
 ;;
 ; @param[out]	zflag	z when counter1 reaches 0 (and text is inactive)
 interactionDecCounter1IfTextNotActive:
@@ -10017,7 +10006,6 @@ interactionSetMiniScript:
 	ld (de),a
 	ret
 
-.endif
 
 
 ;;
@@ -11439,18 +11427,7 @@ func_2d48:
 
 	push af
 
-.ifdef ROM_AGES
-
-.else
-
-.endif
-
 	ld a,b
-.ifdef ROM_AGES
-
-.else
-
-.endif
 	rst_addAToHl
 	ld b,(hl)
 
@@ -11503,18 +11480,11 @@ specialObjectCode_companionCutscene:
 
 ;;
 specialObjectCode_linkInCutscene:
-
-.ifdef ROM_SEASONS
-
 	push af
 
 	pop af
 
 	ret
-
-.else ; ROM_AGES
-
-.endif
 
 ;;
 ; Load dungeon layout if currently in a dungeon.
@@ -12209,15 +12179,12 @@ getRandomPositionForEnemy:
 	.endif
 
 
-.ifdef ROM_AGES
-
 ;;
 ; Calls bank2._checkSpawnTimeportalInteraction.
 ;
 checkSpawnTimeportalInteraction:
 	ld h,$06
 
-.endif
 
 ++
 	ld l,a
@@ -12371,8 +12338,6 @@ fadeinFromBlack:
 
 
 
-.ifdef ROM_AGES
-
 ; Room darkening-related code was slightly rewritten in Ages, compared to Seasons?
 
 ;;
@@ -12449,60 +12414,6 @@ _brightenRoomHelper:
 	ld a,$06
 	ld (wPaletteThread_mode),a
 	ret
-
-
-.else; ROM_SEASONS
-
-;;
-darkenRoomLightly:
-	ld b,$f7
-	jr _darkenRoomHelper
-
-;;
-darkenRoom:
-	ld b,$f0
-
-;;
-_darkenRoomHelper:
-	ld a,$05
-	ld (wPaletteThread_mode),a
-_label_331c:
-	ld a,(wPaletteThread_parameter)
-
-
-;;
-; @param	a	Start of darkening
-; @param	b	Amount to darken
-_setDarkeningVariables:
-	ld (wPaletteThread_fadeOffset),a
-	ld a,b
-	ld (wPaletteThread_parameter),a
-	ld a,$01
-	ld (wPaletteThread_speed),a
-	ld a,$fc
-	ld hl,wDirtyFadeBgPalettes
-	ldi (hl),a
-	ld (hl),$00
-	inc l
-	ldi (hl),a
-	ld (hl),$00
-	ret
-
-;;
-brightenRoomLightly:
-	ld b,$f7
-	jr ++
-
-;;
-brightenRoom:
-	ld b,$00
-++
-	ld a,$06
-	ld (wPaletteThread_mode),a
-	jr _label_331c
-
-
-.endif; ROM_SEASONS
 
 
 
@@ -12595,8 +12506,6 @@ mainThreadStart:
 
 
 
-.ifdef ROM_SEASONS
-
 updateAnimationsAfterCutscene:
 
 	push af
@@ -12604,7 +12513,6 @@ updateAnimationsAfterCutscene:
 	pop af
 
 	ret
-.endif
 
 ;;
 ; Sets wActiveMusic2 to the appropriate value, and sets wLoadingRoomPack (for present/past
@@ -12729,8 +12637,6 @@ dismountCompanionAndSetRememberedPositionToScreenCenter:
 
 	ret
 
-.ifdef ROM_SEASONS
-
 seasonsFunc_331b:
 
 	push af
@@ -12773,8 +12679,6 @@ zeldaKidnappedCutsceneCaller:
 	pop af
 
 	ret
-
-.endif
 
 ;;
 ; TODO: give this a better name
@@ -12860,8 +12764,6 @@ func_3539:
 
 	ret
 
-.ifdef ROM_SEASONS
-
 ;;
 seasonsFunc_34a0:
 
@@ -12882,8 +12784,6 @@ seasonsFunc_34a0:
 	pop af
 
 	ret
-
-.endif
 
 ;;
 clearWramBank1:
@@ -13017,7 +12917,6 @@ setEnemyTargetToLinkPosition:
 	ldh (<hFFB3),a
 	ret
 
-.ifdef ROM_AGES
 
 ;;
 getEntryFromObjectTable2:
@@ -13031,9 +12930,6 @@ getEntryFromObjectTable2:
 
 	ret
 
-.endif
-
-.ifdef ROM_SEASONS
 
 ;;
 multiIntroCutsceneCaller:
@@ -13044,11 +12940,6 @@ multiIntroCutsceneCaller:
 
 	ret
 
-
-.endif
-
-
-.ifdef ROM_AGES
 
 ;;
 ; Check if a dungeon uses those toggle blocks with the orbs.
@@ -13064,9 +12955,7 @@ checkDungeonUsesToggleBlocks:
 
 	.include "data/ages/dungeonsUsingToggleBlocks.s"
 
-.endif
 
-.ifdef ROM_SEASONS
 seasonsFunc_35cc:
 	ld a,($ff00+R_SVBK)
 	ld c,a
@@ -13090,8 +12979,6 @@ func_35ec:
 	pop af
 
 	ret
-
-.endif
 
 ;;
 ; Load data into wAnimationState, wAnimationPointerX, etc.
@@ -13142,7 +13029,6 @@ loadAnimationData:
 	ret
 
 
-.ifdef ROM_SEASONS
 
 roomTileChangesAfterLoad02:
 
@@ -13151,8 +13037,6 @@ roomTileChangesAfterLoad02:
 	pop af
 
 	ret
-
-.endif
 
 ;;
 ; See the comments for roomGfxChanges.getIndexOfGashaSpotInRoom_body.
@@ -13174,8 +13058,6 @@ getIndexOfGashaSpotInRoom:
 
 	ret
 
-
-.ifdef ROM_AGES
 
 ;;
 ; The name is a bit of a guess.
@@ -13203,7 +13085,6 @@ getBlackTowerProgress:
 	pop bc
 	ret
 
-.endif
 
 ; A table of addresses in vram. The index is a row (of 16 pixels), and the corresponding
 ; value is the address of the start of that row.
@@ -13513,7 +13394,6 @@ loadTilesetAndRoomLayout:
 
 	ret
 
-.ifdef ROM_SEASONS
 
 ; Layouts for the lava-filled version of Temple Remains, for all 4 seasons, are stored out of bounds
 ; on the Subrosia map.
@@ -13534,7 +13414,6 @@ loadTilesetAndRoomLayout:
 @seasonOffsets:
 	.db $bc $c0 $c4 $c8
 
-.endif
 
 
 ;;
@@ -13978,8 +13857,6 @@ setTile:
 	or h
 	ret
 
-
-.ifdef ROM_AGES
 ;;
 ; Calls "setTile" and "setTileInRoomLayoutBuffer".
 ;
@@ -13991,7 +13868,6 @@ setTileInAllBuffers:
 	call setTileInRoomLayoutBuffer
 	ld a,e
 	jp setTile
-.endif
 
 ;;
 ; Mixes two tiles together by using some subtiles from one, and some subtiles from the
@@ -14028,8 +13904,6 @@ setInterleavedTile:
 	pop de
 	ret
 
-.ifdef ROM_SEASONS
-
 setSeason:
 	ld b,a
 	ld a,(wActiveGroup)
@@ -14055,7 +13929,6 @@ checkRoomPackAfterWarp:
 
 	ret
 
-.endif
 
 ;;
 ; @param[out]	hl	Address of a free interaction slot (on the id byte)
@@ -14082,11 +13955,9 @@ getFreeInteractionSlot:
 
 
 
-.ifdef ROM_AGES
 ;;
 interactionDeleteAndUnmarkSolidPosition:
 	call objectUnmarkSolidPosition
-.endif
 
 ;;
 interactionDelete:
@@ -14211,7 +14082,6 @@ updateInteraction:
 	rst_derefHl
 	jp hl
 
-.ifdef ROM_SEASONS
 
 createSokraSnore:
 	ld a,(wFrameCounter)
@@ -14231,9 +14101,6 @@ checkGotMakuSeedDidNotSeeZeldaKidnapped:
 
 	ret
 
-.endif
-
-.ifdef ROM_AGES
 
 ;;
 ; Checks that an object is within [hFF8B] pixels of a position on both axes.
@@ -14294,8 +14161,6 @@ tokayIslandStolenItems:
 	.db TREASURE_BOMBS
 	.db TREASURE_BRACELET
 	.db TREASURE_FEATHER
-
-.endif
 
 ;;
 ; This function is identical to "interactionSetMiniScript", but is used in different
@@ -14470,8 +14335,6 @@ interactionRunSimpleScript:
 .endif
 
 
-.ifdef ROM_AGES
-
 ;;
 ; Gets object data for tokays in the wild tokay game.
 ;
@@ -14521,10 +14384,6 @@ setLinkDirection:
 	ld (hl),b
 	ret
 
-.endif
-
-.ifdef ROM_SEASONS
-
 ;;
 ; @param	b	index into _conditionalHoronNPCLookupTable
 ; @param[out]	c	$01 if NPC should be seen, otherwise $00
@@ -14571,8 +14430,6 @@ setUpCharactersAfterMoblinKeepDestroyed:
 
 	ret
 
-.endif ; ROM_SEASONS
-
 
 ;;
 ; Used during the end credits. Seems to load the credit text into OAM.
@@ -14594,8 +14451,6 @@ interactionFunc_3e6d:
 	ret
 
 
-.ifdef ROM_SEASONS
-
 getLinkedHerosCaveSideEntranceRoom:
 
 	push af
@@ -14607,8 +14462,6 @@ getLinkedHerosCaveSideEntranceRoom:
 	pop af
 
 	ret
-
-.endif
 
 ;;
 ; @param[out]	hl	Address of part slot ("id" byte)
@@ -14646,8 +14499,6 @@ partDelete:
 	jr nz,-
 	ret
 
-
-.ifdef ROM_AGES
 
 ;;
 ; @param[out]	cflag
@@ -14695,10 +14546,6 @@ func_3ee4:
 
 	ret
 
-.endif
-
-
-.ifdef ROM_SEASONS
 ;;
 ; CROSSITEMS: For Seasons only, determine which tile index is the cane of somaria (varies based on
 ; which group we're in).
@@ -14722,7 +14569,6 @@ getSomariaBlockIndex:
 	; Maku Tree (2), Indoors (3), Dungeon (4), Sidescrolling (5)
 	ld b,$f9
 	ret
-.endif
 
 
 .include "code/debug.s"
