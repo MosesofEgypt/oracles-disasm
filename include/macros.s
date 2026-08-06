@@ -490,6 +490,26 @@
 .endm
 
 ; Convert pointer in "data/{game}/dungeonLayouts.s" to an index, see that file for details
+.ifdef ROM_COMBO
+.function f_DungeonLayoutToIndex_ages(label) ((label - dungeonLayoutDataStart_ages) / $40)
+.function f_DungeonLayoutToIndex_seasons(label) ((label - dungeonLayoutDataStart_seasons) / $40)
+
+.macro m_DungeonData_ages
+	.assert NARGS == 8
+
+	.db \1, \2
+	.db f_DungeonLayoutToIndex_ages(\3)
+	.db \4, \5, \6, \7, \8
+.endm
+
+.macro m_DungeonData_seasons
+	.assert NARGS == 8
+
+	.db \1, \2
+	.db f_DungeonLayoutToIndex_seasons(\3)
+	.db \4, \5, \6, \7, \8
+.endm
+.else
 .function f_DungeonLayoutToIndex(label) ((label - dungeonLayoutDataStart) / $40)
 
 ; See "data/{game}/dungeonData.s"
@@ -500,6 +520,7 @@
 	.db f_DungeonLayoutToIndex(\3)
 	.db \4, \5, \6, \7, \8
 .endm
+.endif
 
 ; See data/ages/tile_properties/breakableTiles.s for documentation of parameters to this.
 .macro m_BreakableTileData

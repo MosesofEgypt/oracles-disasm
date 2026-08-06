@@ -161,7 +161,13 @@ cutscene18_state5:
 	ret nz
 
 	; Load twinrova fight room, start a fadein, then exit cutscene
-.ifdef ROM_AGES
+.ifdef ROM_COMBO
+	call hIsSeasons
+	ld a,$9e
+	jr c,+
+		ld a,$f5
+	+
+.elif defined(ROM_AGES)
 	ld a,$f5
 .else
 	ld a,$9e
@@ -220,19 +226,23 @@ twinrovaCutscene_deleteAllInteractionsExceptFlames:
 ;;
 ; Loads the "angry-looking" version of the flames.
 twinrovaCutscene_loadAngryFlames:
-.ifdef ROM_AGES
-	ld a,PALH_af
-.else
-	ld a,PALH_SEASONS_af
-.endif
-	call loadPaletteHeader
 .ifdef ROM_COMBO
-	ld hl,objectData_seasons.objectData402f
+	; NOTE: these are the same constant between games, so we
+	;       don't need to do anything special for the combo.
+	ld a,PALH_af
+	call loadPaletteHeader
 	call hIsSeasons
+	ld hl,objectData_seasons.objectData402f
 	jr c,+
 		ld hl,objectData.objectData402f
 	+
 .else
+	.ifdef ROM_AGES
+		ld a,PALH_af
+	.else
+		ld a,PALH_SEASONS_af
+	.endif
+	call loadPaletteHeader
 	ld hl,objectData.objectData402f
 .endif
 	jp parseGivenObjectData
@@ -558,16 +568,26 @@ intro_titlescreen:
 	call addSpritesToOam
 .endif
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.ifdef ROM_COMBO
+	ld hl,bank44.titlescreenMakuSeedSprite
+	ld e,:bank44.titlescreenMakuSeedSprite
+.else
 	ld hl,bank3f.titlescreenMakuSeedSprite
 	ld e,:bank3f.titlescreenMakuSeedSprite
+.endif
 	call addSpritesFromBankToOam
 
 	ld a,(wTmpcbb3)
 	and $20
 	ret nz
+.ifdef ROM_COMBO
+	ld hl,bank44.titlescreenPressStartSprites
+	ld e,:bank44.titlescreenPressStartSprites
+.else
 	ld hl,bank3f.titlescreenPressStartSprites
 	ld e,:bank3f.titlescreenPressStartSprites
+.endif
 	jp addSpritesFromBankToOam
 
 .else; ROM_SEASONS
@@ -601,7 +621,15 @@ intro_titlescreen_state0:
 	call stopTextThread
 
 	call disableLcd
+.ifdef ROM_COMBO
+	ld a,GFXH_TITLESCREEN_SEASONS
+	call hIsSeasons
+	jr c,+
+		ld a,GFXH_TITLESCREEN_AGES
+	+
+.else
 	ld a,GFXH_TITLESCREEN
+.endif
 	call loadGfxHeader
 	ld a,PALH_03
 	call loadPaletteHeader
@@ -680,16 +708,27 @@ runIntroCinematic:
 	.dw introCinematic_inTemple
 	.dw introCinematic_preTitlescreen
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 ;;
 ; Covers intro sections after the capcom screen and before the temple scene.
+.ifdef ROM_COMBO
+introCinematic_ridingHorse:
+	call hIsSeasons
+	jp c,introCinematic_ridingHorse_seasons
+	ld a,(wIntroVar)
+	rst_jumpTable
+	.dw introCinematic_ridingHorse_state0_ages
+	.dw introCinematic_ridingHorse_state1_ages
+	.dw introCinematic_ridingHorse_state2_ages
+.else
 introCinematic_ridingHorse:
 	ld a,(wIntroVar)
 	rst_jumpTable
 	.dw introCinematic_ridingHorse_state0
 	.dw introCinematic_ridingHorse_state1
 	.dw introCinematic_ridingHorse_state2
+.endif
 	.dw introCinematic_ridingHorse_state3
 	.dw introCinematic_ridingHorse_state4
 	.dw introCinematic_ridingHorse_state5
@@ -701,7 +740,11 @@ introCinematic_ridingHorse:
 
 ;;
 ; State 0: initialization
+.ifdef ROM_COMBO
+introCinematic_ridingHorse_state0_ages:
+.else
 introCinematic_ridingHorse_state0:
+.endif
 	call disableLcd
 	ld hl,wOamEnd
 	ld bc,w1Link.enabled-wOamEnd
@@ -723,7 +766,11 @@ introCinematic_ridingHorse_state0:
 	ld a,<wOam+$10
 	ldh (<hOamTail),a
 
+.ifdef ROM_COMBO
+	ld a,GFXH_INTRO_LINK_RIDING_HORSE_AGES
+.else
 	ld a,GFXH_INTRO_LINK_RIDING_HORSE
+.endif
 	call loadGfxHeader
 	ld a,PALH_90
 	call loadPaletteHeader
@@ -776,7 +823,11 @@ introCinematic_ridingHorse_state0:
 
 ;;
 ; State 1: fading into the sunset
+.ifdef ROM_COMBO
+introCinematic_ridingHorse_state1_ages:
+.else
 introCinematic_ridingHorse_state1:
+.endif
 	call introCinematic_moveBlackBarsIn
 	ld hl,wTmpcbb3
 	call decHlRef16WithCap
@@ -790,7 +841,11 @@ introCinematic_ridingHorse_state1:
 
 ;;
 ; State 2: scrolling down to reveal Link on horse
+.ifdef ROM_COMBO
+introCinematic_ridingHorse_state2_ages:
+.else
 introCinematic_ridingHorse_state2:
+.endif
 	call introCinematic_ridingHorse_updateScrollingGround
 	call decCbb3
 	ret nz
@@ -900,8 +955,13 @@ introCinematic_ridingHorse_state4:
 
 ;;
 @drawLinkOnHorseAndScrollScreen:
+.ifdef ROM_COMBO
+	ld hl,bank44.linkOnHorseFacingCameraSprite
+	ld e,:bank44.linkOnHorseFacingCameraSprite
+.else
 	ld hl,bank3f.linkOnHorseFacingCameraSprite
 	ld e,:bank3f.linkOnHorseFacingCameraSprite
+.endif
 	call addSpritesFromBankToOam
 
 	; Scroll the top, cloudy layer right every 32 frames
@@ -977,18 +1037,29 @@ introCinematic_ridingHorse_state6:
 	call loadGfxRegisterStateIndex
 	jp intro_incState
 
+.endif
 
-.else; ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 ;;
 ; Covers intro sections after the capcom screen and before the temple scene.
+.ifdef ROM_COMBO
+introCinematic_ridingHorse_seasons:
+.else
 introCinematic_ridingHorse:
+.endif
 	ld a,(wIntroVar)
 	rst_jumpTable
 
+.ifdef ROM_COMBO
+	.dw introCinematic_ridingHorse_state0_seasons
+	.dw introCinematic_ridingHorse_state1_seasons
+	.dw introCinematic_ridingHorse_state2_seasons
+.else
 	.dw introCinematic_ridingHorse_state0 ; First 3 states in Seasons are unique
 	.dw introCinematic_ridingHorse_state1
 	.dw introCinematic_ridingHorse_state2
+.endif
 
 	.dw introCinematic_ridingHorse_state7 ; Last 4 are the same as in Ages
 	.dw introCinematic_ridingHorse_state8
@@ -997,7 +1068,11 @@ introCinematic_ridingHorse:
 
 ;;
 ; State 0: initialization
+.ifdef ROM_COMBO
+introCinematic_ridingHorse_state0_seasons:
+.else
 introCinematic_ridingHorse_state0:
+.endif
 	call disableLcd
 	ld hl,wOamEnd
 	ld bc,w1Link.enabled-wOamEnd
@@ -1005,7 +1080,11 @@ introCinematic_ridingHorse_state0:
 
 	ld a,$10
 	ldh (<hOamTail),a
+.ifdef ROM_COMBO
+	ld a,GFXH_INTRO_LINK_RIDING_HORSE_SEASONS
+.else
 	ld a,GFXH_INTRO_LINK_RIDING_HORSE
+.endif
 	call loadGfxHeader
 	ld a,PALH_SEASONS_90
 	call loadPaletteHeader
@@ -1045,7 +1124,11 @@ introCinematic_ridingHorse_state0:
 
 ;;
 ; State 1: screen fading in as Link rides closer
+.ifdef ROM_COMBO
+introCinematic_ridingHorse_state1_seasons:
+.else
 introCinematic_ridingHorse_state1:
+.endif
 	call introCinematic_moveBlackBarsIn
 	ld hl,wTmpcbb3
 	call decHlRef16WithCap
@@ -1069,7 +1152,11 @@ introCinematic_ridingHorse_state1:
 
 ;;
 ; State 2: Image of Link bobbing up and down on horse
+.ifdef ROM_COMBO
+introCinematic_ridingHorse_state2_seasons:
+.else
 introCinematic_ridingHorse_state2:
+.endif
 	ld hl,wTmpcbb3
 	call decHlRef16WithCap
 	jr nz,++
@@ -1102,8 +1189,14 @@ introCinematic_ridingHorse_drawLinkOnHorseCloseupSprites_1:
 	ld c,a
 	xor a
 	ldh (<hOamTail),a
+.if defined(ROM_COMBO)
+	ld hl,bank44.linkOnHorseCloseupSprites_1
+	ld e,:bank44.linkOnHorseCloseupSprites_1
+	jp addSpritesFromBankToOam_withOffset
+.else; ROM_SEASONS
 	ld hl,linkOnHorseCloseupSprites_1
 	jp addSpritesToOam_withOffset
+.endif
 
 .endif; ROM_SEASONS
 
@@ -1131,9 +1224,14 @@ introCinematic_ridingHorse_drawLinkOnHorseCloseupSprites_2:
 	ldh (<hOamTail),a
 	ld c,a
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.ifdef ROM_COMBO
+	ld hl,bank44.linkOnHorseCloseupSprites_2
+	ld e,:bank44.linkOnHorseCloseupSprites_2
+.else
 	ld hl,bank3f.linkOnHorseCloseupSprites_2
 	ld e,:bank3f.linkOnHorseCloseupSprites_2
+.endif
 	jp addSpritesFromBankToOam_withOffset
 
 .else; ROM_SEASONS
@@ -1152,6 +1250,8 @@ introCinematic_ridingHorse_state8:
 .ifdef ROM_AGES
 	ld a,PALH_93
 .else
+	; NOTE: these are the same constant between games, so we
+	;       don't need to do anything special for the combo.
 	ld a,PALH_SEASONS_93
 .endif
 	call loadPaletteHeader
@@ -1236,9 +1336,14 @@ introCinematic_ridingHorse_drawTempleSprites:
 	inc a
 	ld c,a
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.ifdef ROM_COMBO
+	ld hl,bank44.introTempleSprites
+	ld e,:bank44.introTempleSprites
+.else
 	ld hl,bank3f.introTempleSprites
 	ld e,:bank3f.introTempleSprites
+.endif
 	jp addSpritesFromBankToOam_withOffset
 
 .else; ROM_SEASONS
@@ -1332,11 +1437,20 @@ introCinematic_inTemple_state0:
 	ld a,$10
 	ldh (<hOamTail),a
 
+.ifdef ROM_COMBO
+	ld a,GFXH_INTRO_TEMPLE_SCENE_SEASONS
+	call hIsSeasons
+	jr c,+
+		ld a,GFXH_INTRO_TEMPLE_SCENE_AGES
+	+
+.else
 	ld a,GFXH_INTRO_TEMPLE_SCENE
+.endif
 	call loadGfxHeader
 .ifdef ROM_AGES
 	ld a,PALH_91
 .else
+	; same constant between games. nothing to change for combo rom
 	ld a,PALH_SEASONS_91
 .endif
 	call loadPaletteHeader
@@ -1347,7 +1461,13 @@ introCinematic_inTemple_state0:
 	ld a,(wGfxRegs1.SCY)
 	ldh (<hCameraY),a
 
-.ifdef ROM_AGES
+.ifdef ROM_COMBO
+	call hIsSeasons
+	ld a,$18
+	jr c,+
+		ld a,$10
+	+
+.elif defined(ROM_AGES)
 	ld a,$10
 .else
 	ld a,$18
@@ -1371,7 +1491,7 @@ introCinematic_inTemple_state0:
 	ld (hl),$50
 
 	; Intro input data was moved to another bank in Ages
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld hl,cutscenesBank10.templeIntro_simulatedInput
 	ld a,:cutscenesBank10.templeIntro_simulatedInput
 .else
@@ -1580,7 +1700,15 @@ flashScreen_body:
 	ld a,b
 	inc (hl)
 	ld b,(hl)
+.ifdef ROM_COMBO
+	call hIsSeasons
+	ld hl,screenFlashingData_seasons
+	jr c,+
+		ld hl,screenFlashingData_ages
+	+
+.else
 	ld hl,screenFlashingData
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 	ld c,$00
@@ -1631,9 +1759,13 @@ clearFadingPalettes_body:
 	ld ($ff00+R_SVBK),a
 	ret
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
+.if defined(ROM_COMBO)
+	screenFlashingData_ages:
+.else
 	screenFlashingData:
+.endif
 		.dw @data0
 		.dw @data1
 		.dw @data2
@@ -1664,10 +1796,15 @@ clearFadingPalettes_body:
 		.db $19 $ff
 	@data5:
 		.db $01 $02 $04 $06 $08 $0a $0c $ff
+.endif
 
-.else; ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
+.if defined(ROM_COMBO)
+	screenFlashingData_seasons:
+.else
 	screenFlashingData:
+.endif
 		.dw @data0
 		.dw @data1
 		.dw @data2
@@ -1712,6 +1849,7 @@ introCinematic_preTitlescreen_state0:
 .ifdef ROM_AGES
 	ld a,PALH_94
 .else
+	; same constant, so nothing to do in rom combo
 	ld a,PALH_SEASONS_94
 .endif
 	call loadPaletteHeader
@@ -1940,7 +2078,7 @@ introCinematic_moveBlackBarsIn:
 	ret
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 ;;
 ; Moves the black bars out until a certain area in the center of the screen is visible.
@@ -1962,8 +2100,9 @@ introCinematic_moveBlackBarsOut:
 	ret c
 	ld (hl),$90-$30
 	ret
+.endif
 
-.else; ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 ;;
 seasonsFunc_03_5367:
@@ -2009,7 +2148,7 @@ cutscene_clearObjects:
 	jp refreshObjectGfx
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 ;;
 ; @param	bc	ID of interaction to create
@@ -2081,7 +2220,7 @@ endgameCutsceneHandler_body:
 	.dw endgameCutsceneHandler_09
 	.dw endgameCutsceneHandler_0a
 	.dw endgameCutsceneHandler_0f
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.dw endgameCutsceneHandler_20
 .endif
 

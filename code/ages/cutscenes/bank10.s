@@ -479,7 +479,15 @@ agesFunc_10_7298:
 	call disableLcd
 	call clearOam
 	call incCbc2
+.ifdef ROM_COMBO
+	ld a,GFXH_TO_BE_CONTINUED_SEASONS
+	call hIsSeasons
+	jr c,+
+		ld a,GFXH_TO_BE_CONTINUED_AGES
+	+
+.else
 	ld a,GFXH_TO_BE_CONTINUED
+.endif
 	call loadGfxHeader
 	ld a,PALH_a7
 	call loadPaletteHeader

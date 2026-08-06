@@ -450,7 +450,15 @@ refreshObjectGfx_body:
 	; Check if bit 7 in the second parameter of objectGfxHeaderTable is set (indicating
 	; the end of the data)
 	ld d,$00
+.ifdef ROM_COMBO
+	ld hl,objectGfxHeaderTable_seasons+1
+	call hIsSeasons
+	jr c,+
+		ld hl,objectGfxHeaderTable_ages+1
+	+
+.else
 	ld hl,objectGfxHeaderTable+1
+.endif
 	add hl,de
 	add hl,de
 	add hl,de
@@ -733,14 +741,30 @@ insertIndexIntoLoadedObjectGfx:
 
 @tree:
 	ld b,$92
+.ifdef ROM_COMBO
+	ld hl,treeGfxHeaderTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,treeGfxHeaderTable_ages
+	+
+.else
 	ld hl,treeGfxHeaderTable
+.endif
 	jr ++
 
 @object:
 	sub <wLoadedObjectGfx
 	or $80
 	ld b,a
+.ifdef ROM_COMBO
+	ld hl,objectGfxHeaderTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,objectGfxHeaderTable_ages
+	+
+.else
 	ld hl,objectGfxHeaderTable
+.endif
 ++
 	ld d,$00
 	add hl,de
@@ -817,7 +841,15 @@ getObjectGfxIndexForEnemy:
 	add a
 	ld c,a
 	ld b,$00
+.ifdef ROM_COMBO
+	call hIsSeasons
+	ld hl,enemyData_seasons
+	jr c,+
+		ld hl,enemyData_ages
+	+
+.else
 	ld hl,enemyData
+.endif
 	add hl,bc
 	add hl,bc
 	pop bc
@@ -832,7 +864,15 @@ partGetObjectGfxIndex:
 	ld e,Part.id
 	ld a,(de)
 	call multiplyABy8
+.ifdef ROM_COMBO
+	call hIsSeasons
+	ld hl,partData_seasons
+	jr c,+
+		ld hl,partData_ages
+	+
+.else
 	ld hl,partData
+.endif
 	add hl,bc
 	pop bc
 	ldi a,(hl)
@@ -856,7 +896,15 @@ itemGetObjectGfxIndex:
 	add a
 	add l
 
+.ifdef ROM_COMBO
+	call hIsSeasons
+	ld hl,itemData_seasons
+	jr c,+
+		ld hl,itemData_ages
+	+
+.else
 	ld hl,itemData
+.endif
 	rst_addAToHl
 	ldi a,(hl)
 	ret
@@ -913,7 +961,15 @@ enemyLoadGraphicsAndProperties:
 	ldi a,(hl)
 	push hl
 	add a
+.ifdef ROM_COMBO
+	call hIsSeasons
+	ld hl,extraEnemyData_seasons
+	jr c,+
+		ld hl,extraEnemyData_ages
+	+
+.else
 	ld hl,extraEnemyData
+.endif
 	rst_addDoubleIndex
 	ld e,$a6
 	ldi a,(hl)
@@ -1085,7 +1141,15 @@ interactionGetData:
 getDataForInteraction:
 	ld c,a
 	ld b,$00
+.ifdef ROM_COMBO
+	call hIsSeasons
+	ld hl,interactionData_seasons+1
+	jr c,+
+		ld hl,interactionData_ages+1
+	+
+.else
 	ld hl,interactionData+1
+.endif
 	add hl,bc
 	add hl,bc
 	add hl,bc

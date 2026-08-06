@@ -44,11 +44,35 @@
 m_section_free Bank_1_test NAMESPACE bank1
 checkUpdateDungeonMinimap:
 checkInitUnderwaterWaves:
+checkSolidObjectAtWarpDestPos:
+clearMemoryOnScreenReload:
+checkDisableUnderwaterWaves:
+calculateRoomEdge:
+func_49c9:
+setObjectsEnabledTo2:
+findActiveRoomInDungeonLayoutWithPointlessBankSwitch:
+	nop
+
+.include {"{GAME_DATA_DIR}/dungeonData.s"}
+.include "data/dungeonProperties.s"
+.include {"{GAME_DATA_DIR}/dungeonLayouts.s"}
+.include {"{GAME_DATA_DIR}/seedTreeRefillData.s"}
+.include {"{GAME_DATA_DIR}/tile_properties/warpTiles.s"}
+
+.ends
+
+m_section_free Bank_2_test NAMESPACE bank2
+fileSelect_redrawDecorationsAndSetWramBank4:
 	nop
 .ends
 
 m_section_free Bank_3_test NAMESPACE bank3
 generateGameTransferSecret:
+	nop
+.ends
+
+m_section_free Bank_6_test NAMESPACE bank6
+specialObjectLoadAnimationFrameToBuffer:
 	nop
 .ends
 
@@ -80,10 +104,6 @@ forceLinksDirection:
 	nop
 .ends
 
-m_section_free RoomGfxChanges_test NAMESPACE roomGfxChanges
-drawCrownDungeonOpeningTiles:
-	nop
-.ends
 
 ; NOTE: temporary code until many banks can be included
 
@@ -104,9 +124,9 @@ drawCrownDungeonOpeningTiles:
 	; This section could probably be made superfree in Ages, but this isn't the case in Seasons,
 	; so let's just play it safe and leave it as "free".
 	 m_section_free Bank_3_Cutscenes NAMESPACE bank3Cutscenes
-;		.include "code/bank3Cutscenes.s"
-;		.include "code/ages/cutscenes/endgameCutscenes.s"
-;		.include "code/ages/cutscenes/miscCutscenes.s"
+		.include "code/bank3Cutscenes.s"
+		.include "code/ages/cutscenes/endgameCutscenes.s"
+		.include "code/ages/cutscenes/miscCutscenes.s"
 	.ends
 
 .BANK $04 SLOT 1
@@ -146,8 +166,8 @@ drawCrownDungeonOpeningTiles:
 	.ends
 
 	 m_section_free Tileset_Loading_2 NAMESPACE tilesets
-;		.include "code/loadTilesToRam.s"
-;		.include "code/ages/loadTilesetData.s"
+		.include "code/loadTilesToRam.s"
+		.include "code/ages/loadTilesetData.s"
 	.ends
 
 		; Must be in same bank as "code/bank4.s"
@@ -666,17 +686,13 @@ m_section_free Enemy_Code_Bank10 NAMESPACE bank10
 
 .ends
 
-
-; Some blank space here ($6e1f-$6eff)
-.ORGA $6f00
-
 m_section_free Interaction_Code_Group8 NAMESPACE commonInteractions8
 ;	.include "object_code/common/interactions/eraOrSeasonInfo.s"
 ;	.include "object_code/common/interactions/statueEyeball.s"
 ;	.include "object_code/common/interactions/ringHelpBook.s"
 .ends
 
-;	.include "code/ages/cutscenes/bank10.s"
+	.include "code/ages/cutscenes/bank10.s"
 
 m_section_free Ages_Interactions_Bank10 NAMESPACE agesInteractionsBank10
 ;	.include "object_code/ages/interactions/miscellaneous2.s"
@@ -787,10 +803,6 @@ m_section_superfree Room_Code namespace roomSpecificCode
 
 ;	.include "code/serialFunctions.s"
 
-	 m_section_free Bank16 NAMESPACE bank16
-		.include {"{GAME_DATA_DIR}/endgameCutsceneOamData.s"}
-	.ends
-
 ;	.include "code/staticObjects.s"
 	.include {"{GAME_DATA_DIR}/staticDungeonObjects.s"}
 
@@ -803,11 +815,11 @@ m_section_superfree Room_Code namespace roomSpecificCode
 ;		.include "scripts/seasons/scriptHelper.s"
 	.ends
 
-	m_section_free Bank16_2 NAMESPACE bank16
-		.include "code/ages/d6FloorUpdateCode.s"
-	.ends
-
 	.include {"{BUILD_DIR}/partAnimations.s"}
+
+	m_section_superfree Terrain_Effects NAMESPACE terrainEffects
+		.include "data/terrainEffects.s"
+	.ends
 
 
 .BANK $16 SLOT 1
@@ -815,9 +827,14 @@ m_section_superfree Room_Code namespace roomSpecificCode
 	.include {"{BUILD_DIR}/partOamData.s"}
 
 	.include {"{BUILD_DIR}/interactionOamData_seasons.s"}
-m_section_superfree Terrain_Effects NAMESPACE terrainEffects
-	.include "data/terrainEffects.s"
-.ends
+
+	m_section_superfree Bank16 NAMESPACE bank16
+		.include {"{GAME_DATA_DIR}/endgameCutsceneOamData.s"}
+	.ends
+
+	m_section_superfree Bank16_2 NAMESPACE bank16
+		.include "code/ages/d6FloorUpdateCode.s"
+	.ends
 
 
 .BANK $17 SLOT 1
@@ -968,7 +985,7 @@ m_section_free enemyCode_Bank43 NAMESPACE bank43
 .ends
 
 m_section_free roomGfxChanges NAMESPACE roomGfxChanges
-;	.include "code/ages/roomGfxChanges.s"
+	.include "code/ages/roomGfxChanges.s"
 .ends
 
 ;.include "object_code/ages/interactions/tuniNutMain.s"
@@ -981,16 +998,17 @@ m_section_free Bank44 NAMESPACE bank44
 
 .define BANK_44 $44
 
-;.include "code/loadGraphics.s"
+.include "code/loadGraphics.s"
 ;.include "code/treasureAndDrops.s"
 ;.include "code/textbox.s"
 
 .include "data/gfxDataIntro/triforceMovementData.s"
 .include "data/gfxDataIntro/makuSeed.s"
 .include "data/gfxDataIntro/pressStart.s"
+.include "data/gfxDataIntro/linkOnHorse1.s"
 .include "data/gfxDataIntro/linkOnHorse2.s"
-.include "data/gfxDataIntro/templeTouchUp.s"
 .include "data/gfxDataIntro/linkOnHorse3.s"
+.include "data/gfxDataIntro/templeTouchUp.s"
 
 
 .include {"{GAME_DATA_DIR}/objectGfxHeaders.s"}
@@ -998,8 +1016,8 @@ m_section_free Bank44 NAMESPACE bank44
 
 .include {"{BUILD_DIR}/enemyData.s"}
 .include {"{BUILD_DIR}/partData.s"}
-.include {"{GAME_DATA_DIR}/itemData.s"}
 .include {"{BUILD_DIR}/interactionData.s"}
+.include {"{GAME_DATA_DIR}/itemData.s"}
 
 .include {"{GAME_DATA_DIR}/treasureCollectionBehaviours.s"}
 .include {"{GAME_DATA_DIR}/treasureDisplayData.s"}

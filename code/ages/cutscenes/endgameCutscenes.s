@@ -334,6 +334,12 @@ endgameCutsceneHandler_09_stage0:
 	call disableLcd
 
 	ld a,GFXH_LINK_WITH_ORACLE_END_SCENE
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr c,+
+		ld a,GFXH_LINK_WITH_ORACLE_END_SCENE_AGES
+	+
+.endif
 	call loadGfxHeader
 	ld a,PALH_9d
 	call loadPaletteHeader
@@ -426,6 +432,12 @@ endgameCutsceneHandler_09_stage1:
 	call disableLcd
 	call clearOam
 	ld a,GFXH_LINK_WITH_ORACLE_AND_TWINROVA_END_SCENE
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr c,+
+		ld a,GFXH_LINK_WITH_ORACLE_AND_TWINROVA_END_SCENE_AGES
+	+
+.endif
 	call loadGfxHeader
 	ld a,PALH_9e
 	call loadPaletteHeader
@@ -563,7 +575,15 @@ endgameCutsceneHandler_09_stage1:
 	ld bc,$0400
 	call clearMemoryBc
 
+.ifdef ROM_COMBO
+	ld a,GFXH_TWINROVA_CLOSEUP_SEASONS
+	call hIsSeasons
+	jr c,+
+		ld a,GFXH_TWINROVA_CLOSEUP_AGES
+	+
+.else
 	ld a,GFXH_TWINROVA_CLOSEUP
+.endif
 	call loadGfxHeader
 	ld a,PALH_9c
 	call loadPaletteHeader
@@ -1297,7 +1317,15 @@ endgameCutsceneHandler_0f:
 	call disableLcd
 	call clearScreenVariablesAndWramBank1
 	call hideStatusBar
+.ifdef ROM_COMBO
+	ld a,GFXH_SCENE_CREDITS_MAKUTREE_SEASONS
+	call hIsSeasons
+	jr c,+
+		ld a,GFXH_SCENE_CREDITS_MAKUTREE_AGES
+	+
+.else
 	ld a,GFXH_SCENE_CREDITS_MAKUTREE
+.endif
 	call loadGfxHeader
 	ld a,PALH_c9
 	call loadPaletteHeader
@@ -1447,7 +1475,15 @@ endgameCutsceneHandler_0a:
 +
 	ld a,(wTmpcfc0.genericCutscene.cfde)
 	add a
+.ifdef ROM_COMBO
+	add GFXH_CREDITS_SCENE1_SEASONS
+	call hIsSeasons
+	jr c,+
+		add GFXH_CREDITS_SCENE1_AGES-GFXH_CREDITS_SCENE1_SEASONS
+	+
+.else
 	add GFXH_CREDITS_SCENE1
+.endif
 	call loadGfxHeader
 	ld a,PALH_0f
 	call loadPaletteHeader
@@ -1516,7 +1552,15 @@ endgameCutsceneHandler_0a:
 	call clearWramBank1
 	ld a,(wTmpcfc0.genericCutscene.cfde)
 	add a
+.ifdef ROM_COMBO
+	add GFXH_CREDITS_IMAGE1_SEASONS
+	call hIsSeasons
+	jr c,+
+		add GFXH_CREDITS_IMAGE1_AGES-GFXH_CREDITS_IMAGE1_SEASONS
+	+
+.else
 	add GFXH_CREDITS_IMAGE1
+.endif
 	call loadGfxHeader
 	ld hl,wTmpcbb3
 	ld (hl),$5a

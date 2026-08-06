@@ -9,7 +9,11 @@ loadTilesetData_body:
 
 	call getAdjustedRoomGroup
 
+.ifdef ROM_COMBO
+	ld hl,roomTilesetsGroupTable_ages
+.else
 	ld hl,roomTilesetsGroupTable
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 	ld a,(wActiveRoom)
@@ -28,7 +32,11 @@ loadTilesetData_body:
 	ld (wTilesetIndex),a
 	and $7f
 	call multiplyABy8
+.ifdef ROM_COMBO
+	ld hl,tilesetData_ages
+.else
 	ld hl,tilesetData
+.endif
 	add hl,bc
 
 	ldi a,(hl)
@@ -169,7 +177,11 @@ checkTilesetOverride:
 
 	; This all seems redundant, possibly it's doing these things because dungeon data hasn't
 	; been loaded yet
+.ifdef ROM_COMBO
+	ld a, f_DungeonLayoutToIndex_ages(dungeon07Layout_ages)
+.else
 	ld a, f_DungeonLayoutToIndex(dungeon07Layout)
+.endif
 	ld (wDungeonFirstLayout),a
 	callab bank1.findActiveRoomInDungeonLayoutWithPointlessBankSwitch
 

@@ -13,7 +13,11 @@ loadTilesetData_body:
 	ldh (<hFF8B),a
 
 	ld a,(wActiveGroup)
+.ifdef ROM_COMBO
+	ld hl,roomTilesetsGroupTable_seasons
+.else
 	ld hl,roomTilesetsGroupTable
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 	ld a,(wActiveRoom)
@@ -25,7 +29,11 @@ loadTilesetData_body:
 	ld a,(wTilesetIndex)
 	and $7f
 	call multiplyABy8
+.ifdef ROM_COMBO
+	ld hl,tilesetData_seasons
+.else
 	ld hl,tilesetData
+.endif
 	add hl,bc
 
 	; If it's a seasonal tileset, then dereference the next pointer

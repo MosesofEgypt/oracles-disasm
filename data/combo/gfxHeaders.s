@@ -863,7 +863,7 @@ m_GfxHeaderStart $94, GFXH_CREDITS_LINKED_IMAGE4
 	m_GfxHeader flg_credits_linked_image4, $9801
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $95, GFXH_CREDITS_SCROLL_SEASONS
+m_GfxHeaderStart $95, GFXH_CREDITS_SCROLL
 	m_GfxHeader spr_credits_font, $8000
 	m_GfxHeader spr_credits_sprites_1, $8400
 	m_GfxHeader spr_credits_sprites_2, $8001

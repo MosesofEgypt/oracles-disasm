@@ -357,8 +357,13 @@ nayruSingingCutsceneHandler:
 	cpl
 	inc a
 	ld c,a
+.ifdef ROM_COMBO
+	ld hl,bank44.oamData_7249
+	ld e,:bank44.oamData_7249
+.else
 	ld hl,bank3f.oamData_7249
 	ld e,:bank3f.oamData_7249
+.endif
 	jp addSpritesFromBankToOam_withOffset
 @state2:
 	ld a,(wPaletteThread_mode)
@@ -1881,6 +1886,29 @@ func_6f44:
 	.dw @cbb8_01
 	.dw @cbb8_02
 @cbb8_00:
+.ifdef ROM_COMBO
+	ld hl,bank44.oamData_714c
+	ld e,:bank44.oamData_714c
+	jp addSpritesFromBankToOam_withOffset
+@cbb8_01:
+	ld hl,bank44.oamData_718d
+	ld e,:bank44.oamData_718d
+	call addSpritesFromBankToOam_withOffset
+	ld hl,bank44.oamData_71ce
+	ld e,:bank44.oamData_71ce
+	jp addSpritesFromBankToOam_withOffset
+@cbb8_02:
+	ld hl,bank44.oamData_71f7
+	ld e,:bank44.oamData_71f7
+	call addSpritesFromBankToOam_withOffset
+	ld hl,bank44.oamData_718d
+	ld e,:bank44.oamData_718d
+	ld a,(wGfxRegs1.SCY)
+	cp $71
+	jr c,+
+	ld hl,bank44.oamData_7220
+	ld e,:bank44.oamData_7220
+.else
 	ld hl,bank3f.oamData_714c
 	ld e,:bank3f.oamData_714c
 	jp addSpritesFromBankToOam_withOffset
@@ -1902,6 +1930,7 @@ func_6f44:
 	jr c,+
 	ld hl,bank3f.oamData_7220
 	ld e,:bank3f.oamData_7220
+.endif
 +
 	jp addSpritesFromBankToOam_withOffset
 
@@ -2340,7 +2369,11 @@ func_03_7244:
 	ld (wScrollMode),a
 	ld a,$08
 	ld (wGenericCutscene.cbb7),a
+.ifdef ROM_COMBO
+	callab bank44.agesFunc_3f_4133
+.else
 	callab bank3f.agesFunc_3f_4133
+.endif
 	callab bank6.specialObjectLoadAnimationFrameToBuffer
 	ld a,GFXH_COMMON_SPRITES_TO_WRAM
 	call loadGfxHeader

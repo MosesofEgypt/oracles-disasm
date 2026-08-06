@@ -173,7 +173,11 @@ roomTileChangesAfterLoad0a:
 	sub $80
 	cp $0a
 	jr nc,+
+.ifdef ROM_COMBO
+	ld (hl),TILEINDEX_PUDDLE_AGES
+.else
 	ld (hl),TILEINDEX_PUDDLE
+.endif
 +
 	dec l
 	jr nz,--
@@ -440,7 +444,11 @@ roomTileChangesAfterLoad08:
 	ret z
 	; 'c' now contains the gasha spot index.
 
+.ifdef ROM_COMBO
+	ld a,TILEINDEX_SOFT_SOIL_AGES
+.else
 	ld a,TILEINDEX_SOFT_SOIL
+.endif
 	call findTileInRoom
 	ret nz
 

@@ -528,7 +528,11 @@ roomTileChangesAfterLoad08:
 	ret z
 	; 'c' now contains the gasha spot index.
 
+.ifdef ROM_COMBO
+	ld a,TILEINDEX_SOFT_SOIL_SEASONS
+.else
 	ld a,TILEINDEX_SOFT_SOIL
+.endif
 	call findTileInRoom
 	ret nz
 
