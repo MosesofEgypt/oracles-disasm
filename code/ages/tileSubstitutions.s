@@ -1,5 +1,9 @@
 ;;
+.ifdef ROM_COMBO
+applyAllTileSubstitutions_ages:
+.else
 applyAllTileSubstitutions:
+.endif
 	call replacePollutionWithWaterIfPollutionFixed
 	call applySingleTileChanges
 	call applyStandardTileSubstitutions
@@ -14,7 +18,11 @@ applyAllTileSubstitutions:
 	call replaceToggleBlocks
 	call replaceJabuTilesIfUnderwater
 +
-	call applyRoomSpecificTileChanges
+.ifdef ROM_COMBO
+	jp applyRoomSpecificTileChanges_ages
+.else
+	jp applyRoomSpecificTileChanges
+.endif
 	ld a,(wActiveGroup)
 	cp $02
 	ret nc
@@ -43,7 +51,7 @@ applyAllTileSubstitutions:
 	ld (bc),a
 	ret
 
-.include {"{GAME_DATA_DIR}/tile_properties/timewarpReturnTileReplacement.s"}
+.include "data/ages/tile_properties/timewarpReturnTileReplacement.s"
 
 ;;
 replaceBreakableTileOverPortal:
@@ -70,7 +78,7 @@ removeBreakableTileForTimeWarp:
 	ld (bc),a
 	ret
 
-.include {"{GAME_DATA_DIR}/tile_properties/timewarpEntryTileReplacement.s"}
+.include "data/ages/tile_properties/timewarpEntryTileReplacement.s"
 
 ;;
 replaceBreakableTileOverLinkTimeWarpingIn:
@@ -145,6 +153,28 @@ replaceTiles:
 applyStandardTileSubstitutions:
 	call getThisRoomFlags
 	ldh (<hFF8B),a
+.ifdef ROM_COMBO
+	ld hl,standardTileSubstitutions_ages@bit0
+	bit 0,a
+	call nz,@locFunc
+
+	ld hl,standardTileSubstitutions_ages@bit1
+	ldh a,(<hFF8B)
+	bit 1,a
+	call nz,@locFunc
+
+	ld hl,standardTileSubstitutions_ages@bit2
+	ldh a,(<hFF8B)
+	bit 2,a
+	call nz,@locFunc
+
+	ld hl,standardTileSubstitutions_ages@bit3
+	ldh a,(<hFF8B)
+	bit 3,a
+	call nz,@locFunc
+
+	ld hl,standardTileSubstitutions_ages@bit7
+.else
 	ld hl,standardTileSubstitutions@bit0
 	bit 0,a
 	call nz,@locFunc
@@ -165,6 +195,7 @@ applyStandardTileSubstitutions:
 	call nz,@locFunc
 
 	ld hl,standardTileSubstitutions@bit7
+.endif
 	ldh a,(<hFF8B)
 	bit 7,a
 	ret z

@@ -257,7 +257,15 @@ applySingleTileChanges:
 	ld c,a
 	ld d,>wRoomLayout
 	ld a,(wActiveGroup)
+.ifdef ROM_COMBO
+	ld hl,singleTileChangeGroupTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,singleTileChangeGroupTable_ages
+	+
+.else
 	ld hl,singleTileChangeGroupTable
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 @next:

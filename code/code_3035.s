@@ -110,7 +110,11 @@ fileSelect_redrawDecorations:
 disableLcdAndLoadRoom:
 	ldh a,(<hRomBank)
 	push af
+.ifdef ROM_COMBO
+	callfrombank0 bank3Cutscenes.disableLcdAndLoadRoom_body_ages
+.else
 	callfrombank0 bank3Cutscenes.disableLcdAndLoadRoom_body
+.endif
 	pop af
 	rst_setrombank
 	ret

@@ -32,7 +32,15 @@ specialObjectSetAnimation_body:
 	ld a,(de)
 
 label_06_032:
+.ifdef ROM_COMBO
+	ld hl,specialObjectAnimationTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,specialObjectAnimationTable_ages
+	+
+.else
 	ld hl,specialObjectAnimationTable
+.endif
 	rst_addDoubleIndex
 	ldi a,(hl)
 	ld h,(hl)
@@ -82,8 +90,11 @@ specialObjectNextAnimationFrame:
 	ret
 
 
+.ifdef ROM_COMBO
+	.include {"{BUILD_DIR}/specialObjectAnimationPointers.s"}
+.else
 	.include {"{GAME_DATA_DIR}/specialObjectAnimationPointers.s"}
-
+.endif
 ;;
 loadLinkAndCompanionAnimationFrame_body:
 	ld a,$ff
@@ -100,6 +111,10 @@ loadLinkAndCompanionAnimationFrame_body:
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 	; CROSSITEMS: The cape animation was added at index 256. It must account for link's
 	; direction.
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr c,+
+.endif
 	ld a,(w1Link.id)
 	cpa SPECIALOBJECT_LINK
 	jr nz,+
@@ -208,7 +223,15 @@ getSpecialObjectGraphicsFrame:
 	ld a,e
 .endif
 
+.ifdef ROM_COMBO
+	ld hl,specialObjectGraphicsTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,specialObjectGraphicsTable_ages
+	+
+.else
 	ld hl,specialObjectGraphicsTable
+.endif
 .ifdef UNRESTRICTED_TRANSFORMS
 	call remapTransformedSpecialObjectGfx
 .endif
@@ -225,7 +248,15 @@ getSpecialObjectGraphicsFrame:
 	add a
 	ld c,a
 	ld a,e
+.ifdef ROM_COMBO
+	ld hl,specialObjectOamDataTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,specialObjectOamDataTable_ages
+	+
+.else
 	ld hl,specialObjectOamDataTable
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 	add hl,bc

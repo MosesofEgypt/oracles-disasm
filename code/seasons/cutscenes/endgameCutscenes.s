@@ -2,20 +2,24 @@
 
 ;;
 ; CUTSCENE_S_DIN_CRYSTAL_DESCENDING
+.ifdef ROM_COMBO
+endgameCutsceneHandler_09_seasons:
+.else
 endgameCutsceneHandler_09:
+.endif
 	ld de,wGenericCutscene.cbc1
 	ld a,(de)
 	rst_jumpTable
-	.dw endgameCutsceneHandler_09_stage0
-	.dw endgameCutsceneHandler_09_stage1
+	.dw endgameCutsceneHandler_09_stage0_seasons
+	.dw endgameCutsceneHandler_09_stage1_seasons
 
-endgameCutsceneHandler_09_stage0:
+endgameCutsceneHandler_09_stage0_seasons:
 	call updateStatusBar
-	call endgameCutsceneHandler_09_stage0_body
+	call endgameCutsceneHandler_09_stage0_body_seasons
 	call updateAllObjects
 	jp checkEnemyAndPartCollisionsIfTextInactive
 
-endgameCutsceneHandler_09_stage0_body:
+endgameCutsceneHandler_09_stage0_body_seasons:
 	ld de,wGenericCutscene.cbc2
 	ld a,(de)
 	rst_jumpTable
@@ -252,13 +256,13 @@ endgameCutsceneHandler_09_stage0_body:
 	ld a,$9d
 	call loadPaletteHeader
 	call cutscene_clearObjects
-	call endgameCutsceneHandler_09_stage1_body@seasonsFunc_03_5ab0
+	call endgameCutsceneHandler_09_stage1_body_seasons@seasonsFunc_03_5ab0
 	ld a,$04
 	call loadGfxRegisterStateIndex
 	jp fadeinFromWhite
 
 @stateB:
-	call endgameCutsceneHandler_09_stage1_body@seasonsFunc_03_5ab0
+	call endgameCutsceneHandler_09_stage1_body_seasons@seasonsFunc_03_5ab0
 	call seasonsFunc_03_6462
 	ret nz
 	call incCbc2
@@ -273,7 +277,7 @@ endgameCutsceneHandler_09_stage0_body:
 	jp showText
 
 @stateC:
-	call endgameCutsceneHandler_09_stage1_body@seasonsFunc_03_5ab0
+	call endgameCutsceneHandler_09_stage1_body_seasons@seasonsFunc_03_5ab0
 	call seasonsFunc_03_645a
 	ret nz
 	call seasonsFunc_03_646a
@@ -691,11 +695,11 @@ endgameCutsceneHandler_09_stage0_body:
 	ld (hl),$03
 	ret
 
-endgameCutsceneHandler_09_stage1:
-	call endgameCutsceneHandler_09_stage1_body
+endgameCutsceneHandler_09_stage1_seasons:
+	call endgameCutsceneHandler_09_stage1_body_seasons
 	jp updateAllObjects
 
-endgameCutsceneHandler_09_stage1_body:
+endgameCutsceneHandler_09_stage1_body_seasons:
 	ld de,wGenericCutscene.cbc2
 	ld a,(de)
 	rst_jumpTable
@@ -735,7 +739,7 @@ endgameCutsceneHandler_09_stage1_body:
 	ld (wTextboxFlags),a
 	ld a,$3c
 	ld bc,TX_3d03
-	jp endgameCutsceneHandler_09_stage0_body@stateDFunc0
+	jp endgameCutsceneHandler_09_stage0_body_seasons@stateDFunc0
 
 @state2:
 	call seasonsFunc_03_645a
@@ -810,7 +814,7 @@ endgameCutsceneHandler_09_stage1_body:
 	ld hl,wGenericCutscene.cbb3
 	ld (hl),$14
 	ld bc,TX_3d04
-	call endgameCutsceneHandler_09_stage0_body@stateBFunc0
+	call endgameCutsceneHandler_09_stage0_body_seasons@stateBFunc0
 	jp incCbc2
 
 @state7:
@@ -851,7 +855,11 @@ endgameCutsceneHandler_09_stage1_body:
 	ld hl,$9c00
 	ld bc,$0400
 	call clearMemoryBc
+.ifdef ROM_COMBO
+	ld a,GFXH_TWINROVA_CLOSEUP_SEASONS
+.else
 	ld a,GFXH_TWINROVA_CLOSEUP
+.endif
 	call loadGfxHeader
 	ld a,PALH_SEASONS_9c
 	call loadPaletteHeader
@@ -882,19 +890,23 @@ endgameCutsceneHandler_09_stage1_body:
 
 ;;
 ; CUTSCENE_S_ROOM_OF_RITES_COLLAPSE
+.ifdef ROM_COMBO
+endgameCutsceneHandler_0f_seasons:
+.else
 endgameCutsceneHandler_0f:
+.endif
 	ld de,wGenericCutscene.cbc1
 	ld a,(de)
 	rst_jumpTable
-	.dw endgameCutsceneHandler_0f_stage0
-	.dw endgameCutsceneHandler_0f_stage1
+	.dw endgameCutsceneHandler_0f_stage0_seasons
+	.dw endgameCutsceneHandler_0f_stage1_seasons
 
-endgameCutsceneHandler_0f_stage0:
+endgameCutsceneHandler_0f_stage0_seasons:
 	call updateStatusBar
-	call endgameCutsceneHandler_0f_stage0_body
+	call endgameCutsceneHandler_0f_stage0_body_seasons
 	jp updateAllObjects
 
-endgameCutsceneHandler_0f_stage0_body:
+endgameCutsceneHandler_0f_stage0_body_seasons:
 	ld de,wGenericCutscene.cbc2
 	ld a,(de)
 	rst_jumpTable
@@ -1029,7 +1041,7 @@ endgameCutsceneHandler_0f_stage0_body:
 
 @stateA:
 	ld e,$1e
-	jp endgameCutsceneHandler_09_stage0_body@state16Func0
+	jp endgameCutsceneHandler_09_stage0_body_seasons@state16Func0
 
 @stateB:
 	call seasonsFunc_03_5cfb
@@ -1090,12 +1102,12 @@ seasonsFunc_03_5d12:
 	ld (hl),b
 	ret
 
-endgameCutsceneHandler_0f_stage1:
+endgameCutsceneHandler_0f_stage1_seasons:
 	call updateStatusBar
-	call endgameCutsceneHandler_0f_stage1_body
+	call endgameCutsceneHandler_0f_stage1_body_seasons
 	jp updateAllObjects
 
-endgameCutsceneHandler_0f_stage1_body:
+endgameCutsceneHandler_0f_stage1_body_seasons:
 	ld de,wGenericCutscene.cbc2
 	ld a,(de)
 	rst_jumpTable
@@ -1221,7 +1233,11 @@ endgameCutsceneHandler_0f_stage1_body:
 	call disableLcd
 	call clearScreenVariablesAndWramBank1
 	call hideStatusBar
+.ifdef ROM_COMBO
+	ld a,GFXH_SCENE_CREDITS_MAKUTREE_SEASONS
+.else
 	ld a,GFXH_SCENE_CREDITS_MAKUTREE
+.endif
 	call loadGfxHeader
 	ld a,PALH_SEASONS_ad
 	call loadPaletteHeader
@@ -1229,12 +1245,12 @@ endgameCutsceneHandler_0f_stage1_body:
 	ld (hl),$f0
 	ld a,$04
 	call loadGfxRegisterStateIndex
-	call endgameCutsceneHandler_09_stage1_body@seasonsFunc_03_5aa2
+	call endgameCutsceneHandler_09_stage1_body_seasons@seasonsFunc_03_5aa2
 	ld a,$03
 	jp fadeinFromWhiteWithDelay
 
 @state9:
-	call endgameCutsceneHandler_09_stage1_body@seasonsFunc_03_5aa2
+	call endgameCutsceneHandler_09_stage1_body_seasons@seasonsFunc_03_5aa2
 	call seasonsFunc_03_6462
 	ret nz
 	call incCbc2
@@ -1244,7 +1260,7 @@ endgameCutsceneHandler_0f_stage1_body:
 	jp fadeoutToBlackWithDelay
 
 @stateA:
-	call endgameCutsceneHandler_09_stage1_body@seasonsFunc_03_5aa2
+	call endgameCutsceneHandler_09_stage1_body_seasons@seasonsFunc_03_5aa2
 	call seasonsFunc_03_6462
 	ret nz
 	ld a,CUTSCENE_S_CREDITS
@@ -1266,7 +1282,11 @@ endgameCutsceneHandler_0f_stage1_body:
 
 ;;
 ; CUTSCENE_S_CREDITS
+.ifdef ROM_COMBO
+endgameCutsceneHandler_0a_seasons:
+.else
 endgameCutsceneHandler_0a:
+.endif
 	call endgameCutsceneHandler_0a_body
 	jp func_3539
 
@@ -1274,12 +1294,12 @@ endgameCutsceneHandler_0a_body:
 	ld de,wGenericCutscene.cbc1
 	ld a,(de)
 	rst_jumpTable
-	.dw endgameCutsceneHandler_0a_stage0
-	.dw endgameCutsceneHandler_0a_stage1
-	.dw endgameCutsceneHandler_0a_stage2
-	.dw endgameCutsceneHandler_0a_stage3
+	.dw endgameCutsceneHandler_0a_stage0_seasons
+	.dw endgameCutsceneHandler_0a_stage1_seasons
+	.dw endgameCutsceneHandler_0a_stage2_seasons
+	.dw endgameCutsceneHandler_0a_stage3_seasons
 
-endgameCutsceneHandler_0a_stage0:
+endgameCutsceneHandler_0a_stage0_seasons:
 	ld de,wGenericCutscene.cbc2
 	ld a,(de)
 	rst_jumpTable
@@ -1332,7 +1352,7 @@ endgameCutsceneHandler_0a_stage0:
 	ld (hl),b
 	jp fadeoutToWhite
 
-endgameCutsceneHandler_0a_stage1:
+endgameCutsceneHandler_0a_stage1_seasons:
 	ld de,wGenericCutscene.cbc2
 	ld a,(de)
 	rst_jumpTable
@@ -1378,7 +1398,11 @@ endgameCutsceneHandler_0a_stage1:
 	ld a,(wGenericCutscene.cbb4)
 	sub $04
 	add a
+.ifdef ROM_COMBO
+	add GFXH_CREDITS_SCENE1_SEASONS
+.else
 	add GFXH_CREDITS_SCENE1
+.endif
 	call loadGfxHeader
 	ld a,PALH_0f
 	call loadPaletteHeader
@@ -1542,7 +1566,7 @@ endgameCutsceneHandler_0a_stage1:
 ++
 	jp fadeoutToWhite
 
-endgameCutsceneHandler_0a_stage2:
+endgameCutsceneHandler_0a_stage2_seasons:
 	xor a
 	ldh (<hOamTail),a
 	ld de,wGenericCutscene.cbc2
@@ -1757,7 +1781,7 @@ endgameCutsceneHandler_0a_stage2:
 	ld a,$04
 	jp fadeoutToWhiteWithDelay
 
-endgameCutsceneHandler_0a_stage3:
+endgameCutsceneHandler_0a_stage3_seasons:
 	ld de,wGenericCutscene.cbc2
 	ld a,(de)
 	rst_jumpTable
@@ -1776,7 +1800,7 @@ endgameCutsceneHandler_0a_stage3:
 
 @state0:
 	call checkIsLinkedGame
-	call nz,endgameCutsceneHandler_0a_stage2@seasonsFunc_03_616f
+	call nz,endgameCutsceneHandler_0a_stage2_seasons@seasonsFunc_03_616f
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
@@ -1873,7 +1897,11 @@ endgameCutsceneHandler_0a_stage3:
 	ret nz
 	call incCbc2
 	call disableLcd
+.ifdef ROM_COMBO
+	callab bank3.generateGameTransferSecret
+.else
 	call bank3.generateGameTransferSecret
+.endif
 	ld a,$ff
 	ld (wGenericCutscene.cbba),a
 	ld a,($ff00+R_SVBK)
@@ -2107,7 +2135,9 @@ seasonsFunc_03_646a:
 	ld b,$10
 	jp clearMemory
 
+.ifndef ROM_COMBO
 .include {"{GAME_DATA_DIR}/creditsOamData.s"}
+.endif
 
 seasonsFunc_03_66dc:
 	ld hl,wLinkHealth

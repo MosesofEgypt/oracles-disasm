@@ -206,9 +206,9 @@ saveFile:
 	ld hl,wSavefileString
 	.ifdef ROM_COMBO
 		call hIsSeasons
-		ld de,saveVerificationStringSeasons
+		ld de,saveVerificationString_seasons
 		jr c,+
-			ld de,saveVerificationStringAges
+			ld de,saveVerificationString_ages
 		+
 	.else
 		ld de,saveVerificationString
@@ -230,6 +230,7 @@ saveFile:
 	ld d,b
 	call copyFileFromHlToDe
 
+.ifndef ROM_COMBO
 	; Save file to backup slot?
 	call getFileAddress2
 	ld e,c
@@ -238,9 +239,18 @@ saveFile:
 
 	; Redundant?
 	jr verifyFileCopies
+.endif
 
 ;;
 loadFile:
+.ifdef ROM_COMBO
+	call getFileAddress1
+	ld l,c
+	ld h,b
+	call verifyFileAtHl
+	call c,eraseFile
+	call getFileAddress1
+.else
 	call verifyFileCopies
 	push af
 	or a
@@ -251,6 +261,7 @@ loadFile:
 +
 	call getFileAddress2
 ++
+.endif
 	ld l,c
 	ld h,b
 	ld de,wFileStart
@@ -265,9 +276,11 @@ loadFile:
 ;;
 eraseFile:
 	call getFileAddress1
+.ifndef ROM_COMBO
 	call @clearFile
 
 	call getFileAddress2
+.endif
 ;;
 ; @param bc
 @clearFile:
@@ -286,6 +299,7 @@ clearFileAtHl:
 	ld bc,$0550
 	jp clearMemoryBc
 
+.ifndef ROM_COMBO
 ;;
 ; Checks both copies of the file data to see if one is valid.
 ; If one is valid but not the other, this also updates the invalid copy with the valid
@@ -345,6 +359,7 @@ verifyFileCopies:
 @bothCopiesInvalid:
 	ld a,$ff
 	ret
+.endif
 
 ;;
 ; Copy a file ($0550 bytes) from hl to de.
@@ -382,9 +397,9 @@ verifyFileAtHl:
 	; Verify the savefile string
 	.ifdef ROM_COMBO
 		call hIsSeasons
-		ld de,saveVerificationStringSeasons
+		ld de,saveVerificationString_seasons
 		jr c,+
-			ld de,saveVerificationStringAges
+			ld de,saveVerificationString_ages
 		+
 	.else
 		ld de,saveVerificationString
@@ -447,7 +462,12 @@ calculateFileChecksum:
 ; @param[out] bc Address
 getFileAddress1:
 	ld c,$00
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr nc,+
+.else
 	jr +
+.endif
 
 ;;
 ; Get the second (backup?) address of the save data
@@ -468,10 +488,12 @@ getFileAddress2:
 	ret
 
 @saveFileAddresses:
+	; ages saves in combo rom
 	.dw $a010
 	.dw $a560
 	.dw $aab0
 
+	; seasons saves in combo rom
 	.dw $b000
 	.dw $b550
 	.dw $baa0
@@ -598,9 +620,9 @@ initialNgpFileVariables_biggoronsword:
 
 ; This string is different in ages and seasons.
 .ifdef ROM_COMBO
-saveVerificationStringAges:
+saveVerificationString_ages:
 	.ASC "Z21216-0"
-saveVerificationStringSeasons:
+saveVerificationString_seasons:
 	.ASC "Z11216-0"
 .else
 saveVerificationString:

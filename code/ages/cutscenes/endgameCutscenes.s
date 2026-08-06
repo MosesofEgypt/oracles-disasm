@@ -2,15 +2,19 @@
 
 ;;
 ; CUTSCENE_BLACK_TOWER_ESCAPE
+.ifdef ROM_COMBO
+endgameCutsceneHandler_09_ages:
+.else
 endgameCutsceneHandler_09:
+.endif
 	ld de,wGenericCutscene.cbc1
 	ld a,(de)
 	rst_jumpTable
-	.dw endgameCutsceneHandler_09_stage0
-	.dw endgameCutsceneHandler_09_stage1
+	.dw endgameCutsceneHandler_09_stage0_ages
+	.dw endgameCutsceneHandler_09_stage1_ages
 
 
-endgameCutsceneHandler_09_stage0:
+endgameCutsceneHandler_09_stage0_ages:
 	call updateStatusBar
 	call @runStates
 	jp updateAllObjects
@@ -333,12 +337,10 @@ endgameCutsceneHandler_09_stage0:
 	ld (wTilesetAnimation),a
 	call disableLcd
 
-	ld a,GFXH_LINK_WITH_ORACLE_END_SCENE
 .ifdef ROM_COMBO
-	call hIsSeasons
-	jr c,+
-		ld a,GFXH_LINK_WITH_ORACLE_END_SCENE_AGES
-	+
+	ld a,GFXH_LINK_WITH_ORACLE_END_SCENE_AGES
+.else
+	ld a,GFXH_LINK_WITH_ORACLE_END_SCENE
 .endif
 	call loadGfxHeader
 	ld a,PALH_9d
@@ -400,7 +402,7 @@ endgameCutsceneHandler_09_stage0:
 
 
 ; Twinrova appears just before credits
-endgameCutsceneHandler_09_stage1:
+endgameCutsceneHandler_09_stage1_ages:
 	call @runStates
 	jp updateAllObjects
 
@@ -431,12 +433,10 @@ endgameCutsceneHandler_09_stage1:
 
 	call disableLcd
 	call clearOam
-	ld a,GFXH_LINK_WITH_ORACLE_AND_TWINROVA_END_SCENE
 .ifdef ROM_COMBO
-	call hIsSeasons
-	jr c,+
-		ld a,GFXH_LINK_WITH_ORACLE_AND_TWINROVA_END_SCENE_AGES
-	+
+	ld a,GFXH_LINK_WITH_ORACLE_AND_TWINROVA_END_SCENE_AGES
+.else
+	ld a,GFXH_LINK_WITH_ORACLE_AND_TWINROVA_END_SCENE
 .endif
 	call loadGfxHeader
 	ld a,PALH_9e
@@ -527,7 +527,7 @@ endgameCutsceneHandler_09_stage1:
 	ld hl,wTmpcbb3
 	ld (hl),20
 	ld bc,TX_280c
-	call endgameCutsceneHandler_09_stage0@showTextDuringTwinrovaCutscene
+	call endgameCutsceneHandler_09_stage0_ages@showTextDuringTwinrovaCutscene
 	jp incCbc2
 
 @state7:
@@ -576,11 +576,7 @@ endgameCutsceneHandler_09_stage1:
 	call clearMemoryBc
 
 .ifdef ROM_COMBO
-	ld a,GFXH_TWINROVA_CLOSEUP_SEASONS
-	call hIsSeasons
-	jr c,+
-		ld a,GFXH_TWINROVA_CLOSEUP_AGES
-	+
+	ld a,GFXH_TWINROVA_CLOSEUP_AGES
 .else
 	ld a,GFXH_TWINROVA_CLOSEUP
 .endif
@@ -1025,7 +1021,11 @@ endgameCutsceneHandler_20:
 
 ;;
 ; CUTSCENE_ROOM_OF_RITES_COLLAPSE
+.ifdef ROM_COMBO
+endgameCutsceneHandler_0f_ages:
+.else
 endgameCutsceneHandler_0f:
+.endif
 	ld de,wMapMenu.drawWarpDestinations
 	ld a,(de)
 	rst_jumpTable
@@ -1318,11 +1318,7 @@ endgameCutsceneHandler_0f:
 	call clearScreenVariablesAndWramBank1
 	call hideStatusBar
 .ifdef ROM_COMBO
-	ld a,GFXH_SCENE_CREDITS_MAKUTREE_SEASONS
-	call hIsSeasons
-	jr c,+
-		ld a,GFXH_SCENE_CREDITS_MAKUTREE_AGES
-	+
+	ld a,GFXH_SCENE_CREDITS_MAKUTREE_AGES
 .else
 	ld a,GFXH_SCENE_CREDITS_MAKUTREE
 .endif
@@ -1368,7 +1364,11 @@ endgameCutsceneHandler_0f:
 
 ;;
 ; CUTSCENE_CREDITS
+.ifdef ROM_COMBO
+endgameCutsceneHandler_0a_ages:
+.else
 endgameCutsceneHandler_0a:
+.endif
 	call @runStates
 	jp func_3539
 
@@ -1476,11 +1476,7 @@ endgameCutsceneHandler_0a:
 	ld a,(wTmpcfc0.genericCutscene.cfde)
 	add a
 .ifdef ROM_COMBO
-	add GFXH_CREDITS_SCENE1_SEASONS
-	call hIsSeasons
-	jr c,+
-		add GFXH_CREDITS_SCENE1_AGES-GFXH_CREDITS_SCENE1_SEASONS
-	+
+	add GFXH_CREDITS_SCENE1_AGES
 .else
 	add GFXH_CREDITS_SCENE1
 .endif
@@ -1553,11 +1549,7 @@ endgameCutsceneHandler_0a:
 	ld a,(wTmpcfc0.genericCutscene.cfde)
 	add a
 .ifdef ROM_COMBO
-	add GFXH_CREDITS_IMAGE1_SEASONS
-	call hIsSeasons
-	jr c,+
-		add GFXH_CREDITS_IMAGE1_AGES-GFXH_CREDITS_IMAGE1_SEASONS
-	+
+	add GFXH_CREDITS_IMAGE1_AGES
 .else
 	add GFXH_CREDITS_IMAGE1
 .endif
@@ -1635,7 +1627,11 @@ endgameCutsceneHandler_0a:
 ;;
 ; Called from disableLcdAndLoadRoom in bank 0.
 ;
+.ifdef ROM_COMBO
+disableLcdAndLoadRoom_body_ages:
+.else
 disableLcdAndLoadRoom_body:
+.endif
 	ld a,b
 	ld (wActiveGroup),a
 	ld a,c
@@ -1657,7 +1653,6 @@ disableLcdAndLoadRoom_body:
 	ld a,$10
 	ldh (<hOamTail),a
 	ret
-
 
 cutscene_parseObjectData_andLoadObjectGfx:
 	call getEntryFromObjectTable1

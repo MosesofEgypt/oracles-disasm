@@ -1,68 +1,72 @@
+.ifdef ROM_COMBO
+applyRoomSpecificTileChanges_seasons:
+.else
 applyRoomSpecificTileChanges:
+.endif
 	ld a,(wActiveRoom)
-	ld hl,roomTileChangerCodeGroupTable
+	ld hl,roomTileChangerCodeGroupTable_seasons
 	call findRoomSpecificData
 	ret nc
 	rst_jumpTable
-	.dw tileReplacement_group0Mapc5 ; $00
-	.dw tileReplacement_group0Mapd9 ; $01
-	.dw tileReplacement_group4Map78 ; $02
-	.dw tileReplacement_group2_3Mapb0 ; $03
-	.dw tileReplacement_group4Map2e ; $04
-	.dw tileReplacement_group4Map64 ; $05
-	.dw tileReplacement_group4Map89 ; $06
-	.dw tileReplacement_group4Mapbb ; $07
-	.dw tileReplacement_group0Mapf6 ; $08
-	.dw tileReplacement_group5Map65 ; $09
-	.dw tileReplacement_group5Map66 ; $0a
-	.dw tileReplacement_group5Map67 ; $0b
-	.dw tileReplacement_group5Map68 ; $0c
-	.dw tileReplacement_group5Map6a ; $0d
-	.dw tileReplacement_group5Map6b ; $0e
-	.dw tileReplacement_group5Map86 ; $0f
-	.dw tileReplacement_group0Map54 ; $10
-	.dw tileReplacement_group0Map7f ; $11
-	.dw tileReplacement_group0Map62 ; $12
-	.dw tileReplacement_group0Map60 ; $13
-	.dw tileReplacement_group0Map61 ; $14
-	.dw tileReplacement_group0Map70 ; $15
-	.dw tileReplacement_group0Map71 ; $16
-	.dw tileReplacement_group0Map81 ; $17
-	.dw tileReplacement_group0Map0d ; $18
-	.dw tileReplacement_group0Map1d ; $19
-	.dw tileReplacement_group5Map7a ; $1a
-	.dw tileReplacement_group5Map78 ; $1b
-	.dw tileReplacement_group2_3Mapb5 ; $1c
-	.dw tileReplacement_group0Map4b ; $1d
-	.dw tileReplacement_group0Map63 ; $1e
-	.dw tileReplacement_group0Mapf4 ; $1f
-	.dw tileReplacement_group0Map6f ; $20
-	.dw tileReplacement_group0Map42 ; $21
-	.dw tileReplacement_group0Mapfc ; $22
-	.dw tileReplacement_group1Map64 ; $23
-	.dw tileReplacement_group1Map74 ; $24
-	.dw tileReplacement_group0Mapee ; $25
-	.dw tileReplacement_group0Mape4 ; $26
-	.dw tileReplacement_group1Map35 ; $27
-	.dw tileReplacement_group0Map56 ; $28
-	.dw tileReplacement_group2_3Mapa4 ; $29
-	.dw tileReplacement_group2_3Mapab ; $2a
-	.dw tileReplacement_group5Map9e ; $2b
-	.dw tileReplacement_group5Map8e ; $2c
-	.dw tileReplacement_group5Map3b ; $2d
-	.dw tileReplacement_group4Map61 ; $2e
+	.dw tileReplacement_group0Mapc5_seasons ; $00
+	.dw tileReplacement_group0Mapd9_seasons ; $01
+	.dw tileReplacement_group4Map78_seasons ; $02
+	.dw tileReplacement_group2_3Mapb0_seasons ; $03
+	.dw tileReplacement_group4Map2e_seasons ; $04
+	.dw tileReplacement_group4Map64_seasons ; $05
+	.dw tileReplacement_group4Map89_seasons ; $06
+	.dw tileReplacement_group4Mapbb_seasons ; $07
+	.dw tileReplacement_group0Mapf6_seasons ; $08
+	.dw tileReplacement_group5Map65_seasons ; $09
+	.dw tileReplacement_group5Map66_seasons ; $0a
+	.dw tileReplacement_group5Map67_seasons ; $0b
+	.dw tileReplacement_group5Map68_seasons ; $0c
+	.dw tileReplacement_group5Map6a_seasons ; $0d
+	.dw tileReplacement_group5Map6b_seasons ; $0e
+	.dw tileReplacement_group5Map86_seasons ; $0f
+	.dw tileReplacement_group0Map54_seasons ; $10
+	.dw tileReplacement_group0Map7f_seasons ; $11
+	.dw tileReplacement_group0Map62_seasons ; $12
+	.dw tileReplacement_group0Map60_seasons ; $13
+	.dw tileReplacement_group0Map61_seasons ; $14
+	.dw tileReplacement_group0Map70_seasons ; $15
+	.dw tileReplacement_group0Map71_seasons ; $16
+	.dw tileReplacement_group0Map81_seasons ; $17
+	.dw tileReplacement_group0Map0d_seasons ; $18
+	.dw tileReplacement_group0Map1d_seasons ; $19
+	.dw tileReplacement_group5Map7a_seasons ; $1a
+	.dw tileReplacement_group5Map78_seasons ; $1b
+	.dw tileReplacement_group2_3Mapb5_seasons ; $1c
+	.dw tileReplacement_group0Map4b_seasons ; $1d
+	.dw tileReplacement_group0Map63_seasons ; $1e
+	.dw tileReplacement_group0Mapf4_seasons ; $1f
+	.dw tileReplacement_group0Map6f_seasons ; $20
+	.dw tileReplacement_group0Map42_seasons ; $21
+	.dw tileReplacement_group0Mapfc_seasons ; $22
+	.dw tileReplacement_group1Map64_seasons ; $23
+	.dw tileReplacement_group1Map74_seasons ; $24
+	.dw tileReplacement_group0Mapee_seasons ; $25
+	.dw tileReplacement_group0Mape4_seasons ; $26
+	.dw tileReplacement_group1Map35_seasons ; $27
+	.dw tileReplacement_group0Map56_seasons ; $28
+	.dw tileReplacement_group2_3Mapa4_seasons ; $29
+	.dw tileReplacement_group2_3Mapab_seasons ; $2a
+	.dw tileReplacement_group5Map9e_seasons ; $2b
+	.dw tileReplacement_group5Map8e_seasons ; $2c
+	.dw tileReplacement_group5Map3b_seasons ; $2d
+	.dw tileReplacement_group4Map61_seasons ; $2e
 
-roomTileChangerCodeGroupTable:
-	.dw roomTileChangerCodeGroup0Data
-	.dw roomTileChangerCodeGroup1Data
-	.dw roomTileChangerCodeGroup2Data
-	.dw roomTileChangerCodeGroup3Data
-	.dw roomTileChangerCodeGroup4Data
-	.dw roomTileChangerCodeGroup5Data
-	.dw roomTileChangerCodeGroup6Data
-	.dw roomTileChangerCodeGroup7Data
+roomTileChangerCodeGroupTable_seasons:
+	.dw roomTileChangerCodeGroup0Data_seasons
+	.dw roomTileChangerCodeGroup1Data_seasons
+	.dw roomTileChangerCodeGroup2Data_seasons
+	.dw roomTileChangerCodeGroup3Data_seasons
+	.dw roomTileChangerCodeGroup4Data_seasons
+	.dw roomTileChangerCodeGroup5Data_seasons
+	.dw roomTileChangerCodeGroup6Data_seasons
+	.dw roomTileChangerCodeGroup7Data_seasons
 
-roomTileChangerCodeGroup0Data:
+roomTileChangerCodeGroup0Data_seasons:
 	.db $c5 $00
 	.db $d9 $01
 	.db $54 $10
@@ -87,21 +91,21 @@ roomTileChangerCodeGroup0Data:
 	.db $f6 $08
 	.db $00
 
-roomTileChangerCodeGroup1Data:
+roomTileChangerCodeGroup1Data_seasons:
 	.db $35 $27
 	.db $64 $23
 	.db $74 $24
 	.db $00
 
-roomTileChangerCodeGroup2Data:
-roomTileChangerCodeGroup3Data:
+roomTileChangerCodeGroup2Data_seasons:
+roomTileChangerCodeGroup3Data_seasons:
 	.db $a4 $29
 	.db $ab $2a
 	.db $b0 $03
 	.db $b5 $1c
 	.db $00
 
-roomTileChangerCodeGroup4Data:
+roomTileChangerCodeGroup4Data_seasons:
 	.db $61 $2e
 	.db $78 $02
 	.db $2e $04
@@ -110,7 +114,7 @@ roomTileChangerCodeGroup4Data:
 	.db $bb $07
 	.db $00
 
-roomTileChangerCodeGroup5Data:
+roomTileChangerCodeGroup5Data_seasons:
 	.db $3b $2d
 	.db $65 $09
 	.db $66 $0a
@@ -125,14 +129,14 @@ roomTileChangerCodeGroup5Data:
 	.db $9e $2b
 	.db $00
 
-roomTileChangerCodeGroup6Data:
-roomTileChangerCodeGroup7Data:
+roomTileChangerCodeGroup6Data_seasons:
+roomTileChangerCodeGroup7Data_seasons:
 	.db $00
 
 	ret
 
 ; Adds a sign outside couple's house
-tileReplacement_group0Mapf6:
+tileReplacement_group0Mapf6_seasons:
 	ld a,GLOBALFLAG_FINISHEDGAME
 	call checkGlobalFlag
 	ret z
@@ -141,7 +145,7 @@ tileReplacement_group0Mapf6:
 	ret
 
 ; Open GBA shop
-tileReplacement_group0Mapc5:
+tileReplacement_group0Mapc5_seasons:
 .ifndef ADVANCE_SHOP_ALWAYS_OPEN
 	ldh a,(<hGameboyType)
 	rlca
@@ -152,7 +156,7 @@ tileReplacement_group0Mapc5:
 	ret
 
 ; Open Maku tree gates
-tileReplacement_group0Mapd9:
+tileReplacement_group0Mapd9_seasons:
 	call getThisRoomFlags
 	bit 7,(hl)
 	ret z
@@ -168,7 +172,7 @@ tileReplacement_group0Mapd9:
 	ret
 
 ; Open Tarm gates
-tileReplacement_group0Map63:
+tileReplacement_group0Map63_seasons:
 	call getThisRoomFlags
 	bit 7,(hl)
 	ret z
@@ -182,7 +186,7 @@ tileReplacement_group0Map63:
 	ret
 
 ; Mr. Write's house - lit torch
-tileReplacement_group2_3Mapa4:
+tileReplacement_group2_3Mapa4_seasons:
 	call getThisRoomFlags
 	and $40
 	ret z
@@ -191,7 +195,7 @@ tileReplacement_group2_3Mapa4:
 	ret
 
 ; Bridge to moldorm guarding jewel
-tileReplacement_group0Mape4:
+tileReplacement_group0Mape4_seasons:
 	call getThisRoomFlags
 	and $40
 	jr z,+
@@ -212,12 +216,17 @@ tileReplacement_group0Mape4:
 	ld (de),a
 	jr -
 @table_group0Mape4:
+.ifdef ROM_COMBO
+	.db $65 TILEINDEX_WATER_SEASONS
+	.db $75 TILEINDEX_WATER_SEASONS
+.else
 	.db $65 TILEINDEX_WATER
 	.db $75 TILEINDEX_WATER
+.endif
 	.db $00
 
 ; Moldorm guarding jewel
-tileReplacement_group0Mapf4:
+tileReplacement_group0Mapf4_seasons:
 	call getThisRoomFlags
 	bit 6,(hl)
 	ret z
@@ -239,7 +248,7 @@ tileReplacement_group0Mapf4:
 	ret
 
 ; D4 - 1F stairs leading to 2-tile pits to stairs to B1
-tileReplacement_group4Map78:
+tileReplacement_group4Map78_seasons:
 	call getThisRoomFlags
 	bit 7,(hl)
 	ret nz
@@ -248,7 +257,7 @@ tileReplacement_group4Map78:
 	ret
 
 ; D4 - 3-torch room while on minecart
-tileReplacement_group4Map64:
+tileReplacement_group4Map64_seasons:
 	call getThisRoomFlags
 	bit 7,(hl)
 	ret z
@@ -259,7 +268,7 @@ tileReplacement_group4Map64:
 	.db $00
 
 ; Member's shop - unlocking chest gambling game
-tileReplacement_group2_3Mapb0:
+tileReplacement_group2_3Mapb0_seasons:
 	ld a,(wBoughtShopItems1)
 	and $0f
 	cp $0f
@@ -279,21 +288,21 @@ tileReplacement_group2_3Mapb0:
 	.db $13 $03 $06 TILEINDEX_STANDARD_FLOOR
 
 ; D2 - hidden rupee room
-tileReplacement_group4Map2e:
+tileReplacement_group4Map2e_seasons:
 	ld hl,wRoomLayout+$23
 	ld bc,$0808
 	ld de,wD2RupeeRoomRupees
 	jp replaceRupeeRoomRupees
 
 ; D6 - hidden rupee room
-tileReplacement_group4Mapbb:
+tileReplacement_group4Mapbb_seasons:
 	ld hl,wRoomLayout+$34
 	ld bc,$0808
 	ld de,wD6RupeeRoomRupees
 	jp replaceRupeeRoomRupees
 
 ; D5 - magnet glove chest
-tileReplacement_group4Map89:
+tileReplacement_group4Map89_seasons:
 	call getThisRoomFlags
 	bit 5,(hl)
 	ret z
@@ -304,7 +313,7 @@ tileReplacement_group4Map89:
 	.db $00
 
 ; D8 - top-left screen of huge lava pool room
-tileReplacement_group5Map65:
+tileReplacement_group5Map65_seasons:
 	call getThisRoomFlags
 	bit 6,(hl)
 	jr z,+
@@ -341,7 +350,7 @@ tileReplacement_group5Map65:
 	.db $ff
 
 ; D8 - center-left screen of huge lava pool room
-tileReplacement_group5Map67:
+tileReplacement_group5Map67_seasons:
 	ld a,<ROOM_SEASONS_565
 	call getARoomFlags
 	bit 6,(hl)
@@ -395,7 +404,7 @@ tileReplacement_group5Map67:
 	.db $ff
 
 ; D8 - center-right screen of huge lava pool room
-tileReplacement_group5Map68:
+tileReplacement_group5Map68_seasons:
 	ld a,<ROOM_SEASONS_566
 	call getARoomFlags
 	bit 6,(hl)
@@ -427,9 +436,9 @@ replaceAllLavaTilesInGivenRange:
 	ret
 
 ; D8 - top-right, and bottom 2 screens of huge lava pool room
-tileReplacement_group5Map66:
-tileReplacement_group5Map6a:
-tileReplacement_group5Map6b:
+tileReplacement_group5Map66_seasons:
+tileReplacement_group5Map6a_seasons:
+tileReplacement_group5Map6b_seasons:
 	call getThisRoomFlags
 	bit 6,(hl)
 	ret z
@@ -451,7 +460,7 @@ d8LavaRoomsReplaceLavaSpewingFace:
 	.db $00
 
 ; D8 - ice-block puzzle room, finished puzzle
-tileReplacement_group5Map86:
+tileReplacement_group5Map86_seasons:
 	call getThisRoomFlags
 	bit 7,(hl)
 	ret z
@@ -470,7 +479,7 @@ tileReplacement_group5Map86:
 	.db $00
 
 ; Ricky screen - replace Ricky with sign
-tileReplacement_group0Map54:
+tileReplacement_group0Map54_seasons:
 	ld a,(wRickyState)
 	bit 6,a
 	ret z
@@ -479,7 +488,7 @@ tileReplacement_group0Map54:
 	ret
 
 ; Holly's house - opening door
-tileReplacement_group0Map7f:
+tileReplacement_group0Map7f_seasons:
 	ld a,(wRoomStateModifier)
 	cp SEASON_WINTER
 	ret nz
@@ -488,7 +497,7 @@ tileReplacement_group0Map7f:
 	ret
 
 ; Floodgate-keeper's house - water outside
-tileReplacement_group0Map62:
+tileReplacement_group0Map62_seasons:
 	ld h,>wSubrosiaRoomFlags
 	ld l,<ROOM_SEASONS_2b5
 	bit 6,(hl)
@@ -496,22 +505,34 @@ tileReplacement_group0Map62:
 	ld hl,@rect
 	call fillRectInRoomLayout
 	ld hl,wRoomLayout+$27
+.ifdef ROM_COMBO
+	ld (hl),TILEINDEX_WATER_SEASONS
+.else
 	ld (hl),TILEINDEX_WATER
+.endif
 	ret
 @rect:
+.ifdef ROM_COMBO
+	.db $26 $02 $03 TILEINDEX_PUDDLE_SEASONS
+.else
 	.db $26 $02 $03 TILEINDEX_PUDDLE
+.endif
 
 ; Inside floodgate-keeper's house
-tileReplacement_group2_3Mapb5:
+tileReplacement_group2_3Mapb5_seasons:
 	call getThisRoomFlags
 	bit 6,(hl)
 	ret nz
 	ld hl,wRoomLayout+$37
+.ifdef ROM_COMBO
+	ld (hl),TILEINDEX_PUDDLE_SEASONS
+.else
 	ld (hl),TILEINDEX_PUDDLE
+.endif
 	ret
 
 ; D3 entrance screen - still flooded
-tileReplacement_group0Map60:
+tileReplacement_group0Map60_seasons:
 	ld a,<ROOM_SEASONS_081
 	call getARoomFlags
 	bit 7,(hl)
@@ -521,12 +542,18 @@ tileReplacement_group0Map60:
 	ld hl,@rect2
 	jp fillRectInRoomLayout
 @rect1:
+.ifdef ROM_COMBO
+	.db $24 $06 $03 TILEINDEX_WATER_SEASONS
+@rect2:
+	.db $47 $04 $03 TILEINDEX_WATER_SEASONS
+.else
 	.db $24 $06 $03 TILEINDEX_WATER
 @rect2:
 	.db $47 $04 $03 TILEINDEX_WATER
+.endif
 
 ; Screen right of D3 entrance
-tileReplacement_group0Map61:
+tileReplacement_group0Map61_seasons:
 	ld a,<ROOM_SEASONS_081
 	call getARoomFlags
 	bit 7,(hl)
@@ -534,10 +561,14 @@ tileReplacement_group0Map61:
 	ld hl,@rect
 	jp fillRectInRoomLayout
 @rect:
+.ifdef ROM_COMBO
+	.db $40 $04 $07 TILEINDEX_WATER_SEASONS
+.else
 	.db $40 $04 $07 TILEINDEX_WATER
+.endif
 
 ; Screen below D3 entrance
-tileReplacement_group0Map70:
+tileReplacement_group0Map70_seasons:
 	ld a,<ROOM_SEASONS_081
 	call getARoomFlags
 	bit 7,(hl)
@@ -545,10 +576,14 @@ tileReplacement_group0Map70:
 	ld hl,@rect
 	jp fillRectInRoomLayout
 @rect:
+.ifdef ROM_COMBO
+	.db $04 $04 $06 TILEINDEX_WATER_SEASONS
+.else
 	.db $04 $04 $06 TILEINDEX_WATER
+.endif
 
 ; Spool swamp screen with Sokra
-tileReplacement_group0Map71:
+tileReplacement_group0Map71_seasons:
 	ld a,<ROOM_SEASONS_081
 	call getARoomFlags
 	bit 7,(hl)
@@ -558,12 +593,18 @@ tileReplacement_group0Map71:
 	ld hl,@rect2
 	jp fillRectInRoomLayout
 @rect1:
+.ifdef ROM_COMBO
+	.db $00 $04 $07 TILEINDEX_WATER_SEASONS
+@rect2:
+	.db $44 $04 $03 TILEINDEX_WATER_SEASONS
+.else
 	.db $00 $04 $07 TILEINDEX_WATER
 @rect2:
 	.db $44 $04 $03 TILEINDEX_WATER
+.endif
 
 ; Spool swamp screen with keylock
-tileReplacement_group0Map81:
+tileReplacement_group0Map81_seasons:
 	call getThisRoomFlags
 	bit 7,(hl)
 	jr nz,+
@@ -578,14 +619,20 @@ tileReplacement_group0Map81:
 +
 	jp fillRectInRoomLayout
 @rect1:
+.ifdef ROM_COMBO
+	.db $04 $01 $03 TILEINDEX_WATER_SEASONS
+@rect2:
+	.db $14 $01 $03 TILEINDEX_PUDDLE_SEASONS
+.else
 	.db $04 $01 $03 TILEINDEX_WATER
 @rect2:
 	.db $14 $01 $03 TILEINDEX_PUDDLE
+.endif
 @rect3:
 	.db $14 $01 $03 $dc
 
 ; Screen above D4 entrance
-tileReplacement_group0Map0d:
+tileReplacement_group0Map0d_seasons:
 	call getThisRoomFlags
 	bit 7,(hl)
 	ret nz
@@ -595,7 +642,7 @@ tileReplacement_group0Map0d:
 	.db $62 $02 $03 TILEINDEX_WATERFALL
 
 ; D4 entrance screen
-tileReplacement_group0Map1d:
+tileReplacement_group0Map1d_seasons:
 	call getThisRoomFlags
 	bit 7,(hl)
 	ret nz
@@ -625,42 +672,42 @@ fillRectIfRoomFlagBit7Set:
 	jp fillRectInRoomLayout
 
 ; D4 B2 room with torches that, when lit, open up a bridge
-tileReplacement_group4Map61:
+tileReplacement_group4Map61_seasons:
 	ld bc,@rect
 	jr fillRectIfRoomFlagBit7Set
 @rect:
 	.db $59 $01 $03 TILEINDEX_HORIZONTAL_BRIDGE
 
 ; D7 - screen left of 1st B2 room, with darknuts and unlockable bridge
-tileReplacement_group5Map3b:
+tileReplacement_group5Map3b_seasons:
 	ld bc,@rect
 	jr fillRectIfRoomFlagBit7Set
 @rect:
 	.db $77 $01 $04 TILEINDEX_HORIZONTAL_BRIDGE
 
 ; D8 - top-right-most room with long bridge unlocked by hitting an orb
-tileReplacement_group5Map7a:
+tileReplacement_group5Map7a_seasons:
 	ld bc,@rect
 	jr fillRectIfRoomFlagBit7Set
 @rect:
 	.db $3c $06 $01 TILEINDEX_VERTICAL_BRIDGE
 
 ; D8 - HSS-skip bridge
-tileReplacement_group5Map78:
+tileReplacement_group5Map78_seasons:
 	ld bc,@rect
 	jr fillRectIfRoomFlagBit7Set
 @rect:
 	.db $82 $01 $07 TILEINDEX_HORIZONTAL_BRIDGE
 
 ; D8 - 1F bridge that extends into lava
-tileReplacement_group5Map8e:
+tileReplacement_group5Map8e_seasons:
 	ld bc,@rect
 	jr fillRectIfRoomFlagBit7Set
 @rect:
 	.db $1b $07 $01 TILEINDEX_VERTICAL_BRIDGE
 
 ; King moblin house
-tileReplacement_group0Map6f:
+tileReplacement_group0Map6f_seasons:
 	call getThisRoomFlags
 	and $c0
 	ret z
@@ -703,7 +750,7 @@ tileReplacement_group0Map6f:
 	.db $a3 $ee $a4
 
 ; Tarm ruins - statues pushed into water
-tileReplacement_group0Map42:
+tileReplacement_group0Map42_seasons:
 	ld hl,wRoomLayout+$44
 	ld (hl),$9c
 	call getThisRoomFlags
@@ -728,7 +775,7 @@ tileReplacement_group0Map42:
 	ret
 
 ; Pirate door into samasa desert
-tileReplacement_group0Mapfc:
+tileReplacement_group0Mapfc_seasons:
 	call getThisRoomFlags
 	bit 7,(hl)
 	ret z
@@ -752,7 +799,7 @@ checkPirateShipDocked:
 	jp checkGlobalFlag
 
 ; Top screen of pirate ship in Subrosia
-tileReplacement_group1Map64:
+tileReplacement_group1Map64_seasons:
 	call checkPirateShipDocked
 	ret z
 	ld hl,@rect
@@ -761,7 +808,7 @@ tileReplacement_group1Map64:
 	.db $44 $04 $05 $0f
 
 ; Bottom screen of pirate ship in Subrosia
-tileReplacement_group1Map74:
+tileReplacement_group1Map74_seasons:
 	call checkPirateShipDocked
 	ret z
 	ld hl,@rect
@@ -770,7 +817,7 @@ tileReplacement_group1Map74:
 	.db $04 $04 $05 $0f
 
 ; Pirate ship screen in samasa desert - turns ship into quicksand rect
-tileReplacement_group0Mapee:
+tileReplacement_group0Mapee_seasons:
 	call checkPirateShipDocked
 	ret z
 	ld hl,@sandRect
@@ -801,7 +848,7 @@ tileReplacement_group0Mapee:
 	.db $bd $bd $be $be $af
 
 ; Screen with linked locked doors in Subrosia
-tileReplacement_group1Map35:
+tileReplacement_group1Map35_seasons:
 	ld a,(wGroup4RoomFlags|<ROOM_SEASONS_4f9)
 	and $04
 	ret z
@@ -810,7 +857,7 @@ tileReplacement_group1Map35:
 	ret
 
 ; Big bridge into Natzu
-tileReplacement_group0Map56:
+tileReplacement_group0Map56_seasons:
 	xor a
 	ld (wSwitchState),a
 	ld a,(wAnimalCompanion)
@@ -820,7 +867,11 @@ tileReplacement_group0Map56:
 	call getThisRoomFlags
 	and $40
 	jr nz,+
+.ifdef ROM_COMBO
+	ld a,TILEINDEX_WATER_SEASONS
+.else
 	ld a,TILEINDEX_WATER
+.endif
 	ld hl,wRoomLayout+$43
 	ldi (hl),a
 	ld (hl),a
@@ -834,7 +885,7 @@ tileReplacement_group0Map56:
 	ret
 
 ; Moblin keep roof - remove when destroyed
-tileReplacement_group0Map4b:
+tileReplacement_group0Map4b_seasons:
 	ld a,GLOBALFLAG_MOBLINS_KEEP_DESTROYED
 	call checkGlobalFlag
 	ret z
@@ -847,7 +898,7 @@ tileReplacement_group0Map4b:
 
 ;;
 ; Twinrova/ganon fight - same as ages
-tileReplacement_group5Map9e:
+tileReplacement_group5Map9e_seasons:
 	ld a,(wTwinrovaTileReplacementMode)
 	or a
 	ret z
@@ -886,7 +937,7 @@ tileReplacement_group5Map9e:
 	jp loadGfxHeader
 
 ; Down horon village stairs leading to Subrosia portal
-tileReplacement_group2_3Mapab:
+tileReplacement_group2_3Mapab_seasons:
 	call getThisRoomFlags
 	and $40
 	ret z
@@ -923,6 +974,7 @@ d8LavaRoomsFillTilesWithLava:
 	ld (de),a
 	jr -
 
+.ifndef ROM_COMBO
 ;;
 ; Fills a square in wRoomLayout using the data at hl.
 ; Data format:
@@ -955,6 +1007,7 @@ fillRectInRoomLayout:
 	dec b
 	jr nz,--
 	ret
+.endif
 
 ;;
 ; @param	bc	$0808

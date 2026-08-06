@@ -126,7 +126,15 @@ checkAndSpawnMaple:
 .endif
 	sub SPECIALOBJECT_RICKY
 +
+.ifdef ROM_COMBO
+	call hIsSeasons
+	ld hl,maplePresentLocationsTable_seasons
+	jr c,+
+		ld hl,maplePresentLocationsTable_ages
+	+
+.else
 	ld hl,maplePresentLocationsTable
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 @startCheck:
@@ -197,7 +205,11 @@ updateRosaDateStatus:
 	ld hl,w1ReservedInteraction1.id
 @nextInteraction:
 	ld a,(hl)
+.ifdef ROM_COMBO
+	cp INTERAC_ROSA_SEASONS
+.else
 	cp INTERAC_ROSA
+.endif
 	ret z
 
 	inc h
@@ -207,7 +219,11 @@ updateRosaDateStatus:
 
 	call getFreeInteractionSlot
 	ret nz
+.ifdef ROM_COMBO
+	ld (hl),INTERAC_ROSA_SEASONS
+.else
 	ld (hl),INTERAC_ROSA
+.endif
 	inc l
 	ld (hl),$01 ; [subid] = 1
 	ret
@@ -408,7 +424,15 @@ checkTileValidForEnemySpawn:
 	; list of nonsolid tiles that enemies can't spawn onto.
 	ld b,>wRoomLayout
 	ld a,(bc)
+.ifdef ROM_COMBO
+	ld hl,enemyUnspawnableTilesTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,enemyUnspawnableTilesTable_ages
+	+
+.else
 	ld hl,enemyUnspawnableTilesTable
+.endif
 	call lookupCollisionTable
 	ret nc
 ++
@@ -741,7 +765,7 @@ createSeaEffectsPartIfApplicable:
 	ld (hl),PART_SEA_EFFECTS
 	ret
 
-.include {"{GAME_DATA_DIR}/tile_properties/seaEffectTiles1.s"}
+.include "data/ages/tile_properties/seaEffectTiles1.s"
 
 ;;
 func_02_7a3a:

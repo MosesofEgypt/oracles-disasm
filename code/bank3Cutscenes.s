@@ -2216,10 +2216,25 @@ endgameCutsceneHandler_body:
 	call clearMemory
 +
 	ld a,e
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+		add $06
+	+
+	rst_jumpTable
+	; TODO: add seasons cutscenes
+	.dw $0000
+	.dw $0000
+	.dw $0000
+	.dw endgameCutsceneHandler_09_ages
+	.dw endgameCutsceneHandler_0a_ages
+	.dw endgameCutsceneHandler_0f_ages
+.else
 	rst_jumpTable
 	.dw endgameCutsceneHandler_09
 	.dw endgameCutsceneHandler_0a
 	.dw endgameCutsceneHandler_0f
+.endif
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 	.dw endgameCutsceneHandler_20
 .endif

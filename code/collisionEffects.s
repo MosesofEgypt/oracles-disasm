@@ -162,7 +162,15 @@ checkEnemyAndPartCollisions:
 partCheckCollisions:
 	ld e,Part.collisionType
 	ld a,(de)
+.ifdef ROM_COMBO
+	ld hl,partActiveCollisions_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,partActiveCollisions_ages
+	+
+.else
 	ld hl,partActiveCollisions
+.endif
 	ld e,Part.yh
 	jr ++
 
@@ -172,7 +180,15 @@ partCheckCollisions:
 ; @param a Enemy.collisionType
 ; @param d Enemy index
 enemyCheckCollisions:
+.ifdef ROM_COMBO
+	ld hl,enemyActiveCollisions_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,enemyActiveCollisions_ages
+	+
+.else
 	ld hl,enemyActiveCollisions
+.endif
 	ld e,Enemy.yh
 
 ++
@@ -231,7 +247,15 @@ enemyCheckCollisions:
 
 	ld bc,$0e07
 	ldh a,(<hFF90)
+.ifdef ROM_COMBO
+	cp ITEMCOLLISION_BOMB_S
+	call hIsSeasons
+	jr c,+
+		cp ITEMCOLLISION_BOMB_A
+	+
+.else
 	cp ITEMCOLLISION_BOMB
+.endif
 	jr nz,++
 
 	ld l,Item.collisionRadiusY
@@ -501,7 +525,15 @@ enemyCheckCollisions:
 	ld a,(de)
 	add a
 	call multiplyABy16
+.ifdef ROM_COMBO
+	ld hl,objectCollisionTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,objectCollisionTable_ages
+	+
+.else
 	ld hl,objectCollisionTable
+.endif
 	add hl,bc
 	pop bc
 	ldh a,(<hFF90)

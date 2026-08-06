@@ -158,7 +158,15 @@ updateAnimationDataPointer:
 loadAnimationGfxIndex:
 	ld c,$06
 	call multiplyAByC
+.ifdef ROM_COMBO
+	call hIsSeasons
+	ld bc, animationAndUniqueGfxData.animationGfxHeaders_seasons
+	jr c,+
+		ld bc, animationAndUniqueGfxData.animationGfxHeaders_ages
+	+
+.else
 	ld bc, animationAndUniqueGfxData.animationGfxHeaders
+.endif
 	add hl,bc
 	ldi a,(hl)
 	ld c,a

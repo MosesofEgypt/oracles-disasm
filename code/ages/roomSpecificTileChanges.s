@@ -1,78 +1,82 @@
 ;;
+.ifdef ROM_COMBO
+applyRoomSpecificTileChanges_ages:
+.else
 applyRoomSpecificTileChanges:
+.endif
 	ld a,(wActiveRoom)
-	ld hl,roomTileChangerCodeGroupTable
+	ld hl,roomTileChangerCodeGroupTable_ages
 	call findRoomSpecificData
 	ret nc
 	rst_jumpTable
-	.dw tileReplacement_group5Mapf5 ; $00
-	.dw tileReplacement_group4Map1b ; $01
-	.dw tileReplacement_group2Map7e ; $02
-	.dw tileReplacement_group4Map4c ; $03
-	.dw tileReplacement_group4Map4e ; $04
-	.dw tileReplacement_group4Map59 ; $05
-	.dw tileReplacement_group4Map60 ; $06
-	.dw tileReplacement_group4Map52 ; $07
-	.dw tileReplacement_group0Map38 ; $08
-	.dw tileReplacement_group1Map38 ; $09
-	.dw tileReplacement_group5Map38 ; $0a
-	.dw tileReplacement_group5Map25 ; $0b
-	.dw tileReplacement_group5Map43 ; $0c
-	.dw tileReplacement_group5Map4c ; $0d
-	.dw tileReplacement_group5Map5c ; $0e
-	.dw tileReplacement_group5Map4d ; $0f
-	.dw tileReplacement_group5Map5d ; $10
-	.dw tileReplacement_group7Map4a ; $11
-	.dw tileReplacement_group5Map95 ; $12
-	.dw tileReplacement_group5Mapc3 ; $13
-	.dw tileReplacement_group0Map5c ; $14
-	.dw tileReplacement_group2Mapf7 ; $15
-	.dw tileReplacement_group0Map73 ; $16
-	.dw tileReplacement_group0Map48 ; $17
-	.dw tileReplacement_group0Mapac ; $18
-	.dw tileReplacement_group0Map2c ; $19
-	.dw tileReplacement_group0Map1c ; $1a
-	.dw tileReplacement_group0Mapba ; $1b
-	.dw tileReplacement_group0Mapaa ; $1c
-	.dw tileReplacement_group0Mapcc ; $1d
-	.dw tileReplacement_group0Mapbc ; $1e
-	.dw tileReplacement_group0Mapda ; $1f
-	.dw tileReplacement_group0Mapca ; $20
-	.dw tileReplacement_group0Map61 ; $21
-	.dw tileReplacement_group0Map51 ; $22
-	.dw tileReplacement_group0Map54 ; $23
-	.dw tileReplacement_group0Map25 ; $24
-	.dw tileReplacement_group0Map3a ; $25
-	.dw tileReplacement_group0Map0b ; $26
-	.dw tileReplacement_group5Mapb9 ; $27
-	.dw tileReplacement_group1Map27 ; $28
-	.dw tileReplacement_group5Mapc2 ; $29
-	.dw tileReplacement_group5Mape3 ; $2a
-	.dw tileReplacement_group2Map90 ; $2b
-	.dw tileReplacement_group1Map8c ; $2c
-	.dw tileReplacement_group4Mapc7 ; $2d
-	.dw tileReplacement_group4Mapc9 ; $2e
-	.dw tileReplacement_group2Map9e ; $2f
-	.dw tileReplacement_group0Mape0 ; $30
-	.dw tileReplacement_group0Mape1 ; $31
-	.dw tileReplacement_group0Mape2 ; $32
-	.dw tileReplacement_group4Mapea ; $33
-	.dw tileReplacement_group1Map58 ; $34
-	.dw tileReplacement_group0Map98 ; $35
-	.dw tileReplacement_group0Map76 ; $36
-	.dw tileReplacement_group0Mapa5 ; $37
+	.dw tileReplacement_group5Mapf5_ages ; $00
+	.dw tileReplacement_group4Map1b_ages ; $01
+	.dw tileReplacement_group2Map7e_ages ; $02
+	.dw tileReplacement_group4Map4c_ages ; $03
+	.dw tileReplacement_group4Map4e_ages ; $04
+	.dw tileReplacement_group4Map59_ages ; $05
+	.dw tileReplacement_group4Map60_ages ; $06
+	.dw tileReplacement_group4Map52_ages ; $07
+	.dw tileReplacement_group0Map38_ages ; $08
+	.dw tileReplacement_group1Map38_ages ; $09
+	.dw tileReplacement_group5Map38_ages ; $0a
+	.dw tileReplacement_group5Map25_ages ; $0b
+	.dw tileReplacement_group5Map43_ages ; $0c
+	.dw tileReplacement_group5Map4c_ages ; $0d
+	.dw tileReplacement_group5Map5c_ages ; $0e
+	.dw tileReplacement_group5Map4d_ages ; $0f
+	.dw tileReplacement_group5Map5d_ages ; $10
+	.dw tileReplacement_group7Map4a_ages ; $11
+	.dw tileReplacement_group5Map95_ages ; $12
+	.dw tileReplacement_group5Mapc3_ages ; $13
+	.dw tileReplacement_group0Map5c_ages ; $14
+	.dw tileReplacement_group2Mapf7_ages ; $15
+	.dw tileReplacement_group0Map73_ages ; $16
+	.dw tileReplacement_group0Map48_ages ; $17
+	.dw tileReplacement_group0Mapac_ages ; $18
+	.dw tileReplacement_group0Map2c_ages ; $19
+	.dw tileReplacement_group0Map1c_ages ; $1a
+	.dw tileReplacement_group0Mapba_ages ; $1b
+	.dw tileReplacement_group0Mapaa_ages ; $1c
+	.dw tileReplacement_group0Mapcc_ages ; $1d
+	.dw tileReplacement_group0Mapbc_ages ; $1e
+	.dw tileReplacement_group0Mapda_ages ; $1f
+	.dw tileReplacement_group0Mapca_ages ; $20
+	.dw tileReplacement_group0Map61_ages ; $21
+	.dw tileReplacement_group0Map51_ages ; $22
+	.dw tileReplacement_group0Map54_ages ; $23
+	.dw tileReplacement_group0Map25_ages ; $24
+	.dw tileReplacement_group0Map3a_ages ; $25
+	.dw tileReplacement_group0Map0b_ages ; $26
+	.dw tileReplacement_group5Mapb9_ages ; $27
+	.dw tileReplacement_group1Map27_ages ; $28
+	.dw tileReplacement_group5Mapc2_ages ; $29
+	.dw tileReplacement_group5Mape3_ages ; $2a
+	.dw tileReplacement_group2Map90_ages ; $2b
+	.dw tileReplacement_group1Map8c_ages ; $2c
+	.dw tileReplacement_group4Mapc7_ages ; $2d
+	.dw tileReplacement_group4Mapc9_ages ; $2e
+	.dw tileReplacement_group2Map9e_ages ; $2f
+	.dw tileReplacement_group0Mape0_ages ; $30
+	.dw tileReplacement_group0Mape1_ages ; $31
+	.dw tileReplacement_group0Mape2_ages ; $32
+	.dw tileReplacement_group4Mapea_ages ; $33
+	.dw tileReplacement_group1Map58_ages ; $34
+	.dw tileReplacement_group0Map98_ages ; $35
+	.dw tileReplacement_group0Map76_ages ; $36
+	.dw tileReplacement_group0Mapa5_ages ; $37
 
-roomTileChangerCodeGroupTable:
-	.dw roomTileChangerCodeGroup0Data
-	.dw roomTileChangerCodeGroup1Data
-	.dw roomTileChangerCodeGroup2Data
-	.dw roomTileChangerCodeGroup3Data
-	.dw roomTileChangerCodeGroup4Data
-	.dw roomTileChangerCodeGroup5Data
-	.dw roomTileChangerCodeGroup6Data
-	.dw roomTileChangerCodeGroup7Data
+roomTileChangerCodeGroupTable_ages:
+	.dw roomTileChangerCodeGroup0Data_ages
+	.dw roomTileChangerCodeGroup1Data_ages
+	.dw roomTileChangerCodeGroup2Data_ages
+	.dw roomTileChangerCodeGroup3Data_ages
+	.dw roomTileChangerCodeGroup4Data_ages
+	.dw roomTileChangerCodeGroup5Data_ages
+	.dw roomTileChangerCodeGroup6Data_ages
+	.dw roomTileChangerCodeGroup7Data_ages
 
-roomTileChangerCodeGroup0Data:
+roomTileChangerCodeGroup0Data_ages:
 	.db $38 $08
 	.db $48 $17
 	.db $5c $14
@@ -99,21 +103,21 @@ roomTileChangerCodeGroup0Data:
 	.db $a5 $37
 	.db $76 $36
 	.db $00
-roomTileChangerCodeGroup1Data:
+roomTileChangerCodeGroup1Data_ages:
 	.db $38 $09
 	.db $27 $28
 	.db $8c $2c
 	.db $58 $34
 	.db $00
-roomTileChangerCodeGroup2Data:
+roomTileChangerCodeGroup2Data_ages:
 	.db $f7 $15
 	.db $90 $2b
 	.db $9e $2f
 	.db $7e $02
 	.db $00
-roomTileChangerCodeGroup3Data:
+roomTileChangerCodeGroup3Data_ages:
 	.db $00
-roomTileChangerCodeGroup4Data:
+roomTileChangerCodeGroup4Data_ages:
 	.db $1b $01
 	.db $4c $03
 	.db $4e $04
@@ -124,7 +128,7 @@ roomTileChangerCodeGroup4Data:
 	.db $c9 $2e
 	.db $ea $33
 	.db $00
-roomTileChangerCodeGroup5Data:
+roomTileChangerCodeGroup5Data_ages:
 	.db $f5 $00
 	.db $38 $0a
 	.db $25 $0b
@@ -141,15 +145,15 @@ roomTileChangerCodeGroup5Data:
 	.db $c2 $29
 	.db $e3 $2a
 	.db $00
-roomTileChangerCodeGroup6Data:
+roomTileChangerCodeGroup6Data_ages:
 	.db $00
-roomTileChangerCodeGroup7Data:
+roomTileChangerCodeGroup7Data_ages:
 	.db $4a $11
 	.db $00
 
 ;;
 ; Opens advance shop
-tileReplacement_group1Map58:
+tileReplacement_group1Map58_ages:
 .ifndef ADVANCE_SHOP_ALWAYS_OPEN
 	ldh a,(<hGameboyType)
 	rlca
@@ -161,7 +165,7 @@ tileReplacement_group1Map58:
 
 ;;
 ; Twinrova/ganon fight - same as seasons
-tileReplacement_group5Mapf5:
+tileReplacement_group5Mapf5_ages:
 	ld a,(wTwinrovaTileReplacementMode)
 	or a
 	ret z
@@ -201,7 +205,7 @@ tileReplacement_group5Mapf5:
 
 ;;
 ; Dungeon 1 in the room where torches light up to make stairs appear
-tileReplacement_group4Map1b:
+tileReplacement_group4Map1b_ages:
 	call getThisRoomFlags
 	and $80
 	ret z
@@ -222,7 +226,7 @@ tileReplacement_group4Map1b:
 ;;
 ; Secret shop: replace item area with blank floor and 2 chests, if you've
 ; already bought everything.
-tileReplacement_group2Map7e:
+tileReplacement_group2Map7e_ages:
 	ld a,(wBoughtShopItems1)
 	and $0f
 	cp $0f
@@ -244,7 +248,7 @@ tileReplacement_group2Map7e:
 
 ;;
 ; Hero's cave: make a bridge appear
-tileReplacement_group4Mapc9:
+tileReplacement_group4Mapc9_ages:
 	call getThisRoomFlags
 	and ROOMFLAG_40
 	ret z
@@ -255,7 +259,7 @@ tileReplacement_group4Mapc9:
 
 ;;
 ; Hero's cave: make a bridge appear, make another disappear if a switch is set
-tileReplacement_group4Mapc7:
+tileReplacement_group4Mapc7_ages:
 	ld hl,wSwitchState
 	bit 0,(hl)
 	ret nz
@@ -276,7 +280,7 @@ tileReplacement_group4Mapc7:
 
 ;;
 ; D3, left of miniboss: deal with bridges
-tileReplacement_group4Map4c:
+tileReplacement_group4Map4c_ages:
 	ld hl,wSwitchState
 	bit 0,(hl)
 	ret nz
@@ -294,7 +298,7 @@ tileReplacement_group4Map4c:
 
 ;;
 ; D3, left, down from miniboss: deal with bridges
-tileReplacement_group4Map4e:
+tileReplacement_group4Map4e_ages:
 	ld hl,wSwitchState
 	bit 1,(hl)
 	ret z
@@ -319,7 +323,7 @@ tileReplacement_group4Map4e:
 
 ;;
 ; D3, right of seed shooter room: set torch lit
-tileReplacement_group4Map59:
+tileReplacement_group4Map59_ages:
 	call getThisRoomFlags
 	and $80
 	ret z
@@ -334,7 +338,7 @@ tileReplacement_group4Map59:
 ;;
 ; D3, upper spinner room: remove spinner if crystals broken (doesn't remove
 ; interaction itself)
-tileReplacement_group4Map60:
+tileReplacement_group4Map60_ages:
 	ld a,GLOBALFLAG_D3_CRYSTALS
 	call checkGlobalFlag
 	ret z
@@ -364,7 +368,7 @@ tileReplacement_group4Map60:
 ;;
 ; D3, lower spinner room: add spinner if crystals broken (doesn't add
 ; interaction itself)
-tileReplacement_group4Map52:
+tileReplacement_group4Map52_ages:
 	ld a,GLOBALFLAG_D3_CRYSTALS
 	call checkGlobalFlag
 	ret z
@@ -377,14 +381,14 @@ tileReplacement_group4Map52:
 
 ;;
 ; Maku tree present
-tileReplacement_group0Map38:
+tileReplacement_group0Map38_ages:
 	ld a,GLOBALFLAG_MAKU_TREE_SAVED
 	call checkGlobalFlag
 	ret z
 	jr +
 ;;
 ; Maku tree past
-tileReplacement_group1Map38:
+tileReplacement_group1Map38_ages:
 	call getThisRoomFlags
 	bit 7,(hl)
 	ret z
@@ -396,7 +400,7 @@ tileReplacement_group1Map38:
 
 ;;
 ; Present: Screen below maku tree
-tileReplacement_group0Map48:
+tileReplacement_group0Map48_ages:
 	ld a,GLOBALFLAG_MAKU_TREE_SAVED
 	call checkGlobalFlag
 	ret z
@@ -408,7 +412,7 @@ tileReplacement_group0Map48:
 
 ;;
 ; D6 before boss room: create bridge
-tileReplacement_group5Map38:
+tileReplacement_group5Map38_ages:
 	call getThisRoomFlags
 	and ROOMFLAG_40
 	ret z
@@ -426,7 +430,7 @@ tileReplacement_group5Map38:
 
 ;;
 ; D6 present: screen with retracting wall
-tileReplacement_group5Map25:
+tileReplacement_group5Map25_ages:
 	call getThisRoomFlags
 	and $40
 	ret nz
@@ -442,7 +446,7 @@ d6RetractingWallRectPast:
 
 ;;
 ; D6 past: screen with retracting walls
-tileReplacement_group5Map43:
+tileReplacement_group5Map43_ages:
 	call getThisRoomFlags
 	and $40
 	jr nz,@pastRetracted
@@ -472,7 +476,7 @@ tileReplacement_group5Map43:
 
 ;;
 ; D8: room with retracting wall
-tileReplacement_group5Map95:
+tileReplacement_group5Map95_ages:
 	call getThisRoomFlags
 	and $40
 	ret nz
@@ -494,7 +498,7 @@ tileReplacement_group5Map95:
 ;;
 ; Past: cave with goron elder
 ; Gets rid of a boulder and creates a shortcut
-tileReplacement_group5Mapc3:
+tileReplacement_group5Mapc3_ages:
 	call @func_04_672e
 	call getThisRoomFlags
 	and ROOMFLAG_40
@@ -567,7 +571,7 @@ tileReplacement_group5Mapc3:
 
 ;;
 ; Past: cave in goron mountain with 2 chests
-tileReplacement_group2Mapf7:
+tileReplacement_group2Mapf7_ages:
 	call getThisRoomFlags
 	bit ROOMFLAG_BIT_ITEM,(hl)
 	jr z,++
@@ -621,7 +625,7 @@ tileReplacement_group2Mapf7:
 
 ;;
 ; D7: 1st platform on floor 1
-tileReplacement_group5Map4c:
+tileReplacement_group5Map4c_ages:
 	ld a,(wJabuWaterLevel)
 	and $07
 	ret z
@@ -639,7 +643,7 @@ tileReplacement_group5Map4c:
 
 ;;
 ; D7: 2nd platform on floor 1
-tileReplacement_group5Map4d:
+tileReplacement_group5Map4d_ages:
 	ld a,(wJabuWaterLevel)
 	and $07
 	ret z
@@ -653,7 +657,7 @@ tileReplacement_group5Map4d:
 ;;
 ; D7: Used in room $55c and $571. Makes the 1st platform appear if the water
 ; level is correct.
-tileReplacement_group5Map5c:
+tileReplacement_group5Map5c_ages:
 	ld a,(wDungeonFloor)
 	ld b,a
 	ld a,(wJabuWaterLevel)
@@ -675,7 +679,7 @@ tileReplacement_group5Map5c:
 ;;
 ; D7: used is room $55d and $572. Makes the 2nd platform appear if the water
 ; level is correct.
-tileReplacement_group5Map5d:
+tileReplacement_group5Map5d_ages:
 	ld a,(wDungeonFloor)
 	ld b,a
 	ld a,(wJabuWaterLevel)
@@ -697,7 +701,7 @@ tileReplacement_group5Map5d:
 ;;
 ; D7 miniboss room (except it's group 7 instead of 5?)
 ; Creates a ladder if the miniboss has been murdered.
-tileReplacement_group7Map4a:
+tileReplacement_group7Map4a_ages:
 	call getThisRoomFlags
 	and $80
 	ret z
@@ -710,7 +714,7 @@ tileReplacement_group7Map4a:
 
 ;;
 ; Graveyard: Clear the fence if opened
-tileReplacement_group0Map5c:
+tileReplacement_group0Map5c_ages:
 	call getThisRoomFlags
 	and $80
 	ret z
@@ -723,7 +727,7 @@ tileReplacement_group0Map5c:
 
 ;;
 ; Present forest above d2: clear rubble
-tileReplacement_group0Map73:
+tileReplacement_group0Map73_ages:
 	call getThisRoomFlags
 	and $80
 	ret z
@@ -742,7 +746,7 @@ tileReplacement_group0Map73:
 
 ;;
 ; Present Tokay: remove scent tree if not planted
-tileReplacement_group0Mapac:
+tileReplacement_group0Mapac_ages:
 	call getThisRoomFlags
 	and $80
 	ret nz
@@ -758,7 +762,7 @@ tileReplacement_group0Mapac:
 
 ;;
 ; Rolling ridge present screen with vine
-tileReplacement_group0Map2c:
+tileReplacement_group0Map2c_ages:
 	ld bc,$0017
 	call getVinePosition
 	jp nz,setTileToWitheredVine
@@ -772,7 +776,7 @@ tileReplacement_group0Map2c:
 
 ;;
 ; Rolling ridge present, above the screen with a vine
-tileReplacement_group0Map1c:
+tileReplacement_group0Map1c_ages:
 	ld bc,$0017
 	call getVinePosition
 	ret nz
@@ -787,7 +791,7 @@ tileReplacement_group0Map1c:
 
 ;;
 ; Tokay island present, D3 entrance screen (has a vine)
-tileReplacement_group0Mapba:
+tileReplacement_group0Mapba_ages:
 	ld bc,$0218
 	call getVinePosition
 	jp nz,setTileToWitheredVine
@@ -804,7 +808,7 @@ tileReplacement_group0Mapba:
 
 ;;
 ; Tokay island present, above D3 entrance screen
-tileReplacement_group0Mapaa:
+tileReplacement_group0Mapaa_ages:
 	ld bc,$0218
 	call getVinePosition
 	ret nz
@@ -819,7 +823,7 @@ tileReplacement_group0Mapaa:
 
 ;;
 ; Tokay island present, 2nd vine screen
-tileReplacement_group0Mapcc:
+tileReplacement_group0Mapcc_ages:
 	ld bc,$0311
 	call getVinePosition
 	jp nz,setTileToWitheredVine
@@ -834,7 +838,7 @@ tileReplacement_group0Mapcc:
 
 ;;
 ; Tokay island present, above 2nd vine screen
-tileReplacement_group0Mapbc:
+tileReplacement_group0Mapbc_ages:
 	ld bc,$0311
 	call getVinePosition
 	ret nz
@@ -849,7 +853,7 @@ tileReplacement_group0Mapbc:
 
 ;;
 ; Tokay island present, 3rd vine screen
-tileReplacement_group0Mapda:
+tileReplacement_group0Mapda_ages:
 	ld bc,$0418
 	call getVinePosition
 	jp nz,setTileToWitheredVine
@@ -864,7 +868,7 @@ tileReplacement_group0Mapda:
 
 ;;
 ; Tokay island present, above 3rd vine screen
-tileReplacement_group0Mapca:
+tileReplacement_group0Mapca_ages:
 	ld bc,$0418
 	call getVinePosition
 	ret nz
@@ -879,7 +883,7 @@ tileReplacement_group0Mapca:
 
 ;;
 ; Talus Peaks Present, has 2 vines
-tileReplacement_group0Map61:
+tileReplacement_group0Map61_ages:
 	ld bc,$0122
 	call getVinePosition
 	jr z,@vine1
@@ -922,7 +926,7 @@ tileReplacement_group0Map61:
 
 ;;
 ; Screen above talus peaks vines
-tileReplacement_group0Map51:
+tileReplacement_group0Map51_ages:
 	ld bc,$0122
 	call getVinePosition
 	jr z,@vines1
@@ -1025,11 +1029,11 @@ initializeVinePositions:
 	jp copyMemoryReverse
 
 @defaultVinePositions:
-	.include {"{GAME_DATA_DIR}/defaultVinePositions.s"}
+	.include "data/ages/defaultVinePositions.s"
 
 ;;
 ; Present, bridge to nuun highlands
-tileReplacement_group0Map54:
+tileReplacement_group0Map54_ages:
 	xor a
 	ld (wSwitchState),a
 	call getThisRoomFlags
@@ -1052,7 +1056,7 @@ tileReplacement_group0Map54:
 
 ;;
 ; Present, right side of bridge to symmetry city
-tileReplacement_group0Map25:
+tileReplacement_group0Map25_ages:
 	ld a,GLOBALFLAG_SYMMETRY_BRIDGE_BUILT
 	call checkGlobalFlag
 	ret z
@@ -1071,7 +1075,7 @@ tileReplacement_group0Map25:
 
 ;;
 ; Present overworld, impa's house
-tileReplacement_group0Map3a:
+tileReplacement_group0Map3a_ages:
 	ld a,GLOBALFLAG_INTRO_DONE
 	call checkGlobalFlag
 	ret z
@@ -1083,7 +1087,7 @@ tileReplacement_group0Map3a:
 
 ;;
 ; Present, screen right of d5 where a cave opens up
-tileReplacement_group0Map0b:
+tileReplacement_group0Map0b_ages:
 	ld hl,wPresentRoomFlags+$0a
 	bit ROOMFLAG_BIT_40,(hl)
 	ret z
@@ -1095,7 +1099,7 @@ tileReplacement_group0Map0b:
 ;;
 ; Present cave with goron elder.
 ; Removes boulders after dungeon 4 is beaten.
-tileReplacement_group5Mapb9:
+tileReplacement_group5Mapb9_ages:
 	; Must have beaten dungeon 4
 	ld a,$03
 	ld hl,wEssencesObtained
@@ -1124,7 +1128,7 @@ tileReplacement_group5Mapb9:
 
 ;;
 ; Past overworld, Ambi's Palace secret passage
-tileReplacement_group1Map27:
+tileReplacement_group1Map27_ages:
 	call getThisRoomFlags
 	ld l,$15
 	bit 7,(hl)
@@ -1165,7 +1169,7 @@ tileReplacement_group1Map27:
 ;;
 ; Present cave on the way to rolling ridge
 ; Has a bridge
-tileReplacement_group5Mapc2:
+tileReplacement_group5Mapc2_ages:
 	call getThisRoomFlags
 	and $80
 	ret z
@@ -1186,7 +1190,7 @@ set3Bytes:
 ;;
 ; Past cave on the way to the d6 area
 ; Has a bridge
-tileReplacement_group5Mape3:
+tileReplacement_group5Mape3_ages:
 	call getThisRoomFlags
 	and $80
 	ret z
@@ -1197,7 +1201,7 @@ tileReplacement_group5Mape3:
 
 ;;
 ; Underwater, entrance to Jabu
-tileReplacement_group2Map90:
+tileReplacement_group2Map90_ages:
 	call getThisRoomFlags
 	and $02
 	ret z
@@ -1212,7 +1216,7 @@ tileReplacement_group2Map90:
 
 ;;
 ; Past, area beneath the entrance to d8 maze
-tileReplacement_group1Map8c:
+tileReplacement_group1Map8c_ages:
 	call getThisRoomFlags
 	and $80
 	ret z
@@ -1233,7 +1237,7 @@ tileReplacement_group1Map8c:
 
 ;;
 ; Present, shortcut cave for tingle
-tileReplacement_group2Map9e:
+tileReplacement_group2Map9e_ages:
 	xor a
 	ld (wToggleBlocksState),a
 	call getThisRoomFlags
@@ -1248,7 +1252,7 @@ tileReplacement_group2Map9e:
 
 ;;
 ; Present, on top of maku tree (left end)
-tileReplacement_group0Mape0:
+tileReplacement_group0Mape0_ages:
 	ld a,(wEssencesObtained)
 	bit 4,a
 	ld l,$46
@@ -1266,7 +1270,7 @@ createInteraction90:
 
 ;;
 ; Present, on top of maku tree (middle)
-tileReplacement_group0Mape1:
+tileReplacement_group0Mape1_ages:
 	ld c,$1c
 	call createInteraction90
 .ifdef ENABLE_NEW_GAME_PLUS
@@ -1290,7 +1294,7 @@ tileReplacement_group0Mape1:
 
 ;;
 ; Present, on top of maku tree (right)
-tileReplacement_group0Mape2:
+tileReplacement_group0Mape2_ages:
 	ld c,$1d
 	call createInteraction90
 	ld a,(wEssencesObtained)
@@ -1307,7 +1311,7 @@ setTileToDoor:
 
 ;;
 ; Black Tower, room with 3 doors
-tileReplacement_group4Mapea:
+tileReplacement_group4Mapea_ages:
 	call getThisRoomFlags
 	and $40
 	ret z
@@ -1330,7 +1334,7 @@ tileReplacement_group4Mapea:
 
 ;;
 ; Present, room where you find ricky's gloves
-tileReplacement_group0Map98:
+tileReplacement_group0Map98_ages:
 	ld a,(wRickyState)
 	bit 5,a
 	jr nz,@removeDirt
@@ -1349,7 +1353,7 @@ tileReplacement_group0Map98:
 
 ;;
 ; Present overworld, black tower entrance
-tileReplacement_group0Map76:
+tileReplacement_group0Map76_ages:
 	call checkIsLinkedGame
 	ret z
 
@@ -1365,7 +1369,7 @@ tileReplacement_group0Map76:
 
 ;;
 ; Present library
-tileReplacement_group0Mapa5:
+tileReplacement_group0Mapa5_ages:
 	ld a,(wPastRoomFlags+$a5)
 	bit 7,a
 	ret z
@@ -1376,6 +1380,7 @@ tileReplacement_group0Mapa5:
 	ld (hl),$ef
 	ret
 
+.ifndef ROM_COMBO
 ;;
 ; Leftover function from Seasons (d8LavaRoomsFillTilesWithLava). Can be used for other tiles, not
 ; just lava
@@ -1392,6 +1397,7 @@ func_04_6ba8:
 	ld a,c
 	ld (de),a
 	jr --
+.endif
 
 ;;
 ; Fills a square in wRoomLayout using the data at hl.

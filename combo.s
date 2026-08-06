@@ -51,7 +51,7 @@ calculateRoomEdge:
 func_49c9:
 setObjectsEnabledTo2:
 findActiveRoomInDungeonLayoutWithPointlessBankSwitch:
-	nop
+	ret
 
 .include {"{GAME_DATA_DIR}/dungeonData.s"}
 .include "data/dungeonProperties.s"
@@ -63,35 +63,36 @@ findActiveRoomInDungeonLayoutWithPointlessBankSwitch:
 
 m_section_free Bank_2_test NAMESPACE bank2
 fileSelect_redrawDecorationsAndSetWramBank4:
-	nop
+removeRing:
+	ret
 .ends
 
 m_section_free Bank_3_test NAMESPACE bank3
 generateGameTransferSecret:
-	nop
+	ret
 .ends
 
 m_section_free Bank_6_test NAMESPACE bank6
 specialObjectLoadAnimationFrameToBuffer:
-	nop
+	ret
 .ends
 
 m_section_free Bank_8_test NAMESPACE agesInteractionsBank08
 shootingGallery_removeAllTargets:
 shootingGallery_initializeGameRounds:
 interactionOscillateXRandomly:
-	nop
+	ret
 .ends
 
 m_section_free Bank_9_test NAMESPACE agesInteractionsBank09
 linkEnterPalaceSimulatedInput:
 linkExitPalaceSimulatedInput:
-	nop
+	ret
 .ends
 
 m_section_free Bank_a_test NAMESPACE agesInteractionsBank0a
 func_0a_7877:
-	nop
+	ret
 .ends
 
 m_section_free Bank_15_test NAMESPACE seasonsInteractionsBank15
@@ -101,7 +102,7 @@ linkedHerosCaveOldMan_takeRupees:
 linkedHerosCaveOldMan_spawnChests:
 spawnRodOfSeasonsSparkles:
 forceLinksDirection:
-	nop
+	ret
 .ends
 
 
@@ -113,7 +114,7 @@ forceLinksDirection:
 .ORG 0
 
 ;	.include "code/bank2.s"
-;	.include "code/roomInitialization.s"
+	.include "code/roomInitialization.s"
 
 
 .BANK $03 SLOT 1
@@ -121,18 +122,25 @@ forceLinksDirection:
 
 ;	.include "code/bank3.s"
 
-	; This section could probably be made superfree in Ages, but this isn't the case in Seasons,
-	; so let's just play it safe and leave it as "free".
-	 m_section_free Bank_3_Cutscenes NAMESPACE bank3Cutscenes
+	 m_section_superfree Bank_3_Cutscenes NAMESPACE bank3Cutscenes
 		.include "code/bank3Cutscenes.s"
 		.include "code/ages/cutscenes/endgameCutscenes.s"
 		.include "code/ages/cutscenes/miscCutscenes.s"
+;		.include "code/seasons/cutscenes/endgameCutscenes.s"
+;		.include "code/seasons/cutscenes/pirateShipDeparting.s"
+;		.include "code/seasons/cutscenes/volcanoErupting.s"
+;		.include "code/seasons/cutscenes/linkedGameCutscenes.s"
+;		.include "code/seasons/cutscenes/introCutscenes.s"
 	.ends
 
 .BANK $04 SLOT 1
 .ORG 0
 
 ;	.include "code/bank4.s"
+	 m_section_free Warp_Data NAMESPACE bank4
+		.include {"{GAME_DATA_DIR}/warpDestinations.s"}
+		.include {"{GAME_DATA_DIR}/warpSources.s"}
+	.ends
 
 	 m_section_superfree RoomPacksAndMusicAssignments NAMESPACE bank4Data1
 		; These 2 includes must be in the same bank
@@ -144,14 +152,8 @@ forceLinksDirection:
 		.include {"{GAME_DATA_DIR}/roomLayoutGroupTable.s"}
 	.ends
 
-	; Must be in the same bank as "Tileset_Loading_2".
-	 m_section_free Tileset_Loading_1 NAMESPACE tilesets
-		.include {"{GAME_DATA_DIR}/tilesets.s"}
-		.include {"{GAME_DATA_DIR}/tilesetAssignments.s"}
-	.ends
-
 	 m_section_superfree animationAndUniqueGfxData NAMESPACE animationAndUniqueGfxData
-;		.include "code/animations.s"
+		.include "code/animations.s"
 
 		.include {"{GAME_DATA_DIR}/uniqueGfxHeaders.s"}
 		.include {"{BUILD_DIR}/animationGroups.s"}
@@ -159,21 +161,17 @@ forceLinksDirection:
 		.include {"{BUILD_DIR}/animationData.s"}
 	.ends
 
-	 m_section_free roomTileChanges NAMESPACE roomTileChanges
-;		.include "code/ages/tileSubstitutions.s"
-;		.include {"{GAME_DATA_DIR}/singleTileChanges.s"}
-;		.include "code/ages/roomSpecificTileChanges.s"
+	 m_section_superfree roomTileChanges NAMESPACE roomTileChanges
+		.include "code/combo/tileSubstitutions.s"
+		.include {"{GAME_DATA_DIR}/singleTileChanges.s"}
+		.include "code/combo/roomSpecificTileChanges.s"
 	.ends
 
-	 m_section_free Tileset_Loading_2 NAMESPACE tilesets
+	 m_section_superfree Tileset_Loading NAMESPACE tilesets
+		.include {"{GAME_DATA_DIR}/tilesets.s"}
+		.include {"{GAME_DATA_DIR}/tilesetAssignments.s"}
 		.include "code/loadTilesToRam.s"
 		.include "code/ages/loadTilesetData.s"
-	.ends
-
-		; Must be in same bank as "code/bank4.s"
-	 m_section_free Warp_Data NAMESPACE bank4
-		.include {"{GAME_DATA_DIR}/warpDestinations.s"}
-		.include {"{GAME_DATA_DIR}/warpSources.s"}
 	.ends
 
 
@@ -194,12 +192,8 @@ forceLinksDirection:
 
 m_section_free Bank_6 NAMESPACE bank6
 
-;	.include "code/interactableTiles.s"
-;	.include "code/specialObjectAnimationsAndDamage.s"
-
-; NOTE: temporary code until specialObjectAnimationsAndDamage can be included
-	.include {"{BUILD_DIR}/specialObjectAnimationPointers.s"}
-; NOTE: temporary code until specialObjectAnimationsAndDamage can be included
+	.include "code/interactableTiles.s"
+	.include "code/specialObjectAnimationsAndDamage.s"
 
 ;	.include "code/parentItemUsage.s"
 
@@ -238,17 +232,11 @@ m_section_free Bank_6 NAMESPACE bank6
 .ORG 0
 
 	 m_section_superfree File_Management namespace fileManagement
-;		.include "code/fileManagement.s"
-	.ends
-
-	 ; This section can't be superfree, since it must be in the same bank as section
-	 ; "Bank_7_Data".
-	 m_section_free Enemy_Part_Collisions namespace bank7
-;		.include "code/collisionEffects.s"
+		.include "code/fileManagement.s"
 	.ends
 
 	 m_section_superfree Item_Code namespace itemCode
-;		.include "code/updateItems.s"
+		.include "code/updateItems.s"
 ;		.include "object_code/common/items/commonCode1.s"
 
 		.include {"{GAME_DATA_DIR}/tile_properties/conveyorItemTiles.s"}
@@ -289,7 +277,8 @@ m_section_free Bank_6 NAMESPACE bank6
 
 	 ; This section can't be superfree, since it must be in the same bank as section
 	 ; "Enemy_Part_Collisions".
-	 m_section_free Bank_7_Data namespace bank7
+	 m_section_superfree Bank_7_Data namespace bank7
+		.include "code/collisionEffects.s"
 		.include {"{GAME_DATA_DIR}/enemyActiveCollisions.s"}
 		.include {"{GAME_DATA_DIR}/partActiveCollisions.s"}
 		.include {"{BUILD_DIR}/objectCollisionTable.s"}
@@ -471,7 +460,7 @@ m_section_free Interaction_Code_Group5 NAMESPACE commonInteractions5
 ;	.include "object_code/common/interactions/woodenTunnel.s"
 ;	.include "object_code/common/interactions/exclamationMark.s"
 ;	.include "object_code/common/interactions/floatingImage.s"
-;	.include "object_code/common/interactions/bipinBlossomFamilySpawner.s"
+	.include "object_code/common/interactions/bipinBlossomFamilySpawner.s"
 ;	.include "object_code/common/interactions/gashaSpot.s"
 ;	.include "object_code/common/interactions/kissHeart.s"
 ;	.include "object_code/common/interactions/banana.s"
@@ -1031,10 +1020,13 @@ m_section_superfree bank19Code NAMESPACE bank19
 	.include {"{GAME_DATA_DIR}/treasureDisplayData.s"}
 	.include "code/treasureAndDrops.s"
 	.include "code/textbox.s"
+.ends
+
+m_section_superfree bank3dCode NAMESPACE bank3d
 	.ifdef ENABLE_SETTINGS_MENU
 ;		.include "code/settingsMenu.s"
 	.endif
-;	.include "code/bank0Ext.s"
+	.include "code/bank0Ext.s"
 .ends
 
 

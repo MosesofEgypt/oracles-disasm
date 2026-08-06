@@ -17,7 +17,7 @@ interactionCodeac:
 		rlca
 	+
 	and (hl)
-	ld hl,(a)
+	ld (hl),a
 .elif defined(ROM_AGES)
 	res 1,(hl)
 .else

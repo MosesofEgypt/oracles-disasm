@@ -19,10 +19,11 @@ interactWithTileBeforeLink:
 	; Check how to behave next to the tile.
 	; Note: The function that's called must set or unset the carry flag on returning.
 	; Setting it disables some of Link's per-frame update code?
-	ld hl,interactableTilesTable
 .ifdef ROM_COMBO
 	call hIsSeasons
+	ld hl,interactableTilesTable_seasons
 	jr nc,+
+		ld hl,interactableTilesTable_ages
 		call getSomariaBlockIndex
 		ld a,b
 		cp e
@@ -32,8 +33,10 @@ interactWithTileBeforeLink:
 	+
 	call lookupCollisionTable_paramE
 .elif defined(ROM_AGES)
+	ld hl,interactableTilesTable
 	call lookupCollisionTable_paramE
 .else
+	ld hl,interactableTilesTable
 	call getSomariaBlockIndex
 	ld a,b
 	cp e
@@ -175,7 +178,15 @@ nextToSignTile:
 
 	; Retrieve the text to show.
 	ld a,(wActiveGroup)
+.ifdef ROM_COMBO
+	ld hl,signTextGroupTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,signTextGroupTable_ages
+	+
+.else
 	ld hl,signTextGroupTable
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 	ld a,(wActiveRoom)
