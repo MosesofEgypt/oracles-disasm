@@ -115,7 +115,15 @@ parseStaticObjects:
 loadStaticObjects_body:
 	call clearStaticObjects
 	ld a,(wDungeonIndex)
+.ifdef ROM_COMBO
+	ld hl,staticDungeonObjects_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,staticDungeonObjects_ages
+	+
+.else
 	ld hl,staticDungeonObjects
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 	ld de,wStaticObjects

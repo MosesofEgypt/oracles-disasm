@@ -132,7 +132,7 @@ checkUseItems:
 	ld (hl),a
 	ld a,(wcc63)
 	rlca
-	jr c,@itemsDisabled
+	jp c,@itemsDisabled
 
 	ld a,(wInShop)
 	or a
@@ -492,6 +492,7 @@ parentItemUpdate:
 	ld a,(de)
 	rst_jumpTable
 
+.ifndef ROM_COMBO	; NOTE: temporary until items are merged in
 	.dw parentItemCode_punch		; ITEM_NONE
 	.dw parentItemCode_shield		; ITEM_SHIELD
 	.dw parentItemCode_punch		; ITEM_PUNCH
@@ -528,6 +529,7 @@ parentItemUpdate:
 	.dw clearParentItem			; ITEM_MINECART_COLLISION
 	.dw parentItemCode_foolsOre		; ITEM_FOOLS_ORE
 	.dw clearParentItem			; ITEM_1f
+.endif	; NOTE: temporary until items are merged in
 
 ;;
 clearParentItem:
@@ -572,6 +574,12 @@ getCanUseItemsInWater:
 	+
 
 	ld a,TREASURE_MERMAID_SUIT
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr nc,+
+		ld a,TREASURE_MERMAID_SUIT_SEASONS
+	+
+.endif
 	call checkTreasureObtained
 	jr nc,+
 		inc b

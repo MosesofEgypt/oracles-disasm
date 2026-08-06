@@ -1,6 +1,6 @@
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 .define SIMPLE_SCRIPT_BANK $0c
-.else
+.elif defined(ROM_SEASONS)
 .define SIMPLE_SCRIPT_BANK $14
 .endif
 
@@ -176,14 +176,21 @@ scriptCmd_showPasswordScreen:
 	ld b,a
 	swap a
 	and $03
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+		add $04
+	+
+.endif
 	rst_jumpTable
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.dw @askForSecret
 	.dw @generateSecret
 	.dw @generateSecret
 	.dw @askForSecret
-.else; ROM_SEASONS
+.endif
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	.dw @generateSecret
 	.dw @askForSecret
 	.dw @askForSecret
@@ -296,7 +303,11 @@ scriptCmd_setSubstate:
 ; This is for all commands under $80.
 scriptCmd_jump:
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,++
+.endif
 	ld a,h
 	cp $80
 	jr c,++
@@ -1034,7 +1045,7 @@ scriptCmd_jumpIfCBA5Eq:
 	jp scriptFunc_add3ToHl_scf
 
 scriptCmd_jumpRandom:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) && !defined(ROM_COMBO)
 	pop hl
 	inc hl
 	jp scriptFunc_jump_scf
@@ -1253,11 +1264,16 @@ scriptCmd_setOrUnsetGlobalFlag:
 	ret
 
 scriptCmd_initNpcHitbox:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,++
+.endif
 	ld e,Interaction.collisionRadiusY
 	ld a,(de)
 	or a
 	jr nz,+
+++
 .endif
 
 	ld a,$06

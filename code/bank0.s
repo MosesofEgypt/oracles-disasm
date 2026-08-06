@@ -14459,7 +14459,11 @@ interactionSetSimpleScript:
 interactionRunSimpleScript:
 	ldh a,(<hRomBank)
 	push af
+.ifdef ROM_COMBO
+	ld a,:mainScripts.runScriptCommand
+.else
 	ld a,SIMPLE_SCRIPT_BANK
+.endif
 	rst_setrombank
 
 	ld h,d

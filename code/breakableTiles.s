@@ -32,10 +32,27 @@ tryToBreakTile_body:
 	ld a,l
 	ldh (<hFF93),a
 
+.ifdef ROM_COMBO
+	ld hl,breakableTileCollisionTable_ages
+	push bc
+	call hIsSeasons
+	jr nc,+
+		ld hl,breakableTileCollisionTable_seasons
+		call getSomariaBlockIndex
+		ld a,b
+		cp e
+		jr nz,+
+			ld hl,caneBreakableTileData
+			pop bc
+			jr ++
+	+
+	call lookupCollisionTable_paramE
+	pop bc
+.elif defined(ROM_AGES)
 	ld hl,breakableTileCollisionTable
-.ifdef ROM_AGES
 	call lookupCollisionTable_paramE
 .else
+	ld hl,breakableTileCollisionTable
 	push bc
 	call getSomariaBlockIndex
 	ld a,b
@@ -56,7 +73,15 @@ tryToBreakTile_body:
 	; hl = breakableTileModes + a*5
 	ld e,a
 	add a
+.ifdef ROM_COMBO
+	ld hl,breakableTileModes_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,breakableTileModes_ages
+	+
+.else
 	ld hl,breakableTileModes
+.endif
 	rst_addDoubleIndex
 	ld a,e
 	rst_addAToHl

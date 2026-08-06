@@ -14,6 +14,12 @@ updateSpecialObjects:
 	ld (hl),a
 
 	ld a,TREASURE_MERMAID_SUIT
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr nc,+
+		ld a,TREASURE_MERMAID_SUIT_SEASONS
+	+
+.endif
 	call checkTreasureObtained
 	jr nc,+
 	set 6,(hl)

@@ -90,7 +90,11 @@ partCommon_standardUpdate:
 	ret
 
 @uninitialized:
+.ifdef ROM_COMBO
+	callab bank44.partLoadGraphicsAndProperties
+.else
 	callab bank3f.partLoadGraphicsAndProperties
+.endif
 	ld e,Part.var3e
 	ld a,$08 ; TODO: what's this
 	ld (de),a

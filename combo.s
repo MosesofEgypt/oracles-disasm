@@ -178,7 +178,7 @@ forceLinksDirection:
 .BANK $05 SLOT 1
 .ORG 0
 
-	 m_section_free Bank_5 NAMESPACE bank5
+	 m_section_superfree Bank_5 NAMESPACE bank5
 ;		.include "code/specialObjects.s"
 
 		.include {"{GAME_DATA_DIR}/tile_properties/tileTypeMappings.s"}
@@ -195,7 +195,7 @@ m_section_free Bank_6 NAMESPACE bank6
 	.include "code/interactableTiles.s"
 	.include "code/specialObjectAnimationsAndDamage.s"
 
-;	.include "code/parentItemUsage.s"
+	.include "code/parentItemUsage.s"
 
 ;	.include "object_code/common/itemParents/shieldParent.s"
 ;	.include "object_code/common/itemParents/otherSwordsParent.s"
@@ -211,7 +211,7 @@ m_section_free Bank_6 NAMESPACE bank6
 ;	.include "object_code/common/itemParents/magnetGloveParent.s"
 ;	.include "object_code/common/itemParents/lifeVialParent.s"
 
-;	.include "object_code/common/itemParents/commonCode.s"
+	.include "object_code/common/itemParents/commonCode.s"
 
 	.include {"{GAME_DATA_DIR}/itemUsageTables.s"}
 
@@ -540,10 +540,15 @@ m_section_free Ages_Interactions_Bank0b NAMESPACE agesInteractionsBank0b
 .BANK $0c SLOT 1
 .ORG 0
 
-	; TODO: "SIMPLE_SCRIPT_BANK" define should be tied to this section somehow
 	 m_section_free Scripts namespace mainScripts
-;		.include "code/scripting.s"
+		.include "code/scripting.s"
 ;		.include {"{BUILD_DIR}/scripts.s"}
+
+; NOTE: temporary code until scripts can be included
+	stubScript:
+	genericNpcScript:
+		scriptend
+; NOTE: temporary code until scripts can be included
 	.ends
 
 
@@ -701,7 +706,7 @@ m_section_free Ages_Interactions_Bank10 NAMESPACE agesInteractionsBank10
 	.export PART_BANK
 
 m_section_free Bank_11 NAMESPACE partCode
-;	.include "object_code/common/parts/commonCode.s"
+	.include "object_code/common/parts/commonCode.s"
 
 ;	.include "object_code/common/parts/itemDrop.s"
 ;	.include "object_code/common/parts/enemyDestroyed.s"
@@ -747,7 +752,7 @@ m_section_free Bank_11 NAMESPACE partCode
 ;	.include "object_code/common/parts/52.s"
 ;	.include "object_code/common/parts/blueEnergyBead.s"
 
-;	.include "code/updateParts.s"
+	.include "code/updateParts.s"
 	.include "data/partCodeTable.s"
 .ends
 
@@ -761,7 +766,7 @@ m_section_superfree Underwater_Surface_Data namespace underwaterSurfacing
 .ENDS
 
 m_section_superfree Room_Code namespace roomSpecificCode
-;	.include "code/ages/roomSpecificCode.s"
+	.include "code/ages/roomSpecificCode.s"
 .ends
 
 
@@ -790,9 +795,9 @@ m_section_superfree Room_Code namespace roomSpecificCode
 .BANK $15 SLOT 1
 .ORG 0
 
-;	.include "code/serialFunctions.s"
+	.include "code/serialFunctions.s"
 
-;	.include "code/staticObjects.s"
+	.include "code/staticObjects.s"
 	.include {"{GAME_DATA_DIR}/staticDungeonObjects.s"}
 
 ;	.include "scripts/common/scriptHelper.s"
@@ -969,7 +974,7 @@ m_section_free enemyCode_Bank43 NAMESPACE bank43
 
 ;	.include "object_code/ages/enemies/anglerFishBubble.s"
 
-;	.include "code/breakableTiles.s"
+	.include "code/breakableTiles.s"
 	.include {"{GAME_DATA_DIR}/tile_properties/breakableTiles.s"}
 .ends
 
@@ -1024,7 +1029,7 @@ m_section_superfree bank19Code NAMESPACE bank19
 
 m_section_superfree bank3dCode NAMESPACE bank3d
 	.ifdef ENABLE_SETTINGS_MENU
-;		.include "code/settingsMenu.s"
+		.include "code/settingsMenu.s"
 	.endif
 	.include "code/bank0Ext.s"
 .ends
