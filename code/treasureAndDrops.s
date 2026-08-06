@@ -18,7 +18,15 @@ checkTreasureObtained_body:
 	ldh a,(<hFF8B)
 	ld c,a
 	ld b,$00
+.ifdef ROM_COMBO
+	ld hl,treasureCollectionBehaviourTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,treasureCollectionBehaviourTable_ages
+	+
+.else
 	ld hl,treasureCollectionBehaviourTable
+.endif
 	add hl,bc
 	add hl,bc
 	add hl,bc
@@ -197,7 +205,15 @@ giveTreasure_body:
 	ldh a,(<hFF8B)
 	ld c,a
 	ld b,$00
+.ifdef ROM_COMBO
+	ld hl,treasureCollectionBehaviourTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,treasureCollectionBehaviourTable_ages
+	+
+.else
 	ld hl,treasureCollectionBehaviourTable
+.endif
 	add hl,bc
 	add hl,bc
 	add hl,bc
@@ -787,7 +803,15 @@ loadTreasureDisplayData:
 +
 	push hl
 	ld a,e
+.ifdef ROM_COMBO
+	ld hl,treasureDisplayData2_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,treasureDisplayData2_ages
+	+
+.else
 	ld hl,treasureDisplayData2
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 	pop bc
@@ -816,7 +840,15 @@ loadTreasureDisplayData:
 ; @param[out]	e	Which sub-table to use from treasureDisplayData2
 @getTableIndices:
 	ld d,a
+.ifdef ROM_COMBO
+	ld hl,treasureDisplayData1_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,treasureDisplayData1_ages
+	+
+.else
 	ld hl,treasureDisplayData1
+.endif
 -
 	ldi a,(hl)
 	or a

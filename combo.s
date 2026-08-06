@@ -989,18 +989,17 @@ m_section_free roomGfxChanges NAMESPACE roomGfxChanges
 .ends
 
 ;.include "object_code/ages/interactions/tuniNutMain.s"
+;.include "object_code/ages/interactions/monkeyMain.s"
+;.include "object_code/ages/interactions/rabbitMain.s"
 
 
 .BANK $44 SLOT 1
 .ORG 0
 
 m_section_free Bank44 NAMESPACE bank44
-
 .define BANK_44 $44
 
 .include "code/loadGraphics.s"
-;.include "code/treasureAndDrops.s"
-;.include "code/textbox.s"
 
 .include "data/gfxDataIntro/triforceMovementData.s"
 .include "data/gfxDataIntro/makuSeed.s"
@@ -1019,23 +1018,19 @@ m_section_free Bank44 NAMESPACE bank44
 .include {"{BUILD_DIR}/interactionData.s"}
 .include {"{GAME_DATA_DIR}/itemData.s"}
 
-.include {"{GAME_DATA_DIR}/treasureCollectionBehaviours.s"}
-.include {"{GAME_DATA_DIR}/treasureDisplayData.s"}
-
 .include "data/ages/blackTowerOamData.s"
 .include "data/ages/nayruSingingOamData.s"
 
-
-;.include "object_code/ages/interactions/monkeyMain.s"
-;.include "object_code/ages/interactions/rabbitMain.s"
-.ifndef ENABLE_NEW_GAME_PLUS
-;.include "object_code/ages/interactions/tuniNutMain.s"
-.endif
 .ends
 
 .BANK $45 SLOT 1
 .ORG 0
+
 m_section_superfree bank19Code NAMESPACE bank19
+	.include {"{GAME_DATA_DIR}/treasureCollectionBehaviours.s"}
+	.include {"{GAME_DATA_DIR}/treasureDisplayData.s"}
+	.include "code/treasureAndDrops.s"
+	.include "code/textbox.s"
 	.ifdef ENABLE_SETTINGS_MENU
 ;		.include "code/settingsMenu.s"
 	.endif

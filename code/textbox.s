@@ -825,7 +825,15 @@ initTextboxStuff:
 	ld b,a
 	add a
 	add b
+.ifdef ROM_COMBO
+	call hIsSeasons
+	ld hl,textTableTable_seasons
+	jr c,++
+		ld hl,textTableTable_ages
+	+
+.else
 	ld hl,textTableTable
+.endif
 	rst_addAToHl
 	ldi a,(hl)
 	ld (w7TextTableAddr),a
@@ -1020,13 +1028,31 @@ getTextAddress:
 	ld a,(wActiveLanguage)
 .endif
 	add a
+.ifdef ROM_COMBO
+	call hIsSeasons
+	ld hl,textOffset1Table_seasons
+	jr c,++
+		ld hl,textOffset1Table_ages
+	+
+.else
 	ld hl,textOffset1Table
+.endif
 	rst_addDoubleIndex
 	ldi a,(hl)
 	ld e,a
 	rst_derefHl
 	ld a,(wTextIndexH)
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr c,++
+		cp TEXT_OFFSET_SPLIT_INDEX_AGES
+		jr +
+	++
+		cp TEXT_OFFSET_SPLIT_INDEX_SEASONS
+	+
+.else
 	cp TEXT_OFFSET_SPLIT_INDEX
+.endif
 	jr c,+
 ; Else, text is relative to TEXT_OFFSET_2
 .ifdef MORE_MESSAGE_SPEEDS
@@ -1035,7 +1061,15 @@ getTextAddress:
 	ld a,(wActiveLanguage)
 .endif
 	add a
+.ifdef ROM_COMBO
+	call hIsSeasons
+	ld hl,textOffset2Table_seasons
+	jr c,++
+		ld hl,textOffset2Table_ages
+	+
+.else
 	ld hl,textOffset2Table
+.endif
 	rst_addDoubleIndex
 	ldi a,(hl)
 	ld e,a
@@ -1058,7 +1092,104 @@ getTextAddress:
 	pop de
 	ret
 
+.ifdef ROM_COMBO
+textOffset1Table_ages:
+	.db :TEXT_OFFSET_AGES_1
+	.dw TEXT_OFFSET_AGES_1&$3fff
+	.db 0
+	.db :TEXT_OFFSET_AGES_1
+	.dw TEXT_OFFSET_AGES_1&$3fff
+	.db 0
+	.db :TEXT_OFFSET_AGES_1
+	.dw TEXT_OFFSET_AGES_1&$3fff
+	.db 0
+	.db :TEXT_OFFSET_AGES_1
+	.dw TEXT_OFFSET_AGES_1&$3fff
+	.db 0
+	.db :TEXT_OFFSET_AGES_1
+	.dw TEXT_OFFSET_AGES_1&$3fff
+	.db 0
+	.db :TEXT_OFFSET_AGES_1
+	.dw TEXT_OFFSET_AGES_1&$3fff
+	.db 0
 
+textOffset2Table_ages:
+	.db :TEXT_OFFSET_AGES_2
+	.dw TEXT_OFFSET_AGES_2&$3fff
+	.db 0
+	.db :TEXT_OFFSET_AGES_2
+	.dw TEXT_OFFSET_AGES_2&$3fff
+	.db 0
+	.db :TEXT_OFFSET_AGES_2
+	.dw TEXT_OFFSET_AGES_2&$3fff
+	.db 0
+	.db :TEXT_OFFSET_AGES_2
+	.dw TEXT_OFFSET_AGES_2&$3fff
+	.db 0
+	.db :TEXT_OFFSET_AGES_2
+	.dw TEXT_OFFSET_AGES_2&$3fff
+	.db 0
+	.db :TEXT_OFFSET_AGES_2
+	.dw TEXT_OFFSET_AGES_2&$3fff
+	.db 0
+
+textTableTable_ages:
+	Pointer3Byte textTableENG_AGES
+	Pointer3Byte textTableENG_AGES
+	Pointer3Byte textTableENG_AGES
+	Pointer3Byte textTableENG_AGES
+	Pointer3Byte textTableENG_AGES
+	Pointer3Byte textTableENG_AGES
+
+textOffset1Table_seasons:
+	.db :TEXT_OFFSET_SEASONS_1
+	.dw TEXT_OFFSET_SEASONS_1&$3fff
+	.db 0
+	.db :TEXT_OFFSET_SEASONS_1
+	.dw TEXT_OFFSET_SEASONS_1&$3fff
+	.db 0
+	.db :TEXT_OFFSET_SEASONS_1
+	.dw TEXT_OFFSET_SEASONS_1&$3fff
+	.db 0
+	.db :TEXT_OFFSET_SEASONS_1
+	.dw TEXT_OFFSET_SEASONS_1&$3fff
+	.db 0
+	.db :TEXT_OFFSET_SEASONS_1
+	.dw TEXT_OFFSET_SEASONS_1&$3fff
+	.db 0
+	.db :TEXT_OFFSET_SEASONS_1
+	.dw TEXT_OFFSET_SEASONS_1&$3fff
+	.db 0
+
+textOffset2Table_seasons:
+	.db :TEXT_OFFSET_SEASONS_2
+	.dw TEXT_OFFSET_SEASONS_2&$3fff
+	.db 0
+	.db :TEXT_OFFSET_SEASONS_2
+	.dw TEXT_OFFSET_SEASONS_2&$3fff
+	.db 0
+	.db :TEXT_OFFSET_SEASONS_2
+	.dw TEXT_OFFSET_SEASONS_2&$3fff
+	.db 0
+	.db :TEXT_OFFSET_SEASONS_2
+	.dw TEXT_OFFSET_SEASONS_2&$3fff
+	.db 0
+	.db :TEXT_OFFSET_SEASONS_2
+	.dw TEXT_OFFSET_SEASONS_2&$3fff
+	.db 0
+	.db :TEXT_OFFSET_SEASONS_2
+	.dw TEXT_OFFSET_SEASONS_2&$3fff
+	.db 0
+
+textTableTable_seasons:
+	Pointer3Byte textTableENG_SEASONS
+	Pointer3Byte textTableENG_SEASONS
+	Pointer3Byte textTableENG_SEASONS
+	Pointer3Byte textTableENG_SEASONS
+	Pointer3Byte textTableENG_SEASONS
+	Pointer3Byte textTableENG_SEASONS
+
+.else
 textOffset1Table:
 	.db :TEXT_OFFSET_1
 	.dw TEXT_OFFSET_1&$3fff
@@ -1107,6 +1238,7 @@ textTableTable:
 	Pointer3Byte textTableENG
 	Pointer3Byte textTableENG
 	Pointer3Byte textTableENG
+.endif
 
 ;;
 ; This peeks at the text to check if the next command is something particular.
