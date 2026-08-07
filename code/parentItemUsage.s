@@ -492,7 +492,11 @@ parentItemUpdate:
 	ld a,(de)
 	rst_jumpTable
 
-.ifndef ROM_COMBO	; NOTE: temporary until items are merged in
+.ifdef ROM_COMBO	; NOTE: temporary until items are merged in
+.repeat $20
+	.dw clearParentItem
+.endr
+.else
 	.dw parentItemCode_punch		; ITEM_NONE
 	.dw parentItemCode_shield		; ITEM_SHIELD
 	.dw parentItemCode_punch		; ITEM_PUNCH

@@ -14543,6 +14543,29 @@ func_3ee4:
 
 	ret
 
+.ifdef ROM_COMBO
+toggleIsSeasons:
+	call hIsSeasons
+	ccf
+
+;;
+; @param	cflag	If set, game will be set to seasons
+setIsSeasons:
+	; insert a small 3-byte program into hRAM for
+	; quickly determining which game is being run
+	push hl
+	ld hl,hIsSeasons
+	ld (hl),$37 		; scf
+	inc hl
+	jr c,+
+		ld (hl),$3f 	; ccf
+		inc hl
+	+
+	ld (hl),$c9			; ret
+	pop hl
+	ret
+.endif
+
 ;;
 ; CROSSITEMS: For Seasons only, determine which tile index is the cane of somaria (varies based on
 ; which group we're in).

@@ -41,6 +41,9 @@ removeRing:
 
 m_section_free Bank_5_test NAMESPACE bank5
 checkPositionSurroundedByWalls:
+linkPullIntoHole:
+specialObjectUpdatePositionGivenVelocity:
+specialObjectUpdatePosition:
 	ret
 .ends
 
@@ -174,7 +177,7 @@ forceLinksDirection:
 .ORG 0
 
 	 m_section_superfree Bank_5 NAMESPACE bank5
-;		.include "code/specialObjects.s"
+		.include "code/specialObjects.s"
 
 		.include {"{GAME_DATA_DIR}/tile_properties/tileTypeMappings.s"}
 		.include {"{GAME_DATA_DIR}/tile_properties/cliffTiles.s"}

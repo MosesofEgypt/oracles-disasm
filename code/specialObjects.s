@@ -104,6 +104,11 @@ updateSpecialObjects:
 	ld l,Object.id
 	ld a,(hl)
 	rst_jumpTable
+.ifdef ROM_COMBO	; NOTE: temporary until items are merged in
+.repeat $14
+	.dw specialObjectCodeNil
+.endr
+.else
 	.dw specialObjectCode_link
 .if defined(ROM_AGES) && !defined(ROM_COMBO)
 	.dw specialObjectCode_transformedLink
@@ -128,6 +133,12 @@ updateSpecialObjects:
 	.dw specialObjectCode_companionCutscene
 	.dw specialObjectCode_companionCutscene
 	.dw specialObjectCode_raft
+.endif	; NOTE: temporary until items are merged in
+
+.ifdef ROM_COMBO	; NOTE: temporary until items are merged in
+specialObjectCodeNil:
+	ret
+.endif	; NOTE: temporary until items are merged in
 
 ;;
 ; Updates wGameKeysPressed based on wKeysPressed, and updates wLinkAngle based on
@@ -395,6 +406,7 @@ func_410d:
 
 
 .include "object_code/common/specialObjects/commonCode.s"
+.ifndef ROM_COMBO	; NOTE: temporary until items are merged in
 .include "object_code/common/specialObjects/link.s"
 .include "object_code/common/specialObjects/transformedLink.s"
 .include "object_code/common/specialObjects/linkRidingAnimal.s"
@@ -415,3 +427,4 @@ specialObjectCode_raft:
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 	jpab bank6.specialObjectCode_raft
 .endif
+.endif				; NOTE: temporary until items are merged in

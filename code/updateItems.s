@@ -67,7 +67,11 @@ updateItems:
 	ld e,Item.id
 	ld a,(de)
 	rst_jumpTable
-.ifndef ROM_COMBO	; NOTE: temporary until items are merged in
+.ifdef ROM_COMBO	; NOTE: temporary until items are merged in
+.repeat $2c
+	.dw itemCodeNilPost
+.endr
+.else
 	.dw itemCode00 ; 0x00
 	.dw itemDelete ; 0x01
 	.dw itemCode02 ; 0x02
@@ -148,7 +152,11 @@ updateItemPost:
 	ld a,(de)
 	rst_jumpTable
 
-.ifndef ROM_COMBO	; NOTE: temporary until items are merged in
+.ifdef ROM_COMBO	; NOTE: temporary until items are merged in
+.repeat $2c
+	.dw itemCodeNilPost
+.endr
+.else
 	.dw itemCode00Post	; 0x00
 	.dw itemCodeNilPost	; 0x01
 	.dw itemCode02Post	; 0x02

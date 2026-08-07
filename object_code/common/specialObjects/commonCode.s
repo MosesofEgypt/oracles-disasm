@@ -179,13 +179,29 @@ sidescrollUpdateActiveTile:
 	call objectGetTileAtPosition
 	ld (wActiveTileIndex),a
 
+.if defined(ROM_COMBO)
+	ld hl,tileTypesTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,tileTypesTable_ages
+	+
+.else
 	ld hl,tileTypesTable
+.endif
 	call lookupCollisionTable
 	ld (wActiveTileType),a
 
 	ld bc,$0800
 	call objectGetRelativeTile
+.if defined(ROM_COMBO)
+	ld hl,tileTypesTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,tileTypesTable_ages
+	+
+.else
 	ld hl,tileTypesTable
+.endif
 	call lookupCollisionTable
 	ld (wLastActiveTileType),a
 	ret
@@ -202,7 +218,7 @@ linkApplyTileTypes:
 	or a
 	jp nz,@tileType_normal
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld (wLinkRaisedFloorOffset),a
 .endif
 	call @linkGetActiveTileType
@@ -242,7 +258,7 @@ linkApplyTileTypes:
 	.dw @tileType_current ; TILETYPE_RIGHTCURRENT
 	.dw @tileType_current ; TILETYPE_DOWNCURRENT
 	.dw @tileType_current ; TILETYPE_LEFTCURRENT
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.dw @tiletype_raisableFloor ; TILETYPE_RAISABLE_FLOOR
 	.dw @swimming ; TILETYPE_SEAWATER
 	.dw @swimming ; TILETYPE_WHIRLPOOL
@@ -309,10 +325,15 @@ linkApplyTileTypes:
 
 @tileType_hole:
 @tileType_warpHole:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	ld a,(wTilesetFlags)
 	and TILESETFLAG_UNDERWATER
 	jr nz,@tileType_normal
++
 .endif
 
 	xor a
@@ -361,7 +382,10 @@ linkApplyTileTypes:
 	jr @notSwimming
 
 @tileType_cracked_ice:
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	ret nc
+.elif defined(ROM_AGES)
 	ret
 .else
 	ld a,(wStandingOnTileCounter)
@@ -383,10 +407,15 @@ linkApplyTileTypes:
 	or a
 	ret nz
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	ld a,(w1Link.var2f)
 	bit 7,a
 	ret nz
++
 .endif
 
 	xor a
@@ -403,12 +432,23 @@ linkApplyTileTypes:
 	ret
 
 @tileType_lava:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	ld a,(wLinkRidingObject)
 	or a
-.else
+.if defined(ROM_COMBO)
+	jr ++
+.endif
+.endif
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
++
 	ld a,(wMagnetGloveState)
 	bit 6,a
+++
 .endif
 	jp nz,@tileType_normal
 
@@ -461,7 +501,7 @@ linkApplyTileTypes:
 @tileType_current:
 	ldbc SPEED_c0, TILETYPE_UPCURRENT
 	call @adjustLinkOnConveyor
-	jr @swimming
+	jp @swimming
 
 ;;
 ; Gets the tile type of the tile link is standing on (see constants/common/tileTypes.s).
@@ -508,7 +548,15 @@ linkApplyTileTypes:
 	ld (hl),a
 
 	ld a,c
+.if defined(ROM_COMBO)
+	ld hl,tileTypesTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,tileTypesTable_ages
+	+
+.else
 	ld hl,tileTypesTable
+.endif
 	jp lookupCollisionTable
 
 ;;
@@ -634,6 +682,23 @@ checkCollisionForCompanion:
 	; Animals can't pass through climbable vines
 	call getTileAtPosition
 	ld a,(hl)
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr c,+
+		cp TILEINDEX_VINE_BOTTOM_AGES
+		jr z,@setCollision
+		cp TILEINDEX_VINE_MIDDLE_AGES
+		jr z,@setCollision
+		cp TILEINDEX_VINE_TOP_AGES
+		jr ++
+	+
+		cp TILEINDEX_VINE_BOTTOM_SEASONS
+		jr z,@setCollision
+		cp TILEINDEX_VINE_MIDDLE_SEASONS
+		jr z,@setCollision
+		cp TILEINDEX_VINE_TOP_SEASONS
+	++
+.else
 	cp TILEINDEX_VINE_BOTTOM
 	jr z,@setCollision
 	cp TILEINDEX_VINE_MIDDLE
@@ -641,6 +706,7 @@ checkCollisionForCompanion:
 
 	; Check for collision on bottom half of this tile only
 	cp TILEINDEX_VINE_TOP
+.endif
 	ld a,$03
 	jp z,checkGivenCollision_allowHoles
 
@@ -655,7 +721,11 @@ checkCollisionForCompanion:
 	bit 7,a
 	jr z,@checkCollision
 	ld a,(hl)
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,@checkCollision
+.endif
 	; tiles that are half-floor/half-cliff?
 	cp $d9
 	ret z
@@ -879,15 +949,26 @@ companionTryToMount:
 	ld a,(wActiveTileType)
 	cp TILETYPE_HOLE
 	jr z,@cantMount
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	ld a,(wDisallowMountingCompanion)
 	or a
 	jr nz,@cantMount
 
 	call checkLinkVulnerableAndIDZero
-.else
+.if defined(ROM_COMBO)
+	jr ++
+.endif
++
+.endif
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	call checkLinkID0AndControlNormal
 .endif
+++
 	jr c,@tryMounting
 
 @cantMount:
@@ -976,6 +1057,10 @@ companionGotoHazardHandlingState:
 ;;
 companionDismountAndSavePosition:
 	call companionDismount
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,@normalDismount
+.endif
 
 	; The below code checks your animal companion, but ultimately appears to do the
 	; same thing in all cases.
@@ -990,7 +1075,8 @@ companionDismountAndSavePosition:
 	jr z,@ricky
 	cp SPECIALOBJECT_DIMITRI
 	jr z,@dimitri
-.ifdef ROM_AGES
+
+.if defined(ROM_AGES) && !defined(ROM_COMBO)
 @moosh:
 	jr @normalDismount
 @ricky:
@@ -1186,7 +1272,11 @@ companionRespawn:
 
 	; Set animal's position to respawn point, then check if the position is valid
 	call specialObjectSetCoordinatesToRespawnYX
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+.endif
 	ld bc,$0500
 	call objectGetRelativeTile
 	cp $20
@@ -1285,10 +1375,28 @@ companionCheckHopDownCliff:
 	ld c,(hl)
 
 	call objectGetRelativeTile
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr c,+
+		cp TILEINDEX_VINE_TOP_AGES
+		jr ++
+	+
+		cp TILEINDEX_VINE_TOP_SEASONS
+	++
+.else
 	cp TILEINDEX_VINE_TOP
+.endif
 	jr z,@vineTop
 
+.ifdef ROM_COMBO
+	ld hl,cliffTilesTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,cliffTilesTable_ages
+	+
+.else
 	ld hl,cliffTilesTable
+.endif
 	call lookupCollisionTable
 	jr c,@cliffTile
 
@@ -1460,7 +1568,11 @@ companionCheckCanSpawn:
 	or a
 	jr nz,@canSpawn
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	; Jump if [substate] != 0
 	inc e
 	ld a,(de)
@@ -1595,10 +1707,15 @@ companionFlashFromChargingAnimation:
 ; @param[out]	zflag	Set if complete
 companionCheckMountingComplete:
 	; Check if something interrupted the mounting?
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	ld a,(wDisallowMountingCompanion)
 	or a
 	jr nz,@stopMounting
++
 .endif
 	ld a,(w1Link.state)
 	cp LINK_STATE_NORMAL
@@ -1672,7 +1789,22 @@ companionCheckEnableTerrainEffects:
 	ld bc,$0500
 	call objectGetRelativeTile
 	ld h,d
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,++
+		cp TILEINDEX_PUDDLE_AGES
+		jr nz,@label_05_067
+		jr +
+	++
+		cp TILEINDEX_PUDDLE_SEASONS
+		jr z,+
+		cp TILEINDEX_PUDDLE_SEASONS+1
+		jr z,+
+		cp TILEINDEX_PUDDLE_SEASONS+2
+		jr nz,@label_05_067
+	+
+
+.elif defined(ROM_AGES)
 	cp TILEINDEX_PUDDLE
 	jr nz,@label_05_067
 .else

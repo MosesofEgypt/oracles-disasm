@@ -1,18 +1,7 @@
 interactionCodeTable: ; $3b8b
 .if defined(ROM_COMBO)
-	.macro m_InteractionCodeRef
-		.db :\1
-		.dw \1
-	.endm
-
-	.rept 8 index SECT
-		.rept 8 index ID
-			.ifdef interactionCodeSection{%.2x{SECT}}.interactionCode{%.2x{ID}}
-				m_InteractionCodeRef interactionCodeSection{%.2x{SECT}}.interactionCode{%.2x{ID}}
-			.else
-				m_InteractionCodeRef interactionDelete
-			.endif
-		.endr
+	.repeat $e8
+		.dw interactionCodeNil
 	.endr
 
 .elif defined(ROM_AGES)
@@ -482,4 +471,9 @@ interactionCodeTable: ; $3b8b
 	.dw       commonInteractions8.interactionCodee5 ; 0xe5
 	.dw seasonsInteractionsBank15.interactionCodee6 ; 0xe6
 	.dw seasonsInteractionsBank15.interactionCodee7 ; 0xe7
+.endif
+
+.ifdef ROM_COMBO	; NOTE: temporary until items are merged in
+interactionCodeNil:
+	ret
 .endif

@@ -1,19 +1,8 @@
 enemyCodeTable:
 
 .if defined(ROM_COMBO)
-	.macro m_EnemyCodeRef
-		.db :\1
-		.dw \1
-	.endm
-
-	.rept 8 index SECT
-		.rept 8 index ID
-			.ifdef enemyCodeSection{%.2x{SECT}}.enemyCode{%.2x{ID}}
-				m_EnemyCodeRef enemyCodeSection{%.2x{SECT}}.enemyCode{%.2x{ID}}
-			.else
-				m_EnemyCodeRef enemyCodeNil
-			.endif
-		.endr
+	.repeat $80
+		.dw enemyCodeNil
 	.endr
 
 .elif defined(ROM_AGES)

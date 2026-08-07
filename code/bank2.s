@@ -420,18 +420,13 @@ fileSelectMode1:
 	; Fade done
 	xor a
 	ld (wLastSecretInputLength),a
-	; insert a small 3-byte program into hRAM for
-	; quickly determining which game is being run
+
+.ifdef ROM_COMBO
 	ld a,(wWhichGame)
-	ld hl,hIsSeasons
-	ld (hl),$37 		; scf
-	inc hl
-	or a
-	jr z,+
-		ld (hl),$3f 	; ccf
-		inc hl
-	+
-	ld (hl),$c9			; ret
+	and $01
+	cp $01
+	call setIsSeasons
+.endif
 
 	; this is where the game switches from the intro/file
 	; select thread to the main game logic thread.
