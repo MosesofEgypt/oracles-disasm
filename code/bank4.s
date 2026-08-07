@@ -98,12 +98,20 @@ applyWarpDest_b04:
 	bit 7,a
 	jr nz,+++
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,label_04_033
+.endif
 	and $0f
 	cp $02
 	jr nz,label_04_032
 
+.if defined(ROM_COMBO)
+	ld hl,warpDestTable_ages
+.else
 	ld hl,warpDestTable
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 	ld a,(wWarpDestRoom)
@@ -114,7 +122,15 @@ applyWarpDest_b04:
 .endif
 
 label_04_032:
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	ld hl,warpDestTable_seasons
+	jr c,+
+		ld hl,warpDestTable_ages
+	+
+.else
 	ld hl,warpDestTable
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 	ld a,(wWarpDestRoom)
@@ -156,9 +172,11 @@ label_04_033:
 	or $08
 	ldi (hl),a
 
-.ifdef ROM_AGES
-	jp loadScreenMusicAndSetRoomPack
-.else; ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,label_04_036
+.endif
 	ld a,(wWarpDestGroup)
 	bit 6,a
 	jr nz,label_04_036
@@ -176,8 +194,8 @@ label_04_035:
 	call loadScreenMusicAndSetRoomPack
 	jp checkRoomPackAfterWarp
 label_04_036:
-	jp loadScreenMusicAndSetRoomPack
 .endif
+	jp loadScreenMusicAndSetRoomPack
 
 ;;
 ; Sets wWarpDestRoom, wWarpDestGroup, wWarpTransition with suitable warp data. If no
@@ -188,14 +206,27 @@ label_04_036:
 ; @param	hFF8C	The tile index that initiated the warp
 ; @param	hFF8D	The position of the tile that initiated the warp
 findWarpSourceAndDest:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	ld a,(wDisableWarps)
 	or a
 	jp nz,setWarpDestDefault
+	+
 .endif
 
 	ld a,(wActiveGroup)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	ld hl,warpSourcesTable_seasons
+	jr c,+
+		ld hl,warpSourcesTable_ages
+	+
+.else
 	ld hl,warpSourcesTable
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 	ld a,(wActiveRoom)
@@ -330,7 +361,15 @@ findScreenEdgeWarpSource:
 	ld l,a
 	ld b,(hl)
 	ld a,(wActiveGroup)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	ld hl,warpSourcesTable_seasons
+	jr c,+
+		ld hl,warpSourcesTable_ages
+	+
+.else
 	ld hl,warpSourcesTable
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 	ld a,(wActiveRoom)
@@ -409,7 +448,15 @@ getLinkWarpQuadrant:
 	jr nc,@largeRoom
 
 @smallRoom:
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+		cp $58
+		jr ++
+	+
+		cp $60
+	++
+.elif defined(ROM_AGES)
 	cp $58
 .else
 	cp $60

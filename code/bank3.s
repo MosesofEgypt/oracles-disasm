@@ -62,7 +62,11 @@ init:
 	ld a,$0f
 	ld ($ff00+R_IE),a
 
+.ifdef ROM_COMBO
+	callab bank44.initGbaModePaletteData
+.else
 	callab bank3f.initGbaModePaletteData
+.endif
 	ei
 	callab bank2.checkDisplayDmgModeScreen
 

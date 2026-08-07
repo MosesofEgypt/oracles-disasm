@@ -1,5 +1,55 @@
 ; TODO: Some code in this file is shared with "code/ages/cutscenes/bank10.s".
 
+.ifdef ROM_COMBO
+
+; these function copies were added so they're available from this bank
+
+seasonsFunc_03_79cd:
+	push hl
+	call getRandomNumber
+	and $07
+	rst_addAToHl
+	ld a,(hl)
+	ld b,a
+	ld a,(de)
+	add b
+	ld (de),a
+	pop hl
+	ret
+
+seasonsFunc_03_7a6b:
+	ldh (<hFF8B),a
+	ld a,$01
+	ld ($ff00+R_VBK),a
+	ld hl,$9800
+	ld bc,$0040
+	ldh a,(<hFF8B)
+	call fillMemoryBc16ByteBlocks
+	xor a
+	ld ($ff00+R_VBK),a
+	ld hl,$9800
+	ld bc,$0400
+	jp clearMemoryBc
+
+seasonsFunc_03_7a88:
+	ldh (<hFF8B),a
+	ld a,($ff00+R_SVBK)
+	push af
+	ld a,$04
+	ld ($ff00+R_SVBK),a
+	ld hl,w4TileMap
+	ld bc,$0240
+	call clearMemoryBc
+	ld hl,w4AttributeMap
+	ld bc,$0024
+	ldh a,(<hFF8B)
+	call fillMemoryBc16ByteBlocks
+	pop af
+	ld ($ff00+R_SVBK),a
+	ret
+.endif
+
+
 ;;
 ; CUTSCENE_S_DIN_CRYSTAL_DESCENDING
 .ifdef ROM_COMBO
@@ -1481,7 +1531,11 @@ endgameCutsceneHandler_0a_stage1_seasons:
 	ld a,(wGenericCutscene.cbb4)
 	sub $04
 	add a
+.ifdef ROM_COMBO
+	add GFXH_CREDITS_IMAGE1_SEASONS
+.else
 	add GFXH_CREDITS_IMAGE1
+.endif
 	call loadGfxHeader
 	ld hl,wGenericCutscene.cbb3
 	ld (hl),$5a
@@ -1991,7 +2045,11 @@ endgameCutsceneHandler_0a_stage3_seasons:
 	call disableLcd
 	call clearOam
 	call incCbc2
-	ld a,GFXH_TO_BE_CONTINUED
+.ifdef ROM_COMBO
+	add GFXH_TO_BE_CONTINUED_SEASONS
+.else
+	add GFXH_TO_BE_CONTINUED
+.endif
 	call loadGfxHeader
 	ld a,PALH_SEASONS_8f
 	call loadPaletteHeader
@@ -2135,9 +2193,7 @@ seasonsFunc_03_646a:
 	ld b,$10
 	jp clearMemory
 
-.ifndef ROM_COMBO
-.include {"{GAME_DATA_DIR}/creditsOamData.s"}
-.endif
+.include "data/seasons/creditsOamData.s"
 
 seasonsFunc_03_66dc:
 	ld hl,wLinkHealth

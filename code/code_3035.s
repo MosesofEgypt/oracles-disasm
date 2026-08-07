@@ -126,7 +126,11 @@ disableLcdAndLoadRoom:
 playWaveSoundAtRandomIntervals:
 	ldh a,(<hRomBank)
 	push af
+.ifdef ROM_COMBO
+	callfrombank0 bank3Cutscenes.agesFunc_10_7298@playWaveSoundAtRandomIntervals_body
+.else
 	callfrombank0 cutscenesBank10.agesFunc_10_7298@playWaveSoundAtRandomIntervals_body
+.endif
 	pop af
 	rst_setrombank
 	ret

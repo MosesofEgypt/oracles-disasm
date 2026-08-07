@@ -1,11 +1,24 @@
 ; TODO: Move this to "cutscenes/" folder (along with seasons equivalent)
+.ifdef ROM_COMBO
+;;
+func_5d41:
+	call func_1613
+	ld a,(wWarpTransition2)
+	or a
+	jp nz,applyWarpTransition2
+	jp updateAllObjects
+.endif
 
 ;;
 ; CUTSCENE_NAYRU_SINGING
 cutscene06:
 	call func_1613
 	ld c,$00
+.ifdef ROM_COMBO
+	jpab bank3Cutscenes_3.miscCutsceneHandler
+.else
 	jpab bank3Cutscenes.miscCutsceneHandler
+.endif
 
 ;;
 ; CUTSCENE_MAKU_TREE_DISAPPEARING
@@ -15,7 +28,11 @@ func_5d5d:
 	ld a,(wWarpTransition2)
 	or a
 	jp nz,applyWarpTransition2
+.ifdef ROM_COMBO
+	jpab bank3Cutscenes_3.miscCutsceneHandler
+.else
 	jpab bank3Cutscenes.miscCutsceneHandler
+.endif
 
 ;;
 ; CUTSCENE_BLACK_TOWER_EXPLANATION
@@ -71,7 +88,11 @@ cutscene20:
 cutscene0d:
 	call func_1613
 	ld c,$06
+.ifdef ROM_COMBO
+	jpab bank3Cutscenes_3.miscCutsceneHandler
+.else
 	jpab bank3Cutscenes.miscCutsceneHandler
+.endif
 
 ;;
 ; CUTSCENE_TWINROVA_REVEAL
@@ -86,7 +107,11 @@ cutscene0e:
 .endif
 
 	ld c,$05
+.ifdef ROM_COMBO
+	jpab bank3Cutscenes_3.miscCutsceneHandler
+.else
 	jpab bank3Cutscenes.miscCutsceneHandler
+.endif
 
 ;;
 ; CUTSCENE_BLACK_TOWER_COMPLETE

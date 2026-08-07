@@ -306,7 +306,11 @@ screenTransitionState2:
 	and b
 	ret z
 +
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,++
+.endif
 	; Ages only: forbid looping around the overworld map in any direction, except up.
 	ld a,(wTilesetFlags)
 	and TILESETFLAG_OUTDOORS
@@ -316,7 +320,11 @@ screenTransitionState2:
 	ld a,(wActiveRoom)
 	ld e,a
 	and $0f
+.if defined(ROM_COMBO)
+	cp OVERWORLD_WIDTH_AGES-1
+.else
 	cp OVERWORLD_WIDTH-1
+.endif
 	jr nz,+
 	ld a,c
 	cp DIR_RIGHT
@@ -324,7 +332,11 @@ screenTransitionState2:
 +
 	; Check bottom-most map boundary
 	ld a,e
+.if defined(ROM_COMBO)
+	cp (OVERWORLD_HEIGHT_AGES-1)*16
+.else
 	cp (OVERWORLD_HEIGHT-1)*16
+.endif
 	jr c,+
 	ld a,c
 	cp DIR_DOWN
@@ -348,7 +360,7 @@ screenTransitionState2:
 	ld a,(wcc92)
 	and $08
 	jr nz,@startTransition
-
+++
 .endif ; ROM_AGES
 
 	; Return if Link is over a hole/lava, or over water without flippers?
@@ -377,13 +389,18 @@ screenTransitionState2:
 	rrca
 	jr c,@fail
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	ld a,TREASURE_MERMAID_SUIT
 	call checkTreasureObtained
 	ret c
 	ld a,(wObjectTileIndex)
 	cp TILEINDEX_DEEP_WATER
 	jr z,@fail
++
 .endif
 
 	ld a,TREASURE_FLIPPERS
@@ -620,7 +637,11 @@ checkDarkenRoom:
 	cp $ff
 	ret z
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,++
+.endif
 	; Hardcoded check for snake's remains entrance
 	ld a,(wActiveGroup)
 	cp >ROOM_SEASONS_439
@@ -680,7 +701,16 @@ screenTransitionState5Substate0:
 	or a
 	ret nz
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	ld a,(wActiveGroup)
+	or a
+	jr c,+
+		ld a,(wTilesetFlags)
+		cpl
+		and TILESETFLAG_OUTDOORS
+	+
+	call z,checkAndApplyPaletteFadeTransition
+.elif defined(ROM_AGES)
 	ld a,(wTilesetFlags)
 	and TILESETFLAG_OUTDOORS
 	call nz,checkAndApplyPaletteFadeTransition
@@ -1601,7 +1631,17 @@ loadBigBufferScrollValues_body:
 
 ;;
 func_47fc:
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+		call getPaletteFadeTransitionData_ages
+		jr ++
+	+
+		call getPaletteFadeTransitionData_seasons
+	++
+.else
 	call getPaletteFadeTransitionData
+.endif
 	jr c,+
 
 	xor a
@@ -1612,21 +1652,37 @@ func_47fc:
 
 ;;
 checkAndApplyPaletteFadeTransition:
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+		call getPaletteFadeTransitionData_ages
+		ret nc
+		jp applyPaletteFadeTransitionData_ages
+	+
+	call getPaletteFadeTransitionData_seasons
+	ret nc
+	jp applyPaletteFadeTransitionData_seasons
+.else
 	call getPaletteFadeTransitionData
 	call c,applyPaletteFadeTransitionData
 	ret
+.endif
 
 
 ; "getPaletteFadeTransitionData" and "applyPaletteFadeTransitionData" functions have
 ; differing implementations in ages and seasons.
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 ;;
 ; Check if a room has a smooth palette transition (ie. entrance to Yoll Graveyard).
 ;
 ; @param[out]	cflag	Set if the active room has palette transition data
 ; @param[out]	hl	Address of palette fade data (if it has one)
+.if defined(ROM_COMBO)
+getPaletteFadeTransitionData_ages:
+.else
 getPaletteFadeTransitionData:
+.endif
 	; Don't do a transition in symmetry city if the tuni nut was fixed
 	call checkSymmetryCityPaletteTransition
 	ret nc
@@ -1663,7 +1719,11 @@ getPaletteFadeTransitionData:
 
 ;;
 ; @param	hl	Address of palette fade transition data (starting at byte 2)
+.if defined(ROM_COMBO)
+applyPaletteFadeTransitionData_ages:
+.else
 applyPaletteFadeTransitionData:
+.endif
 	ld a,(wLoadedTilesetPalette)
 	ld b,a
 	ld a,(wTilesetPalette)
@@ -1721,14 +1781,20 @@ checkSymmetryCityPaletteTransition:
 	ret
 
 
-.else ; ROM_SEASONS
+.endif
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 ;;
 ; Check if a room has a smooth palette transition (ie. entrance to Yoll Graveyard).
 ;
 ; @param[out]	cflag	Set if the active room has palette transition data
 ; @param[out]	hl	Address of palette fade data (if it has one)
+.if defined(ROM_COMBO)
+getPaletteFadeTransitionData_seasons:
+.else
 getPaletteFadeTransitionData:
+.endif
 	ld a,(wActiveGroup)
 	ld b,a
 	rrca
@@ -1764,7 +1830,11 @@ getPaletteFadeTransitionData:
 
 ;;
 ; @param	hl	Address of palette fade transition data (starting at byte 1)
+.if defined(ROM_COMBO)
+applyPaletteFadeTransitionData_seasons:
+.else
 applyPaletteFadeTransitionData:
+.endif
 	inc hl
 	ld a,:w2ColorComponentBuffer1
 	ld ($ff00+R_SVBK),a
@@ -2096,7 +2166,11 @@ playCompassSoundIfKeyInRoom:
 	and ROOMFLAG_ITEM
 	ret nz
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+.endif
 	; Hardcoded to play compass sound in d5 boss key room
 	ld a,(wActiveGroup)
 	cp >ROOM_SEASONS_68b
@@ -2222,7 +2296,15 @@ cutscene17:
 	jr z,+
 
 	ldi a,(hl)
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+++
+		cp INTERAC_ZELDA
+		jr ++
+	+++
+		cp INTERAC_ZELDA_SEASONS
+	++
+.elif defined(ROM_AGES)
 	cp INTERAC_ZELDA
 .else
 	cp INTERAC_ZELDA
@@ -2368,16 +2450,6 @@ cutscene15:
 	.dw @state0
 	.dw @state1
 	.dw @state2
-
-;;
-; Unused?
-@func_4c03:
-	ld hl,wGenericCutscene.cbb4
-	dec (hl)
-	ret nz
-
-	ld (hl),$1e
-	ret
 
 ;;
 @incTmpcbb3:
@@ -2565,7 +2637,15 @@ loadDungeonLayout_b01:
 	ld ($ff00+R_SVBK),a
 	call clearDungeonLayout
 	ld a,(wDungeonIndex)
+.if defined(ROM_COMBO)
+	ld hl,dungeonDataTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl, dungeonDataTable_ages
+	+
+.else
 	ld hl, dungeonDataTable
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 	ld b,$08
@@ -2621,7 +2701,7 @@ clearDungeonLayout:
 	jp clearMemoryBc16ByteBlocks
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 ;;
 findActiveRoomInDungeonLayoutWithPointlessBankSwitch:
 	ld a,:CADDR
@@ -2661,7 +2741,15 @@ getFirstDungeonLayoutAddress:
 	ld a,(wDungeonFirstLayout)
 	add c
 	call multiplyABy16
+.if defined(ROM_COMBO)
+	ld hl,dungeonLayoutDataStart_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,dungeonLayoutDataStart_ages
+	+
+.else
 	ld hl,dungeonLayoutDataStart
+.endif
 	add hl,bc
 	add hl,bc
 	add hl,bc
@@ -2686,7 +2774,7 @@ paletteFadeHandler:
 	.dw paletteFadeHandler0b
 	.dw paletteFadeHandler0c
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.dw paletteFadeHandler0d
 	.dw paletteFadeHandler0e
 .endif
@@ -2803,7 +2891,7 @@ paletteFadeHandler04:
 	jp updateFadingPalettes
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 ;;
 ; @param	b	"inverted" value for wPaletteThread_fadeOffset?
 paletteThread_setFadeOffsetAndStop:
@@ -2829,7 +2917,7 @@ paletteThread_refreshPalettesAndStop:
 	jp clearPaletteFadeVariablesAndRefreshPalettes
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 ;;
 paletteFadeHandler0d:
 	call paletteThread_decCounter
@@ -2840,7 +2928,7 @@ paletteFadeHandler0d:
 ; Fade out to black, stop eventually depending on wPaletteThread_parameter
 paletteFadeHandler05:
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	xor a
 	ldh (<hFF8B),a
 	ld a,(wPaletteThread_speed)
@@ -2849,10 +2937,19 @@ paletteFadeHandler05:
 	dec a
 	ld b,a
 	ld a,(wPaletteThread_fadeOffset)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+		dec a
+		cp b
+		jr ++
+	+
+.endif
 	sub c
 	cp b
-	jr z,paletteThread_stop
 	jr c,paletteThread_stop
+++
+	jr z,paletteThread_stop
 
 	ld (wPaletteThread_fadeOffset),a
 	ld c,a
@@ -2876,7 +2973,7 @@ paletteFadeHandler05:
 .endif
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 ;;
 paletteFadeHandler0e:
 	call paletteThread_decCounter
@@ -2887,12 +2984,24 @@ paletteFadeHandler0e:
 ; Fade in from black, stop eventually depending on wPaletteThread_parameter
 paletteFadeHandler06:
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	xor a
 	ldh (<hFF8B),a
 	ld a,(wPaletteThread_speed)
 	ld c,a
 	ld a,(wPaletteThread_parameter)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+		inc a
+		ld b,a
+		ld a,(wPaletteThread_fadeOffset)
+		inc a
+		cp b
+		jr z,paletteThread_stop
+		jr ++
+	+
+.endif
 	add $1f
 	ld b,a
 	ld a,(wPaletteThread_fadeOffset)
@@ -2903,6 +3012,7 @@ paletteFadeHandler06:
 	jp nc,paletteThread_setFadeOffsetAndStop
 
 	sub $1f
+++
 	ld (wPaletteThread_fadeOffset),a
 	ld c,a
 	jp updateFadingPalettes
@@ -2950,7 +3060,7 @@ paletteFadeHandler07:
 	; Check if the room should be darkened
 	ld a,(wPaletteThread_parameter)
 	or a
-	jr z,paletteThread_refreshPalettesAndStop
+	jp z,paletteThread_refreshPalettesAndStop
 
 	ld b,a
 	xor a
@@ -3267,7 +3377,11 @@ func_593a:
 ;;
 checkUpdateDungeonMinimap:
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	ld a,(wTilesetFlags)
 	bit TILESETFLAG_BIT_LARGE_INDOORS,a
 	ret nz
@@ -3280,9 +3394,12 @@ checkUpdateDungeonMinimap:
 
 	bit TILESETFLAG_BIT_DUNGEON,a
 	ret z
-
-.else ; ROM_SEASONS
-
+	.if defined(ROM_COMBO)
+	jr @setMinimapRoom
+	+
+	.endif
+.endif
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	ld a,(wActiveGroup)
 	cp $03
 	jr c,@setMinimapRoom
@@ -3338,16 +3455,28 @@ initializeGame:
 	ld l,(hl)
 	ld h,a
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld bc,$03fe
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+		ld bc,$03af
+	+
+.endif
 .else
 	ld bc,$03af
 .endif
 	call compareHlToBc
 	jr z,@fixRespawnForGbc
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld bc,$0158
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+		ld bc,$00c5
+	+
+.endif
 .else
 	ld bc,$00c5
 .endif
@@ -3434,7 +3563,11 @@ initializeGame:
 	ld a,$88
 	ld (w1Link.invincibilityCounter),a
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	ld l,<wNumRupees
 	ldi a,(hl)
 	ld (wDisplayedRupees),a
@@ -3445,9 +3578,13 @@ initializeGame:
 	ld a,$ff
 	ld (wActiveMusic),a
 	ld (wcc05),a
+.if defined(ROM_COMBO)
+	jr ++
+	+
+.endif
+.endif
 
-.else ; ROM_SEASONS
-
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	ld de,w1Link.yh
 	call getShortPositionFromDE
 	ld (wWarpDestPos),a
@@ -3455,6 +3592,7 @@ initializeGame:
 
 	ld a,$ff
 	ld (wActiveMusic),a
+	++
 .endif
 
 ; HACK-BASE: Disable pregame intro when quickstart is enabled
@@ -3474,7 +3612,15 @@ initializeGame:
 	ld (wGameState),a
 	ld a,CUTSCENE_PREGAME_INTRO
 	ld (wCutsceneIndex),a
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+		jpab bank3Cutscenes_ages.cutscene0d
+	+
+	jpab bank3Cutscenes_seasons.cutscene0d
+.else
 	jp cutscene0d
+.endif
 
 ; The first time the game is opened, this cutscene plays
 @summonLinkCutscene:
@@ -3506,9 +3652,14 @@ func_5a60:
 	call loadTilesetData
 	call loadTilesetGraphics
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	ld a,(wLoadingRoomPack)
 	ld (wRoomPack),a
++
 .endif
 	call loadDungeonLayout
 
@@ -3590,8 +3741,96 @@ standardGameState:
 	jp stubThreadStart
 +
 	ld a,(wCutsceneIndex)
-	rst_jumpTable
 
+.if defined(ROM_COMBO)
+	cp $02
+	jr nz,+
+		xor a
+		jr ++
+	+
+	cp $06
+	jr nc,+
+		rst_jumpTable
+		.dw cutscene00
+		.dw cutscene01
+		.dw $0000
+		.dw cutscene03
+		.dw cutscene04
+		.dw cutscene05
+	+
+	cp $1a
+	jr nc,+
+		cp $15
+		jr c,++
+			sub $15
+			rst_jumpTable
+			.dw cutscene15
+			.dw cutscene16
+			.dw cutscene17
+			.dw cutscene18
+			.dw cutscene19
+		++
+			sub $06
+		jr ++
+	+
+		sub $0b
+	++
+	call hIsSeasons
+	ld e,:bank3Cutscenes_seasons.cutscene06
+	ld hl,@cutsceneHandlers_seasons
+	jr c,+
+		ld e,:bank3Cutscenes_ages.cutscene06
+		ld hl,@cutsceneHandlers_ages
+	+
+	rst_derefHl
+	jp interBankCall
+
+@cutsceneHandlers_ages:
+	.dw bank3Cutscenes_ages.cutscene02
+	.dw bank3Cutscenes_ages.cutscene06
+	.dw bank3Cutscenes_ages.cutscene07
+	.dw bank3Cutscenes_ages.cutscene08
+	.dw bank3Cutscenes_ages.cutscene09
+	.dw bank3Cutscenes_ages.cutscene0a
+	.dw bank3Cutscenes_ages.cutscene0b
+	.dw bank3Cutscenes_ages.cutscene0c
+	.dw bank3Cutscenes_ages.cutscene0d
+	.dw bank3Cutscenes_ages.cutscene0e
+	.dw bank3Cutscenes_ages.cutscene0f
+	.dw bank3Cutscenes_ages.cutscene10
+	.dw bank3Cutscenes_ages.cutscene11
+	.dw bank3Cutscenes_ages.cutscene12
+	.dw bank3Cutscenes_ages.cutscene13
+	.dw bank3Cutscenes_ages.cutscene14
+
+	.dw bank3Cutscenes_ages.cutscene1a
+	.dw bank3Cutscenes_ages.cutscene1b
+	.dw bank3Cutscenes_ages.cutscene1c
+	.dw bank3Cutscenes_ages.cutscene1d
+	.dw bank3Cutscenes_ages.cutscene1e
+	.dw bank3Cutscenes_ages.cutscene1f
+	.dw bank3Cutscenes_ages.cutscene20
+	.dw bank3Cutscenes_ages.cutscene21
+
+@cutsceneHandlers_seasons:
+	.dw bank3Cutscenes_seasons.cutscene02
+	.dw bank3Cutscenes_seasons.cutscene06
+	.dw bank3Cutscenes_seasons.cutscene07
+	.dw bank3Cutscenes_seasons.cutscene08
+	.dw bank3Cutscenes_seasons.cutscene09
+	.dw bank3Cutscenes_seasons.cutscene0a
+	.dw bank3Cutscenes_seasons.cutscene0b
+	.dw bank3Cutscenes_seasons.cutscene0c
+	.dw bank3Cutscenes_seasons.cutscene0d
+	.dw bank3Cutscenes_seasons.cutscene0e
+	.dw bank3Cutscenes_seasons.cutscene0f
+	.dw bank3Cutscenes_seasons.cutscene10
+	.dw bank3Cutscenes_seasons.cutscene11
+	.dw bank3Cutscenes_seasons.cutscene12
+	.dw bank3Cutscenes_seasons.cutscene13
+	.dw bank3Cutscenes_seasons.cutscene14
+.else
+	rst_jumpTable
 	.dw cutscene00
 	.dw cutscene01
 	.dw cutscene02
@@ -3619,7 +3858,7 @@ standardGameState:
 	.dw cutscene18
 	.dw cutscene19
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 	.dw cutscene1a
 	.dw cutscene1b
 	.dw cutscene1c
@@ -3628,6 +3867,7 @@ standardGameState:
 	.dw cutscene1f
 	.dw cutscene20
 	.dw cutscene21
+.endif
 .endif
 
 
@@ -3645,7 +3885,11 @@ cutscene00:
 	xor a
 	ld (wDisableLinkCollisionsAndMenu),a
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	ld a,(wcc05)
 	bit 7,a
 	jr z,+
@@ -3662,9 +3906,14 @@ cutscene00:
 	ld (wCutsceneIndex),a
 	call playCompassSoundIfKeyInRoom
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	call updateLastToggleBlocksState
 	call checkInitUnderwaterWaves
+	+
 .endif
 
 	jp updateGrassAnimationModifier
@@ -3685,7 +3934,15 @@ cutscene01:
 	ret nz
 	; Returns if a menu is being displayed
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+		call updateAllObjects
+		call updateStatusBar
+		jr ++
+	+
+.endif
 	call updatePirateShip
 	call updateAllObjects
 	call checkUpdateUnderwaterWaves
@@ -3697,9 +3954,10 @@ cutscene01:
 
 	call updateStatusBar
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	call checkUpdateToggleBlocks
 .endif
+	++
 
 	ld a,(wCutsceneTrigger)
 	or a
@@ -3710,16 +3968,24 @@ cutscene01:
 	or a
 	jp nz,applyWarpTransition2
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+.endif
 	ld a,(wcc4c)
 	or a
 	jp nz,triggerFadeoutTransition
+	+
 .endif
 
 	call getNextActiveRoom
 	jp nc,checkEnemyAndPartCollisionsIfTextInactive
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	call nc,checkDisableUnderwaterWaves
+.elif defined(ROM_AGES)
 	call checkDisableUnderwaterWaves
 .endif
 	call updateSeedTreeRefillData
@@ -3733,7 +3999,10 @@ cutscene01:
 	call checkRoomPack
 	jp nz,triggerFadeoutTransition
 
-.ifdef ROM_SEASONS
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	call c,checkPlayRoomMusic
+.elif defined(ROM_SEASONS)
 	call checkPlayRoomMusic
 .endif
 	ld a,(wActiveRoom)
@@ -3746,18 +4015,20 @@ cutscene01:
 	call loadRoomCollisions
 	call generateVramTilesWithRoomChanges
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	call initializeRoom
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	ret c
+.endif
 	jp checkPlayRoomMusic
 .else
 	jp initializeRoom
 .endif
 
-
-.ifdef ROM_SEASONS
-
+.if !defined(ROM_COMBO)
 ;;
-; CUTSCENE_TOGGLE_BLOCKS (does nothing in Seasons)
+; CUTSCENE_TOGGLE_BLOCKS
 cutscene02:
 	ret
 .endif
@@ -3843,7 +4114,12 @@ processAutosaveUpdate:
 	ret nz
 
 	ld a,(wDungeonIndex)
-	.ifdef ROM_AGES
+	.if defined(ROM_AGES) || defined(ROM_COMBO)
+		.if defined(ROM_COMBO)
+			call hIsSeasons
+			jr c,+
+		.endif
+
 		cp $0e ; treat lots of non-dungeon areas as overworld
 		jr nz,+
 			ld a,$ff
@@ -3913,10 +4189,16 @@ updateRingEquipStatuses:
 	ld a,FIST_RING
 	call z,unsetFlag
 
-	.ifdef ROM_SEASONS
+	.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	; don't wanna cheat on blaino....
 	ld a,(wInBoxingMatch)
 	or a
+	.if defined(ROM_COMBO)
+		call hIsSeasons
+		jr c,+
+			xor a
+		+
+	.endif
 	ret nz
 	.endif
 
@@ -4256,7 +4538,11 @@ cutscene03:
 
 func_5c18:
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,++
+.endif
 	call checkUpdateDungeonMinimap
 	ld hl,w1Companion.id
 	ldd a,(hl)
@@ -4280,9 +4566,14 @@ func_5c18:
 	call dropLinkHeldItem
 	call clearAllParentItems
 +
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	ld a,(wLoadingRoomPack)
 	ld (wRoomPack),a
++
 .endif
 	call setInstrumentsDisabledCounterAndScrollMode
 	call setEnteredWarpPosition
@@ -4294,7 +4585,7 @@ func_5c18:
 	call checkPlayRoomMusic
 	xor a
 	ld (wCutsceneIndex),a
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld (wDontUpdateStatusBar),a
 .endif
 	call func_593a
@@ -4337,7 +4628,11 @@ cutscene04:
 	ld l,<w1Link.yh
 	ld a,(wWarpDestPos)
 	call setShortPosition
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,++
+.endif
 	call disableLcd
 	call clearOam
 .endif
@@ -4360,13 +4655,20 @@ cutscene05:
 	call clearParts
 	call clearReservedInteraction0
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+		call clearScreenVariables
+		jr ++
+	+
+.endif
 	ld a,(wScreenTransitionDirection)
 	ldh (<hFF92),a
 	call clearScreenVariables
 	ldh a,(<hFF92)
 	ld (wScreenTransitionDirection),a
-
+	++
 .else; ROM_SEASONS
 	call clearScreenVariables
 .endif
@@ -4387,7 +4689,11 @@ func_5cfe:
 	or a
 	jr z,+++
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,++
+.endif
 	ld a,TILEINDEX_STUMP
 	call findTileInRoom
 	jr nz,@clearCompanion
@@ -4418,6 +4724,7 @@ func_5cfe:
 	ld (wRememberedCompanionY),a
 	ld a,c
 	ld (wRememberedCompanionX),a
+	++
 .endif
 
 	ld a,(w1Companion.enabled)
@@ -4429,7 +4736,11 @@ func_5cfe:
 	cp SPECIALOBJECT_MAPLE
 	jr z,@clearCompanion
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+++
+.endif
 	ld hl,w1Companion.state
 	xor a
 	ld (hl),a
@@ -4472,67 +4783,8 @@ func_5cfe:
 	ret
 
 
-.ifdef ROM_SEASONS
-
-;;
-; CUTSCENE_S_ONOX_FINAL_FORM
-; Falling into final battle with onox (in the sidescrolling area)
-cutscene13:
-	ld a,(wCutsceneState)
-	rst_jumpTable
-	.dw @state0
-	.dw @state1
-	.dw @state2
-
-@state0:
-	ld a,$01
-	ld (wCutsceneState),a
-	ld hl,wTmpcfc0+$8
-	ld b,$18
-	call clearMemory
-	ld a,>ROOM_SEASONS_7ff
-	ld (wActiveGroup),a
-	ld a,<ROOM_SEASONS_7ff
-	ld (wActiveRoom),a
-	ld a,$77
-	ld (wDungeonMapPosition),a
-	ld a,TILESETFLAG_SIDESCROLL | TILESETFLAG_DUNGEON
-	ld (wTilesetFlags),a
-
-	ld a,:w2DungeonLayout
-	ld ($ff00+R_SVBK),a
-	ld hl,w2DungeonLayout+$3f
-	ld (hl),$ff
-	xor a
-	ld ($ff00+R_SVBK),a
-
-	ld a,$04
-	jp fadeoutToWhiteWithDelay
-
-@state1:
-	ld a,(wPaletteThread_mode)
-	or a
-	ret nz
-	ld a,$02
-	ld (wCutsceneState),a
-
-@state2:
-	call func_1613
-	call updateMenus
-	ret nz
-	ld a,(wWarpTransition2)
-	or a
-	jp nz,applyWarpTransition2
-
-	call seasonsFunc_331b
-	call seasonsFunc_34a0
-	call updateStatusBar
-	ld a,(wCutsceneTrigger)
-	or a
-	jp z,checkEnemyAndPartCollisionsIfTextInactive
-	jp setCutsceneIndexIfCutsceneTriggerSet
-
-.endif
+.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
+.include "code/seasons/cutscenes/fallIntoDragonOnoxArena.s"
 
 ;;
 ; Seasons-only
@@ -4554,11 +4806,11 @@ func_5d41:
 
 	jp updateAllObjects
 
-
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 	.include "code/ages/cutscenes.s"
-.else; ROM_SEASONS
+.elif defined(ROM_SEASONS)
 	.include "code/seasons/cutscenes.s"
+.endif
 .endif
 
 
@@ -4585,11 +4837,16 @@ cutscene16:
 	ld (wDisableScreenTransitions),a
 	ret
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 ;;
 ; For some reason, Ages's version of this function is further down than Season's version.
+
+.if defined(ROM_COMBO)
+checkDisplayEraOrSeasonInfo_seasons:
+.else
 checkDisplayEraOrSeasonInfo:
+.endif
 	ld a,GLOBALFLAG_DONT_DISPLAY_SEASON_INFO
 	call checkGlobalFlag
 	jr z,+
@@ -4661,7 +4918,11 @@ checkPlayRoomMusic:
 	ret z
 .endif
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+.endif
 	; Override subrosia music if on a date with Rosa
 	ld a,GLOBALFLAG_DATING_ROSA
 	call checkGlobalFlag
@@ -4679,7 +4940,11 @@ checkPlayRoomMusic:
 	or a
 	ret z
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,++
+.endif
 	; Override symmetry city present music if it hasn't been restored yet
 	ld a,(wActiveMusic2)
 	cp MUS_SYMMETRY_PRESENT
@@ -4709,10 +4974,14 @@ checkPlayRoomMusic:
 	jp playSound
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 ;;
 ; Seasons has a version of this function a bit higher up.
 checkDisplayEraOrSeasonInfo:
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jp c,checkDisplayEraOrSeasonInfo_seasons
+.endif
 	ld a,GLOBALFLAG_16
 	call checkGlobalFlag
 	jr z,+
@@ -4746,12 +5015,19 @@ checkDisplayEraOrSeasonInfo:
 ;
 updateGrassAnimationModifier:
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) && !defined(ROM_COMBO)
 	ld a,$00
 	ld (wGrassAnimationModifier),a
 	ret
 
 .else; ROM_SEASONS
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+		xor a
+		jr ++
+	+
+.endif
 
 	ld a,(wLoadingRoomPack)
 	inc a
@@ -4769,6 +5045,7 @@ updateGrassAnimationModifier:
 	ld hl,@grassAnimationValues
 	rst_addAToHl
 	ld a,(hl)
+++
 	ld (wGrassAnimationModifier),a
 	ret
 
@@ -4789,6 +5066,12 @@ loadDeathRespawnBufferPreset:
 	ld a,c
 	call multiplyABy8
 	ld hl,@respawnBuffers
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+		ld hl,@respawnBuffers_seasons
+	+
+.endif
 	add hl,bc
 	ld de,wDeathRespawnBuffer-1
 	ldi a,(hl)
@@ -4805,13 +5088,17 @@ loadDeathRespawnBufferPreset:
 	ret
 
 @respawnBuffers:
-
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.db $fe $00 $b6 $03 $02 $48 $78 $00
 	.db $fe $00 $38 $00 $02 $68 $50 $00
 	.db $dc $00 $6f $ff $02 $58 $78 $ff
 	.db $dc $01 $58 $ff $02 $48 $58 $ff
-.else; ROM_SEASONS
+.endif
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+@respawnBuffers_seasons:
+.endif
 	.db $fe $00 $b6 $03 $02 $48 $78 $00
 	.db $fe $02 $5d $00 $02 $68 $50 $00
 	.db $dc $00 $6f $ff $02 $58 $78 $ff
@@ -4819,7 +5106,7 @@ loadDeathRespawnBufferPreset:
 .endif
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 ;;
 ; Checks room packs to see whether "fadeout" transition should occur. In Seasons this
@@ -4828,7 +5115,12 @@ loadDeathRespawnBufferPreset:
 ; Seasons puts its implementation of this function at the end of the bank.
 ;
 ; @param[out]	zflag	nz if fadeout transition should occur
+
 checkRoomPack:
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jp c,checkRoomPack_seasons
+.endif
 	ld a,(wActiveGroup)
 	cp $02
 	jr c,+
@@ -4916,16 +5208,30 @@ getNextActiveRoom:
 	ret z
 	ld a,(wActiveRoom)
 	ld hl,mapTransitionGroupTable
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+		ld hl,mapTransitionGroupTable_seasons
+	+
+.endif
 	call findRoomSpecificData
 	jr nc,screenTransitionStandard
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+		add $04
+	+
+.endif
 	rst_jumpTable
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.dw screenTransitionForestScrambler
 	.dw clearEyePuzzleVars
 	.dw clearEyePuzzleVars
 	.dw screenTransitionEyePuzzle
-.else
+.endif
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	.dw screenTransitionLostWoods
 	.dw screenTransitionSwordUpgrade
 	.dw screenTransitionOnoxDungeon
@@ -4947,19 +5253,19 @@ clearEyePuzzleVars:
 	ret
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 	mapTransitionGroupTable:
-		.dw mapTransitionGroup0Data
-		.dw mapTransitionGroup1Data
-		.dw mapTransitionGroup2Data
-		.dw mapTransitionGroup3Data
-		.dw mapTransitionGroup4Data
-		.dw mapTransitionGroup5Data
-		.dw mapTransitionGroup6Data
-		.dw mapTransitionGroup7Data
+		.dw @mapTransitionGroup0Data
+		.dw @mapTransitionGroup1Data
+		.dw @mapTransitionGroup2Data
+		.dw @mapTransitionGroup3Data
+		.dw @mapTransitionGroup4Data
+		.dw @mapTransitionGroup5Data
+		.dw @mapTransitionGroup6Data
+		.dw @mapTransitionGroup7Data
 
-	mapTransitionGroup0Data:
+	@mapTransitionGroup0Data:
 		.db $70 $00 ; ForestScrambler
 		.db $71 $00 ; ForestScrambler
 		.db $72 $00 ; ForestScrambler
@@ -4971,43 +5277,48 @@ clearEyePuzzleVars:
 		.db $92 $00 ; ForestScrambler
 		.db $00
 
-	mapTransitionGroup1Data:
-	mapTransitionGroup2Data:
-	mapTransitionGroup3Data:
-	mapTransitionGroup4Data:
-	mapTransitionGroup6Data:
-	mapTransitionGroup7Data:
+	@mapTransitionGroup1Data:
+	@mapTransitionGroup2Data:
+	@mapTransitionGroup3Data:
+	@mapTransitionGroup4Data:
+	@mapTransitionGroup6Data:
+	@mapTransitionGroup7Data:
 		.db $00
 
-	mapTransitionGroup5Data:
+	@mapTransitionGroup5Data:
 		.db $f3 $03 ; EyePuzzle
 		.db $00
 
-.else; ROM_SEASONS
+.endif
 
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	mapTransitionGroupTable_seasons:
+.else
 	mapTransitionGroupTable:
-		.dw mapTransitionGroup0Data
-		.dw mapTransitionGroup1Data
-		.dw mapTransitionGroup2Data
-		.dw mapTransitionGroup3Data
-		.dw mapTransitionGroup4Data
-		.dw mapTransitionGroup5Data
-		.dw mapTransitionGroup6Data
-		.dw mapTransitionGroup7Data
+.endif
+		.dw @mapTransitionGroup0Data
+		.dw @mapTransitionGroup1Data
+		.dw @mapTransitionGroup2Data
+		.dw @mapTransitionGroup3Data
+		.dw @mapTransitionGroup4Data
+		.dw @mapTransitionGroup5Data
+		.dw @mapTransitionGroup6Data
+		.dw @mapTransitionGroup7Data
 
-	mapTransitionGroup0Data:
+	@mapTransitionGroup0Data:
 		.db $40 $00 ; LostWoods
 		.db $c9 $01 ; SwordUpgrade
 
-	mapTransitionGroup1Data:
-	mapTransitionGroup2Data:
-	mapTransitionGroup3Data:
-	mapTransitionGroup4Data:
-	mapTransitionGroup6Data:
-	mapTransitionGroup7Data:
+	@mapTransitionGroup1Data:
+	@mapTransitionGroup2Data:
+	@mapTransitionGroup3Data:
+	@mapTransitionGroup4Data:
+	@mapTransitionGroup6Data:
+	@mapTransitionGroup7Data:
 		.db $00
 
-	mapTransitionGroup5Data:
+	@mapTransitionGroup5Data:
 		.db $93 $02 ; OnoxDungeon
 		.db $94 $02 ; OnoxDungeon
 		.db $95 $02 ; OnoxDungeon
@@ -5018,7 +5329,7 @@ clearEyePuzzleVars:
 
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 ;;
 ; Forest scrambler code
@@ -5066,9 +5377,9 @@ screenTransitionForestScrambler:
 	.db $72 $91 $00 $92
 	.db $82 $00 $00 $92
 
+.endif
 
-.else; ROM_SEASONS
-
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 ;;
 screenTransitionLostWoods:
@@ -5081,7 +5392,7 @@ screenTransitionLostWoods:
 	jr nz,+
 	ld a,(wLostWoodsTransitionCounter1)
 	cp $03
-	jr nz,screenTransitionStandard
+	jp nz,screenTransitionStandard
 +
 	ld a,$40
 	ld (wActiveRoom),a
@@ -5269,21 +5580,38 @@ screenTransitionEyePuzzle:
 ;;
 updateSeedTreeRefillData:
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	ld a,(wTilesetFlags)
 	and TILESETFLAG_OUTDOORS
 	ret z
+.if defined(ROM_COMBO)
+	jr ++
++
+.endif
+.endif
 
-.else; ROM_SEASONS
-
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	ld a,(wActiveGroup)
 	or a
 	ret nz
+++
 .endif
 
 	ld a,:wxSeedTreeRefillData
 	ld ($ff00+R_SVBK),a
+.if defined(ROM_COMBO)
+	ld hl,seedTreeRefillLocations_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,seedTreeRefillLocations_ages
+	+
+.else
 	ld hl,seedTreeRefillLocations
+.endif
 	ld b,NUM_SEED_TREES
 --
 	push bc
@@ -5314,7 +5642,11 @@ checkSeedTreeRefillIndex:
 	ld a,b
 	ldh (<hFF8D),a
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,++
+.endif
 	ld a,e
 	res 0,e
 	and $01
@@ -5336,8 +5668,11 @@ checkSeedTreeRefillIndex:
 	call checkFlag
 	pop hl
 	ret nz
+	jr +
+	++
+.endif
 
-.else ; ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	ld a,(wActiveRoom)
 	cp c
 	ld d,>wxSeedTreeRefillData
@@ -5353,6 +5688,7 @@ checkSeedTreeRefillIndex:
 	ld a,(wSeedTreeRefilledBitset)
 	and b
 	ret nz
+	+
 .endif
 
 	ld a,(wActiveRoom)
@@ -5380,7 +5716,11 @@ checkSeedTreeRefillIndex:
 ; This screen contains the tree we're checking
 @treeScreen:
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,++
+.endif
 	push hl
 	push de
 	ld c,$08
@@ -5412,9 +5752,10 @@ checkSeedTreeRefillIndex:
 	call clearMemory
 	pop hl
 	ret
+++
+.endif
 
-.else; ROM_SEASONS
-
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	ld c,$08
 --
 	ld a,(de)
@@ -5451,16 +5792,23 @@ checkSeedTreeRefillIndex:
 ;;
 initializeSeedTreeRefillData:
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,++
+.endif
 	ld hl,wSeedTreeRefilledBitset
 	ld (hl),$f0
 	inc l
 	ld (hl),$ff
+	jr +
+	++
+.endif
 
-.else; ROM_SEASONS
-
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	ld a,$fc
 	ld (wSeedTreeRefilledBitset),a
+	+
 .endif
 
 	ld a,:wxSeedTreeRefillData
@@ -5668,9 +6016,14 @@ checkTileWarps:
 	call checkTileIsWarpTile
 	jr nc,noWarpInitiated
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+.endif
 	dec a
 	jr z,@chimney
++
 .endif
 
 	ld a,(wLinkGrabState)
@@ -5686,7 +6039,7 @@ checkTileWarps:
 	callab bank4.findWarpSourceAndDest
 	jp initiateWarp
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 ; Apparently, the chimney in Seasons ignores any checks for held items or proper
 ; centering.
@@ -5736,14 +6089,23 @@ checkTileWarps:
 ; Ages & Seasons have different criteria for when to change the bounds on partially-solid
 ; tiles...
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,++
+.endif
 	or a
 	ld b,$02
 	jr nz,+
 	ld b,$04
 +
-.else; ROM_SEASONS
+.if defined(ROM_COMBO)
+	jr +
+++
+.endif
+.endif
 
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	cp $0c
 	ld b,$02
 	jr z,+
@@ -5808,23 +6170,29 @@ checkScreenEdgeWarps:
 ; @param	a	Tile index
 ; @param[out]	cflag	Set if this tile is a warp tile.
 checkTileIsWarpTile:
+.if defined(ROM_COMBO)
+	ld hl,warpTileTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,warpTileTable_ages
+	+
+.else
 	ld hl,warpTileTable
+.endif
 	jp lookupCollisionTable
 
 
 .include {"{GAME_DATA_DIR}/tile_properties/warpTiles.s"}
 
 
-.ifdef ROM_AGES
-
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.include "code/ages/underwaterWaves.s"
 	.include "code/ages/timewarpTileSolidityCheck.s"
+.endif
 
-.else; ROM_SEASONS
-
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	.include "code/seasons/onoxCastleEssenceCutscene.s"
-
-.endif ; ROM_SEASONS
+.endif
 
 .ENDS
 
@@ -5832,7 +6200,11 @@ checkTileIsWarpTile:
 ; This is superfree (bank can change) so namespace should be different from the others
 m_section_superfree Bank_1_Data_2 NAMESPACE bank1Moveable
 
+.if defined(ROM_COMBO)
+	.include {"{BUILD_DIR}/paletteHeaders.s"}
+.else
 	.include {"{GAME_DATA_DIR}/paletteHeaders.s"}
+.endif
 	.include {"{GAME_DATA_DIR}/uncmpGfxHeaders.s"}
 	.include {"{GAME_DATA_DIR}/gfxHeaders.s"}
 	; HACK-BASE: Removed for expanded tilesets patch
@@ -5843,22 +6215,8 @@ m_section_superfree Bank_1_Data_2 NAMESPACE bank1Moveable
 
 m_section_free Bank_1_Code_3 NAMESPACE bank1
 
-.ifdef ROM_AGES
-;;
-; CUTSCENE_FAIRIES_HIDE
-cutscene13:
-	callab bank3Cutscenes.func_03_6103
-	call func_1613
-	jp updateAllObjects
-
-;;
-; CUTSCENE_BOOTED_FROM_PALACE
-cutscene14:
-	callab bank3Cutscenes.func_03_6275
-	call func_1613
-	call updateAllObjects
-	jp updateStatusBar
-
+.if defined(ROM_AGES) && !defined(ROM_COMBO)
+	.include "code/ages/miscCutscenes2.s"
 .endif
 
 ;;
@@ -5980,7 +6338,7 @@ func_7b93:
 	jp initializeRoom
 
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 ;;
 ; Checks room packs to see whether "fadeout" transition should occur, and determines
@@ -5990,7 +6348,11 @@ func_7b93:
 ; Ages's version of this function is higher up.
 ;
 ; @param[out]	zflag	nz if fadeout transition should occur
+.if defined(ROM_COMBO)
+checkRoomPack_seasons:
+.else
 checkRoomPack:
+.endif
 	ld a,(wActiveGroup)
 	or a
 	jr z,+
@@ -6093,8 +6455,10 @@ checkRoomPackAfterWarp_body:
 	ld (wRoomStateModifier),a
 	ret
 
-.else ; ROM_AGES
+.endif
 
+
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 ;;
 updateLastToggleBlocksState:
 	ld a,(wToggleBlocksState)
@@ -6116,15 +6480,15 @@ checkUpdateToggleBlocks:
 	ld (wCutsceneTrigger),a
 	ret
 
+.ifndef ROM_COMBO
 	.include "code/ages/cutscenes2.s"
+.endif
+
 	.include "code/ages/pirateShip.s"
 
-;;
-; CUTSCENE_BLACK_TOWER_ESCAPE_ATTEMPT
-cutscene1f:
-	callab bank3Cutscenes.func_03_7cb7
-	call updateStatusBar
-	jp updateAllObjects
+.ifndef ROM_COMBO
+	.include "code/ages/cutscenes/blackTowerEscapeAttempt.s"
+.endif
 
 .endif ; ROM_AGES
 

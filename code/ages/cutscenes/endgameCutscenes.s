@@ -1,5 +1,39 @@
 ; This code goes right after the cutscene code in bank 3 (shares the same namespace)
 
+.ifdef ROM_COMBO
+; adding a copy of these functions so cutscenes can be split across banks
+func_6e9a:
+	ldh (<hFF8B),a
+	ld a,$01
+	ld ($ff00+R_VBK),a
+	ld hl,$9800
+	ld bc,$0040
+	ldh a,(<hFF8B)
+	call fillMemoryBc16ByteBlocks
+	xor a
+	ld ($ff00+R_VBK),a
+	ld hl,$9800
+	ld bc,$0400
+	jp clearMemoryBc
+
+func_6ed6:
+	ldh (<hFF8B),a
+	ld a,($ff00+R_SVBK)
+	push af
+	ld a,$04
+	ld ($ff00+R_SVBK),a
+	ld hl,w4TileMap
+	ld bc,$0240
+	call clearMemoryBc
+	ld hl,w4AttributeMap
+	ld bc,$0024
+	ldh a,(<hFF8B)
+	call fillMemoryBc16ByteBlocks
+	pop af
+	ld ($ff00+R_SVBK),a
+	ret
+.endif
+
 ;;
 ; CUTSCENE_BLACK_TOWER_ESCAPE
 .ifdef ROM_COMBO
@@ -134,8 +168,13 @@ endgameCutsceneHandler_09_stage0_ages:
 	ld l,<w1Link.direction
 	ld (hl),DIR_DOWN
 
+.ifdef ROM_COMBO
+	ld hl,blackTowerEscape_simulatedInput1
+	ld a,:blackTowerEscape_simulatedInput1
+.else
 	ld hl,cutscenesBank10.blackTowerEscape_simulatedInput1
 	ld a,:cutscenesBank10.blackTowerEscape_simulatedInput1
+.endif
 	call setSimulatedInputAddress
 
 	ld hl,blackTowerEscapeCutscene_doorOpenReplacement
@@ -170,8 +209,13 @@ endgameCutsceneHandler_09_stage0_ages:
 	ld (wDisabledObjects),a
 	ld (wScrollMode),a
 
+.ifdef ROM_COMBO
+	ld hl,blackTowerEscape_simulatedInput2
+	ld a,:blackTowerEscape_simulatedInput2
+.else
 	ld hl,cutscenesBank10.blackTowerEscape_simulatedInput2
 	ld a,:cutscenesBank10.blackTowerEscape_simulatedInput2
+.endif
 	jp setSimulatedInputAddress
 
 @state8:
@@ -220,8 +264,13 @@ endgameCutsceneHandler_09_stage0_ages:
 	ld l,<w1Link.direction
 	ld (hl),DIR_UP
 
+.ifdef ROM_COMBO
+	ld hl,blackTowerEscape_simulatedInput3
+	ld a,:blackTowerEscape_simulatedInput3
+.else
 	ld hl,cutscenesBank10.blackTowerEscape_simulatedInput3
 	ld a,:cutscenesBank10.blackTowerEscape_simulatedInput3
+.endif
 	call setSimulatedInputAddress
 	xor a
 	ld (wScrollMode),a
@@ -232,8 +281,13 @@ endgameCutsceneHandler_09_stage0_ages:
 	cp $06
 	ret nz
 	call incCbc2
+.ifdef ROM_COMBO
+	ld hl,blackTowerEscape_simulatedInput4
+	ld a,:blackTowerEscape_simulatedInput4
+.else
 	ld hl,cutscenesBank10.blackTowerEscape_simulatedInput4
 	ld a,:cutscenesBank10.blackTowerEscape_simulatedInput4
+.endif
 	jp setSimulatedInputAddress
 
 @stateC:
@@ -255,7 +309,11 @@ endgameCutsceneHandler_09_stage0_ages:
 	or a
 	ret nz
 	call incCbc2
+.ifdef ROM_COMBO
+	callab bank3Cutscenes_3.cutscene_loadRoomObjectSetAndFadein
+.else
 	call cutscene_loadRoomObjectSetAndFadein
+.endif
 	xor a
 	ld (wTmpcfc0.genericCutscene.cfd1),a
 	ld (wTmpcfc0.genericCutscene.cfdf),a
@@ -290,7 +348,11 @@ endgameCutsceneHandler_09_stage0_ages:
 	ret nz
 
 	call incCbc2
+.ifdef ROM_COMBO
+	callab bank3Cutscenes_3.cutscene_loadRoomObjectSetAndFadein
+.else
 	call cutscene_loadRoomObjectSetAndFadein
+.endif
 
 	ld hl,w1Link.enabled
 	ld (hl),$03
@@ -469,8 +531,13 @@ endgameCutsceneHandler_09_stage1_ages:
 	ld (hl),$d0
 
 @loadCertainOamData1:
+.ifdef ROM_COMBO
+	ld hl,oamData_4d05
+	ld e,:oamData_4d05
+.else
 	ld hl,bank16.oamData_4d05
 	ld e,:bank16.oamData_4d05
+.endif
 
 @loadOamData:
 	ld b,$30
@@ -500,8 +567,13 @@ endgameCutsceneHandler_09_stage1_ages:
 	ld (hl),$d0
 
 @loadCertainOamData2:
+.ifdef ROM_COMBO
+	ld hl,oamData_4d9e
+	ld e,:oamData_4d9e
+.else
 	ld hl,bank16.oamData_4d9e
 	ld e,:bank16.oamData_4d9e
+.endif
 	jr @loadOamData
 
 @state5:
@@ -645,7 +717,11 @@ endgameCutsceneHandler_20:
 @state0:
 	ld a,$0b
 	ld (wTmpcfc0.genericCutscene.cfde),a
+.ifdef ROM_COMBO
+	callab bank3Cutscenes_3.cutscene_loadRoomObjectSetAndFadein
+.else
 	call cutscene_loadRoomObjectSetAndFadein
+.endif
 	call hideStatusBar
 	ld a,PALH_ac
 	call loadPaletteHeader
@@ -821,7 +897,11 @@ endgameCutsceneHandler_20:
 	call incCbc1
 	ld a,$0c
 	ld (wTmpcfc0.genericCutscene.cfde),a
+.ifdef ROM_COMBO
+	callab bank3Cutscenes_3.cutscene_loadRoomObjectSetAndFadein
+.else
 	call cutscene_loadRoomObjectSetAndFadein
+.endif
 	ld hl,w1Link.enabled
 	ld (hl),$03
 	ld l,<w1Link.yh
@@ -1230,7 +1310,11 @@ endgameCutsceneHandler_0f:
 	call incCbc2
 	ld a,$11
 	ld (wTmpcfc0.genericCutscene.cfde),a
+.ifdef ROM_COMBO
+	callab bank3Cutscenes_3.cutscene_loadRoomObjectSetAndFadein
+.else
 	call cutscene_loadRoomObjectSetAndFadein
+.endif
 	ld a,$04
 	ld b,$02
 	call cutscene_loadAObjectGfxBTimes_andReload
@@ -1619,10 +1703,18 @@ endgameCutsceneHandler_0a:
 	jp fadeoutToWhite
 
 @state2:
+.ifdef ROM_COMBO
+	jp agesFunc_10_70f6
+.else
 	jpab cutscenesBank10.agesFunc_10_70f6
+.endif
 
 @state3:
+.ifdef ROM_COMBO
+	jp agesFunc_10_7298
+.else
 	jpab cutscenesBank10.agesFunc_10_7298
+.endif
 
 ;;
 ; Called from disableLcdAndLoadRoom in bank 0.
@@ -1755,15 +1847,25 @@ cutscene_rumbleSoundWhenFrameCounterLowerNibbleIs0:
 
 ;;
 cutscene_resetOamWithSomething1:
+.ifdef ROM_COMBO
+	ld hl,oamData_4f73
+	ld e,:oamData_4f73
+.else
 	ld hl,bank16.oamData_4f73
 	ld e,:bank16.oamData_4f73
+.endif
 	ld bc,$3038
 	jr cutscene_resetOamWithData
 
 ;;
 cutscene_resetOamWithSomething2:
+.ifdef ROM_COMBO
+	ld hl,oamData_4e37
+	ld e,:oamData_4e37
+.else
 	ld hl,bank16.oamData_4e37
 	ld e,:bank16.oamData_4e37
+.endif
 	ld bc,$3038
 
 ;;

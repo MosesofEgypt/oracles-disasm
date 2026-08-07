@@ -12852,7 +12852,11 @@ seasonsFunc_332f:
 flameOfDestructionsCutsceneCaller:
 	ldh a,(<hRomBank)
 	push af
+.ifdef ROM_COMBO
+	callfrombank0 bank3Cutscenes_2.flameOfDestructionCutsceneBody
+.else
 	callfrombank0 bank3Cutscenes.flameOfDestructionCutsceneBody
+.endif
 	pop af
 	rst_setrombank
 	ret
@@ -12860,7 +12864,11 @@ flameOfDestructionsCutsceneCaller:
 zeldaAndVillagersCutsceneCaller:
 	ldh a,(<hRomBank)
 	push af
+.ifdef ROM_COMBO
+	callfrombank0 bank3Cutscenes_2.zeldaAndVillagersCutsceneBody
+.else
 	callfrombank0 bank3Cutscenes.zeldaAndVillagersCutsceneBody
+.endif
 	pop af
 	rst_setrombank
 	ret
@@ -12868,7 +12876,11 @@ zeldaAndVillagersCutsceneCaller:
 zeldaKidnappedCutsceneCaller:
 	ldh a,(<hRomBank)
 	push af
+.ifdef ROM_COMBO
+	callfrombank0 bank3Cutscenes_2.zeldaKidnappedCutsceneBody
+.else
 	callfrombank0 bank3Cutscenes.zeldaKidnappedCutsceneBody
+.endif
 	pop af
 	rst_setrombank
 	ret
@@ -13153,7 +13165,11 @@ getEntryFromObjectTable2:
 multiIntroCutsceneCaller:
 	ldh a,(<hRomBank)
 	push af
+.ifdef ROM_COMBO
+	callfrombank0 bank3Cutscenes_2.multiIntroCutsceneHandler
+.else
 	callfrombank0 bank3Cutscenes.multiIntroCutsceneHandler
+.endif
 	pop af
 	rst_setrombank
 	ret

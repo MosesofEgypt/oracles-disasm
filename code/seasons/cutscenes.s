@@ -1,3 +1,65 @@
+.if defined(ROM_COMBO)
+
+; these function copies were added so they're available from this bank
+
+cutscene02:
+	ret
+
+setCutsceneIndexIfCutsceneTriggerSet:
+	ld a,(wCutsceneTrigger)
+	and $7f
+	ld (wCutsceneIndex),a
+	xor a
+	ld (wCutsceneTrigger),a
+	ld (wCutsceneState),a
+	ret
+
+applyWarpTransition2:
+	ld hl,wWarpTransition2
+	ld a,(hl)
+	ld b,a
+	ld (hl),$00
+	and $0f
+	cp $02
+	jr nc,++
+
+	ld a,$01
+	ld (wGameState),a
+	lda CUTSCENE_LOADING_ROOM
+	ld (wCutsceneIndex),a
+	ret
+++
+	ld a,(wLinkObjectIndex)
+	cp $d1
+	jr nz,+
+	inc b
++
+	ld a,b
+	and $0f
+	ld (wCutsceneIndex),a
+	bit 7,b
+	jp z,fadeoutToWhite
+
+	ld a,$04
+	jp fadeoutToWhiteWithDelay
+
+func_5d41:
+	call func_1613
+	ld a,(wWarpTransition2)
+	or a
+	jp nz,applyWarpTransition2
+	jp updateAllObjects
+
+func_5d31:
+	call func_1613
+	ld a,(wWarpTransition2)
+	or a
+	jp nz,applyWarpTransition2
+
+	call updateStatusBar
+	jp updateAllObjects
+.endif
+
 ;;
 ; CUTSCENE_S_DIN_DANCING
 cutscene06:
@@ -46,13 +108,21 @@ cutscene0a:
 ;;
 ; CUTSCENE_S_VOLCANO_ERUPTING
 cutscene0b:
+.ifdef ROM_COMBO
+	callab bank3Cutscenes_2.cutsceneHandler_0b
+.else
 	callab bank3Cutscenes.cutsceneHandler_0b
+.endif
 	jr func_5d31
 
 ;;
 ; CUTSCENE_S_PIRATES_DEPART
 cutscene0c:
+.ifdef ROM_COMBO
+	callab bank3Cutscenes_2.cutsceneHandler_0c
+.else
 	callab bank3Cutscenes.cutsceneHandler_0c
+.endif
 	jr func_5d31
 
 ;;
@@ -67,7 +137,7 @@ cutscene0d:
 cutscene0e:
 	ld a,(wWarpTransition2)
 	or a
-	jr nz,applyWarpTransition2
+	jp nz,applyWarpTransition2
 	ld e,$04
 	call multiIntroCutsceneCaller
 	jp updateAnimationsAfterCutscene

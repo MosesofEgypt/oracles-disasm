@@ -13,13 +13,6 @@ incCutsceneState:
 	ret
 
 ;;
-; Unused
-unused_incTmpcbb3:
-	ld hl,wTmpcbb3
-	inc (hl)
-	ret
-
-;;
 decTmpcbb4:
 	ld hl,wTmpcbb4
 	dec (hl)
@@ -1491,7 +1484,7 @@ introCinematic_inTemple_state0:
 	ld (hl),$50
 
 	; Intro input data was moved to another bank in Ages
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES) && !defined(ROM_COMBO)
 	ld hl,cutscenesBank10.templeIntro_simulatedInput
 	ld a,:cutscenesBank10.templeIntro_simulatedInput
 .else

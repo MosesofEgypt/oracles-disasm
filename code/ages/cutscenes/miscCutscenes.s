@@ -1810,7 +1810,9 @@ func_6eb7:
 	pop af
 	ld ($ff00+R_SVBK),a
 	ret
-	
+
+.ifndef ROM_COMBO
+; moved for rom combo
 func_6ed6:
 	ldh (<hFF8B),a
 	ld a,($ff00+R_SVBK)
@@ -1827,6 +1829,7 @@ func_6ed6:
 	pop af
 	ld ($ff00+R_SVBK),a
 	ret
+.endif
 
 func_6ef7:
 	ld a,(wTmpcbb9)

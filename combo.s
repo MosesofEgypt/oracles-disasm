@@ -29,46 +29,18 @@
 .BANK $01 SLOT 1
 .ORG 0
 
-;	.include "code/bank1.s"
+	.include "code/bank1.s"
 
-; NOTE: temporary code until bank1 can be included
-	.include {"{BUILD_DIR}/paletteHeaders.s"}
-	.include {"{GAME_DATA_DIR}/paletteTransitions.s"}
-	.include {"{GAME_DATA_DIR}/uncmpGfxHeaders.s"}
-	.include {"{GAME_DATA_DIR}/gfxHeaders.s"}
-	.include "data/seasons/roomPackSeasonTable.s"
-; NOTE: temporary code until bank1 can be included
-
-
-; NOTE: temporary code until many banks can be included
-m_section_free Bank_1_test NAMESPACE bank1
-checkUpdateDungeonMinimap:
-checkInitUnderwaterWaves:
-checkSolidObjectAtWarpDestPos:
-clearMemoryOnScreenReload:
-checkDisableUnderwaterWaves:
-calculateRoomEdge:
-func_49c9:
-setObjectsEnabledTo2:
-findActiveRoomInDungeonLayoutWithPointlessBankSwitch:
-	ret
-
-.include {"{GAME_DATA_DIR}/dungeonData.s"}
-.include "data/dungeonProperties.s"
-.include {"{GAME_DATA_DIR}/dungeonLayouts.s"}
-.include {"{GAME_DATA_DIR}/seedTreeRefillData.s"}
-.include {"{GAME_DATA_DIR}/tile_properties/warpTiles.s"}
-
-.ends
 
 m_section_free Bank_2_test NAMESPACE bank2
 fileSelect_redrawDecorationsAndSetWramBank4:
+checkDisplayDmgModeScreen:
 removeRing:
 	ret
 .ends
 
-m_section_free Bank_3_test NAMESPACE bank3
-generateGameTransferSecret:
+m_section_free Bank_5_test NAMESPACE bank5
+checkPositionSurroundedByWalls:
 	ret
 .ends
 
@@ -120,23 +92,46 @@ forceLinksDirection:
 .BANK $03 SLOT 1
 .ORG 0
 
-;	.include "code/bank3.s"
+	.include "code/bank3.s"
 
 	 m_section_superfree Bank_3_Cutscenes NAMESPACE bank3Cutscenes
 		.include "code/bank3Cutscenes.s"
+		.include "code/ages/cutscenes/bank10.s"
 		.include "code/ages/cutscenes/endgameCutscenes.s"
+		.include "code/seasons/cutscenes/endgameCutscenes.s"
+		.include {"{GAME_DATA_DIR}/endgameCutsceneOamData.s"}
+	.ends
+
+	 m_section_superfree Bank_3_Cutscenes_2 NAMESPACE bank3Cutscenes_2
+		.include "code/seasons/cutscenes/pirateShipDeparting.s"
+		.include "code/seasons/cutscenes/volcanoErupting.s"
+		.include "code/seasons/cutscenes/linkedGameCutscenes.s"
+		.include "code/seasons/cutscenes/introCutscenes.s"
+		.include "code/combo/bank3CutscenesUtil.s"
+	.ends
+
+	 m_section_superfree Bank_3_Cutscenes_3 NAMESPACE bank3Cutscenes_3
 		.include "code/ages/cutscenes/miscCutscenes.s"
-;		.include "code/seasons/cutscenes/endgameCutscenes.s"
-;		.include "code/seasons/cutscenes/pirateShipDeparting.s"
-;		.include "code/seasons/cutscenes/volcanoErupting.s"
-;		.include "code/seasons/cutscenes/linkedGameCutscenes.s"
-;		.include "code/seasons/cutscenes/introCutscenes.s"
+		.include "code/combo/bank3CutscenesUtil.s"
+	.ends
+
+	 m_section_superfree Bank_3_Cutscenes_ages NAMESPACE bank3Cutscenes_ages
+		.include "code/ages/cutscenes.s"
+		.include "code/ages/cutscenes2.s"
+		.include "code/ages/cutscenes/miscCutscenes2.s"
+		.include "code/ages/cutscenes/blackTowerEscapeAttempt.s"
+	.ends
+
+	 m_section_superfree Bank_3_Cutscenes_seasons NAMESPACE bank3Cutscenes_seasons
+		.include "code/seasons/cutscenes.s"
+		.include "code/seasons/onoxCastleEssenceCutscene.s"
+		.include "code/seasons/cutscenes/fallIntoDragonOnoxArena.s"
 	.ends
 
 .BANK $04 SLOT 1
 .ORG 0
 
-;	.include "code/bank4.s"
+	.include "code/bank4.s"
 	 m_section_free Warp_Data NAMESPACE bank4
 		.include {"{GAME_DATA_DIR}/warpDestinations.s"}
 		.include {"{GAME_DATA_DIR}/warpSources.s"}
@@ -686,8 +681,6 @@ m_section_free Interaction_Code_Group8 NAMESPACE commonInteractions8
 ;	.include "object_code/common/interactions/ringHelpBook.s"
 .ends
 
-	.include "code/ages/cutscenes/bank10.s"
-
 m_section_free Ages_Interactions_Bank10 NAMESPACE agesInteractionsBank10
 ;	.include "object_code/ages/interactions/miscellaneous2.s"
 ;	.include "object_code/ages/interactions/timewarp.s"
@@ -786,7 +779,6 @@ m_section_superfree Room_Code namespace roomSpecificCode
 	.include {"{BUILD_DIR}/enemyOamData_seasons.s"}
 	.include {"{GAME_DATA_DIR}/data_4556.s"}
 
-	; TODO: "SIMPLE_SCRIPT_BANK" define should be tied to this section somehow
 	 m_section_free Scripts2 NAMESPACE scripts2
 ;		.include "scripts/seasons/scripts2.s"
 	.ends
@@ -821,10 +813,6 @@ m_section_superfree Room_Code namespace roomSpecificCode
 	.include {"{BUILD_DIR}/partOamData.s"}
 
 	.include {"{BUILD_DIR}/interactionOamData_seasons.s"}
-
-	m_section_superfree Bank16 NAMESPACE bank16
-		.include {"{GAME_DATA_DIR}/endgameCutsceneOamData.s"}
-	.ends
 
 	m_section_superfree Bank16_2 NAMESPACE bank16
 		.include "code/ages/d6FloorUpdateCode.s"

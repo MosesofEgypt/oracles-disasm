@@ -1,6 +1,8 @@
 ; TODO: Some code in this file is shared with "code/seasons/cutscenes/endgameCutscenes.s"
 
+.if !defined(ROM_COMBO)
 m_section_superfree Cutscenes_Bank10 NAMESPACE cutscenesBank10
+.endif
 
 ; Input values for the intro cutscene in the temple
 templeIntro_simulatedInput:
@@ -107,7 +109,11 @@ agesFunc_10_70f6:
 	ret nz
 	call checkIsLinkedGame
 	jr nz,@func_7174
+.ifdef ROM_COMBO
+	call cutscene_clearTmpCBB3
+.else
 	callab bank3Cutscenes.cutscene_clearTmpCBB3
+.endif
 	ld a,$03
 	ld (wMapMenu.drawWarpDestinations),a
 	ld a,$04
@@ -197,8 +203,13 @@ agesFunc_10_70f6:
 	and $01
 	jr nz,+
 	ld c,a
+.ifdef ROM_COMBO
+	ld hl,oamData_4ed8
+	ld e,:oamData_4ed8
+.else
 	ld hl,bank16.oamData_4ed8
 	ld e,:bank16.oamData_4ed8
+.endif
 	call addSpritesFromBankToOam_withOffset
 +
 	ld a,(wGfxRegs1.SCY)
@@ -208,16 +219,26 @@ agesFunc_10_70f6:
 	add b
 	ld b,a
 	ld c,$38
+.ifdef ROM_COMBO
+	ld hl,oamData_4f21
+	ld e,:oamData_4f21
+.else
 	ld hl,bank16.oamData_4f21
 	ld e,:bank16.oamData_4f21
+.endif
 	push bc
 	call addSpritesFromBankToOam_withOffset
 	pop bc
 	ld a,(wGfxRegs1.SCY)
 	cp $60
 	ret c
+.ifdef ROM_COMBO
+	ld hl,oamData_4f56
+	ld e,:oamData_4f56
+.else
 	ld hl,bank16.oamData_4f56
 	ld e,:bank16.oamData_4f56
+.endif
 	jp addSpritesFromBankToOam_withOffset
 @substate6:
 	call @func_71fd
@@ -256,7 +277,11 @@ agesFunc_10_70f6:
 	call @func_71fd
 	call decCbb3
 	ret nz
+.ifdef ROM_COMBO
+	call cutscene_clearTmpCBB3
+.else
 	callab bank3Cutscenes.cutscene_clearTmpCBB3
+.endif
 	ld a,$03
 	ld (wMapMenu.drawWarpDestinations),a
 	ld a,$04
@@ -289,7 +314,11 @@ agesFunc_10_7298:
 	ret nz
 	call disableLcd
 	call incCbc2
+.ifdef ROM_COMBO
+	call func_60f1
+.else
 	callab bank3Cutscenes.func_60f1
+.endif
 	call clearDynamicInteractions
 	call clearOam
 	call checkIsLinkedGame
@@ -503,8 +532,13 @@ agesFunc_10_7298:
 	ld (hl),$b4
 	jp incCbc2
 @func_7450:
+.ifdef ROM_COMBO
+	ld hl,oamData_4fec
+	ld e,:oamData_4fec
+.else
 	ld hl,bank16.oamData_4fec
 	ld e,:bank16.oamData_4fec
+.endif
 	ld bc,$3038
 	xor a
 	ldh (<hOamTail),a
@@ -532,4 +566,6 @@ agesFunc_10_7298:
 
 .endif ; !REGION_JP
 
+.if !defined(ROM_COMBO)
 .ends
+.endif
