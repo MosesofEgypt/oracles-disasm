@@ -31,14 +31,6 @@
 
 	.include "code/bank1.s"
 
-
-m_section_free Bank_2_test NAMESPACE bank2
-fileSelect_redrawDecorationsAndSetWramBank4:
-checkDisplayDmgModeScreen:
-removeRing:
-	ret
-.ends
-
 m_section_free Bank_5_test NAMESPACE bank5
 checkPositionSurroundedByWalls:
 linkPullIntoHole:
@@ -88,7 +80,7 @@ forceLinksDirection:
 .BANK $02 SLOT 1
 .ORG 0
 
-;	.include "code/bank2.s"
+	.include "code/bank2.s"
 	.include "code/roomInitialization.s"
 
 
