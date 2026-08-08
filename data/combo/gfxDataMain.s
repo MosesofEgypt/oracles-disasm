@@ -470,6 +470,7 @@ m_GfxData gfx_intro_link_riding_horse_2
 m_GfxData gfx_intro_link_riding_horse_3
 m_GfxData gfx_jp_intro_screen_1
 m_GfxData gfx_jp_intro_screen_2
+m_GfxData gfx_key
 m_GfxData gfx_key_orechunk
 m_GfxData gfx_minimap_tiles_holodrum_1
 m_GfxData gfx_minimap_tiles_holodrum_2

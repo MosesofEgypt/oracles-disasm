@@ -828,6 +828,13 @@ m_section_superfree Room_Code namespace roomSpecificCode
 .ORG 0
 	.include {"{BUILD_DIR}/interactionOamData_ages.s"}
 
+m_section_superfree bank19Code NAMESPACE bank19
+	.include {"{GAME_DATA_DIR}/treasureCollectionBehaviours.s"}
+	.include {"{GAME_DATA_DIR}/treasureDisplayData.s"}
+	.include "code/treasureAndDrops.s"
+	.include "code/textbox.s"
+.ends
+
 
 .BANK $1a SLOT 1
 .ORG 0
@@ -1003,18 +1010,17 @@ m_section_free Bank44 NAMESPACE bank44
 .BANK $45 SLOT 1
 .ORG 0
 
-m_section_superfree bank19Code NAMESPACE bank19
-	.include {"{GAME_DATA_DIR}/treasureCollectionBehaviours.s"}
-	.include {"{GAME_DATA_DIR}/treasureDisplayData.s"}
-	.include "code/treasureAndDrops.s"
-	.include "code/textbox.s"
+m_section_superfree bank_0_Ext NAMESPACE bank0Ext
+	.include "code/bank0Ext.s"
 .ends
 
-m_section_superfree bank3dCode NAMESPACE bank3d
+m_section_superfree Menu_Code_2 NAMESPACE menuCode2
+	.include "code/menu_code/ringMenu.s"
+	.include "code/menu_code/fakeResetMenu.s"
+	.include "code/menu_code/saveAndQuitMenu.s"
 	.ifdef ENABLE_SETTINGS_MENU
-		.include "code/settingsMenu.s"
+		.include "code/menu_code/settingsMenu.s"
 	.endif
-	.include "code/bank0Ext.s"
 .ends
 
 

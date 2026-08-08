@@ -156,7 +156,7 @@ GAMEDATAFILES += $(BUILD_DIR)/specialObjectAnimationPointers.s
 
 MAIN_ASM_FILES = 
 AUDIO_FILES =
-#MAIN_ASM_FILES = $(shell find code/ object_code/ objects/ scripts/ -name '*.s' | grep -v '/ages/' | grep -v '/seasons/')
+MAIN_ASM_FILES = $(shell find code/ object_code/ objects/ scripts/ -name '*.s' | grep -v '/ages/' | grep -v '/seasons/')
 AUDIO_FILES  = $(shell find audio/ -name '*.s')
 AUDIO_FILES += $(shell find audio/combo/ -name '*.bin')
 AUDIO_FILES += $(shell find audio/ages/mus/ -name '*.bin')
@@ -188,9 +188,6 @@ $(BUILD_DIR)/*.o: $(COMMON_INCLUDE_FILES) Makefile
 # HACK-BASE: $(GAME).o depends on new expanded tileset layout files.
 $(BUILD_DIR)/$(GAME).o: tileset_layouts_expanded/ages/*.bin
 $(BUILD_DIR)/$(GAME).o: tileset_layouts_expanded/seasons/*.bin
-
-#$(BUILD_DIR)/%.o: code/%.s | $(BUILD_DIR)
-#	$(CC) -o $@ $(CFLAGS) $<
 
 $(BUILD_DIR)/audio.o: code/audio.s | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<

@@ -5760,13 +5760,7 @@ checkReloadStatusBarGraphics:
 .endif
 	jp loadUncompressedGfxHeader
 
-;;
-; Copy $20 bytes from bank b at hl to de.
-;
-; @param	b	Bank
-; @param	de	Destination
-; @param	hl	Source
-
+copy20BytesFromBank:
 	ld c,$20
 
 ;;
@@ -5777,15 +5771,7 @@ checkReloadStatusBarGraphics:
 ; @param	c	Bytes to copy
 ; @param	de	Destination
 ; @param	hl	Source
-
-
-	push af
-	ld a,b
-
-	ld b,c
-	call copyMemory
-	pop af
-
+copyBytesFromBank:
 	ret
 
 ;;

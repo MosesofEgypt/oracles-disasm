@@ -275,7 +275,7 @@ itemCalculateSwordDamage:
 	push bc
 	ld b,a
 	ld c,e
-	callab bank3d.fractionOf8Multiply
+	callab bank0Ext.fractionOf8Multiply
 	ld a,$ff
 	cp b
 	ld a,c ; use the low byte of the result

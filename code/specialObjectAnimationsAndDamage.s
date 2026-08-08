@@ -922,7 +922,7 @@ linkUpdateDamageToApplyForRings:
 	push bc
 	ld b,a
 	ld c,e
-	callab bank3d.fractionOf8Multiply
+	callab bank0Ext.fractionOf8Multiply
 	ld a,$ff
 	cp b
 	ld a,c ; use the low byte of the result
@@ -1177,7 +1177,7 @@ linkApplyDamage:
 		jr nz,+
 			push bc
 			ld b,a
-			callab bank2.removeRing
+			callab bank0Ext.removeRing
 			pop bc
 			scf
 			jr +++

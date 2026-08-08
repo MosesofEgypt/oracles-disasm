@@ -877,11 +877,14 @@ m_section_free Seasons_Interactions_Bank15 NAMESPACE seasonsInteractionsBank15
 .ORG 0
 .define BANK_3d $3d
 
-m_section_free bank3dCode NAMESPACE bank3d
-	.ifdef ENABLE_SETTINGS_MENU
-		.include "code/settingsMenu.s"
-	.endif
+m_section_superfree bank_0_Ext NAMESPACE bank0Ext
 	.include "code/bank0Ext.s"
+.ends
+
+m_section_superfree Menu_Code_2 NAMESPACE menuCode2
+	.ifdef ENABLE_SETTINGS_MENU
+		.include "code/menu_code/settingsMenu.s"
+	.endif
 .ends
 
 .ifdef ENABLE_NEW_GAME_PLUS

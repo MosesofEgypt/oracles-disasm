@@ -779,7 +779,7 @@ loadGfxRegisterStateIndex:
 	add a
 
 .ifdef ENABLE_NEW_GAME_PLUS
-	ld hl,bank3d.gfxRegisterStates
+	ld hl,bank0Ext.gfxRegisterStates
 .else
 	ld hl,gfxRegisterStates
 .endif
@@ -789,7 +789,7 @@ loadGfxRegisterStateIndex:
 .ifdef ENABLE_NEW_GAME_PLUS
 	ldh a,(<hRomBank)
 	push af
-	ld a,:bank3d.gfxRegisterStates
+	ld a,:bank0Ext.gfxRegisterStates
 	setrombank
 .endif
 -
@@ -3802,7 +3802,7 @@ setDeathRespawnPoint:
 .ifdef ENABLE_NEW_GAME_PLUS
 	ldh a,(<hRomBank)
 	push af
-	callfrombank0 bank3d.setDeathRespawnPoint
+	callfrombank0 bank0Ext.setDeathRespawnPoint
 	pop af
 	rst_setrombank
 .else
@@ -5998,7 +5998,7 @@ linkInteractWithAButtonSensitiveObjects:
 	push af
 	ldh a,(<hRomBank)
 	push af
-	callfrombank0 bank3d.linkInteractWithAButtonSensitiveObjects_body
+	callfrombank0 bank0Ext.linkInteractWithAButtonSensitiveObjects_body
 	ld a,c
 	or a
 	scf
@@ -8442,7 +8442,7 @@ getEnemyUpgradeCount:
 	ldh a,(<hRomBank)
 	push bc
 	push af
-	callfrombank0 bank3d.getNgpUpgradeCount
+	callfrombank0 bank0Ext.getNgpUpgradeCount
 	ld b,a
 	pop af
 	rst_setrombank
@@ -8755,7 +8755,7 @@ handleAutoEquipItem:
 	ld b,a
 	ldh a,(<hRomBank)
 	push af
-	callfrombank0 bank3d.handleAutoEquipItem_body
+	callfrombank0 bank0Ext.handleAutoEquipItem_body
 	pop hl
 	ld a,h
 	setrombank
@@ -9071,7 +9071,7 @@ quickSwapHeldItems:
 	push bc
 	push de
 	push hl
-	callfrombank0 bank2.quickSwapHeldItems_body
+	callfrombank0 bank0Ext.quickSwapHeldItems_body
 
 	; run updateStatusBar_body
 	ld a,$01

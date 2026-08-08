@@ -546,3 +546,152 @@ gfxRegisterStates:
 
 	.db $ef $00 $00 $90 $07 $30 ; 0x19
 	.db $e7 $98 $00 $60 $07 $c7
+
+
+.ifdef ENABLE_RING_REDUX
+quickSwapHeldItems_body:
+	ld hl,wInventoryStorage
+	ld de,wInventoryB
+
+.ifndef ONE_HANDED_BIGGORON_SWORD
+	; if either the first or second items are the
+	; biggorons sword, we need to swap both with it
+	ld a,(hl)
+	cp ITEM_BIGGORON_SWORD
+	jp z,@swapToBiggoron
+
+	inc l
+	ld a,(hl)
+	cp ITEM_BIGGORON_SWORD
+	jp z,@swapToBiggoron
+	dec l
+
+	ld a,(de)
+	cp ITEM_BIGGORON_SWORD
+	jp z,@swapFromBiggoron
+.endif
+	call @swapItems
+	inc de
+	inc hl
+
+@swapItems:
+	ld a,(de)
+	ld c,a
+	ld a,(hl)
+	ld (de),a
+	ld (hl),c
+	ret
+
+.ifndef ONE_HANDED_BIGGORON_SWORD
+@swapFromBiggoron:
+	; swap with the overflowed item
+	ld a,(wBiggoronSwordOverflowItem)
+	inc e
+	ld (de),a
+	dec e
+	xor a
+	ld (wBiggoronSwordOverflowItem),a
+
+	call @swapItems
+	inc de
+	inc hl
+	call @swapItems
+	ret
+
+@swapToBiggoron:
+	xor a
+	ld (hl),a
+
+	ld a,(wInventoryB)
+	call @putItemInFirstBlankSlot
+
+	ld a,(wInventoryA)
+	call @putItemInFirstBlankSlot
+
+	ld a,ITEM_BIGGORON_SWORD
+	ld (de),a
+	inc e
+	ld (de),a
+	ret
+.endif
+
+;;
+; @param a Item to put in a blank slot
+@putItemInFirstBlankSlot:
+	or a
+	ret z
+
+	ld c,a
+	ld l,<wInventoryStorage
+-
+	ld a,<wInventoryStorage+$10
+	cp l
+	jr nz,+
+		; overflowing out of inventory.
+		; put in overflow location
+		ld a,c
+		ld (wBiggoronSwordOverflowItem),a
+		ret
+	+
+	ldi a,(hl)
+	or a
+	jr nz,-
+
+	; clear this
+	xor a
+	ld (wBiggoronSwordOverflowItem),a
+
+	dec l
+	ld (hl),c
+	ret
+.endif
+
+.ifdef REDUX_UTIL_FUNCS
+;;
+; Removes the specified ring from the players ring list and unequips it
+;
+; @param	b	The ring to remove
+;
+removeRing:
+	push hl
+	push bc
+	ld a,b
+	ld hl,wRingsObtained
+	call unsetFlag
+	ld a,b
+
+	; remove from primary ring box
+	ld hl,wRingBoxContents
+	call @removeRingLoop
+
+.ifdef EXTENDED_RING_BOX
+	; remove from extended ring box
+	ld hl,wRingBoxContentsExt
+	call @removeRingLoop
+.endif
+
+.ifndef ENABLE_MULTI_RING
+	; remove from active ring
+	ld hl,(wActiveRing)
+	cp (hl)
+	jr nz,+
+		ld (hl),$ff
+	+
+.endif
+	pop bc
+	pop hl
+	ret
+
+@removeRingLoop:
+	ld b,$05
+	-
+		cp (hl)
+		jr nz,+
+			ld (hl),$ff
+		+
+		inc l
+		dec b
+		jr nz,-
+	ret
+
+.endif
