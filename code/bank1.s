@@ -4026,7 +4026,7 @@ cutscene01:
 	jp initializeRoom
 .endif
 
-.if !defined(ROM_COMBO)
+.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
 ;;
 ; CUTSCENE_TOGGLE_BLOCKS
 cutscene02:
@@ -4796,6 +4796,7 @@ func_5d31:
 
 	call updateStatusBar
 	jp updateAllObjects
+.endif
 
 ;;
 func_5d41:
@@ -4806,11 +4807,10 @@ func_5d41:
 
 	jp updateAllObjects
 
-.if defined(ROM_AGES)
+.if defined(ROM_AGES) && !defined(ROM_COMBO)
 	.include "code/ages/cutscenes.s"
-.elif defined(ROM_SEASONS)
+.elif defined(ROM_SEASONS) && !defined(ROM_COMBO)
 	.include "code/seasons/cutscenes.s"
-.endif
 .endif
 
 
@@ -5668,8 +5668,10 @@ checkSeedTreeRefillIndex:
 	call checkFlag
 	pop hl
 	ret nz
+.if defined(ROM_COMBO)
 	jr +
 	++
+.endif
 .endif
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
@@ -5801,8 +5803,10 @@ initializeSeedTreeRefillData:
 	ld (hl),$f0
 	inc l
 	ld (hl),$ff
+.if defined(ROM_COMBO)
 	jr +
 	++
+.endif
 .endif
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
@@ -6216,7 +6220,7 @@ m_section_superfree Bank_1_Data_2 NAMESPACE bank1Moveable
 m_section_free Bank_1_Code_3 NAMESPACE bank1
 
 .if defined(ROM_AGES) && !defined(ROM_COMBO)
-	.include "code/ages/miscCutscenes2.s"
+	.include "code/ages/cutscenes/miscCutscenes2.s"
 .endif
 
 ;;

@@ -879,7 +879,7 @@ gfxRegisterStates:
 	.db $ff $30 $00 $60 $07 $18 ; 0x16: farore's secret list
 	.db $ff $30 $00 $60 $07 $c7
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.db $ef $00 $00 $90 $07 $00 ; 0x17: intro cinematic screen 1
 	.db $e7 $00 $00 $90 $07 $c7
 
@@ -1174,14 +1174,35 @@ loadPaletteHeader:
 	push bc
 	ld a,$02
 	ld ($ff00+R_SVBK),a
+.if defined(ROM_COMBO)
+	ld b,l
+	ld a,:bank1Moveable.paletteHeaderTable_seasons
+	ld hl,bank1Moveable.paletteHeaderTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld a,:bank1Moveable.paletteHeaderTable_ages
+		ld hl,bank1Moveable.paletteHeaderTable_ages
+	+
+	rst_setrombank
+	ld a,b
+.else
 	ld a,:bank1Moveable.paletteHeaderTable
 	rst_setrombank
 	ld a,l
 	ld hl,bank1Moveable.paletteHeaderTable
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 ---
+.if defined(ROM_COMBO)
+	ld a,:bank1Moveable.paletteHeaderTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld a,:bank1Moveable.paletteHeaderTable_ages
+	+
+.else
 	ld a,:bank1Moveable.paletteHeaderTable
+.endif
 	rst_setrombank
 
 	; b: how many palettes to load
@@ -1355,10 +1376,22 @@ loadUncompressedGfxHeader:
 	ldh a,(<hRomBank)
 	ld b,a
 	push bc
+.if defined(ROM_COMBO)
+	ld a,:bank1Moveable.uncmpGfxHeaderTable_seasons
+	ld hl,bank1Moveable.uncmpGfxHeaderTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld a,:bank1Moveable.uncmpGfxHeaderTable_ages
+		ld hl,bank1Moveable.uncmpGfxHeaderTable_ages
+	+
+	rst_setrombank
+	ld a,e
+.else
 	ld a,:bank1Moveable.uncmpGfxHeaderTable
 	rst_setrombank
 	ld a,e
 	ld hl,bank1Moveable.uncmpGfxHeaderTable
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 --
@@ -1382,7 +1415,15 @@ loadUncompressedGfxHeader:
 	ldh (<hFF91),a
 	pop hl
 	call queueDmaTransfer
+.if defined(ROM_COMBO)
+	ld a,:bank1Moveable.uncmpGfxHeaderTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld a,:bank1Moveable.uncmpGfxHeaderTable_ages
+	+
+.else
 	ld a,:bank1Moveable.uncmpGfxHeaderTable
+.endif
 	rst_setrombank
 	ldh a,(<hFF90)
 	ld l,a
@@ -1998,7 +2039,11 @@ _mainLoop_nextThread:
 
 	; No threads remaining this frame
 
+.if defined(ROM_COMBO)
+	callfrombank0 bank44.refreshDirtyPalettes
+.else
 	callfrombank0 bank3f.refreshDirtyPalettes
+.endif
 	xor a
 	ld ($ff00+R_SVBK),a
 	ld hl,wc49e
@@ -2077,7 +2122,7 @@ _initialThreadStates:
 
 ; Upper bytes of addresses of flags for each group
 flagLocationGroupTable:
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	.db >wGroup0RoomFlags,  >wGroup1RoomFlags
 	.db >wGroup0RoomFlags,  >wGroup1RoomFlags
 	.db >wGroup4RoomFlags,  >wGroup5RoomFlags
@@ -2973,11 +3018,16 @@ drawAllSpritesUnconditionally:
 	push af
 	call queueDrawEverything
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	ld a,(wLinkRaisedFloorOffset)
 	ld hl,w1Link.yh
 	add (hl)
 	ld (hl),a
++
 .endif
 
 	ld de,w1Link
@@ -3115,7 +3165,11 @@ drawAllSpritesUnconditionally:
 	jr c,-
 ++
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	; Undo link's Y offset for drawing
 	ld a,(wLinkRaisedFloorOffset)
 	cpl
@@ -3123,6 +3177,7 @@ drawAllSpritesUnconditionally:
 	ld hl,w1Link.yh
 	add (hl)
 	ld (hl),a
++
 .endif
 
 	pop af
@@ -3379,7 +3434,11 @@ _drawObjectTerrainEffects:
 	ld b,>wRoomLayout
 	ld a,(bc)
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+.endif
 	; CROSSITEMS: Cane of Somaria uses tile index $f9 indoors. It behaves like a grass tile, but
 	; it's never used indoors, so disable the grass animation on that tile.
 	; (Even though the somaria block is solid, the grass animation can be seen when item drops
@@ -3395,13 +3454,22 @@ _drawObjectTerrainEffects:
 +
 .endif
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	cp TILEINDEX_GRASS
 	jr z,@walkingInGrass
 	cp TILEINDEX_PUDDLE
 	jr nz,@end
+.if defined(ROM_COMBO)
+	jr @walkingInPuddle
+	+
+.endif
+.endif
 
-.else ; ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	; Seasons has multiple grass and shallow water tiles, so this checks ranges
 	; instead of exact values
 	cp TILEINDEX_GRASS
@@ -3761,10 +3829,22 @@ objectQueueDraw:
 getChestData:
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	ld a,:chestData.chestDataGroupTable_seasons
+	ld hl,chestData.chestDataGroupTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld a,:chestData.chestDataGroupTable_ages
+		ld hl,chestData.chestDataGroupTable_ages
+	+
+	rst_setrombank
+	ld a,(wActiveGroup)
+.else
 	ld a,:chestData.chestDataGroupTable
 	rst_setrombank
 	ld a,(wActiveGroup)
 	ld hl,chestData.chestDataGroupTable
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 	ld a,(wActiveRoom)
@@ -3969,9 +4049,10 @@ setRoomFlagsForUnlockedKeyDoor_overworldOnly:
 	ld a,(wActiveRoom)
 	ld c,a
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 	ld b,>wPresentRoomFlags
 .else
+	; NOTE: same address in both ages and seasons, so no need to change in combo
 	ld b,>wSubrosiaRoomFlags
 .endif
 
@@ -4114,7 +4195,11 @@ func_131f:
 	call          bank1.setScreenTransitionState02
 	call          loadTilesetAndRoomLayout
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	ld a,(wcddf)
 	or a
 	jr z,+
@@ -4158,7 +4243,7 @@ loadTilesetAnimation:
 ; Called when displaying D4 entrance after water shuts off in screen above
 func_1383:
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	push de
 	ld (wActiveRoom),a
 	ld a,b
@@ -4818,7 +4903,11 @@ getTileIndexFromRoomLayoutBuffer_paramC:
 interactionInitGraphics:
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	callfrombank0 bank44.interactionLoadGraphics
+.else
 	callfrombank0 bank3f.interactionLoadGraphics
+.endif
 	ld c,a
 	pop af
 	rst_setrombank
@@ -4834,7 +4923,11 @@ func_1613:
 refreshObjectGfx:
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	callfrombank0 bank44.refreshObjectGfx_body
+.else
 	callfrombank0 bank3f.refreshObjectGfx_body
+.endif
 	xor a
 	ld (wLoadedTreeGfxIndex),a
 	pop af
@@ -4845,7 +4938,11 @@ refreshObjectGfx:
 reloadObjectGfx:
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	callfrombank0 bank44.reloadObjectGfx
+.else
 	callfrombank0 bank3f.reloadObjectGfx
+.endif
 	pop af
 	rst_setrombank
 	ret
@@ -4859,7 +4956,11 @@ reloadObjectGfx:
 loadObjectGfxHeaderToSlot4:
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	callfrombank0 bank44.loadObjectGfxHeaderToSlot4_body
+.else
 	callfrombank0 bank3f.loadObjectGfxHeaderToSlot4_body
+.endif
 	pop af
 	rst_setrombank
 	ret
@@ -4870,7 +4971,11 @@ loadTreeGfx:
 	ld e,a
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	callfrombank0 bank44.loadTreeGfx_body
+.else
 	callfrombank0 bank3f.loadTreeGfx_body
+.endif
 	pop af
 	rst_setrombank
 	ret
@@ -4881,7 +4986,11 @@ loadWeaponGfx:
 	ld e,a
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	callfrombank0 bank44.loadWeaponGfx
+.else
 	callfrombank0 bank3f.loadWeaponGfx
+.endif
 	pop af
 	rst_setrombank
 	ret
@@ -4908,10 +5017,15 @@ loadObjectGfx2:
 	and $7f
 	ld h,a
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,++
+.endif
 	ld a,(wcc1f+$01)
 	or a
 	jr nz,@label_00_192
+++
 .endif
 
 	push de
@@ -4935,7 +5049,7 @@ loadObjectGfx2:
 	ld b,$1f
 	jp queueDmaTransfer
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 @label_00_192:
 	ld a,d
@@ -4961,7 +5075,11 @@ loadTreasureDisplayData:
 	ld l,a
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	callfrombank0 bank19.loadTreasureDisplayData
+.else
 	callfrombank0 bank3f.loadTreasureDisplayData
+.endif
 	pop af
 	rst_setrombank
 	ret
@@ -4974,7 +5092,11 @@ decideItemDrop:
 	ld c,a
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	callfrombank0 bank19.decideItemDrop_body
+.else
 	callfrombank0 bank3f.decideItemDrop_body
+.endif
 	pop af
 	rst_setrombank
 	ld a,c
@@ -4990,10 +5112,18 @@ checkItemDropAvailable:
 	ld c,a
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	ld a,:bank19.checkItemDropAvailable_body
+.else
 	ld a,:bank3f.checkItemDropAvailable_body
+.endif
 	rst_setrombank
 	ld a,c
+.if defined(ROM_COMBO)
+	call bank19.checkItemDropAvailable_body
+.else
 	call bank3f.checkItemDropAvailable_body
+.endif
 	pop af
 	rst_setrombank
 	ld a,c
@@ -5008,7 +5138,11 @@ giveTreasure:
 	ld b,a
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	callfrombank0 bank19.giveTreasure_body
+.else
 	callfrombank0 bank3f.giveTreasure_body
+.endif
 	pop af
 	rst_setrombank
 	ld a,b
@@ -5021,7 +5155,11 @@ loseTreasure:
 	ld b,a
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	callfrombank0 bank19.loseTreasure_body
+.else
 	callfrombank0 bank3f.loseTreasure_body
+.endif
 	pop af
 	rst_setrombank
 	ret
@@ -5038,7 +5176,11 @@ checkTreasureObtained:
 
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	callfrombank0 bank19.checkTreasureObtained_body
+.else
 	callfrombank0 bank3f.checkTreasureObtained_body
+.endif
 	pop af
 	setrombank
 	ld a,l
@@ -5048,7 +5190,7 @@ checkTreasureObtained:
 	ret
 
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 ;;
 ; Same as below but for ore chunks.
 cpOreChunkValue:
@@ -5089,7 +5231,7 @@ cpRupeeValue:
 	ret
 
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 ;;
 removeOreChunkValue:
 	ld hl,wNumOreChunks
@@ -5197,7 +5339,11 @@ setStatusBarNeedsRefreshBit1:
 getRandomRingOfGivenTier:
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	ld a,:bank19.ringTierTable
+.else
 	ld a,:bank3f.ringTierTable
+.endif
 	rst_setrombank
 
 .ifdef ENABLE_GASHA_REBALANCE
@@ -5209,7 +5355,11 @@ getRandomRingOfGivenTier:
 	jr z,+
 	ld b,$07
 +
+.if defined(ROM_COMBO)
+	ld hl,bank19.ringTierTable
+.else
 	ld hl,bank3f.ringTierTable
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 
@@ -5373,9 +5523,15 @@ textThreadStart:
 	jp stubThreadStart
 
 @showText:
+.if defined(ROM_COMBO)
+	callfrombank0 bank19.initTextbox
+-
+	callfrombank0 bank19.updateTextbox
+.else
 	callfrombank0 bank3f.initTextbox
 -
 	callfrombank0 bank3f.updateTextbox
+.endif
 	call resumeThreadNextFrame
 	jr -
 
@@ -5554,7 +5710,7 @@ getARoomFlags:
 ; @param[out]	hl	Address of room flags
 getRoomFlags:
 	ld hl, flagLocationGroupTable
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	cp $02
 	jr nz,+
 		call hIsSeasons
@@ -5608,7 +5764,11 @@ clearAllItemsAndPutLinkOnGround:
 @nextItem:
 	ld h,d
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,@notSomariaBlock
+.endif
 	ld l,Item.id
 	ld a,(hl)
 	cp ITEM_18
@@ -6338,9 +6498,13 @@ _checkCollisionWithHAndD:
 checkLinkID0AndControlNormal:
 	ld a,(w1Link.id)
 	or a
-.ifdef ROM_AGES
+.if defined(ROM_AGES) && !defined(ROM_COMBO)
 	jr z,+++
 .else
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+++
+.endif
 	jr z,checkLinkVulnerableAndIDZero
 .endif
 	xor a
@@ -6349,7 +6513,11 @@ checkLinkID0AndControlNormal:
 ;;
 checkLinkVulnerableAndIDZero:
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,checkLinkVulnerable
+.endif
 	ld a,(w1Link.id)
 	or a
 	jr z,checkLinkVulnerable
@@ -6379,7 +6547,7 @@ checkLinkCollisionsEnabled:
 	rlca
 	jr nc,@noCarry
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
 	ld a,(wLinkDeathTrigger)
 	or a
 	jr nz,@noCarry
@@ -6393,7 +6561,7 @@ checkLinkCollisionsEnabled:
 	or a
 	jr nz,@noCarry
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 +++
 	ld a,(wLinkDeathTrigger)
 	or a
@@ -7837,7 +8005,7 @@ objectCheckIsOnHazard:
 objectCheckIsOverHazard:
 	ld bc,$0500
 	call objectGetRelativeTile
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld (wObjectTileIndex),a
 .endif
 	ld hl,hazardCollisionTable
@@ -8766,7 +8934,7 @@ handleAutoEquipItem:
 	ret
 .endif
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 isDeepUnderwater:
 	ldh (<hFFBD),a	; store temporarily for restoring later
 	ld a,(wTilesetFlags)
@@ -9318,7 +9486,7 @@ objectCreateFallingDownHoleInteraction:
 	xor a
 	ret
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 ;;
 ; Makes the object invisible if (wFrameCounter&b) == 0.
@@ -9605,12 +9773,12 @@ scriptCmd_loadScript:
 	ld e,a
 	ldi a,(hl)
 	ld c,a
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ldh (<hScriptAddressL),a
 .endif
 	ldi a,(hl)
 	ld b,a
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ldh (<hScriptAddressH),a
 .endif
 	ldh a,(<hRomBank)
@@ -9798,13 +9966,24 @@ npcFaceLinkAndAnimate:
 
 	; Set animation
 	srl b
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	ld e,Interaction.var37
 	ld a,(de)
 	add b
-.else
+.if defined(ROM_COMBO)
+	jr ++
+	+
+.endif
+.endif
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	call seasonsFunc_2678
 	ld a,b
+	++
 .endif
 	call interactionSetAnimation
 
@@ -9817,7 +9996,7 @@ npcFaceLinkAndAnimate:
 	jr interactionAnimateAsNpc
 
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 ;;
 seasonsFunc_2678:
 	ld e,Interaction.id
@@ -9954,7 +10133,7 @@ interactionCheckAdjacentTileIsSolid_viaDirection:
 
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 ;;
 ; @param[out]	zflag	z when counter1 reaches 0 (and text is inactive)
@@ -10445,7 +10624,11 @@ enemyStandardUpdate:
 	ret
 
 @uninitialized:
+.if defined(ROM_COMBO)
+	callab bank44.enemyLoadGraphicsAndProperties
+.else
 	callab bank3f.enemyLoadGraphicsAndProperties
+.endif
 	call getRandomNumber_noPreserveVars
 	ld e,Enemy.var3d
 	ld (de),a
@@ -11201,7 +11384,9 @@ tryToBreakTile:
 	ldh (<hFF8F),a
 	ldh a,(<hRomBank)
 	push af
-.ifdef ENABLE_NEW_GAME_PLUS
+.if defined(ROM_COMBO)
+	callfrombank0 bank43.tryToBreakTile_body
+.elif defined(ENABLE_NEW_GAME_PLUS)
 	callfrombank0 bank3e.tryToBreakTile_body
 .else
 	callfrombank0 bank6.tryToBreakTile_body
@@ -11504,14 +11689,18 @@ func_2d48:
 	ldh a,(<hRomBank)
 	push af
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	ld a,:bank44.data_5951
+.elif defined(ROM_AGES)
 	ld a,:bank3f.data_5951
 .else
 	ld a,:bank3Cutscenes.data_5951
 .endif
 	rst_setrombank
 	ld a,b
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	ld hl,bank44.data_5951
+.elif defined(ROM_AGES)
 	ld hl,bank3f.data_5951
 .else
 	ld hl,bank3Cutscenes.data_5951
@@ -11569,7 +11758,7 @@ specialObjectCode_companionCutscene:
 ;;
 specialObjectCode_linkInCutscene:
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
 
 	ldh a,(<hRomBank)
 	push af
@@ -11677,7 +11866,7 @@ getRoomInDungeon:
 	ret
 
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	.include "code/code_3035.s"
 .endif
 
@@ -12014,7 +12203,7 @@ updateEnemy:
 .include "data/enemyCodeTable.s"
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) && !defined(ROM_COMBO)
 	.include "code/code_3035.s"
 .endif
 
@@ -12032,7 +12221,11 @@ initializeRoom:
 	ld (wNgpUncappedUpgradesThisRoom),a
 .endif
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,++
+.endif
 	callab bank1.clearSolidObjectPositions
 
 	ld a,(wSentBackByStrangeForce)
@@ -12068,8 +12261,13 @@ initializeRoom:
 	ld a,(wcc05)
 	bit 0,a
 	call nz,objectData.parseObjectData
+.if defined(ROM_COMBO)
+	jr +
+++
+.endif
+.endif
 
-.else ; ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	call          refreshObjectGfx
 
 	ldh a,(<hRomBank)
@@ -12079,6 +12277,7 @@ initializeRoom:
 	call          roomInitialization.checkAndSpawnMaple
 	call          roomInitialization.updateRosaDateStatus
 	callfrombank0 objectData.parseObjectData
+	+
 .endif
 
 	callfrombank0 staticObjects.parseStaticObjects
@@ -12131,7 +12330,7 @@ clearStaticObjects:
 ; @param[out]	zflag	Set on success
 findFreeStaticObjectSlot:
 	ld hl,wStaticObjects
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld b,$08
 .endif
 --
@@ -12142,7 +12341,7 @@ findFreeStaticObjectSlot:
 	ld a,$08
 	add l
 	ld l,a
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	dec b
 .endif
 	jr nz,--
@@ -12249,7 +12448,7 @@ unsetGlobalFlag:
 ;
 clearEnemiesKilledList:
 	ld h,$00
-	.ifdef ROM_AGES
+	.if defined(ROM_AGES) && !defined(ROM_COMBO)
 	jr ++
 	.else
 	jp ++
@@ -12260,7 +12459,7 @@ clearEnemiesKilledList:
 ;
 addRoomToEnemiesKilledList:
 	ld h,$01
-	.ifdef ROM_AGES
+	.if defined(ROM_AGES) && !defined(ROM_COMBO)
 	jr ++
 	.else
 	jp ++
@@ -12272,7 +12471,7 @@ addRoomToEnemiesKilledList:
 ;
 markEnemyAsKilledInRoom:
 	ld h,$02
-	.ifdef ROM_AGES
+	.if defined(ROM_AGES) && !defined(ROM_COMBO)
 	jr ++
 	.else
 	jp ++
@@ -12284,7 +12483,7 @@ markEnemyAsKilledInRoom:
 ;
 generateRandomBuffer:
 	ld h,$04
-	.ifdef ROM_AGES
+	.if defined(ROM_AGES) && !defined(ROM_COMBO)
 	jr ++
 	.else
 	jp ++
@@ -12297,14 +12496,14 @@ generateRandomBuffer:
 ; @param	hFF8B	"Flags" (set when placing an enemy in the editor)
 getRandomPositionForEnemy:
 	ld h,$05
-	.ifdef ROM_AGES
+	.if defined(ROM_AGES) && !defined(ROM_COMBO)
 	jr ++
 	.else
 	jp ++
 	.endif
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 ;;
 ; Calls bank2._checkSpawnTimeportalInteraction.
@@ -12691,7 +12890,7 @@ mainThreadStart:
 
 
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 updateAnimationsAfterCutscene:
 	ldh a,(<hRomBank)
@@ -12708,7 +12907,7 @@ updateAnimationsAfterCutscene:
 loadScreenMusic:
 	ldh a,(<hRomBank)
 	push af
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	call hIsSeasons
 	ld a,:bank4Data1.musicAssignmentGroupTable_seasons
 	ld hl,bank4Data1.musicAssignmentGroupTable_seasons
@@ -12732,7 +12931,11 @@ loadScreenMusic:
 	ldi a,(hl)
 	ld (wActiveMusic2),a
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	ld a,(wActiveGroup)
 	cp $02
 	jr nc,++
@@ -12748,9 +12951,10 @@ loadScreenMusic:
 	pop af
 	rst_setrombank
 	ret
++
+.endif
 
-.else; ROM_SEASONS
-
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	ld a,(wActiveGroup)
 	or a
 	jr nz,++
@@ -12773,8 +12977,13 @@ applyWarpDest:
 	push af
 	callfrombank0 bank4.applyWarpDest_b04
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+.endif
 	callfrombank0 bank1.checkUpdateDungeonMinimap
++
 .endif
 
 	pop af
@@ -12795,8 +13004,13 @@ loadScreenMusicAndSetRoomPack:
 	ret nz
 
 	ld a,(wLoadingRoomPack)
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	and $7f
++
 .endif
 	ld (wRoomPack),a
 	ret
@@ -12828,12 +13042,16 @@ dismountCompanionAndSetRememberedPositionToScreenCenter:
 	rst_setrombank
 	ret
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 seasonsFunc_331b:
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	callfrombank0 bank3Cutscenes_seasons.seasonsFunc_0f_6f75
+.else
 	callfrombank0 bank0f.seasonsFunc_0f_6f75
+.endif
 	pop af
 	rst_setrombank
 	ret
@@ -12843,8 +13061,13 @@ seasonsFunc_332f:
 	push af
 	ld a,$0f
 	rst_setrombank
+.if defined(ROM_COMBO)
+	call bank3Cutscenes_seasons.seasonsFunc_0f_704d
+	call bank3Cutscenes_seasons.seasonsFunc_0f_7182
+.else
 	call bank0f.seasonsFunc_0f_704d
 	call bank0f.seasonsFunc_0f_7182
+.endif
 	pop af
 	rst_setrombank
 	ret
@@ -12852,7 +13075,7 @@ seasonsFunc_332f:
 flameOfDestructionsCutsceneCaller:
 	ldh a,(<hRomBank)
 	push af
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	callfrombank0 bank3Cutscenes_2.flameOfDestructionCutsceneBody
 .else
 	callfrombank0 bank3Cutscenes.flameOfDestructionCutsceneBody
@@ -12864,7 +13087,7 @@ flameOfDestructionsCutsceneCaller:
 zeldaAndVillagersCutsceneCaller:
 	ldh a,(<hRomBank)
 	push af
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	callfrombank0 bank3Cutscenes_2.zeldaAndVillagersCutsceneBody
 .else
 	callfrombank0 bank3Cutscenes.zeldaAndVillagersCutsceneBody
@@ -12876,7 +13099,7 @@ zeldaAndVillagersCutsceneCaller:
 zeldaKidnappedCutsceneCaller:
 	ldh a,(<hRomBank)
 	push af
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	callfrombank0 bank3Cutscenes_2.zeldaKidnappedCutsceneBody
 .else
 	callfrombank0 bank3Cutscenes.zeldaKidnappedCutsceneBody
@@ -12958,15 +13181,27 @@ func_3539:
 	ldh a,(<hRomBank)
 	push af
 	callfrombank0 bank5.updateSpecialObjects
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	callfrombank0 itemCode.updateItems
 	callfrombank0 updateEnemies
 	callfrombank0 partCode.updateParts
 	callfrombank0 updateInteractions
 	callfrombank0 itemCode.updateItemsPost
-.else
+
+.if defined(ROM_COMBO)
+	jr ++
++
+.endif
+.endif
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	callfrombank0 updateEnemies
 	callfrombank0 updateInteractions
+++
 .endif
 	callfrombank0 loadLinkAndCompanionAnimationFrame
 	callfrombank0 animationAndUniqueGfxData.updateAnimations
@@ -12976,7 +13211,7 @@ func_3539:
 	rst_setrombank
 	ret
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 ;;
 seasonsFunc_34a0:
@@ -12987,7 +13222,11 @@ seasonsFunc_34a0:
 	callfrombank0 updateEnemies
 	callfrombank0 partCode.updateParts
 	callfrombank0 updateInteractions
+.if defined(ROM_COMBO)
+	callfrombank0 bank3Cutscenes_seasons.seasonsFunc_0f_7159
+.else
 	callfrombank0 bank0f.seasonsFunc_0f_7159
+.endif
 
 	ld a,:bank6.updateGrabbedObjectPosition
 	rst_setrombank
@@ -12997,7 +13236,11 @@ seasonsFunc_34a0:
 
 	call loadLinkAndCompanionAnimationFrame
 	callfrombank0 itemCode.updateItemsPost
+.if defined(ROM_COMBO)
+	callfrombank0 bank3Cutscenes_seasons.seasonsFunc_0f_7182
+.else
 	callfrombank0 bank0f.seasonsFunc_0f_7182
+.endif
 	callfrombank0 tilesets.updateChangedTileQueue
 
 	xor a
@@ -13141,7 +13384,7 @@ setEnemyTargetToLinkPosition:
 	ldh (<hFFB3),a
 	ret
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 ;;
 getEntryFromObjectTable2:
@@ -13159,13 +13402,13 @@ getEntryFromObjectTable2:
 
 .endif
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 ;;
 multiIntroCutsceneCaller:
 	ldh a,(<hRomBank)
 	push af
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	callfrombank0 bank3Cutscenes_2.multiIntroCutsceneHandler
 .else
 	callfrombank0 bank3Cutscenes.multiIntroCutsceneHandler
@@ -13178,7 +13421,7 @@ multiIntroCutsceneCaller:
 .endif
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 ;;
 ; Check if a dungeon uses those toggle blocks with the orbs.
@@ -13196,7 +13439,7 @@ checkDungeonUsesToggleBlocks:
 
 .endif
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 seasonsFunc_35cc:
 	ld a,($ff00+R_SVBK)
 	ld c,a
@@ -13274,7 +13517,7 @@ loadAnimationData:
 	ret
 
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 roomTileChangesAfterLoad02:
 	ldh a,(<hRomBank)
@@ -13309,7 +13552,7 @@ getIndexOfGashaSpotInRoom:
 	ret
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 ;;
 ; The name is a bit of a guess.
@@ -13465,9 +13708,14 @@ loadTilesetGraphics:
 
 	callfrombank0 animationAndUniqueGfxData.initializeAnimations
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	callab        roomGfxChanges.func_02_7a77
 	callab        roomGfxChanges.checkLoadPastSignAndChestGfx
++
 .endif
 
 	; HACK-BASE: This is done in the "loadTilesetGfx" function instead
@@ -13543,8 +13791,18 @@ loadTilesetGfx:
 	ldh a,(<hRomBank)
 	push af
 
+.if defined(ROM_COMBO)
+	ld hl,expandedTilesetGfxTable_seasons
+	ld a,:expandedTilesetGfxTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,expandedTilesetGfxTable_ages
+		ld a,:expandedTilesetGfxTable_ages
+	+
+.else
 	ld hl,expandedTilesetGfxTable
 	ld a,:expandedTilesetGfxTable
+.endif
 	call lookupExpandedTilesetTable
 
 	; We do the DMA transfer in 3 goes. A single transfer can take $80 tiles, so 2 goes is
@@ -13587,7 +13845,11 @@ loadTilesetGfx:
 	and $7f
 	ld (wLoadedTilesetIndex),a
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+.endif
 	; For gnarled root dungeon entrance: load "unique graphics" when closed
 	ld a,(wActiveGroup)
 	or a
@@ -13634,7 +13896,10 @@ loadTilesetAndRoomLayout:
 	ld (wLoadedTilesetLayout),a
 	call nz,loadTilesetLayout
 
-.ifdef ROM_SEASONS
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	call c,@adjustLoadingRoomForTempleRemains
+.elif defined(ROM_SEASONS)
 	call @adjustLoadingRoomForTempleRemains
 .endif
 	; Load the room layout and apply any dynamic changes necessary
@@ -13656,7 +13921,7 @@ loadTilesetAndRoomLayout:
 	rst_setrombank
 	ret
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 ; Layouts for the lava-filled version of Temple Remains, for all 4 seasons, are stored out of bounds
 ; on the Subrosia map.
@@ -13691,12 +13956,28 @@ loadRoomLayout:
 	ld hl,wRoomLayout
 	ld b,(LARGE_ROOM_HEIGHT+1)*16
 	call clearMemory
+.if defined(ROM_COMBO)
+	ld a,:roomLayouts.roomLayoutGroupTable_seasons
+	ld hl,roomLayouts.roomLayoutGroupTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld a,:roomLayouts.roomLayoutGroupTable_ages
+		ld hl,roomLayouts.roomLayoutGroupTable_ages
+	+
+	rst_setrombank
+	push hl
+	call @getLayoutGroup
+	pop hl
+	add a
+	add a
+.else
 	ld a,:roomLayouts.roomLayoutGroupTable
 	rst_setrombank
 	call @getLayoutGroup
 	add a
 	add a
 	ld hl,roomLayouts.roomLayoutGroupTable
+.endif
 	rst_addDoubleIndex
 	ldi a,(hl)
 	ld b,a
@@ -13738,7 +14019,11 @@ loadRoomLayout:
 	cp $ff
 	ret nz
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+.endif
 	; Group 0: depends on season
 	ld a,(wActiveGroup)
 	ld b,a
@@ -13747,20 +14032,38 @@ loadRoomLayout:
 	ret z
 
 	ld a,(wActiveGroup)
+.if defined(ROM_COMBO)
+	ld hl,@layoutGroupTable_seasons
+	jr ++
++
+	ld hl,@layoutGroupTable_ages
+.endif
+.endif
 
-.else ;ROM_AGES
+++
+.if defined(ROM_COMBO)
+	push hl
+	callab tilesets.getAdjustedRoomGroup
+	pop hl
+	ld a,b
+.elif defined(ROM_AGES)
 	; Ages only: if bit 0 of room flags is set, underwater version of the room gets loaded instead.
 	callab tilesets.getAdjustedRoomGroup
 	ld a,b
 .endif
 
+.if !defined(ROM_COMBO)
 	ld hl,@layoutGroupTable
+.endif
 	rst_addAToHl
 	ld a,(hl)
 	ret
 
 @layoutGroupTable:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+@layoutGroupTable_ages:
+.endif
 	.db $00
 	.db $02
 	.db $01
@@ -13769,7 +14072,12 @@ loadRoomLayout:
 	.db $05
 	.db $04
 	.db $05
-.else ;ROM_SEASONS
+.endif
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+@layoutGroupTable_seasons:
+.endif
 	.db $ff
 	.db $04
 	.db $04
@@ -13780,6 +14088,8 @@ loadRoomLayout:
 	.db $06
 .endif
 
+.if !defined(ROM_COMBO)
+;; unused???
 ;;
 @loadLargeRoomLayoutHlpr:
 	ld d,b
@@ -13800,6 +14110,7 @@ loadRoomLayout:
 	add $03
 	ld b,a
 	ret
+.endif
 
 ;;
 @loadLargeRoomLayout:
@@ -14023,7 +14334,7 @@ generateVramTilesWithRoomChanges:
 	push bc
 
 	callfrombank0 tilesets.generateW3VramTilesAndAttributes
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	callab        roomGfxChanges.applyRoomSpecificTileChangesAfterGfxLoad
 .else
 	call          roomGfxChanges.applyRoomSpecificTileChangesAfterGfxLoad
@@ -14059,7 +14370,7 @@ getTileMappingData:
 	ld de,wTmpcec0
 	ld b,$08
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	call copyMemory
 .else
 --
@@ -14132,7 +14443,7 @@ setTile:
 	ret
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 ;;
 ; Calls "setTile" and "setTileInRoomLayoutBuffer".
 ;
@@ -14183,7 +14494,7 @@ setInterleavedTile:
 	pop de
 	ret
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 setSeason:
 	ld b,a
@@ -14237,7 +14548,7 @@ getFreeInteractionSlot:
 
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 ;;
 interactionDeleteAndUnmarkSolidPosition:
 	call objectUnmarkSolidPosition
@@ -14369,7 +14680,7 @@ updateInteraction:
 
 .include "data/interactionCodeTable.s"
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 createSokraSnore:
 	ld a,(wFrameCounter)
@@ -14391,7 +14702,7 @@ checkGotMakuSeedDidNotSeeZeldaKidnapped:
 
 .endif
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 ;;
 ; Checks that an object is within [hFF8B] pixels of a position on both axes.
@@ -14475,7 +14786,7 @@ interactionSetSimpleScript:
 interactionRunSimpleScript:
 	ldh a,(<hRomBank)
 	push af
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	ld a,:mainScripts.runScriptCommand
 .else
 	ld a,SIMPLE_SCRIPT_BANK
@@ -14514,7 +14825,7 @@ interactionRunSimpleScript:
 	.dw @command2
 	.dw @command3
 	.dw @command4
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	.dw @command5
 	.dw @command6
 	.dw @command7
@@ -14578,7 +14889,7 @@ interactionRunSimpleScript:
 	ret
 
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 @command5:
 	pop hl
@@ -14636,7 +14947,7 @@ interactionRunSimpleScript:
 .endif
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 ;;
 ; Gets object data for tokays in the wild tokay game.
@@ -14691,7 +15002,7 @@ setLinkDirection:
 
 .endif
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 ;;
 ; @param	b	index into _conditionalHoronNPCLookupTable
@@ -14753,7 +15064,7 @@ interactionFunc_3e6d:
 
 	ldh a,(<hRomBank)
 	push af
-.ifdef ROM_AGES
+.if defined(ROM_AGES) && !defined(ROM_COMBO)
 	ld a,:bank16.data_4556
 .else
 	ld a,:data_4556
@@ -14761,7 +15072,7 @@ interactionFunc_3e6d:
 	rst_setrombank
 
 	ld a,e
-.ifdef ROM_AGES
+.if defined(ROM_AGES) && !defined(ROM_COMBO)
 	ld hl,bank16.data_4556
 .else
 	ld hl,data_4556
@@ -14775,7 +15086,7 @@ interactionFunc_3e6d:
 	ret
 
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 getLinkedHerosCaveSideEntranceRoom:
 	ldh a,(<hRomBank)
@@ -14829,7 +15140,7 @@ partDelete:
 	ret
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 ;;
 ; @param[out]	cflag
@@ -14879,7 +15190,7 @@ func_3ee4:
 
 .endif
 
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 toggleIsSeasons:
 	call hIsSeasons
 	ccf
@@ -14903,7 +15214,7 @@ setIsSeasons:
 .endif
 
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 ;;
 ; CROSSITEMS: For Seasons only, determine which tile index is the cane of somaria (varies based on
 ; which group we're in).

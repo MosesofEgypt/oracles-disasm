@@ -2,19 +2,20 @@
 ;       in NG+ it'll break if it goes over $55, so be careful about adding more.
 .define NUM_PARTS $54
 
-.macro m_PartCodeRef
-	.ifdef ENABLE_NEW_GAME_PLUS
-		.db :\1
-	.endif
-	.dw \1
-.endm
-
 partCodeTable:
 	.repeat NUM_PARTS index COUNT
-		.ifdef partCode{%.2x{COUNT}}
-			m_PartCodeRef partCode{%.2x{COUNT}}
+		.ifdef ENABLE_NEW_GAME_PLUS
+			.ifdef partCode{%.2x{COUNT}}
+				3BytePointer partCode{%.2x{COUNT}}
+			.else
+				3BytePointer partCodeExt.partCode{%.2x{COUNT}}
+			.endif
 		.else
-			m_PartCodeRef partCodeNil
+			.ifdef partCode{%.2x{COUNT}}
+				.dw partCode{%.2x{COUNT}}
+			.else
+				.dw partCodeExt.partCode{%.2x{COUNT}}
+			.endif
 		.endif
 	.endr
 

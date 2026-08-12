@@ -270,7 +270,7 @@ shopkeeper_take10Rupees:
 
 m_section_free Bank_15_2 NAMESPACE scriptHelp
 
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 createBossDeathExplosion:
 	call getFreePartSlot

@@ -11797,8 +11797,8 @@ mapMenu_tileSubstitutionTable:
 ;               If it HAS been entered, the index will be $02XX, where XX is the index used for this
 ;               table's lookup (a dungeon index).
 ;     Bit 7: 0=group 5, 1=group 4 (reversed from what you might expect)
-.if defined(ROM_AGES) || defined(ROM_COMBO)
 mapMenu_dungeonEntranceText:
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 		.db $04, $80|(<TX_0307)
 		.db $24, $80|(<TX_0309)
 		.db $46, $80|(<TX_0337)

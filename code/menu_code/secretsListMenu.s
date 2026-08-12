@@ -314,7 +314,11 @@ secretListMenu_getSecretData:
 ;   b2: Index of secret data?
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
 	@unlinked_ages:
+.else
+	@unlinked:
+.endif
 		.db $03, GLOBALFLAG_FINISHEDGAME,		$00
 		.db $85, GLOBALFLAG_RING_SECRET_GENERATED,	$02
 		.db $d0, GLOBALFLAG_DONE_KING_ZORA_SECRET,	$10
@@ -329,7 +333,11 @@ secretListMenu_getSecretData:
 		; through vasu instead.
 		.db $00
 
+.if defined(ROM_COMBO)
 	@linked_ages:
+.else
+	@linked:
+.endif
 		.db $85, GLOBALFLAG_RING_SECRET_GENERATED,	$02
 		.db $c6, GLOBALFLAG_BEGAN_CLOCK_SHOP_SECRET, 	$20
 		.db $ca, GLOBALFLAG_BEGAN_SMITH_SECRET, 	$24
@@ -345,7 +353,11 @@ secretListMenu_getSecretData:
 .endif
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
 	@unlinked_seasons:
+.else
+	@unlinked:
+.endif
 		.db $04, GLOBALFLAG_FINISHEDGAME,		$00
 		.db $85, GLOBALFLAG_RING_SECRET_GENERATED,	$02
 		.db $c6, GLOBALFLAG_DONE_CLOCK_SHOP_SECRET,	$30
@@ -358,7 +370,11 @@ secretListMenu_getSecretData:
 		.db $c8, GLOBALFLAG_DONE_SUBROSIAN_SECRET,	$32
 		.db $00
 
+.if defined(ROM_COMBO)
 	@linked_seasons:
+.else
+	@linked:
+.endif
 		.db $85, GLOBALFLAG_RING_SECRET_GENERATED,	$02
 		.db $d0, GLOBALFLAG_BEGAN_KING_ZORA_SECRET,	$00
 		.db $d4, GLOBALFLAG_BEGAN_LIBRARY_SECRET,	$04

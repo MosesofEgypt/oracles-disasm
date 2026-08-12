@@ -74,6 +74,9 @@ include redux_config/config.env
 
 ORACLE_REDUX_DEFINES =
 ifdef ENABLE_NEW_GAME_PLUS
+ifndef ENABLE_DOUBLE_HEART_CAP
+	ENABLE_DOUBLE_HEART_CAP = 1
+endif
 ifndef ENABLE_SETTINGS_MENU
 	ENABLE_SETTINGS_MENU = 1
 endif
@@ -84,6 +87,9 @@ ifndef MORE_MESSAGE_SPEEDS
 	MORE_MESSAGE_SPEEDS = 1
 endif
 	ORACLE_REDUX_DEFINES += -D ENABLE_SETTINGS_MENU
+endif
+ifdef ENABLE_DOUBLE_HEART_CAP
+	ORACLE_REDUX_DEFINES += -D ENABLE_DOUBLE_HEART_CAP
 endif
 ifdef ENABLE_FULL_REDUX
 	ORACLE_REDUX_DEFINES += -D ENABLE_FULL_REDUX
@@ -189,6 +195,10 @@ ifdef ENABLE_RING_REDUX
 # overriding ring gfx
 BIN_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux -name 'map_rings.bin')
 UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name 'map_rings.bin')
+endif
+ifdef ENABLE_DOUBLE_HEART_CAP
+UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name 'gfx_overlap_hearts.png')
+PNG_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux -name 'gfx_overlap_hearts.png')
 endif
 ifdef ENABLE_SETTINGS_MENU
 BIN_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux/settings_menu -name '*.bin')

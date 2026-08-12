@@ -888,7 +888,9 @@ m_section_superfree Menu_Code_2 NAMESPACE menuCode2
 .ends
 
 .ifdef ENABLE_NEW_GAME_PLUS
-m_section_free Part_Code_3 NAMESPACE partCode
+m_section_free Part_Code_3 NAMESPACE partCodeExt
+	.include "object_code/common/parts/commonCode.s"
+
 	.include "object_code/seasons/parts/holesFloortrap.s"
 	.include "object_code/seasons/parts/slingshotEyeStatue.s"
 	.include "object_code/seasons/parts/16.s"

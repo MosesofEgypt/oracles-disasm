@@ -20,10 +20,7 @@
 .BANK $00 SLOT 0
 .ORG 0
 
-;	.include "code/bank0.s"
-; NOTE: temporary code until bank0 can be included
-	.include "code/bank0Stub.s"
-; NOTE: temporary code until bank0 can be included
+	.include "code/bank0.s"
 
 
 .BANK $01 SLOT 1
@@ -41,6 +38,8 @@ specialObjectUpdatePosition:
 
 m_section_free Bank_6_test NAMESPACE bank6
 specialObjectLoadAnimationFrameToBuffer:
+specialObjectCode_linkInCutscene:
+specialObjectCode_companionCutscene:
 	ret
 .ends
 
@@ -48,6 +47,7 @@ m_section_free Bank_8_test NAMESPACE agesInteractionsBank08
 shootingGallery_removeAllTargets:
 shootingGallery_initializeGameRounds:
 interactionOscillateXRandomly:
+checkObjectIsCloseToPosition:
 	ret
 .ends
 
@@ -72,6 +72,46 @@ forceLinksDirection:
 	ret
 .ends
 
+m_section_free Common_Interactions_2 NAMESPACE commonInteractions2
+objectOscillateZ_body:
+	ret
+.ends
+
+m_section_free Common_Interactions_5 NAMESPACE commonInteractions5
+objectCreateFloatingImage:
+	ret
+.ends
+
+m_section_free Part_Code NAMESPACE partCode
+createEnergySwirlGoingIn_body:
+createEnergySwirlGoingOut_body:
+	ret
+.ends
+
+m_section_free Seasons_Interactions_Bank08 NAMESPACE seasonsInteractionsBank08
+checkHoronVillageNPCShouldBeSeen_body:
+@main:
+getSunkenCityNPCVisibleSubId:
+@main:
+	ret
+.ends
+
+m_section_free Seasons_Interactions_Bank09 NAMESPACE seasonsInteractionsBank09
+roomTileChangesAfterLoad02_body:
+makuTree_setAppropriateStage:
+	ret
+.ends
+
+m_section_free Seasons_Interactions_Bank0a NAMESPACE seasonsInteractionsBank0a
+checkGotMakuSeedDidNotSeeZeldaKidnapped_body:
+moblinKeepScene_setLinkDirectionAndPositionAfterDestroyed:
+	ret
+.ends
+
+m_section_free Script_Help NAMESPACE scriptHelp
+makuTree_setMapTextBasedOnStage:
+	ret
+.ends
 
 ; NOTE: temporary code until many banks can be included
 
@@ -121,6 +161,7 @@ forceLinksDirection:
 		.include "code/seasons/cutscenes.s"
 		.include "code/seasons/onoxCastleEssenceCutscene.s"
 		.include "code/seasons/cutscenes/fallIntoDragonOnoxArena.s"
+		.include "code/seasons/cutscenes/transitionToDragonOnox.s"
 	.ends
 
 .BANK $04 SLOT 1

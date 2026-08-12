@@ -18,10 +18,10 @@ applyAllTileSubstitutions:
 	call replaceToggleBlocks
 	call replaceJabuTilesIfUnderwater
 +
-.ifdef ROM_COMBO
-	jp applyRoomSpecificTileChanges_ages
+.if defined(ROM_COMBO)
+	call applyRoomSpecificTileChanges_ages
 .else
-	jp applyRoomSpecificTileChanges
+	call applyRoomSpecificTileChanges
 .endif
 	ld a,(wActiveGroup)
 	cp $02

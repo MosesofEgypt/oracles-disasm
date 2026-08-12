@@ -1007,7 +1007,9 @@ m_section_superfree Menu_Code_2 NAMESPACE menuCode2
 
 
 .ifdef ENABLE_NEW_GAME_PLUS
-m_section_free Part_Code_2 NAMESPACE partCode
+m_section_free Part_Code_2 NAMESPACE partCodeExt
+	.include "object_code/common/parts/commonCode.s"
+
 	.include "object_code/ages/parts/jabuJabusBubbles.s"
 	.include "object_code/ages/parts/grottoCrystal.s"
 	.include "object_code/ages/parts/wallArrowShooter.s"

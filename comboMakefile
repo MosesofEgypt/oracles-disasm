@@ -55,6 +55,10 @@ ifdef ENABLE_RING_REDUX
 BIN_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux -name 'map_rings.bin')
 UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name 'map_rings.bin')
 endif
+ifdef ENABLE_DOUBLE_HEART_CAP
+UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux -name 'gfx_overlap_hearts.png')
+PNG_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux -name 'gfx_overlap_hearts.png')
+endif
 ifdef ENABLE_SETTINGS_MENU
 BIN_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux/settings_menu -name '*.bin')
 UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/settings_menu -name '*.bin' -or -name '*.png')

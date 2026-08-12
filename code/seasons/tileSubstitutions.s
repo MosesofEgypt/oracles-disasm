@@ -18,7 +18,7 @@ applyAllTileSubstitutions:
 	jr nc,+
 	; groups 0,1,3
 	call loadSubrosiaObjectGfxHeader
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	jp applyRoomSpecificTileChanges_seasons
 .else
 	jp applyRoomSpecificTileChanges
@@ -27,7 +27,7 @@ applyAllTileSubstitutions:
 	; groups 4,5,6,7
 	call replaceShutterForLinkEntering
 	call replaceSwitchTiles
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	jp applyRoomSpecificTileChanges_seasons
 .else
 	jp applyRoomSpecificTileChanges

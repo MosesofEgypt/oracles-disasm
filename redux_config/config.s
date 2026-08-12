@@ -36,10 +36,6 @@
 		; determines whether the Biggoron's Sword occupies 1 hand instead of 2
 ;		.define ONE_HANDED_BIGGORON_SWORD		1 	; keeping here for documentation
 	.endif
-	.ifndef ENABLE_DOUBLE_HEART_CAP
-		; determines whether link's max heart count is doubled to 32.
-		.define ENABLE_DOUBLE_HEART_CAP			1
-	.endif
 	.ifndef ADVANCE_SHOP_ALWAYS_OPEN
 		; determines whether the advance shop is open even on GBC
 		.define ADVANCE_SHOP_ALWAYS_OPEN			1
