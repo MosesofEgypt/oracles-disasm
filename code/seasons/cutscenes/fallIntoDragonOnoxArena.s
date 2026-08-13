@@ -49,7 +49,7 @@ cutscene13:
 	jp nz,applyWarpTransition2
 
 .if defined(ROM_COMBO)
-	callab bank3Cutscenes_seasons.seasonsFunc_331b
+	callab bank3Cutscenes_seasons.seasonsFunc_0f_6f75
 .else
 	call seasonsFunc_331b
 .endif

@@ -5,6 +5,9 @@ m_section_free Bank_3 NAMESPACE bank3
 init:
 	di
 	xor a
+.if defined(ROM_COMBO)
+	call setIsSeasons
+.endif
 	ld ($ff00+R_IF),a
 	ld ($ff00+R_IE),a
 	ld ($ff00+R_STAT),a

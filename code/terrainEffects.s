@@ -165,22 +165,32 @@ _drawObjectTerrainEffects:
 +
 .endif
 
-.if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
 	call hIsSeasons
 	jr c,+
-.endif
+		cp TILEINDEX_GRASS
+		jr z,@walkingInGrass
+		cp TILEINDEX_PUDDLE_AGES
+		jr nz,@end
+		jr @walkingInPuddle
+	+
+
+	; Seasons has multiple grass and shallow water tiles, so this checks ranges
+	; instead of exact values
+	cp TILEINDEX_GRASS
+	jr c,@end
+	cp TILEINDEX_WATER_SEASONS
+	jr nc,@end
+	cp TILEINDEX_PUDDLE_SEASONS
+	jr c,@walkingInGrass
+
+.elif defined(ROM_AGES)
 	cp TILEINDEX_GRASS
 	jr z,@walkingInGrass
 	cp TILEINDEX_PUDDLE
 	jr nz,@end
-.if defined(ROM_COMBO)
-	jr @walkingInPuddle
-	+
-.endif
-.endif
 
-.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.elif defined(ROM_SEASONS)
 	; Seasons has multiple grass and shallow water tiles, so this checks ranges
 	; instead of exact values
 	cp TILEINDEX_GRASS

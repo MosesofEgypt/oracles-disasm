@@ -4,7 +4,10 @@
 
 partCodeTable:
 	.repeat NUM_PARTS index COUNT
-		.ifdef ENABLE_NEW_GAME_PLUS
+		.if defined(ROM_COMBO)
+			; NOTE: TEMPORARY UNTIL PARTS ARE MERGED IN
+				.dw partCodeNil
+		.elif defined(ENABLE_NEW_GAME_PLUS)
 			.ifdef partCode{%.2x{COUNT}}
 				3BytePointer partCode{%.2x{COUNT}}
 			.else

@@ -2,7 +2,11 @@
 ; Called from loadTilesetData in bank 0. Function differs substantially in Ages and Seasons.
 ;
 ; HACK-BASE: This has been modified for the expanded tilesets patch.
+.if defined(ROM_COMBO)
+loadTilesetData_body_ages:
+.else
 loadTilesetData_body:
+.endif
 	; HACK-BASE: Use hFF8B to store the "layout group override"
 	ld a,$ff
 	ldh (<hFF8B),a

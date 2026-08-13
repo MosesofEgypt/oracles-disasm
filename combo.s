@@ -33,6 +33,8 @@ checkPositionSurroundedByWalls:
 linkPullIntoHole:
 specialObjectUpdatePositionGivenVelocity:
 specialObjectUpdatePosition:
+linkSetState:
+linkCancelAllItemUsageAndClearAdjacentWallsBitset:
 	ret
 .ends
 
@@ -54,6 +56,7 @@ checkObjectIsCloseToPosition:
 m_section_free Bank_9_test NAMESPACE agesInteractionsBank09
 linkEnterPalaceSimulatedInput:
 linkExitPalaceSimulatedInput:
+checkNpcShouldExistAtGameStage_body:
 	ret
 .ends
 
@@ -74,11 +77,6 @@ forceLinksDirection:
 
 m_section_free Common_Interactions_2 NAMESPACE commonInteractions2
 objectOscillateZ_body:
-	ret
-.ends
-
-m_section_free Common_Interactions_5 NAMESPACE commonInteractions5
-objectCreateFloatingImage:
 	ret
 .ends
 
@@ -105,6 +103,8 @@ makuTree_setAppropriateStage:
 m_section_free Seasons_Interactions_Bank0a NAMESPACE seasonsInteractionsBank0a
 checkGotMakuSeedDidNotSeeZeldaKidnapped_body:
 moblinKeepScene_setLinkDirectionAndPositionAfterDestroyed:
+moblinKeepScene_spawnKingMoblin:
+moblinKeepScene_spawn2MoblinsAfterKeepDestroyed:
 	ret
 .ends
 
@@ -203,6 +203,7 @@ makuTree_setMapTextBasedOnStage:
 		.include {"{GAME_DATA_DIR}/tilesetAssignments.s"}
 		.include "code/loadTilesToRam.s"
 		.include "code/ages/loadTilesetData.s"
+		.include "code/seasons/loadTilesetData.s"
 	.ends
 
 
@@ -489,7 +490,7 @@ m_section_free Ages_Interactions_BankA NAMESPACE agesInteractionsBank0a
 
 m_section_free Interaction_Code_Group5 NAMESPACE commonInteractions5
 ;	.include "object_code/common/interactions/woodenTunnel.s"
-;	.include "object_code/common/interactions/exclamationMark.s"
+	.include "object_code/common/interactions/exclamationMark.s"
 ;	.include "object_code/common/interactions/floatingImage.s"
 	.include "object_code/common/interactions/bipinBlossomFamilySpawner.s"
 ;	.include "object_code/common/interactions/gashaSpot.s"
@@ -975,8 +976,6 @@ m_section_free Part_Code_2 NAMESPACE partCode
 .ORG 0
 
 m_section_free enemyCode_Bank43 NAMESPACE bank43
-	.define BANK_43 $43
-
 ;	.include "object_code/common/enemies/commonCode.s"
 
 ;	.include "object_code/common/enemies/polsVoice.s"
@@ -1010,8 +1009,10 @@ m_section_free enemyCode_Bank43 NAMESPACE bank43
 	.include {"{GAME_DATA_DIR}/tile_properties/breakableTiles.s"}
 .ends
 
-m_section_free roomGfxChanges NAMESPACE roomGfxChanges
+m_section_superfree roomGfxChanges NAMESPACE roomGfxChanges
+	.include "code/roomGfxChanges.s"
 	.include "code/ages/roomGfxChanges.s"
+	.include "code/seasons/roomGfxChanges.s"
 .ends
 
 ;.include "object_code/ages/interactions/tuniNutMain.s"
@@ -1023,8 +1024,6 @@ m_section_free roomGfxChanges NAMESPACE roomGfxChanges
 .ORG 0
 
 m_section_free Bank44 NAMESPACE bank44
-.define BANK_44 $44
-
 .include "code/loadGraphics.s"
 
 .include "data/gfxDataIntro/triforceMovementData.s"

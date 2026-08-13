@@ -9,9 +9,13 @@
 ; @param	a	Room
 ; @param[out]	c	Gasha spot index
 ; @param[out]	zflag	z if nothing is planted in the given room.
+.if defined(ROM_COMBO)
+getIndexOfGashaSpotInRoom_body_seasons:
+.else
 getIndexOfGashaSpotInRoom_body:
+.endif
 	ld c,$00
-	ld hl,gashaSpotRooms
+	ld hl,@gashaSpotRooms
 --
 	cp (hl)
 	jr z,+
@@ -37,33 +41,37 @@ getIndexOfGashaSpotInRoom_body:
 ; gasha spots on the same map in the past/present.
 ; ie. You can't have a gasha spot on both maps $050 and $150.
 
-gashaSpotRooms:
+@gashaSpotRooms:
 	.db $1f $22 $38 $3b $44 $3f $75 $80 ; Subids 0-7
 	.db $89 $95 $a6 $ac $c0 $ef $f0 $c8 ; Subids 8-f
 
 ;;
+.if defined(ROM_COMBO)
+applyRoomSpecificTileChangesAfterGfxLoad_seasons:
+.else
 applyRoomSpecificTileChangesAfterGfxLoad:
+.endif
 	ld a,(wActiveRoom)
 	ld hl,@tileChangesGroupTable
 	call findRoomSpecificData
 	ret nc
 	rst_jumpTable
-	.dw roomTileChangesAfterLoad00
-	.dw roomTileChangesAfterLoad01
-	.dw  roomTileChangesAfterLoad02 ; Located in bank 0 / bank 9 for some reason
-	.dw roomTileChangesAfterLoad03
-	.dw roomTileChangesAfterLoad04
-	.dw roomTileChangesAfterLoad05
-	.dw roomTileChangesAfterLoad06
-	.dw roomTileChangesAfterLoad07
-	.dw roomTileChangesAfterLoad08
-	.dw roomTileChangesAfterLoad09
-	.dw roomTileChangesAfterLoad0a
-	.dw roomTileChangesAfterLoad0b
-	.dw roomTileChangesAfterLoad0c
-	.dw roomTileChangesAfterLoad0d
-	.dw roomTileChangesAfterLoad0e
-	.dw roomTileChangesAfterLoad0f
+	.dw roomTileChangesAfterLoad00_seasons
+	.dw roomTileChangesAfterLoad01_seasons
+	.dw roomTileChangesAfterLoad02_seasons ; Located in bank 0 / bank 9 for some reason
+	.dw roomTileChangesAfterLoad03_seasons
+	.dw roomTileChangesAfterLoad04_seasons
+	.dw roomTileChangesAfterLoad05_seasons
+	.dw roomTileChangesAfterLoad06_seasons
+	.dw roomTileChangesAfterLoad07_seasons
+	.dw roomTileChangesAfterLoad08_seasons
+	.dw roomTileChangesAfterLoad09_seasons
+	.dw roomTileChangesAfterLoad0a_seasons
+	.dw roomTileChangesAfterLoad0b_seasons
+	.dw roomTileChangesAfterLoad0c_seasons
+	.dw roomTileChangesAfterLoad0d_seasons
+	.dw roomTileChangesAfterLoad0e_seasons
+	.dw roomTileChangesAfterLoad0f_seasons
 
 @tileChangesGroupTable:
 	.dw @group0
@@ -145,7 +153,7 @@ applyRoomSpecificTileChangesAfterGfxLoad:
 
 ;;
 ; $09: Load scent tree graphics (north horon)
-roomTileChangesAfterLoad09:
+roomTileChangesAfterLoad09_seasons:
 	ld a,TREE_GFXH_07
 label_04_291:
 	call loadTreeGfx
@@ -162,13 +170,13 @@ label_04_291:
 
 ;;
 ; $0a: Load pegasus tree graphics (spool swamp)
-roomTileChangesAfterLoad0a:
+roomTileChangesAfterLoad0a_seasons:
 	ld a,TREE_GFXH_08
 	jr label_04_291
 
 ;;
 ; $0b: Load gale tree graphics (tarm ruins)
-roomTileChangesAfterLoad0b:
+roomTileChangesAfterLoad0b_seasons:
 	ld hl,loadGaleTreeGfx@rect
 loadGaleTreeGfx:
 	call drawRectangleToVramTiles
@@ -185,7 +193,7 @@ loadGaleTreeGfx:
 
 ;;
 ; $0c: Load gale tree graphics (sunken city)
-roomTileChangesAfterLoad0c:
+roomTileChangesAfterLoad0c_seasons:
 	ld hl,@rect
 	jr loadGaleTreeGfx
 
@@ -199,7 +207,7 @@ roomTileChangesAfterLoad0c:
 
 ;;
 ; $0d: Load mystery tree graphics (woods of winter)
-roomTileChangesAfterLoad0d:
+roomTileChangesAfterLoad0d_seasons:
 	ld a,TREE_GFXH_0a
 	call loadTreeGfx
 	ld hl,@rect
@@ -215,7 +223,7 @@ roomTileChangesAfterLoad0d:
 
 ;;
 ; $00: Pirate ship bow (at beach)
-roomTileChangesAfterLoad00:
+roomTileChangesAfterLoad00_seasons:
 	ld a,GLOBALFLAG_PIRATE_SHIP_DOCKED
 	call checkGlobalFlag
 	ret z
@@ -256,7 +264,7 @@ roomTileChangesAfterLoad00:
 
 ;;
 ; $01: Pirate ship middle (at beach)
-roomTileChangesAfterLoad01:
+roomTileChangesAfterLoad01_seasons:
 	ld a,GLOBALFLAG_PIRATE_SHIP_DOCKED
 	call checkGlobalFlag
 	ret z
@@ -297,7 +305,7 @@ roomTileChangesAfterLoad01:
 
 ;;
 ; $03: Din's troupe screen: Draw tents and stuff if they should be there.
-roomTileChangesAfterLoad03:
+roomTileChangesAfterLoad03_seasons:
 	call getThisRoomFlags
 	and $40
 	ret nz
@@ -425,7 +433,7 @@ dinsTroupeVramAndCollisions:
 
 ;;
 ; $0e: West of din's troupe: create wagon
-roomTileChangesAfterLoad0e:
+roomTileChangesAfterLoad0e_seasons:
 	ld a,GLOBALFLAG_INTRO_DONE
 	call checkGlobalFlag
 	ret nz
@@ -459,7 +467,7 @@ roomTileChangesAfterLoad0e:
 
 ;;
 ; $05: King Moblin's house (not moblin's keep)
-roomTileChangesAfterLoad05:
+roomTileChangesAfterLoad05_seasons:
 	ld a,GLOBALFLAG_MOBLINS_KEEP_DESTROYED
 	call checkGlobalFlag
 	ret z
@@ -480,7 +488,7 @@ roomTileChangesAfterLoad05:
 
 ;;
 ; $06: Blaino's gym (draws gloves on roof)
-roomTileChangesAfterLoad06:
+roomTileChangesAfterLoad06_seasons:
 	ld a,TREE_GFXH_01
 	call loadTreeGfx
 	ld hl,@rect
@@ -496,7 +504,7 @@ roomTileChangesAfterLoad06:
 
 ;;
 ; $07: Vasu's shop (draws ring sign)
-roomTileChangesAfterLoad07:
+roomTileChangesAfterLoad07_seasons:
 	ld a,$01
 	call loadTreeGfx
 	ld hl,vasuSignRect
@@ -506,7 +514,7 @@ roomTileChangesAfterLoad07:
 
 ;;
 ; $0f: Maku tree entrance & one screen south: forbid digging up enemies
-roomTileChangesAfterLoad0f:
+roomTileChangesAfterLoad0f_seasons:
 	ld a,$01
 	ld (wDiggingUpEnemiesForbidden),a
 	ret
@@ -521,10 +529,14 @@ vasuSignRect:
 
 ;;
 ; $08: Gasha spot (draws the tree or the plant if something has been planted)
-roomTileChangesAfterLoad08:
+roomTileChangesAfterLoad08_seasons:
 	; Return if a gasha seed is not planted in this room.
 	ld a,(wActiveRoom)
+.if defined(ROM_COMBO)
+	call getIndexOfGashaSpotInRoom_body_seasons
+.else
 	call getIndexOfGashaSpotInRoom_body
+.endif
 	ret z
 	; 'c' now contains the gasha spot index.
 
@@ -570,165 +582,13 @@ roomTileChangesAfterLoad08:
 	.db $75 $0f $76 $0f
 	.db $85 $0f $86 $0f
 
-;;
-; This function is used by "drawRectangleToVramTiles".
-readParametersForRectangleDrawing:
-	ldi a,(hl)
-	ld e,a
-	ldi a,(hl)
-	ld d,a
-	ldi a,(hl)
-	ld b,a
-	ldi a,(hl)
-	ld c,a
-	ret
-
-;;
-; Unused in seasons?
-;
-; @param	b	# of columns to write before moving to next row
-; @param	c	# of rows
-; @param	de	Where to write the data (should point to w3VramTiles)
-; @param	hl	The address of the data to write to the given address
-drawRectangleToVramTiles_withParameters:
-	ld a,($ff00+R_SVBK)
-	push af
-	ld a,:w3VramTiles
-	ld ($ff00+R_SVBK),a
-	jr drawRectangleToVramTiles@nextRow
-
-;;
-; This function takes a data struct in hl which is expected to point to somewhere in
-; w3VramTiles. This function is used to rewrite a rectangular area in that buffer.
-;
-; @param	hl	Pointer to data struct:
-; 			b0-b1: Where to write the data (should point to w3VramTiles)
-; 			b2: # of columns to write before moving to next row
-; 			b3: # of rows
-; 			b4+: The data to write to the given address
-drawRectangleToVramTiles:
-	ld a,($ff00+R_SVBK)
-	push af
-	ld a,:w3VramTiles
-	ld ($ff00+R_SVBK),a
-	call readParametersForRectangleDrawing
-
-@nextRow:
-	push bc
---
-	ldi a,(hl)
-	ld (de),a
-	set 2,d
-	ldi a,(hl)
-	ld (de),a
-	res 2,d
-	inc de
-	dec c
-	jr nz,--
-	pop bc
-	ld a,$20
-	sub c
-	call addAToDe
-	dec b
-	jr nz,@nextRow
-
-	pop af
-	ld ($ff00+R_SVBK),a
-	ret
-
-;;
-; @param	hl	Pointer to data struct:
-; 			b0: # of columns
-; 			b1: # of rows
-; 			b2-b3: Where to write the data (should point somewhere in wram 3)
-; 			b4-b5: Where to read data from (should point somewhere in wram 2)
-copyRectangleFromTmpGfxBuffer:
-	ld a,($ff00+R_SVBK)
-	push af
-
-	ldi a,(hl)
-	ld b,a
-	ldi a,(hl)
-	ld c,a
-	ldi a,(hl)
-	ld e,a
-	ldi a,(hl)
-	ld d,a
-	rst_derefHl
-
-@nextRow:
-	push bc
---
-	ld a,:w2TmpGfxBuffer
-	ld ($ff00+R_SVBK),a
-	ldi a,(hl)
-	ld b,a
-	ld a,:w3VramTiles
-	ld ($ff00+R_SVBK),a
-	ld a,b
-	ld (de),a
-	inc de
-	dec c
-	jr nz,--
-	pop bc
-	ld a,$20
-	sub c
-	call addAToDe
-	ld a,$20
-	sub c
-	rst_addAToHl
-	dec b
-	jr nz,@nextRow
-
-	pop af
-	ld ($ff00+R_SVBK),a
-	ret
-
-;;
-; @param	hl	Pointer to data struct:
-;			b0-b1: Where to write the data (should point to wRoomLayout)
-;			b2: # of columns
-;			b3: # of rows
-;			b4+: Data to write (even bytes go to wRoomLayout, odd bytes go to
-;			wRoomCollisions)
-copyRectangleToRoomLayoutAndCollisions:
-	ldi a,(hl)
-	ld e,a
-	ldi a,(hl)
-	ld d,a
-
-;;
-; @param	de	Where to write the data
-; @param	hl	Pointer to data struct (same as above method except first 2 bytes)
-copyRectangleToRoomLayoutAndCollisions_paramDe:
-	ldi a,(hl)
-	ld b,a
-	ldi a,(hl)
-	ld c,a
-
-@nextRow:
-	push bc
---
-	ldi a,(hl)
-	ld (de),a
-	dec d
-	ldi a,(hl)
-	ld (de),a
-	inc d
-	inc de
-	dec c
-	jr nz,--
-	pop bc
-	ld a,$10
-	sub c
-	call addAToDe
-	dec b
-	jr nz,@nextRow
-	ret
+.if !defined(ROM_COMBO)
+	.include "code/roomGfxChanges.s"
+.endif
 
 ;;
 ; This is called in shops to load "price" graphics and set bit 1 of "wInShop".
-roomTileChangesAfterLoad04:
+roomTileChangesAfterLoad04_seasons:
 	ld hl,wInShop
 	set 1,(hl)
 	ld a,TREE_GFXH_03

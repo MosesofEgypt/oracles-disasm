@@ -9,9 +9,13 @@
 ; @param	a	Room
 ; @param[out]	c	Gasha spot index
 ; @param[out]	zflag	z if nothing is planted in the given room.
+.if defined(ROM_COMBO)
+getIndexOfGashaSpotInRoom_body_ages:
+.else
 getIndexOfGashaSpotInRoom_body:
+.endif
 	ld c,$00
-	ld hl,gashaSpotRooms
+	ld hl,@gashaSpotRooms
 --
 	cp (hl)
 	jr z,+
@@ -37,7 +41,7 @@ getIndexOfGashaSpotInRoom_body:
 ; gasha spots on the same map in the past/present.
 ; ie. You can't have a gasha spot on both maps $050 and $150.
 
-gashaSpotRooms:
+@gashaSpotRooms:
 	.db $05 $2c $30 $7b $90 $ad $cb $d7 ; Subids 0-7
 	.db $01 $0a $28 $34 $55 $95 $d0 $ca ; Subids 8-f
 
@@ -61,23 +65,27 @@ func_02_7a77:
 ; involves either modifying w3VramTiles, or modifying wRoomLayout for behavioural changes
 ; only (not visual changes).
 ;
+.if defined(ROM_COMBO)
+applyRoomSpecificTileChangesAfterGfxLoad_ages:
+.else
 applyRoomSpecificTileChangesAfterGfxLoad:
+.endif
 	ld a,(wActiveRoom)
 	ld hl,@tileChangesGroupTable
 	call findRoomSpecificData
 	ret nc
 	rst_jumpTable
-	.dw roomTileChangesAfterLoad00
-	.dw roomTileChangesAfterLoad01
-	.dw roomTileChangesAfterLoad02
-	.dw roomTileChangesAfterLoad03
-	.dw roomTileChangesAfterLoad04
-	.dw roomTileChangesAfterLoad05
-	.dw roomTileChangesAfterLoad06
-	.dw roomTileChangesAfterLoad07
-	.dw roomTileChangesAfterLoad08
-	.dw roomTileChangesAfterLoad09
-	.dw roomTileChangesAfterLoad0a
+	.dw roomTileChangesAfterLoad00_ages
+	.dw roomTileChangesAfterLoad01_ages
+	.dw roomTileChangesAfterLoad02_ages
+	.dw roomTileChangesAfterLoad03_ages
+	.dw roomTileChangesAfterLoad04_ages
+	.dw roomTileChangesAfterLoad05_ages
+	.dw roomTileChangesAfterLoad06_ages
+	.dw roomTileChangesAfterLoad07_ages
+	.dw roomTileChangesAfterLoad08_ages
+	.dw roomTileChangesAfterLoad09_ages
+	.dw roomTileChangesAfterLoad0a_ages
 
 ;;
 ; Unused stub
@@ -166,7 +174,7 @@ applyRoomSpecificTileChangesAfterGfxLoad:
 ; no visual effect. The only purpose is to make it so that when Link stands on these
 ; tiles, he gets the "pond" animation at his feet.
 ;
-roomTileChangesAfterLoad0a:
+roomTileChangesAfterLoad0a_ages:
 	ld hl,wRoomLayout+$79
 --
 	ld a,(hl)
@@ -188,7 +196,7 @@ roomTileChangesAfterLoad0a:
 ; mermaid statue tiles with the base for the Link statue. (The statue itself is an object,
 ; so it's not drawn here.)
 ;
-roomTileChangesAfterLoad09:
+roomTileChangesAfterLoad09_ages:
 	ld a,GLOBALFLAG_FINISHEDGAME
 	call checkGlobalFlag
 	ret z
@@ -208,8 +216,8 @@ roomTileChangesAfterLoad09:
 ;
 ; A portal gets put on top of the staircase, so you don't see it.
 ;
-roomTileChangesAfterLoad06:
-	call roomTileChangesAfterLoad0a
+roomTileChangesAfterLoad06_ages:
+	call roomTileChangesAfterLoad0a_ages
 	call checkIsLinkedGame
 	ret z
 
@@ -226,7 +234,7 @@ roomTileChangesAfterLoad06:
 ; Crown Dungeon entrance screen: redraw the tiles for the entrance if it has not been
 ; opened yet.
 ;
-roomTileChangesAfterLoad07:
+roomTileChangesAfterLoad07_ages:
 	call getThisRoomFlags
 	and $80
 	ret nz
@@ -298,7 +306,7 @@ drawCrownDungeonOpeningTiles:
 ;;
 ; Dungeon 2 present screen: redraw the cave if it's collapsed.
 ;
-roomTileChangesAfterLoad00:
+roomTileChangesAfterLoad00_ages:
 	call getThisRoomFlags
 	and $80
 	ret z
@@ -331,16 +339,16 @@ drawCollapsedWingDungeon:
 ;;
 ; This is unused in Ages.
 ;
-roomTileChangesAfterLoad02:
+roomTileChangesAfterLoad02_ages:
 	call getThisRoomFlags
 	and $01
 	ret z
-	jr roomTileChangesAfterLoad01
+	jr roomTileChangesAfterLoad01_ages
 
 ;;
 ; Present tokay island screen with scent tree: draw the tree if room flags are set.
 ;
-roomTileChangesAfterLoad03:
+roomTileChangesAfterLoad03_ages:
 	call getThisRoomFlags
 	and $80
 	ret z
@@ -348,7 +356,7 @@ roomTileChangesAfterLoad03:
 ;;
 ; Each screen with a tree on it calls this to load the tree's graphics.
 ;
-roomTileChangesAfterLoad01:
+roomTileChangesAfterLoad01_ages:
 	ld a,(wActiveGroup)
 	ld hl,treeGfxLocationsTable
 	rst_addDoubleIndex
@@ -437,10 +445,14 @@ treeTilesTable:
 ; Rooms with gasha spots call this to replace the "soft soil" with tree graphics if
 ; necessary.
 ;
-roomTileChangesAfterLoad08:
+roomTileChangesAfterLoad08_ages:
 	; Return if a gasha seed is not planted in this room.
 	ld a,(wActiveRoom)
+.if defined(ROM_COMBO)
+	call getIndexOfGashaSpotInRoom_body_ages
+.else
 	call getIndexOfGashaSpotInRoom_body
+.endif
 	ret z
 	; 'c' now contains the gasha spot index.
 
@@ -493,7 +505,7 @@ roomTileChangesAfterLoad08:
 ; Of course, this is after w3VramTiles has been generated, so there is no visual change.
 ; It seems that this is done to allow Link to throw bombs up the ledge.
 ;
-roomTileChangesAfterLoad05:
+roomTileChangesAfterLoad05_ages:
 	ld hl,wRoomLayout+$33
 	ld a,$0a
 	ldi (hl),a
@@ -502,169 +514,13 @@ roomTileChangesAfterLoad05:
 	ldi (hl),a
 	ret
 
-;;
-; This function is used by "drawRectangleToVramTiles".
-readParametersForRectangleDrawing:
-	ldi a,(hl)
-	ld e,a
-	ldi a,(hl)
-	ld d,a
-	ldi a,(hl)
-	ld b,a
-	ldi a,(hl)
-	ld c,a
-	ret
-
-;;
-; @param	b	# of columns to write before moving to next row
-; @param	c	# of rows
-; @param	de	Where to write the data (should point to w3VramTiles)
-; @param	hl	The address of the data to write to the given address
-drawRectangleToVramTiles_withParameters:
-	ld a,($ff00+R_SVBK)
-	push af
-	ld a,:w3VramTiles
-	ld ($ff00+R_SVBK),a
-	jr drawRectangleToVramTiles@nextRow
-
-;;
-; This function takes a data struct in hl which is expected to point to somewhere in
-; w3VramTiles. This function is used to rewrite a rectangular area in that buffer.
-;
-; @param	hl	Pointer to data struct:
-; 			b0-b1: Where to write the data (should point to w3VramTiles)
-; 			b2: # of columns to write before moving to next row
-; 			b3: # of rows
-; 			b4+: The data to write to the given address
-drawRectangleToVramTiles:
-	ld a,($ff00+R_SVBK)
-	push af
-	ld a,:w3VramTiles
-	ld ($ff00+R_SVBK),a
-	call readParametersForRectangleDrawing
-
-@nextRow:
-	push bc
---
-	ldi a,(hl)
-	ld (de),a
-	set 2,d
-	ldi a,(hl)
-	ld (de),a
-	res 2,d
-	inc de
-	dec c
-	jr nz,--
-
-	pop bc
-	ld a,$20
-	sub c
-	call addAToDe
-	dec b
-	jr nz,@nextRow
-
-	pop af
-	ld ($ff00+R_SVBK),a
-	ret
-
-;;
-copyRectangleFromTmpGfxBuffer_paramBc:
-	ld l,c
-	ld h,b
-
-;;
-; @param	hl	Pointer to data struct:
-; 			b0: # of columns
-; 			b1: # of rows
-; 			b2-b3: Where to write the data (should point somewhere in wram 3)
-; 			b4-b5: Where to read data from (should point somewhere in wram 2)
-copyRectangleFromTmpGfxBuffer:
-	ld a,($ff00+R_SVBK)
-	push af
-
-	ldi a,(hl)
-	ld b,a
-	ldi a,(hl)
-	ld c,a
-	ldi a,(hl)
-	ld e,a
-	ldi a,(hl)
-	ld d,a
-	rst_derefHl
-
-@nextRow:
-	push bc
---
-	ld a,:w2TmpGfxBuffer
-	ld ($ff00+R_SVBK),a
-	ldi a,(hl)
-	ld b,a
-	ld a,:w3VramTiles
-	ld ($ff00+R_SVBK),a
-	ld a,b
-	ld (de),a
-	inc de
-	dec c
-	jr nz,--
-	pop bc
-	ld a,$20
-	sub c
-	call addAToDe
-	ld a,$20
-	sub c
-	rst_addAToHl
-	dec b
-	jr nz,@nextRow
-
-	pop af
-	ld ($ff00+R_SVBK),a
-	ret
-
-;;
-; @param	hl	Pointer to data struct:
-;			b0-b1: Where to write the data (should point to wRoomLayout)
-;			b2: # of columns
-;			b3: # of rows
-;			b4+: Data to write (even bytes go to wRoomLayout, odd bytes go to
-;			wRoomCollisions)
-copyRectangleToRoomLayoutAndCollisions:
-	ldi a,(hl)
-	ld e,a
-	ldi a,(hl)
-	ld d,a
-
-;;
-; @param	de	Where to write the data
-; @param	hl	Pointer to data struct (same as above method except first 2 bytes)
-copyRectangleToRoomLayoutAndCollisions_paramDe:
-	ldi a,(hl)
-	ld b,a
-	ldi a,(hl)
-	ld c,a
-
-@nextRow:
-	push bc
---
-	ldi a,(hl)
-	ld (de),a
-	dec d
-	ldi a,(hl)
-	ld (de),a
-	inc d
-	inc de
-	dec c
-	jr nz,--
-	pop bc
-	ld a,$10
-	sub c
-	call addAToDe
-	dec b
-	jr nz,@nextRow
-	ret
+.if !defined(ROM_COMBO)
+	.include "code/roomGfxChanges.s"
+.endif
 
 ;;
 ; This is called in shops to load "price" graphics and set bit 1 of "wInShop".
-roomTileChangesAfterLoad04:
+roomTileChangesAfterLoad04_ages:
 	ld hl,wInShop
 	set 1,(hl)
 	ld a,TREE_GFXH_03

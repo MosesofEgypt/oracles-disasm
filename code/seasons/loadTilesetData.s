@@ -2,7 +2,11 @@
 ; Called from loadTilesetData in bank 0. Function differs substantially in Ages and Seasons.
 ;
 ; HACK-BASE: This has been modified for the expanded tilesets patch.
+.if defined(ROM_COMBO)
+loadTilesetData_body_seasons:
+.else
 loadTilesetData_body:
+.endif
 	call getTempleRemainsSeasonsTilesetData
 	jr c,@gotTilesetIndex
 	call getMoblinKeepSeasonsTilesetData

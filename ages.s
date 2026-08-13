@@ -993,7 +993,6 @@ m_section_free Enemy_Code_Bank3c NAMESPACE bank3c
 
 .BANK $3d SLOT 1
 .ORG 0
-.define BANK_3d $3d
 
 m_section_superfree bank_0_Ext NAMESPACE bank0Ext
 	.include "code/bank0Ext.s"
@@ -1060,8 +1059,6 @@ m_section_free Part_Code_2 NAMESPACE partCodeExt
 .ORG 0
 
 m_section_free enemyCode_Bank3e NAMESPACE bank3e
-	.define BANK_3e $3e
-
 	.include "object_code/common/enemies/commonCode.s"
 
 	.include "object_code/common/enemies/polsVoice.s"
@@ -1107,8 +1104,6 @@ m_section_free roomGfxChanges NAMESPACE roomGfxChanges
 .ORG 0
 
 m_section_free Bank3f NAMESPACE bank3f
-
-.define BANK_3f $3f
 
 .include "code/loadGraphics.s"
 .include "code/treasureAndDrops.s"

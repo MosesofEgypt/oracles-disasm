@@ -230,7 +230,7 @@ bitTable:
 ; ROM title / manufacturer code
 .ORGA $134
 
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	.asc "ZELDA OOA&S"
 
 	.ifdef REGION_JP
@@ -1175,16 +1175,15 @@ loadPaletteHeader:
 	ld a,$02
 	ld ($ff00+R_SVBK),a
 .if defined(ROM_COMBO)
-	ld b,l
-	ld a,:bank1Moveable.paletteHeaderTable_seasons
+	ld a,:bank1Moveable.paletteHeaderTable_seasons ; they're in the same bank
+	rst_setrombank
+	ld a,l
+
 	ld hl,bank1Moveable.paletteHeaderTable_seasons
 	call hIsSeasons
 	jr c,+
-		ld a,:bank1Moveable.paletteHeaderTable_ages
 		ld hl,bank1Moveable.paletteHeaderTable_ages
 	+
-	rst_setrombank
-	ld a,b
 .else
 	ld a,:bank1Moveable.paletteHeaderTable
 	rst_setrombank
@@ -3773,12 +3772,28 @@ updateLinkLocalRespawnPosition:
 ; @param	a	Tile that was broken
 updateRoomFlagsForBrokenTile:
 	push af
+.if defined(ROM_COMBO)
+	ld hl,tileIncreaseGashaMaturityOnBreakTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,tileIncreaseGashaMaturityOnBreakTable_ages
+	+
+.else
 	ld hl,tileIncreaseGashaMaturityOnBreakTable
+.endif
 	call lookupCollisionTable
 	call c,addToGashaMaturity
 
 	pop af
+.if defined(ROM_COMBO)
+	ld hl,tileUpdateRoomFlagsOnBreakTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,tileUpdateRoomFlagsOnBreakTable_ages
+	+
+.else
 	ld hl,tileUpdateRoomFlagsOnBreakTable
+.endif
 	call lookupCollisionTable
 	ret nc
 
@@ -4874,7 +4889,11 @@ loadObjectGfx2:
 	ld c,:w4GfxBuf1
 	ld a,$01
 	ld ($ff00+R_SVBK),a
-	ld a,BANK_3f
+.if defined(ROM_COMBO)
+	ld a,:bank44.insertIndexIntoLoadedObjectGfx
+.else
+	ld a,:bank3f.insertIndexIntoLoadedObjectGfx
+.endif
 	rst_setrombank
 	ld b,$1f
 	jp queueDmaTransfer
@@ -4892,7 +4911,11 @@ loadObjectGfx2:
 	call decompressGraphics
 	ld a,$01
 	ld ($ff00+R_SVBK),a
-	ld a,BANK_3f
+.if defined(ROM_COMBO)
+	ld a,:bank44.insertIndexIntoLoadedObjectGfx
+.else
+	ld a,:bank3f.insertIndexIntoLoadedObjectGfx
+.endif
 	rst_setrombank
 	ret
 .endif
@@ -5177,7 +5200,11 @@ getRandomRingOfGivenTier:
 	rst_setrombank
 
 .ifdef ENABLE_GASHA_REBALANCE
+.if defined(ROM_COMBO)
+	call bank19.getRandomRingOfGivenTier_body
+.else
 	call bank3f.getRandomRingOfGivenTier_body
+.endif
 .else
 	ld b,$01
 	ld a,c
@@ -5390,7 +5417,11 @@ retrieveTextCharacter:
 	setrombank
 	call @func_18fd
 
-	ld a,BANK_3f
+.if defined(ROM_COMBO)
+	ld a,:bank19.updateTextbox
+.else
+	ld a,:bank3f.updateTextbox
+.endif
 	setrombank
 
 	xor a
@@ -5487,7 +5518,11 @@ readByteFromW7ActiveBank:
 	setrombank
 	ld b,(hl)
 
-	ld a,BANK_3f
+.if defined(ROM_COMBO)
+	ld a,:bank19.readByteFromW7ActiveBankAndIncHl
+.else
+	ld a,:bank3f.readByteFromW7ActiveBankAndIncHl
+.endif
 	setrombank
 
 	ld a,b
@@ -7838,7 +7873,15 @@ objectCheckIsOverHazard:
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld (wObjectTileIndex),a
 .endif
+.if defined(ROM_COMBO)
+	ld hl,hazardCollisionTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,hazardCollisionTable_ages
+	+
+.else
 	ld hl,hazardCollisionTable
+.endif
 	jp lookupCollisionTable
 
 ;;
@@ -8004,8 +8047,19 @@ breakCrackedFloor:
 ;			water)
 objectCheckTileAtPositionIsWater:
 	call objectGetTileAtPosition
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+		sub TILEINDEX_PUDDLE_AGES
+		cp TILERANGE_WATER_AGES
+		ret
+	+
+	sub TILEINDEX_PUDDLE_SEASONS
+	cp TILERANGE_WATER_SEASONS
+.else
 	sub TILEINDEX_PUDDLE
 	cp TILERANGE_WATER
+.endif
 	ret
 
 ;;
@@ -8015,8 +8069,19 @@ objectCheckTileAtPositionIsWater:
 ; @param[out]	cflag	Set if the tile at that position is water (even shallow water)
 checkTileAtPositionIsWater:
 	call getTileAtPosition
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+		sub TILEINDEX_PUDDLE_AGES
+		cp TILERANGE_WATER_AGES
+		ret
+	+
+	sub TILEINDEX_PUDDLE_SEASONS
+	cp TILERANGE_WATER_SEASONS
+.else
 	sub TILEINDEX_PUDDLE
 	cp TILERANGE_WATER
+.endif
 	ret
 
 ;;
@@ -9499,7 +9564,15 @@ interactionAnimate:
 
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	ld a,:interactionAnimationTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld a,:interactionAnimationTable_ages
+	+
+.else
 	ld a,:interactionAnimationTable
+.endif
 	setrombank
 	ld l,Interaction.animPointer
 	jr _interactionNextAnimationFrame
@@ -9512,11 +9585,24 @@ interactionSetAnimation:
 	ld b,$00
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	ld a,:interactionAnimationTable_seasons
+	ld hl,interactionAnimationTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld a,:interactionAnimationTable_ages
+		ld hl,interactionAnimationTable_ages
+	+
+	setrombank
+	ld e,Interaction.id
+	ld a,(de)
+.else
 	ld a,:interactionAnimationTable
 	setrombank
 	ld e,Interaction.id
 	ld a,(de)
 	ld hl,interactionAnimationTable
+.endif
 	rst_addDoubleIndex
 	ldi a,(hl)
 	ld h,(hl)
@@ -9567,7 +9653,15 @@ _interactionNextAnimationFrame:
 
 	ld e,Interaction.id
 	ld a,(de)
+.if defined(ROM_COMBO)
+	ld hl,interactionOamDataTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,interactionOamDataTable_ages
+	+
+.else
 	ld hl,interactionOamDataTable
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 	add hl,bc
@@ -10059,7 +10153,15 @@ enemyAnimate:
 
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	ld a,:enemyAnimationTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld a,:enemyAnimationTable_ages
+	+
+.else
 	ld a,:enemyAnimationTable
+.endif
 	setrombank
 	ld l,Enemy.animPointer
 	jr _enemyNextAnimationFrame
@@ -10073,11 +10175,24 @@ enemySetAnimation:
 	ld b,$00
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	ld a,:enemyAnimationTable_seasons
+	ld hl,enemyAnimationTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld a,:enemyAnimationTable_ages
+		ld hl,enemyAnimationTable_ages
+	+
+	setrombank
+	ld e,Enemy.id
+	ld a,(de)
+.else
 	ld a,:enemyAnimationTable
 	setrombank
 	ld e,Enemy.id
 	ld a,(de)
 	ld hl,enemyAnimationTable
+.endif
 	rst_addDoubleIndex
 	ldi a,(hl)
 	ld h,(hl)
@@ -10125,7 +10240,15 @@ _enemyNextAnimationFrame:
 
 	ld e,Enemy.id
 	ld a,(de)
+.if defined(ROM_COMBO)
+	ld hl,enemyOamDataTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,enemyOamDataTable_ages
+	+
+.else
 	ld hl,enemyOamDataTable
+.endif
 	rst_addDoubleIndex
 	ldi a,(hl)
 	ld h,(hl)
@@ -10459,7 +10582,15 @@ partAnimate:
 	ld l,Part.animCounter
 	dec (hl)
 	ret nz
+.if defined(ROM_COMBO)
+	ld a,:partAnimationTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld a,:partAnimationTable_ages
+	+
+.else
 	ld a,:partAnimationTable
+.endif
 	setrombank
 	ld l,Part.animPointer
 	jr _partNextAnimationFrame
@@ -10469,11 +10600,24 @@ partSetAnimation:
 	add a
 	ld c,a
 	ld b,$00
+.if defined(ROM_COMBO)
+	ld a,:partAnimationTable_seasons
+	ld hl,partAnimationTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld a,:partAnimationTable_ages
+		ld hl,partAnimationTable_ages
+	+
+	setrombank
+	ld e,Part.id
+	ld a,(de)
+.else
 	ld a,:partAnimationTable
 	setrombank
-	ld e,$c1
+	ld e,Part.id
 	ld a,(de)
 	ld hl,partAnimationTable
+.endif
 	rst_addDoubleIndex
 	ldi a,(hl)
 	ld h,(hl)
@@ -10523,7 +10667,15 @@ _partNextAnimationFrame:
 
 	ld e,Part.id
 	ld a,(de)
+.if defined(ROM_COMBO)
+	ld hl,partOamDataTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,partOamDataTable_ages
+	+
+.else
 	ld hl,partOamDataTable
+.endif
 	rst_addDoubleIndex
 	ldi a,(hl)
 	ld h,(hl)
@@ -11892,7 +12044,11 @@ updateEnemy:
 .endif
 	jp hl
 
+.if !defined(ROM_COMBO) 	; NOTE: TEMPORARY FOR TESTING
 .include "data/enemyCodeTable.s"
+.else
+enemyCodeTable:
+.endif					; NOTE: TEMPORARY FOR TESTING
 
 
 .if defined(ROM_AGES) && !defined(ROM_COMBO)
@@ -12140,7 +12296,7 @@ unsetGlobalFlag:
 ;
 clearEnemiesKilledList:
 	ld h,$00
-	.if defined(ROM_AGES) && !defined(ROM_COMBO)
+	.if defined(ROM_AGES) || defined(ROM_COMBO)
 	jr ++
 	.else
 	jp ++
@@ -12151,7 +12307,7 @@ clearEnemiesKilledList:
 ;
 addRoomToEnemiesKilledList:
 	ld h,$01
-	.if defined(ROM_AGES) && !defined(ROM_COMBO)
+	.if defined(ROM_AGES) || defined(ROM_COMBO)
 	jr ++
 	.else
 	jp ++
@@ -12163,7 +12319,7 @@ addRoomToEnemiesKilledList:
 ;
 markEnemyAsKilledInRoom:
 	ld h,$02
-	.if defined(ROM_AGES) && !defined(ROM_COMBO)
+	.if defined(ROM_AGES) || defined(ROM_COMBO)
 	jr ++
 	.else
 	jp ++
@@ -12175,7 +12331,7 @@ markEnemyAsKilledInRoom:
 ;
 generateRandomBuffer:
 	ld h,$04
-	.if defined(ROM_AGES) && !defined(ROM_COMBO)
+	.if defined(ROM_AGES) || defined(ROM_COMBO)
 	jr ++
 	.else
 	jp ++
@@ -12188,7 +12344,7 @@ generateRandomBuffer:
 ; @param	hFF8B	"Flags" (set when placing an enemy in the editor)
 getRandomPositionForEnemy:
 	ld h,$05
-	.if defined(ROM_AGES) && !defined(ROM_COMBO)
+	.if defined(ROM_AGES) || defined(ROM_COMBO)
 	jr ++
 	.else
 	jp ++
@@ -12635,7 +12791,15 @@ loadScreenMusic:
 	ld b,a
 	ld a,(wActiveRoom)
 	ld c,a
+.if defined(ROM_COMBO)
+	ld hl,bank4Data1.roomPackData_seasons
+	call hIsSeasons
+	jr c,+++
+		ld hl,bank4Data1.roomPackData_ages
+	+++
+.else
 	ld hl,bank4Data1.roomPackData
+.endif
 	add hl,bc
 	ldi a,(hl)
 	ld (wLoadingRoomPack),a
@@ -12652,7 +12816,15 @@ loadScreenMusic:
 	jr nz,++
 
 	ld a,(wActiveRoom)
+.if defined(ROM_COMBO)
+	ld hl,bank4Data1.roomPackData_seasons
+	call hIsSeasons
+	jr c,+++
+		ld hl,bank4Data1.roomPackData_ages
+	+++
+.else
 	ld hl,bank4Data1.roomPackData
+.endif
 	rst $10
 	ldi a,(hl)
 	ld (wLoadingRoomPack),a
@@ -13159,10 +13331,22 @@ loadAnimationData:
 	ld b,a
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	ld a,:animationAndUniqueGfxData.animationGroupTable_seasons
+	ld hl,animationAndUniqueGfxData.animationGroupTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld a,:animationAndUniqueGfxData.animationGroupTable_ages
+		ld hl,animationAndUniqueGfxData.animationGroupTable_ages
+	+
+	setrombank
+	ld a,b
+.else
 	ld a,:animationAndUniqueGfxData.animationGroupTable
 	rst_setrombank
 	ld a,b
 	ld hl,animationAndUniqueGfxData.animationGroupTable
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 	ldi a,(hl)
@@ -13202,9 +13386,13 @@ loadAnimationData:
 	ret
 
 
-.if defined(ROM_SEASONS) || defined(ROM_COMBO)
-
+.if defined(ROM_SEASONS)
 roomTileChangesAfterLoad02:
+.elif defined(ROM_COMBO)
+roomTileChangesAfterLoad02_seasons:
+.endif
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	ldh a,(<hRomBank)
 	push af
 	callfrombank0 seasonsInteractionsBank09.roomTileChangesAfterLoad02_body
@@ -13225,10 +13413,23 @@ getIndexOfGashaSpotInRoom:
 	ldh a,(<hRomBank)
 	push af
 
+.if defined(ROM_COMBO)
+	ld a,:roomGfxChanges.getIndexOfGashaSpotInRoom_body_seasons
+	rst_setrombank
+	ld a,c
+	call hIsSeasons
+	jr c,+
+		call roomGfxChanges.getIndexOfGashaSpotInRoom_body_ages
+		jr ++
+	+
+		call roomGfxChanges.getIndexOfGashaSpotInRoom_body_seasons
+	++
+.else
 	ld a,:roomGfxChanges.getIndexOfGashaSpotInRoom_body
 	rst_setrombank
 	ld a,c
 	call roomGfxChanges.getIndexOfGashaSpotInRoom_body
+.endif
 
 	push af
 	pop bc
@@ -13307,8 +13508,18 @@ loadTilesetLayout:
 	ldh (<R_SVBK),a
 
 	; Get address of expanded tileset mappings + collisions
+.if defined(ROM_COMBO)
+	ld hl,expandedTilesetMappingsTable_seasons
+	ld a,:expandedTilesetMappingsTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,expandedTilesetMappingsTable_ages
+		ld a,:expandedTilesetMappingsTable_ages
+	+
+.else
 	ld hl,expandedTilesetMappingsTable
 	ld a,:expandedTilesetMappingsTable
+.endif
 	call lookupExpandedTilesetTable
 
 	; Copy tile mapping data
@@ -13559,7 +13770,17 @@ loadTilesetData:
 	ldh a,(<hRomBank)
 	push af
 
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+		callfrombank0 tilesets.loadTilesetData_body_ages
+		jr ++
+	+
+		callfrombank0 tilesets.loadTilesetData_body_seasons
+	++
+.else
 	callfrombank0 tilesets.loadTilesetData_body
+.endif
 	callab        bank2.updateTilesetFlagsForIndoorRoomInAltWorld
 
 	pop af
@@ -13590,7 +13811,17 @@ loadTilesetAndRoomLayout:
 	; Load the room layout and apply any dynamic changes necessary
 	call          loadRoomLayout
 
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+		callfrombank0 roomTileChanges.applyAllTileSubstitutions_ages
+		jr ++
+	+
+		callfrombank0 roomTileChanges.applyAllTileSubstitutions_seasons
+	++
+.else
 	callfrombank0 roomTileChanges.applyAllTileSubstitutions
+.endif
 
 	; Copy wRoomLayout to w3RoomLayoutBuffer
 	ld a,:w3RoomLayoutBuffer
@@ -14019,7 +14250,15 @@ generateVramTilesWithRoomChanges:
 	push bc
 
 	callfrombank0 tilesets.generateW3VramTilesAndAttributes
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+		callab    roomGfxChanges.applyRoomSpecificTileChangesAfterGfxLoad_ages
+		jr ++
+	+
+		callab    roomGfxChanges.applyRoomSpecificTileChangesAfterGfxLoad_seasons
+	++
+.elif defined(ROM_AGES)
 	callab        roomGfxChanges.applyRoomSpecificTileChangesAfterGfxLoad
 .else
 	call          roomGfxChanges.applyRoomSpecificTileChangesAfterGfxLoad
@@ -14363,7 +14602,11 @@ updateInteraction:
 	rst_derefHl
 	jp hl
 
+.if defined(ROM_COMBO)	; NOTE: TEMPORARY UNTIL INTERACTIONS ARE MERGED IN
+interactionCodeTable:
+.else
 .include "data/interactionCodeTable.s"
+.endif					; NOTE: TEMPORARY UNTIL INTERACTIONS ARE MERGED IN
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
@@ -14749,7 +14992,19 @@ interactionFunc_3e6d:
 
 	ldh a,(<hRomBank)
 	push af
-.if defined(ROM_AGES) && !defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	ld a,:bank14.data_4556_seasons
+	ld hl,bank14.data_4556_seasons
+	jr c,+
+		ld a,:bank14.data_4556_ages
+		ld hl,bank14.data_4556_ages
+	+
+	rst_setrombank
+	ld a,e
+.else
+
+.if defined(ROM_AGES)
 	ld a,:bank16.data_4556
 .else
 	ld a,:data_4556
@@ -14757,10 +15012,11 @@ interactionFunc_3e6d:
 	rst_setrombank
 
 	ld a,e
-.if defined(ROM_AGES) && !defined(ROM_COMBO)
+.if defined(ROM_AGES)
 	ld hl,bank16.data_4556
 .else
 	ld hl,data_4556
+.endif
 .endif
 	rst_addDoubleIndex
 	rst_derefHl
@@ -14776,9 +15032,15 @@ interactionFunc_3e6d:
 getLinkedHerosCaveSideEntranceRoom:
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	ld a,:(bank4.warpSourcesTable_seasons@warpSource7653+2)
+	rst_setrombank
+	ld hl,bank4.warpSourcesTable_seasons@warpSource7653+2
+.else
 	ld a,:(bank4.warpSourcesTable@warpSource7653+2)
 	rst_setrombank
 	ld hl,bank4.warpSourcesTable@warpSource7653+2
+.endif
 	ld a,(hl)
 	; ROOM_SEASONS_552
 	ld (wWarpDestRoom),a

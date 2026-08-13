@@ -146,7 +146,7 @@ cutscene0e:
 ; CUTSCENE_S_FLAME_OF_DESTRUCTION
 cutscene10:
 .if defined(ROM_COMBO)
-	callab bank3Cutscenes_2.flameOfDestructionsCutsceneCaller
+	callab bank3Cutscenes_2.flameOfDestructionCutsceneBody
 .else
 	call flameOfDestructionsCutsceneCaller
 .endif
@@ -156,7 +156,7 @@ cutscene10:
 ; CUTSCENE_S_ZELDA_VILLAGERS
 cutscene11:
 .if defined(ROM_COMBO)
-	callab bank3Cutscenes_2.zeldaAndVillagersCutsceneCaller
+	callab bank3Cutscenes_2.zeldaAndVillagersCutsceneBody
 .else
 	call zeldaAndVillagersCutsceneCaller
 .endif

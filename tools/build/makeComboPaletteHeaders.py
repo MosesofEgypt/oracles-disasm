@@ -64,6 +64,7 @@ def make_header_names_unique(
             debug and print(f"Renamed {name} to {new_name}")
 
         for line in header_data:
+            
             if (line.startswith("m_PaletteHeaderBg") or
                 line.startswith("m_PaletteHeaderSpr")):
                 line_parts = [s for s in line.replace(","," ").split(" ") if s]
@@ -78,7 +79,7 @@ def make_header_names_unique(
                         
                     data_name += f"_{suffix}".lower()
                     line_parts[3] = data_name + modifier
-                    line = "m_PaletteHeaderSpr " + (", ".join(line_parts[1:]))
+                    line = line.split(" ", 1)[0] + " " + (", ".join(line_parts[1:]))
                 else:
                     debug and print(f"Skipping renaming palette {line_parts[3]}")
 
