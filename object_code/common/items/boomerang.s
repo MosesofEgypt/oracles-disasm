@@ -1,3 +1,30 @@
+.ifdef ENABLE_RING_REDUX
+eitherRangRingEquipped:
+	push bc
+	ldbc RANG_RING_L2,RANG_RING_L1
+	jp eitherRingActiveAndPopBC
+
+superBoomerangComboActive:
+	ld a,TOSS_RING
+	call cpActiveRing
+	jr z,+
+		ld a,HASTE_RING
+		call cpActiveRing
+		ret nz
+	+
+@zIfEither
+	call eitherRangRingEquipped
+	jp getZflagOrCflagSet
+
+diggerangComboActive:
+	push bc
+	ldbc TOSS_RING,DISCOVERY_RING
+	call bothRingsActive
+	pop bc
+	ret nz
+	jr superBoomerangComboActive@zIfEither
+.endif
+
 ;;
 ; ITEM_BOOMERANG
 itemCode06:

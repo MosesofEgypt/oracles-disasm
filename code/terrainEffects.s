@@ -11,6 +11,7 @@ func_0eda:
 	ld l,a
 	ldh a,(<hFF8F)
 	ld h,a
+func_0eda_fromWithinBank:
 .else
 	ld a,:terrainEffects.shadowAnimation
 	rst_setrombank
@@ -211,7 +212,11 @@ _drawObjectTerrainEffects:
 
 @grassOrWater:
 	push de
+.if defined(ROM_COMBO)
+	call func_0eda_fromWithinBank
+.else
 	call func_0eda
+.endif
 	pop de
 
 @end:

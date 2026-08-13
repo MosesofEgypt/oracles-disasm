@@ -8236,6 +8236,7 @@ objectUpdateSpeedZAndBounce:
 	call objectUpdateSpeedZ_paramC
 	ret nz
 
+.if !defined(ROM_COMBO)
 ;;
 ; Inverts an object's Z speed and halves it. Used for bombs when bouncing on the ground.
 ;
@@ -8286,6 +8287,7 @@ objectNegateAndHalveSpeedZ:
 
 	xor a
 	ret
+.endif
 
 ;;
 ; @param	bc	speedZ
@@ -8764,53 +8766,6 @@ handleAutoEquipItem:
 	ret
 .endif
 
-.if defined(ROM_AGES) || defined(ROM_COMBO)
-isDeepUnderwater:
-	ldh (<hFFBD),a	; store temporarily for restoring later
-	ld a,(wTilesetFlags)
-	cpl
-	and TILESETFLAG_UNDERWATER
-	ldh a,(<hFFBD)	; restore a from temp var
-	ret
-.endif
-
-wasOppositeItemButtonPressed:
-	; get the opposite button of the one this item is assigned
-	; to and use it to determine if we smack with the item
-	ld c,a
-	ld h,d
-	ld l,Item.var03
-	ld a,(hl)
-	xor $03
-	; AND it with the keys pressed byte to find if it was pressed
-	and c
-	ret
-
-getHeldObject:
-	push de
-	ld h,d
-	ld d,a
-	ld l,Item.var37
-	xor a
-	or (hl)
-	jr z,+
-		ld hl,w1ReservedItemC
-		ld a,d
-		pop de
-		ret
-	+
-	; get the object held by w1Link
-	ld hl,w1Link.relatedObj2
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
-	; test that the object is enabled
-	xor a
-	or (hl)
-	ld a,d
-	pop de
-	ret
-
 ; @param	a	Enemy id to check
 ; @param[out]	zflag set if the enemy CANNOT be picked up/thrown
 isValidTargetForJudo:
@@ -8861,6 +8816,17 @@ bothRingsActive:
 	ld a,b
 	ret
 
+eitherRingActiveAndPopBC:
+	call eitherRingActive
+	pop bc
+	ret
+
+getZflagOrCflagSet:
+	ret z
+	ret nc
+	xor a
+	ret
+
 isHasteRingEquipped:
 	push de
 	ld d,a
@@ -8874,114 +8840,12 @@ remoteBombComboActive:
 	ldbc PEACE_RING,BOMBERS_RING
 	jr bothRingsActive
 
-swordShmupComboActive:
-	ldbc ENERGY_RING,CHARGE_RING
-	jr bothRingsActive
-
-eitherRingActiveAndPopBC:
-	call eitherRingActive
-	pop bc
-	ret
-
-miningBombComboActive:
-	ldh (<hFFBD),a	; store temporarily for restoring later
-	xor a
-	jp getRingComboFlag
-
-cacheMiningBombComboActive:
-	push bc
-	ldbc DISCOVERY_RING,BLAST_RING
-	call bothRingsActive
-	pop bc
-	ret nz
-
-	ldh (<hFFBD),a	; store temporarily for restoring later
-	xor a
-	jp setRingComboFlag
-
-enemyPogoComboActive:
-	push bc
-	ldbc STEADFAST_RING,ROCS_RING
-	call bothRingsActive
-	pop bc
-	ret
-
-kenpoMasterComboActive:
-	push bc
-	ldbc EXPERTS_RING,FIST_RING
-	call bothRingsActive
-	pop bc
-	ret
-
-hadoukenComboActive:
-	push bc
-	ldbc EXPERTS_RING,ENERGY_RING
-	call bothRingsActive
-	pop bc
-	ret
-
-hurricaneSpinComboActive:
-	push bc
-	ldbc SPIN_RING,CHARGE_RING
-	call bothRingsActive
-	pop bc
-	ret
-
 judoMasterComboActive:
-	ldh (<hFFBD),a	; store temporarily for restoring later
+	push af
 	ld a,$01
-	jp getRingComboFlag
-
-cacheJudoMasterComboActive:
-	push bc
-	ldbc EXPERTS_RING,TOSS_RING
-	call bothRingsActive
-	pop bc
-	ret nz
-
-	ldh (<hFFBD),a	; store temporarily for restoring later
-	ld a,$01
-	jp setRingComboFlag
-
-beamosComboActive:
-	ld a,ENERGY_RING
-	call cpActiveRing
-	ret nz
-
-	push bc
-	ldbc LIGHT_RING_L2,LIGHT_RING_L1
-	call eitherRingActive
-	pop bc
-	jr getZflagOrCflagSet
-
-eitherRangRingEquipped:
-	push bc
-	ldbc RANG_RING_L2,RANG_RING_L1
-	jp eitherRingActiveAndPopBC
-
-superBoomerangComboActive:
-	ld a,TOSS_RING
-	call cpActiveRing
-	jr z,+
-		ld a,HASTE_RING
-		call cpActiveRing
-		ret nz
-	+
-@zIfEither
-	call eitherRangRingEquipped
-getZflagOrCflagSet:
-	ret z
-	ret nc
-	xor a
+	call getRingComboFlag
+	pop af
 	ret
-
-diggerangComboActive:
-	push bc
-	ldbc TOSS_RING,DISCOVERY_RING
-	call bothRingsActive
-	pop bc
-	ret nz
-	jr superBoomerangComboActive@zIfEither
 
 victoryRingIncLevel:
 	push de
@@ -9088,7 +8952,6 @@ setRingComboFlag:
 	ld hl,wRingComboCacheFlags
 	call unsetFlag
 	pop hl
-	ldh a,(<hFFBD)	; restore a from temp var
 	ret
 
 getRingComboFlag:
@@ -9096,7 +8959,6 @@ getRingComboFlag:
 	ld hl,wRingComboCacheFlags
 	call checkFlag
 	pop hl
-	ldh a,(<hFFBD)	; restore a from temp var
 	ret
 .endif
 
@@ -15016,7 +14878,7 @@ setIsSeasons:
 	ld (hl),$c9			; ret
 	pop hl
 	ret
-.else
+.elif defined(ROM_AGES)
 ;;
 func_3ed0:
 	ldh a,(<hRomBank)

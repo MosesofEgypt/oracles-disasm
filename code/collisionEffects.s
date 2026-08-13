@@ -1748,6 +1748,13 @@ applyDamageToLink:
 
 
 .ifdef ENABLE_RING_REDUX
+enemyPogoComboActive:
+	push bc
+	ldbc STEADFAST_RING,ROCS_RING
+	call bothRingsActive
+	pop bc
+	ret
+
 collisionLinkBounce:
 	; only bounce if link is in the air, the collision effect
 	; is specifically COLLISIONEFFECT_DAMAGE_LINK, and link is

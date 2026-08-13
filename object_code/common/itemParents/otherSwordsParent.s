@@ -1,3 +1,12 @@
+.ifdef ENABLE_RING_REDUX
+hadoukenComboActive:
+	push bc
+	ldbc EXPERTS_RING,ENERGY_RING
+	call bothRingsActive
+	pop bc
+	ret
+.endif
+
 ;;
 ; ITEM_ROD_OF_SEASONS ($07)
 parentItemCode_rodOfSeasons:

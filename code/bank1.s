@@ -4216,8 +4216,17 @@ updateRingEquipStatuses:
 
 	; these combos can get checked multiple times a
 	; frame, so we cache them for quicker processing
-	call cacheJudoMasterComboActive
-	call cacheMiningBombComboActive
+	push bc
+
+	ldbc DISCOVERY_RING,BLAST_RING
+	ld a,$01
+	call @cacheComboActive
+
+	ldbc EXPERTS_RING,TOSS_RING
+	xor a
+	call @cacheComboActive
+
+	pop bc
 
 	ret
 
@@ -4234,6 +4243,12 @@ updateRingEquipStatuses:
 		dec b
 		jr nz,-
 	ret
+
+@cacheComboActive:
+	call bothRingsActive
+	jp z,setRingComboFlag
+	ret
+
 .endif
 
 .ifdef ENABLE_RING_REDUX

@@ -1,3 +1,27 @@
+.ifdef ENABLE_RING_REDUX
+hurricaneSpinComboActive:
+	push bc
+	ldbc SPIN_RING,CHARGE_RING
+	call bothRingsActive
+	pop bc
+	ret
+
+beamosComboActive:
+	ld a,ENERGY_RING
+	call cpActiveRing
+	ret nz
+
+	push bc
+	ldbc LIGHT_RING_L2,LIGHT_RING_L1
+	call eitherRingActive
+	pop bc
+	jp getZflagOrCflagSet
+
+swordShmupComboActive:
+	ldbc ENERGY_RING,CHARGE_RING
+	jp bothRingsActive
+.endif
+
 ;;
 ; ITEM_SWORD ($05)
 parentItemCode_sword:

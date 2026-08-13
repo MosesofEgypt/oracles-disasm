@@ -1,3 +1,9 @@
+.ifdef ENABLE_RING_REDUX
+miningBombComboActive:
+	xor a
+	jp getRingComboFlag
+.endif
+
 ;;
 ; ITEM_BOMB
 itemCode03:
@@ -538,7 +544,6 @@ explosionTryToBreakNextTile:
 		ld (hl),$ff
 	+
 
-	; determines the tile offset to use, and handles the counter reset
 	call miningBombComboActive
 
 	ret nz

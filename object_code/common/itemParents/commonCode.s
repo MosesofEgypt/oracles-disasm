@@ -1,3 +1,42 @@
+.ifdef ENABLE_RING_REDUX
+getHeldObject:
+	push de
+	ld h,d
+	ld d,a
+	ld l,Item.var37
+	xor a
+	or (hl)
+	jr z,+
+		ld hl,w1ReservedItemC
+		ld a,d
+		pop de
+		ret
+	+
+	; get the object held by w1Link
+	ld hl,w1Link.relatedObj2
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
+	; test that the object is enabled
+	xor a
+	or (hl)
+	ld a,d
+	pop de
+	ret
+
+wasOppositeItemButtonPressed:
+	; get the opposite button of the one this item is assigned
+	; to and use it to determine if we smack with the item
+	ld c,a
+	ld h,d
+	ld l,Item.var03
+	ld a,(hl)
+	xor $03
+	; AND it with the keys pressed byte to find if it was pressed
+	and c
+	ret
+.endif
+
 ;;
 ; @param	d	The current parent item
 ; @param[out]	zflag	Set if there are no other parent item slots in use

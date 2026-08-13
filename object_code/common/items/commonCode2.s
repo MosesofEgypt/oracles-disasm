@@ -1,3 +1,76 @@
+.ifdef ENABLE_RING_REDUX
+kenpoMasterComboActive:
+	push bc
+	ldbc EXPERTS_RING,FIST_RING
+	call bothRingsActive
+	pop bc
+	ret
+
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+isDeepUnderwater:
+	ldh (<hFFBD),a	; store temporarily for restoring later
+	ld a,(wTilesetFlags)
+	cpl
+	and TILESETFLAG_UNDERWATER
+	ldh a,(<hFFBD)	; restore a from temp var
+	ret
+.endif
+.endif
+
+.if defined(ROM_COMBO)
+; NOTE: the functions below were moved out of bank0 for space
+;;
+; Inverts an object's Z speed and halves it. Used for bombs when bouncing on the ground.
+;
+; Once it reaches a speed of less than 1 pixel per frame downwards, it stops.
+;
+; @param[out]	cflag	c if the object will no longer bounce (speedZ is sufficiently low).
+; @param[out]	zflag	z if the object touched the ground
+objectNegateAndHalveSpeedZ:
+	ld h,d
+	ldh a,(<hActiveObjectType)
+	or Object.speedZ
+	ld l,a
+
+	; Get -speedZ/2 in bc
+	ldi a,(hl)
+	cpl
+	ld c,a
+	ld a,(hl)
+	cpl
+	ld b,a
+
+	inc bc
+	sra b
+	rr c
+
+	; Return if bc > $ff80 (original speed is less than 1 pixel per frame downward)
+	ld hl,$ff80
+	call compareHlToBc
+	inc a
+	scf
+	ret z
+
+	ldh a,(<hActiveObjectType)
+	or Object.speedZ
+	ld e,a
+
+	; Store new speedZ
+	ld a,c
+	ld (de),a
+	inc e
+	ld a,b
+	ld (de),a
+
+	; Set carry flag on return if speed is zero
+	or c
+	scf
+	ret z
+
+	xor a
+	ret
+.endif
+
 ;;
 tryBreakTileWithExpertsRing:
 	ld a,(w1Link.direction)
