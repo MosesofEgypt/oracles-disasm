@@ -145,17 +145,29 @@ cutscene0e:
 ;;
 ; CUTSCENE_S_FLAME_OF_DESTRUCTION
 cutscene10:
+.if defined(ROM_COMBO)
+	callab bank3Cutscenes_2.flameOfDestructionsCutsceneCaller
+.else
 	call flameOfDestructionsCutsceneCaller
+.endif
 	jp func_5d41
 
 ;;
 ; CUTSCENE_S_ZELDA_VILLAGERS
 cutscene11:
+.if defined(ROM_COMBO)
+	callab bank3Cutscenes_2.zeldaAndVillagersCutsceneCaller
+.else
 	call zeldaAndVillagersCutsceneCaller
+.endif
 	jp func_5d31
 
 ;;
 ; CUTSCENE_S_ZELDA_KIDNAPPED
 cutscene12:
+.if defined(ROM_COMBO)
+	callab bank3Cutscenes_2.zeldaKidnappedCutsceneBody
+.else
 	call zeldaKidnappedCutsceneCaller
+.endif
 	jp func_5d41

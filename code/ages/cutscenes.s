@@ -132,7 +132,11 @@ cutscene10:
 ;;
 ; CUTSCENE_FLAME_OF_SORROW
 cutscene11:
+.if defined(ROM_COMBO)
+	callab bank3Cutscenes.func_03_7841
+.else
 	call func_3ed0
+.endif
 	jp func_5d41
 
 ;;
@@ -141,6 +145,9 @@ cutscene12:
 	ld a,(wCutsceneTrigger)
 	or a
 	jp nz,setCutsceneIndexIfCutsceneTriggerSet
-
+.if defined(ROM_COMBO)
+	callab bank3Cutscenes.func_03_7849
+.else
 	call func_3ee4
+.endif
 	jp func_5d41

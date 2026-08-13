@@ -48,7 +48,11 @@ cutscene13:
 	or a
 	jp nz,applyWarpTransition2
 
+.if defined(ROM_COMBO)
+	callab bank3Cutscenes_seasons.seasonsFunc_331b
+.else
 	call seasonsFunc_331b
+.endif
 	call seasonsFunc_34a0
 	call updateStatusBar
 	ld a,(wCutsceneTrigger)

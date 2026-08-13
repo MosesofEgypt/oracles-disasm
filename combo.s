@@ -841,6 +841,7 @@ m_section_superfree Room_Code namespace roomSpecificCode
 
 	m_section_superfree Terrain_Effects NAMESPACE terrainEffects
 		.include "data/terrainEffects.s"
+		.include "code/terrainEffects.s"
 	.ends
 
 

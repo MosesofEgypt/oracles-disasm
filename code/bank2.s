@@ -3377,7 +3377,12 @@ reloadGraphicsOnExitMenu_body:
 	inc a
 	jr nz,++
 	pop de
+.if defined(ROM_COMBO)
+	callab bank3Cutscenes_seasons.seasonsFunc_0f_704d
+	jpab   bank3Cutscenes_seasons.seasonsFunc_0f_7182
+.else
 	jp seasonsFunc_332f
+.endif
 .endif
 ++
 
