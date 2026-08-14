@@ -1068,10 +1068,12 @@ m_section_superfree Menu_Code_2 NAMESPACE menuCode2
 .BANK $46 SLOT 1
 .ORG 0
 m_section_free Object_Pointers namespace objectData
+	.include "code/ages/objectData.s"
 	.include "objects/ages/pointers.s"
 .ends
 
 m_section_free Object_Pointers_seasons namespace objectData_seasons
+	.include "code/ages/objectData.s"
 	.include "objects/seasons/pointers.s"
 .ends
 
@@ -1103,7 +1105,7 @@ m_section_free Objects_3 namespace objectData_seasons
 .ends
 
 .BANK $4a SLOT 1
-.ORG 0
+.ORGA $4000
 	.REDEFINE DATA_ADDR $4000
 	.REDEFINE DATA_BANK $4a
 	.include {"{GAME_DATA_DIR}/gfxDataMain.s"}

@@ -125,6 +125,10 @@
 	; This keeps track of the "state" corresponding to the above link mode.
 	hSerialLinkState		db	; $ffbf/$ffbd
 
+	.ifdef INCREASE_GFX_SPACE
+		hGfxCompressionMode	db	; $ffc0/$ffbe
+	.endif
+
 	; Marker for end of "normal" hram (memory gets cleared up to here upon game initialization)
 	hramEnd			 	.db	; $ffc0/$ffbe
 .ende

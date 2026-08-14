@@ -117,9 +117,11 @@ interactionCode0c:
 	jp interactionSetAnimation
 
 @interac00:
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
 	call hIsSeasons
 	jr c,+
+.endif
+.if defined(ROM_AGES)
 	ld a,(wTilesetFlags)
 	and TILESETFLAG_UNDERWATER
 	jr z,+

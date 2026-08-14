@@ -24,6 +24,12 @@
 	.endif
 .endif
 
+.if defined(ROM_COMBO) || defined(ENABLE_NEW_GAME_PLUS)
+	.ifndef INCREASE_GFX_SPACE
+		.define INCREASE_GFX_SPACE			1
+	.endif
+.endif
+
 .ifdef ENABLE_REDUX_EXTRAS
 	; if ENABLE_REDUX_EXTRAS is enabled, the options below will
 	; be enabled(except the commented-out ones starting with ';')

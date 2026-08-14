@@ -353,6 +353,7 @@ fractionOf8Multiply:
 	ret
 .endif
 
+.ifdef ENABLE_NEW_GAME_PLUS
 getNgpUpgradeCount:
 	push de
 	push hl
@@ -436,6 +437,7 @@ getNgpUpgradeCount:
 	.db $21 $11 $00 $00 $00 $00 $00 $00; NG+1 strong enemy
 	.db $21 $22 $10 $00 $00 $00 $00 $00; NG+2 strong enemy
 	.db $43 $23 $21 $10 $00 $00 $00 $00; NG+3 strong enemy
+.endif
 
 ;;
 ; Set Link's death respawn point based on the current room / position variables.

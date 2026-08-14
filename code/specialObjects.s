@@ -104,10 +104,13 @@ updateSpecialObjects:
 	ld l,Object.id
 	ld a,(hl)
 	rst_jumpTable
-.ifdef ROM_COMBO	; NOTE: temporary until items are merged in
+.ifdef ROM_COMBO	; NOTE: temporary until special objects are merged in
 .repeat $14
 	.dw specialObjectCodeNil
 .endr
+
+specialObjectCodeNil:
+	ret
 .else
 	.dw specialObjectCode_link
 .if defined(ROM_AGES) && !defined(ROM_COMBO)
@@ -135,10 +138,6 @@ updateSpecialObjects:
 	.dw specialObjectCode_raft
 .endif	; NOTE: temporary until items are merged in
 
-.ifdef ROM_COMBO	; NOTE: temporary until items are merged in
-specialObjectCodeNil:
-	ret
-.endif	; NOTE: temporary until items are merged in
 
 ;;
 ; Updates wGameKeysPressed based on wKeysPressed, and updates wLinkAngle based on

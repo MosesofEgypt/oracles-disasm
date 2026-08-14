@@ -37,12 +37,6 @@
 
 	.include "code/bank2.s"
 	.include "code/roomInitialization.s"
-.ifndef ENABLE_NEW_GAME_PLUS
-	 m_section_free roomGfxChanges NAMESPACE roomGfxChanges
-		.include "code/ages/roomGfxChanges.s"
-	.ends
-.endif
-
 	.include "code/ages/garbage/bank02End.s"
 
 
@@ -132,9 +126,6 @@ m_section_free Bank_6 NAMESPACE bank6
 
 	.include "code/interactableTiles.s"
 	.include "code/specialObjectAnimationsAndDamage.s"
-.ifndef ENABLE_NEW_GAME_PLUS
-	.include "code/breakableTiles.s"
-.endif
 
 	.include "code/parentItemUsage.s"
 
@@ -165,9 +156,6 @@ m_section_free Bank_6 NAMESPACE bank6
 	.include "object_code/ages/specialObjects/companionCutscene.s"
 	.include "object_code/ages/specialObjects/linkInCutscene.s"
 	.include {"{GAME_DATA_DIR}/signText.s"}
-.ifndef ENABLE_NEW_GAME_PLUS
-	.include {"{GAME_DATA_DIR}/tile_properties/breakableTiles.s"}
-.endif
 
 	.include "object_code/ages/specialObjects/timeWarp.s"
 
@@ -1054,11 +1042,11 @@ m_section_free Part_Code_2 NAMESPACE partCodeExt
 .ends
 .endif
 
-.ifdef ENABLE_NEW_GAME_PLUS
 .BANK $3e SLOT 1
 .ORG 0
 
 m_section_free enemyCode_Bank3e NAMESPACE bank3e
+.ifdef ENABLE_NEW_GAME_PLUS
 	.include "object_code/common/enemies/commonCode.s"
 
 	.include "object_code/common/enemies/polsVoice.s"
@@ -1087,6 +1075,7 @@ m_section_free enemyCode_Bank3e NAMESPACE bank3e
 	.include "object_code/common/enemies/waterTektite.s"
 
 	.include "object_code/ages/enemies/anglerFishBubble.s"
+.endif
 
 	.include "code/breakableTiles.s"
 	.include {"{GAME_DATA_DIR}/tile_properties/breakableTiles.s"}
@@ -1096,6 +1085,7 @@ m_section_free roomGfxChanges NAMESPACE roomGfxChanges
 	.include "code/ages/roomGfxChanges.s"
 .ends
 
+.ifdef ENABLE_NEW_GAME_PLUS
 .include "object_code/ages/interactions/tuniNutMain.s"
 .endif
 

@@ -156,7 +156,11 @@ updateAnimationDataPointer:
 ;;
 ; Load animation index a
 loadAnimationGfxIndex:
+.ifdef INCREASE_GFX_SPACE
+	ld c,$07
+.else
 	ld c,$06
+.endif
 	call multiplyAByC
 .ifdef ROM_COMBO
 	call hIsSeasons
@@ -170,6 +174,9 @@ loadAnimationGfxIndex:
 	add hl,bc
 	ldi a,(hl)
 	ld c,a
+.ifdef INCREASE_GFX_SPACE
+	inc hl	; no compression, so skip compression byte
+.endif
 	ldi a,(hl)
 	ld d,a
 	ldi a,(hl)

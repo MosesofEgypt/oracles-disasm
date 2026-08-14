@@ -1396,6 +1396,9 @@ loadUncompressedGfxHeader:
 --
 	ldi a,(hl)
 	ld c,a
+.ifdef INCREASE_GFX_SPACE
+	inc hl ; no compression, so pad
+.endif
 	ldi a,(hl)
 	ld d,a
 	ldi a,(hl)
@@ -1453,6 +1456,10 @@ loadUniqueGfxHeaderEntry:
 	ldi a,(hl)
 	ld c,a
 	ldi a,(hl)
+.ifdef INCREASE_GFX_SPACE
+	ldh (<hGfxCompressionMode),a
+	ldi a,(hl)
+.endif
 	ld d,a
 	ldi a,(hl)
 	ld e,a
@@ -1501,6 +1508,10 @@ loadGfxHeader:
 	ldi a,(hl)
 	ld c,a
 	ldi a,(hl)
+.ifdef INCREASE_GFX_SPACE
+	ldh (<hGfxCompressionMode),a
+	ldi a,(hl)
+.endif
 	ld d,a
 	ldi a,(hl)
 	ld e,a
@@ -1538,6 +1549,7 @@ loadGfxHeader:
 ;;
 ; Deals with graphics compression
 ;
+; @param hGfxCompressionMode  Compression mode (only if INCREASE_GFX_SPACE is defined)
 ; @param	b	Data size (divided by 16, minus 1)
 ; @param	c	ROM bank (bits 0-5) and compression mode (bits 6-7)
 ; @param	de	Destination (lower 4 bits = destination bank, either vram or wram)
@@ -1550,10 +1562,16 @@ decompressGraphics:
 	xor e
 	ld e,a
 	ld a,c
+.ifdef INCREASE_GFX_SPACE
+	rst_setrombank
+	inc b
+	ldh a,(<hGfxCompressionMode)
+.else
 	and $3f
 	rst_setrombank
 	inc b
 	ld a,c
+.endif
 	and $c0
 	jp z,func_06e0
 	cp $c0
@@ -4858,6 +4876,10 @@ loadObjectGfx:
 loadObjectGfx2:
 	ld c,a
 	ldi a,(hl)
+.ifdef INCREASE_GFX_SPACE
+	ldh (<hGfxCompressionMode),a
+	ldi a,(hl)
+.endif
 	ld l,(hl)
 	and $7f
 	ld h,a
@@ -11230,10 +11252,8 @@ tryToBreakTile:
 	push af
 .if defined(ROM_COMBO)
 	callfrombank0 bank43.tryToBreakTile_body
-.elif defined(ENABLE_NEW_GAME_PLUS)
-	callfrombank0 bank3e.tryToBreakTile_body
 .else
-	callfrombank0 bank6.tryToBreakTile_body
+	callfrombank0 bank3e.tryToBreakTile_body
 .endif
 	rl e
 	pop af
@@ -12042,6 +12062,9 @@ updateEnemy:
 		ld a,c
 	+
 .endif
+.if defined(ROM_COMBO)	; NOTE: TEMPORARY UNTIL INTERACTIONS ARE MERGED IN
+	ret
+.endif
 	jp hl
 
 .if !defined(ROM_COMBO) 	; NOTE: TEMPORARY FOR TESTING
@@ -12124,8 +12147,12 @@ initializeRoom:
 	callfrombank0 roomInitialization.loadRememberedCompanion
 	call          roomInitialization.checkAndSpawnMaple
 	call          roomInitialization.updateRosaDateStatus
-	callfrombank0 objectData.parseObjectData
+.if defined(ROM_COMBO)
+	callfrombank0 objectData_seasons.parseObjectData
 	+
+.else
+	callfrombank0 objectData.parseObjectData
+.endif
 .endif
 
 	callfrombank0 staticObjects.parseStaticObjects
@@ -12140,12 +12167,27 @@ initializeRoom:
 parseGivenObjectData:
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+		ld a, :objectData_seasons.parseGivenObjectData
+		rst_setrombank
+		push de
+		ld d,h
+		ld e,l
+		call objectData_seasons.parseGivenObjectData
+		jr ++
+	+
+.endif
 	ld a, :objectData.parseGivenObjectData
 	rst_setrombank
 	push de
 	ld d,h
 	ld e,l
 	call objectData.parseGivenObjectData
+.if defined(ROM_COMBO)
+	++
+.endif
 	pop de
 	pop af
 	rst_setrombank
@@ -13385,14 +13427,8 @@ loadAnimationData:
 	inc hl
 	ret
 
-
-.if defined(ROM_SEASONS)
-roomTileChangesAfterLoad02:
-.elif defined(ROM_COMBO)
-roomTileChangesAfterLoad02_seasons:
-.endif
-
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
+roomTileChangesAfterLoad02_seasons:
 	ldh a,(<hRomBank)
 	push af
 	callfrombank0 seasonsInteractionsBank09.roomTileChangesAfterLoad02_body
@@ -14600,6 +14636,9 @@ updateInteraction:
 	ld hl,interactionCodeTable
 	rst_addDoubleIndex
 	rst_derefHl
+.if defined(ROM_COMBO)	; NOTE: TEMPORARY UNTIL INTERACTIONS ARE MERGED IN
+	ret
+.endif
 	jp hl
 
 .if defined(ROM_COMBO)	; NOTE: TEMPORARY UNTIL INTERACTIONS ARE MERGED IN

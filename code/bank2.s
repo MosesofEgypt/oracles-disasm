@@ -5157,7 +5157,7 @@ loadItemIconGfx:
 	-
 		ldi a,(hl)
 		or a
-		jr z,+
+		jr z,+++
 			; check if tile matches first tile in swaps
 			cp b
 			jr z,++
@@ -5209,7 +5209,7 @@ loadItemIconGfx:
 						rst_addAToHl
 					++
 					jp copy20BytesFromBank
-	+
+	+++
 
 	; check for item level upgrades
 	ld hl,@partialItemSwaps

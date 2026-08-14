@@ -23,9 +23,9 @@ parseObjectData:
 	call addRoomToEnemiesKilledList
 	call generateRandomBuffer
 
-.if defined(ROM_AGES)
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	callab getObjectDataAddress
-.else; ROM_SEASONS || ROM_COMBO
+.else; ROM_SEASONS
 	ld a,(wActiveGroup)
 	ld hl,objectDataGroupTable
 	rst_addDoubleIndex

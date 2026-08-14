@@ -126,10 +126,6 @@ m_section_free Bank_6 NAMESPACE bank6
 
 	.include "code/interactableTiles.s"
 	.include "code/specialObjectAnimationsAndDamage.s"
-.ifndef ENABLE_NEW_GAME_PLUS
-	.include "code/breakableTiles.s"
-.endif
-
 	.include "code/parentItemUsage.s"
 
 	.include "object_code/common/itemParents/shieldParent.s"
@@ -158,9 +154,6 @@ m_section_free Bank_6 NAMESPACE bank6
 	.include "object_code/seasons/specialObjects/companionCutscene.s"
 	.include "object_code/seasons/specialObjects/linkInCutscene.s"
 	.include {"{GAME_DATA_DIR}/signText.s"}
-.ifndef ENABLE_NEW_GAME_PLUS
-	.include {"{GAME_DATA_DIR}/tile_properties/breakableTiles.s"}
-.endif
 
 .ends
 
@@ -925,11 +918,11 @@ m_section_free Part_Code_3 NAMESPACE partCodeExt
 .ends
 .endif
 
-.ifdef ENABLE_NEW_GAME_PLUS
 .BANK $3e SLOT 1
 .ORG 0
 
 m_section_free enemyCode_Bank3e NAMESPACE bank3e
+.ifdef ENABLE_NEW_GAME_PLUS
 	.include "object_code/common/enemies/commonCode.s"
 
 	.include "object_code/common/enemies/polsVoice.s"
@@ -956,11 +949,11 @@ m_section_free enemyCode_Bank3e NAMESPACE bank3e
 	.include "object_code/common/enemies/greatFairy.s"
 	.include "object_code/common/enemies/fireKeese.s"
 	.include "object_code/common/enemies/waterTektite.s"
+.endif
 
 	.include "code/breakableTiles.s"
 	.include {"{GAME_DATA_DIR}/tile_properties/breakableTiles.s"}
 .ends
-.endif
 
 
 .BANK $3f SLOT 1

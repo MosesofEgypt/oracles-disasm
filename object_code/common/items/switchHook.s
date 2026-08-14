@@ -631,11 +631,7 @@ switchHookState3:
 	jr @delete
 +
 	; Create the bush/pot/etc breakage animation (based on var03)
-.ifdef ENABLE_NEW_GAME_PLUS
 	callab bank3e.itemMakeInteractionForBreakableTile
-.else
-	callab bank6.itemMakeInteractionForBreakableTile
-.endif
 	jr @delete
 
 @reenableEnemy:

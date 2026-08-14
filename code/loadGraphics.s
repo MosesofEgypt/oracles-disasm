@@ -770,6 +770,9 @@ insertIndexIntoLoadedObjectGfx:
 	add hl,de
 	add hl,de
 	add hl,de
+.ifdef INCREASE_GFX_SPACE
+	add hl,de
+.endif
 	call loadObjectGfx
 	pop hl
 	pop de

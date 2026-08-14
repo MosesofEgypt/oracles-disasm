@@ -411,6 +411,9 @@ intro_restart:
 	xor a
 	ld (wIntroStage),a
 	ld (wIntroVar),a
+.if defined(ROM_COMBO)
+	call toggleIsSeasons
+.endif
 	ret
 
 ;;
@@ -794,15 +797,7 @@ introCinematic_ridingHorse_state0:
 	ld (hl),$01
 
 	; Load Link and Bird objects
-.ifdef ROM_COMBO
-	ld hl,objectData_seasons.objectData4037
-	call hIsSeasons
-	jr c,+
-		ld hl,objectData.objectData4037
-	+
-.else
 	ld hl,objectData.objectData4037
-.endif
 	call parseGivenObjectData
 
 	ld a,$17
