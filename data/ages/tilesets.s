@@ -315,45 +315,66 @@ tilesetData:
 	; 0x28
 	.db $1f, $04
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_INDOORS_AGES
+.else
 	.db GFXH_TILESET_INDOORS
+.endif
 	.db PALH_TILESET_INDOORS_PRESENT
 	.db $15, $01, $10
 
 	; 0x29
 	.db $1f, $04
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_INDOORS_AGES
+.else
 	.db GFXH_TILESET_INDOORS
+.endif
 	.db PALH_TILESET_OLD_MAN_CAVE_PRESENT
 	.db $15, $01, $10
 
 	; 0x2a
 	.db $1f, $84
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_INDOORS_AGES
+.else
 	.db GFXH_TILESET_INDOORS
+.endif
 	.db PALH_TILESET_INDOORS_PAST
 	.db $15, $01, $10
 
 	; 0x2b
 	.db $1f, $04
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_INDOORS_AGES
+.else
 	.db GFXH_TILESET_INDOORS
+.endif
 	.db PALH_TILESET_INDOORS_PRESENT
 	.db $15, $03, $10
 
 	; 0x2c
 	.db $1f, $04
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_INDOORS_AGES
+.else
 	.db GFXH_TILESET_INDOORS
+.endif
 	.db PALH_TILESET_INDOORS_PAST
 	.db $15, $03, $10
 
 	; 0x2d
 	.db $1f, $04
 	.db UNIQUE_GFXH_NONE
-	.db GFXH_TILESET_CAVE
 .ifdef ROM_COMBO
+	.db GFXH_TILESET_CAVE_AGES
 	.db PALH_TILESET_CAVE_AGES
 .else
+	.db GFXH_TILESET_CAVE
 	.db PALH_TILESET_CAVE
 .endif
 	.db $16, $01, $10
@@ -361,10 +382,11 @@ tilesetData:
 	; 0x2e
 	.db $1f, $04
 	.db UNIQUE_GFXH_NONE
-	.db GFXH_TILESET_CAVE
 .ifdef ROM_COMBO
+	.db GFXH_TILESET_CAVE_AGES
 	.db PALH_TILESET_CAVE_AGES
 .else
+	.db GFXH_TILESET_CAVE
 	.db PALH_TILESET_CAVE
 .endif
 	.db $16, $03, $10
@@ -650,24 +672,33 @@ tilesetData:
 	; 0x55
 	.db $2e, $18
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_INDOORS_AGES
+.else
 	.db GFXH_TILESET_INDOORS
+.endif
 	.db PALH_TILESET_INDOORS_PRESENT
 	.db $15, $05, $10
 
 	; 0x56
 	.db $2f, $10
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_INDOORS_AGES
+.else
 	.db GFXH_TILESET_INDOORS
+.endif
 	.db PALH_TILESET_INDOORS_PRESENT
 	.db $15, $05, $10
 
 	; 0x57
 	.db $2f, $12
 	.db UNIQUE_GFXH_NONE
-	.db GFXH_TILESET_INDOORS
 .ifdef ROM_COMBO
+	.db GFXH_TILESET_INDOORS_AGES
 	.db PALH_TILESET_MAKU_TREE_INSIDE_AGES
 .else
+	.db GFXH_TILESET_INDOORS
 	.db PALH_TILESET_MAKU_TREE_INSIDE
 .endif
 	.db $15, $05, $10
@@ -675,10 +706,11 @@ tilesetData:
 	; 0x58
 	.db $2e, $18
 	.db UNIQUE_GFXH_NONE
-	.db GFXH_TILESET_CAVE
 .ifdef ROM_COMBO
+	.db GFXH_TILESET_CAVE_AGES
 	.db PALH_TILESET_CAVE_AGES
 .else
+	.db GFXH_TILESET_CAVE
 	.db PALH_TILESET_CAVE
 .endif
 	.db $16, $05, $10
@@ -686,10 +718,11 @@ tilesetData:
 	; 0x59
 	.db $2f, $10
 	.db UNIQUE_GFXH_NONE
-	.db GFXH_TILESET_CAVE
 .ifdef ROM_COMBO
+	.db GFXH_TILESET_CAVE_AGES
 	.db PALH_TILESET_CAVE_AGES
 .else
+	.db GFXH_TILESET_CAVE
 	.db PALH_TILESET_CAVE
 .endif
 	.db $16, $05, $10
@@ -760,21 +793,33 @@ tilesetData:
 	; 0x63
 	.db $1f, $04
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_CAVE_AGES
+.else
 	.db GFXH_TILESET_CAVE
+.endif
 	.db PALH_TILESET_ROLLING_RIDGE_CAVE_PRESENT
 	.db $16, $01, $10
 
 	; 0x64
 	.db $1f, $04
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_CAVE_AGES
+.else
 	.db GFXH_TILESET_CAVE
+.endif
 	.db PALH_TILESET_ROLLING_RIDGE_CAVE_PRESENT
 	.db $16, $03, $10
 
 	; 0x65
 	.db $2e, $18
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_CAVE_AGES
+.else
 	.db GFXH_TILESET_CAVE
+.endif
 	.db PALH_TILESET_ROLLING_RIDGE_CAVE_PRESENT
 	.db $16, $05, $10
 

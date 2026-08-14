@@ -1,6 +1,6 @@
 ; See data/ages/gfxHeaders.s for more info.
 
-.define NUM_GFX_HEADERS $f3
+.define NUM_GFX_HEADERS $f5
 
 gfxHeaderTable:
 	.repeat NUM_GFX_HEADERS index COUNT
@@ -302,8 +302,8 @@ m_GfxHeaderStart $2d, GFXH_TWINROVA_CLOSEUP_SEASONS
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $2e, GFXH_SCENE_INSIDE_ONOX_CASTLE
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_2, $9001
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_1, $8801
 	m_GfxHeader gfx_tileset_snakes_remains, $9401
 	m_GfxHeader map_inside_onox_castle, $9800
 	m_GfxHeader flg_inside_onox_castle, $9801
@@ -553,76 +553,76 @@ m_GfxHeaderStart $5e, GFXH_5e
 m_GfxHeaderStart $5f, GFXH_5f
 
 m_GfxHeaderStart $60, GFXH_TILESET_HEROS_CAVE
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_1, $8801
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_2, $9001
 	m_GfxHeader gfx_tileset_heros_cave, $9401
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $61, GFXH_TILESET_GNARLED_ROOT_DUNGEON
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_1, $8801
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_2, $9001
 	m_GfxHeader gfx_tileset_gnarled_root_dungeon, $9401
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $62, GFXH_TILESET_SNAKES_REMAINS
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_1, $8801
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_2, $9001
 	m_GfxHeader gfx_tileset_snakes_remains, $9401
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $63, GFXH_TILESET_POISON_MOTHS_LAIR
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_1, $8801
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_2, $9001
 	m_GfxHeader gfx_tileset_poison_moths_lair, $9401
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $64, GFXH_TILESET_DANCING_DRAGON_DUNGEON
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_1, $8801
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_2, $9001
 	m_GfxHeader gfx_tileset_dancing_dragon_dungeon, $9401
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $65, GFXH_TILESET_UNICORNS_CAVE
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_1, $8801
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_2, $9001
 	m_GfxHeader gfx_tileset_unicorns_cave, $9401
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $66, GFXH_TILESET_ANCIENT_RUINS
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_1, $8801
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_2, $9001
 	m_GfxHeader gfx_tileset_tarm_ruins, $9401
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $67, GFXH_TILESET_EXPLORERS_CRYPT
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_1, $8801
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_2, $9001
 	m_GfxHeader gfx_tileset_explorers_crypt, $9401
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $68, GFXH_TILESET_SWORD_AND_SHIELD_MAZE_ICE
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_1, $8801
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_2, $9001
 	m_GfxHeader gfx_tileset_sword_and_shield_maze_ice, $9401
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $69, GFXH_TILESET_ONOX_CASTLE
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_1, $8801
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_2, $9001
 	m_GfxHeader gfx_tileset_onox_castle, $9401
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $6a, GFXH_TILESET_ROOM_OF_RITES
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_1, $8801
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_2, $9001
 	m_GfxHeader gfx_tileset_room_of_rites, $9401
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $6b, GFXH_6b
 
 m_GfxHeaderStart $6c, GFXH_TILESET_SWORD_AND_SHIELD_MAZE_FIRE
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_1, $8801
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_2, $9001
 	m_GfxHeader gfx_tileset_sword_and_shield_maze_fire, $9401
 	m_GfxHeaderEnd
 
@@ -656,15 +656,15 @@ m_GfxHeaderStart $79, GFXH_79
 m_GfxHeaderStart $7a, GFXH_7a
 m_GfxHeaderStart $7b, GFXH_7b
 
-m_GfxHeaderStart $7c, GFXH_TILESET_INDOORS
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801, $20
+m_GfxHeaderStart $7c, GFXH_TILESET_INDOORS_SEASONS
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_1, $8801, $20
 	m_GfxHeader gfx_tileset_indoors_1, $8a01
 	m_GfxHeader gfx_tileset_indoors_2, $9001
 	m_GfxHeader gfx_tileset_vases, $8861
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $7d, GFXH_TILESET_CAVE
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801, $20
+m_GfxHeaderStart $7d, GFXH_TILESET_CAVE_SEASONS
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_1, $8801, $20
 	m_GfxHeader gfx_tileset_cave_1, $8a01
 	m_GfxHeader gfx_tileset_cave_2, $9001
 	m_GfxHeader gfx_tileset_cave_replacement, $8861
@@ -673,7 +673,7 @@ m_GfxHeaderStart $7d, GFXH_TILESET_CAVE
 m_GfxHeaderStart $7e, GFXH_7e
 
 m_GfxHeaderStart $7f, GFXH_TILESET_SUBROSIA_INDOORS
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801, $20
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_1, $8801, $20
 	m_GfxHeader gfx_tileset_subrosia_indoors_1, $8a01
 	m_GfxHeader gfx_tileset_subrosia_indoors_2, $9001
 	m_GfxHeader gfx_tileset_subrosia_indoors_replacement, $8861
@@ -959,8 +959,8 @@ m_GfxHeaderStart $9d, GFXH_INTRO_OUTSIDE_CASTLE
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $9e, GFXH_INTRO_TEMPLE_SCENE_SEASONS
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_1, $8801
+	m_GfxHeader seasons_gfx_tileset_dungeon_standard_2, $9001
 	m_GfxHeader gfx_tileset_tarm_ruins, $9401
 	m_GfxHeader gfx_hud, $9000, $08
 	m_GfxHeader seasons_map_intro_triforce_room, $9800
@@ -1503,8 +1503,8 @@ m_GfxHeaderStart $e6, GFXH_INTRO_LINK_RIDING_HORSE_AGES
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $e7, GFXH_INTRO_TEMPLE_SCENE_AGES
-	m_GfxHeader gfx_tileset_dungeon_standard_1, $8801
-	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
+	m_GfxHeader ages_gfx_tileset_dungeon_standard_1, $8801
+	m_GfxHeader ages_gfx_tileset_dungeon_standard_2, $9001
 	m_GfxHeader gfx_tileset_maku_path, $9401
 	m_GfxHeader gfx_hud, $9000, $08
 	m_GfxHeader ages_map_intro_triforce_room, $9800
@@ -1613,6 +1613,20 @@ m_GfxHeaderStart $f1, GFXH_TITLESCREEN_AGES
 m_GfxHeaderStart $f2, GFXH_INVENTORY_SUBSCREEN_3_AGES
 	m_GfxHeader ages_map_inventory_screen_3, w4TileMap+$040
 	m_GfxHeader ages_flg_inventory_screen_3, w4AttributeMap+$040
+	m_GfxHeaderEnd
+
+m_GfxHeaderStart $f3, GFXH_TILESET_INDOORS_AGES
+	m_GfxHeader ages_gfx_tileset_dungeon_standard_1, $8801, $20
+	m_GfxHeader gfx_tileset_indoors_1, $8a01
+	m_GfxHeader gfx_tileset_indoors_2, $9001
+	m_GfxHeader gfx_tileset_vases, $8861
+	m_GfxHeaderEnd
+
+m_GfxHeaderStart $f4, GFXH_TILESET_CAVE_AGES
+	m_GfxHeader ages_gfx_tileset_dungeon_standard_1, $8801, $20
+	m_GfxHeader gfx_tileset_cave_1, $8a01
+	m_GfxHeader gfx_tileset_cave_2, $9001
+	m_GfxHeader gfx_tileset_cave_replacement, $8861
 	m_GfxHeaderEnd
 
 

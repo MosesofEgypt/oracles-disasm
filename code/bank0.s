@@ -13329,6 +13329,12 @@ multiIntroCutsceneCaller:
 checkDungeonUsesToggleBlocks:
 	ld a,(wDungeonIndex)
 	cp $ff
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr nc,+
+		xor a
+	+
+.endif
 	ret z
 
 	ld hl,dungeonsUsingToggleBlocks

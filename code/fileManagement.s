@@ -192,10 +192,10 @@ saveFile:
 	; Write $01 here for "ages", $00 for "seasons"
 	ld hl,wWhichGame
 .ifdef ROM_COMBO
-	ld (hl),$01
+	ld (hl),$00
 	call hIsSeasons
-	jr nc,+
-		dec (hl)
+	jr c,+
+		inc (hl)
 	+
 .elif defined(ROM_AGES)
 	ld (hl),$01
@@ -228,9 +228,11 @@ saveFile:
 	call getFileAddress1
 	ld e,c
 	ld d,b
+.ifdef ROM_COMBO
+	jp copyFileFromHlToDe
+.else
 	call copyFileFromHlToDe
 
-.ifndef ROM_COMBO
 	; Save file to backup slot?
 	call getFileAddress2
 	ld e,c
@@ -248,6 +250,7 @@ loadFile:
 	ld l,c
 	ld h,b
 	call verifyFileAtHl
+	push af
 	call c,eraseFile
 	call getFileAddress1
 .else

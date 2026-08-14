@@ -172,45 +172,66 @@ tilesetData:
 	; 0x2c
 	.db $3f, $04
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_INDOORS_SEASONS
+.else
 	.db GFXH_TILESET_INDOORS
+.endif
 	.db PALH_TILESET_INDOORS_A
 	.db $2e, $04, $18
 
 	; 0x2d
 	.db $3f, $04
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_INDOORS_SEASONS
+.else
 	.db GFXH_TILESET_INDOORS
+.endif
 	.db PALH_TILESET_INDOORS_B
 	.db $2e, $04, $18
 
 	; 0x2e
 	.db $3f, $04
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_INDOORS_SEASONS
+.else
 	.db GFXH_TILESET_INDOORS
+.endif
 	.db PALH_TILESET_SUBROSIA_FURNACE
 	.db $2e, $04, $18
 
 	; 0x2f
 	.db $3f, $04
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_INDOORS_SEASONS
+.else
 	.db GFXH_TILESET_INDOORS
+.endif
 	.db PALH_TILESET_MOBLIN_HOUSE
 	.db $2e, $04, $18
 
 	; 0x30
 	.db $3f, $04
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_INDOORS_SEASONS
+.else
 	.db GFXH_TILESET_INDOORS
+.endif
 	.db PALH_TILESET_VASE_HOUSE
 	.db $2e, $04, $18
 
 	; 0x31
 	.db $3f, $04
 	.db UNIQUE_GFXH_NONE
-	.db GFXH_TILESET_CAVE
 .ifdef ROM_COMBO
+	.db GFXH_TILESET_CAVE_SEASONS
 	.db PALH_TILESET_CAVE_SEASONS
 .else
+	.db GFXH_TILESET_CAVE
 	.db PALH_TILESET_CAVE
 .endif
 	.db $2f, $04, $18
@@ -218,14 +239,22 @@ tilesetData:
 	; 0x32
 	.db $3f, $04
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_CAVE_SEASONS
+.else
 	.db GFXH_TILESET_CAVE
+.endif
 	.db PALH_TILESET_MOBLIN_KEEP
 	.db $2f, $04, $18
 
 	; 0x33
 	.db $3f, $04
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_CAVE_SEASONS
+.else
 	.db GFXH_TILESET_CAVE
+.endif
 	.db PALH_TILESET_TEMPLE_OF_SEASONS
 	.db $2f, $04, $18
 
@@ -384,10 +413,11 @@ tilesetData:
 	; 0x48
 	.db $4f, $10
 	.db UNIQUE_GFXH_NONE
-	.db GFXH_TILESET_CAVE
 .ifdef ROM_COMBO
+	.db GFXH_TILESET_CAVE_SEASONS
 	.db PALH_TILESET_CAVE_SEASONS
 .else
+	.db GFXH_TILESET_CAVE
 	.db PALH_TILESET_CAVE
 .endif
 	.db $2f, $05, $18
@@ -395,17 +425,22 @@ tilesetData:
 	; 0x49
 	.db $4f, $10
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_CAVE_SEASONS
+.else
 	.db GFXH_TILESET_CAVE
+.endif
 	.db PALH_TILESET_SUBROSIA_CAVE
 	.db $2f, $05, $18
 
 	; 0x4a
 	.db $4f, $10
 	.db UNIQUE_GFXH_NONE
-	.db GFXH_TILESET_CAVE
 .ifdef ROM_COMBO
+	.db GFXH_TILESET_CAVE_SEASONS
 	.db PALH_TILESET_MAKU_TREE_INSIDE_SEASONS
 .else
+	.db GFXH_TILESET_CAVE
 	.db PALH_TILESET_MAKU_TREE_INSIDE
 .endif
 	.db $2f, $05, $18
@@ -413,7 +448,11 @@ tilesetData:
 	; 0x4b
 	.db $4f, $10
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_INDOORS_SEASONS
+.else
 	.db GFXH_TILESET_INDOORS
+.endif
 	.db PALH_TILESET_SUBROSIA_BOOMERANG_ROOM
 	.db $2e, $05, $18
 
@@ -427,24 +466,33 @@ tilesetData:
 	; 0x4d
 	.db $4f, $10
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_INDOORS_SEASONS
+.else
 	.db GFXH_TILESET_INDOORS
+.endif
 	.db PALH_TILESET_INDOORS_A
 	.db $2e, $06, $18
 
 	; 0x4e
 	.db $4f, $10
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_INDOORS_SEASONS
+.else
 	.db GFXH_TILESET_INDOORS
+.endif
 	.db PALH_TILESET_OLD_MAN_CAVE
 	.db $2e, $06, $18
 
 	; 0x4f
 	.db $4f, $10
 	.db UNIQUE_GFXH_NONE
-	.db GFXH_TILESET_CAVE
 .ifdef ROM_COMBO
+	.db GFXH_TILESET_CAVE_SEASONS
 	.db PALH_TILESET_CAVE_SEASONS
 .else
+	.db GFXH_TILESET_CAVE
 	.db PALH_TILESET_CAVE
 .endif
 	.db $2f, $06, $18
@@ -452,10 +500,11 @@ tilesetData:
 	; 0x50
 	.db $4f, $10
 	.db UNIQUE_GFXH_NONE
-	.db GFXH_TILESET_CAVE
 .ifdef ROM_COMBO
+	.db GFXH_TILESET_CAVE_SEASONS
 	.db PALH_TILESET_MAKU_TREE_INSIDE_SEASONS
 .else
+	.db GFXH_TILESET_CAVE
 	.db PALH_TILESET_MAKU_TREE_INSIDE
 .endif
 	.db $2f, $06, $18
@@ -463,28 +512,44 @@ tilesetData:
 	; 0x51
 	.db $4f, $10
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_CAVE_SEASONS
+.else
 	.db GFXH_TILESET_CAVE
+.endif
 	.db PALH_TILESET_TEMPLE_SPRING
 	.db $2f, $06, $18
 
 	; 0x52
 	.db $4f, $10
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_CAVE_SEASONS
+.else
 	.db GFXH_TILESET_CAVE
+.endif
 	.db PALH_TILESET_TEMPLE_SUMMER
 	.db $2f, $06, $18
 
 	; 0x53
 	.db $4f, $10
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_CAVE_SEASONS
+.else
 	.db GFXH_TILESET_CAVE
+.endif
 	.db PALH_TILESET_TEMPLE_AUTUMN
 	.db $2f, $06, $18
 
 	; 0x54
 	.db $4f, $10
 	.db UNIQUE_GFXH_NONE
+.ifdef ROM_COMBO
+	.db GFXH_TILESET_CAVE_SEASONS
+.else
 	.db GFXH_TILESET_CAVE
+.endif
 	.db PALH_TILESET_TEMPLE_WINTER
 	.db $2f, $06, $18
 
