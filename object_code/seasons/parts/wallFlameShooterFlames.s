@@ -64,7 +64,7 @@ partCode26:
 @table_66d2:
 	.db $02 $04 $06
 @state2:
-	call partCode.partCommon_decCounter1IfNonzero
+	call partCommon_decCounter1IfNonzero
 	jp z,partDelete
 	ld a,(hl)
 	rrca

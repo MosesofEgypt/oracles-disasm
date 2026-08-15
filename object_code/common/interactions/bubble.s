@@ -138,7 +138,15 @@ interactionCode91:
 @@sidescrolling:
 	; Check if it's still in water
 	call objectGetTileAtPosition
+.if defined(ROM_COMBO)
+	ld hl,hazardCollisionTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,hazardCollisionTable_ages
+	+
+.else
 	ld hl,hazardCollisionTable
+.endif
 	call lookupCollisionTable
 	ccf
 	ret

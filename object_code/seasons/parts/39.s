@@ -27,7 +27,7 @@ partCode39:
 	jp z,partDelete
 	call func_6a28
 	ret nz
-	call partCode.partCommon_checkOutOfBounds
+	call partCommon_checkOutOfBounds
 	jp z,partDelete
 	ld a,(wFrameCounter)
 	rrca

@@ -2057,7 +2057,7 @@ _mainLoop_nextThread:
 	; No threads remaining this frame
 
 .if defined(ROM_COMBO)
-	callfrombank0 bank44.refreshDirtyPalettes
+	callfrombank0 gfxLoading.refreshDirtyPalettes
 .else
 	callfrombank0 bank3f.refreshDirtyPalettes
 .endif
@@ -4815,7 +4815,7 @@ interactionInitGraphics:
 	ldh a,(<hRomBank)
 	push af
 .if defined(ROM_COMBO)
-	callfrombank0 bank44.interactionLoadGraphics
+	callfrombank0 gfxLoading.interactionLoadGraphics
 .else
 	callfrombank0 bank3f.interactionLoadGraphics
 .endif
@@ -4835,7 +4835,7 @@ refreshObjectGfx:
 	ldh a,(<hRomBank)
 	push af
 .if defined(ROM_COMBO)
-	callfrombank0 bank44.refreshObjectGfx_body
+	callfrombank0 gfxLoading.refreshObjectGfx_body
 .else
 	callfrombank0 bank3f.refreshObjectGfx_body
 .endif
@@ -4850,7 +4850,7 @@ reloadObjectGfx:
 	ldh a,(<hRomBank)
 	push af
 .if defined(ROM_COMBO)
-	callfrombank0 bank44.reloadObjectGfx
+	callfrombank0 gfxLoading.reloadObjectGfx
 .else
 	callfrombank0 bank3f.reloadObjectGfx
 .endif
@@ -4868,7 +4868,7 @@ loadObjectGfxHeaderToSlot4:
 	ldh a,(<hRomBank)
 	push af
 .if defined(ROM_COMBO)
-	callfrombank0 bank44.loadObjectGfxHeaderToSlot4_body
+	callfrombank0 gfxLoading.loadObjectGfxHeaderToSlot4_body
 .else
 	callfrombank0 bank3f.loadObjectGfxHeaderToSlot4_body
 .endif
@@ -4883,7 +4883,7 @@ loadTreeGfx:
 	ldh a,(<hRomBank)
 	push af
 .if defined(ROM_COMBO)
-	callfrombank0 bank44.loadTreeGfx_body
+	callfrombank0 gfxLoading.loadTreeGfx_body
 .else
 	callfrombank0 bank3f.loadTreeGfx_body
 .endif
@@ -4898,7 +4898,7 @@ loadWeaponGfx:
 	ldh a,(<hRomBank)
 	push af
 .if defined(ROM_COMBO)
-	callfrombank0 bank44.loadWeaponGfx
+	callfrombank0 gfxLoading.loadWeaponGfx
 .else
 	callfrombank0 bank3f.loadWeaponGfx
 .endif
@@ -4960,7 +4960,7 @@ loadObjectGfx2:
 	ld a,$01
 	ld ($ff00+R_SVBK),a
 .if defined(ROM_COMBO)
-	ld a,:bank44.insertIndexIntoLoadedObjectGfx
+	ld a,:gfxLoading.insertIndexIntoLoadedObjectGfx
 .else
 	ld a,:bank3f.insertIndexIntoLoadedObjectGfx
 .endif
@@ -4982,7 +4982,7 @@ loadObjectGfx2:
 	ld a,$01
 	ld ($ff00+R_SVBK),a
 .if defined(ROM_COMBO)
-	ld a,:bank44.insertIndexIntoLoadedObjectGfx
+	ld a,:gfxLoading.insertIndexIntoLoadedObjectGfx
 .else
 	ld a,:bank3f.insertIndexIntoLoadedObjectGfx
 .endif
@@ -10510,7 +10510,7 @@ enemyStandardUpdate:
 
 @uninitialized:
 .if defined(ROM_COMBO)
-	callab bank44.enemyLoadGraphicsAndProperties
+	callab gfxLoading.enemyLoadGraphicsAndProperties
 .else
 	callab bank3f.enemyLoadGraphicsAndProperties
 .endif
@@ -10653,11 +10653,9 @@ partAnimate:
 	dec (hl)
 	ret nz
 .if defined(ROM_COMBO)
+	ldh a,(<hRomBank)
+	push af
 	ld a,:partAnimationTable_seasons
-	call hIsSeasons
-	jr c,+
-		ld a,:partAnimationTable_ages
-	+
 .else
 	ld a,:partAnimationTable
 .endif
@@ -10671,11 +10669,12 @@ partSetAnimation:
 	ld c,a
 	ld b,$00
 .if defined(ROM_COMBO)
+	ldh a,(<hRomBank)
+	push af
 	ld a,:partAnimationTable_seasons
 	ld hl,partAnimationTable_seasons
 	call hIsSeasons
 	jr c,+
-		ld a,:partAnimationTable_ages
 		ld hl,partAnimationTable_ages
 	+
 	setrombank
@@ -10762,7 +10761,12 @@ _partNextAnimationFrame:
 	or $40
 	ld (de),a
 
+.if defined(ROM_COMBO)
+	pop af
+	ldh (<hRomBank),a
+.else
 	ld a,PART_BANK
+.endif
 	setrombank
 	ret
 
@@ -11299,7 +11303,7 @@ tryToBreakTile:
 	ldh a,(<hRomBank)
 	push af
 .if defined(ROM_COMBO)
-	callfrombank0 bank43.tryToBreakTile_body
+	callfrombank0 breakableTiles.tryToBreakTile_body
 .else
 	callfrombank0 bank3e.tryToBreakTile_body
 .endif
@@ -11606,7 +11610,7 @@ func_2d48:
 	push af
 
 .if defined(ROM_COMBO)
-	ld a,:bank44.data_5951
+	ld a,:gfxLoading.data_5951
 .elif defined(ROM_AGES)
 	ld a,:bank3f.data_5951
 .else
@@ -11615,7 +11619,7 @@ func_2d48:
 	rst_setrombank
 	ld a,b
 .if defined(ROM_COMBO)
-	ld hl,bank44.data_5951
+	ld hl,gfxLoading.data_5951
 .elif defined(ROM_AGES)
 	ld hl,bank3f.data_5951
 .else
@@ -13055,7 +13059,11 @@ updateAllObjects:
 	callfrombank0 itemCode.updateItems
 	call          setEnemyTargetToLinkPosition
 	callfrombank0 updateEnemies
+.if defined(ROM_COMBO)
+	callfrombank0 objectUpdating.updateParts
+.else
 	callfrombank0 partCode.updateParts
+.endif
 	callfrombank0 updateInteractions
 	callfrombank0 bank1.func_4000
 
@@ -13132,7 +13140,11 @@ func_3539:
 .endif
 	callfrombank0 itemCode.updateItems
 	callfrombank0 updateEnemies
+.if defined(ROM_COMBO)
+	callfrombank0 objectUpdating.updateParts
+.else
 	callfrombank0 partCode.updateParts
+.endif
 	callfrombank0 updateInteractions
 	callfrombank0 itemCode.updateItemsPost
 
@@ -13164,7 +13176,11 @@ seasonsFunc_34a0:
 	callfrombank0 bank5.updateSpecialObjects
 	callfrombank0 itemCode.updateItems
 	callfrombank0 updateEnemies
+.if defined(ROM_COMBO)
+	callfrombank0 objectUpdating.updateParts
+.else
 	callfrombank0 partCode.updateParts
+.endif
 	callfrombank0 updateInteractions
 .if defined(ROM_COMBO)
 	callfrombank0 bank3Cutscenes_seasons.seasonsFunc_0f_7159
@@ -14603,6 +14619,14 @@ interactionDelete:
 	jr nz,-
 	ret
 
+.if defined(ROM_COMBO)
+updateInteractions:
+	jpab objectUpdating.updateInteractions
+
+updateInteraction:
+	jpab objectUpdating.updateInteraction
+
+.else
 ;;
 _updateInteractionsIfStateIsZero:
 	ld a,Interaction.start
@@ -14704,36 +14728,6 @@ updateInteraction:
 .endif
 
 @cnt:
-.if defined(ROM_COMBO)	; NOTE: TEMPORARY UNTIL INTERACTIONS ARE MERGED IN
-	ld a,(de)
-	cp $75
-	jr nz,+
-		ld a,$0a
-		ld hl,agesInteractionsBank0a.interactionCode75
-		jr ++
-	+
-	cp $d2
-	jr nz,+
-		ld a,$0b
-		ld hl,commonInteractions6.interactionCoded2
-		jr ++
-	+
-	cp $d3
-	jr nz,+
-		ld a,$0b
-		ld hl,commonInteractions6.interactionCoded3
-		jr ++
-	+
-	cp $4a
-	ret nz
-
-	ld a,$09
-	ld hl,commonInteractions2.interactionCode4a
-
-++
-	rst_setrombank
-	jp hl
-.endif					; NOTE: TEMPORARY UNTIL INTERACTIONS ARE MERGED IN
 	ld a,b
 	rst_setrombank
 	ld a,(de)
@@ -14742,11 +14736,8 @@ updateInteraction:
 	rst_derefHl
 	jp hl
 
-.if defined(ROM_COMBO)	; NOTE: TEMPORARY UNTIL INTERACTIONS ARE MERGED IN
-interactionCodeTable:
-.else
 .include "data/interactionCodeTable.s"
-.endif					; NOTE: TEMPORARY UNTIL INTERACTIONS ARE MERGED IN
+.endif
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 

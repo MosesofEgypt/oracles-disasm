@@ -66,7 +66,7 @@ init:
 	ld ($ff00+R_IE),a
 
 .ifdef ROM_COMBO
-	callab bank44.initGbaModePaletteData
+	callab gfxLoading.initGbaModePaletteData
 .else
 	callab bank3f.initGbaModePaletteData
 .endif

@@ -769,7 +769,15 @@ likelike_checkHazards:
 	jr c,++
 	ld bc,$0500
 	call objectGetRelativeTile
+.if defined(ROM_COMBO)
+	ld hl,hazardCollisionTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,hazardCollisionTable_ages
+	+
+.else
 	ld hl,hazardCollisionTable
+.endif
 	call lookupCollisionTable
 	call c,likelike_releaseLink
 ++

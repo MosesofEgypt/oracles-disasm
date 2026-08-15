@@ -566,8 +566,8 @@ intro_titlescreen:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .ifdef ROM_COMBO
-	ld hl,bank44.titlescreenMakuSeedSprite
-	ld e,:bank44.titlescreenMakuSeedSprite
+	ld hl,gfxLoading.titlescreenMakuSeedSprite
+	ld e,:gfxLoading.titlescreenMakuSeedSprite
 .else
 	ld hl,bank3f.titlescreenMakuSeedSprite
 	ld e,:bank3f.titlescreenMakuSeedSprite
@@ -578,8 +578,8 @@ intro_titlescreen:
 	and $20
 	ret nz
 .ifdef ROM_COMBO
-	ld hl,bank44.titlescreenPressStartSprites
-	ld e,:bank44.titlescreenPressStartSprites
+	ld hl,gfxLoading.titlescreenPressStartSprites
+	ld e,:gfxLoading.titlescreenPressStartSprites
 .else
 	ld hl,bank3f.titlescreenPressStartSprites
 	ld e,:bank3f.titlescreenPressStartSprites
@@ -944,8 +944,8 @@ introCinematic_ridingHorse_state4:
 ;;
 @drawLinkOnHorseAndScrollScreen:
 .ifdef ROM_COMBO
-	ld hl,bank44.linkOnHorseFacingCameraSprite
-	ld e,:bank44.linkOnHorseFacingCameraSprite
+	ld hl,gfxLoading.linkOnHorseFacingCameraSprite
+	ld e,:gfxLoading.linkOnHorseFacingCameraSprite
 .else
 	ld hl,bank3f.linkOnHorseFacingCameraSprite
 	ld e,:bank3f.linkOnHorseFacingCameraSprite
@@ -1178,8 +1178,8 @@ introCinematic_ridingHorse_drawLinkOnHorseCloseupSprites_1:
 	xor a
 	ldh (<hOamTail),a
 .if defined(ROM_COMBO)
-	ld hl,bank44.linkOnHorseCloseupSprites_1
-	ld e,:bank44.linkOnHorseCloseupSprites_1
+	ld hl,gfxLoading.linkOnHorseCloseupSprites_1
+	ld e,:gfxLoading.linkOnHorseCloseupSprites_1
 	jp addSpritesFromBankToOam_withOffset
 .else; ROM_SEASONS
 	ld hl,linkOnHorseCloseupSprites_1
@@ -1214,8 +1214,8 @@ introCinematic_ridingHorse_drawLinkOnHorseCloseupSprites_2:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .ifdef ROM_COMBO
-	ld hl,bank44.linkOnHorseCloseupSprites_2
-	ld e,:bank44.linkOnHorseCloseupSprites_2
+	ld hl,gfxLoading.linkOnHorseCloseupSprites_2
+	ld e,:gfxLoading.linkOnHorseCloseupSprites_2
 .else
 	ld hl,bank3f.linkOnHorseCloseupSprites_2
 	ld e,:bank3f.linkOnHorseCloseupSprites_2
@@ -1326,8 +1326,8 @@ introCinematic_ridingHorse_drawTempleSprites:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .ifdef ROM_COMBO
-	ld hl,bank44.introTempleSprites
-	ld e,:bank44.introTempleSprites
+	ld hl,gfxLoading.introTempleSprites
+	ld e,:gfxLoading.introTempleSprites
 .else
 	ld hl,bank3f.introTempleSprites
 	ld e,:bank3f.introTempleSprites

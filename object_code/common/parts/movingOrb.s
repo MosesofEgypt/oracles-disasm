@@ -44,7 +44,13 @@ partCode0b:
 	.dw @stateC_waiting
 
 @state0To7:
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	ld hl,objectMovement.orbMovementScript_seasons
+	jr c,+
+		ld hl,objectMovement.orbMovementScript_ages
+	+
+.elif defined(ROM_AGES)
 	ld hl,bank0e.orbMovementScript
 .else
 	ld hl,bank0d.orbMovementScript

@@ -31,7 +31,7 @@ partCode49:
 	ld (de),a
 
 @state2:
-	call partCode.partCommon_checkOutOfBounds
+	call partCommon_checkOutOfBounds
 	jp z,partDelete
 	call objectApplySpeed
 @animate:

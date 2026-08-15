@@ -237,7 +237,12 @@ itemCode16:
 @@destroyWithAnimation:
 	call objectReplaceWithAnimationIfOnHazard
 	ret c
+
+.if defined(ROM_COMBO)
+	callab breakableTiles.itemMakeInteractionForBreakableTile
+.else
 	callab bank3e.itemMakeInteractionForBreakableTile
+.endif
 	jp itemDelete
 
 ;;

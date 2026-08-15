@@ -13,7 +13,7 @@ partCode42:
 	ld a,(de)
 	or a
 	jr z,@state0
-	call partCode.partCommon_checkTileCollisionOrOutOfBounds
+	call partCommon_checkTileCollisionOrOutOfBounds
 	jr z,@delete
 	ld e,$c2
 	ld a,(de)

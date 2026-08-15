@@ -120,14 +120,30 @@ ecom_checkHazardsCommon:
 	; Check if it touched a hazard
 	ld bc,$05ff
 	call objectGetRelativeTile
+.if defined(ROM_COMBO)
+	ld hl,hazardCollisionTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,hazardCollisionTable_ages
+	+
+.else
 	ld hl,hazardCollisionTable
+.endif
 	call lookupCollisionTable
 	ld b,$ff
 	jr c,@touchedHazard
 
 	ld bc,$0501
 	call objectGetRelativeTile
+.if defined(ROM_COMBO)
+	ld hl,hazardCollisionTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,hazardCollisionTable_ages
+	+
+.else
 	ld hl,hazardCollisionTable
+.endif
 	call lookupCollisionTable
 	ld b,$01
 	jr c,@touchedHazard
@@ -272,7 +288,15 @@ ecom_updateMovingPlatform:
 	; Check if on a moving platform
 	ld bc,$0500
 	call objectGetRelativeTile
+.if defined(ROM_COMBO)
+	ld hl,enemyConveyorTilesTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,enemyConveyorTilesTable_ages
+	+
+.else
 	ld hl,enemyConveyorTilesTable
+.endif
 	call lookupCollisionTable
 	ret nc
 

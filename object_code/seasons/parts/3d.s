@@ -38,7 +38,7 @@ partCode3d:
 +
 	jp objectSetVisiblec1
 @state1:
-	call partCode.partCommon_checkOutOfBounds
+	call partCommon_checkOutOfBounds
 	jp z,partDelete
 	call objectApplySpeed
 	ld c,$0e

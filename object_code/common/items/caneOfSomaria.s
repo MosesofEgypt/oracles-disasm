@@ -420,7 +420,15 @@ itemCode18:
 	call @alignOnTile
 	call objectGetTileAtPosition
 	push hl
+.if defined(ROM_COMBO)
+	ld hl,hazardCollisionTable_seasons
+	call hIsSeasons
+	jr c,+
+		ld hl,hazardCollisionTable_ages
+	+
+.else
 	ld hl,hazardCollisionTable
+.endif
 	call lookupCollisionTable
 	pop hl
 	jr c,++

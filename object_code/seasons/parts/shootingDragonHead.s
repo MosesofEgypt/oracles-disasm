@@ -78,7 +78,7 @@ partCode24:
 	ld l,e
 	inc (hl)
 @state2:
-	call partCode.partCommon_checkTileCollisionOrOutOfBounds
+	call partCommon_checkTileCollisionOrOutOfBounds
 	jp c,partDelete
 +
 	call objectApplySpeed

@@ -2562,7 +2562,11 @@ cutscene15:
 	ld (wMinimapRoom),a
 ++
 	call loadCommonGraphics
+.ifdef ROM_COMBO
+	call updateInteractions
+.else
 	callab updateInteractions
+.endif
 	ld a,$02
 	call loadGfxRegisterStateIndex
 	ld a,$10
