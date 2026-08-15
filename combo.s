@@ -22,25 +22,28 @@
 
 	.include "code/bank0.s"
 
+; NOTE: TEMPORARY UNTIL MANY BANKS CAN BE MERGED
+specialObjectCode_subrosiaDanceLink:
+specialObjectCode_transformedLink:
+specialObjectCode_linkRidingAnimal:
+specialObjectCode_minecart:
+specialObjectCode_ricky:
+specialObjectCode_dimitri:
+specialObjectCode_moosh:
+specialObjectCode_maple:
+specialObjectCode_raft:
+	ret
+
+; NOTE: TEMPORARY UNTIL MANY BANKS CAN BE MERGED
 
 .BANK $01 SLOT 1
 .ORG 0
 
 	.include "code/bank1.s"
 
-m_section_free Bank_5_test NAMESPACE bank5
-checkPositionSurroundedByWalls:
-linkPullIntoHole:
-specialObjectUpdatePositionGivenVelocity:
-specialObjectUpdatePosition:
-linkSetState:
-linkCancelAllItemUsageAndClearAdjacentWallsBitset:
-	ret
-.ends
-
+; NOTE: TEMPORARY UNTIL MANY BANKS CAN BE MERGED
 m_section_free Bank_6_test NAMESPACE bank6
 specialObjectLoadAnimationFrameToBuffer:
-specialObjectCode_linkInCutscene:
 specialObjectCode_companionCutscene:
 	ret
 .ends
@@ -111,9 +114,7 @@ moblinKeepScene_spawn2MoblinsAfterKeepDestroyed:
 m_section_free Script_Help NAMESPACE scriptHelp
 makuTree_setMapTextBasedOnStage:
 	ret
-.ends
-
-; NOTE: temporary code until many banks can be included
+.ends	; NOTE: TEMPORARY UNTIL MANY BANKS CAN BE MERGED
 
 
 
@@ -223,9 +224,26 @@ makuTree_setMapTextBasedOnStage:
 
 
 m_section_free Bank_6 NAMESPACE bank6
-
 	.include "code/interactableTiles.s"
 	.include "code/specialObjectAnimationsAndDamage.s"
+
+;	.include "object_code/common/specialObjects/minecart.s"
+;	.include "object_code/ages/specialObjects/raft.s"
+
+	.include {"{BUILD_DIR}/specialObjectAnimationData.s"}
+;	.include "object_code/ages/specialObjects/companionCutscene.s"
+	.include "object_code/ages/specialObjects/linkInCutscene.s"
+	.include "object_code/seasons/specialObjects/linkInCutscene.s"
+	.include {"{GAME_DATA_DIR}/signText.s"}
+
+;	.include "object_code/ages/specialObjects/timeWarp.s"
+.ends
+
+m_section_superfree Item_Parents NAMESPACE itemParents
+	; NOTE: these are needed in here as well due to them relying
+	;       on several animation related function for link in here
+	.include "code/specialObjectAnimationsAndDamage.s"
+	.include {"{BUILD_DIR}/specialObjectAnimationData.s"}
 
 	.include "code/parentItemUsage.s"
 
@@ -246,17 +264,6 @@ m_section_free Bank_6 NAMESPACE bank6
 	.include "object_code/common/itemParents/commonCode.s"
 
 	.include {"{GAME_DATA_DIR}/itemUsageTables.s"}
-
-;	.include "object_code/common/specialObjects/minecart.s"
-;	.include "object_code/ages/specialObjects/raft.s"
-
-	.include {"{BUILD_DIR}/specialObjectAnimationData.s"}
-;	.include "object_code/ages/specialObjects/companionCutscene.s"
-;	.include "object_code/ages/specialObjects/linkInCutscene.s"
-	.include {"{GAME_DATA_DIR}/signText.s"}
-
-;	.include "object_code/ages/specialObjects/timeWarp.s"
-
 .ends
 
 
@@ -307,8 +314,6 @@ m_section_free Bank_6 NAMESPACE bank6
 		.include "data/itemAnimations.s"
 	.ends
 
-	 ; This section can't be superfree, since it must be in the same bank as section
-	 ; "Enemy_Part_Collisions".
 	 m_section_superfree Bank_7_Data namespace bank7
 		.include "code/collisionEffects.s"
 		.include {"{GAME_DATA_DIR}/enemyActiveCollisions.s"}
@@ -378,7 +383,7 @@ m_section_free Ages_Interactions_Bank8 NAMESPACE agesInteractionsBank08
 m_section_free Interaction_Code_Group2 NAMESPACE commonInteractions2
 ;	.include "object_code/common/interactions/shopkeeper.s"
 ;	.include "object_code/common/interactions/shopItem.s"
-;	.include "object_code/common/interactions/introSprites1.s"
+	.include "object_code/common/interactions/introSprites1.s"
 ;	.include "object_code/common/interactions/seasonsFairy.s"
 ;	.include "object_code/common/interactions/explosion.s"
 .ends
@@ -456,7 +461,8 @@ m_section_free Ages_Interactions_BankA NAMESPACE agesInteractionsBank0a
 ;	.include "object_code/ages/interactions/kingMoblinDefeated.s"
 ;	.include "object_code/ages/interactions/ghiniHarassingMoosh.s"
 ;	.include "object_code/ages/interactions/rickysGloveSpawner.s"
-;	.include "object_code/ages/interactions/introSprite.s"
+	.include "object_code/ages/interactions/introSprite.s"
+	.include "object_code/seasons/interactions/75.s"
 ;	.include "object_code/ages/interactions/makuGateOpening.s"
 ;	.include "object_code/ages/interactions/smallKeyOnEnemy.s"
 ;	.include "object_code/ages/interactions/stonePanel.s"
@@ -504,8 +510,8 @@ m_section_free Interaction_Code_Group6 NAMESPACE commonInteractions6
 ;	.include "object_code/common/interactions/cf.s"
 ;	.include "object_code/common/interactions/companionTutorial.s"
 ;	.include "object_code/common/interactions/gameCompleteDialog.s"
-;	.include "object_code/common/interactions/titlescreenClouds.s"
-;	.include "object_code/common/interactions/introBird.s"
+	.include "object_code/common/interactions/titlescreenClouds.s"
+	.include "object_code/common/interactions/introBird.s"
 ;	.include "object_code/common/interactions/linkShip.s"
 .ends
 
@@ -803,8 +809,11 @@ m_section_superfree Room_Code namespace roomSpecificCode
 .BANK $13 SLOT 1
 .ORG 0
 
-	.define BASE_OAM_DATA_BANK $13
-	.export BASE_OAM_DATA_BANK
+	.define AGES_ITEM_OAM_DATA_BANK			$13 EXPORT
+	.define SEASONS_ITEM_OAM_DATA_BANK		$13 EXPORT
+	.define AGES_SPEC_OBJ_OAM_DATA_BANK		$13 EXPORT
+	.define SEASONS_SPEC_OBJ_OAM_DATA_BANK	$13 EXPORT
+	.define AGES_ENEMY_OAM_DATA_BANK		$13 EXPORT
 
 	.include "data/itemOamData.s"
 	.include {"{BUILD_DIR}/enemyOamData_ages.s"}
@@ -813,6 +822,8 @@ m_section_superfree Room_Code namespace roomSpecificCode
 
 .BANK $14 SLOT 1
 .ORG 0
+	.define SEASONS_ENEMY_OAM_DATA_BANK		$14 EXPORT
+
 	.include {"{BUILD_DIR}/enemyOamData_seasons.s"}
 	.include {"{GAME_DATA_DIR}/data_4556.s"}
 
@@ -848,6 +859,9 @@ m_section_superfree Room_Code namespace roomSpecificCode
 
 .BANK $16 SLOT 1
 .ORG 0
+	.define AGES_PART_OAM_DATA_BANK			$16 EXPORT
+	.define SEASONS_PART_OAM_DATA_BANK		$16 EXPORT
+	.define SEASONS_INTERAC_OAM_DATA_BANK	$16 EXPORT
 	.include {"{BUILD_DIR}/partOamData.s"}
 
 	.include {"{BUILD_DIR}/interactionOamData_seasons.s"}
@@ -869,6 +883,7 @@ m_section_superfree Room_Code namespace roomSpecificCode
 
 .BANK $19 SLOT 1
 .ORG 0
+	.define AGES_INTERAC_OAM_DATA_BANK		$19 EXPORT
 	.include {"{BUILD_DIR}/interactionOamData_ages.s"}
 
 m_section_superfree bank19Code NAMESPACE bank19

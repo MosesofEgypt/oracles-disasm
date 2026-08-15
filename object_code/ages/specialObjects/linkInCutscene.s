@@ -2,27 +2,34 @@
 
 ;;
 specialObjectCode_linkInCutscene:
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jp c,specialObjectCode_linkInCutscene_seasons
+.endif
 	ld e,SpecialObject.subid
 	ld a,(de)
 	rst_jumpTable
-	.dw linkCutscene0
-	.dw linkCutscene1
-	.dw linkCutscene2
-	.dw linkCutscene3
-	.dw linkCutscene4
-	.dw linkCutscene5
-	.dw linkCutscene6
-	.dw linkCutscene7
-	.dw linkCutscene8
-	.dw linkCutscene9
-	.dw linkCutsceneA
-	.dw linkCutsceneB
-	.dw linkCutsceneC
+	.dw linkCutscene0_ages
+	.dw linkCutscene1_ages
+	.dw linkCutscene2_ages
+	.dw linkCutscene3_ages
+	.dw linkCutscene4_ages
+	.dw linkCutscene5_ages
+	.dw linkCutscene6_ages
+	.dw linkCutscene7_ages
+	.dw linkCutscene8_ages
+	.dw linkCutscene9_ages
+	.dw linkCutsceneA_ages
+	.dw linkCutsceneB_ages
+	.dw linkCutsceneC_ages
 
 
 ;;
 ; Opening cutscene with the triforce
-linkCutscene0:
+.ifdef ROM_COMBO
+linkCutscene0_seasons:
+.endif
+linkCutscene0_ages:
 	ld e,Item.state
 	ld a,(de)
 	rst_jumpTable
@@ -209,7 +216,7 @@ linkCutscene0_substate6:
 
 
 ;;
-linkCutscene1:
+linkCutscene1_ages:
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable
@@ -295,7 +302,7 @@ linkCutsceneRet:
 	ret
 
 ;;
-linkCutscene2:
+linkCutscene2_ages:
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable
@@ -431,7 +438,7 @@ linkCutscene2:
 	ret
 
 ;;
-linkCutscene3:
+linkCutscene3_ages:
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable
@@ -571,7 +578,7 @@ linkCutsceneFunc_73e8:
 	jp specialObjectSetAnimation
 
 ;;
-linkCutscene4:
+linkCutscene4_ages:
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable
@@ -622,7 +629,7 @@ linkCutscene4:
 	ld l,SpecialObject.speed
 	ld (hl),SPEED_100
 	ld b,$10
-	jp linkCutscene2@label_72cc
+	jp linkCutscene2_ages@label_72cc
 
 @substate3:
 	call linkCutscene_animateAndDecCounter1
@@ -635,7 +642,7 @@ linkCutscene4:
 	ret nz
 	ld (hl),$10
 	ld b,$18
-	jp linkCutscene2@label_72cc
+	jp linkCutscene2_ages@label_72cc
 
 @substate5:
 	call linkCutscene_animateAndDecCounter1
@@ -677,7 +684,7 @@ linkCutscene_animateAndDecCounter1:
 	jp itemDecCounter1
 
 ;;
-linkCutscene5:
+linkCutscene5_ages:
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable
@@ -703,7 +710,7 @@ linkCutscene5:
 	jp setLinkIDOverride
 
 ;;
-linkCutscene6:
+linkCutscene6_ages:
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable
@@ -751,7 +758,7 @@ linkCutscene6:
 	ret
 
 ;;
-linkCutscene7:
+linkCutscene7_ages:
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable
@@ -779,7 +786,7 @@ linkCutscene7:
 	ret
 
 ;;
-linkCutscene8:
+linkCutscene8_ages:
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable
@@ -818,7 +825,7 @@ linkCutscene8:
 	ret
 
 ;;
-linkCutscene9:
+linkCutscene9_ages:
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable
@@ -887,7 +894,10 @@ linkCutscene9:
 ;;
 ; Link being kissed by Zelda in ending cutscene - cutscene 6 in seasons
 ;
-linkCutsceneA:
+linkCutsceneA_ages:
+.ifdef ROM_COMBO
+linkCutscene6_seasons
+.endif
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable
@@ -995,7 +1005,10 @@ linkCutsceneA:
 ;;
 ; Cutscene played on starting a new game ("accept our quest, hero") - cutsceneB in seasons
 ;
-linkCutsceneB:
+linkCutsceneB_ages:
+.ifdef ROM_COMBO
+linkCutsceneA_seasons:
+.endif
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable
@@ -1024,7 +1037,7 @@ linkCutsceneB:
 	call hIsSeasons
 	ldbc INTERAC_SPARKLE, $0d
 	jr nc,+
-		ldbc INTERAC_SPARKLE, $09
+		ld c,$09
 	+
 .elif defined(ROM_AGES)
 	ldbc INTERAC_SPARKLE, $0d
@@ -1106,7 +1119,7 @@ linkCutsceneB:
 	jp objectSetVisible
 
 ;;
-linkCutsceneC:
+linkCutsceneC_ages:
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable

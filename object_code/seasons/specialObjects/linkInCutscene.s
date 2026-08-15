@@ -1,22 +1,27 @@
+.ifdef ROM_COMBO
+specialObjectCode_linkInCutscene_seasons:
+.else
 specialObjectCode_linkInCutscene:
+.endif
 	ld e,SpecialObject.subid
 	ld a,(de)
 	rst_jumpTable
-	.dw linkCutscene0
-	.dw linkCutscene1
-	.dw linkCutscene2
-	.dw linkCutscene3
-	.dw linkCutscene4
-	.dw linkCutscene5
-	.dw linkCutscene6
-	.dw linkCutscene7
-	.dw linkCutscene8
-	.dw linkCutscene9
-	.dw linkCutsceneA
+	.dw linkCutscene0_seasons
+	.dw linkCutscene1_seasons
+	.dw linkCutscene2_seasons
+	.dw linkCutscene3_seasons
+	.dw linkCutscene4_seasons
+	.dw linkCutscene5_seasons
+	.dw linkCutscene6_seasons
+	.dw linkCutscene7_seasons
+	.dw linkCutscene8_seasons
+	.dw linkCutscene9_seasons
+	.dw linkCutsceneA_seasons
 
+.ifndef ROM_COMBO
 ;;
 ; Opening cutscene with the triforce
-linkCutscene0:
+linkCutscene0_seasons:
 	ld e,Item.state
 	ld a,(de)
 	rst_jumpTable
@@ -185,7 +190,6 @@ linkCutscene_zOscillation1:
 linkCutscene_zOscillation2:
 	.db $02 $03 $04 $03 $02 $00 $ff $00
 
-
 linkCutscene0_substate6:
 	ld e,SpecialObject.animParameter
 	ld a,(de)
@@ -200,10 +204,11 @@ linkCutscene0_substate6:
 	rrca
 	jp nc,objectSetInvisible
 	jp objectSetVisible
+.endif
 
 
 ; Dancing with Din
-linkCutscene1:
+linkCutscene1_seasons:
 	ld e,Item.state
 	ld a,(de)
 	rst_jumpTable
@@ -508,7 +513,7 @@ linkCutscene1:
 	jp itemIncSubstate
 
 
-linkCutscene2:
+linkCutscene2_seasons:
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable
@@ -622,7 +627,7 @@ setRelatedObj2Animation:
 	ret
 
 
-linkCutscene3:
+linkCutscene3_seasons:
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable
@@ -681,7 +686,7 @@ linkCutscene3:
 	ret
 
 
-linkCutscene4:
+linkCutscene4_seasons:
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable
@@ -769,7 +774,7 @@ linkCutscene4:
 
 
 ; Sokra?
-linkCutscene5:
+linkCutscene5_seasons:
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable
@@ -820,10 +825,11 @@ linkCutscene5:
 	ret
 
 
+.ifndef ROM_COMBO
 ;;
 ; Link being kissed by Zelda in ending cutscene - cutsceneA in ages
 ;
-linkCutscene6:
+linkCutscene6_seasons:
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable
@@ -927,27 +933,30 @@ linkCutscene6:
 	ld hl,wTmpcfc0.normal.cfc0
 	ld (hl),$09
 	ret
+.endif
 
 
 ; Sokra?
-linkCutscene7:
+linkCutscene7_seasons:
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
-	.dw linkCutscene5@ret
+	.dw linkCutscene5_seasons@ret
 
 @state0:
 	call linkCutscene_initOam_setVisible_incState
-	jp linkCutscene5@seasonsFunc_06_72d0
+	jp linkCutscene5_seasons@seasonsFunc_06_72d0
 
+.ifndef ROM_COMBO
 linkCutscene_initOam_setVisible_incState:
 	callab bank5.specialObjectSetOamVariables
 	call objectSetVisiblec1
 	jp itemIncState
+.endif
 
 
-linkCutscene8:
+linkCutscene8_seasons:
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable
@@ -971,7 +980,7 @@ linkCutscene8:
 	jp setLinkIDOverride
 
 
-linkCutscene9:
+linkCutscene9_seasons:
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable
@@ -1070,10 +1079,11 @@ linkCutscene9:
 	ret
 
 
+.ifndef ROM_COMBO
 ;;
 ; Cutscene played on starting a new game ("accept our quest, hero") - cutsceneA in ages
 ;
-linkCutsceneA:
+linkCutsceneA_seasons:
 	ld e,SpecialObject.state
 	ld a,(de)
 	rst_jumpTable
@@ -1102,7 +1112,7 @@ linkCutsceneA:
 	call hIsSeasons
 	ldbc INTERAC_SPARKLE, $0d
 	jr nc,+
-		ldbc INTERAC_SPARKLE, $09
+		ld c,$09
 	+
 .elif defined(ROM_AGES)
 	ldbc INTERAC_SPARKLE, $0d
@@ -1187,6 +1197,7 @@ linkCutsceneA:
 linkCutscene_oscillateZ_2:
 	ld hl,linkCutscene_zOscillation2
 	jp linkCutscene_oscillateZ
+.endif
 
 
 angleToY48X50:

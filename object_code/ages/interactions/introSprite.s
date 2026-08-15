@@ -2,6 +2,10 @@
 ; INTERAC_INTRO_SPRITE
 ; ==================================================================================================
 interactionCode75:
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jp c,interactionCode75_seasons
+.endif
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

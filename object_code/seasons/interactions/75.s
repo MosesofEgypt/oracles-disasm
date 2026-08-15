@@ -1,7 +1,11 @@
 ; ==================================================================================================
 ; INTERAC_INTRO_SPRITE
 ; ==================================================================================================
+.ifdef ROM_COMBO
+interactionCode75_seasons:
+.else
 interactionCode75:
+.endif
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable
@@ -14,8 +18,10 @@ interactionCode75:
 	ld a,(de)
 	or a
 	jr nz,@notSubdId0
+.ifndef ROM_COMBO	; NOTE: TEMPORARY UNTIL SCRIPTS ARE MERGED IN
 	ld hl,mainScripts.script6f48
 	call interactionSetScript
+.endif				; NOTE: TEMPORARY UNTIL SCRIPTS ARE MERGED IN
 	jp objectSetVisible82
 @notSubdId0:
 	ld h,d

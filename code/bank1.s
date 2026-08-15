@@ -3708,6 +3708,12 @@ processDmgPaletteUpdate:
 
 ;;
 standardGameState:
+.if defined(ROM_COMBO)	; NOTE: TEMPORARY UNTIL COMBO TESTING IS DONE
+	; allow toggling this being seasons or not by pressing select
+	ld a,(wKeysJustPressed)
+	cp BTN_SELECT
+	call z,toggleIsSeasons
+.endif					; NOTE: TEMPORARY UNTIL COMBO TESTING IS DONE
 .ifdef ENABLE_MULTI_RING
 	call updateRingEquipStatuses
 .endif
@@ -4405,7 +4411,11 @@ updateAzuchu:
 	ldbc ITEM_AZUCHU,$01
 	ld d,>w1Link
 
+.if defined(ROM_COMBO)
+	callab itemParents.itemCreateUniqueChildWithID
+.else
 	callab bank6.itemCreateUniqueChildWithID
+.endif
 	; the c flag will get overwritten by the callab, so we have
 	; to do the same check to determine if it was created correctly
 	ld a,h

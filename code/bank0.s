@@ -3232,6 +3232,39 @@ drawAllSpritesUnconditionally:
 	ldi a,(hl)
 	ldh (<hFF8E),a
 
+.if defined(SUPERFREE_OAM_DATA_BANKS)
+	; Get bank of animation frame data
+	push hl
+	ld a,h
+	cp >w1Companion+1
+	ld a,l
+	jr nc,+
+		and $c0
+		jr nz,+
+			; special object
+			ld a,$04
+			jr ++
+	+
+		rlca
+		rlca
+		and $03
+	++
+
+	call hIsSeasons
+	jr nc,+
+		add $05
+	+
+	ld hl,objectOamBankTable
+	rst_addAToHl
+	ld a,(hl)
+	pop hl
+	setrombank
+
+	; Object.oamDataAddress
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
+.else
 	; Object.oamDataAddress
 	ldi a,(hl)
 	ld h,(hl)
@@ -3244,6 +3277,7 @@ drawAllSpritesUnconditionally:
 	rlca
 	add BASE_OAM_DATA_BANK
 	setrombank
+.endif
 	set 6,h
 	res 7,h
 
@@ -3328,6 +3362,20 @@ drawAllSpritesUnconditionally:
 	dec c
 	jr nz,@nextSprite
 	jr @doneDrawing
+
+.if defined(SUPERFREE_OAM_DATA_BANKS)
+objectOamBankTable:
+	.db AGES_ITEM_OAM_DATA_BANK
+	.db AGES_INTERAC_OAM_DATA_BANK
+	.db AGES_ENEMY_OAM_DATA_BANK
+	.db AGES_PART_OAM_DATA_BANK
+	.db AGES_SPEC_OBJ_OAM_DATA_BANK
+	.db SEASONS_ITEM_OAM_DATA_BANK
+	.db SEASONS_INTERAC_OAM_DATA_BANK
+	.db SEASONS_ENEMY_OAM_DATA_BANK
+	.db SEASONS_PART_OAM_DATA_BANK
+	.db SEASONS_SPEC_OBJ_OAM_DATA_BANK
+.endif
 
 .if !defined(ROM_COMBO)
 	.include "code/terrainEffects.s"
@@ -11286,7 +11334,11 @@ checkUseItems:
 ++
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	callfrombank0 itemParents.functionCaller
+.else
 	callfrombank0 bank6.functionCaller
+.endif
 	pop af
 	setrombank
 	ret
@@ -13014,11 +13066,19 @@ updateAllObjects:
 	rrca
 	call c,bank5.func_410d
 
+.if defined(ROM_COMBO)
+	ld a,:itemParents.updateGrabbedObjectPosition
+.else
 	ld a,:bank6.updateGrabbedObjectPosition
+.endif
 	setrombank
 	ld a,(wLinkGrabState)
 	rlca
+.if defined(ROM_COMBO)
+	call c,itemParents.updateGrabbedObjectPosition
+.else
 	call c,bank6.updateGrabbedObjectPosition
+.endif
 
 	call loadLinkAndCompanionAnimationFrame
 
@@ -13112,11 +13172,19 @@ seasonsFunc_34a0:
 	callfrombank0 bank0f.seasonsFunc_0f_7159
 .endif
 
+.if defined(ROM_COMBO)
+	ld a,:itemParents.updateGrabbedObjectPosition
+.else
 	ld a,:bank6.updateGrabbedObjectPosition
+.endif
 	rst_setrombank
 	ld a,(wLinkGrabState)
 	rlca
+.if defined(ROM_COMBO)
+	call c,itemParents.updateGrabbedObjectPosition
+.else
 	call c,bank6.updateGrabbedObjectPosition
+.endif
 
 	call loadLinkAndCompanionAnimationFrame
 	callfrombank0 itemCode.updateItemsPost
@@ -14636,15 +14704,42 @@ updateInteraction:
 .endif
 
 @cnt:
+.if defined(ROM_COMBO)	; NOTE: TEMPORARY UNTIL INTERACTIONS ARE MERGED IN
+	ld a,(de)
+	cp $75
+	jr nz,+
+		ld a,$0a
+		ld hl,agesInteractionsBank0a.interactionCode75
+		jr ++
+	+
+	cp $d2
+	jr nz,+
+		ld a,$0b
+		ld hl,commonInteractions6.interactionCoded2
+		jr ++
+	+
+	cp $d3
+	jr nz,+
+		ld a,$0b
+		ld hl,commonInteractions6.interactionCoded3
+		jr ++
+	+
+	cp $4a
+	ret nz
+
+	ld a,$09
+	ld hl,commonInteractions2.interactionCode4a
+
+++
+	rst_setrombank
+	jp hl
+.endif					; NOTE: TEMPORARY UNTIL INTERACTIONS ARE MERGED IN
 	ld a,b
 	rst_setrombank
 	ld a,(de)
 	ld hl,interactionCodeTable
 	rst_addDoubleIndex
 	rst_derefHl
-.if defined(ROM_COMBO)	; NOTE: TEMPORARY UNTIL INTERACTIONS ARE MERGED IN
-	ret
-.endif
 	jp hl
 
 .if defined(ROM_COMBO)	; NOTE: TEMPORARY UNTIL INTERACTIONS ARE MERGED IN

@@ -104,14 +104,6 @@ updateSpecialObjects:
 	ld l,Object.id
 	ld a,(hl)
 	rst_jumpTable
-.ifdef ROM_COMBO	; NOTE: temporary until special objects are merged in
-.repeat $14
-	.dw specialObjectCodeNil
-.endr
-
-specialObjectCodeNil:
-	ret
-.else
 	.dw specialObjectCode_link
 .if defined(ROM_AGES) && !defined(ROM_COMBO)
 	.dw specialObjectCode_transformedLink
@@ -136,7 +128,6 @@ specialObjectCodeNil:
 	.dw specialObjectCode_companionCutscene
 	.dw specialObjectCode_companionCutscene
 	.dw specialObjectCode_raft
-.endif	; NOTE: temporary until items are merged in
 
 
 ;;
@@ -405,8 +396,8 @@ func_410d:
 
 
 .include "object_code/common/specialObjects/commonCode.s"
-.ifndef ROM_COMBO	; NOTE: temporary until items are merged in
 .include "object_code/common/specialObjects/link.s"
+.ifndef ROM_COMBO	; NOTE: temporary until items are merged in
 .include "object_code/common/specialObjects/transformedLink.s"
 .include "object_code/common/specialObjects/linkRidingAnimal.s"
 

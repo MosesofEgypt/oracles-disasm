@@ -28,6 +28,9 @@
 	.ifndef INCREASE_GFX_SPACE
 		.define INCREASE_GFX_SPACE			1
 	.endif
+	.ifndef SUPERFREE_OAM_DATA_BANKS
+		.define SUPERFREE_OAM_DATA_BANKS	1
+	.endif
 .endif
 
 .ifdef ENABLE_REDUX_EXTRAS
