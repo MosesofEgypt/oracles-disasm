@@ -3,12 +3,8 @@
 checkEnemyAndPartCollisions:
 	; Calculate shield position
 	ld hl,@shieldCollisionData
-.ifdef ENABLE_PASSIVE_SHIELD
+.if defined(ENABLE_PASSIVE_SHIELD) || defined(ENABLE_NEW_GAME_PLUS)
 	ld a,(wUsingShield)
-.else
-.ifdef ENABLE_NEW_GAME_PLUS
-	ld a,(wUsingShield)
-.endif
 .endif
 
 .ifdef ENABLE_PASSIVE_SHIELD

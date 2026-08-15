@@ -76,6 +76,11 @@ initializeNgpFile:
 
 	ld hl,initialNgpFileVariables_spawn
 	call initializeFileVariables
+.if defined(ROM_COMBO)
+	ld hl,initialFileVariables_seasons
+	call hIsSeasons
+	call c,initializeFileVariables
+.endif
 
 	pop af
 	or a
@@ -132,6 +137,11 @@ initializeNgpFile:
 initializeFile:
 	ld hl,initialFileVariables
 	call initializeFileVariables
+.if defined(ROM_COMBO)
+	ld hl,initialFileVariables_seasons
+	call hIsSeasons
+	call c,initializeFileVariables
+.endif
 
 	; Load in a: wFileIsHeroGame (bit 1), wFileIsLinkedGame (bit 0)
 	ld hl,wFileIsHeroGame
@@ -544,7 +554,7 @@ initialFileVariables:
 .ifdef ENABLE_NEW_GAME_PLUS
 initialNgpFileVariables_spawn:
 .endif
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	; Initial spawn location
 	.db <wDeathRespawnBuffer.group,		$00
 	.db <wDeathRespawnBuffer.room,		$8a
@@ -558,7 +568,13 @@ initialNgpFileVariables_spawn:
 	.db <wPirateShipY,			$48
 	.db <wPirateShipX,			$48
 	.db <wPirateShipAngle,			$02
-.else ;ROM_SEASONS
+.if defined(ROM_COMBO)
+	.db $00
+
+initialFileVariables_seasons:
+.endif
+.endif
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	; Initial spawn location
 	.db <wDeathRespawnBuffer.group,		$00
 	.db <wDeathRespawnBuffer.room,		$a7
@@ -591,7 +607,7 @@ initialFileVariables_linkedGame:
 	.db <wShieldLevel,			$01
 	.db <wInventoryStorage,			ITEM_SWORD
 	.db <wObtainedTreasureFlags,		(1<<TREASURE_PUNCH) | (1<<TREASURE_SWORD)
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.db <wPirateShipY,			$58
 	.db <wPirateShipX,			$78
 .endif

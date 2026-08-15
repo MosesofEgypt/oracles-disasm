@@ -812,12 +812,19 @@ warpTransitionB:
 	; HACK-BASE: Link in Seasons normally starts unconscious. Disable that when
 	; HACK_DISABLE_INTRO_LOCKS is set.
 
-.if defined(ROM_AGES) || defined(HACK_DISABLE_INTRO_LOCKS)
+.if defined(ROM_AGES) || defined(ROM_COMBO) || defined(HACK_DISABLE_INTRO_LOCKS)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	call itemIncSubstate
 	call animateLinkStanding
 	ld a,SND_SPLASH
 	jp playSound
-.else
+	+
+.endif
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	xor a
 	ld (wDisabledObjects),a
 	ld a,SPECIALOBJECT_LINK_CUTSCENE
@@ -5060,7 +5067,7 @@ specialObjectUpdateAdjacentWallsBitset:
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
 	call hIsSeasons
-	jr nc,+++
+	jr c,+++
 .endif
 	ld b,a
 	ld hl,@data-1
@@ -5406,6 +5413,10 @@ checkLinkPushingAgainstBed:
 ;;
 ; Pushing against tree stump
 checkLinkPushingAgainstTreeStump:
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	ret nc
+.endif
 	ld a,(wActiveTileType)
 	cp TILETYPE_STUMP
 	jp z,seasonsFunc_05_5ed3

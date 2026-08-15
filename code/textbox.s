@@ -828,7 +828,7 @@ initTextboxStuff:
 .ifdef ROM_COMBO
 	call hIsSeasons
 	ld hl,textTableTable_seasons
-	jr c,++
+	jr c,+
 		ld hl,textTableTable_ages
 	+
 .else
@@ -1031,7 +1031,7 @@ getTextAddress:
 .ifdef ROM_COMBO
 	call hIsSeasons
 	ld hl,textOffset1Table_seasons
-	jr c,++
+	jr c,+
 		ld hl,textOffset1Table_ages
 	+
 .else
@@ -1066,7 +1066,7 @@ getTextAddress:
 	ld hl,textOffset2Table_seasons
 	jr c,++
 		ld hl,textOffset2Table_ages
-	+
+	++
 .else
 	ld hl,textOffset2Table
 .endif

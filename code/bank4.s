@@ -101,14 +101,14 @@ applyWarpDest_b04:
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
 	call hIsSeasons
-	jr nc,label_04_033
+	jr nc,label_04_032
 .endif
 	and $0f
 	cp $02
 	jr nz,label_04_032
 
 .if defined(ROM_COMBO)
-	ld hl,warpDestTable_ages
+	ld hl,warpDestTable_seasons
 .else
 	ld hl,warpDestTable
 .endif

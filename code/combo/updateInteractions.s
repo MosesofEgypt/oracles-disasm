@@ -25,9 +25,7 @@ updateInteractions:
 	ld a,(de)
 	or a
 
-	push hl
 	call nz,updateInteraction
-	pop hl
 	ldh a,(<hActiveObject)
 	inc a
 	cp LAST_INTERACTION_INDEX+1
@@ -57,9 +55,7 @@ _updateInteractionsIfStateIsZero:
 	or a
 	jr nz,@next
 +
-	push hl
 	call updateInteraction
-	pop hl
 @next:
 	ldh a,(<hActiveObject)
 	inc a
@@ -79,6 +75,7 @@ getInteractionCodeTable:
 ;
 ; @param	d	Interaction to update
 updateInteraction:
+	push hl
 	ld e,Interaction.id
 	ld a,(de)
 	ld c,a
@@ -91,6 +88,8 @@ updateInteraction:
 	ldi a,(hl)
 	ld h,(hl)
 	ld l,a
-	jp interBankCall
+	call interBankCall
+	pop hl
+	ret
 
 .include "data/interactionCodeTable.s"

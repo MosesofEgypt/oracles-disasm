@@ -970,7 +970,7 @@ wKilledGoldenEnemies: ; $c6cf/$c6c9
 ; Bit 3: killed golden lynel
 	db
 
-wGlobalFlags: ; $c6d0/$c6ca
+wGlobalFlags: ; $c6d0/$c6ca/$c6c6
 	dsb NUM_GLOBALFLAGS/8
 
 wChildStage: ; $c6e0/$c6da
@@ -1845,7 +1845,7 @@ wStatusBarNeedsRefresh: ; $cbe9/$cbea
 ; The following "wBItem" and "wAItem" variables are loaded almost directly from the
 ; "treasureDisplayData" structure.
 
-wBItemTreasure: ; $cbea/$cbeb
+wBItemTreasure: ; $cbea/$cbeb/$cbeb
 ; wBItemTreasure: This is the treasure index used to determine the item's level / ammo
 ; count. Usually this is either $00 or equal to [wInventoryB], but not always - the seed
 ; satchel sets this to a different value for each seed type, for instance.
@@ -2149,7 +2149,7 @@ wDungeonData7: ; $cc44
 	db
 
 
-wLoadingRoomPack: ; $cc45/$cc61
+wLoadingRoomPack: ; $cc45/$cc61/$cc6a
 	db
 
 wActiveMusic2: ; $cc46/$cc62
@@ -2187,7 +2187,7 @@ wWarpTransition2: ; $cc4b/$cc67
 wWarpDestVariablesEnd: ; $cc4c/$cc68
 	.db
 
-wcc4c: ; $cc4c/$cc68
+wcc4c: ; $cc4c/$cc68/$cc71
 	db
 
 .ifndef ROM_COMBO
@@ -2271,7 +2271,7 @@ wLinkGrabState2: ; $cc5b/$cc76
 ; cc5c-cce9 treated as a block: cleared when loading a room through "whiteout" transition
 
 
-wLinkInAir: ; $cc5c/$cc77
+wLinkInAir: ; $cc5c/$cc77/$cc7f
 ; Bit 7: lock link's movement direction, prevent jumping. (Jumping down a cliff, using
 ;        gale seed, jumping into bed in Nayru's house, etc...)
 ; Bit 5: If set, Link's gravity is reduced
@@ -2325,7 +2325,7 @@ wBraceletGrabbingNothing: ; $cc64
 ; grabbing anything. Used for the rollers in Seasons.
 	db
 
-wLinkPushingDirection: ; $cc65
+wLinkPushingDirection: ; $cc65/..../$cc88
 ; This is equal to w1Link.direction when he's pushing something.
 ; When he's not pushing something, this equals $ff.
 	db
@@ -2405,7 +2405,7 @@ wGrabbableObjectBufferEnd: ; $cc84
 	.db
 .endif
 
-wcc84: ; $cc84/$cc9e
+wcc84: ; $cc84/$cc9e/$cc96
 	db
 wcc85: ; $cc85/$cc9f
 ; Relates to maple?
@@ -2434,7 +2434,7 @@ wTextInputResult: ; $cc89/$cca3
 
 ; Everything from $cc8a-$cce0 is cleared on screen transitions?
 
-wDisabledObjects: ; $cc8a/$cca4
+wDisabledObjects: ; $cc8a/$cca4/$cc9c
 ; Bit 0 disables link.
 ; Bit 1 disables interactions.
 ; Bit 2 disables enemies.
@@ -2610,7 +2610,7 @@ wTwinrovaTileReplacementMode: ; $cca9/$ccc4
 ; 3: Return to normal empty layout
 ; 4+: Use "seizure tiles" (when controls are reversed in ganon fight)
 	db
-wccaa: ; $ccaa/$ccc5
+wccaa: ; $ccaa/$ccc5/$ccbb
 	db
 
 
@@ -2664,7 +2664,7 @@ wAButtonSensitiveObjectList: ; $ccb3/$ccca
 wAButtonSensitiveObjectListEnd: ; $ccd3
 	.db
 
-wInShop: ; $ccd3/$ccea
+wInShop: ; $ccd3/$ccea/$ccdf
 ; When this is nonzero, it prevents Link from using items.
 ; Bit 1: Set while in a shop.
 ; Bit 2: Requests the tilemap for the items on display to be updated.
@@ -2751,7 +2751,7 @@ wChangedTileQueueHead: ; $ccdf
 wChangedTileQueueTail: ; $cce0
 	db
 
-wcce1: ; $cce1/$ccf7
+wcce1: ; $cce1/$ccf7/$ccec
 ; This is used as a marker; all memory from "wDisabledObjects" to here is cleared in one
 ; spot (not including wcce1).
 	db
@@ -2773,7 +2773,7 @@ wLinkPathIndex: ; $cce6
 
 wFollowingLinkObjectType: ; $cce7/$ccfd
 	db
-wFollowingLinkObject: ; $cce8/$ccfe
+wFollowingLinkObject: ; $cce8/$ccfe/$ccf3
 	db
 
 .ifndef ROM_COMBO

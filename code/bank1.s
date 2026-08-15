@@ -3716,7 +3716,12 @@ standardGameState:
 	; allow toggling this being seasons or not by pressing select
 	ld a,(wKeysJustPressed)
 	cp BTN_SELECT
-	call z,toggleIsSeasons
+	jr nz,+
+	ld a,(wOpenedMenuType)
+	or a
+	jr nz,+
+		call toggleIsSeasons
+	+
 .endif					; NOTE: TEMPORARY UNTIL COMBO TESTING IS DONE
 .ifdef ENABLE_MULTI_RING
 	call updateRingEquipStatuses
@@ -3753,17 +3758,12 @@ standardGameState:
 	ld a,(wCutsceneIndex)
 
 .if defined(ROM_COMBO)
-	cp $02
-	jr nz,+
-		xor a
-		jr ++
-	+
 	cp $06
 	jr nc,+
 		rst_jumpTable
 		.dw cutscene00
 		.dw cutscene01
-		.dw $0000
+		.dw cutscene02
 		.dw cutscene03
 		.dw cutscene04
 		.dw cutscene05
@@ -3781,7 +3781,7 @@ standardGameState:
 			.dw cutscene19
 		++
 			sub $06
-		jr ++
+			jr ++
 	+
 		sub $0b
 	++
@@ -3792,11 +3792,11 @@ standardGameState:
 		ld e,:bank3Cutscenes_ages.cutscene06
 		ld hl,@cutsceneHandlers_ages
 	+
+	rst_addDoubleIndex
 	rst_derefHl
 	jp interBankCall
 
 @cutsceneHandlers_ages:
-	.dw bank3Cutscenes_ages.cutscene02
 	.dw bank3Cutscenes_ages.cutscene06
 	.dw bank3Cutscenes_ages.cutscene07
 	.dw bank3Cutscenes_ages.cutscene08
@@ -3823,7 +3823,6 @@ standardGameState:
 	.dw bank3Cutscenes_ages.cutscene21
 
 @cutsceneHandlers_seasons:
-	.dw bank3Cutscenes_seasons.cutscene02
 	.dw bank3Cutscenes_seasons.cutscene06
 	.dw bank3Cutscenes_seasons.cutscene07
 	.dw bank3Cutscenes_seasons.cutscene08
@@ -3839,6 +3838,14 @@ standardGameState:
 	.dw bank3Cutscenes_seasons.cutscene12
 	.dw bank3Cutscenes_seasons.cutscene13
 	.dw bank3Cutscenes_seasons.cutscene14
+
+cutscene02:
+	call hIsSeasons
+	jr c,+
+		jpab bank3Cutscenes_ages.cutscene02
+	+
+	jpab bank3Cutscenes_seasons.cutscene02
+
 .else
 	rst_jumpTable
 	.dw cutscene00

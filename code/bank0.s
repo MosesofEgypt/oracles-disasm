@@ -1452,14 +1452,14 @@ loadUniqueGfxHeaderEntry:
 	ld c,a
 	ldh (<hFF8C),a
 	ldi a,(hl)
-	ld b,a
-	ldi a,(hl)
-	ld c,a
-	ldi a,(hl)
 .ifdef INCREASE_GFX_SPACE
 	ldh (<hGfxCompressionMode),a
 	ldi a,(hl)
 .endif
+	ld b,a
+	ldi a,(hl)
+	ld c,a
+	ldi a,(hl)
 	ld d,a
 	ldi a,(hl)
 	ld e,a
@@ -6433,13 +6433,13 @@ _checkCollisionWithHAndD:
 checkLinkID0AndControlNormal:
 	ld a,(w1Link.id)
 	or a
-.if defined(ROM_AGES) && !defined(ROM_COMBO)
-	jr z,+++
-.else
 .if defined(ROM_COMBO)
 	call hIsSeasons
 	jr nc,+++
-.endif
+	jr z,checkLinkVulnerableAndIDZero
+.elif defined(ROM_AGES)
+	jr z,+++
+.else
 	jr z,checkLinkVulnerableAndIDZero
 .endif
 	xor a
@@ -6482,10 +6482,15 @@ checkLinkCollisionsEnabled:
 	rlca
 	jr nc,@noCarry
 
-.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call hIsSeasons
+	jr c,+
+.endif
 	ld a,(wLinkDeathTrigger)
 	or a
 	jr nz,@noCarry
+	+
 .endif
 
 	ld a,(wDisableLinkCollisionsAndMenu)
