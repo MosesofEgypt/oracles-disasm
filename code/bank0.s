@@ -15125,11 +15125,10 @@ interactionFunc_3e6d:
 	push af
 .if defined(ROM_COMBO)
 	call hIsSeasons
-	ld a,:bank14.data_4556_seasons
-	ld hl,bank14.data_4556_seasons
+	ld a,:data_4556_seasons
+	ld hl,data_4556_seasons
 	jr c,+
-		ld a,:bank14.data_4556_ages
-		ld hl,bank14.data_4556_ages
+		ld hl,data_4556_ages
 	+
 	rst_setrombank
 	ld a,e

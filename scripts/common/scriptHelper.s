@@ -263,7 +263,7 @@ shopkeeper_take10Rupees:
 .ends
 
 
-.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
 	.include "code/loadTreasureData.s"
 .endif
 

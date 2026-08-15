@@ -870,7 +870,9 @@ m_section_superfree Terrain_Effects NAMESPACE terrainEffects
 .BANK $16 SLOT 1
 .ORG 0
 
+m_section_free serialCode NAMESPACE serialCode
 	.include "code/serialFunctions.s"
+.ends
 	.include "code/loadTreasureData.s"
 
 	 m_section_free Bank16 NAMESPACE bank16

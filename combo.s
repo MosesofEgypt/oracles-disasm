@@ -34,14 +34,6 @@ specialObjectCode_maple:
 specialObjectCode_raft:
 	ret
 
-; NOTE: TEMPORARY UNTIL MANY BANKS CAN BE MERGED
-
-.BANK $01 SLOT 1
-.ORG 0
-
-	.include "code/bank1.s"
-
-; NOTE: TEMPORARY UNTIL MANY BANKS CAN BE MERGED
 m_section_free Bank_6_test NAMESPACE bank6
 specialObjectLoadAnimationFrameToBuffer:
 specialObjectCode_companionCutscene:
@@ -116,15 +108,22 @@ makuTree_setMapTextBasedOnStage:
 .ends	; NOTE: TEMPORARY UNTIL MANY BANKS CAN BE MERGED
 
 
+.BANK $01 SLOT 1
+.ORG 0
+
+	.include "code/bank1.s"
+
 
 .BANK $02 SLOT 1
 .ORG 0
 	.include "code/bank2.s"
 	.include "code/roomInitialization.s"
 
+
 .BANK $03 SLOT 1
 .ORG 0
 	.include "code/bank3.s"
+
 
 .BANK $04 SLOT 1
 .ORG 0
@@ -155,24 +154,8 @@ m_section_free Bank_6 NAMESPACE bank6
 .ends
 
 
-.BANK $0c SLOT 1
-.ORG 0
-
-m_section_free Scripts namespace mainScripts
-	.include "code/scripting.s"
-;	.include {"{BUILD_DIR}/scripts.s"}
-
-; NOTE: temporary code until scripts can be included
-	stubScript:
-	genericNpcScript:
-		scriptend
-; NOTE: temporary code until scripts can be included
-.ends
-
-
 .BANK $14 SLOT 1
 .ORG 0
-	.include {"{GAME_DATA_DIR}/data_4556.s"}
 
 	 m_section_free Scripts2 NAMESPACE scripts2
 ;		.include "scripts/seasons/scripts2.s"
@@ -182,14 +165,10 @@ m_section_free Scripts namespace mainScripts
 .BANK $15 SLOT 1
 .ORG 0
 
-	.include "code/serialFunctions.s"
-
 	.include "code/staticObjects.s"
 	.include {"{GAME_DATA_DIR}/staticDungeonObjects.s"}
 
 ;	.include "scripts/common/scriptHelper.s"
-	.include {"{GAME_DATA_DIR}/chestData.s"}
-	.include {"{GAME_DATA_DIR}/treasureObjectData.s"}
 
 	 m_section_free Bank_15_3 NAMESPACE scriptHelp
 ;		.include "scripts/ages/scriptHelper.s"
@@ -215,13 +194,16 @@ m_section_free Gfx_1b ALIGN $20
 
 .BANK $1c SLOT 1
 .ORG 0
+
+m_section_free Gfx_1c ALIGN $20
 	.include "data/gfxDataBank1c.s"
+.ends
 
-	.include {"{GAME_DATA_DIR}/smallRoomLayoutTables.s"}
-	.include {"{GAME_DATA_DIR}/largeRoomLayoutTables.s"}
 
-	.include {"{BUILD_DIR}/ages_textData.s"}
-	.include {"{BUILD_DIR}/seasons_textData.s"}
+; NOTE: These includes define their own .bank and .orga
+.include {"{BUILD_DIR}/ages_textData.s"}
+.include {"{BUILD_DIR}/seasons_textData.s"}
+
 
 .BANK $2b SLOT 1
 .ORG 0
@@ -231,7 +213,7 @@ m_section_free Gfx_1b ALIGN $20
 
 
 .BANK $4a SLOT 1
-.ORGA $4000
+.ORG 0
 	.REDEFINE DATA_ADDR $4000
 	.REDEFINE DATA_BANK $4a
 	.include {"{GAME_DATA_DIR}/gfxDataMain.s"}
@@ -652,7 +634,7 @@ m_section_superfree Seasons_Interactions_Bank0f NAMESPACE seasonsInteractionsBan
 ;	.include "object_code/seasons/interactions/d7.s"
 .ends
 
-m_section_free Seasons_Interactions_Bank15 NAMESPACE seasonsInteractionsBank15
+m_section_superfree Seasons_Interactions_Bank15 NAMESPACE seasonsInteractionsBank15
 ;	.include "object_code/seasons/interactions/linkedFountainLady.s"
 ;	.include "object_code/seasons/interactions/linkedSecredGivers.s"
 ;	.include "object_code/seasons/interactions/miscPuzzles.s"
@@ -949,7 +931,7 @@ m_section_superfree Part_Code_Bank_2 NAMESPACE partCode2
 ;	.include "object_code/ages/parts/triforceStone.s"
 .ends
 
-m_section_free Part_Code_Bank_3 NAMESPACE partCode3
+m_section_superfree Part_Code_Bank_3 NAMESPACE partCode3
 	.include "object_code/common/parts/commonCode.s"
 
 ;	.include "object_code/seasons/parts/holesFloortrap.s"
@@ -1222,6 +1204,30 @@ m_section_superfree Tileset_Loading NAMESPACE tilesets
 	.include "code/seasons/loadTilesetData.s"
 .ends
 
+m_section_superfree Treasure_Data NAMESPACE treasureData
+	.include "code/loadTreasureData.s"
+	.include {"{GAME_DATA_DIR}/treasureObjectData.s"}
+.ends
+
+m_section_superfree chestData NAMESPACE chestData
+	.include {"{GAME_DATA_DIR}/chestData.s"}
+.ends
+
+m_section_superfree serialCode NAMESPACE serialCode
+	.include "code/serialFunctions.s"
+.ends
+
+m_section_superfree Scripts namespace mainScripts
+	.include "code/scripting.s"
+;	.include {"{BUILD_DIR}/scripts.s"}
+
+; NOTE: TEMPORARY CODE UNTIL ALL SCRIPTS CAN BE INCLUDED
+	stubScript:
+	genericNpcScript:
+		scriptend
+; NOTE: TEMPORARY CODE UNTIL ALL SCRIPTS CAN BE INCLUDED
+.ends
+
 m_section_superfree Bank_5 NAMESPACE bank5
 	.include "code/specialObjects.s"
 
@@ -1242,6 +1248,15 @@ m_section_superfree Object_Pointers namespace objectData
 m_section_superfree Object_Pointers_seasons namespace objectData_seasons
 	.include "code/ages/objectData.s"
 	.include "objects/seasons/pointers.s"
+.ends
+
+m_section_superfree Room_Layout_Tables
+	.include {"{GAME_DATA_DIR}/smallRoomLayoutTables.s"}
+	.include {"{GAME_DATA_DIR}/largeRoomLayoutTables.s"}
+.ends
+
+m_section_superfree Data_4556
+	.include {"{GAME_DATA_DIR}/data_4556.s"}
 .ends
 
 m_section_superfree Item_Parents NAMESPACE itemParents

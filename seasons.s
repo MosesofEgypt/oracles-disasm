@@ -762,7 +762,9 @@ m_section_superfree Terrain_Effects NAMESPACE terrainEffects
 .BANK $15 SLOT 1
 .ORG 0
 
+m_section_free serialCode NAMESPACE serialCode
 	.include "code/serialFunctions.s"
+.ends
 
 	.include "scripts/common/scriptHelper.s"
 

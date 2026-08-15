@@ -1,6 +1,7 @@
 ; The only reason this gets its own file is because it moves around between Ages and Seasons.
-
+.ifndef ROM_COMBO
 m_section_free LoadTreasureData NAMESPACE treasureData
+.endif
 
 ;;
 ; @param	d	Interaction index (should be of type INTERAC_TREASURE)
@@ -66,4 +67,6 @@ interactionLoadTreasureData:
 	ld (de),a
 	ret
 
+.ifndef ROM_COMBO
 .ends
+.endif

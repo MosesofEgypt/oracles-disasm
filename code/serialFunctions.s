@@ -1,5 +1,3 @@
-m_section_free serialCode NAMESPACE serialCode
-
 ;;
 func_4000:
 	ldh a,(<hSerialInterruptBehaviour)
@@ -957,5 +955,3 @@ ringFortuneTable:
 @rings2:
 	.db CURSED_RING,    GREEN_LUCK_RING,  BLUE_LUCK_RING, GREEN_HOLY_RING
 	.db BLUE_HOLY_RING, RED_HOLY_RING,    CURSED_RING,    WHISP_RING
-
-.ends

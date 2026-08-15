@@ -1,5 +1,3 @@
-m_section_free chestData NAMESPACE chestData
-
 ; m_ChestData macro takes 3 parameters:
 ;   1: Y/X position of chest (byte); an opened chest tile will be placed here when the room is
 ;      loaded, if ROOMFLAG_ITEM has been set in that room.
@@ -301,4 +299,3 @@ chestGroup5Data_seasons:
 
 chestGroupData_null:
 	.db $ff
-.ends
