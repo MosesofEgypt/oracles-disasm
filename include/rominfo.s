@@ -16,20 +16,23 @@
 ; Seasons takes more space due to the extra deduplication from each of the season tilesets.
 .if defined(ROM_COMBO)
 
-.rombanks 256
-.romsize $07
+	.define ROM_BANKS 256
+	.define ROM_SIZE  08
 
 .elif defined(ROM_AGES)
 
-.rombanks 128
-.romsize $06
+	.define ROM_BANKS 128
+	.define ROM_SIZE  07
 
 .else ; ROM_SEASONS
 
-.rombanks 128
-.romsize $06
+	.define ROM_BANKS 128
+	.define ROM_SIZE  07
 
 .endif
+
+.rombanks ROM_BANKS
+.romsize ROM_SIZE
 
 .nintendologo
 .romgbconly

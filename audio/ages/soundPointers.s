@@ -1,6 +1,10 @@
 ; If adding/removing any music, remember to update soundChannelPointers.s, soundChannelData.s, and
 ; constants/common/music.s.
+.ifdef ROM_COMBO
+soundPointers_ages:
+.else
 soundPointers:
+.endif
 	/* 0x00 */ m_soundPointer musNone
 	/* 0x01 */ m_soundPointer musTitlescreen
 	/* 0x02 */ m_soundPointer musMinigame
@@ -31,7 +35,11 @@ soundPointers:
 	/* 0x1b */ m_soundPointer musFinalDungeon
 	/* 0x1c */ m_soundPointer musOnoxCastle
 	/* 0x1d */ m_soundPointer musRoomOfRites
+.ifdef ROM_COMBO
+	/* 0x1e */ m_soundPointer musAgesMakuTree
+.else
 	/* 0x1e */ m_soundPointer musMakuTree
+.endif
 	/* 0x1f */ m_soundPointer musSadness
 	/* 0x20 */ m_soundPointer musTriumphant
 	/* 0x21 */ m_soundPointer musDisaster
@@ -213,7 +221,11 @@ soundPointers:
 	/* 0xd0 */ m_soundPointer sndPirateBell
 	/* 0xd1 */ m_soundPointer sndTimewarpInitiated
 	/* 0xd2 */ m_soundPointer sndLightning
+.ifdef ROM_COMBO
+	/* 0xd3 */ m_soundPointer sndAgesWind
+.else
 	/* 0xd3 */ m_soundPointer sndWind
+.endif
 	/* 0xd4 */ m_soundPointer sndTimewarpCompleted
 	/* 0xd5 */ m_soundPointer sndd5
 	/* 0xd6 */ m_soundPointer sndd6
@@ -227,6 +239,7 @@ soundPointers:
 	/* 0xde */ m_soundPointer sndde
 
 
+.ifndef ROM_COMBO
 ; This should really be located in "soundChannelPointers.s" but it's positioned differently for
 ; some reason.
 sndde:
@@ -251,4 +264,5 @@ sndde:
 	.db $07
 	.dw $59ff
 	.db $ff
+.endif
 .endif

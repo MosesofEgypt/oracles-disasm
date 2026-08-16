@@ -94,8 +94,6 @@ sndbdChannel2:
 .ends
 
 
-.BANK $73 SLOT 1
-.ORG 0
 .ifdef ROM_COMBO
 m_section_superfree AudioData8
 .else
@@ -227,8 +225,6 @@ sndcfChannel2:
 .ends
 
 
-.BANK $74 SLOT 1
-.ORG 0
 .ifdef ROM_COMBO
 m_section_superfree AudioData9
 .else
@@ -288,8 +284,6 @@ sndcaChannel7:
 .ends
 
 
-.BANK $75 SLOT 1
-.ORG 0
 .ifdef ROM_COMBO
 m_section_superfree AudioData10
 .else
@@ -346,8 +340,6 @@ bank3cChannelFallback:
 .ends
 
 
-.BANK $76 SLOT 1
-.ORG 0
 .ifdef ROM_COMBO
 m_section_superfree AudioData11
 .else
@@ -406,8 +398,6 @@ snd94Channel2:
 .ends
 
 
-.BANK $77 SLOT 1
-.ORG 0
 .ifdef ROM_COMBO
 m_section_superfree AudioData12
 .else

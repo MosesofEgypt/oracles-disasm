@@ -73,8 +73,6 @@ bank39ChannelFallback:
 .ends
 
 
-.BANK $73 SLOT 1
-.ORG 0
 
 m_section_superfree AudioData2
 
@@ -202,8 +200,6 @@ sndd5Channel2:
 .ends
 
 
-.BANK $74 SLOT 1
-.ORG 0
 
 m_section_superfree AudioData3
 
@@ -259,8 +255,6 @@ bank3bChannelFallback:
 .ends
 
 
-.BANK $75 SLOT 1
-.ORG 0
 
 m_section_superfree AudioData4
 
@@ -297,8 +291,6 @@ bank3cChannelFallback:
 .ends
 
 
-.BANK $76 SLOT 1
-.ORG 0
 
 m_section_superfree AudioData5
 
@@ -342,8 +334,6 @@ mus24Channel4:
 .ends
 
 
-.BANK $77 SLOT 1
-.ORG 0
 
 m_section_superfree AudioData6
 

@@ -5,21 +5,10 @@
 
 ; HACK-BASE: Bank of sound engine (and of data in "audio/{game}/soundChannelData.s") changed to
 ; allocate more space to the compressed data section (text, graphics, room layouts).
-.ifdef ROM_COMBO
-.BANK $40 SLOT 1
-.else
-.BANK $39 SLOT 1
-.endif
+.BANK 1 SLOT 1
 .ORG 0
 
-.ifdef ROM_COMBO
-; NOTE: doing this temporarily while combining games, as the audio data
-;       is getting stuffed into bank0, which is fucking up calculations
-;       for all m_soundPointer instances(they're going -135)
-m_section_free AudioCode NAMESPACE audio
-.else
 m_section_superfree AudioCode NAMESPACE audio
-.endif
 
 ;;
 b39_initSound:
@@ -49,18 +38,13 @@ func_39_400c:
 b39_updateMusicVolume:
 	jp updateMusicVolume
 
-
-; This is pointless?
-.dw musNone
-
-
 ;;
 initSound:
-	ldh (<hSoundDataBaseBank),a
+	ldh (<hSoundDataBank),a
 	call stopSound
 	ld a,$03
 	ld (wMusicVolume),a
-	ld a,$00
+	xor a
 	ld (wSoundFadeDirection),a
 	ld (wSoundFadeCounter),a
 	ld (wSoundDisabled),a
@@ -72,7 +56,7 @@ initSound:
 	ld ($ff00+R_NR50),a
 	ld a,$ff
 	ld ($ff00+R_NR51),a
-	ld c,@readFunctionEnd-@readFunction+2
+	ld c,@readFunctionEnd-@readFunction
 	ld hl,@readFunction
 	ld de,wMusicReadFunction
 -
@@ -84,17 +68,15 @@ initSound:
 	ret
 
 ; This function is copied to wMusicReadFunction and executed there.
+; NOTE: THIS CODE SHOULD ONLY EVER BE CALLED BY
+;       CODE IN THIS BANK, OR CODE IN BANK 0
 @readFunction:
-	ldh (<hSoundDataBaseBank2),a
-	ld ($2000),a
+	ld ($2222),a
 	ldi a,(hl)
 	ld c,a
-	ldh a,(<hSoundDataBaseBank)
-	ldh (<hSoundDataBaseBank2),a
-	ld ($2000),a
+	ld a,:initSound
+	ld ($2222),a
 	ld a,c
-	ret
-	ret
 	ret
 @readFunctionEnd:
 
@@ -111,14 +93,11 @@ updateMusicVolume:
 
 	pop af
 	ld (wMusicVolume),a
-	cp $00
-	jr nz,+
-
+	or a
 	ld a,$01
-	jr ++
+	jr z,+
+	xor a
 +
-	ld a,$00
-++
 	ld (wc023),a
 	pop hl
 	pop de
@@ -128,36 +107,17 @@ updateMusicVolume:
 ;;
 @updateSquareChannelVolumes:
 	; Update square 1's volume
-	ld a,$00
-	ld (wSoundChannel),a
-	ld hl,wChannelsEnabled
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
-	cp $00
-	jr z,+
-	call updateChannelStuff
-+
+	xor a
+	call _updateChannel
+
 	; Update square 2's volume
 	ld a,$01
-	ld (wSoundChannel),a
-	ld hl,wChannelsEnabled
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
-	cp $00
-	jr z,+
-	call updateChannelStuff
-+
+	call _updateChannel
 	ret
 
 ;;
 stopSound:
-	ld a,$00
+	xor a
 -
 	ld (wSoundChannel),a
 	call channelCmdff
@@ -169,7 +129,7 @@ stopSound:
 
 ;;
 func_39_40b9:
-	ld a,$00
+	xor a
 -
 	ld (wSoundChannel),a
 	call updateChannelStuff
@@ -185,56 +145,36 @@ func_39_40b9:
 stopSfx:
 	; Square 1
 	ld a,$02
-	ld (wSoundChannel),a
-	ld hl,wChannelsEnabled
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
-	cp $00
-	jr z,+
-	call channelCmdff
-+
+	call _disableChannel
+
 	; Square 2
 	ld a,$03
-	ld (wSoundChannel),a
-	ld hl,wChannelsEnabled
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
-	cp $00
-	jr z,+
-	call channelCmdff
-+
+	call _disableChannel
+
 	; Wave
 	ld a,$05
-	ld (wSoundChannel),a
-	ld hl,wChannelsEnabled
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
-	cp $00
-	jr z,+
-	call channelCmdff
-+
+	call _disableChannel
+
 	; Noise
 	ld a,$07
+	call _disableChannel
+	ret
+
+_disableChannel:
+	call _channelHelper
+	ret z
+	jp channelCmdff
+
+_updateChannel:
+	call _channelHelper
+	ret z
+	jp updateChannelStuff
+
+_channelHelper:
 	ld (wSoundChannel),a
 	ld hl,wChannelsEnabled
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
-	cp $00
-	jr z,+
-	call channelCmdff
-+
+	call readChannelDataFromHl
+	or a
 	ret
 
 ;;
@@ -243,14 +183,13 @@ updateSound:
 	push de
 	push hl
 	ld a,(wSoundDisabled)
-	cp $00
-	jr z,+
-	jp @ret
-+
+	or a
+	jr nz,@ret
+
 	ld a,(wSoundVolume)
 	ld ($ff00+R_NR50),a
 	ld a,(wSoundFadeDirection)
-	cp $00
+	or a
 	jr z,@updateChannels
 
 	ld a,(wSoundFadeSpeed)
@@ -268,7 +207,7 @@ updateSound:
 
 @decVolume:
 	ld a,(wSoundVolume)
-	cp $00
+	or a
 	jr z,@stopSound
 
 	sub $11
@@ -288,30 +227,19 @@ updateSound:
 	call stopSound
 
 @clearFadeVariables:
-	ld a,$00
+	xor a
 	ld (wSoundFadeCounter),a
 	ld (wSoundFadeDirection),a
 
 @updateChannels:
-	ld a,$00
+	xor a
 @channelLoop:
-	ld (wSoundChannel),a
-	ld hl,wChannelsEnabled
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
-	cp $00
+	call _channelHelper
 	jr z,@nextChannel
 
 	ld hl,wChannelWaitCounters
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
-	cp $00
+	call readChannelDataFromHl
+	or a
 	jr nz,+
 
 	call doNextChannelCommand
@@ -340,68 +268,42 @@ updateSound:
 ;;
 func_39_41c2:
 	ld hl,wChannelWaitCounters
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
+	call readChannelDataFromHl
 	dec a
 	ld (hl),a
 	ld a,(wSoundChannel)
 	cp $06
-	jr nc,@ret
+	ret nc
 
 	ld hl,wc039
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
+	call readChannelDataFromHl
 	and $40
-	jr nz,@ret
+	ret nz
 	ld a,(wSoundChannel)
 	cp $05
-	jr nc,+
-	call func_39_464c
-+
-	call func_39_41f3
-@ret:
-	ret
+	call c,func_39_464c
 
 ;;
 func_39_41f3:
 	ld hl,wc03f
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
+	call readChannelDataFromHl
 	ld c,a
 	and $7f
 	jr z,label_39_024
 
 	ld a,c
 	and $80
-	jr nz,+
-
 	ld d,$00
-	jr ++
-+
+	jr z,++
 	ld d,$ff
 ++
 	push de
 	ld hl,wc03f
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
+	call readChannelDataFromHl
 	pop de
 	ld e,a
 	ld a,(wSoundChannel)
 	sla a
-	ld b,a
-	ld a,b
 	add <hSoundData3
 	ld c,a
 	ld a,($ff00+c)
@@ -413,104 +315,85 @@ func_39_41f3:
 	add hl,de
 	ld a,(wSoundChannel)
 	sla a
-	ld b,a
+	add <hSoundData3
+	ld c,a
 	ld a,l
-	ld c,<hSoundData3
-	call writeIndexedHighRamAndIncrement
+	ld ($ff00+c),a
+	inc c
 	ld a,h
 	ld ($ff00+c),a
 	inc c
 label_39_024:
 	ld hl,wc045
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
+	call readChannelDataFromHl
 	and $10
 	jr nz,label_39_026
 
 	ld hl,wc051
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
-	cp $00
+	call readChannelDataFromHl
+	or a
 	jr z,label_39_025
 
 	dec a
 	ld hl,wc051
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	ld hl,$0000
 	jp func_42d1
 
 label_39_025:
 	ld a,$10
+
 	ld hl,wc045
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
-	ld a,$00
+	call writeChannelDataToHl
+	xor a
+
 	ld hl,wc051
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
+
 label_39_026:
 	ld hl,wc051
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
+	call readChannelDataFromHl
 	cp $08
 	jr nz,label_39_027
+	xor a
 
-	ld a,$00
 	ld hl,wc051
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
-	ld a,$00
+	call writeChannelDataToHl
+	xor a
+
 label_39_027:
 	ld hl,data_4b40
-	call readWordFromTable
+	rst_addDoubleIndex
+	rst_derefHl
+
+	ld d,$00
+
 	push hl
 	ld hl,wc051
 	ld a,(wSoundChannel)
 	ld e,a
-	ld d,$00
 	add hl,de
-	ld a,(hl)
-	inc a
-	ld (hl),a
+	inc (hl)
+
 	ld hl,wChannelVibratos
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
+	call readChannelDataFromHl
 	and $0f
 	pop hl
-	call func_39_4a10
+
+	or a
+
+	jr nz,+
+		ld h,a
+		ld l,a
+		jr func_42d1
+	+
+	ld e,l
+	ld d,h
+	-
+		dec a
+		jr z,func_42d1
+		add hl,de
+		jr -
 
 ;;
 func_42d1:
@@ -535,8 +418,6 @@ func_42d1:
 ;;
 func_42ea:
 	ld a,(wSoundChannel)
-	scf
-	ccf
 	cp $04
 	jr nc,label_39_029
 
@@ -550,7 +431,7 @@ func_42ea:
 	ld d,$00
 	add hl,de
 	ld a,(hl)
-	cp $00
+	or a
 	jr z,label_39_028
 	ret
 
@@ -562,38 +443,39 @@ label_39_028:
 	sla a
 	add b
 	ld b,a
-	push bc
+
+	add R_NR13
+	ld c,a
 	ld a,(wSoundFrequencyL)
-	ld c,R_NR13
-	call writeIndexedHighRamAndIncrement
+	ld ($ff00+c),a
+	inc c
+
 	ld a,(wSoundCmdEnvelope)
 	ld e,a
 	ld a,(wSoundFrequencyH)
 	or e
 	ld ($ff00+c),a
 	inc c
-	pop bc
-	push bc
+
 	ld hl,wChannelDutyCycles
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
-	pop bc
-	ld c,$11
-	call writeIndexedHighRamAndIncrement
+	call readChannelDataFromHl
+	push af
+	ld a,$11
+	add b
+	ld c,a
+	pop af
+	ld ($ff00+c),a
 	ret
 
 label_39_029:
 	call func_39_434b
-	cp $00
+	or a
 	jr nz,label_39_030
 	ld a,l
 	ld ($ff00+R_NR33),a
 	ld a,h
 	ld ($ff00+R_NR34),a
-	ld a,$00
+	xor a
 	ld ($ff00+R_NR31),a
 label_39_030:
 	ret
@@ -606,14 +488,14 @@ func_39_434b:
 	jr z,@zero
 
 	ld a,(wChannelsEnabled+5)
-	cp $00
+	or a
 	jr nz,@one
 
 	ld a,(wc023)
 	cp $02
 	jr z,@one
 @zero:
-	ld a,$00
+	xor a
 	ret
 @one:
 	ld a,$01
@@ -622,87 +504,76 @@ func_39_434b:
 ;;
 getNextChannelByte:
 	push bc
-	push de
 	push hl
 	ld a,(wSoundChannel)
-	sla a
-	add <hSoundChannelAddresses
-	ld c,a
-	ld a,($ff00+c)
-	inc c
-	ld l,a
-	ld a,($ff00+c)
-	ld h,a
-	ld a,(wSoundChannel)
+	ld b,a
+
+	add a
+	ld hl,hSoundChannelAddresses
+	rst_addAToHl
+	rst_derefHl
+
+	ld a,b
 	add <hSoundChannelBanks
 	ld c,a
 	ld a,($ff00+c)
-	inc c
+
 	call wMusicReadFunction
 	push af
-	ld a,(wSoundChannel)
+
+	; move to the next byte in the data
+	ld a,b
 	sla a
-	ld b,a
+	add <hSoundChannelAddresses
+	ld c,a
 	ld a,l
-	ld c,<hSoundChannelAddresses
-	call writeIndexedHighRamAndIncrement
-	ld a,h
 	ld ($ff00+c),a
 	inc c
+	ld a,h
+	ld ($ff00+c),a
+
 	pop af
 	pop hl
-	pop de
 	pop bc
 	ret
 
 ;;
 doNextChannelCommand:
 	call getNextChannelByte
-	scf
-	ccf
 	cp $f0
 	jr nc,@cmdf0Toff
 
-	scf
-	ccf
 	cp $e0
-	jr c,+
-	jp cmde0Toef
-+
-	scf
-	ccf
+	jp nc,cmde0Toef
+
 	cp $d0
-	jr c,+
-	jp cmdVolume
-+
+	jp nc,cmdVolume
+
 	ld (wSoundCmd),a
 	jp standardSoundCmd
 
 @cmdf0Toff:
-	ld e,a
-	ld a,$ff
-	sub e
+	add $10
 	ld hl,@table
-	call readWordFromTable
-	jp hl
+	rst_jumpTable
 
 @table:
+	.dw channelCmdf0
+	.dw channelCmdf1
+	.dw channelCmdf2
+	.dw channelCmdf3
 	.dw channelCmdff
-	.dw channelCmdfe
-	.dw channelCmdfd
-	.dw channelCmdff
-	.dw channelCmdff
-	.dw channelCmdff
-	.dw channelCmdf9
-	.dw channelCmdf8
 	.dw channelCmdff
 	.dw channelCmdf6
 	.dw channelCmdff
+	.dw channelCmdf8
+	.dw channelCmdf9
 	.dw channelCmdff
-	.dw channelCmdf3
-	.dw channelCmdf2
-	.dw channelCmdf1
-	.dw channelCmdf0
+	.dw channelCmdff
+	.dw channelCmdff
+	.dw channelCmdfd
+	.dw channelCmdfe
+	.dw channelCmdff
 
 ;;
 channelCmdf1:
@@ -719,58 +590,34 @@ channelCmdf3:
 ;
 channelCmdf9:
 	ld a,(wSoundChannel)
-	scf
-	ccf
 	cp $06
 	jr nc,++
 
 	call getNextChannelByte
 	ld hl,wChannelVibratos
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	jp doNextChannelCommand
 
 ;;
 channelCmdf8:
 	ld a,(wSoundChannel)
-	scf
-	ccf
 	cp $06
 	jr nc,++
 
 	call getNextChannelByte
 	ld hl,wc03f
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	jp doNextChannelCommand
 
 ;;
 channelCmdfd:
 	ld a,(wSoundChannel)
-	scf
-	ccf
 	cp $06
 	jr nc,++
 
 	call getNextChannelByte
 	ld hl,wChannelPitchShift
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	jp doNextChannelCommand
 ++
 	call getNextChannelByte
@@ -780,23 +627,12 @@ channelCmdfd:
 cmde0Toef:
 	and $07
 	ld hl,wChannelEnvelopes
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	call getNextChannelByte
+
 	and $07
 	ld hl,wChannelEnvelopes2
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	jp doNextChannelCommand
 
 ;;
@@ -812,48 +648,26 @@ channelCmdf0:
 
 	pop af
 	ld hl,wChannelDutyCycles
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	ld a,$41
 	ld hl,wc039
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	jp doNextChannelCommand
 label_39_037:
 	pop af
 	and $c0
 	ld hl,wChannelDutyCycles
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
+
 	ld a,$01
 	ld hl,wc039
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	jp doNextChannelCommand
+
 label_39_038:
 	call getNextChannelByte
 	ld ($ff00+R_NR42),a
-	ld a,$00
+	xor a
 	ld ($ff00+R_NR41),a
 	ld a,$80
 	ld (wc01c),a
@@ -869,13 +683,7 @@ cmdVolume:
 	pop af
 	and $0f
 	ld hl,wChannelVolumes
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	jp doNextChannelCommand
 
 @next:
@@ -897,18 +705,18 @@ channelCmdf6:
 	sla a
 	sla a
 	ld hl,wChannelDutyCycles
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	jp doNextChannelCommand
 
 @wave:
 	call getNextChannelByte
 	ld hl,wChannelDutyCycles
+	call writeChannelDataToHl
+	ld (wWaveformIndex),a
+	call setWaveform
+	jp doNextChannelCommand
+
+writeChannelDataToHl:
 	push af
 	ld a,(wSoundChannel)
 	ld e,a
@@ -916,16 +724,21 @@ channelCmdf6:
 	add hl,de
 	pop af
 	ld (hl),a
-	ld (wWaveformIndex),a
-	call setWaveform
-	jp doNextChannelCommand
+	ret
+
+readChannelDataFromHl:
+	ld a,(wSoundChannel)
+	ld e,a
+	ld d,$00
+	add hl,de
+	ld a,(hl)
+	ret
 
 ;;
 standardSoundCmd:
 	ld a,(wSoundChannel)
 	ld hl,@table
-	call readWordFromTable
-	jp hl
+	rst_jumpTable
 
 @table:
 	.dw @channel0To3
@@ -939,12 +752,8 @@ standardSoundCmd:
 
 @channel0To3:
 	ld hl,wc039
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
-	cp $00
+	call readChannelDataFromHl
+	or a
 	jr z,+
 
 	call getNextChannelByte
@@ -964,23 +773,13 @@ standardSoundCmd:
 
 @cmd60:
 	ld hl,wChannelEnvelopes2
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
-	cp $00
+	call readChannelDataFromHl
+	or a
 	jr nz,@cmd61
 
 	ld a,$02
 	ld hl,wc05d
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	call getChannelVolume
 	sla a
 	sla a
@@ -998,47 +797,26 @@ standardSoundCmd:
 	ld a,(wSoundCmd)
 	sub $0c
 	ld hl,soundFrequencyTable
-	call readWordFromTable
+	rst_addDoubleIndex
+	rst_derefHl
 @cmdUnknown:
 	call setSoundFrequency
-	ld a,$00
+	xor a
 	ld hl,wc05d
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	call func_39_464c
-	ld a,$00
+	xor a
 	ld hl,wc045
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
-	ld a,$00
+	call writeChannelDataToHl
+	xor a
 	ld hl,wChannelVibratos
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
+	call readChannelDataFromHl
 	and $f0
 	srl a
 	srl a
 	srl a
 	ld hl,wc051
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	call func_42ea
 ;;
 ; Read a byte, set the channel wait counter to the value
@@ -1046,13 +824,7 @@ setChannelWaitCounter:
 	call getNextChannelByte
 	dec a
 	ld hl,wChannelWaitCounters
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	ret
 
 ;;
@@ -1074,29 +846,24 @@ func_39_4609:
 setSoundFrequency:
 	push hl
 	ld hl,wChannelPitchShift
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
+	call readChannelDataFromHl
 	ld d,a
 	sla d
-	jr c,+
-
 	ld d,$00
-	jr ++
-+
-	ld d,$ff
-++
+	jr nc,+
+		dec d
+	+
 	ld e,a
 	pop hl
 	add hl,de
+
 	ld a,(wSoundChannel)
 	sla a
-	ld b,a
+	add <hSoundData3
+	ld c,a
 	ld a,l
-	ld c,<hSoundData3
-	call writeIndexedHighRamAndIncrement
+	ld ($ff00+c),a
+	inc c
 	ld a,h
 	ld ($ff00+c),a
 	inc c
@@ -1110,32 +877,22 @@ setSoundFrequency:
 func_39_464c:
 	ld a,(wSoundChannel)
 	cp $04
-	jr nz,+
-	jp func_39_4766
-+
+	jp z,func_39_4766
 	ld hl,wc05d
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
-	cp $00
+	call readChannelDataFromHl
+	or a
 	jr z,label_39_047
 
 	cp $01
 	jr z,label_39_048
 
-	ld a,$00
+	xor a
 	ld (wSoundCmdEnvelope),a
 	ret
 label_39_047:
 	ld hl,wChannelEnvelopes
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
-	cp $00
+	call readChannelDataFromHl
+	or a
 	jr z,label_39_049
 
 	ld c,a
@@ -1147,54 +904,30 @@ label_39_047:
 	ld b,a
 	call func_39_4609
 	ld hl,wc061
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	ld a,$01
 	ld hl,wc05d
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	jp updateChannelVolume
 
 label_39_048:
 	ld hl,wc061
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
-	cp $00
+	call readChannelDataFromHl
+	or a
 	jr z,label_39_049
 
 	ld hl,wc061
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
+	call readChannelDataFromHl
 	dec a
 	ld (hl),a
-	ld a,$00
+	xor a
 	ld (wSoundCmdEnvelope),a
 	ret
 
 label_39_049:
 	ld hl,wChannelEnvelopes2
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
-	cp $00
+	call readChannelDataFromHl
+	or a
 	jr nz,+
 
 	ld a,$02
@@ -1203,13 +936,7 @@ label_39_049:
 	ld a,$03
 ++
 	ld hl,wc05d
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	call getChannelVolume
 	sla a
 	sla a
@@ -1217,11 +944,7 @@ label_39_049:
 	sla a
 	ld (wSoundCmdEnvelope),a
 	ld hl,wChannelEnvelopes2
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
+	call readChannelDataFromHl
 	ld c,a
 	ld a,(wSoundCmdEnvelope)
 	or c
@@ -1235,7 +958,7 @@ updateChannelVolume:
 	jr nc,++
 
 	ld a,(wMusicVolume)
-	cp $00
+	or a
 	jr z,@ret
 
 	ld a,(wSoundChannel)
@@ -1246,7 +969,7 @@ updateChannelVolume:
 	ld d,$00
 	add hl,de
 	ld a,(hl)
-	cp $00
+	or a
 	jr z,++
 @ret:
 	ret
@@ -1266,16 +989,12 @@ updateChannelVolume:
 	sla a
 	sla a
 	add b
-	ld b,a
+	add R_NR12
+	ld c,a
 	ld a,(wSoundCmdEnvelope)
-	ld c,R_NR12
-	call writeIndexedHighRamAndIncrement
+	ld ($ff00+c),a
 	ld hl,wc039
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
+	call readChannelDataFromHl
 	and $40
 	or $80
 	ld (wSoundCmdEnvelope),a
@@ -1287,30 +1006,27 @@ func_39_4766:
 	ld b,a
 	ld a,(wc025+4)
 	cp b
-	jr z,+
+	ret nz
 
 	call func_39_489e
 	ld (wc025+4),a
 	call func_39_434b
-	cp $00
-	jr nz,+
+	or a
+	ret z
 
 	ld a,(wc025+4)
 	ld ($ff00+R_NR32),a
-+
 	ret
 
 ;;
 getChannelVolume:
 	ld a,(wSoundChannel)
-	scf
-	ccf
 	cp $02
 	jr nc,label_39_056
 ;;
 func_39_478c:
 	ld a,(wMusicVolume)
-	cp $00
+	or a
 	jr z,label_39_059
 	cp $01
 	jr z,label_39_058
@@ -1318,43 +1034,27 @@ func_39_478c:
 	jr z,label_39_057
 label_39_056:
 	ld hl,wChannelVolumes
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
+	call readChannelDataFromHl
 	ret
 label_39_057:
 	ld hl,wChannelVolumes
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
+	call readChannelDataFromHl
 	srl a
 	ret
 label_39_058:
 	ld hl,wChannelVolumes
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
+	call readChannelDataFromHl
 	srl a
 	srl a
 	ret
 label_39_059:
-	ld a,$00
+	xor a
 	ret
 
 standardCmdChannels4To5:
 	ld hl,wc039
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
-	cp $00
+	call readChannelDataFromHl
+	or a
 	jr z,+
 
 	call getNextChannelByte
@@ -1364,104 +1064,55 @@ standardCmdChannels4To5:
 	jp @cmdUnknown
 +
 	ld a,(wSoundCmd)
-	scf
-	ccf
 	cp $60
 	jr nz,@freqCommand
 @cmd60:
 	ld a,$01
 	ld hl,wc02d
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	call func_39_489e
 	ld hl,wc025
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	call func_39_434b
-	cp $00
+	or a
 	jr nz,+
 
 	ld hl,wc025
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
+	call readChannelDataFromHl
 	ld ($ff00+R_NR32),a
 +
 	jp setChannelWaitCounter
 @freqCommand:
-	ld a,$00
+	xor a
 	ld hl,wc02d
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	ld a,(wSoundCmd)
 	ld hl,soundFrequencyTable
-	call readWordFromTable
+	rst_addDoubleIndex
+	rst_derefHl
 @cmdUnknown:
 	call setSoundFrequency
-	ld a,$00
+	xor a
 	ld hl,wc045
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
-	ld a,$00
+	call writeChannelDataToHl
+	xor a
 	ld hl,wChannelVibratos
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
+	call readChannelDataFromHl
 	and $f0
 	srl a
 	srl a
 	srl a
 	ld hl,wc051
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	call func_39_489e
 	ld hl,wc025
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 	call func_39_434b
-	cp $00
+	or a
 	jr nz,+
 
 	ld hl,wc025
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
+	call readChannelDataFromHl
 	ld ($ff00+R_NR32),a
 	ld a,(wSoundFrequencyL)
 	ld ($ff00+R_NR33),a
@@ -1473,18 +1124,14 @@ standardCmdChannels4To5:
 ;;
 func_39_489e:
 	ld hl,wc02d
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
-	cp $00
+	call readChannelDataFromHl
+	or a
 	jr nz,label_39_067
 	ld a,(wSoundChannel)
 	cp $05
 	jr nc,label_39_064
 	ld a,(wMusicVolume)
-	cp $00
+	or a
 	jr z,label_39_067
 	cp $01
 	jr z,label_39_066
@@ -1500,7 +1147,7 @@ label_39_066:
 	ld a,$60
 	ret
 label_39_067:
-	ld a,$00
+	xor a
 	ret
 
 ;;
@@ -1527,7 +1174,7 @@ standardCmdChannel6:
 	ld a,(de)
 	ld h,a
 	ld a,(wChannelsEnabled+$07)
-	cp $00
+	or a
 	jr nz,@end
 
 	push hl
@@ -1550,27 +1197,21 @@ standardCmdChannel6:
 standardCmdChannel7:
 	ld a,(wSoundCmd)
 	ld ($ff00+R_NR43),a
-	ld a,$00
+	xor a
 	ld ($ff00+R_NR41),a
 	ld a,(wc01c)
-	cp $00
+	or a
 	jr z,+
 	ld ($ff00+R_NR44),a
 +
-	ld a,$00
+	xor a
 	ld (wc01c),a
 	jp setChannelWaitCounter
 
 channelCmdff:
-	ld a,$00
+	xor a
 	ld hl,wChannelsEnabled
-	push af
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	pop af
-	ld (hl),a
+	call writeChannelDataToHl
 ;;
 ; Checks whether to call updateChannelVolume on square channels, does some other things
 ; with the other types of channels...
@@ -1578,8 +1219,7 @@ channelCmdff:
 updateChannelStuff:
 	ld a,(wSoundChannel)
 	ld hl,@table
-	call readWordFromTable
-	jp hl
+	rst_jumpTable
 
 @table:
 	.dw @musicSquareChannel
@@ -1601,7 +1241,7 @@ updateChannelStuff:
 	ld d,$00
 	add hl,de
 	ld a,(hl)
-	cp $00
+	or a
 	jr z,+
 	ret
 
@@ -1616,15 +1256,11 @@ updateChannelStuff:
 	ld d,$00
 	add hl,de
 	ld a,(hl)
-	cp $00
+	or a
 	jr z,+
 +
 	ld hl,wc05d
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
+	call readChannelDataFromHl
 	cp $03
 	jr nz,+
 	ret
@@ -1636,23 +1272,20 @@ updateChannelStuff:
 
 @musicWaveChannel:
 	call func_39_434b
-	cp $00
-	jr nz,+
+	or a
+	ret nz
 
-	ld a,$00
+	xor a
 	ld ($ff00+R_NR30),a
-+
 	ret
 
 @sfxWaveChannel:
 	ld a,(wChannelsEnabled+4)
-	cp $00
+	or a
 	jr z,++
 
-	ld a,$04
-	ld e,a
+	ld de,$0004
 	ld hl,wChannelDutyCycles
-	ld d,$00
 	add hl,de
 	ld a,(hl)
 	ld (wWaveformIndex),a
@@ -1661,7 +1294,7 @@ updateChannelStuff:
 	ld ($ff00+R_NR32),a
 	ret
 ++
-	ld a,$00
+	xor a
 	ld ($ff00+R_NR30),a
 	ret
 
@@ -1675,13 +1308,12 @@ updateChannelStuff:
 ;;
 setWaveform:
 	call func_39_434b
-	cp $00
-	jr z,@waitLoop
-	ret
+	or a
+	ret nz
 
 @waitLoop:
 	; Wait for channel 3 to be on
-	ld a,$00
+	xor a
 	ld ($ff00+R_NR30),a
 	ld a,($ff00+R_NR52)
 	and $04
@@ -1690,7 +1322,8 @@ setWaveform:
 	; Copy waveform to $ff30
 	ld a,(wWaveformIndex)
 	ld hl,waveformTable
-	call readWordFromTable
+	rst_addDoubleIndex
+	rst_derefHl
 	ld c,$10
 	ld de,$ff30
 -
@@ -1707,8 +1340,9 @@ setWaveform:
 	and $80
 	jr z,-
 
-	; Restart channel 3 (but trashes lower frequency bits?)
-	ld a,$80
+	; Restart channel 3
+	ld a,($ff00+R_NR34)
+	or $80
 	ld ($ff00+R_NR34),a
 	ret
 
@@ -1719,32 +1353,14 @@ channelCmdfe:
 	ld h,a
 	ld a,(wSoundChannel)
 	sla a
-	ld b,a
+	add <hSoundChannelAddresses
+	ld c,a
 	ld a,l
-	ld c,<hSoundChannelAddresses
-	call writeIndexedHighRamAndIncrement
-	ld a,h
 	ld ($ff00+c),a
 	inc c
+	ld a,h
+	ld ($ff00+c),a
 	jp doNextChannelCommand
-
-;;
-func_39_4a10:
-	cp $00
-	jr nz,+
-	ld hl,$0000
-	ret
-+
-	ld e,l
-	ld d,h
---
-	dec a
-	jr z,+
-
-	add hl,de
-	jp --
-+
-	ret
 
 soundFrequencyTable:
 	.dw $002d
@@ -1861,31 +1477,27 @@ playSound:
 	push de
 	push hl
 	ld (wSoundTmp),a
-	cp $00
-	jr nz,+
-	jp @playSoundEnd
-+
-	cp $f0
-	jr z,@sndf0
-	cp $f1
-	jr z,@sndf1
-	cp $f5
-	jr z,@sndf5
-	cp $f6
-	jr z,@sndf6
-	cp $f7
-	jr z,@sndf7
-	cp $f8
-	jr z,@sndf8
-	cp $f9
-	jr z,@sndf9
-	cp $fa
-	jr z,@sndfa
-	cp $fb
-	jr z,@sndfb
-	cp $fc
-	jr z,@sndfc
-	jr @normalSound
+	or a
+	jp z,@playSoundEnd
+	sub $f0
+	jr c,@normalSound
+	rst_jumpTable
+	.dw @sndf0
+	.dw @sndf1
+	.dw @sndf2
+	.dw @sndf3
+	.dw @sndf4
+	.dw @sndf5
+	.dw @sndf6
+	.dw @sndf7
+	.dw @sndf8
+	.dw @sndf9
+	.dw @sndfa
+	.dw @sndfb
+	.dw @sndfc
+	.dw @sndfd
+	.dw @sndfe
+	.dw @normalSound
 
 ; Stop music
 @sndf0:
@@ -1907,7 +1519,7 @@ playSound:
 
 ; Enable sound
 @sndf6:
-	ld a,$00
+	xor a
 	ld (wSoundDisabled),a
 	jp @setVolumeAndEnd
 
@@ -1926,7 +1538,7 @@ playSound:
 	ld a,$1f
 +
 	ld (wSoundFadeSpeed),a
-	ld a,$00
+	xor a
 	ld (wSoundFadeCounter),a
 	ld a,$01
 	ld (wSoundFadeDirection),a
@@ -1949,30 +1561,23 @@ playSound:
 	ld a,$0f
 +
 	ld (wSoundFadeSpeed),a
-	ld a,$00
+	xor a
 	ld (wSoundFadeCounter),a
 	ld a,$0a
 	ld (wSoundFadeDirection),a
-	ld a,$00
+	xor a
 	ld (wSoundVolume),a
 	jp @playSoundEnd
 
+; these aren't coded to do anything special, and as
+; a result they default to the normalSound behavior
+@sndf2:
+@sndf3:
+@sndf4:
+@sndfd:
+@sndfe:
+
 @normalSound:
-	ld a,$00
-	ld (wSoundFadeDirection),a
-	ld a,(wSoundTmp)
-
-	; Get a*3 in de
-	ld d,$00
-	ld e,a
-	ld h,$00
-	ld l,a
-	sla l
-	rl h
-	add hl,de
-	ld d,h
-	ld e,l
-
 .ifdef ROM_COMBO
 	call hIsSeasons
 	ld hl,soundPointers_seasons
@@ -1982,38 +1587,28 @@ playSound:
 .else
 	ld hl,soundPointers
 .endif
+
+	ld a,(wSoundTmp)
+	ld e,a
+	xor a
+	ld d,a
+	ld (wSoundFadeDirection),a
+
+	; add a*3 to hl
+	add hl,de
+	add hl,de
 	add hl,de
 
-	; Wrapping this in a BUILD_VANILLA check because: A) it's unused, B) it can cause problems
-	; if audio data gets placed into an unexpected bank (which WLA could decide to do).
-.ifdef BUILD_VANILLA
-	ld a,(hl)
-	and $80
-	jr z,@skipWeirdCall
-
-	; What were the programmers on? Clearly this part of the code is unused
-	call noiseFrequencyTable
-
-	jp @setVolumeAndEnd
-
-@skipWeirdCall:
-
-.endif
-
 	ldi a,(hl)
-	ld c,a
-	ldh a,(<hSoundDataBaseBank)
-	add c
 	ld (wLoadingSoundBank),a
+
 	ldi a,(hl)
 	ld c,a
-	ld a,(hl)
-	ld b,a
+	ld h,(hl)
 	ld l,c
-	ld h,b
 
 @nextSoundChannel:
-	ldh a,(<hSoundDataBaseBank)
+	ldh a,(<hSoundDataBank)
 	call wMusicReadFunction
 	cp $ff
 	jr nz,+
@@ -2038,7 +1633,6 @@ playSound:
 	ld a,(wSoundChannelValue)
 	cp c
 	jr nc,+
-
 	inc hl
 	inc hl
 	jp @nextSoundChannel
@@ -2046,56 +1640,54 @@ playSound:
 	push hl
 	ld a,(wSoundTmp)
 	ld e,a
+	ld d,$00
+
 	ld a,(wSoundChannelValue)
 	ld hl,wChannelsEnabled
-	ld d,$00
 	add hl,de
 	ld (hl),a
+
 	ld a,$08
 	ld hl,wChannelVolumes
-	ld d,$00
 	add hl,de
 	ld (hl),a
-	ld a,$00
-	ld hl,wChannelWaitCounters
-	ld d,$00
-	add hl,de
-	ld (hl),a
-	ld a,(wSoundTmp)
-	cp $00
-	jr z,@squareChannel
-	cp $01
-	jr z,@squareChannel
-	cp $02
-	jr z,@squareChannel
-	cp $03
-	jr z,@squareChannel
-	cp $04
-	jr z,@waveChannel
-	cp $05
-	jr z,@waveChannel
 
-	; Noise channels
-	jr ++
+	xor a
+	ld hl,wChannelWaitCounters
+	add hl,de
+	ld (hl),a
+
+	ld a,(wSoundTmp)
+	cp $06
+	jr nc,++	; Noise channels
+
+	rst_jumpTable
+	.dw @squareChannel
+	.dw @squareChannel
+	.dw @squareChannel
+	.dw @squareChannel
+	.dw @waveChannel
+	.dw @waveChannel
 
 @waveChannel:
 	ld a,(wSoundTmp)
 	ld e,a
-	ld a,$00
+	xor a
+	ld d,a
+
 	ld hl,wChannelVibratos
-	ld d,$00
 	add hl,de
 	ld (hl),a
+
 	ld hl,wc03f
-	ld d,$00
 	add hl,de
 	ld (hl),a
+
 	ld hl,wChannelPitchShift
-	ld d,$00
 	add hl,de
 	ld (hl),a
+
 	ld hl,wc039
-	ld d,$00
 	add hl,de
 	ld (hl),a
 	jr ++
@@ -2103,35 +1695,35 @@ playSound:
 @squareChannel:
 	ld a,(wSoundTmp)
 	ld e,a
+	xor a
+	ld d,a
 
 	; Clear a bunch of variables
-	ld a,$00
 	ld hl,wChannelEnvelopes
-	ld d,$00
 	add hl,de
 	ld (hl),a
+
 	ld hl,wChannelEnvelopes2
-	ld d,$00
 	add hl,de
 	ld (hl),a
+
 	ld hl,wChannelDutyCycles
-	ld d,$00
 	add hl,de
 	ld (hl),a
+
 	ld hl,wChannelVibratos
-	ld d,$00
 	add hl,de
 	ld (hl),a
+
 	ld hl,wc03f
-	ld d,$00
 	add hl,de
 	ld (hl),a
+
 	ld hl,wChannelPitchShift
-	ld d,$00
 	add hl,de
 	ld (hl),a
+
 	ld hl,wc039
-	ld d,$00
 	add hl,de
 	ld (hl),a
 ++
@@ -2139,26 +1731,24 @@ playSound:
 	pop hl
 	ld a,(wSoundTmp)
 	ld b,a
+
+	add <hSoundChannelBanks
+	ld c,a
 	ld a,(wLoadingSoundBank)
-	ld c,<hSoundChannelBanks
-	call writeIndexedHighRamAndIncrement
+	ld ($ff00+c),a
 
 	; Write the address for this sound channel into hSoundChannelAddresses
-	ld a,(wSoundTmp)
-	sla a
-	ld b,a
-	push bc
-	ldh a,(<hSoundDataBaseBank)
-	call wMusicReadFunction
-	pop bc
-	ld c,<hSoundChannelAddresses
-	call writeIndexedHighRamAndIncrement
-	push bc
-	ldh a,(<hSoundDataBaseBank)
-	call wMusicReadFunction
-	pop bc
+	ld a,b
+	add a
+	add <hSoundChannelAddresses
+	ld c,a
+
+	ldi a,(hl)
 	ld ($ff00+c),a
 	inc c
+
+	ldi a,(hl)
+	ld ($ff00+c),a
 	jp @nextSoundChannel
 
 @setVolumeAndEnd:
@@ -2168,42 +1758,6 @@ playSound:
 	pop hl
 	pop de
 	pop bc
-	ret
-
-;;
-; Reads a word at hl+a*2 into de and hl. Index can't be higher than $7f.
-readWordFromTable:
-	sla a
-	ld d,$00
-	ld e,a
-	add hl,de
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	ld h,d
-	ld l,e
-	ret
-
-;;
-; Adds b to c, writes a to ($ff00+c), increments c.
-writeIndexedHighRamAndIncrement:
-	push af
-	ld a,b
-	add c
-	ld c,a
-	pop af
-	ld ($ff00+c),a
-	inc c
-	ret
-
-	push af
-	ld a,(wSoundChannel)
-	ld b,a
-	ld a,b
-	add c
-	ld c,a
-	pop af
-	ld ($ff00+c),a
 	ret
 
 noiseFrequencyTable:

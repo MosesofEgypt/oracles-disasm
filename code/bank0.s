@@ -2281,7 +2281,7 @@ vblankInterrupt:
 	ldh a,(<hRomBank)
 	bit 0,(hl)
 	jr z,+
-	ldh a,(<hSoundDataBaseBank2)
+	ld a,:audio.b39_initSound
 +
 	ld ($2222),a
 	pop hl
@@ -2845,9 +2845,7 @@ _startSound:
 	ldh a,(<hRomBank)
 	push af
 	call disableTimer
-	ld a,:audio.b39_initSound
-	ldh (<hSoundDataBaseBank),a
-	ldh (<hSoundDataBaseBank2),a
+	ld a,:audio.initSound
 	setrombank
 	call jpBc
 	call enableTimer
@@ -14117,12 +14115,13 @@ loadRoomLayout:
 	ld a,(hl)
 	ret
 
-.if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
 @layoutGroupTable_ages:
 .else
 @layoutGroupTable:
 .endif
+
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.db $00
 	.db $02
 	.db $01
@@ -14133,10 +14132,10 @@ loadRoomLayout:
 	.db $05
 .endif
 
-.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
 @layoutGroupTable_seasons:
 .endif
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	.db $ff
 	.db $04
 	.db $04

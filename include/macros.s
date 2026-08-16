@@ -135,7 +135,7 @@
 		.ifdef FORCE_SECTIONS
 		.section \1 FORCE
 		.else
-		.section \1 SUPERFREE
+		.section \1 SEMISUPERFREE BANKS {ROM_BANKS-1}-1
 		.endif
 	.else
 		.assert NARGS == 3
@@ -143,7 +143,7 @@
 		.ifdef FORCE_SECTIONS
 		.section \1 \2 \3 FORCE
 		.else
-		.section \1 \2 \3 SUPERFREE
+		.section \1 \2 \3 SEMISUPERFREE BANKS {ROM_BANKS-1}-1
 		.endif
 	.endif
 .endm

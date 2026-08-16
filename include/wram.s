@@ -10,6 +10,8 @@
 
 wMusicReadFunction: ; $c000
 ; Function copied to RAM to read a byte from another bank.
+; NOTE: THIS CODE SHOULD ONLY EVER BE CALLED BY
+;       CODE IN THE AUDIO BANK, OR CODE IN BANK 0
 	dsb $14
 
 wSoundFadeCounter: ; $c014

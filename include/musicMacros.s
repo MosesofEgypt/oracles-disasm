@@ -127,7 +127,7 @@
 .endm
 
 .macro m_soundPointer
-	.db :\1Start - :b39_initSound ; Bank number
+	.db :\1Start ; Bank number
 	.dw \1 ; Pointer
 .endm
 
@@ -255,14 +255,17 @@
 .endm
 
 ; f1-f3: does nothing
+; NOTE: because they do nothing, we're removing the opcode
+;       to reduce audio sizes and make them more efficient.
+;		this only affects a few though, and only for cmdf2
 .macro cmdf1
-	.db $f1
+	;.db $f1
 .endm
 .macro cmdf2
-	.db $f2
+	;.db $f2
 .endm
 .macro cmdf3
-	.db $f3
+	;.db $f3
 .endm
 
 ; f4-f5: duplicates of ff?
