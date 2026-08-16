@@ -5991,6 +5991,12 @@ getRoomDungeonProperties:
 	ld a,(wActiveGroup)
 	and $01
 	ld hl, bank1.dungeonRoomPropertiesGroupTable
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr nc,+
+		add $02
+	+
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 	ld a,b
@@ -11738,6 +11744,12 @@ getThisRoomDungeonProperties:
 	sub $04
 	and $01
 	ld hl, bank1.dungeonRoomPropertiesGroupTable
+.ifdef ROM_COMBO
+	call hIsSeasons
+	jr nc,+
+		add $02
+	+
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 	ld a,(wActiveRoom)
@@ -14069,7 +14081,9 @@ loadRoomLayout:
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
 	call hIsSeasons
+	ld hl,@layoutGroupTable_ages
 	jr nc,+
+	ld hl,@layoutGroupTable_seasons
 .endif
 	; Group 0: depends on season
 	ld a,(wActiveGroup)
@@ -14079,37 +14093,35 @@ loadRoomLayout:
 	ret z
 
 	ld a,(wActiveGroup)
-.if defined(ROM_COMBO)
-	ld hl,@layoutGroupTable_seasons
-	jr ++
-+
-	ld hl,@layoutGroupTable_ages
-.endif
+	+
 .endif
 
-++
 .if defined(ROM_COMBO)
-	push hl
-	callab tilesets.getAdjustedRoomGroup
-	pop hl
-	ld a,b
+	call hIsSeasons
+	jr c,+
+		push hl
+		callab tilesets.getAdjustedRoomGroup
+		pop hl
+		ld a,b
+	+
 .elif defined(ROM_AGES)
 	; Ages only: if bit 0 of room flags is set, underwater version of the room gets loaded instead.
 	callab tilesets.getAdjustedRoomGroup
 	ld a,b
-.endif
-
-.if !defined(ROM_COMBO)
+	ld hl,@layoutGroupTable
+.else
 	ld hl,@layoutGroupTable
 .endif
+
 	rst_addAToHl
 	ld a,(hl)
 	ret
 
-@layoutGroupTable:
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
 @layoutGroupTable_ages:
+.else
+@layoutGroupTable:
 .endif
 	.db $00
 	.db $02
@@ -14135,30 +14147,6 @@ loadRoomLayout:
 	.db $06
 .endif
 
-.if !defined(ROM_COMBO)
-;; unused???
-;;
-@loadLargeRoomLayoutHlpr:
-	ld d,b
-	ld a,b
-	and $0f
-	ld b,a
-
-	; Get relative offset in hl
-	ldh a,(<hFF8F)
-	ld h,a
-	ldh a,(<hFF8E)
-	ld l,a
-
-	add hl,bc
-	ld a,d
-	swap a
-	and $0f
-	add $03
-	ld b,a
-	ret
-.endif
-
 ;;
 @loadLargeRoomLayout:
 	ldh a,(<hFF8F)
@@ -14176,8 +14164,12 @@ loadRoomLayout:
 
 	pop bc
 	add hl,bc
+.ifndef ROM_COMBO
+	; what is even going on here, and why's it only 
+	; screwing up calculations in the combo rom???
 	ld bc,-$200
 	add hl,bc
+.endif
 	ld c,>wRoomLayout
 	jp @loadLayoutData
 

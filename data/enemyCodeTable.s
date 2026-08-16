@@ -2,7 +2,7 @@ enemyCodeTable:
 
 .if defined(ROM_COMBO)
 	.repeat $80
-		.dw enemyCodeNil
+		.dw enemyDelete
 	.endr
 
 .elif defined(ROM_AGES)

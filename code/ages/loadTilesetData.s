@@ -182,9 +182,9 @@ checkTilesetOverride:
 	; This all seems redundant, possibly it's doing these things because dungeon data hasn't
 	; been loaded yet
 .ifdef ROM_COMBO
-	ld a, f_DungeonLayoutToIndex_ages(dungeon07Layout_ages)
+	ld a, f_DungeonLayoutToIndex(dungeon07Layout_ages - dungeonLayoutDataStart_ages)
 .else
-	ld a, f_DungeonLayoutToIndex(dungeon07Layout)
+	ld a, f_DungeonLayoutToIndex(dungeon07Layout - dungeonLayoutDataStart)
 .endif
 	ld (wDungeonFirstLayout),a
 	callab bank1.findActiveRoomInDungeonLayoutWithPointlessBankSwitch
