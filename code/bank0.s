@@ -13073,13 +13073,13 @@ updateAllObjects:
 	callfrombank0 bank5.updateSpecialObjects
 	callfrombank0 itemCode.updateItems
 	call          setEnemyTargetToLinkPosition
-	callfrombank0 updateEnemies
+	call          updateEnemies
 .if defined(ROM_COMBO)
 	callfrombank0 objectUpdating.updateParts
 .else
 	callfrombank0 partCode.updateParts
 .endif
-	callfrombank0 updateInteractions
+	call updateInteractions
 	callfrombank0 bank1.func_4000
 
 	; Call func_410d if Link is riding something
@@ -13107,7 +13107,7 @@ updateAllObjects:
 
 	callfrombank0 itemCode.updateItemsPost
 	callfrombank0 bank1.checkUpdateFollowingLinkObject
-	callfrombank0 updateCamera
+	call          updateCamera
 	callfrombank0 tilesets.updateChangedTileQueue
 	callfrombank0 animationAndUniqueGfxData.updateAnimations
 
@@ -13122,7 +13122,7 @@ updateSpecialObjectsAndInteractions:
 	ldh a,(<hRomBank)
 	push af
 	callfrombank0 bank5.updateSpecialObjects
-	callfrombank0 updateInteractions
+	call          updateInteractions
 	call          loadLinkAndCompanionAnimationFrame
 	xor a
 	ld (wc4b6),a
@@ -13134,7 +13134,7 @@ updateSpecialObjectsAndInteractions:
 updateInteractionsAndDrawAllSprites:
 	ldh a,(<hRomBank)
 	push af
-	callfrombank0 updateInteractions
+	call updateInteractions
 	call drawAllSprites
 	xor a
 	ld (wc4b6),a
@@ -13154,13 +13154,13 @@ func_3539:
 	jr c,+
 .endif
 	callfrombank0 itemCode.updateItems
-	callfrombank0 updateEnemies
+	call          updateEnemies
 .if defined(ROM_COMBO)
 	callfrombank0 objectUpdating.updateParts
 .else
 	callfrombank0 partCode.updateParts
 .endif
-	callfrombank0 updateInteractions
+	call updateInteractions
 	callfrombank0 itemCode.updateItemsPost
 
 .if defined(ROM_COMBO)
@@ -13170,11 +13170,11 @@ func_3539:
 .endif
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
-	callfrombank0 updateEnemies
-	callfrombank0 updateInteractions
+	call updateEnemies
+	call updateInteractions
 ++
 .endif
-	callfrombank0 loadLinkAndCompanionAnimationFrame
+	call loadLinkAndCompanionAnimationFrame
 	callfrombank0 animationAndUniqueGfxData.updateAnimations
 	xor a
 	ld (wc4b6),a
@@ -13190,13 +13190,13 @@ seasonsFunc_34a0:
 	push af
 	callfrombank0 bank5.updateSpecialObjects
 	callfrombank0 itemCode.updateItems
-	callfrombank0 updateEnemies
+	call          updateEnemies
 .if defined(ROM_COMBO)
 	callfrombank0 objectUpdating.updateParts
 .else
 	callfrombank0 partCode.updateParts
 .endif
-	callfrombank0 updateInteractions
+	call updateInteractions
 .if defined(ROM_COMBO)
 	callfrombank0 bank3Cutscenes_seasons.seasonsFunc_0f_7159
 .else
@@ -14617,10 +14617,10 @@ interactionDelete:
 
 .if defined(ROM_COMBO)
 updateInteractions:
-	jpab objectUpdating.updateInteractions
+	jpfrombank0 objectUpdating.updateInteractions
 
 updateInteraction:
-	jpab objectUpdating.updateInteraction
+	jpfrombank0 objectUpdating.updateInteraction
 
 .else
 ;;

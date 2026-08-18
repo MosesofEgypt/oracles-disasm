@@ -25,7 +25,7 @@ updateInteractions:
 	ld a,(de)
 	or a
 
-	call nz,updateInteraction
+	call nz,objectUpdating.updateInteraction
 	ldh a,(<hActiveObject)
 	inc a
 	cp LAST_INTERACTION_INDEX+1
@@ -49,13 +49,12 @@ _updateInteractionsIfStateIsZero:
 
 	rlca
 	jr c,+
-
-	ld e,Interaction.state
-	ld a,(de)
-	or a
-	jr nz,@next
-+
-	call updateInteraction
+		ld e,Interaction.state
+		ld a,(de)
+		or a
+		jr nz,@next
+	+
+	call objectUpdating.updateInteraction
 @next:
 	ldh a,(<hActiveObject)
 	inc a
