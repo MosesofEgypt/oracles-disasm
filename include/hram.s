@@ -139,7 +139,7 @@
 	; =====================================================================
 
 	; Keeps track of the bank of the channel data current being parsed
-	hSoundDataBank			db	; $ffd9
+	hSoundDataBaseBank			db	; $ffd9
 
 	; Each of these are buffers taking wSoundChannel as an index.
 	; This one is 8 bytes (1 byte for each index)

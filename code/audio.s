@@ -40,7 +40,7 @@ b39_updateMusicVolume:
 
 ;;
 initSound:
-	ldh (<hSoundDataBank),a
+	ldh (<hSoundDataBaseBank),a
 	call stopSound
 	ld a,$03
 	ld (wMusicVolume),a
@@ -366,14 +366,11 @@ label_39_027:
 	rst_addDoubleIndex
 	rst_derefHl
 
-	ld d,$00
-
 	push hl
 	ld hl,wc051
-	ld a,(wSoundChannel)
-	ld e,a
-	add hl,de
-	inc (hl)
+	call readChannelDataFromHl
+	inc a
+	ld (hl),a
 
 	ld hl,wChannelVibratos
 	call readChannelDataFromHl
@@ -1006,13 +1003,13 @@ func_39_4766:
 	ld b,a
 	ld a,(wc025+4)
 	cp b
-	ret nz
+	ret z
 
 	call func_39_489e
 	ld (wc025+4),a
 	call func_39_434b
 	or a
-	ret z
+	ret nz
 
 	ld a,(wc025+4)
 	ld ($ff00+R_NR32),a
@@ -1341,8 +1338,7 @@ setWaveform:
 	jr z,-
 
 	; Restart channel 3
-	ld a,($ff00+R_NR34)
-	or $80
+	ld a,$80
 	ld ($ff00+R_NR34),a
 	ret
 
@@ -1540,7 +1536,7 @@ playSound:
 	ld (wSoundFadeSpeed),a
 	xor a
 	ld (wSoundFadeCounter),a
-	ld a,$01
+	inc a
 	ld (wSoundFadeDirection),a
 	ld a,$77
 	ld (wSoundVolume),a
@@ -1561,12 +1557,11 @@ playSound:
 	ld a,$0f
 +
 	ld (wSoundFadeSpeed),a
-	xor a
-	ld (wSoundFadeCounter),a
 	ld a,$0a
 	ld (wSoundFadeDirection),a
 	xor a
 	ld (wSoundVolume),a
+	ld (wSoundFadeCounter),a
 	jp @playSoundEnd
 
 ; these aren't coded to do anything special, and as
@@ -1608,7 +1603,7 @@ playSound:
 	ld l,c
 
 @nextSoundChannel:
-	ldh a,(<hSoundDataBank)
+	ldh a,(<hSoundDataBaseBank)
 	call wMusicReadFunction
 	cp $ff
 	jr nz,+
