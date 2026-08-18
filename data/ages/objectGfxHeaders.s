@@ -251,7 +251,7 @@ objectGfxHeaderTable:
 	/* $c1 */ m_ObjectGfxHeader spr_headthwomp_3, 1
 	/* $c2 */ m_ObjectGfxHeader spr_shadowhag_1
 	/* $c3 */ m_ObjectGfxHeader spr_shadowhag_2, 1
-	/* $c4 */ m_ObjectGfxHeader spr_smog_1
+	/* $c4 */ m_ObjectGfxHeader spr_eyesoar
 	/* $c5 */ m_ObjectGfxHeader spr_smog_2
 	/* $c6 */ m_ObjectGfxHeader spr_smog_3
 	/* $c7 */ m_ObjectGfxHeader spr_smog_projectiles, 1

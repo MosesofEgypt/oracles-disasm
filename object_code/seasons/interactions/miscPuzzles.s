@@ -498,7 +498,7 @@ interactionCodedc_subid8:
 	ld b,a
 	ld e,$47
 	ld a,(de)
-	ld hl,table_6a02
+	ld hl,dungeonsInOrder
 	rst_addAToHl
 	ld a,(hl)
 	cp b
@@ -560,7 +560,7 @@ interactionCodedc_subid8:
 	xor a
 	ld (wcca2),a
 	ret
-table_6a02:
+dungeonsInOrder:
 	.db $66 $5b $43 $3b
 	.db $59 $23 $73 $35
 

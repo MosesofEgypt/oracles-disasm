@@ -336,6 +336,7 @@ m_GfxDataAligned spr_chickens_dog_forestfairy_other
 m_GfxDataAligned spr_colored_cube
 m_GfxDataAligned spr_constructionworker_shootinggalleryguy
 m_GfxDataAligned spr_darklink
+m_GfxDataAligned spr_eyesoar
 m_GfxDataAligned spr_fairyveran_1
 m_GfxDataAligned spr_fairy_toilethand
 m_GfxDataAligned spr_farore_1
