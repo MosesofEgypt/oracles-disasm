@@ -58,7 +58,7 @@ twinrovaCutscene_state1:
 
 .ifdef ROM_COMBO
 	ld hl,objectData_seasons.objectData4022
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,objectData.objectData4022
 	+
@@ -155,7 +155,7 @@ cutscene18_state5:
 
 	; Load twinrova fight room, start a fadein, then exit cutscene
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	ld a,$9e
 	jr c,+
 		ld a,$f5
@@ -224,7 +224,7 @@ twinrovaCutscene_loadAngryFlames:
 	;       don't need to do anything special for the combo.
 	ld a,PALH_af
 	call loadPaletteHeader
-	call hIsSeasons
+	call wIsSeasons
 	ld hl,objectData_seasons.objectData402f
 	jr c,+
 		ld hl,objectData.objectData402f
@@ -619,7 +619,7 @@ intro_titlescreen_state0:
 	call disableLcd
 .ifdef ROM_COMBO
 	ld a,GFXH_TITLESCREEN_SEASONS
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld a,GFXH_TITLESCREEN_AGES
 	+
@@ -710,7 +710,7 @@ runIntroCinematic:
 ; Covers intro sections after the capcom screen and before the temple scene.
 .ifdef ROM_COMBO
 introCinematic_ridingHorse:
-	call hIsSeasons
+	call wIsSeasons
 	jp c,introCinematic_ridingHorse_seasons
 	ld a,(wIntroVar)
 	rst_jumpTable
@@ -1427,7 +1427,7 @@ introCinematic_inTemple_state0:
 
 .ifdef ROM_COMBO
 	ld a,GFXH_INTRO_TEMPLE_SCENE_SEASONS
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld a,GFXH_INTRO_TEMPLE_SCENE_AGES
 	+
@@ -1450,7 +1450,7 @@ introCinematic_inTemple_state0:
 	ldh (<hCameraY),a
 
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	ld a,$18
 	jr c,+
 		ld a,$10
@@ -1689,7 +1689,7 @@ flashScreen_body:
 	inc (hl)
 	ld b,(hl)
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	ld hl,screenFlashingData_seasons
 	jr c,+
 		ld hl,screenFlashingData_ages
@@ -2205,7 +2205,7 @@ endgameCutsceneHandler_body:
 +
 	ld a,e
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		add $06
 	+

@@ -86,7 +86,7 @@ interac11_subid00:
 
 	; Create a large, blue-and-red sparkle, and set its "related object" to this.
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ldbc INTERAC_SPARKLE, $04
 	jr c,+
 		ldbc INTERAC_SPARKLE, $0c

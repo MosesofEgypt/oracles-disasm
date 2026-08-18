@@ -308,7 +308,7 @@ screenTransitionState2:
 +
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 .endif
 	; Ages only: forbid looping around the overworld map in any direction, except up.
@@ -391,7 +391,7 @@ screenTransitionState2:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld a,TREASURE_MERMAID_SUIT
@@ -639,7 +639,7 @@ checkDarkenRoom:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,++
 .endif
 	; Hardcoded check for snake's remains entrance
@@ -1632,7 +1632,7 @@ loadBigBufferScrollValues_body:
 ;;
 func_47fc:
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		call getPaletteFadeTransitionData_ages
 		jr ++
@@ -1653,7 +1653,7 @@ func_47fc:
 ;;
 checkAndApplyPaletteFadeTransition:
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		call getPaletteFadeTransitionData_ages
 		ret nc
@@ -2168,7 +2168,7 @@ playCompassSoundIfKeyInRoom:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	; Hardcoded to play compass sound in d5 boss key room
@@ -2297,7 +2297,7 @@ cutscene17:
 
 	ldi a,(hl)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+++
 		cp INTERAC_ZELDA
 		jr ++
@@ -2643,7 +2643,7 @@ loadDungeonLayout_b01:
 	ld a,(wDungeonIndex)
 .if defined(ROM_COMBO)
 	ld hl,dungeonDataTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl, dungeonDataTable_ages
 	+
@@ -2747,7 +2747,7 @@ getFirstDungeonLayoutAddress:
 	call multiplyABy16
 .if defined(ROM_COMBO)
 	ld hl,dungeonLayoutDataStart_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,dungeonLayoutDataStart_ages
 	+
@@ -2942,7 +2942,7 @@ paletteFadeHandler05:
 	ld b,a
 	ld a,(wPaletteThread_fadeOffset)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		dec a
 		cp b
@@ -2995,7 +2995,7 @@ paletteFadeHandler06:
 	ld c,a
 	ld a,(wPaletteThread_parameter)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		inc a
 		ld b,a
@@ -3383,7 +3383,7 @@ checkUpdateDungeonMinimap:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld a,(wTilesetFlags)
@@ -3462,7 +3462,7 @@ initializeGame:
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld bc,$03fe
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		ld bc,$03af
 	+
@@ -3476,7 +3476,7 @@ initializeGame:
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld bc,$0158
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		ld bc,$00c5
 	+
@@ -3569,7 +3569,7 @@ initializeGame:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld l,<wNumRupees
@@ -3617,7 +3617,7 @@ initializeGame:
 	ld a,CUTSCENE_PREGAME_INTRO
 	ld (wCutsceneIndex),a
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		jpab bank3Cutscenes_ages.cutscene0d
 	+
@@ -3658,7 +3658,7 @@ func_5a60:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld a,(wLoadingRoomPack)
@@ -3785,7 +3785,7 @@ standardGameState:
 	+
 		sub $0b
 	++
-	call hIsSeasons
+	call wIsSeasons
 	ld e,:bank3Cutscenes_seasons.cutscene06
 	ld hl,@cutsceneHandlers_seasons
 	jr c,+
@@ -3840,7 +3840,7 @@ standardGameState:
 	.dw bank3Cutscenes_seasons.cutscene14
 
 cutscene02:
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		jpab bank3Cutscenes_ages.cutscene02
 	+
@@ -3904,7 +3904,7 @@ cutscene00:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld a,(wcc05)
@@ -3925,7 +3925,7 @@ cutscene00:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	call updateLastToggleBlocksState
@@ -3953,7 +3953,7 @@ cutscene01:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		call updateAllObjects
 		call updateStatusBar
@@ -3987,7 +3987,7 @@ cutscene01:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	ld a,(wcc4c)
@@ -4000,7 +4000,7 @@ cutscene01:
 	jp nc,checkEnemyAndPartCollisionsIfTextInactive
 
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	call nc,checkDisableUnderwaterWaves
 .elif defined(ROM_AGES)
 	call checkDisableUnderwaterWaves
@@ -4017,7 +4017,7 @@ cutscene01:
 	jp nz,triggerFadeoutTransition
 
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	call c,checkPlayRoomMusic
 .elif defined(ROM_SEASONS)
 	call checkPlayRoomMusic
@@ -4035,7 +4035,7 @@ cutscene01:
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 	call initializeRoom
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ret c
 .endif
 	jp checkPlayRoomMusic
@@ -4133,7 +4133,7 @@ processAutosaveUpdate:
 	ld a,(wDungeonIndex)
 	.if defined(ROM_AGES) || defined(ROM_COMBO)
 		.if defined(ROM_COMBO)
-			call hIsSeasons
+			call wIsSeasons
 			jr c,+
 		.endif
 
@@ -4211,7 +4211,7 @@ updateRingEquipStatuses:
 	ld a,(wInBoxingMatch)
 	or a
 	.if defined(ROM_COMBO)
-		call hIsSeasons
+		call wIsSeasons
 		jr c,+
 			xor a
 		+
@@ -4576,7 +4576,7 @@ func_5c18:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 .endif
 	call checkUpdateDungeonMinimap
@@ -4604,7 +4604,7 @@ func_5c18:
 +
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld a,(wLoadingRoomPack)
@@ -4666,7 +4666,7 @@ cutscene04:
 	call setShortPosition
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 .endif
 	call disableLcd
@@ -4693,7 +4693,7 @@ cutscene05:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		call clearScreenVariables
 		jr ++
@@ -4727,7 +4727,7 @@ func_5cfe:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,++
 .endif
 	ld a,TILEINDEX_STUMP
@@ -4774,7 +4774,7 @@ func_5cfe:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+++
 .endif
 	ld hl,w1Companion.state
@@ -4956,7 +4956,7 @@ checkPlayRoomMusic:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	; Override subrosia music if on a date with Rosa
@@ -4978,7 +4978,7 @@ checkPlayRoomMusic:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 .endif
 	; Override symmetry city present music if it hasn't been restored yet
@@ -5015,7 +5015,7 @@ checkPlayRoomMusic:
 ; Seasons has a version of this function a bit higher up.
 checkDisplayEraOrSeasonInfo:
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jp c,checkDisplayEraOrSeasonInfo_seasons
 .endif
 	ld a,GLOBALFLAG_16
@@ -5058,7 +5058,7 @@ updateGrassAnimationModifier:
 
 .else; ROM_SEASONS
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		xor a
 		jr ++
@@ -5103,7 +5103,7 @@ loadDeathRespawnBufferPreset:
 	call multiplyABy8
 	ld hl,@respawnBuffers
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		ld hl,@respawnBuffers_seasons
 	+
@@ -5154,7 +5154,7 @@ loadDeathRespawnBufferPreset:
 
 checkRoomPack:
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jp c,checkRoomPack_seasons
 .endif
 	ld a,(wActiveGroup)
@@ -5245,7 +5245,7 @@ getNextActiveRoom:
 	ld a,(wActiveRoom)
 	ld hl,mapTransitionGroupTable
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		ld hl,mapTransitionGroupTable_seasons
 	+
@@ -5253,7 +5253,7 @@ getNextActiveRoom:
 	call findRoomSpecificData
 	jr nc,screenTransitionStandard
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		add $04
 	+
@@ -5618,7 +5618,7 @@ updateSeedTreeRefillData:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld a,(wTilesetFlags)
@@ -5641,7 +5641,7 @@ updateSeedTreeRefillData:
 	ld ($ff00+R_SVBK),a
 .if defined(ROM_COMBO)
 	ld hl,seedTreeRefillLocations_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,seedTreeRefillLocations_ages
 	+
@@ -5680,7 +5680,7 @@ checkSeedTreeRefillIndex:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 .endif
 	ld a,e
@@ -5756,7 +5756,7 @@ checkSeedTreeRefillIndex:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 .endif
 	push hl
@@ -5832,7 +5832,7 @@ initializeSeedTreeRefillData:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 .endif
 	ld hl,wSeedTreeRefilledBitset
@@ -6058,7 +6058,7 @@ checkTileWarps:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	dec a
@@ -6131,7 +6131,7 @@ checkTileWarps:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 .endif
 	or a
@@ -6212,7 +6212,7 @@ checkScreenEdgeWarps:
 checkTileIsWarpTile:
 .if defined(ROM_COMBO)
 	ld hl,warpTileTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,warpTileTable_ages
 	+

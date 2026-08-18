@@ -874,7 +874,7 @@ linkCutscene6_seasons:
 
 	call itemIncSubstate
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jp c,objectSetVisible
 	jp objectSetVisible82
 .elif defined(ROM_AGES)
@@ -1109,7 +1109,7 @@ linkCutsceneA_seasons:
 	ld (wTmpcbb9),a
 
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ldbc INTERAC_SPARKLE, $0d
 	jr nc,+
 		ld c,$09
@@ -1153,7 +1153,7 @@ linkCutsceneA_seasons:
 
 	call itemIncSubstate
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ld bc,TX_1213
 	jr nc,+
 		ld bc,TX_0c16

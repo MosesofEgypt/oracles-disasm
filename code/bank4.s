@@ -100,7 +100,7 @@ applyWarpDest_b04:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,label_04_032
 .endif
 	and $0f
@@ -123,7 +123,7 @@ applyWarpDest_b04:
 
 label_04_032:
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ld hl,warpDestTable_seasons
 	jr c,+
 		ld hl,warpDestTable_ages
@@ -174,7 +174,7 @@ label_04_033:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,label_04_036
 .endif
 	ld a,(wWarpDestGroup)
@@ -208,7 +208,7 @@ label_04_036:
 findWarpSourceAndDest:
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld a,(wDisableWarps)
@@ -219,7 +219,7 @@ findWarpSourceAndDest:
 
 	ld a,(wActiveGroup)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ld hl,warpSourcesTable_seasons
 	jr c,+
 		ld hl,warpSourcesTable_ages
@@ -362,7 +362,7 @@ findScreenEdgeWarpSource:
 	ld b,(hl)
 	ld a,(wActiveGroup)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ld hl,warpSourcesTable_seasons
 	jr c,+
 		ld hl,warpSourcesTable_ages
@@ -449,7 +449,7 @@ getLinkWarpQuadrant:
 
 @smallRoom:
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		cp $58
 		jr ++

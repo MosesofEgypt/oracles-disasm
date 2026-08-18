@@ -36,7 +36,7 @@ interactionCode0f:
 	ld a,SND_FALLINHOLE
 	call nc,playSound
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	call nc,@checkUpdateHoleEvent
 .elif defined(ROM_AGES)
 	call @checkUpdateHoleEvent

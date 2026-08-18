@@ -515,7 +515,7 @@ mapleState5:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,@normalEncounter
 .endif
 	; Check if this is the past. She says something about coming through a "weird
@@ -577,7 +577,7 @@ mapleState5:
 	ld l,SpecialObject.speed
 	ld (hl),SPEED_100
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ld bc,TX_0709
 	jr c,+
 		ld bc,TX_070d
@@ -1204,7 +1204,7 @@ mapleStateB:
 	call mapleUpdateOscillation
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld e,SpecialObject.direction
@@ -1250,8 +1250,8 @@ mapleStateB:
 	ld (de),a ; [substate] -= 1
 	ret nz
 
-.if defined(ROM_AGES) || defined(ROM_COMBO)
-	call hIsSeasons
+.if defined(ROM_COMBO)
+	call wIsSeasons
 	ld bc,TX_070b
 	jr c,+
 		ld bc,TX_0711
@@ -1345,7 +1345,7 @@ mapleSpawnItemDrops:
 	call checkTreasureObtained
 	jr nc,@noTradeItem
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ld e,$01
 	jr c,+
 		ld e,$08
@@ -1359,7 +1359,7 @@ mapleSpawnItemDrops:
 	jr nz,@noTradeItem
 
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ld b,INTERAC_LON_LON_EGG
 	jr c,+
 		ld b,INTERAC_TOUCHING_BOOK

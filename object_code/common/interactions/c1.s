@@ -89,7 +89,7 @@ interactionCodec1:
 	ret nz
 	ld (hl),$06 ; [var36]
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ldbc INTERAC_SPARKLE, $05
 	jr c,+
 		ldbc INTERAC_SPARKLE, $09

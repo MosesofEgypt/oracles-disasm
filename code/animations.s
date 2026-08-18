@@ -6,7 +6,7 @@ initializeAnimations:
 
 	call loadAnimationData
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	jr c,@locFunc
 .endif
 .if defined(ROM_AGES) || defined(ROM_COMBO)
@@ -163,7 +163,7 @@ loadAnimationGfxIndex:
 .endif
 	call multiplyAByC
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	ld bc,animationAndUniqueGfxData.animationGfxHeaders_seasons
 	jr c,+
 		ld bc,animationAndUniqueGfxData.animationGfxHeaders_ages

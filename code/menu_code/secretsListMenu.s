@@ -30,7 +30,7 @@ secretListMenu_state0:
 	ld a,GFXH_SECRET_LIST_MENU
 	call loadGfxHeader
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	ld a,PALH_SECRET_LIST_MENU_SEASONS
 	jr c,+
 		ld a,PALH_SECRET_LIST_MENU_AGES
@@ -279,7 +279,7 @@ secretListMenu_getSecretData:
 	ld hl,wFileIsLinkedGame
 	bit 0,(hl)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 		ld hl,@unlinked_ages
 		jr z,+

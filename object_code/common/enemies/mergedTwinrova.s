@@ -44,7 +44,7 @@ enemyCode01:
 
 	ld l,Enemy.collisionType
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ld (hl),$87
 	jr c,+
 		ld (hl),$ff

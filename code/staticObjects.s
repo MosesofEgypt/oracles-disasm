@@ -117,7 +117,7 @@ loadStaticObjects_body:
 	ld a,(wDungeonIndex)
 .ifdef ROM_COMBO
 	ld hl,staticDungeonObjects_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,staticDungeonObjects_ages
 	+

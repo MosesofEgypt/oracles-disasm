@@ -35,7 +35,7 @@ tryToBreakTile_body:
 .ifdef ROM_COMBO
 	ld hl,breakableTileCollisionTable_ages
 	push bc
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		ld hl,breakableTileCollisionTable_seasons
 		call getSomariaBlockIndex
@@ -75,7 +75,7 @@ tryToBreakTile_body:
 	add a
 .ifdef ROM_COMBO
 	ld hl,breakableTileModes_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,breakableTileModes_ages
 	+

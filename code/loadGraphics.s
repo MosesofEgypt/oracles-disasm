@@ -452,7 +452,7 @@ refreshObjectGfx_body:
 	ld d,$00
 .ifdef ROM_COMBO
 	ld hl,objectGfxHeaderTable_seasons+1
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,objectGfxHeaderTable_ages+1
 	+
@@ -743,7 +743,7 @@ insertIndexIntoLoadedObjectGfx:
 	ld b,$92
 .ifdef ROM_COMBO
 	ld hl,treeGfxHeaderTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,treeGfxHeaderTable_ages
 	+
@@ -758,7 +758,7 @@ insertIndexIntoLoadedObjectGfx:
 	ld b,a
 .ifdef ROM_COMBO
 	ld hl,objectGfxHeaderTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,objectGfxHeaderTable_ages
 	+
@@ -845,7 +845,7 @@ getObjectGfxIndexForEnemy:
 	ld c,a
 	ld b,$00
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	ld hl,enemyData_seasons
 	jr c,+
 		ld hl,enemyData_ages
@@ -868,7 +868,7 @@ partGetObjectGfxIndex:
 	ld a,(de)
 	call multiplyABy8
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	ld hl,partData_seasons
 	jr c,+
 		ld hl,partData_ages
@@ -900,7 +900,7 @@ itemGetObjectGfxIndex:
 	add l
 
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	ld hl,itemData_seasons
 	jr c,+
 		ld hl,itemData_ages
@@ -965,7 +965,7 @@ enemyLoadGraphicsAndProperties:
 	push hl
 	add a
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	ld hl,extraEnemyData_seasons
 	jr c,+
 		ld hl,extraEnemyData_ages
@@ -1145,7 +1145,7 @@ getDataForInteraction:
 	ld c,a
 	ld b,$00
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	ld hl,interactionData_seasons+1
 	jr c,+
 		ld hl,interactionData_ages+1

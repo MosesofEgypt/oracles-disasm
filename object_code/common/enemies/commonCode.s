@@ -122,7 +122,7 @@ ecom_checkHazardsCommon:
 	call objectGetRelativeTile
 .if defined(ROM_COMBO)
 	ld hl,hazardCollisionTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,hazardCollisionTable_ages
 	+
@@ -137,7 +137,7 @@ ecom_checkHazardsCommon:
 	call objectGetRelativeTile
 .if defined(ROM_COMBO)
 	ld hl,hazardCollisionTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,hazardCollisionTable_ages
 	+
@@ -290,7 +290,7 @@ ecom_updateMovingPlatform:
 	call objectGetRelativeTile
 .if defined(ROM_COMBO)
 	ld hl,enemyConveyorTilesTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,enemyConveyorTilesTable_ages
 	+

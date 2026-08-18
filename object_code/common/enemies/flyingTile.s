@@ -87,7 +87,7 @@ flyingTile_state_spawner:
 	ld a,(de)
 .if defined(ROM_COMBO)
 	ld hl,flyingTile_layoutDataSeasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,flyingTile_layoutDataAges
 	+

@@ -47,7 +47,7 @@ loadRememberedCompanion:
 	ld (w1Companion.yh),a
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	.ifdef ROM_COMBO
-		call hIsSeasons
+		call wIsSeasons
 		jr c,+
 	.endif
 	ld (wLastAnimalMountPointY),a
@@ -57,7 +57,7 @@ loadRememberedCompanion:
 	ld (w1Companion.xh),a
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	.ifdef ROM_COMBO
-		call hIsSeasons
+		call wIsSeasons
 		jr c,+
 	.endif
 	ld (wLastAnimalMountPointX),a
@@ -101,7 +101,7 @@ checkAndSpawnMaple:
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .ifdef ROM_COMBO
 	or a
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld hl,maplePastLocations
@@ -127,7 +127,7 @@ checkAndSpawnMaple:
 	sub SPECIALOBJECT_RICKY
 +
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	ld hl,maplePresentLocationsTable_seasons
 	jr c,+
 		ld hl,maplePresentLocationsTable_ages
@@ -426,7 +426,7 @@ checkTileValidForEnemySpawn:
 	ld a,(bc)
 .ifdef ROM_COMBO
 	ld hl,enemyUnspawnableTilesTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,enemyUnspawnableTilesTable_ages
 	+

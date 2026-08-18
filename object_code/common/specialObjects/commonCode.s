@@ -181,7 +181,7 @@ sidescrollUpdateActiveTile:
 
 .if defined(ROM_COMBO)
 	ld hl,tileTypesTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,tileTypesTable_ages
 	+
@@ -195,7 +195,7 @@ sidescrollUpdateActiveTile:
 	call objectGetRelativeTile
 .if defined(ROM_COMBO)
 	ld hl,tileTypesTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,tileTypesTable_ages
 	+
@@ -327,7 +327,7 @@ linkApplyTileTypes:
 @tileType_warpHole:
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld a,(wTilesetFlags)
@@ -383,7 +383,7 @@ linkApplyTileTypes:
 
 @tileType_cracked_ice:
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ret nc
 .elif defined(ROM_AGES)
 	ret
@@ -409,7 +409,7 @@ linkApplyTileTypes:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld a,(w1Link.var2f)
@@ -434,7 +434,7 @@ linkApplyTileTypes:
 @tileType_lava:
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld a,(wLinkRidingObject)
@@ -550,7 +550,7 @@ linkApplyTileTypes:
 	ld a,c
 .if defined(ROM_COMBO)
 	ld hl,tileTypesTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,tileTypesTable_ages
 	+
@@ -683,7 +683,7 @@ checkCollisionForCompanion:
 	call getTileAtPosition
 	ld a,(hl)
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		cp TILEINDEX_VINE_BOTTOM_AGES
 		jr z,@setCollision
@@ -723,7 +723,7 @@ checkCollisionForCompanion:
 	ld a,(hl)
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,@checkCollision
 .endif
 	; tiles that are half-floor/half-cliff?
@@ -951,7 +951,7 @@ companionTryToMount:
 	jr z,@cantMount
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld a,(wDisallowMountingCompanion)
@@ -1058,7 +1058,7 @@ companionGotoHazardHandlingState:
 companionDismountAndSavePosition:
 	call companionDismount
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,@normalDismount
 .endif
 
@@ -1274,7 +1274,7 @@ companionRespawn:
 	call specialObjectSetCoordinatesToRespawnYX
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	ld bc,$0500
@@ -1376,7 +1376,7 @@ companionCheckHopDownCliff:
 
 	call objectGetRelativeTile
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		cp TILEINDEX_VINE_TOP_AGES
 		jr ++
@@ -1390,7 +1390,7 @@ companionCheckHopDownCliff:
 
 .ifdef ROM_COMBO
 	ld hl,cliffTilesTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,cliffTilesTable_ages
 	+
@@ -1570,7 +1570,7 @@ companionCheckCanSpawn:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	; Jump if [substate] != 0
@@ -1709,7 +1709,7 @@ companionCheckMountingComplete:
 	; Check if something interrupted the mounting?
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld a,(wDisallowMountingCompanion)
@@ -1790,7 +1790,7 @@ companionCheckEnableTerrainEffects:
 	call objectGetRelativeTile
 	ld h,d
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 		cp TILEINDEX_PUDDLE_AGES
 		jr nz,@label_05_067

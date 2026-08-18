@@ -118,7 +118,7 @@ interactionCode0c:
 
 @interac00:
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 .if defined(ROM_AGES)

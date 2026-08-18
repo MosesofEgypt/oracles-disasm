@@ -115,7 +115,7 @@ enemyBoss_initializeRoomWithoutExtraGfx:
 	ld (wLinkForceState),a
 
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ld a,$1a
 	jr c,+
 		ld a,$16

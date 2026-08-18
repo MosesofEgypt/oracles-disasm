@@ -212,7 +212,7 @@ skipToOpEnd_4byte:
 ; @param[out] @zflag Set if the pointer should be skipped.
 checkSkipPointer:
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 .if defined(ROM_AGES) || defined(ROM_COMBO)

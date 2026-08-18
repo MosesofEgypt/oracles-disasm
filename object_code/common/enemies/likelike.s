@@ -771,7 +771,7 @@ likelike_checkHazards:
 	call objectGetRelativeTile
 .if defined(ROM_COMBO)
 	ld hl,hazardCollisionTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,hazardCollisionTable_ages
 	+

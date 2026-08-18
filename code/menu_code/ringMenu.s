@@ -184,7 +184,7 @@ ringMenu_state0:
 	ld a,(wRingMenu_mode)
 .if defined(ROM_COMBO)
 	add GFXH_UNAPPRAISED_RING_LIST_SEASONS
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		add GFXH_UNAPPRAISED_RING_LIST_AGES-GFXH_UNAPPRAISED_RING_LIST_SEASONS
 	+

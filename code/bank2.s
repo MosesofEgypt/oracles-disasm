@@ -65,7 +65,7 @@ updateTilesetFlagsForIndoorRoomInAltWorld:
 
 .if defined(ROM_COMBO)
 	ld hl,roomsInAltWorldTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,roomsInAltWorldTable_ages
 	+
@@ -260,7 +260,7 @@ fileSelectMode1:
 	call disableLcd
 .if defined(ROM_COMBO)
 	ld a,GFXH_FILE_MENU_WITH_MESSAGE_SPEED_SEASONS
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld a,GFXH_FILE_MENU_WITH_MESSAGE_SPEED_AGES
 	+
@@ -960,7 +960,7 @@ fileSelectMode6:
 	ld a,(wEnemyPlacement.cec5)
 .if defined(ROM_COMBO)
 	or a
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 		dec a
 	++
@@ -2049,7 +2049,7 @@ fileSelectDrawHeartsAndDeathCounter:
 
 .if defined(ROM_COMBO)
 	ld a,GFXH_FILE_MENU_LAYOUT_SEASONS
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld a,GFXH_FILE_MENU_LAYOUT_AGES
 	+
@@ -2360,7 +2360,7 @@ fileSelectMode7:
 	call disableLcd
 .if defined(ROM_COMBO)
 	ld a,GFXH_FILE_MENU_SEASONS
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld a,GFXH_FILE_MENU_AGES
 	+
@@ -2565,7 +2565,7 @@ fileSelect_redrawDecorationsAndSetWramBank4:
 fileSelectDrawLinkInOtherGame:
 .if defined(ROM_COMBO)
 	ld b,$04
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 	ld b,$00
 .elif defined(ROM_AGES)
@@ -2580,7 +2580,7 @@ fileSelectDrawLinkInOtherGame:
 fileSelectDrawLink:
 .if defined(ROM_COMBO)
 	ld b,$00
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 	ld b,$04
 .elif defined(ROM_AGES)
@@ -3366,7 +3366,7 @@ reloadGraphicsOnExitMenu_body:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,++
 .endif
 	; Checking for ROOM_SEASONS_7ff (onox fight?)
@@ -3393,7 +3393,7 @@ reloadGraphicsOnExitMenu_body:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ret c
 .endif
 	jpab bank1.checkInitUnderwaterWaves
@@ -3478,7 +3478,7 @@ loadCommonGraphics_body:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 .endif
 	; CROSSITEMS: Like Seasons, load the key graphic to replace the rupee graphic when in
@@ -3599,7 +3599,7 @@ updateStatusBar_body:
 
 .if defined(ROM_COMBO)
 	ld hl,wNumRupees
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		ld a,(wDisplayedMoneyAddress)
 		ld l,a
@@ -3739,7 +3739,7 @@ updateStatusBar_body:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 .endif
 	bit TILESETFLAG_BIT_LARGE_INDOORS,a
@@ -4139,7 +4139,7 @@ loadEquippedItemSpriteData:
 .ifdef ENABLE_NEW_GAME_PLUS
 	; insert the vial sprite
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		cp $bb
 		jr +++
@@ -4523,7 +4523,7 @@ drawTreasureExtraTiles:
 
 @@drawOnInventory:
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ld a,HARP_TILE_BASE_AGES+3
 	jr nc,+
 		ld a,HARP_TILE_BASE_SEASONS+3
@@ -4546,7 +4546,7 @@ drawTreasureExtraTiles:
 	ldd (hl),a
 	res 2,h
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ld a,HARP_TILE_BASE_AGES
 	jr nc,+
 		ld a,HARP_TILE_BASE_SEASONS
@@ -4637,7 +4637,7 @@ drawTreasureExtraTiles:
 .else
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	; Inventory only: adjust tile index
@@ -4791,7 +4791,7 @@ drawHeartDisplay:
 	; overwrite one of the rods season tiles
 	ld de,$91c0
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,++
 		ld de,$90c0
 	++
@@ -5008,7 +5008,7 @@ drawHeartDisplay:
 			.if defined(ROM_AGES) || defined(ROM_COMBO)
 				ld a,$1c
 				.if defined(ROM_COMBO)
-					call hIsSeasons
+					call wIsSeasons
 					jr nc,++
 						ld a,$0c
 					++
@@ -5088,7 +5088,7 @@ loadItemIconGfx:
 	.ifdef ENABLE_NEW_GAME_PLUS
 		; insert the vial sprite
 		.if defined(ROM_COMBO)
-			call hIsSeasons
+			call wIsSeasons
 			jr c,+
 				cp $bb
 				jr +++
@@ -5470,7 +5470,7 @@ loadItemIconGfx:
 	.ifdef ENABLE_NEW_GAME_PLUS
 		; insert the vial sprite
 		.if defined(ROM_COMBO)
-			call hIsSeasons
+			call wIsSeasons
 			jr c,+
 				cp $bb
 				jr +++
@@ -5710,7 +5710,7 @@ inventoryMenuState0:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,++
 .endif
 	dec a
@@ -5732,7 +5732,7 @@ inventoryMenuState0:
 	call loadCommonGraphics
 .if defined(ROM_COMBO)
 	ld a,GFXH_INVENTORY_SCREEN_SEASONS
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld a,GFXH_INVENTORY_SCREEN_AGES
 	+
@@ -5994,7 +5994,7 @@ func_02_55b2:
 @subScreen2:
 .if defined(ROM_COMBO)
 	ld a,GFXH_INVENTORY_SUBSCREEN_3_SEASONS
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld a,GFXH_INVENTORY_SUBSCREEN_3_AGES
 	+
@@ -6284,7 +6284,7 @@ inventoryMenuState1:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,++
 .endif
 	; Can't equip rings while boxing
@@ -6634,7 +6634,7 @@ inventoryMenuState2:
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
 	ld de,$0001
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld de,$0101
@@ -6916,7 +6916,7 @@ inventorySubmenu2CheckDirectionButtons:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	ld e,$80
@@ -6952,7 +6952,7 @@ inventorySubmenu2CheckDirectionButtons:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	cp e
@@ -7070,7 +7070,7 @@ inventorySubmenu1_drawCursor:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 .endif
 	cp $09
@@ -7234,7 +7234,7 @@ func_02_5a35:
 	and $f0
 	swap a
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		add NUMBER_OFFSET_AGES
 		ldi (hl),a
@@ -7630,7 +7630,7 @@ inventorySubscreen0_drawStoredItems:
 inventorySubscreen1_drawTreasures:
 	ld hl,subscreen1TreasureData
 	.if defined(ROM_COMBO)
-		call hIsSeasons
+		call wIsSeasons
 		jr nc,+
 			ld hl,subscreen1TreasureData_seasons
 		+
@@ -7836,7 +7836,7 @@ inventorySubscreen1_getRingBoxWidth:
 inventorySubscreen2_drawTreasures:
 	ld hl,itemSubmenu2TextIndices
 	.if defined(ROM_COMBO)
-		call hIsSeasons
+		call wIsSeasons
 		jr nc,+
 			ld hl,itemSubmenu2TextIndices_seasons
 		+
@@ -7905,7 +7905,7 @@ inventorySubscreen2_drawTreasures:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	ld a,(wTilesetFlags)
@@ -7948,7 +7948,7 @@ inventorySubscreen2_drawTreasures:
 	add c
 	ld hl,itemSubmenu2BlurbDisplayData
 	.if defined(ROM_COMBO)
-		call hIsSeasons
+		call wIsSeasons
 		jr nc,+
 			ld hl,itemSubmenu2BlurbDisplayData_seasons
 		+
@@ -8458,7 +8458,7 @@ createBlankSpritesForItemSubmenu:
 	push bc
 	ld hl,@spritesTable
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		ld hl,@spritesTable_seasons
 	+
@@ -8620,7 +8620,7 @@ mapMenu_performTileSubstitutionsWrapper:
 mapMenu_performTileSubstitutions:
 	ld hl,mapMenu_tileSubstitutionTable
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		ld hl,mapMenu_tileSubstitutionTable_seasons
 	+
@@ -8724,7 +8724,7 @@ mapMenu_state0:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 
@@ -8819,7 +8819,7 @@ mapMenu_state0:
 	ld a,(wDungeonIndex)
 .if defined(ROM_COMBO)
 	add GFXH_DUNGEON_0_BLURB_SEASONS
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		add GFXH_DUNGEON_0_BLURB_AGES-GFXH_DUNGEON_0_BLURB_SEASONS
 	+
@@ -8860,7 +8860,7 @@ loadMinimapDisplayRoom:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld hl,wMinimapGroup
@@ -9036,7 +9036,7 @@ mapMenu_state1:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 .endif
 
@@ -9095,7 +9095,7 @@ mapMenu_state1:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 .endif
 	ld a,h
@@ -9168,7 +9168,7 @@ mapGetRoomTextOrReturn:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	ld a,(wMapMenu.mode) ; Check if in subrosia
@@ -9199,13 +9199,13 @@ mapGetRoomText:
 .ifdef ROM_COMBO
 	ld hl,presentMapTextIndices_seasons
 	jr nc,+
-		call hIsSeasons
+		call wIsSeasons
 		jr c,++
 			ld hl,presentMapTextIndices_ages
 			jr ++
 	+
 		ld hl,pastMapTextIndices_seasons
-		call hIsSeasons
+		call wIsSeasons
 		jr c,++
 			ld hl,pastMapTextIndices_ages
 	++
@@ -9236,7 +9236,7 @@ mapGetRoomText:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,++
 .endif
 	; Check if Link has met the maku tree
@@ -9306,7 +9306,7 @@ mapGetRoomText:
 	call checkMoblinsKeepDestroyed
 .if defined(ROM_COMBO)
 	ld c,<TX_030b
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld c,<TX_0317
 	+
@@ -9325,7 +9325,7 @@ mapGetRoomText:
 	sub SPECIALOBJECT_RICKY
 .if defined(ROM_COMBO)
 	ld c,<TX_0308
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld c,<TX_032d
 	+
@@ -9343,7 +9343,7 @@ mapGetRoomText:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld c,<TX_0326
@@ -9368,7 +9368,7 @@ mapGetRoomText:
 	push de
 	ld hl,mapMenu_dungeonEntranceText
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		ld hl,mapMenu_dungeonEntranceText_seasons
 	+
@@ -9393,7 +9393,7 @@ mapMenu_loadPopupData:
 	jr z,@noIcon
 .if defined(ROM_COMBO)
 	ld hl,presentMinimapPopups_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,presentMinimapPopups_ages
 	+
@@ -9405,7 +9405,7 @@ mapMenu_loadPopupData:
 	jr nc,+
 .if defined(ROM_COMBO)
 	ld hl,pastMinimapPopups_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,pastMinimapPopups_ages
 .else
@@ -9452,7 +9452,7 @@ mapMenu_loadPopupData:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	; Check for subrosia
@@ -9519,7 +9519,7 @@ getMinimapPopupType:
 	ld e,a
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	rst_jumpTable
@@ -9597,7 +9597,7 @@ minimapPopupType_gashaSpot:
 minimapPopupType_portalSpot:
 .if defined(ROM_COMBO)
 	ld hl,wOverworldRoomFlags
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,wPresentRoomFlags
 	+
@@ -9613,7 +9613,7 @@ minimapPopupType_portalSpot:
 
 .if defined(ROM_COMBO)
 	ld hl,wSubrosiaRoomFlags
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,wPastRoomFlags
 	+
@@ -9654,7 +9654,7 @@ minimapPopupType_shop:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld a,$0e
@@ -9782,7 +9782,7 @@ maupMenu_drawPopup:
 	ld a,(hl)
 	ld hl,mapIconOamTable
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		ld hl,mapIconOamTable_seasons
 	+
@@ -10116,7 +10116,7 @@ mapMenu_drawSprites:
 	or a
 	jp nz,mapMenu_drawWarpSites
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jp c,mapMenu_drawJewelLocations
 	jp mapMenu_drawTimePortal
 .elif defined(ROM_AGES)
@@ -10209,7 +10209,7 @@ dungeonMap_drawFloorCursor:
 	ld a,(wDungeonIndex)
 	ld hl,dungeonMapSymbolPositions
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		ld hl,dungeonMapSymbolPositions_seasons
 	+
@@ -10239,7 +10239,7 @@ dungeonMap_drawBossSymbolForFloor:
 	ld a,(wDungeonIndex)
 	ld hl,dungeonMapSymbolPositions+1
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		ld hl,dungeonMapSymbolPositions_seasons+1
 	+
@@ -10288,7 +10288,7 @@ dungeonMap_drawLinkIcons:
 	ld a,(wDungeonIndex)
 	ld hl,dungeonMapSymbolPositions
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		ld hl,dungeonMapSymbolPositions_seasons
 	+
@@ -10398,7 +10398,7 @@ mapGetRoomIndexWithoutUnusedColumns:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 .endif
 	push bc
@@ -10466,7 +10466,7 @@ mapMenu_checkRoomVisited:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	ld hl,wPastRoomFlags
@@ -10531,7 +10531,7 @@ mapMenu_drawCursor:
 mapMenu_drawSpriteAtRoomIndex:
 	ld c,a
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	ldde OVERWORLD_MAP_START_Y_SEASONS*8, OVERWORLD_MAP_START_X_SEASONS*8
 	jr c,+
 		ldde OVERWORLD_MAP_START_Y_AGES*8, OVERWORLD_MAP_START_X_AGES*8
@@ -10542,7 +10542,7 @@ mapMenu_drawSpriteAtRoomIndex:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	; Check for subrosia
@@ -10660,7 +10660,7 @@ getWarpTreeData:
 	ld hl,treeWarps
 .else
 	.if defined(ROM_COMBO)
-		call hIsSeasons
+		call wIsSeasons
 		jr nc,+
 			ld hl,treeWarps
 			jr @ret
@@ -10812,7 +10812,7 @@ mapMenu_clearUnvisitedTiles:
 	ld ($ff00+R_SVBK),a
 
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	ldde OVERWORLD_HEIGHT_SEASONS, OVERWORLD_WIDTH_SEASONS
 	ld hl,w4TileMap + OVERWORLD_MAP_START_Y_SEASONS*$20 + OVERWORLD_MAP_START_X_SEASONS
 	jr c,+
@@ -10826,7 +10826,7 @@ mapMenu_clearUnvisitedTiles:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	; Different dimensions for subrosia map
@@ -10893,7 +10893,7 @@ checkMoblinsKeepDestroyed:
 checkAdvanceShopVisited:
 
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ld a,(wSubrosiaRoomFlags+$af)
 	jr c,+
 		ld a,(wPastRoomFlags+$fe)
@@ -10953,7 +10953,7 @@ dungeonMap_drawFloorList:
 	ld a,(wDungeonIndex)
 	ld hl,dungeonMapFloorListStartPositions
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		ld hl,dungeonMapFloorListStartPositions_seasons
 	+

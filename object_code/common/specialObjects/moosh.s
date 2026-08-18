@@ -40,7 +40,7 @@ mooshState0:
 	jr nz,@setAnimation
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 	.if defined(ROM_COMBO)
-		call hIsSeasons
+		call wIsSeasons
 		jr c,+
 	.endif
 	; Check for the screen with the bridge near the forest?
@@ -641,7 +641,7 @@ mooshStateC:
 ; State A: cutscene stuff
 .if defined(ROM_COMBO)
 mooshStateA:
-	call hIsSeasons
+	call wIsSeasons
 	jp c,mooshStateA_seasons
 
 mooshStateA_ages:

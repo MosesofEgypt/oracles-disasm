@@ -4,7 +4,7 @@
 ; Replaces a shutter link is about to walk on to with empty floor.
 replaceShutterForLinkEntering:
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		ld a,(wDungeonIndex)
 		inc a
@@ -259,7 +259,7 @@ applySingleTileChanges:
 	ld a,(wActiveGroup)
 .ifdef ROM_COMBO
 	ld hl,singleTileChangeGroupTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,singleTileChangeGroupTable_ages
 	+

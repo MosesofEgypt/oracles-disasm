@@ -20,7 +20,7 @@ checkTreasureObtained_body:
 	ld b,$00
 .ifdef ROM_COMBO
 	ld hl,treasureCollectionBehaviourTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,treasureCollectionBehaviourTable_ages
 	+
@@ -115,7 +115,7 @@ giveTreasure_body:
 	ld hl,@itemsToRemoveTable
 .if defined(ROM_COMBO)
 	; nothing to remove in ages
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	call @findItemInTable
@@ -207,7 +207,7 @@ giveTreasure_body:
 	ld b,$00
 .ifdef ROM_COMBO
 	ld hl,treasureCollectionBehaviourTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,treasureCollectionBehaviourTable_ages
 	+
@@ -805,7 +805,7 @@ loadTreasureDisplayData:
 	ld a,e
 .ifdef ROM_COMBO
 	ld hl,treasureDisplayData2_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,treasureDisplayData2_ages
 	+
@@ -842,7 +842,7 @@ loadTreasureDisplayData:
 	ld d,a
 .ifdef ROM_COMBO
 	ld hl,treasureDisplayData1_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,treasureDisplayData1_ages
 	+
@@ -983,7 +983,7 @@ decideItemDrop_body:
 ; @param[out]	c	$ff if item cannot spawn (Link doesn't have it), otherwise the item itself
 checkItemDropAvailable_body:
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
@@ -1004,7 +1004,7 @@ checkItemDropAvailable_body:
 	rst_addDoubleIndex
 	ldi a,(hl)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		cp <wMinimapGroup
 		jr z,@done

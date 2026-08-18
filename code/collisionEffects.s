@@ -160,7 +160,7 @@ partCheckCollisions:
 	ld a,(de)
 .ifdef ROM_COMBO
 	ld hl,partActiveCollisions_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,partActiveCollisions_ages
 	+
@@ -178,7 +178,7 @@ partCheckCollisions:
 enemyCheckCollisions:
 .ifdef ROM_COMBO
 	ld hl,enemyActiveCollisions_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,enemyActiveCollisions_ages
 	+
@@ -245,7 +245,7 @@ enemyCheckCollisions:
 	ldh a,(<hFF90)
 .ifdef ROM_COMBO
 	cp ITEMCOLLISION_BOMB_S
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		cp ITEMCOLLISION_BOMB_A
 	+
@@ -523,7 +523,7 @@ enemyCheckCollisions:
 	call multiplyABy16
 .ifdef ROM_COMBO
 	ld hl,objectCollisionTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,objectCollisionTable_ages
 	+

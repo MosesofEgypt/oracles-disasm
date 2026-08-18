@@ -107,7 +107,7 @@ interactionCodedf:
 	call z,interactionAnimate
 
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ld l,Interaction.var37
 	jr c,+
 		inc l
@@ -137,7 +137,7 @@ interactionCodedf:
 	swap a
 	add $20
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ld e,Interaction.var37
 	jr c,+
 		inc e

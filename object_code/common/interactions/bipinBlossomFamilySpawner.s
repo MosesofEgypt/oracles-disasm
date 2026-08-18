@@ -11,7 +11,7 @@ interactionCodeac:
 	call spawnBipinBlossomFamilyObjects
 	ld hl,wSeedTreeRefilledBitset
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ld a,$fe
 	jr c,+
 		rlca
@@ -33,7 +33,7 @@ interactionCodeac:
 @checkUpdateState:
 	ld a,(wSeedTreeRefilledBitset)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	bit 0,a
 	jr c,+
 		bit 1,a

@@ -8,11 +8,26 @@
 
 .RAMSECTION Wram0_c000
 
-wMusicReadFunction: ; $c000
-; Function copied to RAM to read a byte from another bank.
-; NOTE: THIS CODE SHOULD ONLY EVER BE CALLED BY
-;       CODE IN THE AUDIO BANK, OR CODE IN BANK 0
-	dsb $14
+.if defined(ROM_COMBO)
+	wMusicReadFunction: ; $c000
+		dsb $11
+
+	wIsSeasons
+		; function to set carry flag if seasons, or clear
+		; it if ages. exists in hram so it can be modified.
+		; will contain a variant of this function:
+		;	scf
+		;	ccf		; this may be replaced with a return
+		;	ret
+		; the cflag will be cleared if ages and set if seasons
+		dsb $03
+.else
+	wMusicReadFunction: ; $c000
+	; Function copied to RAM to read a byte from another bank.
+	; NOTE: THIS CODE SHOULD ONLY EVER BE CALLED BY
+	;       CODE IN THE AUDIO BANK, OR CODE IN BANK 0
+		dsb $14
+.endif
 
 wSoundFadeCounter: ; $c014
 ; When [wSoundFadeCounter]&[wSoundFadeSpeed] == 0, volume is incremented or decremented.

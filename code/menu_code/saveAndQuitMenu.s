@@ -98,7 +98,7 @@ getIsInNgpDungeon:
 		jr z,+
 		.if defined(ROM_AGES) || defined(ROM_COMBO)
 			.if defined(ROM_COMBO)
-				call hIsSeasons
+				call wIsSeasons
 				jr c,++
 			.endif
 			cp $0e ; lots of non-dungeon areas

@@ -66,7 +66,7 @@ getEntryFromObjectTable1:
 .ifdef ROM_COMBO
 	ld hl, objectData_seasons.objectTable1
 	ld a, :objectData_seasons.objectTable1
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl, objectData.objectTable1
 		ld a, :objectData.objectTable1

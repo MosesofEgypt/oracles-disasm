@@ -158,7 +158,7 @@ warpTransitionA:
 
 .if defined(ROM_COMBO)
 warpTransitionAOr7:
-	call hIsSeasons
+	call wIsSeasons
 	jp c,warpTransition7
 	jp initLinkStateAndAnimateStanding
 .endif
@@ -202,7 +202,7 @@ warpTransition_setLinkFacingDir:
 	call objectGetTileAtPosition
 .if defined(ROM_COMBO)
 	ld hl,facingDirAfterWarpTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 		ld hl,facingDirAfterWarpTable_ages
 	++
@@ -418,7 +418,7 @@ warpTransition5_01:
 
 .if defined(ROM_COMBO)
 	call objectGetTileAtPosition
-	call hIsSeasons
+	call wIsSeasons
 	ld hl,hazardCollisionTable_ages
 	jr nc,++
 		ld hl,hazardCollisionTable_seasons
@@ -814,7 +814,7 @@ warpTransitionB:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO) || defined(HACK_DISABLE_INTRO_LOCKS)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	call itemIncSubstate
@@ -858,7 +858,7 @@ warpTransitionF:
 ; Warp in and create a portal. Doesn't update respawn. Ages only.
 warpTransition6:
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jp c,warpTransition6_seasons
 .endif
 	ld e,SpecialObject.substate
@@ -1242,7 +1242,7 @@ linkState0e:
 ; LINK_STATE_TOSSED_BY_GUARDS
 linkState0f:
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jp c,linkState0f_seasons
 .endif
 	ld a,(wTextIsActive)
@@ -1519,7 +1519,7 @@ linkState02:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	; Check if the current room is the moblin keep with the crumbling floors
@@ -1540,7 +1540,7 @@ linkState02:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	; start CUTSCENE_S_ONOX_FINAL_FORM
@@ -1656,7 +1656,7 @@ linkState02:
 ; Makes Link surface from an underwater area if he's pressed B.
 checkForUnderwaterTransition:
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ret c
 .endif
 	ld a,(wDisableScreenTransitions)
@@ -1675,7 +1675,7 @@ checkForUnderwaterTransition:
 	ld a,(hl)
 .if defined(ROM_COMBO)
 	ld hl,tileTypesTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,tileTypesTable_ages
 	+
@@ -2137,7 +2137,7 @@ linkState0d:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld l,SpecialObject.speedZ
@@ -2226,7 +2226,7 @@ linkState05:
 	; Set destination position (var37 / var38)
 .if defined(ROM_COMBO)
 	ld l,$13
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld l,$18
 	+
@@ -2298,7 +2298,7 @@ linkState05:
 	ld l,SpecialObject.direction
 .if defined(ROM_COMBO)
 	ld (hl),DIR_RIGHT
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld (hl),DIR_LEFT
 	+
@@ -2312,7 +2312,7 @@ linkState05:
 	inc l
 .if defined(ROM_COMBO)
 	ld (hl),$08
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld (hl),$18
 	+
@@ -2415,7 +2415,7 @@ linkState06:
 ; This state is used during the cutscene in the black tower where Ambi gets un-possessed.
 linkState09:
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jp c,linkState09_seasons
 .endif
 	ld e,SpecialObject.substate
@@ -2840,7 +2840,7 @@ linkSetState:
 linkState10:
 .endif
 	.if defined(ROM_COMBO)
-		call hIsSeasons
+		call wIsSeasons
 		jp c,linkState10_seasons
 	.endif
 linkState01:
@@ -3364,7 +3364,7 @@ forceDrownLink:
 checkSwimmingOverSeawater:
 .if defined(ROM_COMBO)
 	or $01
-	call hIsSeasons
+	call wIsSeasons
 	ret c
 .endif
 	ld a,(w1Link.var2f)
@@ -3610,7 +3610,7 @@ linkUpdateDiving:
 	ld hl,wLinkSwimmingState
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,@checkInput
 .endif
 	bit 7,(hl)
@@ -3792,7 +3792,7 @@ linkUpdateSwimming_sidescroll:
 linkUpdateVelocity:
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,@label_05_159
 .endif
 	ld a,(wTilesetFlags)
@@ -4334,7 +4334,7 @@ linkUpdateInAir:
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	push af
@@ -4547,7 +4547,7 @@ linkUpdateInAir_sidescroll:
 	cp $a9
 	jr c,@notLanded
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,@landedOnGround
 .elif defined(ROM_AGES)
 	jr @landedOnGround
@@ -5046,7 +5046,7 @@ specialObjectUpdateAdjacentWallsBitset:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	ld a,(wActiveTileType)
@@ -5066,7 +5066,7 @@ specialObjectUpdateAdjacentWallsBitset:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+++
 .endif
 	ld b,a
@@ -5149,7 +5149,7 @@ calculateAdjacentWallsBitset:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld a,(wLinkRaisedFloorOffset)
@@ -5373,7 +5373,7 @@ checkLinkPushingAgainstBed:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	ldbc <ROOM_SEASONS_382, $14
@@ -5414,7 +5414,7 @@ checkLinkPushingAgainstBed:
 ; Pushing against tree stump
 checkLinkPushingAgainstTreeStump:
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ret nc
 .endif
 	ld a,(wActiveTileType)
@@ -5643,7 +5643,7 @@ specialObjectSetPositionToVar38IfSet:
 checkLinkJumpingOffCliff:
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	ld a,(wActiveTileType)
@@ -5697,7 +5697,7 @@ checkLinkJumpingOffCliff:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	ldh a,(<hFF8B)
@@ -5734,7 +5734,7 @@ checkLinkJumpingOffCliff:
 	ldh (<hFF8B),a
 .if defined(ROM_COMBO)
 	ld hl,cliffTilesTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,cliffTilesTable_ages
 	+
@@ -5781,7 +5781,7 @@ linkState12:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	; Set jumping animation if not underwater
@@ -5876,7 +5876,7 @@ linkState12:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	ld a,(wActiveGroup)
@@ -6000,7 +6000,7 @@ linkState12:
 	ldh a,(<hFF92)
 .if defined(ROM_COMBO)
 	ld hl,landableTileFromCliffExceptions_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,landableTileFromCliffExceptions_ages
 	+

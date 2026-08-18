@@ -78,7 +78,7 @@ initializeNgpFile:
 	call initializeFileVariables
 .if defined(ROM_COMBO)
 	ld hl,initialFileVariables_seasons
-	call hIsSeasons
+	call wIsSeasons
 	call c,initializeFileVariables
 .endif
 
@@ -139,7 +139,7 @@ initializeFile:
 	call initializeFileVariables
 .if defined(ROM_COMBO)
 	ld hl,initialFileVariables_seasons
-	call hIsSeasons
+	call wIsSeasons
 	call c,initializeFileVariables
 .endif
 
@@ -188,7 +188,7 @@ initializeFile:
 ++
 	callab commonInteractions5.initializeChildOnGameStart
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	jr c,saveFile
 .endif
 .if defined(ROM_AGES) || defined(ROM_COMBO)
@@ -203,7 +203,7 @@ saveFile:
 	ld hl,wWhichGame
 .ifdef ROM_COMBO
 	ld (hl),$00
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		inc (hl)
 	+
@@ -215,7 +215,7 @@ saveFile:
 	; String to verify save integrity (unique between ages/seasons)
 	ld hl,wSavefileString
 	.ifdef ROM_COMBO
-		call hIsSeasons
+		call wIsSeasons
 		ld de,saveVerificationString_seasons
 		jr c,+
 			ld de,saveVerificationString_ages
@@ -409,7 +409,7 @@ verifyFileAtHl:
 
 	; Verify the savefile string
 	.ifdef ROM_COMBO
-		call hIsSeasons
+		call wIsSeasons
 		ld de,saveVerificationString_seasons
 		jr c,+
 			ld de,saveVerificationString_ages
@@ -476,7 +476,7 @@ calculateFileChecksum:
 getFileAddress1:
 	ld c,$00
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .else
 	jr +

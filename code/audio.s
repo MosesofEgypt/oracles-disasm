@@ -1579,7 +1579,7 @@ playSound:
 
 @normalSound:
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	ld hl,soundPointers_seasons
 	jr c,+
 		ld hl,soundPointers_ages

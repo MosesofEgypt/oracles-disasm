@@ -64,7 +64,7 @@ _updateInteractionsIfStateIsZero:
 
 getInteractionCodeTable:
 	ld hl,interactionCodeTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	ret c
 	ld hl,interactionCodeTable_ages
 	ret

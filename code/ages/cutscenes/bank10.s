@@ -510,7 +510,7 @@ agesFunc_10_7298:
 	call incCbc2
 .ifdef ROM_COMBO
 	ld a,GFXH_TO_BE_CONTINUED_SEASONS
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld a,GFXH_TO_BE_CONTINUED_AGES
 	+

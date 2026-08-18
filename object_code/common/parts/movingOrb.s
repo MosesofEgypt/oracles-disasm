@@ -45,7 +45,7 @@ partCode0b:
 
 @state0To7:
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ld hl,objectMovement.orbMovementScript_seasons
 	jr c,+
 		ld hl,objectMovement.orbMovementScript_ages

@@ -20,7 +20,7 @@ interactWithTileBeforeLink:
 	; Note: The function that's called must set or unset the carry flag on returning.
 	; Setting it disables some of Link's per-frame update code?
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	ld hl,interactableTilesTable_seasons
 	jr nc,+
 		ld hl,interactableTilesTable_ages
@@ -180,7 +180,7 @@ nextToSignTile:
 	ld a,(wActiveGroup)
 .ifdef ROM_COMBO
 	ld hl,signTextGroupTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,signTextGroupTable_ages
 	+
@@ -263,7 +263,7 @@ checkFacingBottomOfTile:
 ; Deals with pushing blocks, pots, etc.
 nextToPushableBlock:
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		; No pushing underwater
 		ld a,(wTilesetFlags)
@@ -310,7 +310,7 @@ nextToPushableBlock:
 
 .ifdef ROM_COMBO
 	ldh a,(<hFF8B)
-	call hIsSeasons
+	call wIsSeasons
 	ld b,TILEINDEX_SOMARIA_BLOCK
 	call c,getSomariaBlockIndex
 	cp b
@@ -357,7 +357,7 @@ nextToPushableBlock:
 	dec (hl)
 
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 .if defined(ROM_AGES) || defined(ROM_COMBO)
@@ -530,7 +530,7 @@ nextToOverworldKeyhole:
 	ld a,(wActiveRoom)
 	ld hl,@roomsWithKeyholesTable
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		ld hl,@roomsWithKeyholesTableSeasons
 	+
@@ -654,7 +654,7 @@ createKeySpriteInteraction:
 ;;
 nextToSubrosiaKeydoor:
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	ccf
 	ret c
 .endif
@@ -860,7 +860,7 @@ specialObjectCheckPushingAgainstTile:
 ; @param[out]	zflag	Set if you have no keys, or don't have the boss key
 checkAndDecKeyCount:
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		ld a,GLOBALFLAG_DATING_ROSA
 		call checkGlobalFlag

@@ -215,7 +215,7 @@ parentItemCode_bracelet:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 .endif
 	ld a,(wActiveTileType)
@@ -619,7 +619,7 @@ parentItemCode_bracelet:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO) ; TODO: why does only ages check this?
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 .endif
 	; Load animation depending on whether Link's riding a minecart

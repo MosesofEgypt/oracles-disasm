@@ -177,7 +177,7 @@ scriptCmd_showPasswordScreen:
 	swap a
 	and $03
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		add $04
 	+
@@ -305,7 +305,7 @@ scriptCmd_jump:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 .endif
 	ld a,h
@@ -1266,7 +1266,7 @@ scriptCmd_setOrUnsetGlobalFlag:
 scriptCmd_initNpcHitbox:
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 .endif
 	ld e,Interaction.collisionRadiusY

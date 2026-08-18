@@ -34,7 +34,7 @@ specialObjectSetAnimation_body:
 label_06_032:
 .ifdef ROM_COMBO
 	ld hl,specialObjectAnimationTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,specialObjectAnimationTable_ages
 	+
@@ -112,7 +112,7 @@ loadLinkAndCompanionAnimationFrame_body:
 	; CROSSITEMS: The cape animation was added at index 256. It must account for link's
 	; direction.
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld a,(w1Link.id)
@@ -225,7 +225,7 @@ getSpecialObjectGraphicsFrame:
 
 .ifdef ROM_COMBO
 	ld hl,specialObjectGraphicsTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,specialObjectGraphicsTable_ages
 	+
@@ -250,7 +250,7 @@ getSpecialObjectGraphicsFrame:
 	ld a,e
 .ifdef ROM_COMBO
 	ld hl,specialObjectOamDataTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,specialObjectOamDataTable_ages
 	+
@@ -346,7 +346,7 @@ func_4553:
 @getLinkWalkingAnimation:
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	jr c,@notUnderwater
 .endif
 	ld c,$0a
@@ -1174,19 +1174,23 @@ linkApplyDamage:
 	jr c,+++
 		ld a,FAIRYS_RING
 		call cpActiveRing
-		jr nz,+
-			push bc
-			ld b,a
-			callab bank0Ext.removeRing
-			pop bc
-			scf
-			jr +++
-		+
 		scf
 		ccf
+		jr nz,@noPotion
+
+		push bc
+		ld b,a
+		callab bank0Ext.removeRing
+		pop bc
+		scf
+		jr ++++
 	+++
-.endif
+		ld a,TREASURE_POTION
+		call loseTreasure
+	++++
+.else
 	jr nc,@noPotion
+.endif
 
 	; [wLinkHealth] = [wLinkMaxHealth]
 	ld hl,wLinkMaxHealth
@@ -1204,11 +1208,10 @@ linkApplyDamage:
 	ld a,$01
 	ld (de),a
 
-.ifdef ENABLE_RING_REDUX
-	jr nc,++
-.endif
+.ifndef ENABLE_RING_REDUX
 	ld a,TREASURE_POTION
 	call loseTreasure
+.endif
 	jr ++
 
 ; Link is dead, and has no potion.

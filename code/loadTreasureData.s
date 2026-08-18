@@ -11,7 +11,7 @@ interactionLoadTreasureData:
 	ld e,Interaction.var30
 	ld (de),a
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	ld hl,treasureObjectData_seasons
 	jr c,+
 		ld hl,treasureObjectData_ages

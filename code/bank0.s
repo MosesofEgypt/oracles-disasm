@@ -1180,7 +1180,7 @@ loadPaletteHeader:
 	ld a,l
 
 	ld hl,bank1Moveable.paletteHeaderTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,bank1Moveable.paletteHeaderTable_ages
 	+
@@ -1195,7 +1195,7 @@ loadPaletteHeader:
 ---
 .if defined(ROM_COMBO)
 	ld a,:bank1Moveable.paletteHeaderTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld a,:bank1Moveable.paletteHeaderTable_ages
 	+
@@ -1378,7 +1378,7 @@ loadUncompressedGfxHeader:
 .if defined(ROM_COMBO)
 	ld a,:bank1Moveable.uncmpGfxHeaderTable_seasons
 	ld hl,bank1Moveable.uncmpGfxHeaderTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld a,:bank1Moveable.uncmpGfxHeaderTable_ages
 		ld hl,bank1Moveable.uncmpGfxHeaderTable_ages
@@ -1419,7 +1419,7 @@ loadUncompressedGfxHeader:
 	call queueDmaTransfer
 .if defined(ROM_COMBO)
 	ld a,:bank1Moveable.uncmpGfxHeaderTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld a,:bank1Moveable.uncmpGfxHeaderTable_ages
 	+
@@ -3035,7 +3035,7 @@ drawAllSpritesUnconditionally:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld a,(wLinkRaisedFloorOffset)
@@ -3190,7 +3190,7 @@ drawAllSpritesUnconditionally:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	; Undo link's Y offset for drawing
@@ -3248,7 +3248,7 @@ drawAllSpritesUnconditionally:
 		and $03
 	++
 
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		add $05
 	+
@@ -3725,7 +3725,7 @@ getChestData:
 .if defined(ROM_COMBO)
 	ld a,:chestData.chestDataGroupTable_seasons
 	ld hl,chestData.chestDataGroupTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld a,:chestData.chestDataGroupTable_ages
 		ld hl,chestData.chestDataGroupTable_ages
@@ -3838,7 +3838,7 @@ updateRoomFlagsForBrokenTile:
 	push af
 .if defined(ROM_COMBO)
 	ld hl,tileIncreaseGashaMaturityOnBreakTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,tileIncreaseGashaMaturityOnBreakTable_ages
 	+
@@ -3851,7 +3851,7 @@ updateRoomFlagsForBrokenTile:
 	pop af
 .if defined(ROM_COMBO)
 	ld hl,tileUpdateRoomFlagsOnBreakTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,tileUpdateRoomFlagsOnBreakTable_ages
 	+
@@ -4106,7 +4106,7 @@ func_131f:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld a,(wcddf)
@@ -4932,7 +4932,7 @@ loadObjectGfx2:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 .endif
 	ld a,(wcc1f+$01)
@@ -5646,7 +5646,7 @@ getRoomFlags:
 .if defined(ROM_COMBO)
 	cp $02
 	jr nz,+
-		call hIsSeasons
+		call wIsSeasons
 		jr nc,+
 			inc a
 	+
@@ -5699,7 +5699,7 @@ clearAllItemsAndPutLinkOnGround:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,@notSomariaBlock
 .endif
 	ld l,Item.id
@@ -5990,7 +5990,7 @@ getRoomDungeonProperties:
 	and $01
 	ld hl, bank1.dungeonRoomPropertiesGroupTable
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		add $02
 	+
@@ -6438,7 +6438,7 @@ checkLinkID0AndControlNormal:
 	ld a,(w1Link.id)
 	or a
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+++
 	jr z,checkLinkVulnerableAndIDZero
 .elif defined(ROM_AGES)
@@ -6454,7 +6454,7 @@ checkLinkVulnerableAndIDZero:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,checkLinkVulnerable
 .endif
 	ld a,(w1Link.id)
@@ -6488,7 +6488,7 @@ checkLinkCollisionsEnabled:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld a,(wLinkDeathTrigger)
@@ -7954,7 +7954,7 @@ objectCheckIsOverHazard:
 .endif
 .if defined(ROM_COMBO)
 	ld hl,hazardCollisionTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,hazardCollisionTable_ages
 	+
@@ -8127,7 +8127,7 @@ breakCrackedFloor:
 objectCheckTileAtPositionIsWater:
 	call objectGetTileAtPosition
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		sub TILEINDEX_PUDDLE_AGES
 		cp TILERANGE_WATER_AGES
@@ -8149,7 +8149,7 @@ objectCheckTileAtPositionIsWater:
 checkTileAtPositionIsWater:
 	call getTileAtPosition
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		sub TILEINDEX_PUDDLE_AGES
 		cp TILERANGE_WATER_AGES
@@ -9645,7 +9645,7 @@ interactionAnimate:
 	push af
 .if defined(ROM_COMBO)
 	ld a,:interactionAnimationTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld a,:interactionAnimationTable_ages
 	+
@@ -9667,7 +9667,7 @@ interactionSetAnimation:
 .if defined(ROM_COMBO)
 	ld a,:interactionAnimationTable_seasons
 	ld hl,interactionAnimationTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld a,:interactionAnimationTable_ages
 		ld hl,interactionAnimationTable_ages
@@ -9734,7 +9734,7 @@ _interactionNextAnimationFrame:
 	ld a,(de)
 .if defined(ROM_COMBO)
 	ld hl,interactionOamDataTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,interactionOamDataTable_ages
 	+
@@ -9833,7 +9833,7 @@ npcFaceLinkAndAnimate:
 	srl b
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld e,Interaction.var37
@@ -10234,7 +10234,7 @@ enemyAnimate:
 	push af
 .if defined(ROM_COMBO)
 	ld a,:enemyAnimationTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld a,:enemyAnimationTable_ages
 	+
@@ -10257,7 +10257,7 @@ enemySetAnimation:
 .if defined(ROM_COMBO)
 	ld a,:enemyAnimationTable_seasons
 	ld hl,enemyAnimationTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld a,:enemyAnimationTable_ages
 		ld hl,enemyAnimationTable_ages
@@ -10321,7 +10321,7 @@ _enemyNextAnimationFrame:
 	ld a,(de)
 .if defined(ROM_COMBO)
 	ld hl,enemyOamDataTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,enemyOamDataTable_ages
 	+
@@ -10682,7 +10682,7 @@ partSetAnimation:
 	push af
 	ld a,:partAnimationTable_seasons
 	ld hl,partAnimationTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,partAnimationTable_ages
 	+
@@ -10747,7 +10747,7 @@ _partNextAnimationFrame:
 	ld a,(de)
 .if defined(ROM_COMBO)
 	ld hl,partOamDataTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,partOamDataTable_ages
 	+
@@ -11743,7 +11743,7 @@ getThisRoomDungeonProperties:
 	and $01
 	ld hl, bank1.dungeonRoomPropertiesGroupTable
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		add $02
 	+
@@ -12165,7 +12165,7 @@ initializeRoom:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 .endif
 	callab bank1.clearSolidObjectPositions
@@ -12239,7 +12239,7 @@ parseGivenObjectData:
 	ldh a,(<hRomBank)
 	push af
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		ld a, :objectData_seasons.parseGivenObjectData
 		rst_setrombank
@@ -12869,7 +12869,7 @@ loadScreenMusic:
 	ldh a,(<hRomBank)
 	push af
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ld a,:bank4Data1.musicAssignmentGroupTable_seasons
 	ld hl,bank4Data1.musicAssignmentGroupTable_seasons
 	jr c,+
@@ -12894,7 +12894,7 @@ loadScreenMusic:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld a,(wActiveGroup)
@@ -12906,7 +12906,7 @@ loadScreenMusic:
 	ld c,a
 .if defined(ROM_COMBO)
 	ld hl,bank4Data1.roomPackData_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+++
 		ld hl,bank4Data1.roomPackData_ages
 	+++
@@ -12931,7 +12931,7 @@ loadScreenMusic:
 	ld a,(wActiveRoom)
 .if defined(ROM_COMBO)
 	ld hl,bank4Data1.roomPackData_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+++
 		ld hl,bank4Data1.roomPackData_ages
 	+++
@@ -12956,7 +12956,7 @@ applyWarpDest:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	callfrombank0 bank1.checkUpdateDungeonMinimap
@@ -12983,7 +12983,7 @@ loadScreenMusicAndSetRoomPack:
 	ld a,(wLoadingRoomPack)
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	and $7f
@@ -13150,7 +13150,7 @@ func_3539:
 	callfrombank0 bank5.updateSpecialObjects
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	callfrombank0 itemCode.updateItems
@@ -13429,7 +13429,7 @@ checkDungeonUsesToggleBlocks:
 	ld a,(wDungeonIndex)
 	cp $ff
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		xor a
 	+
@@ -13481,7 +13481,7 @@ loadAnimationData:
 .if defined(ROM_COMBO)
 	ld a,:animationAndUniqueGfxData.animationGroupTable_seasons
 	ld hl,animationAndUniqueGfxData.animationGroupTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld a,:animationAndUniqueGfxData.animationGroupTable_ages
 		ld hl,animationAndUniqueGfxData.animationGroupTable_ages
@@ -13558,7 +13558,7 @@ getIndexOfGashaSpotInRoom:
 	ld a,:roomGfxChanges.getIndexOfGashaSpotInRoom_body_seasons
 	rst_setrombank
 	ld a,c
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		call roomGfxChanges.getIndexOfGashaSpotInRoom_body_ages
 		jr ++
@@ -13652,7 +13652,7 @@ loadTilesetLayout:
 .if defined(ROM_COMBO)
 	ld hl,expandedTilesetMappingsTable_seasons
 	ld a,:expandedTilesetMappingsTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,expandedTilesetMappingsTable_ages
 		ld a,:expandedTilesetMappingsTable_ages
@@ -13747,7 +13747,7 @@ loadTilesetGraphics:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	callab        roomGfxChanges.func_02_7a77
@@ -13831,7 +13831,7 @@ loadTilesetGfx:
 .if defined(ROM_COMBO)
 	ld hl,expandedTilesetGfxTable_seasons
 	ld a,:expandedTilesetGfxTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,expandedTilesetGfxTable_ages
 		ld a,:expandedTilesetGfxTable_ages
@@ -13884,7 +13884,7 @@ loadTilesetGfx:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	; For gnarled root dungeon entrance: load "unique graphics" when closed
@@ -13912,7 +13912,7 @@ loadTilesetData:
 	push af
 
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		callfrombank0 tilesets.loadTilesetData_body_ages
 		jr ++
@@ -13944,7 +13944,7 @@ loadTilesetAndRoomLayout:
 	call nz,loadTilesetLayout
 
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	call c,@adjustLoadingRoomForTempleRemains
 .elif defined(ROM_SEASONS)
 	call @adjustLoadingRoomForTempleRemains
@@ -13953,7 +13953,7 @@ loadTilesetAndRoomLayout:
 	call          loadRoomLayout
 
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		callfrombank0 roomTileChanges.applyAllTileSubstitutions_ages
 		jr ++
@@ -14016,7 +14016,7 @@ loadRoomLayout:
 .if defined(ROM_COMBO)
 	ld a,:roomLayouts.roomLayoutGroupTable_seasons
 	ld hl,roomLayouts.roomLayoutGroupTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld a,:roomLayouts.roomLayoutGroupTable_ages
 		ld hl,roomLayouts.roomLayoutGroupTable_ages
@@ -14078,7 +14078,7 @@ loadRoomLayout:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ld hl,@layoutGroupTable_ages
 	jr nc,+
 	ld hl,@layoutGroupTable_seasons
@@ -14095,7 +14095,7 @@ loadRoomLayout:
 .endif
 
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		push hl
 		callab tilesets.getAdjustedRoomGroup
@@ -14373,7 +14373,7 @@ generateVramTilesWithRoomChanges:
 
 	callfrombank0 tilesets.generateW3VramTilesAndAttributes
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		callab    roomGfxChanges.applyRoomSpecificTileChangesAfterGfxLoad_ages
 		jr ++
@@ -15120,7 +15120,7 @@ interactionFunc_3e6d:
 	ldh a,(<hRomBank)
 	push af
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ld a,:data_4556_seasons
 	ld hl,data_4556_seasons
 	jr c,+
@@ -15247,7 +15247,7 @@ copy256BytesFromBank:
 
 .if defined(ROM_COMBO)
 toggleIsSeasons:
-	call hIsSeasons
+	call wIsSeasons
 	ccf
 
 ;;
@@ -15256,7 +15256,7 @@ setIsSeasons:
 	; insert a small 3-byte program into hRAM for
 	; quickly determining which game is being run
 	push hl
-	ld hl,hIsSeasons
+	ld hl,wIsSeasons
 	ld (hl),$37 		; scf
 	inc hl
 	jr c,+

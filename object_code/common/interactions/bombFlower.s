@@ -3,7 +3,7 @@
 ; ==================================================================================================
 interactionCode6f:
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jp nc,interactionDelete
 .elif defined(ROM_AGES)
 	jp interactionDelete

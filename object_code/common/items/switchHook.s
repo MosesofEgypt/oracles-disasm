@@ -618,7 +618,7 @@ switchHookState3:
 	ld a,(de)
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	cp TILEINDEX_SWITCH_DIAMOND

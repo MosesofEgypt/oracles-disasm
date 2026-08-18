@@ -64,7 +64,7 @@ partCode13:
 	ld (hl),INTERAC_SPARKLE
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jp nc,objectCopyPositionWithOffset
 .endif
 	; substate

@@ -15,7 +15,7 @@ updateSpecialObjects:
 
 	ld a,TREASURE_MERMAID_SUIT
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		ld a,TREASURE_MERMAID_SUIT_SEASONS
 	+
@@ -26,7 +26,7 @@ updateSpecialObjects:
 +
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld a,(wTilesetFlags)

@@ -321,7 +321,7 @@ sendFileHeader:
 	jr nz,--
 
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	ld a,SERIAL_UPPER_NIBBLE + $90
 	jr c,+
 		inc a
@@ -811,7 +811,7 @@ gameLink_getFile3:
 @gameLink:
 	ld a,(w4PacketBuffer+31)
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		dec a
 	+

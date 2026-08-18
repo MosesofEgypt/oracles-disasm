@@ -20,7 +20,7 @@ interactionCodeb5:
 	call setDeathRespawnPoint
 
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		ld a,$09
 		ld (wc6e5),a

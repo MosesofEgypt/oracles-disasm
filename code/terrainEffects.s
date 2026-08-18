@@ -147,7 +147,7 @@ _drawObjectTerrainEffects:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	; CROSSITEMS: Cane of Somaria uses tile index $f9 indoors. It behaves like a grass tile, but
@@ -166,7 +166,7 @@ _drawObjectTerrainEffects:
 .endif
 
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		cp TILEINDEX_GRASS
 		jr z,@walkingInGrass

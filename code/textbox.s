@@ -307,7 +307,7 @@ updateTextbox:
 
 	; You got 4 pieces of heart. That's 1 heart container
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ld a,<TX_0024
 	jr c,+
 		ld a,<TX_0049
@@ -826,7 +826,7 @@ initTextboxStuff:
 	add a
 	add b
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	ld hl,textTableTable_seasons
 	jr c,+
 		ld hl,textTableTable_ages
@@ -975,7 +975,7 @@ initTextboxStuff:
 	ld a,(wTextboxFlags)
 	and TEXTBOXFLAG_ALTPALETTE2
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ld a,PALH_SEASONS_bd
 	jr c,+
 		ld a,PALH_bd
@@ -1029,7 +1029,7 @@ getTextAddress:
 .endif
 	add a
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	ld hl,textOffset1Table_seasons
 	jr c,+
 		ld hl,textOffset1Table_ages
@@ -1043,7 +1043,7 @@ getTextAddress:
 	rst_derefHl
 	ld a,(wTextIndexH)
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	jr c,++
 		cp TEXT_OFFSET_SPLIT_INDEX_AGES
 		jr +
@@ -1062,7 +1062,7 @@ getTextAddress:
 .endif
 	add a
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	ld hl,textOffset2Table_seasons
 	jr c,++
 		ld hl,textOffset2Table_ages

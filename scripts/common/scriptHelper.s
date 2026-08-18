@@ -295,7 +295,7 @@ movingPlatform_loadScript:
 	; Not in dungeon
 .ifdef ROM_COMBO
 	ld hl,movingPlatform_nonDungeonScriptTable
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,movingPlatform_scriptTable_ages
 	+
@@ -310,7 +310,7 @@ movingPlatform_loadScript:
 	ld a,b
 .ifdef ROM_COMBO
 	ld hl,movingPlatform_scriptTable_seasons
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 		ld hl,movingPlatform_scriptTable_ages
 	+

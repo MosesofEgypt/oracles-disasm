@@ -6,7 +6,7 @@ interactionCode1e:
 	call returnIfScrollMode01Unset
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr c,+
 .endif
 	ld a,(wSwitchHookState)
@@ -148,7 +148,7 @@ interactionCode1e:
 	; The tile at this position must not be solid
 	call objectGetTileAtPosition
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	ld b,TILEINDEX_SOMARIA_BLOCK
 	jr nc,+
 		push af

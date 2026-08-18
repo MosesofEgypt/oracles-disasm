@@ -17,7 +17,7 @@ enemyCode53:
 dragonfly_state0:
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	ld a,(wRoomStateModifier)

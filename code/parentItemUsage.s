@@ -38,7 +38,7 @@ setupPassiveShield:
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 	; no passive shield underwater
 	.ifdef ROM_COMBO
-		call hIsSeasons
+		call wIsSeasons
 		jr c,++
 	.endif
 	ld a,(wTilesetFlags)
@@ -162,7 +162,7 @@ checkUseItems:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 	.ifdef ROM_COMBO
-		call hIsSeasons
+		call wIsSeasons
 		jr c,@normal
 	.endif
 	bit TILESETFLAG_BIT_UNDERWATER,a
@@ -197,7 +197,7 @@ checkUseItems:
 	or a
 
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		jr nz,@checkB
 		jr ++
@@ -276,7 +276,7 @@ checkItemUsed:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 .endif
 	ld a,(wInBoxingMatch)
@@ -579,7 +579,7 @@ getCanUseItemsInWater:
 
 	ld a,TREASURE_MERMAID_SUIT
 .ifdef ROM_COMBO
-	call hIsSeasons
+	call wIsSeasons
 	jr nc,+
 		ld a,TREASURE_MERMAID_SUIT_SEASONS
 	+
