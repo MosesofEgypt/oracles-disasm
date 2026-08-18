@@ -1,4 +1,4 @@
-.enum $ff80 export
+.RAMSECTION Hram_Main
 	hOamFunc			dsb $a	; $ff80
 
 	; General-purpose variables
@@ -34,8 +34,11 @@
 
 	; 0: set SCX based on values in wBigBuffer at each hblank
 	; 1: set SCY based on values in wBigBuffer at each hblank
-	; 2+: ?
-	; 5: used for ring menu
+	; 2: ?
+	; 3: ?
+	; 4: Subrosia pirate ship cutscene?
+	; 5: Ring menu
+	; 6: Seasons dragon onox fight?
 	hLcdInterruptBehaviour		db	; $ff9b/$ff99
 
 	; This is a counter for how many times the LCD interrupt has been triggered this
@@ -127,9 +130,9 @@
 
 	; Marker for end of "normal" hram (memory gets cleared up to here upon game initialization)
 	hramEnd			 	.db	; $ffc0/$ffbe
-.ende
+.ENDS
 
-.enum $ffd8 export
+.RAMSECTION Hram_Music
 	; =====================================================================
 	; Music stuff
 	; =====================================================================
@@ -145,4 +148,4 @@
 	hSoundChannelAddresses			dsw 8	; $ffe2
 
 	hSoundData3				db	; $fff2
-.ende
+.ENDS
