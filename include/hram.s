@@ -145,7 +145,8 @@
 	; This one is 8 bytes (1 byte for each index)
 	hSoundChannelBanks			dsb 8	; $ffda
 	; This one is 16 bytes (1 word for each index)
-	hSoundChannelAddresses			dsw 8	; $ffe2
+	hSoundChannelAddresses		dsw 8	; $ffe2
 
-	hSoundData3				db	; $fff2
+	; This one is 12 bytes (1 word for each non-wave index)
+	hSoundData3					dsw 6	; $fff2
 .ende

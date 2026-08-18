@@ -652,12 +652,12 @@ mooshStateA:
 	ld a,(de)
 	rst_jumpTable
 	.dw @mooshStateASubstate0
-	.dw mooshStateASubstate1
+	.dw @mooshStateASubstate1
 	.dw @mooshStateASubstate2
-	.dw mooshStateASubstate3
-	.dw mooshStateASubstate4
-	.dw mooshStateASubstate5
-	.dw mooshStateASubstate6
+	.dw @mooshStateASubstate3
+	.dw @mooshStateASubstate4
+	.dw @mooshStateASubstate5
+	.dw @mooshStateASubstate6
 
 ;;
 @mooshStateASubstate0:
@@ -706,7 +706,7 @@ mooshStateA:
 	jp objectSetVisiblec3
 
 ;;
-mooshStateASubstate1:
+@mooshStateASubstate1:
 	ld e,SpecialObject.var3d
 	ld a,(de)
 	or a
@@ -723,7 +723,7 @@ mooshStateASubstate1:
 	jr +
 
 ;;
-mooshStateASubstate3:
+@mooshStateASubstate3:
 	call companionSetAnimationToVar3f
 	call mooshUpdateAsNpc
 	ld a,(wMooshState)
@@ -743,13 +743,13 @@ mooshStateASubstate3:
 	jp companionForceMount
 
 ;;
-mooshStateASubstate4:
+@mooshStateASubstate4:
 	call mooshIncVar03
 	ld bc,TX_2208
 	jp showText
 
 ;;
-mooshStateASubstate5:
+@mooshStateASubstate5:
 	call retIfTextIsActive
 
 	ld bc,-$140
@@ -765,7 +765,7 @@ mooshStateASubstate5:
 	jp mooshIncVar03
 
 ;;
-mooshStateASubstate6:
+@mooshStateASubstate6:
 	call specialObjectAnimate
 
 	ld e,SpecialObject.speedZ+1
@@ -800,21 +800,21 @@ mooshStateA:
 	ld e,SpecialObject.var03
 	ld a,(de)
 	rst_jumpTable
-	.dw mooshStateASubstate0
-	.dw mooshStateASubstate1
-	.dw mooshStateASubstate2
-	.dw mooshStateASubstate3
-	.dw mooshStateASubstate4
-	.dw mooshStateASubstate5
-	.dw mooshStateASubstate6
-	.dw mooshStateASubstate7
-	.dw mooshStateASubstate8
-	.dw mooshStateASubstate9
-	.dw mooshStateASubstateA
-	.dw mooshStateASubstateB
-	.dw mooshStateASubstateC
+	.dw @mooshStateASubstate0
+	.dw @mooshStateASubstate1
+	.dw @mooshStateASubstate2
+	.dw @mooshStateASubstate3
+	.dw @mooshStateASubstate4
+	.dw @mooshStateASubstate5
+	.dw @mooshStateASubstate6
+	.dw @mooshStateASubstate7
+	.dw @mooshStateASubstate8
+	.dw @mooshStateASubstate9
+	.dw @mooshStateASubstateA
+	.dw @mooshStateASubstateB
+	.dw @mooshStateASubstateC
 
-mooshStateASubstate0:
+@mooshStateASubstate0:
 	ld a,$01
 	ld (de),a
 
@@ -839,8 +839,8 @@ mooshStateASubstate0:
 	ld e,SpecialObject.var3d
 	jp objectAddToAButtonSensitiveObjectList
 
-mooshStateASubstate1:
-mooshStateASubstate7:
+@mooshStateASubstate1:
+@mooshStateASubstate7:
 	call companionSetAnimationToVar3f
 	call mooshUpdateAsNpc
 	ld a,(wMooshState)
@@ -856,7 +856,7 @@ mooshStateASubstate7:
 	ld (wDisabledObjects),a
 	ret
 
-mooshStateASubstate2:
+@mooshStateASubstate2:
 	ld e,SpecialObject.invincibilityCounter
 	ld a,(de)
 	or a
@@ -866,7 +866,7 @@ mooshStateASubstate2:
 	ld h,d
 	jp updateLinkInvincibilityCounter@func_4244
 
-mooshStateASubstate3:
+@mooshStateASubstate3:
 	call companionSetAnimationToVar3f
 	call specialObjectAnimate
 	call companionDecCounter1IfNonzero
@@ -874,7 +874,7 @@ mooshStateASubstate3:
 	ld c,$10
 	jp objectUpdateSpeedZ_paramC
 
-mooshStateASubstate4:
+@mooshStateASubstate4:
 	call companionSetAnimationToVar3f
 	ld c,$10
 	call objectUpdateSpeedZ_paramC
@@ -885,8 +885,8 @@ mooshStateASubstate4:
 	ld (de),a
 	jp specialObjectAnimate
 
-mooshStateASubstate5:
-mooshStateASubstate6:
+@mooshStateASubstate5:
+@mooshStateASubstate6:
 	call companionSetAnimationToVar3f
 	call mooshUpdateAsNpc
 	ld a,(wMooshState)
@@ -903,7 +903,7 @@ mooshStateASubstate6:
 	call companionSetAnimation
 	jp companionForceMount
 
-mooshStateASubstate8:
+@mooshStateASubstate8:
 	call companionSetAnimationToVar3f
 	ld e,SpecialObject.var3e
 	xor a
@@ -911,7 +911,7 @@ mooshStateASubstate8:
 	ld c,$10
 	jp objectUpdateSpeedZ_paramC
 
-mooshFunc_05_7aff:
+@mooshFunc_05_7aff:
 	ld b,$40
 	ld c,$70
 	call objectGetRelativeAngle
@@ -920,7 +920,7 @@ mooshFunc_05_7aff:
 	ld (de),a
 	ret
 
-mooshStateASubstate9:
+@mooshStateASubstate9:
 	ld c,$10
 	call objectUpdateSpeedZ_paramC
 	call specialObjectAnimate
@@ -928,13 +928,13 @@ mooshStateASubstate9:
 	ld e,SpecialObject.xh
 	ld a,(de)
 	cp $38
-	jr c,mooshFunc_05_7aff
+	jr c,@mooshFunc_05_7aff
 	ld a,$01
 	ld e,SpecialObject.var3e
 	ld (de),a
 	jp mooshIncVar03
 
-mooshStateASubstateA:
+@mooshStateASubstateA:
 	call companionSetAnimationToVar3f
 	ld e,SpecialObject.var3e
 	ld a,(de)
@@ -944,7 +944,7 @@ mooshStateASubstateA:
 	call showText
 	jp mooshIncVar03
 
-mooshStateASubstateB:
+@mooshStateASubstateB:
 	call retIfTextIsActive
 	call companionDismount
 	ld a,$18
@@ -962,7 +962,7 @@ mooshStateASubstateB:
 	call companionSetAnimation
 	jp mooshIncVar03
 
-mooshStateASubstateC:
+@mooshStateASubstateC:
 	call specialObjectAnimate
 	ld e,$15
 	ld a,(de)

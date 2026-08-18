@@ -22,24 +22,6 @@
 
 	.include "code/bank0.s"
 
-; NOTE: TEMPORARY UNTIL MANY BANKS CAN BE MERGED
-specialObjectCode_subrosiaDanceLink:
-specialObjectCode_transformedLink:
-specialObjectCode_linkRidingAnimal:
-specialObjectCode_minecart:
-specialObjectCode_ricky:
-specialObjectCode_dimitri:
-specialObjectCode_moosh:
-specialObjectCode_maple:
-specialObjectCode_raft:
-	ret
-
-m_section_free Bank_6_test NAMESPACE bank6
-specialObjectLoadAnimationFrameToBuffer:
-specialObjectCode_companionCutscene:
-	ret
-.ends
-
 m_section_free Main_Scripts_test NAMESPACE mainScripts
 script6f48:
 	ret
@@ -133,27 +115,6 @@ makuTree_setMapTextBasedOnStage:
 		.include {"{GAME_DATA_DIR}/warpSources.s"}
 	.ends
 
-
-.BANK $06 SLOT 1
-.ORG 0
-m_section_free Bank_6 NAMESPACE bank6
-	.include "code/interactableTiles.s"
-	.include {"{GAME_DATA_DIR}/signText.s"}
-
-	.include "code/specialObjectAnimationsAndDamage.s"
-
-;	.include "object_code/common/specialObjects/minecart.s"
-;	.include "object_code/ages/specialObjects/raft.s"
-
-	.include {"{BUILD_DIR}/specialObjectAnimationData.s"}
-;	.include "object_code/ages/specialObjects/companionCutscene.s"
-	.include "object_code/ages/specialObjects/linkInCutscene.s"
-	.include "object_code/seasons/specialObjects/linkInCutscene.s"
-
-;	.include "object_code/ages/specialObjects/timeWarp.s"
-.ends
-
-
 .BANK $14 SLOT 1
 .ORG 0
 
@@ -227,6 +188,50 @@ m_section_free Gfx_1c ALIGN $20
 ; NOTE: All sections below here are superfree
 ; #################################################################################
 
+
+m_section_superfree Bank_5 NAMESPACE bank5
+	.define SKIP_COMPANION_COMMON_CODE
+	.include "code/specialObjects.s"
+	.undefine SKIP_COMPANION_COMMON_CODE
+
+	.include {"{GAME_DATA_DIR}/tile_properties/tileTypeMappings.s"}
+	.include {"{GAME_DATA_DIR}/tile_properties/cliffTiles.s"}
+.ends
+
+m_section_superfree Bank_5_Ext NAMESPACE bank5Ext
+	.define SKIP_LINK_COMMON_CODE
+	.include "object_code/common/specialObjects/commonCode.s"
+	.undefine SKIP_LINK_COMMON_CODE
+
+	.include "object_code/common/specialObjects/maple.s"
+	.include "object_code/common/specialObjects/ricky.s"
+	.include "object_code/common/specialObjects/dimitri.s"
+	.include "object_code/common/specialObjects/moosh.s"
+
+	.include {"{GAME_DATA_DIR}/tile_properties/tileTypeMappings.s"}
+	.include {"{GAME_DATA_DIR}/tile_properties/cliffTiles.s"}
+.ends
+
+m_section_superfree Bank_6 NAMESPACE bank6
+	.include "code/interactableTiles.s"
+	.include {"{GAME_DATA_DIR}/signText.s"}
+
+	.include "code/specialObjectAnimationsAndDamage.s"
+
+	.include {"{BUILD_DIR}/specialObjectAnimationData.s"}
+	.include "object_code/ages/specialObjects/linkInCutscene.s"
+	.include "object_code/seasons/specialObjects/linkInCutscene.s"
+
+	.include "object_code/ages/specialObjects/timeWarp.s"
+.ends
+
+m_section_superfree Bank_6_Ext NAMESPACE bank6Ext
+	.include "object_code/ages/specialObjects/companionCutscene.s"
+	.include "object_code/seasons/specialObjects/companionCutscene.s"
+	.include "object_code/common/specialObjects/minecart.s"
+	.include "object_code/ages/specialObjects/raft.s"
+	.include {"{BUILD_DIR}/specialObjectAnimationData.s"}
+.ends
 
 m_section_superfree Interaction_Code_Group1 NAMESPACE commonInteractions1
 ;	.include "object_code/common/interactions/treasure.s"
@@ -1226,13 +1231,6 @@ m_section_superfree Scripts namespace mainScripts
 	genericNpcScript:
 		scriptend
 ; NOTE: TEMPORARY CODE UNTIL ALL SCRIPTS CAN BE INCLUDED
-.ends
-
-m_section_superfree Bank_5 NAMESPACE bank5
-	.include "code/specialObjects.s"
-
-	.include {"{GAME_DATA_DIR}/tile_properties/tileTypeMappings.s"}
-	.include {"{GAME_DATA_DIR}/tile_properties/cliffTiles.s"}
 .ends
 
 m_section_superfree Breakable_Tiles NAMESPACE breakableTiles

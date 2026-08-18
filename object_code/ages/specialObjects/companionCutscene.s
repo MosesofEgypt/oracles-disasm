@@ -1,5 +1,9 @@
 ;;
 specialObjectCode_companionCutscene:
+.ifdef ROM_COMBO
+	call wIsSeasons
+	jp c,specialObjectCode_companionCutscene_seasons
+.endif
 	ld hl,w1Companion.id
 	ld a,(hl)
 	sub SPECIALOBJECT_RICKY_CUTSCENE

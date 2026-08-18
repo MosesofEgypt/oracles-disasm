@@ -206,6 +206,11 @@ sidescrollUpdateActiveTile:
 	ld (wLastActiveTileType),a
 	ret
 
+; NOTE: this is not needed by anything but link/transformed link, but
+;       it also calls link's code so there's a circular dependency.
+;       this define will be set in the combo rom section that Contains
+;       the code for the companions.
+.ifndef SKIP_LINK_COMMON_CODE
 ;;
 ; Does various things based on the tile type of the tile Link is standing on (see
 ; constants/common/tileTypes.s).
@@ -594,7 +599,11 @@ linkAdjustGivenAngleInSidescrollingArea:
 	.db $08 $08 $08 $08 $08 $08 $08 $08
 	.db $ff $18 $18 $18 $18 $18 $18 $18
 	.db $18 $18 $18 $18 $18 $18 $18 $18
+.endif
 
+; NOTE: this is not needed by anything but the companions, so it can
+;       be skipped in the combo rom section that link's code is in
+.ifndef SKIP_COMPANION_COMMON_CODE
 ;;
 ; Prevents link from passing object d.
 ;
@@ -606,7 +615,11 @@ companionPreventLinkFromPassing_noExtraChecks:
 ;;
 companionUpdateMovement:
 	call companionCalculateAdjacentWallsBitset
+.if defined(ROM_COMBO)
+	callab bank5.specialObjectUpdatePosition
+.else
 	call specialObjectUpdatePosition
+.endif
 
 	; Don't attempt to break tile on ground if in midair
 	ld h,d
@@ -1947,6 +1960,36 @@ companionDecCounter1:
 	ld a,(hl)
 	or a
 	ret
+
+.if defined(ROM_COMBO)
+companionCpVineTopTileIndex:
+	call wIsSeasons
+	jr c,+
+		cp TILEINDEX_VINE_TOP_AGES
+		ret
+	+
+	cp TILEINDEX_VINE_TOP_SEASONS
+	ret
+
+companionCpVineMiddleTileIndex:
+	call wIsSeasons
+	jr c,+
+		cp TILEINDEX_VINE_MIDDLE_AGES
+		ret
+	+
+	cp TILEINDEX_VINE_MIDDLE_SEASONS
+	ret
+
+companionCpVineBottomTileIndex:
+	call wIsSeasons
+	jr c,+
+		cp TILEINDEX_VINE_BOTTOM_AGES
+		ret
+	+
+	cp TILEINDEX_VINE_BOTTOM_SEASONS
+	ret
+.endif
+.endif
 
 ;;
 specialObjectTryToBreakTile_source05:

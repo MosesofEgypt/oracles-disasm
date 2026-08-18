@@ -12996,7 +12996,11 @@ loadScreenMusicAndSetRoomPack:
 dismountCompanionAndSetRememberedPositionToScreenCenter:
 	ldh a,(<hRomBank)
 	push af
-	ld a,:bank5.companionDismount
+	.if defined(ROM_COMBO)
+		ld a,:bank5Ext.companionDismount
+	.else
+		ld a,:bank5.companionDismount
+	.endif
 	rst_setrombank
 
 	ld de,w1Companion
@@ -13005,8 +13009,13 @@ dismountCompanionAndSetRememberedPositionToScreenCenter:
 	ld a,d
 	ldh (<hActiveObject),a
 
-	call bank5.companionDismount
-	call bank5.saveLinkLocalRespawnAndCompanionPosition
+	.if defined(ROM_COMBO)
+		call bank5Ext.companionDismount
+		call bank5Ext.saveLinkLocalRespawnAndCompanionPosition
+	.else
+		call bank5.companionDismount
+		call bank5.saveLinkLocalRespawnAndCompanionPosition
+	.endif
 
 	; After saving the companion's position, overwrite it with values for the center
 	; of the screen?

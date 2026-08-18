@@ -259,7 +259,11 @@ specialObjectCode_raft:
 	inc l
 	ld a,(hl)
 	ld (bc),a
-	jpab bank5.saveLinkLocalRespawnAndCompanionPosition
+	.if defined(ROM_COMBO)
+		jpab bank5Ext.saveLinkLocalRespawnAndCompanionPosition
+	.else
+		jpab bank5.saveLinkLocalRespawnAndCompanionPosition
+	.endif
 
 ;;
 ; Calculates the "adjacent walls bitset" for the raft specifically, treating everything as
@@ -312,7 +316,11 @@ specialObjectCode_raft:
 	.db TILEINDEX_CURRENT_DOWN
 	.db TILEINDEX_CURRENT_LEFT
 	.db TILEINDEX_CURRENT_RIGHT
+.if defined(ROM_COMBO)
+	.db TILEINDEX_WATER_AGES
+.else
 	.db TILEINDEX_WATER
+.endif
 	.db TILEINDEX_WHIRLPOOL
 	.db $00
 

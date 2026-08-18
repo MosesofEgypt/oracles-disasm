@@ -397,24 +397,45 @@ func_410d:
 
 .include "object_code/common/specialObjects/commonCode.s"
 .include "object_code/common/specialObjects/link.s"
-.ifndef ROM_COMBO	; NOTE: temporary until items are merged in
 .include "object_code/common/specialObjects/transformedLink.s"
 .include "object_code/common/specialObjects/linkRidingAnimal.s"
 
+.if defined(ROM_COMBO)
+.include "object_code/seasons/specialObjects/subrosiaDanceLink.s"
 
+; these were split out due to bank size constraints
+specialObjectCode_ricky:
+	jpab bank5Ext.specialObjectCode_ricky
+
+specialObjectCode_dimitri:
+	jpab bank5Ext.specialObjectCode_dimitri
+
+specialObjectCode_moosh:
+	jpab bank5Ext.specialObjectCode_moosh
+
+specialObjectCode_maple:
+	jpab bank5Ext.specialObjectCode_maple
+
+specialObjectCode_minecart:
+	jpab bank6Ext.specialObjectCode_minecart
+
+specialObjectCode_raft:
+	jpab bank6Ext.specialObjectCode_raft
+
+.else
 specialObjectCode_minecart:
 	; Jump to code in bank 6 to handle it
 	jpab bank6.specialObjectCode_minecart
-
 
 .include "object_code/common/specialObjects/maple.s"
 .include "object_code/common/specialObjects/ricky.s"
 .include "object_code/common/specialObjects/dimitri.s"
 .include "object_code/common/specialObjects/moosh.s"
 
-
 specialObjectCode_raft:
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 	jpab bank6.specialObjectCode_raft
+.else
+	ret
 .endif
-.endif				; NOTE: temporary until items are merged in
+.endif

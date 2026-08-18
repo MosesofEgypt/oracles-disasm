@@ -856,6 +856,10 @@ rickySetJumpSpeedForCutscene:
 ;;
 ; Ricky leaving upon meeting Tingle (part 5: punching the air)
 rickyStateASubstate6:
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jp c,rickyStateASubstate6_seasons
+.endif
 	; Wait for animation to give signals to play sound, start moving away.
 	call specialObjectAnimate
 	ld e,SpecialObject.animParameter
@@ -881,6 +885,10 @@ rickyStateASubstate6:
 ;;
 ; Ricky leaving upon meeting Tingle (part 2: start moving toward cliff)
 rickyStateASubstate3:
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jp c,rickyStateASubstate3_seasons
+.endif
 	call retIfTextIsActive
 
 	; Move down-left
@@ -900,6 +908,10 @@ rickyStateASubstate3:
 ;;
 ; Ricky leaving upon meeting Tingle (part 4: jumping down cliff)
 rickyStateASubstate5:
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jp c,rickyStateASubstate5_seasons
+.endif
 	call specialObjectAnimate
 	call objectApplySpeed
 	ld c,$40
@@ -921,6 +933,10 @@ rickyStateASubstate7:
 ; Ricky leaving upon meeting Tingle (part 3: moving toward cliff, or...
 ;                                    part 6: moving toward screen edge)
 rickyStateASubstate4:
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jp c,rickyStateASubstate4_seasons
+.endif
 	call companionSetAnimationToVar3f
 	call rickyWaitUntilJumpDone
 	ret nz
@@ -996,7 +1012,11 @@ rickyStateASubstate7:
 	ld a,$10
 	ld (de),a
 	ret
+.if defined(ROM_COMBO)
+rickyStateASubstate3_seasons:
+.else
 rickyStateASubstate3:
+.endif
 	call companionSetAnimationToVar3f
 	ld e,SpecialObject.var3e
 	ld a,(de)
@@ -1007,13 +1027,17 @@ rickyStateASubstate3:
 	ld e,SpecialObject.yh
 	ld a,(de)
 	cp $38
-	jr nc,rickySetJumpSpeedForCutsceneAndSetAngle
+	jp nc,rickySetJumpSpeedForCutsceneAndSetAngle
 	ld e,SpecialObject.var3e
 	ld a,(de)
 	or $01
 	ld (de),a
 	ret
+.if defined(ROM_COMBO)
+rickyStateASubstate4_seasons:
+.else
 rickyStateASubstate4:
+.endif
 	call companionSetAnimationToVar3f
 	ld e,SpecialObject.var3e
 	ld a,(de)
@@ -1022,13 +1046,21 @@ rickyStateASubstate4:
 	or $02
 	ld (de),a
 	jp companionDismount
+.if defined(ROM_COMBO)
+rickyStateASubstate5_seasons:
+.else
 rickyStateASubstate5:
+.endif
 	call rickySetJumpSpeedForCutsceneAndSetAngle
 	ld e,SpecialObject.angle
 	ld a,$10
 	ld (de),a
 	ret
+.if defined(ROM_COMBO)
+rickyStateASubstate6_seasons:
+.else
 rickyStateASubstate6:
+.endif
 rickyStateASubstate8:
 	call companionSetAnimationToVar3f
 	call rickyWaitUntilJumpDone
@@ -1253,7 +1285,11 @@ rickyCheckHopUpCliff:
 	cp $03
 	jr z,+
 	ld a,b
+.if defined(ROM_COMBO)
+	call companionCpVineTopTileIndex
+.else
 	cp TILEINDEX_VINE_TOP
+.endif
 	jr nz,@tryTwoTilesUp
 +
 	ld hl,@cliffOffset_oneUp_left
@@ -1261,7 +1297,11 @@ rickyCheckHopUpCliff:
 	cp $03
 	jr z,@canJumpUpCliff
 	ld a,b
+.if defined(ROM_COMBO)
+	call companionCpVineTopTileIndex
+.else
 	cp TILEINDEX_VINE_TOP
+.endif
 	jr z,@canJumpUpCliff
 
 ; Check that the tiles on ricky's left and right sides two tiles up are clear
@@ -1271,7 +1311,11 @@ rickyCheckHopUpCliff:
 	cp $03
 	jr z,+
 	ld a,b
+.if defined(ROM_COMBO)
+	call companionCpVineTopTileIndex
+.else
 	cp TILEINDEX_VINE_TOP
+.endif
 	ret nz
 +
 	ld hl,@cliffOffset_twoUp_left
@@ -1279,7 +1323,11 @@ rickyCheckHopUpCliff:
 	cp $03
 	jr z,@canJumpUpCliff
 	ld a,b
+.if defined(ROM_COMBO)
+	call companionCpVineTopTileIndex
+.else
 	cp TILEINDEX_VINE_TOP
+.endif
 	ret nz
 
 @canJumpUpCliff:

@@ -987,11 +987,23 @@ dimitriCheckCanBeHeldInDirection:
 	ld b,a
 	call objectGetRelativeTile
 
+.if defined(ROM_COMBO)
+	call companionCpVineBottomTileIndex
+.else
 	cp TILEINDEX_VINE_BOTTOM
+.endif
 	ret z
+.if defined(ROM_COMBO)
+	call companionCpVineMiddleTileIndex
+.else
 	cp TILEINDEX_VINE_MIDDLE
+.endif
 	ret z
+.if defined(ROM_COMBO)
+	call companionCpVineTopTileIndex
+.else
 	cp TILEINDEX_VINE_TOP
+.endif
 	ret z
 
 	; Only disallow tiles where the top half is solid? (cave entrances?

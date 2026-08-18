@@ -1,4 +1,8 @@
+.ifdef ROM_COMBO
+specialObjectCode_companionCutscene_seasons:
+.else
 specialObjectCode_companionCutscene:
+.endif
 	ld hl,w1Companion.id
 	ld a,(hl)
 	sub $0f
