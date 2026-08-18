@@ -40,7 +40,15 @@ rickyStateB:
 	ld (hl),$10
 	ld a,(wRickyState)
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jp nc,+
+		and $80
+		jr nz,@setAnimation17
+		jr @canTalkToRicky
+	+
+.endif
 	bit 7,a
 	jr nz,@setAnimation17
 
@@ -63,7 +71,13 @@ rickyStateB:
 	ld (hl),$0a
 	ld e,SpecialObject.var3d
 	call objectAddToAButtonSensitiveObjectList
-.ifdef ROM_AGES
+
+.if defined(ROM_COMBO)
+	xor a
+	call wIsSeasons
+	jr c,@setAnimation
+	ld a,c
+.elif defined(ROM_AGES)
 	ld a,c
 .else
 	ld a,$00
@@ -738,7 +752,7 @@ rickyStateA:
 	.dw rickyStateASubstate5
 	.dw rickyStateASubstate6
 	.dw rickyStateASubstate7
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	.dw rickyStateASubstate8
 	.dw rickyStateASubstate9
 	.dw rickyStateASubstateA
@@ -767,10 +781,14 @@ rickyStateASubstate1:
 	call objectRemoveFromAButtonSensitiveObjectList
 	jp companionForceMount
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 ;;
 ; Ricky leaving upon meeting Tingle (part 1: print text)
 rickyStateASubstate2:
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,rickyStateASubstate2_seasons
+.endif
 	ld c,$40
 	call objectUpdateSpeedZ_paramC
 	ret nz
@@ -794,8 +812,14 @@ rickyStateASubstate2:
 	call specialObjectSetAnimation
 	call rickyIncVar03
 	jr rickySetJumpSpeedForCutscene
+.endif
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+rickyStateASubstate2_seasons:
 .else
 rickyStateASubstate2:
+.endif
 	ld a,$01
 	ld (wDisabledObjects),a
 	ld a,DIR_UP
@@ -828,7 +852,7 @@ rickySetJumpSpeedForCutscene:
 	ld (hl),$08
 	ret
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 ;;
 ; Ricky leaving upon meeting Tingle (part 5: punching the air)
 rickyStateASubstate6:
@@ -887,11 +911,16 @@ rickyStateASubstate5:
 	call specialObjectSetAnimation
 	jp rickyIncVar03
 
+
+rickyStateASubstate7:
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,rickyStateASubstate7_seasons
+.endif
 ;;
 ; Ricky leaving upon meeting Tingle (part 3: moving toward cliff, or...
 ;                                    part 6: moving toward screen edge)
 rickyStateASubstate4:
-rickyStateASubstate7:
 	call companionSetAnimationToVar3f
 	call rickyWaitUntilJumpDone
 	ret nz
@@ -943,9 +972,15 @@ rickyStateASubstate7:
 	ld hl,wRickyState
 	set 6,(hl)
 	jp saveLinkLocalRespawnAndCompanionPosition
-.else
+.endif
 
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+rickyStateASubstate7_seasons:
+.else
 rickyStateASubstate7:
+.endif
 	call companionSetAnimationToVar3f
 	call specialObjectAnimate
 	ld e,SpecialObject.animParameter

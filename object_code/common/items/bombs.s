@@ -193,7 +193,14 @@ bombUpdateThrowingVerticallyAndCheckDelete:
 
 	; Check whether to trigger a special event when a bomb falls into a hazard (bomb upgrade in
 	; ages, or volcano trigger in seasons)
-.ifdef ROM_AGES
+
+.if defined(ROM_COMBO)
+	ld bc,ROOM_SEASONS_4ef
+	call wIsSeasons
+	jr c,+
+		ld bc,ROOM_AGES_050
+	+
+.elif defined(ROM_AGES)
 	ld bc,ROOM_AGES_050
 .else
 	ld bc,ROOM_SEASONS_4ef

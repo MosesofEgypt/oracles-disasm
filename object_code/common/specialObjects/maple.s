@@ -190,7 +190,15 @@ mapleState2:
 	or a
 	ret z
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+
+		call checkLinkID0AndControlNormal
+		jr ++
+	+
+		call checkLinkVulnerableAndIDZero
+	++
+.elif defined(ROM_AGES)
 	call checkLinkVulnerableAndIDZero
 .else
 	call checkLinkID0AndControlNormal

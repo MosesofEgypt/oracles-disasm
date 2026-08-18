@@ -8,7 +8,13 @@ itemCode13:
 	or a
 	ret nz
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	ld a,UNCMP_GFXH_SEASONS_1d
+	call wIsSeasons
+	jr c,+
+		ld a,UNCMP_GFXH_AGES_SLINGSHOT
+	+
+.elif defined(ROM_AGES)
 	ld a,UNCMP_GFXH_AGES_SLINGSHOT
 .else
 	ld a,UNCMP_GFXH_SEASONS_1d

@@ -2,7 +2,7 @@
 
 ;;
 specialObjectCode_linkInCutscene:
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	call wIsSeasons
 	jp c,specialObjectCode_linkInCutscene_seasons
 .endif
@@ -26,7 +26,7 @@ specialObjectCode_linkInCutscene:
 
 ;;
 ; Opening cutscene with the triforce
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 linkCutscene0_seasons:
 .endif
 linkCutscene0_ages:
@@ -895,7 +895,7 @@ linkCutscene9_ages:
 ; Link being kissed by Zelda in ending cutscene - cutscene 6 in seasons
 ;
 linkCutsceneA_ages:
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 linkCutscene6_seasons
 .endif
 	ld e,SpecialObject.state
@@ -1006,7 +1006,7 @@ linkCutscene6_seasons
 ; Cutscene played on starting a new game ("accept our quest, hero") - cutsceneB in seasons
 ;
 linkCutsceneB_ages:
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 linkCutsceneA_seasons:
 .endif
 	ld e,SpecialObject.state

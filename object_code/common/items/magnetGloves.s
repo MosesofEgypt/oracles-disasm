@@ -7,7 +7,13 @@ itemCode08:
 	.dw @state1
 
 @state0:
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	ld a,UNCMP_GFXH_SEASONS_1e
+	call wIsSeasons
+	jr c,+
+		ld a,UNCMP_GFXH_AGES_MAGNETGLOVES
+	+
+.elif defined(ROM_AGES)
 	ld a,UNCMP_GFXH_AGES_MAGNETGLOVES
 .else
 	ld a,UNCMP_GFXH_SEASONS_1e

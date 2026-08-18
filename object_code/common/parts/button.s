@@ -21,10 +21,15 @@ partCode09:
 	call checkObjectsCollided
 	jr c,@linkTouchedButton
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+.endif
 	ld hl,$dd00
 	call checkObjectsCollided
 	jr c,@dd00TouchedButton
+	+
 .endif
 
 	call objectGetTileAtPosition

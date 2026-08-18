@@ -57,12 +57,19 @@ partCode27:
 	ld a,(de)
 	or a
 	ret z
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld a,$ff
-.else
+.endif
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+.endif
 	ld b,a
 	ld a,(wTmpcfc0.genericCutscene.cfd2)
 	or b
+	+
 .endif
 	ld (wTmpcfc0.genericCutscene.cfd2),a
 	ret

@@ -682,7 +682,7 @@ checkCollisionForCompanion:
 	; Animals can't pass through climbable vines
 	call getTileAtPosition
 	ld a,(hl)
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	call wIsSeasons
 	jr c,+
 		cp TILEINDEX_VINE_BOTTOM_AGES
@@ -1375,7 +1375,7 @@ companionCheckHopDownCliff:
 	ld c,(hl)
 
 	call objectGetRelativeTile
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	call wIsSeasons
 	jr c,+
 		cp TILEINDEX_VINE_TOP_AGES
@@ -1388,7 +1388,7 @@ companionCheckHopDownCliff:
 .endif
 	jr z,@vineTop
 
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	ld hl,cliffTilesTable_seasons
 	call wIsSeasons
 	jr c,+

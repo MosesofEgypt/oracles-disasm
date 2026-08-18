@@ -16,12 +16,7 @@ enemyCode5a:
 	ld a,$01
 	ld (de),a ; [state]
 
-.ifdef ROM_AGES
-	; Locate tree
-	ld a,TILEINDEX_MYSTICAL_TREE_TL
-	call findTileInRoom
 .ifdef ENABLE_RING_REDUX
-	jp nz,enemyDelete
 	; make tree visible(so azuchu can see it), but have it use
 	; a blank tile so it doesn't actually look like anything.
 	ld e,Enemy.visible
@@ -33,9 +28,17 @@ enemyCode5a:
 	xor a
 	inc e
 	ld (de),a
-.else
-	jp nz,interactionDelete ; BUG: Wrong function call! (see below)
 .endif
+
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,++
+.endif
+	; Locate tree
+	ld a,TILEINDEX_MYSTICAL_TREE_TL
+	call findTileInRoom
+	jp nz,enemyDelete
 
 	; Move to that position
 	ld c,l
@@ -50,24 +53,19 @@ enemyCode5a:
 	and $0f
 	ld hl,wSeedTreeRefilledBitset
 	call checkFlag
-.ifdef ENABLE_RING_REDUX
 	jp z,enemyDelete
-.else
-	jp z,interactionDelete
-.endif
-
-	; BUG: Above function call is wrong! Should be "enemyDelete"!
-	; If a seed tree's seeds are exhausted, instead of deleting this object, it will
-	; try to delete the interaction in the corresponding spot!
-	; This is not be very noticeable, because often this will be in slot $d0, which
-	; for interactions, is reserved for items from chests and stuff like that. But
-	; that can be manipulated by digging up enemies from the ground...
 
 	ld a,(de)
 	swap a
 	and $0f
 	ldh (<hFF8B),a
-.else
+.ifdef defined(ROM_COMBO)
+	jr +
+	++
+.endif
+.endif
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	ld e,Enemy.subid
 	ld a,(de)
 	ld b,a
@@ -89,6 +87,7 @@ enemyCode5a:
 	ld a,(wSeedTreeRefilledBitset)
 	and (hl)
 	jp z,enemyDelete
+	+
 .endif
 
 	; Spawn the 3 seed objects
@@ -132,7 +131,7 @@ enemyCode5a:
 	.db $00 $f8
 	.db $00 $08
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 ; Data:
 ; - Seed type
@@ -157,17 +156,25 @@ enemyCode5a:
 	ret z
 
 	; Mark seeds as taken
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+
+.endif
 	ld e,Enemy.subid
 	ld a,(de)
 	and $0f
 	ld hl,wSeedTreeRefilledBitset
 	call unsetFlag
-.else
+	jp enemyDelete
+	+
+.endif
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	ld e,Enemy.direction
 	ld a,(de)
 	ld hl,wSeedTreeRefilledBitset
 	and (hl)
 	ld (hl),a
-.endif
 	jp enemyDelete
+.endif

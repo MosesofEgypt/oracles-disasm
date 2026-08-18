@@ -69,7 +69,12 @@ partCode01:
 .endif
 	cp $e0
 	jp c,itemDrop_spawnEnemy
-.ifdef ROM_SEASONS
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,@normalItem
+.endif
 	ld a,(wTilesetFlags)
 	cp (TILESETFLAG_SUBROSIA|TILESETFLAG_OUTDOORS)
 	jp z,partDelete
@@ -134,9 +139,14 @@ partCode01:
 	call objectSetVisiblec3
 
 @label_11_010:
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,++
+.endif
 	call itemDrop_pullOreChunksWithMagnetGloves
 	jr c,+
+	++
 .endif
 	call itemDrop_checkOnHazard
 	ret c
@@ -416,11 +426,16 @@ itemDrop_spawnEnemy:
 	or a
 	jr nz,@delete
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+.endif
 	ld b,ENEMY_PODOBOO_TOWER
 	ld a,(wTilesetFlags)
 	cp (TILESETFLAG_SUBROSIA|TILESETFLAG_OUTDOORS)
 	jr z,+
+	++
 .endif
 
 	ld a,c
@@ -655,7 +670,7 @@ itemDrop_moveTowardPoint:
 	xor a
 	ret
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 itemDrop_pullOreChunksWithMagnetGloves:
 	ld e,Part.subid
 	ld a,(de)
@@ -713,7 +728,7 @@ itemDrop_applySpeed:
 	scf
 	ret
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 itemDrop_magnetGlovePullSpeed:
 	.db SPEED_280 SPEED_280 SPEED_200 SPEED_180
 	.db SPEED_100 SPEED_0c0 SPEED_080 SPEED_040

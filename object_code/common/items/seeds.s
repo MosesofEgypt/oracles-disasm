@@ -221,7 +221,14 @@ seedItemState1:
 	+
 .endif
 	call itemUpdateDamageToApply
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+		jr nz,@seedCollidedWithEnemy
+		jr @noCollision
+	+
+.endif
 	jr z,@noCollision
 
 	; Check bit 4 of Item.var2a
@@ -730,7 +737,17 @@ galeSeedTryToWarpLink:
 @substate0:
 	; Test TILESETFLAG_OUTDOORS
 	ld a,(wTilesetFlags)
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+
+		rrca
+		jr nc,@setSubstate3
+		jr ++
+	+
+		dec a
+		jr nz,@setSubstate3
+	++
+.elif defined(ROM_AGES)
 	rrca
 	jr nc,@setSubstate3
 .else
@@ -752,7 +769,15 @@ galeSeedTryToWarpLink:
 	cp $40
 	jr z,galeSeedUpdateAnimationAndCounter
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+
+		call checkLinkVulnerableAndIDZero
+		jr ++
+	+
+		call checkLinkID0AndControlNormal
+	++
+.elif defined(ROM_AGES)
 	call checkLinkVulnerableAndIDZero
 .else
 	call checkLinkID0AndControlNormal

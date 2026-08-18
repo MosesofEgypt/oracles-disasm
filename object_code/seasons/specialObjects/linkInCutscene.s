@@ -1,4 +1,4 @@
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 specialObjectCode_linkInCutscene_seasons:
 .else
 specialObjectCode_linkInCutscene:

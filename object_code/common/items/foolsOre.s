@@ -17,7 +17,13 @@ itemCode1e:
 	ldi (hl),a
 	ld (hl),a
 .endif
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	ld a,UNCMP_GFXH_SEASONS_1f
+	call wIsSeasons
+	jr c,+
+		ld a,UNCMP_GFXH_AGES_FOOLS_ORE
+	+
+.elif defined(ROM_AGES)
 	ld a,UNCMP_GFXH_AGES_FOOLS_ORE
 .else
 	ld a,UNCMP_GFXH_SEASONS_1f

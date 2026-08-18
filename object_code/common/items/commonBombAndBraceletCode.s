@@ -54,6 +54,12 @@ itemBeginThrow:
 	swap a
 	add a
 	ld hl,itemWeights
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+		add 12
+	+
+.endif
 	rst_addDoubleIndex
 
 	; Byte 0 from hl: value for Item.var39 (gravity)
@@ -119,7 +125,15 @@ itemUpdateThrowingLaterally:
 	; Check whether the "weight" value for the item equals 3?
 	cp $40
 	jr nc,+
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+++
+		cp $30
+		jr ++
+	+++
+		cp $20
+	++
+.elif defined(ROM_AGES)
 	cp $30
 .else
 	cp $20
@@ -264,7 +278,16 @@ data_649a:
 itemWeights:
 	.db $1c $10 SPEED_180 SPEED_280
 	.db $20 $00 SPEED_080 SPEED_100
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	; ages
+	.db $28 $20 SPEED_1a0 SPEED_280
+	.db $20 $00 SPEED_080 SPEED_100
+	.db $20 $e0 SPEED_140 SPEED_180
+	.db $20 $00 SPEED_080 SPEED_100
+
+	; seasons
+.endif
+.if defined(ROM_AGES) && !defined(ROM_COMBO)
 	.db $28 $20 SPEED_1a0 SPEED_280
 	.db $20 $00 SPEED_080 SPEED_100
 .else

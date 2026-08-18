@@ -8,7 +8,13 @@ itemCode0f:
 	.dw @state1
 
 @state0:
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	ld a,UNCMP_GFXH_SEASONS_SEED_SHOOTER
+	call wIsSeasons
+	jr c,+
+		ld a,UNCMP_GFXH_AGES_1d
+	+
+.elif defined(ROM_AGES)
 	ld a,UNCMP_GFXH_AGES_1d
 .else
 	ld a,UNCMP_GFXH_SEASONS_SEED_SHOOTER

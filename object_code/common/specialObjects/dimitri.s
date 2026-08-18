@@ -38,7 +38,11 @@ dimitriState0:
 	ld (hl),a ; [counter2] = $02
 
 	ld a,(wDimitriState)
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,++
+.endif
 	bit 7,a
 	jr nz,@setAnimation
 	bit 6,a
@@ -60,7 +64,13 @@ dimitriState0:
 	call objectAddToAButtonSensitiveObjectList
 
 	ld a,c
-.else
+.if defined(ROM_COMBO)
+	jr +
+	++
+.endif
+.endif
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	and $80
 	jr nz,@setAnimation
 	ld l,SpecialObject.state
@@ -68,6 +78,7 @@ dimitriState0:
 	ld e,SpecialObject.var3d
 	call objectAddToAButtonSensitiveObjectList
 	ld a,$24
+	+
 .endif
 
 	ld e,SpecialObject.var3f
@@ -481,7 +492,11 @@ dimitriUpdateMovement:
 	ld l,SpecialObject.state
 	ld (hl),$05
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,++
+.endif
 	ld a,(wLinkForceState)
 	cp LINK_STATE_RESPAWNING
 	jr nz,++
@@ -763,22 +778,26 @@ dimitriLandOnGroundAndGotoState5:
 	ld c,$00
 	jp companionSetAnimationAndGotoState5
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 ;;
 ; State A: cutscene-related stuff
 dimitriStateA:
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jp c,dimitriStateA_seasons
+.endif
 	ld e,SpecialObject.var03
 	ld a,(de)
 	rst_jumpTable
-	.dw dimitriStateASubstate0
-	.dw dimitriStateASubstate1
-	.dw dimitriStateASubstate2
-	.dw dimitriStateASubstate3
-	.dw dimitriStateASubstate4
+	.dw @dimitriStateASubstate0
+	.dw @dimitriStateASubstate1
+	.dw @dimitriStateASubstate2
+	.dw @dimitriStateASubstate3
+	.dw @dimitriStateASubstate4
 
 ;;
 ; Force mounting Dimitri?
-dimitriStateASubstate0:
+@dimitriStateASubstate0:
 	ld e,SpecialObject.var3d
 	ld a,(de)
 	or a
@@ -810,7 +829,7 @@ dimitriStateASubstate0:
 
 ;;
 ; Force mounting dimitri?
-dimitriStateASubstate1:
+@dimitriStateASubstate1:
 	ld e,SpecialObject.var3d
 	call objectRemoveFromAButtonSensitiveObjectList
 	ld c,$1c
@@ -819,7 +838,7 @@ dimitriStateASubstate1:
 
 ;;
 ; Dimitri begins parting upon reaching mainland?
-dimitriStateASubstate3:
+@dimitriStateASubstate3:
 	ld e,SpecialObject.direction
 	ld a,DIR_RIGHT
 	ld (de),a
@@ -838,7 +857,7 @@ dimitriStateASubstate3:
 
 ;;
 ; Dimitri moving until he goes off-screen
-dimitriStateASubstate4:
+@dimitriStateASubstate4:
 	call dimitriUpdateMovement
 
 	ld e,SpecialObject.state
@@ -856,7 +875,7 @@ dimitriStateASubstate4:
 
 ;;
 ; Force dismount Dimitri
-dimitriStateASubstate2:
+@dimitriStateASubstate2:
 	ld a,(wLinkObjectIndex)
 	cp >w1Companion
 	ret nz
@@ -864,8 +883,14 @@ dimitriStateASubstate2:
 	xor a
 	ld (wRememberedCompanionId),a
 	ret
+.endif
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+dimitriStateA_seasons:
 .else
 dimitriStateA:
+.endif
 	call companionSetAnimationToVar3f
 	call companionPreventLinkFromPassing_noExtraChecks
 	call specialObjectAnimate

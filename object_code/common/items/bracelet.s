@@ -158,7 +158,15 @@ itemCode16:
 @state3:
 	call braceletCheckDeleteSelfWhileThrowing
 	call itemUpdateThrowingLaterally
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+
+		jr z,@@destroyWithAnimation
+		jr ++
+	+
+		jr z,@@preDestroyWithAnimation
+	++
+.elif defined(ROM_AGES)
 	jr z,@@destroyWithAnimation
 .else
 	jr z,@@preDestroyWithAnimation
@@ -173,9 +181,19 @@ itemCode16:
 	; If it's breakable, destroy it; if not, let it bounce
 	call braceletCheckBreakable
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,++
+.endif
 	jr nz,@@destroyWithAnimation
-.else
+.if defined(ROM_COMBO)
+	jr +
+	++
+.endif
+.endif
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	jr nz,@@preDestroyWithAnimation
 	jr nc,+
 	call objectReplaceWithAnimationIfOnHazard
@@ -211,11 +229,16 @@ itemCode16:
 	jp objectCopyPosition
 
 @@release:
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+.endif
 	ld e,$02
 	ld a,(de)
 	cp $d7
 	jr z,@@createPuff
+	+
 .endif
 
 	ld a,Object.substate
@@ -223,7 +246,7 @@ itemCode16:
 	ld (hl),$03
 	jp itemDelete
 
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 @@preDestroyWithAnimation:
 	ld e,Item.subid
 	ld a,(de)
@@ -253,7 +276,15 @@ braceletCheckBreakable:
 	ld a,(de)
 	or a
 	ret z
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+
+		scf
+		ret
+	+
+.endif
+	; this seems unlikely to be purposeful.... oh well....
 	cp $d7
 .endif
 	scf

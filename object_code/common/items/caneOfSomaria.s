@@ -18,7 +18,13 @@ itemCode04:
 	ldi (hl),a
 	ld (hl),a
 .endif
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	ld a,UNCMP_GFXH_CANE_OF_SOMARIA
+	call wIsSeasons
+	jr c,+
+		ld a,UNCMP_GFXH_AGES_1c
+	+
+.elif defined(ROM_AGES)
 	ld a,UNCMP_GFXH_AGES_1c
 .else
 	ld a,UNCMP_GFXH_CANE_OF_SOMARIA
@@ -341,15 +347,26 @@ itemCode18:
 	ld e,Item.var32
 	ld a,(de)
 	ld l,a
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+
+.endif
 	ld h,>wRoomLayout
 	ld a,(hl)
 	cp TILEINDEX_SOMARIA_BLOCK
-.else
+.if defined(ROM_COMBO)
+	jr ++
+	+
+.endif
+.endif
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	call getSomariaBlockIndex
 	ld h,>wRoomLayout
 	ld a,(hl)
 	cp b
+++
 .endif
 	ret nz
 
@@ -372,7 +389,11 @@ itemCode18:
 ;;
 ; @param[out]	zflag	Set if the block can appear at this position
 @checkBlockCanAppear:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+
+.endif
 	; Disallow cane of somaria usage if in patch's minigame room
 	ld a,(wActiveGroup)
 	cp >ROOM_AGES_5e8
@@ -393,11 +414,16 @@ itemCode18:
 	call objectGetTileCollisions
 	ret nz
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+
+.endif
 	; If underwater, never allow it
 	ld a,(wTilesetFlags)
 	bit TILESETFLAG_BIT_UNDERWATER,a
 	ret nz
+	+
 .endif
 	; If in a sidescrolling area, check for floor underneath
 	and TILESETFLAG_SIDESCROLL
@@ -434,14 +460,25 @@ itemCode18:
 	jr c,++
 
 	; Overwrite the tile with the somaria block
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+
+.endif
 	ld b,(hl)
 	ld (hl),TILEINDEX_SOMARIA_BLOCK
-.else
+.if defined(ROM_COMBO)
+	jr +++
+	+
+.endif
+.endif
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	call getSomariaBlockIndex
 	ld a,b
 	ld b,(hl)
 	ld (hl),a
++++
 .endif
 	ld h,>wRoomCollisions
 	ld (hl),$0f

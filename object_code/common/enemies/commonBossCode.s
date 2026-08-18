@@ -92,9 +92,14 @@ enemyBoss_initializeRoom:
 ;;
 ; Stops music, forces Link to walk into the room.
 enemyBoss_initializeRoomWithoutExtraGfx:
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+.endif
 	ldh a,(<hActiveObject)
 	ld d,a
+	+
 .endif
 	ld a,SNDCTRL_STOPMUSIC
 	call playSound

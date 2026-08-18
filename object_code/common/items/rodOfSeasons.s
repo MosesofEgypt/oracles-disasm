@@ -24,7 +24,13 @@ itemCode07:
 	ld (hl),$10
 	ld a,SND_SWORDSLASH
 	call playSound
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	ld a,UNCMP_GFXH_SEASONS_1c
+	call wIsSeasons
+	jr c,+
+		ld a,UNCMP_GFXH_AGES_ROD_OF_SEASONS
+	+
+.elif defined(ROM_AGES)
 	ld a,UNCMP_GFXH_AGES_ROD_OF_SEASONS
 .else
 	ld a,UNCMP_GFXH_SEASONS_1c
@@ -34,9 +40,14 @@ itemCode07:
 	jp objectSetVisible82
 
 @state1:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) && !defined(ROM_COMBO)
 	ret
-.else
+.endif
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	ret nc
+.endif
 	ld h,d
 	ld l,Item.counter1
 	dec (hl)

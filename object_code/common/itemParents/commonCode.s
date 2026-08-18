@@ -105,7 +105,11 @@ parentItemLoadAnimationAndIncState:
 	bit 7,b
 	call nz,setLinkUsingItem1
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,@notUnderwater
+.endif
 	ld a,(w1Companion.id)
 	cp SPECIALOBJECT_RAFT
 	ld a,c
@@ -457,7 +461,7 @@ checkLinkOnGround:
 	; Check wLinkSwimmingState
 	or (hl)
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ret nz
 	jr isLinkUnderwater
 
@@ -466,11 +470,16 @@ checkLinkOnGround:
 .endif
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 ;;
 ; TODO: rename this to the inverse of what it is now
 ; @param[out]	zflag	z if Link is not in an underwater map
 isLinkUnderwater:
+.if defined(ROM_COMBO)
+	xor a
+	call wIsSeasons
+	ret c
+.endif
 	ld a,(w1Link.var2f)
 	bit 7,a
 	ret
@@ -586,8 +595,25 @@ updateGrabbedObjectPosition:
 	ld e,<w1Link.direction
 	ld a,(de)
 	add b
+.if defined(ROM_COMBO)
+	add a
+	call wIsSeasons
+	jr c,++
+		; if ages, increment weights 3 and 4 past the seasons weights
+		cp $80
+		jr c,+
+	++
+		; if seasons, increment weights 2, 3 and 4 past the ages weights
+		cp $70
+		jr c,+
+			add $20
+	+
+	ld hl,@liftedObjectPositions
+	rst_addAToHl
+.else
 	ld hl,@liftedObjectPositions
 	rst_addDoubleIndex
+.endif
 	ldi a,(hl)
 	ld b,a
 	ldi a,(hl)
@@ -637,12 +663,13 @@ updateGrabbedObjectPosition:
 	.db $f0 $00 $f0 $00 $f0 $00 $f0 $00
 
 	; Weight 2 (TODO: what is this, and why does it differ?)
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.db $f8 $00 $00 $07 $06 $00 $00 $f8
 	.db $fa $00 $f8 $03 $04 $00 $f8 $fc
 	.db $f3 $00 $f2 $00 $f3 $00 $f2 $00
 	.db $f3 $00 $f3 $00 $f3 $00 $f3 $00
-.else; ROM_SEASONS
+.endif
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	.db $f4 $00 $00 $14 $0c $00 $00 $ec
 	.db $f2 $00 $f2 $10 $f2 $00 $f2 $f0
 	.db $ef $00 $ef $00 $ef $00 $ef $00

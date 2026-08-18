@@ -42,7 +42,15 @@ itemCode06:
 	call itemLoadAttributesAndGraphics
 	ld e,Item.subid
 	ld a,(de)
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+
+		add UNCMP_GFXH_AGES_L1_BOOMERANG
+		jr ++
+	+
+		add UNCMP_GFXH_18
+	++
+.elif defined(ROM_AGES)
 	add UNCMP_GFXH_AGES_L1_BOOMERANG
 .else
 	add UNCMP_GFXH_18 ; Either this or UNCMP_GFXH_19

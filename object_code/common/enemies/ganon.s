@@ -144,13 +144,13 @@ ganon_state_uninitialized:
 	call resetCamera
 	call loadCommonGraphics
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld a,PALH_8b
 .else
 	ld a,PALH_SEASONS_8b
 .endif
 	call loadPaletteHeader
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld a,PALH_b1
 .else
 	ld a,PALH_SEASONS_b1
@@ -991,7 +991,7 @@ ganon_stateC_substate9:
 	ld (de),a ; [substate]
 	ld a,$03
 	call ganon_setTileReplacementMode
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld a,PALH_b1
 .else
 	ld a,PALH_SEASONS_b1
@@ -1363,7 +1363,7 @@ ganon_updateSeizurePalette:
 	ld a,(hl)
 	inc (hl)
 	and $07
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	add a,PALH_b1
 .else
 	add a,PALH_SEASONS_b1

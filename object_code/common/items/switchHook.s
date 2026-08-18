@@ -114,7 +114,13 @@ itemCode0a:
 	.dw switchHookState3
 
 @state0:
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	ld a,UNCMP_GFXH_SEASONS_SWITCH_HOOK
+	call wIsSeasons
+	jr c,+
+		ld a,UNCMP_GFXH_AGES_1f
+	+
+.elif defined(ROM_AGES)
 	ld a,UNCMP_GFXH_AGES_1f
 .else
 	ld a,UNCMP_GFXH_SEASONS_SWITCH_HOOK

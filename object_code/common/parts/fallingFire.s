@@ -16,7 +16,14 @@ partCode23:
 	jr z,@func_54f6
 	call partCommon_decCounter1IfNonzero
 	ret nz
-.ifdef ROM_AGES
+
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	ld (hl),$3c
+	jr c,+
+		ld (hl),$78
+	+
+.elif defined(ROM_AGES)
 	ld (hl),$78
 .else
 	ld (hl),$3c
@@ -82,6 +89,12 @@ func_553f:
 	and $03
 	ld (de),a
 	ld hl,table_554f
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+		add $04
+	+
+.endif
 	rst_addAToHl
 	ld e,$c6
 	ld a,(hl)
@@ -89,7 +102,11 @@ func_553f:
 	ret
 
 table_554f:
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	.db $78 $78
+	.db $1e $1e
+	.db $3c $3c
+.elif defined(ROM_AGES)
 	.db $78 $78
 .else
 	.db $3c $3c
