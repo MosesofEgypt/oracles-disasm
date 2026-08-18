@@ -97,10 +97,12 @@
 	b8: db
 .ende
 
-.redefine od (-1)
-.redefine ou (-2)
-.redefine r (-3)
+; Other values that can be use within note/beat macros
+.redefine od (-1) ; octave down
+.redefine ou (-2) ; octave up
+.redefine r (-3)  ; rest
 
+; Define relative notes names within a given octave
 .macro octave
 	.redefine OCTAVE \1
 	.redefine OFFSET (-$c)
@@ -312,4 +314,12 @@
 ; ff: disables the channel
 .macro cmdff
 	.db $ff
+.endm
+
+; Parameters:
+;   \1: Index
+;   \2: Name
+.macro m_waveform
+	.DEFINE \2, \1 EXPORT
+	@waveform{%.2x{\1}}:
 .endm
