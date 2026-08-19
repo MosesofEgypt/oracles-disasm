@@ -4236,11 +4236,11 @@ updateRingEquipStatuses:
 	push bc
 
 	ldbc DISCOVERY_RING,BLAST_RING
-	ld a,$01
+	xor a
 	call @cacheComboActive
 
 	ldbc EXPERTS_RING,TOSS_RING
-	xor a
+	ld a,$01
 	call @cacheComboActive
 
 	pop bc

@@ -135,7 +135,7 @@
 		.ifdef FORCE_SECTIONS
 		.section \1 FORCE
 		.else
-		.section \1 SEMISUPERFREE BANKS {ROM_BANKS-1}-1
+		.section \1 SEMISUPERFREE BANKS {MAX_BANK_NUM}-{MIN_BANK_NUM}
 		.endif
 	.else
 		.assert NARGS == 3
@@ -143,10 +143,23 @@
 		.ifdef FORCE_SECTIONS
 		.section \1 \2 \3 FORCE
 		.else
-		.section \1 \2 \3 SEMISUPERFREE BANKS {ROM_BANKS-1}-1
+		.section \1 \2 \3 SEMISUPERFREE BANKS {MAX_BANK_NUM}-{MIN_BANK_NUM}
 		.endif
 	.endif
 .endm
+
+.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE
+.macro m_section_superfree_audio
+	.if NARGS == 1
+		.section \1 SEMISUPERFREE BANKS 256-511
+	.else
+		.assert NARGS == 3
+		.section \1 \2 \3 SEMISUPERFREE BANKS 256-511
+	.endif
+.endm
+.else
+.define m_section_superfree_audio	m_section_superfree
+.endif
 
 ; Include something from the "rooms" directory based on the game
 .macro m_IncRoomData

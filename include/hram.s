@@ -133,13 +133,10 @@
 	hramEnd			 	.db	; $ffc0/$ffbe
 .ende
 
-.enum $ffd9 export
+.enum $ffda export
 	; =====================================================================
 	; Music stuff
 	; =====================================================================
-
-	; Keeps track of the bank of the channel data current being parsed
-	hSoundDataBaseBank			db	; $ffd9
 
 	; Each of these are buffers taking wSoundChannel as an index.
 	; This one is 8 bytes (1 byte for each index)

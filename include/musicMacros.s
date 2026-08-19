@@ -129,7 +129,11 @@
 .endm
 
 .macro m_soundPointer
-	.db :\1Start ; Bank number
+	.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE
+		.db (:\1Start)&$ff ; Bank number
+	.else
+		.db :\1Start ; Bank number
+	.endif
 	.dw \1 ; Pointer
 .endm
 

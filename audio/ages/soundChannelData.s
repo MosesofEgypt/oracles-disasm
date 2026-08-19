@@ -1,7 +1,7 @@
 .ifdef ROM_COMBO
-m_section_superfree AudioData7
+m_section_superfree_audio AudioData7
 .else
-m_section_superfree AudioData1
+m_section_superfree_audio AudioData1
 .endif
 
 .ifndef ROM_COMBO
@@ -95,9 +95,9 @@ sndbdChannel2:
 
 
 .ifdef ROM_COMBO
-m_section_superfree AudioData8
+m_section_superfree_audio AudioData8
 .else
-m_section_superfree AudioData2
+m_section_superfree_audio AudioData2
 .endif
 
 .ifndef ROM_COMBO
@@ -226,9 +226,9 @@ sndcfChannel2:
 
 
 .ifdef ROM_COMBO
-m_section_superfree AudioData9
+m_section_superfree_audio AudioData9
 .else
-m_section_superfree AudioData3
+m_section_superfree_audio AudioData3
 .endif
 
 .ifndef ROM_COMBO
@@ -285,9 +285,9 @@ sndcaChannel7:
 
 
 .ifdef ROM_COMBO
-m_section_superfree AudioData10
+m_section_superfree_audio AudioData10
 .else
-m_section_superfree AudioData4
+m_section_superfree_audio AudioData4
 .endif
 
 .ifndef ROM_COMBO
@@ -341,9 +341,9 @@ bank3cChannelFallback:
 
 
 .ifdef ROM_COMBO
-m_section_superfree AudioData11
+m_section_superfree_audio AudioData11
 .else
-m_section_superfree AudioData5
+m_section_superfree_audio AudioData5
 .endif
 
 .ifndef ROM_COMBO
@@ -399,9 +399,9 @@ snd94Channel2:
 
 
 .ifdef ROM_COMBO
-m_section_superfree AudioData12
+m_section_superfree_audio AudioData12
 .else
-m_section_superfree AudioData6
+m_section_superfree_audio AudioData6
 .endif
 
 .ifndef ROM_COMBO

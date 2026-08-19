@@ -31,6 +31,10 @@
 .endif
 
 .if defined(ROM_COMBO)
+	.ifndef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE
+		.define I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE	1
+	.endif
+
 	.ifndef SUPERFREE_OAM_DATA_BANKS
 		.define SUPERFREE_OAM_DATA_BANKS	1
 	.endif

@@ -8,25 +8,26 @@
 
 .RAMSECTION Wram0_c000
 
-.if defined(ROM_COMBO)
-	wMusicReadFunction: ; $c000
-		dsb $11
-
-	wIsSeasons
-		; function to set carry flag if seasons, or clear
-		; it if ages. exists in hram so it can be modified.
-		; will contain a variant of this function:
-		;	scf
-		;	ccf		; this may be replaced with a return
-		;	ret
-		; the cflag will be cleared if ages and set if seasons
-		dsb $03
-.else
+.if !defined(I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE)
 	wMusicReadFunction: ; $c000
 	; Function copied to RAM to read a byte from another bank.
 	; NOTE: THIS CODE SHOULD ONLY EVER BE CALLED BY
 	;       CODE IN THE AUDIO BANK, OR CODE IN BANK 0
 		dsb $14
+
+	.if defined(ROM_COMBO)
+		wIsSeasons
+			dsb $03
+	.endif
+
+.elif defined(ROM_COMBO)
+	wGrabbableObjectBuffer:
+		dsb $10
+	wGrabbableObjectBufferEnd:
+		.db
+
+	wc010:	; padding
+		.dsb $4
 .endif
 
 wSoundFadeCounter: ; $c014
@@ -163,7 +164,22 @@ wChannelVolumes: ; $c07d
 	; Never read for wave channels
 	dsb 8
 
-.if defined(ROM_COMBO)
+.if defined(I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE)
+	wMusicReadFunction:
+		dsb $17
+
+	.if defined(ROM_COMBO)
+		wIsSeasons
+			; function to set carry flag if seasons, or clear
+			; it if ages. exists in hram so it can be modified.
+			; will contain a variant of this function:
+			;	scf
+			;	ccf		; this may be replaced with a return
+			;	ret
+			; the cflag will be cleared if ages and set if seasons
+			dsb $03
+	.endif
+.elif defined(ROM_COMBO)
 wGrabbableObjectBuffer:
 	dsb $10
 wGrabbableObjectBufferEnd:

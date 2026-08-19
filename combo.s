@@ -139,7 +139,8 @@ makuTree_setMapTextBasedOnStage:
 
 .BANK $1a SLOT 1
 .ORG 0
-
+; NOTE: links gfx must lie in bank $1a.
+;       TODO: dehardcode this
 m_section_free Gfx_1a ALIGN $20
 	.include "data/gfxDataBank1a.s"
 .ends
@@ -147,7 +148,8 @@ m_section_free Gfx_1a ALIGN $20
 
 .BANK $1b SLOT 1
 .ORG 0
-
+; NOTE: companions gfx must lie in bank $1b.
+;       TODO: dehardcode this
 m_section_free Gfx_1b ALIGN $20
 	.include "data/gfxDataBank1b.s"
 .ends

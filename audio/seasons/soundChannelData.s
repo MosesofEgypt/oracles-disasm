@@ -1,4 +1,4 @@
-m_section_superfree AudioData1
+m_section_superfree_audio AudioData1
 
 snddeStart:
 
@@ -74,7 +74,7 @@ bank39ChannelFallback:
 
 
 
-m_section_superfree AudioData2
+m_section_superfree_audio AudioData2
 
 mus41Start:
 mus42Start:
@@ -201,7 +201,7 @@ sndd5Channel2:
 
 
 
-m_section_superfree AudioData3
+m_section_superfree_audio AudioData3
 
 mus43Start:
 mus44Start:
@@ -256,7 +256,7 @@ bank3bChannelFallback:
 
 
 
-m_section_superfree AudioData4
+m_section_superfree_audio AudioData4
 
 bank3cChannelFallback:
 	cmdff
@@ -292,7 +292,7 @@ bank3cChannelFallback:
 
 
 
-m_section_superfree AudioData5
+m_section_superfree_audio AudioData5
 
 bank3dChannelFallback:
 mus24Channel6:
@@ -335,7 +335,7 @@ mus24Channel4:
 
 
 
-m_section_superfree AudioData6
+m_section_superfree_audio AudioData6
 
 mus30Start:
 mus37Start:

@@ -1293,7 +1293,6 @@ loadPaletteHeader:
 
 ;;
 ; Do a DMA transfer next vblank. Note:
-;  - Only banks $00-$3f work properly
 ;  - Destination address must be a multiple of 16
 ;
 ; @param	b	(data size)/16 - 1
@@ -8985,10 +8984,12 @@ remoteBombComboActive:
 	jr bothRingsActive
 
 judoMasterComboActive:
-	push af
+	push hl
+	ld h,a
 	ld a,$01
 	call getRingComboFlag
-	pop af
+	ld a,h
+	pop hl
 	ret
 
 victoryRingIncLevel:
