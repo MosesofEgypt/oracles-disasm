@@ -42,7 +42,15 @@ parentItemCode_magnetGloves:
 	call parentItemCheckButtonPressed
 	jr z,@invertPolarityAndStop
 
+.if defined(ROM_COMBO)
 	ld a,SND_MAGNET_GLOVES
+	call wIsSeasons
+	jr c,+
+		ld a,SND_MAGNET_GLOVES_AGES
+	+
+.else
+	ld a,SND_MAGNET_GLOVES
+.endif
 	call playSound
 	ld a,(wMagnetGlovePolarity)
 	scf
@@ -91,7 +99,15 @@ parentItemCode_magnetGloves:
 	ret z
 
 	ld a,(wActiveGroup)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	ld hl,magnetTilesTable_seasons
+	jr c,+
+		ld hl,magnetTilesTable_ages
+	+
+.else
 	ld hl,magnetTilesTable
+.endif
 	rst_addAToHl
 	ld a,(hl)
 	or a

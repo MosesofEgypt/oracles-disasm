@@ -1265,19 +1265,31 @@ m_section_superfree Item_Parents NAMESPACE itemParents
 
 	.include "code/parentItemUsage.s"
 
-;	.include "object_code/common/itemParents/shieldParent.s"
-;	.include "object_code/common/itemParents/otherSwordsParent.s"
-;	.include "object_code/common/itemParents/switchHookParent.s"
-;	.include "object_code/common/itemParents/caneOfSomariaParent.s"
-;	.include "object_code/common/itemParents/swordParent.s"
-;	.include "object_code/common/itemParents/harpFluteParent.s"
-;	.include "object_code/common/itemParents/seedsParent.s"
-;	.include "object_code/common/itemParents/shovelParent.s"
-;	.include "object_code/common/itemParents/boomerangParent.s"
-;	.include "object_code/common/itemParents/bombsBraceletParent.s"
-;	.include "object_code/common/itemParents/featherParent.s"
-;	.include "object_code/common/itemParents/magnetGloveParent.s"
-;	.include "object_code/common/itemParents/lifeVialParent.s"
+	.include "object_code/common/itemParents/shieldParent.s"
+	.include "object_code/common/itemParents/otherSwordsParent.s"
+	.include "object_code/common/itemParents/switchHookParent.s"
+	.include "object_code/common/itemParents/caneOfSomariaParent.s"
+	.include "object_code/common/itemParents/swordParent.s"
+	.include "object_code/common/itemParents/seedsParent.s"
+	.include "object_code/common/itemParents/boomerangParent.s"
+	.include "object_code/common/itemParents/bombsBraceletParent.s"
+	.include "object_code/common/itemParents/featherParent.s"
+	.include "object_code/common/itemParents/magnetGloveParent.s"
+	.include "object_code/common/itemParents/lifeVialParent.s"
+
+	.include "object_code/common/itemParents/commonCode.s"
+
+	.include {"{GAME_DATA_DIR}/itemUsageTables.s"}
+.ends
+
+m_section_superfree Item_Parents_2 NAMESPACE itemParentsExt
+	; NOTE: these are needed in here as well due to them relying
+	;       on several animation related functions for link in here
+	.include "code/specialObjectAnimationsAndDamage.s"
+	.include {"{BUILD_DIR}/specialObjectAnimationData.s"}
+
+	.include "object_code/common/itemParents/harpFluteParent.s"
+	.include "object_code/common/itemParents/shovelParent.s"
 
 	.include "object_code/common/itemParents/commonCode.s"
 
@@ -1286,37 +1298,37 @@ m_section_superfree Item_Parents NAMESPACE itemParents
 
 m_section_superfree Item_Code namespace itemCode
 	.include "code/updateItems.s"
-;	.include "object_code/common/items/commonCode1.s"
+	.include "object_code/common/items/commonCode1.s"
 
 	.include {"{GAME_DATA_DIR}/tile_properties/conveyorItemTiles.s"}
 	.include {"{GAME_DATA_DIR}/tile_properties/itemPassableTiles.s"}
 
-;	.include "object_code/common/items/seeds.s"
-;	.include "object_code/common/items/dimitriMouth.s"
-;	.include "object_code/common/items/bombchus.s"
-;	.include "object_code/common/items/bombs.s"
-;	.include "object_code/common/items/boomerang.s"
-;	.include "object_code/common/items/switchHook.s"
-;	.include "object_code/common/items/rickyTornado.s"
-;	.include "object_code/common/items/magnetBall.s"
-;	.include "object_code/common/items/seedShooter.s"
-;	.include "object_code/common/items/rickyMooshAttack.s"
-;	.include "object_code/common/items/shovel.s"
-;	.include "object_code/common/items/caneOfSomaria.s"
-;	.include "object_code/common/items/minecartCollision.s"
-;	.include "object_code/common/items/slingshot.s"
-;	.include "object_code/common/items/foolsOre.s"
-;	.include "object_code/common/items/biggoronSword.s"
-;	.include "object_code/common/items/sword.s"
-;	.include "object_code/common/items/punch.s"
-;	.include "object_code/common/items/swordBeam.s"
-;	.include "object_code/common/items/postUpdate.s"
-;	.include "object_code/common/items/commonCode2.s"
-;	.include "object_code/common/items/bracelet.s"
-;	.include "object_code/common/items/commonBombAndBraceletCode.s"
-;	.include "object_code/common/items/dust.s"
-;	.include "object_code/common/items/magnetGloves.s"
-;	.include "object_code/common/items/rodOfSeasons.s"
+	.include "object_code/common/items/seeds.s"
+	.include "object_code/common/items/dimitriMouth.s"
+	.include "object_code/common/items/bombchus.s"
+	.include "object_code/common/items/bombs.s"
+	.include "object_code/common/items/boomerang.s"
+	.include "object_code/common/items/switchHook.s"
+	.include "object_code/common/items/rickyTornado.s"
+	.include "object_code/common/items/magnetBall.s"
+	.include "object_code/common/items/seedShooter.s"
+	.include "object_code/common/items/rickyMooshAttack.s"
+	.include "object_code/common/items/shovel.s"
+	.include "object_code/common/items/caneOfSomaria.s"
+	.include "object_code/common/items/minecartCollision.s"
+	.include "object_code/common/items/slingshot.s"
+	.include "object_code/common/items/foolsOre.s"
+	.include "object_code/common/items/biggoronSword.s"
+	.include "object_code/common/items/sword.s"
+	.include "object_code/common/items/punch.s"
+	.include "object_code/common/items/swordBeam.s"
+	.include "object_code/common/items/postUpdate.s"
+	.include "object_code/common/items/commonCode2.s"
+	.include "object_code/common/items/bracelet.s"
+	.include "object_code/common/items/commonBombAndBraceletCode.s"
+	.include "object_code/common/items/dust.s"
+	.include "object_code/common/items/magnetGloves.s"
+	.include "object_code/common/items/rodOfSeasons.s"
 
 	.include {"{GAME_DATA_DIR}/itemAttributes.s"}
 	.include "data/itemAnimations.s"

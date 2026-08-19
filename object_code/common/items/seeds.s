@@ -225,7 +225,7 @@ seedItemState1:
 .if defined(ROM_COMBO)
 	call wIsSeasons
 	jr nc,+
-		jr nz,@seedCollidedWithEnemy
+		jp nz,@seedCollidedWithEnemy
 		jr @noCollision
 	+
 .endif
@@ -878,7 +878,15 @@ galeSeedTryToWarpLink:
 ; @param[out]	zflag	Unset when the seed's "effect" should be activated
 seedItemUpdateBouncing:
 	call objectGetTileAtPosition
-	ld hl,seedsDontBounceTilesTable
+	.if defined(ROM_COMBO)
+		call wIsSeasons
+		ld hl,seedsDontBounceTilesTable_seasons
+		jr c,+
+			ld hl,seedsDontBounceTilesTable_ages
+		+
+	.else
+		ld hl,seedsDontBounceTilesTable
+	.endif
 	call findByteInCollisionTable
 	jr c,@unsetZFlag
 
@@ -1001,7 +1009,15 @@ seedItemCheckDiagonalCollision:
 ; Collision occurred; check whether it should bounce (set carry flag if so)
 
 	call getTileAtPosition
-	ld hl,seedsDontBounceTilesTable
+	.if defined(ROM_COMBO)
+		call wIsSeasons
+		ld hl,seedsDontBounceTilesTable_seasons
+		jr c,+
+			ld hl,seedsDontBounceTilesTable_ages
+		+
+	.else
+		ld hl,seedsDontBounceTilesTable
+	.endif
 	call findByteInCollisionTable
 	ccf
 	jr nc,@next

@@ -223,14 +223,19 @@ soundPointers:
 	/* 0xd2 */ m_soundPointer sndLightning
 .ifdef ROM_COMBO
 	/* 0xd3 */ m_soundPointer sndAgesWind
+	/* 0xd4 */ m_soundPointer sndTimewarpCompleted
+	/* 0xd5 */ m_soundPointer sndEchoes
+	/* 0xd6 */ m_soundPointer sndCurrents
+	/* 0xd7 */ m_soundPointer sndAges
+	/* 0xd8 */ m_soundPointer sndMagnetGloves
 .else
 	/* 0xd3 */ m_soundPointer sndWind
-.endif
 	/* 0xd4 */ m_soundPointer sndTimewarpCompleted
 	/* 0xd5 */ m_soundPointer sndd5
 	/* 0xd6 */ m_soundPointer sndd6
 	/* 0xd7 */ m_soundPointer sndd7
 	/* 0xd8 */ m_soundPointer sndd8
+.endif
 	/* 0xd9 */ m_soundPointer sndd9
 	/* 0xda */ m_soundPointer sndda
 	/* 0xdb */ m_soundPointer snddb

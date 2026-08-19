@@ -223,20 +223,26 @@ soundPointers:
 	/* 0xd2 */ m_soundPointer sndLightning
 .ifdef ROM_COMBO
 	/* 0xd3 */ m_soundPointer sndSeasonsWind
+	/* 0xd4 */ m_soundPointer sndd4
+	/* 0xd5 */ m_soundPointer sndEchoes
+	/* 0xd6 */ m_soundPointer sndCurrents
+	/* 0xd7 */ m_soundPointer sndAges
+	/* 0xd8 */ m_soundPointer sndMagnetGloves
 .else
 	/* 0xd3 */ m_soundPointer sndWind
-.endif
 	/* 0xd4 */ m_soundPointer sndd4
 	/* 0xd5 */ m_soundPointer sndd5
 	/* 0xd6 */ m_soundPointer sndd6
 	/* 0xd7 */ m_soundPointer sndd7
 	/* 0xd8 */ m_soundPointer sndd8
+.endif
 	/* 0xd9 */ m_soundPointer sndd9
 	/* 0xda */ m_soundPointer sndda
 	/* 0xdb */ m_soundPointer snddb
 	/* 0xdc */ m_soundPointer snddc
 	/* 0xdd */ m_soundPointer snddd
 	/* 0xde */ m_soundPointer sndde
+
 
 .ifndef ROM_COMBO
 ; This should really be located in "soundChannelPointers.s" but it's positioned differently for

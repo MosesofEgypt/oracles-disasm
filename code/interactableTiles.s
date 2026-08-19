@@ -21,9 +21,9 @@ interactWithTileBeforeLink:
 	; Setting it disables some of Link's per-frame update code?
 .ifdef ROM_COMBO
 	call wIsSeasons
-	ld hl,interactableTilesTable_seasons
+	ld hl,interactableTilesTable_ages
 	jr nc,+
-		ld hl,interactableTilesTable_ages
+		ld hl,interactableTilesTable_seasons
 		call getSomariaBlockIndex
 		ld a,b
 		cp e

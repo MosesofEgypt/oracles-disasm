@@ -35,6 +35,15 @@ parentItemCode_harp:
 +
 	ld a,(hl)
 	add b
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	; switch to the seasons sound indices
+	jr nc,+
+		cp $04
+		jr c,+
+			add $03
+	+
+.endif
 	ld hl,@sfxList
 	rst_addAToHl
 	ld a,(hl)
@@ -112,6 +121,12 @@ parentItemCode_harp:
 
 @tuneEchoesInVain:
 	ld bc,TX_5110
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+		ld bc,TX_510f
+	+
+.endif
 	call showText
 	jr @clearSelf
 
@@ -147,6 +162,10 @@ parentItemCode_harp:
 
 @tuneOfAges:
 	call restartSound
+.ifdef ROM_COMBO
+	call wIsSeasons
+	jr c,@tuneEchoesInVain
+.endif
 
 	ld a,CUTSCENE_TIMEWARP
 	ld (wCutsceneTrigger),a
@@ -169,6 +188,11 @@ parentItemCode_harp:
 	.db SND_TUNE_OF_ECHOES
 	.db SND_TUNE_OF_CURRENTS
 	.db SND_TUNE_OF_AGES
+.if defined(ROM_COMBO)
+	.db SND_TUNE_OF_ECHOES_SEASONS
+	.db SND_TUNE_OF_CURRENTS_SEASONS
+	.db SND_TUNE_OF_AGES_SEASONS
+.endif
 .else
 	; CROSSITEMS: For now we're putting placeholder sounds for the harp songs in seasons
 	.db SND_FILLED_HEART_CONTAINER

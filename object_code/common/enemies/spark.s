@@ -16,7 +16,17 @@ enemyCode13:
 	; changed.
 	cp ITEMCOLLISION_L1_BOOMERANG
 	jr z,@boomerangCollision
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,++
+		cp ITEMCOLLISION_L2_BOOMERANG_A
+		jr +
+	++
+		cp ITEMCOLLISION_L2_BOOMERANG_S
+	+
+.else
 	cp ITEMCOLLISION_L2_BOOMERANG
+.endif
 	jr nz,@normalStatus
 .else
 	sub ITEMCOLLISION_L1_BOOMERANG

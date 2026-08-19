@@ -230,7 +230,15 @@ tryBreakTileWithSword:
 	ret c
 
 	; Check for bombable wall clink sound
+.if defined(ROM_COMBO)
+	ld hl,clinkSoundTable_seasons
+	call wIsSeasons
+	jr c,+
+		ld hl,clinkSoundTable_ages
+	+
+.else
 	ld hl,clinkSoundTable
+.endif
 	call findByteInCollisionTable
 	jr c,@bombableWallClink
 

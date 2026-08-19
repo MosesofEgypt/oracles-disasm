@@ -10,7 +10,15 @@ itemLoadAttributesAndGraphics:
 	ld e,Item.id
 	ld a,(de)
 	add a
+.if defined(ROM_COMBO)
+	ld hl,itemAttributes_seasons
+	call wIsSeasons
+	jr c,+
+		ld hl,itemAttributes_ages
+	+
+.else
 	ld hl,itemAttributes
+.endif
 	rst_addDoubleIndex
 
 	; b0: Item.collisionType
@@ -46,7 +54,11 @@ itemLoadAttributesAndGraphics:
 	ld (de),a
 
 	call itemSetVar3cToFF
+.if defined(ROM_COMBO)
+	jpab gfxLoading.itemLoadGraphics
+.else
 	jpab bank3f.itemLoadGraphics
+.endif
 
 ;;
 itemSetVar3cToFF:
@@ -644,7 +656,15 @@ itemCheckCanPassSolidTile:
 ; @param[out]	zflag	Set if there will be no elevation change (ignore the value of a)
 checkTileIsPassableFromDirection:
 	; Check if the tile can be passed by items
+.if defined(ROM_COMBO)
+	ld hl,itemPassableTilesTable_seasons
+	call wIsSeasons
+	jr c,+
+		ld hl,itemPassableTilesTable_ages
+	+
+.else
 	ld hl,itemPassableTilesTable
+.endif
 	call findByteInCollisionTable_paramE
 	jr c,@canPassWithoutElevationChange
 
@@ -657,7 +677,15 @@ checkTileIsPassableFromDirection:
 	push af
 
 	ld a,(wActiveCollisions)
+.if defined(ROM_COMBO)
+	ld hl,itemPassableCliffTilesTable_seasons
+	call wIsSeasons
+	jr c,+
+		ld hl,itemPassableCliffTilesTable_ages
+	+
+.else
 	ld hl,itemPassableCliffTilesTable
+.endif
 	rst_addDoubleIndex
 	rst_derefHl
 
@@ -711,7 +739,15 @@ itemUpdateConveyorBelt:
 	; Check if on a conveyor belt; get in 'a' the angle to move in if so
 	ld bc,$0500
 	call objectGetRelativeTile
+.if defined(ROM_COMBO)
+	ld hl,itemConveyorTilesTable_seasons
+	call wIsSeasons
+	jr c,+
+		ld hl,itemConveyorTilesTable_ages
+	+
+.else
 	ld hl,itemConveyorTilesTable
+.endif
 	call lookupCollisionTable
 	ret nc
 

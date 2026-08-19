@@ -66,7 +66,15 @@ itemCode06:
 
 	; level-2
 	ld l,Item.collisionType
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	ld (hl),$80|ITEMCOLLISION_L2_BOOMERANG_S
+	jr c,++
+		ld (hl),$80|ITEMCOLLISION_L2_BOOMERANG_A
+	++
+.else
 	ld (hl),$80|ITEMCOLLISION_L2_BOOMERANG
+.endif
 	ld l,Item.oamFlagsBackup
 	ld a,$0c
 	ldi (hl),a

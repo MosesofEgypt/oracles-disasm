@@ -418,6 +418,22 @@ andHlWithGameKeysPressed:
 	ret
 
 ;;
+clearParentItem:
+	call clearLinkUsingItem1
+	call itemEnableLinkTurning
+	call itemEnableLinkMovement
+	ld e,Item.start
+	jp objectDelete_de
+
+;;
+clearParentItemH:
+	push de
+	ld d,h
+	call clearParentItem
+	pop de
+	ret
+
+;;
 ; @param	d	Parent item object
 clearParentItemIfCantUseSword:
 	; Check if in a spinner

@@ -995,7 +995,15 @@ bombchuCheckForEnemyTarget:
 	ld l,Enemy.id
 	ld a,(hl)
 	push hl
-	ld hl,bombchuTargets
+	.if defined(ROM_COMBO)
+		call wIsSeasons
+		ld hl,bombchuTargets_seasons
+		jr c,+
+			ld hl,bombchuTargets_ages
+		+
+	.else
+		ld hl,bombchuTargets
+	.endif
 .ifdef ENABLE_RING_REDUX
 	push af
 	call isAzuchu

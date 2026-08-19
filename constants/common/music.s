@@ -487,6 +487,12 @@
 .if defined(ROM_COMBO)
 	SND_TIMEWARP_COMPLETED  .db
 	SND_d4                  db ; $d4
+
+	SND_TUNE_OF_ECHOES_SEASONS      db ; $d5
+	SND_TUNE_OF_CURRENTS_SEASONS    db ; $d6
+	SND_TUNE_OF_AGES_SEASONS        db ; $d7
+	SND_MAGNET_GLOVES_AGES         .db ; $d8
+
 .elif defined(ROM_AGES)
 	SND_TIMEWARP_COMPLETED  db ; $d4
 .else

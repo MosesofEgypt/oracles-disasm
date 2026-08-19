@@ -491,12 +491,6 @@ parentItemUpdate:
 	ld e,Item.id
 	ld a,(de)
 	rst_jumpTable
-
-.ifdef ROM_COMBO	; NOTE: temporary until items are merged in
-.repeat $20
-	.dw clearParentItem
-.endr
-.else
 	.dw parentItemCode_punch		; ITEM_NONE
 	.dw parentItemCode_shield		; ITEM_SHIELD
 	.dw parentItemCode_punch		; ITEM_PUNCH
@@ -533,23 +527,18 @@ parentItemUpdate:
 	.dw clearParentItem			; ITEM_MINECART_COLLISION
 	.dw parentItemCode_foolsOre		; ITEM_FOOLS_ORE
 	.dw clearParentItem			; ITEM_1f
-.endif	; NOTE: temporary until items are merged in
 
-;;
-clearParentItem:
-	call clearLinkUsingItem1
-	call itemEnableLinkTurning
-	call itemEnableLinkMovement
-	ld e,Item.start
-	jp objectDelete_de
+.if defined(ROM_COMBO)
+; bank is too full in rom combo, so need to split these out
+parentItemCode_shovel:
+	jpab itemParentsExt.parentItemCode_shovel
 
-;;
-clearParentItemH:
-	push de
-	ld d,h
-	call clearParentItem
-	pop de
-	ret
+parentItemCode_harp:
+	jpab itemParentsExt.parentItemCode_harp
+
+parentItemCode_flute:
+	jpab itemParentsExt.parentItemCode_flute
+.endif
 
 
 .ifdef ENABLE_RING_REDUX
