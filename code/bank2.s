@@ -5780,7 +5780,7 @@ inventoryMenuState0:
 .if defined(ROM_COMBO)
 	callab bank19.getNumUnappraisedRings
 .else
-	callab bank3f.getNumUnappraisedRings
+	callab dataLoading.getNumUnappraisedRings
 .endif
 	call func_02_55b2
 	ld a,$01

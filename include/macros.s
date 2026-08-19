@@ -148,18 +148,22 @@
 	.endif
 .endm
 
-.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE
 .macro m_section_superfree_audio
 	.if NARGS == 1
-		.section \1 SEMISUPERFREE BANKS 256-511
+		.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE
+			.section \1 SEMISUPERFREE BANKS 256-511
+		.else
+			m_section_superfree \1
+		.endif
 	.else
 		.assert NARGS == 3
-		.section \1 \2 \3 SEMISUPERFREE BANKS 256-511
+		.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE
+			.section \1 \2 \3 SEMISUPERFREE BANKS 256-511
+		.else
+			m_section_superfree \1 \2 \3
+		.endif
 	.endif
 .endm
-.else
-.define m_section_superfree_audio	m_section_superfree
-.endif
 
 ; Include something from the "rooms" directory based on the game
 .macro m_IncRoomData
@@ -457,24 +461,29 @@
 .endm
 
 
-; A pointer to a special object's graphics. Must be located in bank $1a or $1b.
+; A pointer to a special object's graphics.
 ; If only 2 arguments are specified, and the second is $0000, no graphics data will be
 ; loaded (although the OAM data in the first argument may still apply).
 ;
 ; Arg 1: index for specialObjectOamDataTable
 ; Arg 2: graphics file
-; Arg 3: offset within file
-; Arg 4: size (divided by 16)
+; Arg 3: offset within file(must be a multiple of 16)
+; Arg 4: byte size divided by 16 (max value of 31, must be even numbered)
 .macro m_SpecialObjectGfxPointer
 	.IF NARGS == 2
 		.db \1
+		.db $00
 		.dw \2
 	.ELSE
-		.assert NARGS == 4
+		.assert NARGS   == 4
+		.assert (\3&0f) == 0
+		.assert (\4)    < 32
+		.assert (\4&1)  == 0
 		m_ReadGfxDataHashedFilename \2
 
 		.db \1
-		.dw ({filename})+(\3) | (\4) | ((:{filename}) - :gfxDataBank1a)
+		.db (:{filename})
+		.dw (({filename})+(\3)) | (\4>>1)
 	.ENDIF
 .endm
 

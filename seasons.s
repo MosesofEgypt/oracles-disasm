@@ -816,44 +816,14 @@ m_section_free Seasons_Interactions_Bank15 NAMESPACE seasonsInteractionsBank15
 	;.include {"{GAME_DATA_DIR}/tilesetCollisions.s"}
 
 	.include {"{GAME_DATA_DIR}/smallRoomLayoutTables.s"}
-
-
-; HACK-BASE: TODO: Bank $17 removed
-
-.BANK $18 SLOT 1
-.ORG 0
-
 	.include {"{GAME_DATA_DIR}/largeRoomLayoutTables.s"}
 
-	m_GfxDataSimple gfx_animations_1
-	m_GfxDataSimple gfx_animations_2
-	m_GfxDataSimple gfx_animations_3
-	m_GfxDataSimple gfx_063940
 
-	; Compressed graphics file, for some reason doesn't go in gfxDataMain.s.
-	m_GfxDataSimple spr_credits_sprites_2
-
-
-; HACK-BASE: Deleted tileMappings.s include from bank $19 for expanded tilesets patch.
-
-
-.BANK $1a SLOT 1
+.BANK $19 SLOT 1
 .ORG 0
-	.include "data/gfxDataBank1a.s"
-
-
-.BANK $1b SLOT 1
-.ORG 0
-	.include "data/gfxDataBank1b.s"
-
-
-.BANK $1c SLOT 1
-.ORG 0
-	.include "data/gfxDataBank1c.s"
-
 	; "${BUILD_DIR}/textData.s" will determine where this data starts.
-	;   Ages:    1d:4000
-	;   Seasons: 1c:5c00
+	; The .BANK and .ORG above are just reminders
+	;   Both games:   19:4000
 
 	.include {"{BUILD_DIR}/textData.s"}
 
@@ -862,10 +832,6 @@ m_section_free Seasons_Interactions_Bank15 NAMESPACE seasonsInteractionsBank15
 
 	.include {"{GAME_DATA_DIR}/roomLayoutData.s"}
 	.include {"{GAME_DATA_DIR}/gfxDataMain.s"}
-
-	; HACK-BASE: Normally audio code would start in bank $39. But to give more space for the
-	; data in the above includes, it's been relocated. So now, banks all the way up to and
-	; including bank $3e could be used for the above data (text, room layouts, graphics).
 
 
 .BANK $3d SLOT 1
@@ -958,11 +924,7 @@ m_section_free enemyCode_Bank3e NAMESPACE bank3e
 .ends
 
 
-.BANK $3f SLOT 1
-.ORG 0
-
-m_section_free Bank3f NAMESPACE bank3f
-
+m_section_superfree Data_Loading NAMESPACE dataLoading
 	.include "code/loadGraphics.s"
 	.include "code/treasureAndDrops.s"
 	.include "code/textbox.s"
@@ -978,7 +940,6 @@ m_section_free Bank3f NAMESPACE bank3f
 
 	.include {"{GAME_DATA_DIR}/treasureCollectionBehaviours.s"}
 	.include {"{GAME_DATA_DIR}/treasureDisplayData.s"}
-
 .ends
 
 

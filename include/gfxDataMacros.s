@@ -1,16 +1,22 @@
 ; Incbin gfx data, can cross over banks. Pass filename without extension as parameter.
 .macro m_GfxData
-	.assert NARGS == 1
+	.define skipsize 3
+	.if NARGS == 2
+		.redefine skipsize skipsize+(\2)
+	.else
+		.assert NARGS == 1
+	.endif
 
 	m_ReadGfxDataHashedFilename \1
 
 	.ifndef HASHED_GFX_{filename}
 		{filename}:
-		m_IncbinCrossBankData {"{BUILD_DIR}/gfx/{filename}.cmp"}, 3
+		m_IncbinCrossBankData {"{BUILD_DIR}/gfx/{filename}.cmp"}, skipsize
 		.define HASHED_GFX_{filename}
 	.endif
 
 	.undefine filename
+	.undefine skipsize
 .endm
 
 .macro m_ReadGfxDataHashedFilename
@@ -102,9 +108,11 @@
 .endm
 
 ; Same as m_GfxData, except it ensures the data is aligned
-; to a 16-byte boundary, and doesn't skip over data banks
+; to a 32-byte boundary, and doesn't skip over data banks.
+; This ensures gfx are always located at an offset that
+; will work with DMA.
 .macro m_GfxDataAligned
-	.assert NARGS == 1
+	.assert (NARGS == 1) || (NARGS == 2)
 
 	m_ReadGfxDataHashedFilename \1
 
@@ -114,7 +122,7 @@
 		.fclose file
 		.redefine SIZE SIZE-3
 
-		.define PAD_AMOUNT ((DATA_ADDR+$0f)&$fff0)-DATA_ADDR
+		.define PAD_AMOUNT ((DATA_ADDR+$1f)&$ffe0)-DATA_ADDR
 
 		.repeat PAD_AMOUNT index COUNT
 			.db $00
@@ -139,7 +147,11 @@
 	.endif
 
 	.undefine filename
-	m_GfxData \1
+	.if NARGS == 1
+		m_GfxData \1
+	.else
+		m_GfxData \1 \2
+	.endif
 .endm
 
 ; Start of a gfx header. Creates a label at the current position (ie. gfxHeader00:) and an exported

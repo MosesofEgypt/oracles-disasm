@@ -18,7 +18,6 @@ specialObjectCode_linkInCutscene:
 	.dw linkCutscene9_seasons
 	.dw linkCutsceneA_seasons
 
-.ifndef ROM_COMBO
 ;;
 ; Opening cutscene with the triforce
 linkCutscene0_seasons:
@@ -204,7 +203,6 @@ linkCutscene0_substate6:
 	rrca
 	jp nc,objectSetInvisible
 	jp objectSetVisible
-.endif
 
 
 ; Dancing with Din
@@ -825,7 +823,7 @@ linkCutscene5_seasons:
 	ret
 
 
-.ifndef ROM_COMBO
+
 ;;
 ; Link being kissed by Zelda in ending cutscene - cutsceneA in ages
 ;
@@ -933,7 +931,6 @@ linkCutscene6_seasons:
 	ld hl,wTmpcfc0.normal.cfc0
 	ld (hl),$09
 	ret
-.endif
 
 
 ; Sokra?
@@ -948,12 +945,11 @@ linkCutscene7_seasons:
 	call linkCutscene_initOam_setVisible_incState
 	jp linkCutscene5_seasons@seasonsFunc_06_72d0
 
-.ifndef ROM_COMBO
+
 linkCutscene_initOam_setVisible_incState:
 	callab bank5.specialObjectSetOamVariables
 	call objectSetVisiblec1
 	jp itemIncState
-.endif
 
 
 linkCutscene8_seasons:
@@ -1079,7 +1075,6 @@ linkCutscene9_seasons:
 	ret
 
 
-.ifndef ROM_COMBO
 ;;
 ; Cutscene played on starting a new game ("accept our quest, hero") - cutsceneA in ages
 ;
@@ -1197,7 +1192,6 @@ linkCutsceneA_seasons:
 linkCutscene_oscillateZ_2:
 	ld hl,linkCutscene_zOscillation2
 	jp linkCutscene_oscillateZ
-.endif
 
 
 angleToY48X50:

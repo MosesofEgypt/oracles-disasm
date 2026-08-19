@@ -68,7 +68,7 @@ init:
 .ifdef ROM_COMBO
 	callab gfxLoading.initGbaModePaletteData
 .else
-	callab bank3f.initGbaModePaletteData
+	callab dataLoading.initGbaModePaletteData
 .endif
 	ei
 	callab bank2.checkDisplayDmgModeScreen

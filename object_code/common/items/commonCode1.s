@@ -57,7 +57,7 @@ itemLoadAttributesAndGraphics:
 .if defined(ROM_COMBO)
 	jpab gfxLoading.itemLoadGraphics
 .else
-	jpab bank3f.itemLoadGraphics
+	jpab dataLoading.itemLoadGraphics
 .endif
 
 ;;

@@ -2058,7 +2058,7 @@ _mainLoop_nextThread:
 .if defined(ROM_COMBO)
 	callfrombank0 gfxLoading.refreshDirtyPalettes
 .else
-	callfrombank0 bank3f.refreshDirtyPalettes
+	callfrombank0 dataLoading.refreshDirtyPalettes
 .endif
 	xor a
 	ld ($ff00+R_SVBK),a
@@ -4814,7 +4814,7 @@ interactionInitGraphics:
 .if defined(ROM_COMBO)
 	callfrombank0 gfxLoading.interactionLoadGraphics
 .else
-	callfrombank0 bank3f.interactionLoadGraphics
+	callfrombank0 dataLoading.interactionLoadGraphics
 .endif
 	ld c,a
 	pop af
@@ -4834,7 +4834,7 @@ refreshObjectGfx:
 .if defined(ROM_COMBO)
 	callfrombank0 gfxLoading.refreshObjectGfx_body
 .else
-	callfrombank0 bank3f.refreshObjectGfx_body
+	callfrombank0 dataLoading.refreshObjectGfx_body
 .endif
 	xor a
 	ld (wLoadedTreeGfxIndex),a
@@ -4849,7 +4849,7 @@ reloadObjectGfx:
 .if defined(ROM_COMBO)
 	callfrombank0 gfxLoading.reloadObjectGfx
 .else
-	callfrombank0 bank3f.reloadObjectGfx
+	callfrombank0 dataLoading.reloadObjectGfx
 .endif
 	pop af
 	rst_setrombank
@@ -4867,7 +4867,7 @@ loadObjectGfxHeaderToSlot4:
 .if defined(ROM_COMBO)
 	callfrombank0 gfxLoading.loadObjectGfxHeaderToSlot4_body
 .else
-	callfrombank0 bank3f.loadObjectGfxHeaderToSlot4_body
+	callfrombank0 dataLoading.loadObjectGfxHeaderToSlot4_body
 .endif
 	pop af
 	rst_setrombank
@@ -4882,7 +4882,7 @@ loadTreeGfx:
 .if defined(ROM_COMBO)
 	callfrombank0 gfxLoading.loadTreeGfx_body
 .else
-	callfrombank0 bank3f.loadTreeGfx_body
+	callfrombank0 dataLoading.loadTreeGfx_body
 .endif
 	pop af
 	rst_setrombank
@@ -4897,7 +4897,7 @@ loadWeaponGfx:
 .if defined(ROM_COMBO)
 	callfrombank0 gfxLoading.loadWeaponGfx
 .else
-	callfrombank0 bank3f.loadWeaponGfx
+	callfrombank0 dataLoading.loadWeaponGfx
 .endif
 	pop af
 	rst_setrombank
@@ -4959,7 +4959,7 @@ loadObjectGfx2:
 .if defined(ROM_COMBO)
 	ld a,:gfxLoading.insertIndexIntoLoadedObjectGfx
 .else
-	ld a,:bank3f.insertIndexIntoLoadedObjectGfx
+	ld a,:dataLoading.insertIndexIntoLoadedObjectGfx
 .endif
 	rst_setrombank
 	ld b,$1f
@@ -4981,7 +4981,7 @@ loadObjectGfx2:
 .if defined(ROM_COMBO)
 	ld a,:gfxLoading.insertIndexIntoLoadedObjectGfx
 .else
-	ld a,:bank3f.insertIndexIntoLoadedObjectGfx
+	ld a,:dataLoading.insertIndexIntoLoadedObjectGfx
 .endif
 	rst_setrombank
 	ret
@@ -4998,7 +4998,7 @@ loadTreasureDisplayData:
 .if defined(ROM_COMBO)
 	callfrombank0 bank19.loadTreasureDisplayData
 .else
-	callfrombank0 bank3f.loadTreasureDisplayData
+	callfrombank0 dataLoading.loadTreasureDisplayData
 .endif
 	pop af
 	rst_setrombank
@@ -5015,7 +5015,7 @@ decideItemDrop:
 .if defined(ROM_COMBO)
 	callfrombank0 bank19.decideItemDrop_body
 .else
-	callfrombank0 bank3f.decideItemDrop_body
+	callfrombank0 dataLoading.decideItemDrop_body
 .endif
 	pop af
 	rst_setrombank
@@ -5035,14 +5035,14 @@ checkItemDropAvailable:
 .if defined(ROM_COMBO)
 	ld a,:bank19.checkItemDropAvailable_body
 .else
-	ld a,:bank3f.checkItemDropAvailable_body
+	ld a,:dataLoading.checkItemDropAvailable_body
 .endif
 	rst_setrombank
 	ld a,c
 .if defined(ROM_COMBO)
 	call bank19.checkItemDropAvailable_body
 .else
-	call bank3f.checkItemDropAvailable_body
+	call dataLoading.checkItemDropAvailable_body
 .endif
 	pop af
 	rst_setrombank
@@ -5061,7 +5061,7 @@ giveTreasure:
 .if defined(ROM_COMBO)
 	callfrombank0 bank19.giveTreasure_body
 .else
-	callfrombank0 bank3f.giveTreasure_body
+	callfrombank0 dataLoading.giveTreasure_body
 .endif
 	pop af
 	rst_setrombank
@@ -5078,7 +5078,7 @@ loseTreasure:
 .if defined(ROM_COMBO)
 	callfrombank0 bank19.loseTreasure_body
 .else
-	callfrombank0 bank3f.loseTreasure_body
+	callfrombank0 dataLoading.loseTreasure_body
 .endif
 	pop af
 	rst_setrombank
@@ -5099,7 +5099,7 @@ checkTreasureObtained:
 .if defined(ROM_COMBO)
 	callfrombank0 bank19.checkTreasureObtained_body
 .else
-	callfrombank0 bank3f.checkTreasureObtained_body
+	callfrombank0 dataLoading.checkTreasureObtained_body
 .endif
 	pop af
 	setrombank
@@ -5262,7 +5262,7 @@ getRandomRingOfGivenTier:
 .if defined(ROM_COMBO)
 	ld a,:bank19.ringTierTable
 .else
-	ld a,:bank3f.ringTierTable
+	ld a,:dataLoading.ringTierTable
 .endif
 	rst_setrombank
 
@@ -5270,7 +5270,7 @@ getRandomRingOfGivenTier:
 .if defined(ROM_COMBO)
 	call bank19.getRandomRingOfGivenTier_body
 .else
-	call bank3f.getRandomRingOfGivenTier_body
+	call dataLoading.getRandomRingOfGivenTier_body
 .endif
 .else
 	ld b,$01
@@ -5282,7 +5282,7 @@ getRandomRingOfGivenTier:
 .if defined(ROM_COMBO)
 	ld hl,bank19.ringTierTable
 .else
-	ld hl,bank3f.ringTierTable
+	ld hl,dataLoading.ringTierTable
 .endif
 	rst_addDoubleIndex
 	rst_derefHl
@@ -5452,9 +5452,9 @@ textThreadStart:
 -
 	callfrombank0 bank19.updateTextbox
 .else
-	callfrombank0 bank3f.initTextbox
+	callfrombank0 dataLoading.initTextbox
 -
-	callfrombank0 bank3f.updateTextbox
+	callfrombank0 dataLoading.updateTextbox
 .endif
 	call resumeThreadNextFrame
 	jr -
@@ -5472,22 +5472,34 @@ retrieveTextCharacter:
 	push bc
 	call multiplyABy16
 	ld a,(w7TextGfxSource)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+		or a
+		jr z,+
+			; use seasons gfx font trade items
+			inc a
+	+
+.endif
+	ld h,a
+	add a
+	add h
 	ld hl,@data
-	rst_addDoubleIndex
+	ldi a,(hl)
+	setrombank
+
 	ldi a,(hl)
 	ld h,(hl)
 	ld l,a
 	add hl,bc
 	pop bc
-	m_ReadGfxDataHashedFilename gfx_font
-	ld a,:{filename}
-	setrombank
+
 	call @func_18fd
 
 .if defined(ROM_COMBO)
 	ld a,:bank19.updateTextbox
 .else
-	ld a,:bank3f.updateTextbox
+	ld a,:dataLoading.updateTextbox
 .endif
 	setrombank
 
@@ -5498,11 +5510,29 @@ retrieveTextCharacter:
 	ret
 
 @data:
+	; The first $e characters of gfx_font are blank, so they aren't
+	; included in the rom. In order to get the offsets correct, use
+	; gfx_font_start as the label instead of gfx_font.
+	m_ReadGfxDataHashedFilename gfx_font
+	.define gfx_font_start {filename}-$e0
+	.db :{filename}
 	.dw gfx_font_start
+
 	m_ReadGfxDataHashedFilename gfx_font_jp
+	.db :{filename}
+	.dw {filename}
+.if defined(ROM_COMBO)
+	m_ReadGfxDataHashedFilename ages_gfx_font_tradeitems
+	.db :{filename}
+	.dw {filename}
+	m_ReadGfxDataHashedFilename seasons_gfx_font_tradeitems
+	.db :{filename}
+	.dw {filename}
+.else
 	.dw {filename}
 	m_ReadGfxDataHashedFilename gfx_font_tradeitems
 	.dw {filename}
+.endif
 
 ;;
 ; @param bc
@@ -5588,7 +5618,7 @@ readByteFromW7ActiveBank:
 .if defined(ROM_COMBO)
 	ld a,:bank19.readByteFromW7ActiveBankAndIncHl
 .else
-	ld a,:bank3f.readByteFromW7ActiveBankAndIncHl
+	ld a,:dataLoading.readByteFromW7ActiveBankAndIncHl
 .endif
 	setrombank
 
@@ -10522,7 +10552,7 @@ enemyStandardUpdate:
 .if defined(ROM_COMBO)
 	callab gfxLoading.enemyLoadGraphicsAndProperties
 .else
-	callab bank3f.enemyLoadGraphicsAndProperties
+	callab dataLoading.enemyLoadGraphicsAndProperties
 .endif
 	call getRandomNumber_noPreserveVars
 	ld e,Enemy.var3d
@@ -11622,7 +11652,7 @@ func_2d48:
 .if defined(ROM_COMBO)
 	ld a,:gfxLoading.data_5951
 .elif defined(ROM_AGES)
-	ld a,:bank3f.data_5951
+	ld a,:dataLoading.data_5951
 .else
 	ld a,:bank3Cutscenes.data_5951
 .endif
@@ -11631,7 +11661,7 @@ func_2d48:
 .if defined(ROM_COMBO)
 	ld hl,gfxLoading.data_5951
 .elif defined(ROM_AGES)
-	ld hl,bank3f.data_5951
+	ld hl,dataLoading.data_5951
 .else
 	ld hl,bank3Cutscenes.data_5951
 .endif

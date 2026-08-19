@@ -150,7 +150,6 @@ m_section_free Bank_6 NAMESPACE bank6
 	.include {"{GAME_DATA_DIR}/itemUsageTables.s"}
 
 	.include "object_code/common/specialObjects/minecart.s"
-	.include "object_code/ages/specialObjects/raft.s"
 
 	.include {"{GAME_DATA_DIR}/specialObjectAnimationData.s"}
 	.include "object_code/ages/specialObjects/companionCutscene.s"
@@ -160,7 +159,12 @@ m_section_free Bank_6 NAMESPACE bank6
 	.include "object_code/ages/specialObjects/timeWarp.s"
 
 	.include "code/ages/garbage/bank06End.s"
+.ends
 
+m_section_superfree Bank_6_Raft NAMESPACE bank6Raft
+	; split this into its own separate section since there's a bit more data in the
+	; special object animation pointer tables now, and this is pushing it overfull
+	.include "object_code/ages/specialObjects/raft.s"
 .ends
 
 
@@ -903,52 +907,15 @@ m_section_free Bank16_2 NAMESPACE bank16
 	;.include {"{GAME_DATA_DIR}/tilesetCollisions.s"}
 
 	.include {"{GAME_DATA_DIR}/smallRoomLayoutTables.s"}
-
-	.include "code/ages/garbage/bank17End.s"
+	.include {"{GAME_DATA_DIR}/largeRoomLayoutTables.s"}
 
 ; HACK-BASE: Bank $18 is repurposed for the expanded tilesets patch.
 
 .BANK $19 SLOT 1
 .ORG 0
-
-m_section_free Gfx_19_1 ALIGN $10
-	.include {"{GAME_DATA_DIR}/gfxDataBank19_1.s"}
-.ends
-
-; HACK-BASE: Deleted tileMappings.s include for expanded tilesets patch.
-
-m_section_free Gfx_19_2 ALIGN $10
-	.include {"{GAME_DATA_DIR}/gfxDataBank19_2.s"}
-.ends
-
-
-.BANK $1a SLOT 1
-.ORG 0
-
-
-m_section_free Gfx_1a ALIGN $20
-	.include "data/gfxDataBank1a.s"
-.ends
-
-
-.BANK $1b SLOT 1
-.ORG 0
-
-m_section_free Gfx_1b ALIGN $20
-	.include "data/gfxDataBank1b.s"
-.ends
-
-
-.BANK $1c SLOT 1
-.ORG 0
-	.include "data/gfxDataBank1c.s"
-
-	.include {"{GAME_DATA_DIR}/largeRoomLayoutTables.s"} ; $719c0
-	.include "code/ages/garbage/bank1cEnd.s"
-
 	; "${BUILD_DIR}/textData.s" will determine where this data starts.
-	;   Ages:    1d:4000
-	;   Seasons: 1c:5c00
+	; The .BANK and .ORG above are just reminders
+	;   Both games:   19:4000
 
 	.include {"{BUILD_DIR}/textData.s"}
 
@@ -957,11 +924,6 @@ m_section_free Gfx_1b ALIGN $20
 
 	.include {"{GAME_DATA_DIR}/roomLayoutData.s"}
 	.include {"{GAME_DATA_DIR}/gfxDataMain.s"}
-
-	; HACK-BASE: Normally audio code would start in bank $39. But to give more space for the
-	; data in the above includes, it's been relocated. So now, banks all the way up to and
-	; including bank $3e could be used for the above data (text, room layouts, graphics).
-
 
 .BANK $3c SLOT 1
 .ORG 0
@@ -996,7 +958,7 @@ m_section_superfree Menu_Code_2 NAMESPACE menuCode2
 
 
 .ifdef ENABLE_NEW_GAME_PLUS
-m_section_free Part_Code_2 NAMESPACE partCodeExt
+m_section_superfree Part_Code_2 NAMESPACE partCodeExt
 	.include "object_code/common/parts/commonCode.s"
 
 	.include "object_code/ages/parts/jabuJabusBubbles.s"
@@ -1091,11 +1053,7 @@ m_section_free roomGfxChanges NAMESPACE roomGfxChanges
 .include "object_code/ages/interactions/tuniNutMain.s"
 .endif
 
-
-.BANK $3f SLOT 1
-.ORG 0
-
-m_section_free Bank3f NAMESPACE bank3f
+m_section_superfree Data_Loading NAMESPACE dataLoading
 
 .include "code/loadGraphics.s"
 .include "code/treasureAndDrops.s"

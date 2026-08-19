@@ -198,7 +198,7 @@ ringMenu_state0:
 .if defined(ROM_COMBO)
 	callab bank19.realignUnappraisedRings
 .else
-	callab bank3f.realignUnappraisedRings
+	callab dataLoading.realignUnappraisedRings
 .endif
 	call ringMenu_calculateNumPagesForUnappraisedRings
 	call ringMenu_redrawRingListOrUnappraisedRings
@@ -460,7 +460,7 @@ ringMenu_unappraisedRings_state4:
 .if defined(ROM_COMBO)
 	callab bank19.getNumUnappraisedRings
 .else
-	callab bank3f.getNumUnappraisedRings
+	callab dataLoading.getNumUnappraisedRings
 .endif
 	call ringMenu_drawUnappraisedRings
 	call ringMenu_copyTilemapToVram
@@ -1258,7 +1258,7 @@ ringMenu_calculateNumPagesForUnappraisedRings:
 .if defined(ROM_COMBO)
 	callab bank19.getNumUnappraisedRings
 .else
-	callab bank3f.getNumUnappraisedRings
+	callab dataLoading.getNumUnappraisedRings
 .endif
 	ld a,(wNumUnappraisedRingsBcd)
 	or a

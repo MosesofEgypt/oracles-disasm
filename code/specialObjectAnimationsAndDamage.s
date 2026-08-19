@@ -240,6 +240,7 @@ getSpecialObjectGraphicsFrame:
 	add hl,bc
 	add hl,bc
 	add hl,bc
+	add hl,bc
 	ld b,$00
 
 	; Byte 0
@@ -268,23 +269,22 @@ getSpecialObjectGraphicsFrame:
 	and $3f
 	ld (de),a
 
-	; Bytes 1-2: address of graphics
 	pop hl
+
+	; Byte 1: bank select
+	ldi a,(hl)
+	ld c,a
+
+	; Bytes 2-3: address of graphics
 	rst_derefHl
 	or h
 	ret z
 
-	; Bit 0: bank select
+	; Bits 0-4: size (divided by 32)
 	ld a,l
-	and $01
-	m_ReadGfxDataHashedFilename spr_link
-	add :{filename}
-	ld c,a
-
-	; Bits 1-4: size (divided by 16)
-	ld a,l
-	and $1e
-	dec a
+	and $1f
+	add a
+	dec a ; DMA always expects to read 1 more than the number specified
 	ld b,a
 
 	; Clear bit 4 (bits 0-3 will be ignored by dma)
@@ -553,6 +553,12 @@ getItemForTileBeingPushedOn:
 	ldi a,(hl)
 	add c
 	ld c,a
+
+	; don't switch when pushing on stump
+	call getTileAtPosition
+	cp TILETYPE_STUMP
+	ld a,$00
+	ret z
 
 	ld hl,@breakableSourcesAndItems
 	-

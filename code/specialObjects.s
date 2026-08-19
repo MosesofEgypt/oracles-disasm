@@ -434,7 +434,7 @@ specialObjectCode_minecart:
 
 specialObjectCode_raft:
 .if defined(ROM_AGES)
-	jpab bank6.specialObjectCode_raft
+	jpab bank6Raft.specialObjectCode_raft
 .else
 	ret
 .endif

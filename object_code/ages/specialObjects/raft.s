@@ -282,6 +282,14 @@ specialObjectCode_raft:
 	call objectGetRelativeTile
 	or a
 	jr z,+
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,++
+		cp TILEINDEX_WATER_SEASONS
+		jr nz,++
+			ld a,TILEINDEX_WATER_AGES
+	++
+.endif
 	ld e,a
 	ld hl,@@validTiles
 	call findByteAtHl

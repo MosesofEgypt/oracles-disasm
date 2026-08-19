@@ -596,8 +596,51 @@
 	m_GfxData oth_twinrova_normal_layout ; $0e3b9a
 	m_GfxData gfx_tileset_blaino_gym_outside ; $0e3baf
 	m_GfxData spr_caravan ; $0e3ca0
-
 	m_GfxData gfx_harp_inventory
+
+	m_GfxDataAligned spr_link
+	m_GfxDataAligned spr_ricky
+	m_GfxDataAligned spr_dimitri
+	m_GfxDataAligned spr_moosh
+	m_GfxDataAligned spr_maple
+	m_GfxDataAligned spr_link_retro
+	m_GfxDataAligned spr_octorok_leever_tektite_zora
+	m_GfxDataAligned spr_moblin
+	m_GfxDataAligned spr_ballandchain_likelike
+	m_GfxDataAligned spr_link_baby
+	m_GfxDataAligned spr_subrosian
+	m_GfxDataAligned spr_dungeon_sprites
+
+	m_GfxDataAligned gfx_font $e0
+	m_GfxDataAligned gfx_font_jp
+	m_GfxDataAligned gfx_font_tradeitems
+	m_GfxDataAligned gfx_font_heartpiece
+	m_GfxDataAligned gfx_animations_1
+	m_GfxDataAligned gfx_animations_2
+	m_GfxDataAligned gfx_animations_3
+	m_GfxDataAligned gfx_063940
+	m_GfxDataAligned gfx_key_orechunk
+	m_GfxDataAligned gfx_partial_hearts
+	m_GfxDataAligned map_rings
+
+	m_GfxDataAligned spr_boomerang
+	m_GfxDataAligned spr_swords
+	m_GfxDataAligned spr_rod_of_seasons
+	m_GfxDataAligned spr_hyperslingshot_inventory
+	m_GfxDataAligned spr_cane_of_somaria
+	m_GfxDataAligned spr_switch_hook
+	m_GfxDataAligned spr_seed_shooter
+	m_GfxDataAligned spr_magnet_gloves
+	m_GfxDataAligned spr_slingshot
+	m_GfxDataAligned spr_credits_sprites_2
+
+	m_GfxDataAligned spr_item_icons_1
+	m_GfxDataAligned spr_item_icons_2
+	m_GfxDataAligned spr_item_icons_3
+
+.ifdef ENABLE_DOUBLE_HEART_CAP
+	m_GfxDataAligned gfx_overlap_hearts
+.endif
 
 .ifdef ENABLE_NEW_GAME_PLUS
 	m_GfxData map_pick_a_file_menu_middle ; ????
@@ -609,7 +652,11 @@
 	m_GfxData gfx_savescreen_dungeon_ngp ; ????
 	m_GfxData flg_save_menu_middle_dungeon_ngp_gameover ; ????
 	m_GfxData map_save_menu_middle_dungeon_ngp_gameover ; ????
-	m_GfxData gfx_make ; ????
+	m_GfxDataAligned gfx_make ; ????
+	m_GfxDataAligned spr_item_icons_sword_shield_l4
+	.ifndef WIDE_INVENTORY_SPRITES
+		m_GfxDataAligned spr_item_icons_life_vial_slim
+	.endif
 .endif
 
 .ifdef ENABLE_SETTINGS_MENU

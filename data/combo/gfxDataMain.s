@@ -702,6 +702,42 @@ m_GfxDataAligned spr_windmill_l2sword
 m_GfxDataAligned spr_zol_peahat_watertektite_moldorm
 m_GfxDataAligned spr_zz_bubble_exclamation_heart
 
+m_GfxDataAligned spr_link
+m_GfxDataAligned spr_ricky
+m_GfxDataAligned spr_dimitri
+m_GfxDataAligned spr_moosh
+m_GfxDataAligned spr_maple
+m_GfxDataAligned spr_link_retro
+m_GfxDataAligned spr_octorok_leever_tektite_zora
+m_GfxDataAligned spr_moblin
+m_GfxDataAligned spr_ballandchain_likelike
+m_GfxDataAligned spr_link_baby
+m_GfxDataAligned spr_raft
+
+m_GfxDataAligned gfx_font $e0
+m_GfxDataAligned gfx_font_jp
+m_GfxDataAligned gfx_font_heartpiece
+m_GfxDataAligned gfx_partial_hearts
+m_GfxDataAligned map_rings
+
+m_GfxDataAligned spr_boomerang
+m_GfxDataAligned spr_swords
+m_GfxDataAligned spr_rod_of_seasons
+m_GfxDataAligned spr_hyperslingshot_inventory
+m_GfxDataAligned spr_cane_of_somaria
+m_GfxDataAligned spr_switch_hook
+m_GfxDataAligned spr_seed_shooter
+m_GfxDataAligned spr_magnet_gloves
+m_GfxDataAligned spr_slingshot
+
+m_GfxDataAligned spr_item_icons_1
+m_GfxDataAligned spr_item_icons_2
+m_GfxDataAligned spr_item_icons_3
+
+.ifdef ENABLE_DOUBLE_HEART_CAP
+	m_GfxDataAligned gfx_overlap_hearts
+.endif
+
 ; these ones exist in both games
 .macro m_GfxDataBothGames
     m_GfxDataAligned ages_\1
@@ -753,6 +789,7 @@ m_GfxDataBothGames gfx_credits_image4_2
 m_GfxDataBothGames gfx_credits_makutree_1
 m_GfxDataBothGames gfx_credits_makutree_2
 m_GfxDataBothGames gfx_dmg_gametitle
+m_GfxDataBothGames gfx_font_tradeitems
 m_GfxDataBothGames gfx_inventory_hud_1
 m_GfxDataBothGames gfx_inventory_hud_2
 m_GfxDataBothGames gfx_link_with_oracle_1
@@ -791,6 +828,7 @@ m_GfxDataBothGames spr_bipsom_1
 m_GfxDataBothGames spr_common_items
 m_GfxDataBothGames spr_credits_makutree
 m_GfxDataBothGames spr_din_2
+m_GfxDataBothGames spr_dungeon_sprites
 m_GfxDataBothGames spr_essences
 m_GfxDataBothGames spr_kingmoblin_1
 m_GfxDataBothGames spr_kingmoblin_2
@@ -808,7 +846,6 @@ m_GfxDataBothGames spr_seasonfairy_ambi
 m_GfxDataBothGames spr_subrosian
 m_GfxDataBothGames spr_woodentunnel_seasonsymbols
 
-
 .ifdef ENABLE_NEW_GAME_PLUS
 m_GfxDataAligned map_pick_a_file_menu_middle
 m_GfxDataAligned flg_pick_a_file_menu_middle
@@ -820,6 +857,10 @@ m_GfxDataAligned gfx_savescreen_dungeon_ngp
 m_GfxDataAligned flg_save_menu_middle_dungeon_ngp_gameover
 m_GfxDataAligned map_save_menu_middle_dungeon_ngp_gameover
 m_GfxDataAligned gfx_make
+m_GfxDataAligned spr_item_icons_sword_shield_l4
+.ifndef WIDE_INVENTORY_SPRITES
+    m_GfxDataAligned spr_item_icons_life_vial_slim
+.endif
 .endif
 
 .ifdef ENABLE_SETTINGS_MENU

@@ -569,8 +569,8 @@ intro_titlescreen:
 	ld hl,gfxLoading.titlescreenMakuSeedSprite
 	ld e,:gfxLoading.titlescreenMakuSeedSprite
 .else
-	ld hl,bank3f.titlescreenMakuSeedSprite
-	ld e,:bank3f.titlescreenMakuSeedSprite
+	ld hl,dataLoading.titlescreenMakuSeedSprite
+	ld e,:dataLoading.titlescreenMakuSeedSprite
 .endif
 	call addSpritesFromBankToOam
 
@@ -581,8 +581,8 @@ intro_titlescreen:
 	ld hl,gfxLoading.titlescreenPressStartSprites
 	ld e,:gfxLoading.titlescreenPressStartSprites
 .else
-	ld hl,bank3f.titlescreenPressStartSprites
-	ld e,:bank3f.titlescreenPressStartSprites
+	ld hl,dataLoading.titlescreenPressStartSprites
+	ld e,:dataLoading.titlescreenPressStartSprites
 .endif
 	jp addSpritesFromBankToOam
 
@@ -947,8 +947,8 @@ introCinematic_ridingHorse_state4:
 	ld hl,gfxLoading.linkOnHorseFacingCameraSprite
 	ld e,:gfxLoading.linkOnHorseFacingCameraSprite
 .else
-	ld hl,bank3f.linkOnHorseFacingCameraSprite
-	ld e,:bank3f.linkOnHorseFacingCameraSprite
+	ld hl,dataLoading.linkOnHorseFacingCameraSprite
+	ld e,:dataLoading.linkOnHorseFacingCameraSprite
 .endif
 	call addSpritesFromBankToOam
 
@@ -1217,8 +1217,8 @@ introCinematic_ridingHorse_drawLinkOnHorseCloseupSprites_2:
 	ld hl,gfxLoading.linkOnHorseCloseupSprites_2
 	ld e,:gfxLoading.linkOnHorseCloseupSprites_2
 .else
-	ld hl,bank3f.linkOnHorseCloseupSprites_2
-	ld e,:bank3f.linkOnHorseCloseupSprites_2
+	ld hl,dataLoading.linkOnHorseCloseupSprites_2
+	ld e,:dataLoading.linkOnHorseCloseupSprites_2
 .endif
 	jp addSpritesFromBankToOam_withOffset
 
@@ -1329,8 +1329,8 @@ introCinematic_ridingHorse_drawTempleSprites:
 	ld hl,gfxLoading.introTempleSprites
 	ld e,:gfxLoading.introTempleSprites
 .else
-	ld hl,bank3f.introTempleSprites
-	ld e,:bank3f.introTempleSprites
+	ld hl,dataLoading.introTempleSprites
+	ld e,:dataLoading.introTempleSprites
 .endif
 	jp addSpritesFromBankToOam_withOffset
 

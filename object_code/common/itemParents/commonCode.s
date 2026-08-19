@@ -510,6 +510,26 @@ isLinkInHole:
 	ret
 
 ;;
+; This is "state 1" for the satchel, bombchu, and bomb "parent items". It simply updates
+; Link's animation, then deletes the parent.
+parentItemGenericState1:
+	ld e,Item.animParameter
+	ld a,(de)
+	rlca
+.ifdef ENABLE_RING_REDUX
+	jr c,+
+		call isHasteRingEquipped
+		call z,specialObjectAnimate_optimized
+		ld e,Item.animParameter
+		ld a,(de)
+		rlca
+	+
+.endif
+	jp nc,specialObjectAnimate_optimized
+	jp clearParentItem
+
+
+;;
 ; Updates the position of a grabbed object (overwrites its x/y/z variables).
 ;
 updateGrabbedObjectPosition:

@@ -137,32 +137,6 @@ makuTree_setMapTextBasedOnStage:
 	.ends
 
 
-.BANK $1a SLOT 1
-.ORG 0
-; NOTE: links gfx must lie in bank $1a.
-;       TODO: dehardcode this
-m_section_free Gfx_1a ALIGN $20
-	.include "data/gfxDataBank1a.s"
-.ends
-
-
-.BANK $1b SLOT 1
-.ORG 0
-; NOTE: companions gfx must lie in bank $1b.
-;       TODO: dehardcode this
-m_section_free Gfx_1b ALIGN $20
-	.include "data/gfxDataBank1b.s"
-.ends
-
-
-.BANK $1c SLOT 1
-.ORG 0
-
-m_section_free Gfx_1c ALIGN $20
-	.include "data/gfxDataBank1c.s"
-.ends
-
-
 ; NOTE: These includes define their own .bank and .orga
 .include {"{BUILD_DIR}/ages_textData.s"}
 .include {"{BUILD_DIR}/seasons_textData.s"}
@@ -175,10 +149,10 @@ m_section_free Gfx_1c ALIGN $20
 	.include {"{GAME_DATA_DIR}/roomLayoutData.s"}
 
 
-.BANK $4a SLOT 1
+.BANK $40 SLOT 1
 .ORG 0
 	.REDEFINE DATA_ADDR $4000
-	.REDEFINE DATA_BANK $4a
+	.REDEFINE DATA_BANK $40
 	.include {"{GAME_DATA_DIR}/gfxDataMain.s"}
 
 
@@ -222,7 +196,6 @@ m_section_superfree Bank_6 NAMESPACE bank6
 
 	.include {"{BUILD_DIR}/specialObjectAnimationData.s"}
 	.include "object_code/ages/specialObjects/linkInCutscene.s"
-	.include "object_code/seasons/specialObjects/linkInCutscene.s"
 
 	.include "object_code/ages/specialObjects/timeWarp.s"
 .ends
@@ -232,6 +205,7 @@ m_section_superfree Bank_6_Ext NAMESPACE bank6Ext
 	.include "object_code/seasons/specialObjects/companionCutscene.s"
 	.include "object_code/common/specialObjects/minecart.s"
 	.include "object_code/ages/specialObjects/raft.s"
+	.include "object_code/seasons/specialObjects/linkInCutscene.s"
 	.include {"{BUILD_DIR}/specialObjectAnimationData.s"}
 .ends
 
@@ -1261,39 +1235,37 @@ m_section_superfree Data_4556
 
 m_section_superfree Item_Parents NAMESPACE itemParents
 	; NOTE: these are needed in here as well due to them relying
-	;       on several animation related function for link in here
+	;       on several animation related function in here for link
 	.include "code/specialObjectAnimationsAndDamage.s"
 	.include {"{BUILD_DIR}/specialObjectAnimationData.s"}
+	.include "object_code/common/itemParents/commonCode.s"
 
 	.include "code/parentItemUsage.s"
 
-	.include "object_code/common/itemParents/shieldParent.s"
 	.include "object_code/common/itemParents/otherSwordsParent.s"
 	.include "object_code/common/itemParents/switchHookParent.s"
 	.include "object_code/common/itemParents/caneOfSomariaParent.s"
 	.include "object_code/common/itemParents/swordParent.s"
-	.include "object_code/common/itemParents/seedsParent.s"
 	.include "object_code/common/itemParents/boomerangParent.s"
 	.include "object_code/common/itemParents/bombsBraceletParent.s"
 	.include "object_code/common/itemParents/featherParent.s"
-	.include "object_code/common/itemParents/magnetGloveParent.s"
-	.include "object_code/common/itemParents/lifeVialParent.s"
-
-	.include "object_code/common/itemParents/commonCode.s"
 
 	.include {"{GAME_DATA_DIR}/itemUsageTables.s"}
 .ends
 
 m_section_superfree Item_Parents_2 NAMESPACE itemParentsExt
 	; NOTE: these are needed in here as well due to them relying
-	;       on several animation related functions for link in here
+	;       on several animation related function in here for link
 	.include "code/specialObjectAnimationsAndDamage.s"
 	.include {"{BUILD_DIR}/specialObjectAnimationData.s"}
+	.include "object_code/common/itemParents/commonCode.s"
 
+	.include "object_code/common/itemParents/shieldParent.s"
+	.include "object_code/common/itemParents/seedsParent.s"
 	.include "object_code/common/itemParents/harpFluteParent.s"
 	.include "object_code/common/itemParents/shovelParent.s"
-
-	.include "object_code/common/itemParents/commonCode.s"
+	.include "object_code/common/itemParents/lifeVialParent.s"
+	.include "object_code/common/itemParents/magnetGloveParent.s"
 
 	.include {"{GAME_DATA_DIR}/itemUsageTables.s"}
 .ends

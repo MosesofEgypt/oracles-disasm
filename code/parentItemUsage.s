@@ -538,6 +538,25 @@ parentItemCode_harp:
 
 parentItemCode_flute:
 	jpab itemParentsExt.parentItemCode_flute
+
+parentItemCode_lifeVial:
+	jpab itemParentsExt.parentItemCode_lifeVial
+
+parentItemCode_shield:
+	jpab itemParentsExt.parentItemCode_shield
+
+parentItemCode_magnetGloves:
+	jpab itemParentsExt.parentItemCode_magnetGloves
+
+parentItemCode_shooter:
+	jpab itemParentsExt.parentItemCode_shooter
+
+parentItemCode_slingshot:
+	jpab itemParentsExt.parentItemCode_slingshot
+
+parentItemCode_satchel:
+	jpab itemParentsExt.parentItemCode_satchel
+
 .endif
 
 

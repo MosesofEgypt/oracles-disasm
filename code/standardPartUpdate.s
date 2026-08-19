@@ -34,7 +34,7 @@ partCommon_standardUpdate:
 .ifdef ROM_COMBO
 	callab gfxLoading.partLoadGraphicsAndProperties
 .else
-	callab bank3f.partLoadGraphicsAndProperties
+	callab dataLoading.partLoadGraphicsAndProperties
 .endif
 	ld e,Part.var3e
 	ld a,$08 ; TODO: what's this

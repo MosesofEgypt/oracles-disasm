@@ -41,6 +41,6 @@ interactionCode10:
 
 ; Indirect caller for INTERAC_FARORE_MAKECHEST
 interactionCode11_caller:
-	jpab bank3f.interactionCode11
+	jpab dataLoading.interactionCode11
 
 .endif

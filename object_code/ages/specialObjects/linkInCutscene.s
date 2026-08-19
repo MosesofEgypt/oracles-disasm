@@ -4,7 +4,9 @@
 specialObjectCode_linkInCutscene:
 .if defined(ROM_COMBO)
 	call wIsSeasons
-	jp c,specialObjectCode_linkInCutscene_seasons
+	jr nc,+
+		jpab bank6Ext.specialObjectCode_linkInCutscene_seasons
+	+
 .endif
 	ld e,SpecialObject.subid
 	ld a,(de)
