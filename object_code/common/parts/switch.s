@@ -4,7 +4,7 @@
 ; Variables:
 ;   var30: Position of tile it's on
 ; ==================================================================================================
-m_PartCode $05
+partCode05:
 	jr z,@normalStatus
 
 	; Just hit
@@ -53,7 +53,15 @@ m_PartCode $05
 	jp setTile
 
 @flipOverworldSwitch:
+.if defined(ROM_COMBO)
+	ld a,TILEINDEX_OVERWORLD_SWITCH_ON_SEASONS
+	call wIsSeasons
+	jr c,+
+		ld a,TILEINDEX_OVERWORLD_SWITCH_ON_AGES
+	+
+.else
 	ld a,TILEINDEX_OVERWORLD_SWITCH_ON
+.endif
 	call setTile
 	ld b,>wRoomLayout
 	xor a

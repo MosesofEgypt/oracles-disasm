@@ -8605,7 +8605,7 @@ eitherRingActive:
 .endif
 
 .ifdef ENABLE_NEW_GAME_PLUS
-updatePart:
+updatePartCaller:
 	call @execPartCode
 	pop af
 	setrombank

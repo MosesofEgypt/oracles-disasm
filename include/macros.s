@@ -178,11 +178,24 @@
 
 .MACRO m_PartCode
 	.assert NARGS == 1
+	; wla is such a picky prick when it comes to string interpolation
+	.define partid {"{%.2x{\1}}"}
 
-	partCode{%.2x{\1}}:
+	partCode{partid}:
 	.ifdef EXTENDED_SECTION
-		.define PART_{%.2x{\1}}_IN_EXT EXTENDED_SECTION EXPORT
+		.ifndef ROM_COMBO
+			.define PART_{partid}_IN_EXT EXTENDED_SECTION EXPORT
+		.elif defined(ROM_AGES)
+			.define PART_{partid}_IN_EXT_AGES EXTENDED_SECTION EXPORT
+		.elif defined(ROM_SEASONS)
+			.define PART_{partid}_IN_EXT_SEASONS EXTENDED_SECTION EXPORT
+		.else
+			.define PART_{partid}_EXISTS 0 EXPORT
+		.endif
+	.else
+		.define PART_{partid}_EXISTS 0 EXPORT
 	.endif
+	.undefine partid
 .ENDM
 
 ; Pointers

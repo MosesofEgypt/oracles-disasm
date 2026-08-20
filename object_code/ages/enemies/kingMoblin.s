@@ -18,7 +18,15 @@ enemyCode7f:
 
 	ld e,Enemy.var2a
 	ld a,(de)
+.if defined(ROM_COMBO)
+	cp $80|ITEMCOLLISION_BOMB_S
+	call wIsSeasons
+	jr c,+
+		cp $80|ITEMCOLLISION_BOMB_A
+	+
+.else
 	cp $80|ITEMCOLLISION_BOMB
+.endif
 	jr nz,@normalStatus
 
 	ld a,SND_BOSS_DAMAGE

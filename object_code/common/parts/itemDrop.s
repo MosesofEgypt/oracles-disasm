@@ -159,7 +159,15 @@ m_PartCode $01
 	; On solid ground; check for conveyor tiles
 	ld bc,$0500
 	call objectGetRelativeTile
+.if defined(ROM_COMBO)
+	ld hl,itemDropConveyorTilesTable_seasons
+	call wIsSeasons
+	jr c,+
+		ld hl,itemDropConveyorTilesTable_ages
+	+
+.else
 	ld hl,itemDropConveyorTilesTable
+.endif
 	call lookupCollisionTable
 	ret nc
 	ld c,a

@@ -1,4 +1,4 @@
-label_11_212:
+_updatePartsIfStateIsZero:
 	ld d,FIRST_PART_INDEX
 	ld a,d
 -
@@ -14,7 +14,7 @@ label_11_212:
 	or a
 	jr nz,++
 +
-	call func_11_5e8a
+	call objectUpdating.updatePart
 ++
 	inc d
 	ld a,d
@@ -28,14 +28,14 @@ updateParts:
 	ldh (<hActiveObjectType),a
 	ld a,(wScrollMode)
 	cp $08
-	jr z,label_11_212
+	jr z,_updatePartsIfStateIsZero
 	ld a,(wTextIsActive)
 	or a
-	jr nz,label_11_212
+	jr nz,_updatePartsIfStateIsZero
 
 	ld a,(wDisabledObjects)
 	and $88
-	jr nz,label_11_212
+	jr nz,_updatePartsIfStateIsZero
 
 	ld d,FIRST_PART_INDEX
 	ld a,d
@@ -46,7 +46,7 @@ updateParts:
 	or a
 	jr z,+
 
-	call func_11_5e8a
+	call objectUpdating.updatePart
 	ld h,d
 	ld l,Part.var2a
 	res 7,(hl)
@@ -58,33 +58,44 @@ updateParts:
 	ret
 
 ;;
-func_11_5e8a:
+updatePart:
 	call partCommon_standardUpdate
 
 	ld e,Part.id
 	ld a,(de)
-.ifdef ENABLE_NEW_GAME_PLUS
+.if defined(ENABLE_NEW_GAME_PLUS) || defined(ROM_COMBO)
+	push bc
+
+	.if defined(ROM_COMBO)
+		call wIsSeasons
+		ld hl,partCodeTable_seasons
+		jr c,+
+			ld hl,partCodeTable_ages
+		+
+	.else
+		ld hl,partCodeTable
+	.endif
+
+	ld b,$00
+	ld c,a
+
 	; hl = partCodeTable + [Part.id] * 3
-	ld l,a
-	; NOTE: this code will break if more than $55 part ids exist.
-	;       currently it's limited to $54, but 2 more will break it
-	add a
-	add l
+	add hl,bc
+	add hl,bc
+	add hl,bc
+
+	pop bc
+	ldh a,(<hRomBank)
+	push af
+	jp updatePartCaller
 .else
 	; hl = partCodeTable + [Part.id] * 2
 	add a
-.endif
 	add <partCodeTable
 	ld l,a
 	ld a,$00
 	adc >partCodeTable
 	ld h,a
-
-.ifdef ENABLE_NEW_GAME_PLUS
-	ldh a,(<hRomBank)
-	push af
-	jp updatePart
-.else
 	ldi a,(hl)
 	ld h,(hl)
 	ld l,a
@@ -92,5 +103,4 @@ func_11_5e8a:
 	ld a,c
 	or a
 	jp hl
-
 .endif

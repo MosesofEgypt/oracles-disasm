@@ -207,4 +207,4 @@ m_PartCode $2e
 	.db $3c $32 $28 $1e
 	.db $19 $14 $0f $0a
 	
-.include {"{GAME_DATA_DIR}/tile_properties/seaEffectTiles2.s"}
+.include "data/ages/tile_properties/seaEffectTiles2.s"

@@ -47,6 +47,11 @@ func_0a_7877:
 	ret
 .ends
 
+m_section_free Bank_10_test NAMESPACE bank10
+blackTower_getMovingFlamesNextTileCoords:
+	ret
+.ends
+
 m_section_free Bank_15_test NAMESPACE seasonsInteractionsBank15
 checkGoldenBeastsKilled:
 giveRedRing:
@@ -59,12 +64,6 @@ forceLinksDirection:
 
 m_section_free Common_Interactions_2 NAMESPACE commonInteractions2
 objectOscillateZ_body:
-	ret
-.ends
-
-m_section_free Part_Code NAMESPACE partCode
-createEnergySwirlGoingIn_body:
-createEnergySwirlGoingOut_body:
 	ret
 .ends
 
@@ -826,133 +825,159 @@ m_section_superfree Boss_Code_Bank_5 NAMESPACE bossCode5
 ;	.include "object_code/seasons/enemies/kingMoblin.s"
 .ends
 
-m_section_superfree Part_Code_Bank_1 NAMESPACE partCode1
+m_section_superfree Part_Code_1 NAMESPACE partCode
 	.include "object_code/common/parts/commonCode.s"
 
-;	.include "object_code/common/parts/itemDrop.s"
-;	.include "object_code/common/parts/enemyDestroyed.s"
-;	.include "object_code/common/parts/orb.s"
-;	.include "object_code/common/parts/bossDeathExplosion.s"
-;	.include "object_code/common/parts/switch.s"
-;	.include "object_code/common/parts/lightableTorch.s"
-;	.include "object_code/common/parts/shadow.s"
-;	.include "object_code/common/parts/darkRoomHandler.s"
-;	.include "object_code/common/parts/button.s"
-;	.include "object_code/common/parts/movingOrb.s"
-;	.include "object_code/common/parts/bridgeSpawner.s"
-;	.include "object_code/common/parts/detectionHelper.s"
-;	.include "object_code/common/parts/respawnableBush.s"
-;	.include "object_code/common/parts/seedOnTree.s"
-;	.include "object_code/common/parts/volcanoRock.s"
-;	.include "object_code/common/parts/flame.s"
-;	.include "object_code/common/parts/owlStatue.s"
-;	.include "object_code/common/parts/itemFromMaple.s"
-;	.include "object_code/common/parts/gashaTree.s"
-;	.include "object_code/common/parts/octorokProjectile.s"
-;	.include "object_code/common/parts/fireProjectiles.s"
-;	.include "object_code/common/parts/enemyArrow.s"
-;	.include "object_code/common/parts/lynelBeam.s"
-;	.include "object_code/common/parts/stalfosBone.s"
-;	.include "object_code/common/parts/enemySword.s"
-;	.include "object_code/common/parts/dekuScrubProjectile.s"
-;	.include "object_code/common/parts/wizzrobeProjectile.s"
-;	.include "object_code/common/parts/fire.s"
-;	.include "object_code/common/parts/moblinBoomerang.s"
-;	.include "object_code/common/parts/cuccoAttacker.s"
-;	.include "object_code/common/parts/fallingFire.s"
-;	.include "object_code/common/parts/lighting.s"
-;	.include "object_code/common/parts/smallFairy.s"
-;	.include "object_code/common/parts/beam.s"
-;	.include "object_code/common/parts/spikedBall.s"
-;	.include "object_code/common/parts/greatFairyHeart.s"
-;	.include "object_code/common/parts/twinrovaProjectile.s"
-;	.include "object_code/common/parts/twinrovaFlame.s"
-;	.include "object_code/common/parts/twinrovaSnowball.s"
-;	.include "object_code/common/parts/ganonTrident.s"
-;	.include "object_code/common/parts/51.s"
-;	.include "object_code/common/parts/52.s"
-;	.include "object_code/common/parts/blueEnergyBead.s"
+	.include "object_code/common/parts/itemDrop.s"
+	.include "object_code/common/parts/enemyDestroyed.s"
+	.include "object_code/common/parts/orb.s"
+	.include "object_code/common/parts/bossDeathExplosion.s"
+	.include "object_code/common/parts/switch.s"
+	.include "object_code/common/parts/lightableTorch.s"
+	.include "object_code/common/parts/shadow.s"
+	.include "object_code/common/parts/darkRoomHandler.s"
+	.include "object_code/common/parts/button.s"
+	.include "object_code/common/parts/movingOrb.s"
+	.include "object_code/common/parts/bridgeSpawner.s"
+	.include "object_code/common/parts/detectionHelper.s"
+	.include "object_code/common/parts/respawnableBush.s"
+	.include "object_code/common/parts/seedOnTree.s"
+	.include "object_code/common/parts/volcanoRock.s"
+	.include "object_code/common/parts/flame.s"
+	.include "object_code/common/parts/owlStatue.s"
+	.include "object_code/common/parts/itemFromMaple.s"
+	.include "object_code/common/parts/gashaTree.s"
+	.include "object_code/common/parts/octorokProjectile.s"
+	.include "object_code/common/parts/fireProjectiles.s"
+	.include "object_code/common/parts/enemyArrow.s"
+	.include "object_code/common/parts/lynelBeam.s"
+	.include "object_code/common/parts/stalfosBone.s"
+	.include "object_code/common/parts/enemySword.s"
+	.include "object_code/common/parts/dekuScrubProjectile.s"
+	.include "object_code/common/parts/wizzrobeProjectile.s"
+	.include "object_code/common/parts/fire.s"
+	.include "object_code/common/parts/moblinBoomerang.s"
+	.include "object_code/common/parts/cuccoAttacker.s"
+	.include "object_code/common/parts/fallingFire.s"
+	.include "object_code/common/parts/lighting.s"
+	.include "object_code/common/parts/smallFairy.s"
+	.include "object_code/common/parts/beam.s"
+	.include "object_code/common/parts/spikedBall.s"
+	.include "object_code/common/parts/greatFairyHeart.s"
+	.include "object_code/common/parts/twinrovaProjectile.s"
+	.include "object_code/common/parts/twinrovaFlame.s"
+	.include "object_code/common/parts/twinrovaSnowball.s"
+	.include "object_code/common/parts/ganonTrident.s"
+	.include "object_code/common/parts/51.s"
+	.include "object_code/common/parts/52.s"
+	.include "object_code/common/parts/blueEnergyBead.s"
+
 .ends
 
-m_section_superfree Part_Code_Bank_2 NAMESPACE partCode2
-;	.include "object_code/ages/parts/jabuJabusBubbles.s"
-;	.include "object_code/ages/parts/grottoCrystal.s"
-;	.include "object_code/ages/parts/wallArrowShooter.s"
-;	.include "object_code/ages/parts/sparkle.s"
-;	.include "object_code/ages/parts/timewarpAnimation.s"
-;	.include "object_code/ages/parts/donkeyKongFlame.s"
-;	.include "object_code/ages/parts/veranFairyProjectile.s"
-;	.include "object_code/ages/parts/seaEffects.s"
-;	.include "object_code/ages/parts/babyBall.s"
-;	.include "object_code/ages/parts/subterrorDirt.s"
-;	.include "object_code/ages/parts/rotatableSeedThing.s"
-;	.include "object_code/ages/parts/ramrockSeedFormLaser.s"
-;	.include "object_code/ages/parts/ramrockGloveFormArm.s"
-;	.include "object_code/ages/parts/candleFlame.s"
-;	.include "object_code/ages/parts/veranProjectile.s"
-;	.include "object_code/ages/parts/ball.s"
-;	.include "object_code/ages/parts/headThwompFireball.s"
-;	.include "object_code/common/parts/vireProjectile.s"
-;	.include "object_code/ages/parts/3b.s"
-;	.include "object_code/ages/parts/headThwompCircularProjectile.s"
-;	.include "object_code/ages/parts/blueStalfosProjectile.s"
-;	.include "object_code/ages/parts/3e.s"
-;	.include "object_code/ages/parts/kingMoblinBomb.s"
-;	.include "object_code/ages/parts/headThwompBombDropper.s"
-;	.include "object_code/ages/parts/shadowHagShadow.s"
-;	.include "object_code/ages/parts/pumpkinHeadProjectile.s"
-;	.include "object_code/ages/parts/plasmarineProjectile.s"
-;	.include "object_code/ages/parts/tingleBalloon.s"
-;	.include "object_code/ages/parts/fallingBoulderSpawner.s"
-;	.include "object_code/ages/parts/seedShooterEyeStatue.s"
-;	.include "object_code/ages/parts/bomb.s"
-;	.include "object_code/ages/parts/octogonDepthCharge.s"
-;	.include "object_code/ages/parts/bigBangBombSpawner.s"
-;	.include "object_code/ages/parts/smogProjectile.s"
-;	.include "object_code/ages/parts/ramrockSeedFormOrb.s"
-;	.include "object_code/ages/parts/roomOfRitesFallingBoulder.s"
-;	.include "object_code/ages/parts/octogonBubble.s"
-;	.include "object_code/ages/parts/veranSpiderweb.s"
-;	.include "object_code/ages/parts/veranAcidPool.s"
-;	.include "object_code/ages/parts/veranBeeProjectile.s"
-;	.include "object_code/ages/parts/blackTowerMovingFlames.s"
-;	.include "object_code/ages/parts/triforceStone.s"
-.ends
-
-m_section_superfree Part_Code_Bank_3 NAMESPACE partCode3
+; NOTE: This section MUST be processed BEFORE "data/partCodeTable.s"
+m_section_superfree Part_Code_2 NAMESPACE partCodeAges
 	.include "object_code/common/parts/commonCode.s"
+	.define ROM_AGES
+	.define EXTENDED_SECTION
 
-;	.include "object_code/seasons/parts/holesFloortrap.s"
-;	.include "object_code/seasons/parts/slingshotEyeStatue.s"
-;	.include "object_code/seasons/parts/16.s"
-;	.include "object_code/seasons/parts/shootingDragonHead.s"
-;	.include "object_code/seasons/parts/arrowShooter.s"
-;	.include "object_code/seasons/parts/wallFlameShooterFlames.s"
-;	.include "object_code/seasons/parts/buriedMoldorm.s"
-;	.include "object_code/seasons/parts/kingMoblinsCannons.s"
-;	.include "object_code/seasons/parts/2e.s"
-;	.include "object_code/seasons/parts/2f.s"
-;	.include "object_code/seasons/parts/poppableBubble.s"
-;	.include "object_code/seasons/parts/33.s"
-;	.include "object_code/seasons/parts/38.s"
-;	.include "object_code/seasons/parts/39.s"
-;	.include "object_code/seasons/parts/3b.s"
-;	.include "object_code/seasons/parts/poeSisterFlame.s"
-;	.include "object_code/seasons/parts/3d.s"
-;	.include "object_code/seasons/parts/3e.s"
-;	.include "object_code/seasons/parts/kingMoblinBomb.s"
-;	.include "object_code/seasons/parts/aquamentusProjectile.s"
-;	.include "object_code/seasons/parts/dodongoFireball.s"
-;	.include "object_code/seasons/parts/mothulaProjectile2.s"
-;	.include "object_code/seasons/parts/43.s"
-;	.include "object_code/seasons/parts/44.s"
-;	.include "object_code/seasons/parts/45.s"
-;	.include "object_code/seasons/parts/46.s"
-;	.include "object_code/seasons/parts/47.s"
-;	.include "object_code/seasons/parts/48.s"
-;	.include "object_code/seasons/parts/49.s"
-;	.include "object_code/seasons/parts/4a.s"
-;	.include "object_code/seasons/parts/dinCrystal.s"
+	.include "object_code/ages/parts/jabuJabusBubbles.s"
+	.include "object_code/ages/parts/grottoCrystal.s"
+	.include "object_code/ages/parts/wallArrowShooter.s"
+	.include "object_code/ages/parts/sparkle.s"
+	.include "object_code/ages/parts/timewarpAnimation.s"
+	.include "object_code/ages/parts/donkeyKongFlame.s"
+	.include "object_code/ages/parts/veranFairyProjectile.s"
+	.include "object_code/ages/parts/seaEffects.s"
+	.include "object_code/ages/parts/babyBall.s"
+	.include "object_code/ages/parts/subterrorDirt.s"
+	.include "object_code/ages/parts/rotatableSeedThing.s"
+	.include "object_code/ages/parts/ramrockSeedFormLaser.s"
+	.include "object_code/ages/parts/ramrockGloveFormArm.s"
+	.include "object_code/ages/parts/candleFlame.s"
+	.include "object_code/ages/parts/veranProjectile.s"
+	.include "object_code/ages/parts/ball.s"
+	.include "object_code/ages/parts/headThwompFireball.s"
+	.include "object_code/common/parts/vireProjectile.s"
+	.include "object_code/ages/parts/3b.s"
+	.include "object_code/ages/parts/headThwompCircularProjectile.s"
+	.include "object_code/ages/parts/blueStalfosProjectile.s"
+	.include "object_code/ages/parts/3e.s"
+	.include "object_code/ages/parts/kingMoblinBomb.s"
+	.include "object_code/ages/parts/headThwompBombDropper.s"
+	.include "object_code/ages/parts/shadowHagShadow.s"
+	.include "object_code/ages/parts/pumpkinHeadProjectile.s"
+	.include "object_code/ages/parts/plasmarineProjectile.s"
+	.include "object_code/ages/parts/tingleBalloon.s"
+	.include "object_code/ages/parts/fallingBoulderSpawner.s"
+	.include "object_code/ages/parts/seedShooterEyeStatue.s"
+	.include "object_code/ages/parts/bomb.s"
+	.include "object_code/ages/parts/octogonDepthCharge.s"
+	.include "object_code/ages/parts/bigBangBombSpawner.s"
+	.include "object_code/ages/parts/smogProjectile.s"
+	.include "object_code/ages/parts/ramrockSeedFormOrb.s"
+	.include "object_code/ages/parts/roomOfRitesFallingBoulder.s"
+	.include "object_code/ages/parts/octogonBubble.s"
+	.include "object_code/ages/parts/veranSpiderweb.s"
+	.include "object_code/ages/parts/veranAcidPool.s"
+	.include "object_code/ages/parts/veranBeeProjectile.s"
+	.include "object_code/ages/parts/blackTowerMovingFlames.s"
+	.include "object_code/ages/parts/triforceStone.s"
+
+	m_PartCode $0a
+	m_PartCode $0d
+		ret
+
+	.undefine EXTENDED_SECTION
+	.undefine ROM_AGES
+.ends
+
+; NOTE: This section MUST be processed BEFORE "data/partCodeTable.s"
+m_section_superfree Part_Code_3 NAMESPACE partCodeSeasons
+	.include "object_code/common/parts/commonCode.s"
+	.define ROM_SEASONS
+	.define EXTENDED_SECTION
+
+	.include "object_code/seasons/parts/holesFloortrap.s"
+	.include "object_code/seasons/parts/slingshotEyeStatue.s"
+	.include "object_code/seasons/parts/16.s"
+	.include "object_code/seasons/parts/shootingDragonHead.s"
+	.include "object_code/seasons/parts/arrowShooter.s"
+	.include "object_code/seasons/parts/wallFlameShooterFlames.s"
+	.include "object_code/seasons/parts/buriedMoldorm.s"
+	.include "object_code/seasons/parts/kingMoblinsCannons.s"
+	.include "object_code/seasons/parts/2e.s"
+	.include "object_code/seasons/parts/2f.s"
+	.include "object_code/seasons/parts/poppableBubble.s"
+	.include "object_code/seasons/parts/33.s"
+	.include "object_code/seasons/parts/38.s"
+	.include "object_code/seasons/parts/39.s"
+	.include "object_code/common/parts/vireProjectile.s"
+	.include "object_code/seasons/parts/3b.s"
+	.include "object_code/seasons/parts/poeSisterFlame.s"
+	.include "object_code/seasons/parts/3d.s"
+	.include "object_code/seasons/parts/3e.s"
+	.include "object_code/seasons/parts/kingMoblinBomb.s"
+	.include "object_code/seasons/parts/aquamentusProjectile.s"
+	.include "object_code/seasons/parts/dodongoFireball.s"
+	.include "object_code/seasons/parts/mothulaProjectile2.s"
+	.include "object_code/seasons/parts/43.s"
+	.include "object_code/seasons/parts/44.s"
+	.include "object_code/seasons/parts/45.s"
+	.include "object_code/seasons/parts/46.s"
+	.include "object_code/seasons/parts/47.s"
+	.include "object_code/seasons/parts/48.s"
+	.include "object_code/seasons/parts/49.s"
+	.include "object_code/seasons/parts/4a.s"
+	.include "object_code/seasons/parts/dinCrystal.s"
+
+	m_PartCode $34
+	m_PartCode $35
+	m_PartCode $36
+	m_PartCode $37
+		ret
+
+	.undefine EXTENDED_SECTION
+	.undefine ROM_SEASONS
 .ends
 
 m_section_superfree Terrain_Effects NAMESPACE terrainEffects

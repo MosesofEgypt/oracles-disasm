@@ -1,48 +1,84 @@
-; NOTE: the code that calls these functions will break if the count goes over $80.
-;       in NG+ it'll break if it goes over $55, so be careful about adding more.
-.define NUM_PARTS $54
+.define NUM_PARTS $5b
 
-partCodeTable:
-	.repeat NUM_PARTS index COUNT
-		.if defined(ROM_COMBO)
-			; NOTE: TEMPORARY UNTIL PARTS ARE MERGED IN
-			3BytePointer partCodeNil
-		.elif defined(ROM_COMBO) || defined(ENABLE_NEW_GAME_PLUS)
-			.ifndef PART_{%.2x{COUNT}}_IN_EXT
-				3BytePointer partCode{%.2x{COUNT}}
-			.elif PART_{%.2x{COUNT}}_IN_EXT == 1
-				3BytePointer partCodeExt.partCode{%.2x{COUNT}}
-			.elif PART_{%.2x{COUNT}}_IN_EXT == 2
-				3BytePointer partCodeExt2.partCode{%.2x{COUNT}}
-			.elif PART_{%.2x{COUNT}}_IN_EXT == 3
-				3BytePointer partCodeExt3.partCode{%.2x{COUNT}}
-			.elif PART_{%.2x{COUNT}}_IN_EXT == 1
-				3BytePointer partCodeExt.partCode{%.2x{COUNT}}
-			.else
-				fail "Unknown part bank extension."
-			.endif
-		.else
-			.ifndef PART_{%.2x{COUNT}}_IN_EXT
-				.dw partCode{%.2x{COUNT}}
-			.else
-				.dw partCodeExt.partCode{%.2x{COUNT}}
-			.endif
-		.endif
-	.endr
+.if defined(ROM_COMBO)
+	partCodeTable_ages:
+		.repeat NUM_PARTS index COUNT
+			.redefine partid {"{%.2x{COUNT}}"}
 
-.if defined(ROM_AGES)
-m_PartCode $0a
-m_PartCode $0d
-.elif defined(ROM_SEASONS)
-m_PartCode $34
-m_PartCode $35
-m_PartCode $36
-m_PartCode $37
+			.if defined(PART_{partid}_IN_EXT_AGES)
+				3BytePointer partCodeAges.partCode{partid}
+
+			.elif defined(PART_{partid}_EXISTS)
+				3BytePointer partCode.partCode{partid}
+
+			.else
+				3BytePointer partCodeNil
+				.print {"FAIL TO FIND PART_{partid} for AGES\n"}
+
+			.endif
+		.endr
+
+	partCodeTable_seasons:
+		.repeat NUM_PARTS index COUNT
+			.redefine partid {"{%.2x{COUNT}}"}
+
+			.if defined(PART_{partid}_IN_EXT_SEASONS)
+				3BytePointer partCodeSeasons.partCode{partid}
+
+			.elif defined(PART_{partid}_EXISTS)
+				3BytePointer partCode.partCode{partid}
+
+			.else
+				3BytePointer partCodeNil
+				.print {"FAIL TO FIND PART_{partid} for SEASONS\n"}
+
+			.endif
+		.endr
+
+.else
+	partCodeTable:
+		.repeat NUM_PARTS index COUNT
+			.redefine partid {"{%.2x{COUNT}}"}
+
+			.if defined(ENABLE_NEW_GAME_PLUS)
+
+				.if !defined(PART_{partid}_IN_EXT)
+					.if defined(PART_{partid}_EXISTS)
+						3BytePointer partCode{partid}
+					.else
+						3BytePointer partCodeNil
+						;.print {"FAIL TO FIND PART_{partid}\n"}
+					.endif
+
+				.elif PART_{partid}_IN_EXT == 1
+					3BytePointer partCodeExt.partCode{partid}
+
+				.elif PART_{partid}_IN_EXT == 2
+					3BytePointer partCodeExt2.partCode{partid}
+
+				.elif PART_{partid}_IN_EXT == 3
+					3BytePointer partCodeExt3.partCode{partid}
+
+				.else
+					.fail "Unknown part bank extension."
+
+				.endif
+
+			.elif defined(PART_{partid}_IN_EXT)
+				.dw partCodeExt.partCode{partid}
+
+			.elif defined(PART_{partid}_EXISTS)
+				.dw partCode{partid}
+
+			.else
+				.dw partCodeNil
+				;.print {"FAIL TO FIND PART_{partid}\n"}
+
+			.endif
+		.endr
 .endif
-;;
+
+.undefine partid
+
 partCodeNil:
 	ret
-
-;;
-m_PartCode $00
-	jp partDelete
