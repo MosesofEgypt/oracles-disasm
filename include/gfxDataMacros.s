@@ -1,22 +1,16 @@
 ; Incbin gfx data, can cross over banks. Pass filename without extension as parameter.
-.macro m_GfxData
-	.define skipsize 3
-	.if NARGS == 2
-		.redefine skipsize skipsize+(\2)
-	.else
-		.assert NARGS == 1
-	.endif
+.macro m_GfxDataHelper
+	.assert NARGS == 2
 
 	m_ReadGfxDataHashedFilename \1
 
 	.ifndef HASHED_GFX_{filename}
 		{filename}:
-		m_IncbinCrossBankData {"{BUILD_DIR}/gfx/{filename}.cmp"}, skipsize
+		m_IncbinCrossBankData {"{BUILD_DIR}/gfx/{filename}.cmp"}, \2
 		.define HASHED_GFX_{filename}
 	.endif
 
 	.undefine filename
-	.undefine skipsize
 .endm
 
 .macro m_ReadGfxDataHashedFilename
@@ -111,16 +105,23 @@
 ; to a 32-byte boundary, and doesn't skip over data banks.
 ; This ensures gfx are always located at an offset that
 ; will work with DMA.
-.macro m_GfxDataAligned
+.macro m_GfxData
 	.assert (NARGS == 1) || (NARGS == 2)
 
 	m_ReadGfxDataHashedFilename \1
+
+	.define skipsize 3
+	.if NARGS == 2
+		.redefine skipsize skipsize+(\2)
+	.else
+		.assert NARGS == 1
+	.endif
 
 	.ifndef HASHED_GFX_{filename}
 		.fopen {"{BUILD_DIR}/gfx/{filename}.cmp"} file
 		.fsize file SIZE
 		.fclose file
-		.redefine SIZE SIZE-3
+		.redefine SIZE SIZE-skipsize
 
 		.define PAD_AMOUNT ((DATA_ADDR+$1f)&$ffe0)-DATA_ADDR
 
@@ -147,11 +148,8 @@
 	.endif
 
 	.undefine filename
-	.if NARGS == 1
-		m_GfxData \1
-	.else
-		m_GfxData \1 \2
-	.endif
+	m_GfxDataHelper \1 skipsize
+	.undefine skipsize
 .endm
 
 ; Start of a gfx header. Creates a label at the current position (ie. gfxHeader00:) and an exported
@@ -220,7 +218,11 @@
 
 	; Byte 1: Source bank number(if expanded)
 	.ifdef INCREASE_GFX_SPACE
-		.db (:{filename})
+		.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
+			.db (:{filename})&$ff
+		.else
+			.db (:{filename})
+		.endif
 	.endif
 
 	; Byte 1: Source bank number & compression mode
@@ -373,7 +375,11 @@
 	.fclose m_GfxHeaderFile
 
 	.ifdef INCREASE_GFX_SPACE
-		.db (:{filename})
+		.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
+			.db (:{filename})&$ff
+		.else
+			.db (:{filename})
+		.endif
 		.db (mode<<6)
 	.else
 		.db (:{filename}) | (mode<<6)

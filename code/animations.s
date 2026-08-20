@@ -188,4 +188,4 @@ loadAnimationGfxIndex:
 	ld e,a
 	ld b,(hl)
 	pop hl
-	jp queueDmaTransfer
+	jp queueDmaTransferFromRom

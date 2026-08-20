@@ -8,7 +8,7 @@
 
 .RAMSECTION Wram0_c000
 
-.if !defined(I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE)
+.if !defined(I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND)
 	wMusicReadFunction: ; $c000
 	; Function copied to RAM to read a byte from another bank.
 	; NOTE: THIS CODE SHOULD ONLY EVER BE CALLED BY
@@ -164,7 +164,7 @@ wChannelVolumes: ; $c07d
 	; Never read for wave channels
 	dsb 8
 
-.if defined(I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE)
+.if defined(I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND)
 	wMusicReadFunction:
 		dsb $17
 

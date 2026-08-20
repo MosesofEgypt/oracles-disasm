@@ -129,7 +129,7 @@
 .endm
 
 .macro m_soundPointer
-	.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE
+	.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND
 		.db (:\1Start)&$ff ; Bank number
 	.else
 		.db :\1Start ; Bank number

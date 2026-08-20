@@ -167,7 +167,7 @@ loadLinkAndCompanionAnimationFrame_body:
 	jr c,+
 	ld d,$86
 +
-	jp queueDmaTransfer
+	jp queueDmaTransferFromRom
 
 ; These are animation frame indices; frame indices under the given value don't have link's direction
 ; added to them?
@@ -287,8 +287,10 @@ getSpecialObjectGraphicsFrame:
 	dec a ; DMA always expects to read 1 more than the number specified
 	ld b,a
 
-	; Clear bit 4 (bits 0-3 will be ignored by dma)
-	res 4,l
+	; Clear size bits from pointer
+	ld a,l
+	and $e0
+	ld l,a
 
 	; Clear zero flag
 	or d

@@ -1291,17 +1291,37 @@ loadPaletteHeader:
 	pop de
 	ret
 
+
+queueDmaTransferFromRom:
+.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
+	or $01
+	jr _queueDmaTransfer
+.endif
+
+queueDmaTransfer:
+.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
+	xor a
+.endif
+
 ;;
 ; Do a DMA transfer next vblank. Note:
 ;  - Destination address must be a multiple of 16
 ;
-; @param	b	(data size)/16 - 1
-; @param	c	src bank
-; @param	de	(dest address) | (vram or wram bank)
-; @param	hl	src address
-; @param[out]	cflag	Set if the lcd is on (data can't be copied immediately)
+; @param	b		(data size)/16 - 1
+; @param	c		src bank
+; @param	de		(dest address) | (vram or wram bank)
+; @param	hl		src address
+; @param	zflag	Set if the source is in the upper 4MB of an 8MB ROM
+; @param[out]		cflag	Set if the lcd is on (data can't be copied immediately)
 ; @trashes{hl}
-queueDmaTransfer:
+_queueDmaTransfer:
+.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
+	res 0,l
+	jr z,+
+		; indicate to read from upper 4MB of rom
+		set 0,l
+	+
+.endif
 	ld a,($ff00+R_LCDC)
 	rlca
 	jr nc,++
@@ -1344,6 +1364,14 @@ queueDmaTransfer:
 	ld a,c
 	ld ($ff00+R_SVBK),a
 	setrombank
+.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
+	bit 0,l
+	jr z,+
+		ld a,$01
+		ld ($3333),a
+		res 0,l
+	+
+.endif
 	pop de
 	ld hl, HDMA1
 	ld (hl),d
@@ -1362,6 +1390,9 @@ queueDmaTransfer:
 	pop af
 	setrombank
 	xor a
+.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
+	ld ($3333),a
+.endif
 	ret
 
 ;;
@@ -1415,7 +1446,7 @@ loadUncompressedGfxHeader:
 	ld a,h
 	ldh (<hFF91),a
 	pop hl
-	call queueDmaTransfer
+	call queueDmaTransferFromRom
 .if defined(ROM_COMBO)
 	ld a,:bank1Moveable.uncmpGfxHeaderTable_seasons
 	call wIsSeasons
@@ -1479,7 +1510,7 @@ loadUniqueGfxHeaderEntry:
 	ld c,:w7d800
 	ldh a,(<hFF8D)
 	ld b,a
-	call queueDmaTransfer
+	call queueDmaTransferFromRom
 	pop hl
 	ld a,$00
 	ld ($ff00+R_SVBK),a
@@ -2255,6 +2286,10 @@ vblankInterrupt:
 	ldh a,(<hVBlankFunctionQueueTail)
 	or a
 	call nz,runVBlankFunctions
+.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
+	xor a
+	ld ($3333),a
+.endif
 
 	call updateDirtyPalettes
 
@@ -2447,9 +2482,17 @@ vblankDmaFunction:
 	ldi a,(hl) 		; src bank
 	ld ($ff00+R_SVBK),a
 	ld ($2222),a
-	ldi a,(hl) 		; src start addr high
-	ld ($ff00+R_HDMA1),a
+.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
+	bit 0,(hl)
+	jr z,+
+		ld a,$01
+		ld ($3333),a
+		res 0,(hl)
+	+
+.endif
 	ldi a,(hl) 		; src start addr low
+	ld ($ff00+R_HDMA1),a
+	ldi a,(hl) 		; src start addr high
 	ld ($ff00+R_HDMA2),a
 	ldi a,(hl) 		; dst start addr low
 	ld ($ff00+R_VBK),a
@@ -4963,7 +5006,7 @@ loadObjectGfx2:
 .endif
 	rst_setrombank
 	ld b,$1f
-	jp queueDmaTransfer
+	jp queueDmaTransferFromRom
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 
@@ -13889,7 +13932,7 @@ loadTilesetGfx:
 	push hl
 	ld de,$8801
 	ld b,$5f
-	call queueDmaTransfer
+	call queueDmaTransferFromRom
 
 	; Wait 1 frame if the LCD is on
 	call c,resumeThreadNextFrame
@@ -13900,7 +13943,7 @@ loadTilesetGfx:
 	ld h,a
 	push hl
 	ld d,$8e
-	call queueDmaTransfer
+	call queueDmaTransferFromRom
 
 	call c,resumeThreadNextFrame
 
@@ -13910,7 +13953,7 @@ loadTilesetGfx:
 	ld h,a
 	ld d,$94
 	ld b,$3f
-	call queueDmaTransfer
+	call queueDmaTransferFromRom
 
 	; If LCD is on, wait 1 frame before returning. Otherwise there are issues due to the fact
 	; that we're going to use tons of vblank time (ie. palettes don't get updated properly).

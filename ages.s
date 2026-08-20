@@ -29,15 +29,12 @@
 
 	.include "code/bank1.s"
 
-	.include "code/ages/garbage/bank01End.s"
-
 
 .BANK $02 SLOT 1
 .ORG 0
 
 	.include "code/bank2.s"
 	.include "code/roomInitialization.s"
-	.include "code/ages/garbage/bank02End.s"
 
 
 .BANK $03 SLOT 1
@@ -52,8 +49,6 @@
 		.include "code/ages/cutscenes/endgameCutscenes.s"
 		.include "code/ages/cutscenes/miscCutscenes.s"
 	.ends
-
-	.include "code/ages/garbage/bank03End.s"
 
 .BANK $04 SLOT 1
 .ORG 0
@@ -102,8 +97,6 @@
 		.include {"{GAME_DATA_DIR}/warpSources.s"}
 	.ends
 
-	.include "code/ages/garbage/bank04End.s"
-
 
 .BANK $05 SLOT 1
 .ORG 0
@@ -113,8 +106,6 @@
 
 		.include {"{GAME_DATA_DIR}/tile_properties/tileTypeMappings.s"}
 		.include {"{GAME_DATA_DIR}/tile_properties/cliffTiles.s"}
-
-		.include "code/ages/garbage/bank05End.s"
 	.ends
 
 
@@ -157,8 +148,6 @@ m_section_free Bank_6 NAMESPACE bank6
 	.include {"{GAME_DATA_DIR}/signText.s"}
 
 	.include "object_code/ages/specialObjects/timeWarp.s"
-
-	.include "code/ages/garbage/bank06End.s"
 .ends
 
 m_section_superfree Bank_6_Raft NAMESPACE bank6Raft
@@ -227,8 +216,6 @@ m_section_superfree Bank_6_Raft NAMESPACE bank6Raft
 		.include {"{GAME_DATA_DIR}/enemyActiveCollisions.s"}
 		.include {"{GAME_DATA_DIR}/partActiveCollisions.s"}
 		.include {"{GAME_DATA_DIR}/objectCollisionTable.s"}
-
-		.include "code/ages/garbage/bank07End.s"
 	.ends
 
 
@@ -483,8 +470,6 @@ m_section_free Ages_Interactions_Bank0b NAMESPACE agesInteractionsBank0b
 	.include "object_code/ages/interactions/slateSlot.s"
 .ends
 
-	.include "code/ages/garbage/bank0bEnd.s"
-
 
 .BANK $0c SLOT 1
 .ORG 0
@@ -613,8 +598,6 @@ m_section_free Enemy_Code_Bank0e NAMESPACE bank0e
 
 	.include {"{GAME_DATA_DIR}/movingSidescrollPlatform.s"}
 
-	.include "code/ages/garbage/bank0eEnd.s"
-
 .ends
 
 .BANK $0f SLOT 1
@@ -666,16 +649,6 @@ m_section_free Enemy_Code_Bank10 NAMESPACE bank10
 
 .ends
 
-
-.ifdef BUILD_VANILLA
-.ifdef REGION_JP
-	; 3 garbage bytes, which round out the data following this to start at $6e00
-	.db $be $28 $1e
-.else
-	; Some blank space here ($6e1f-$6eff)
-	.ORGA $6f00
-.endif
-.endif
 
 m_section_free Interaction_Code_Group8 NAMESPACE commonInteractions8
 	.include "object_code/common/interactions/eraOrSeasonInfo.s"
@@ -796,7 +769,6 @@ m_section_free Bank_11 NAMESPACE partCode
 	.include "object_code/ages/parts/blackTowerMovingFlames.s"
 	.include "object_code/ages/parts/triforceStone.s"
 .endif
-	.include "code/ages/garbage/bank11End.s"
 .ends
 
 
@@ -923,7 +895,9 @@ m_section_free Bank16_2 NAMESPACE bank16
 	.REDEFINE DATA_BANK TEXT_END_BANK
 
 	.include {"{GAME_DATA_DIR}/roomLayoutData.s"}
+.ifndef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
 	.include {"{GAME_DATA_DIR}/gfxDataMain.s"}
+.endif
 
 .BANK $3c SLOT 1
 .ORG 0
@@ -1088,10 +1062,24 @@ m_section_superfree Data_Loading NAMESPACE dataLoading
 .include "object_code/ages/interactions/tuniNutMain.s"
 .endif
 
-.include "code/ages/garbage/bank3fEnd.s"
-
 .ends
 
 
 ; HACK-BASE: Expanded tileset data
 .include {"{GAME_DATA_DIR}/expandedTilesets.s"}
+
+
+.REDEFINE DATA_ADDR $4000
+.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
+	.REDEFINE DATA_BANK MIN_RAWDATA_BANK_NUM
+.else
+	.REDEFINE DATA_BANK $40
+.endif
+
+
+.BANK DATA_BANK SLOT 1
+.ORG 0
+.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
+	.include {"{GAME_DATA_DIR}/gfxDataMain.s"}
+.endif
+	.include {"{GAME_DATA_DIR}/expandedTilesetsGfxData.s"}

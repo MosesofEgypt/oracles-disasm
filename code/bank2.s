@@ -3493,7 +3493,7 @@ loadCommonGraphics_body:
 	ld de,$9040
 	ldbc $00, :{filename}
 
-	call queueDmaTransfer
+	call queueDmaTransferFromRom
 +
 
 	xor a
@@ -3547,7 +3547,7 @@ loadCommonGraphics_body:
 	ld de,$9040
 	ldbc $00, :{filename}
 
-	call queueDmaTransfer
+	call queueDmaTransferFromRom
 	pop bc
 
 @updateDisplayedMoney:
@@ -4781,7 +4781,7 @@ drawHeartDisplay:
 	push bc
 	ldbc $01, :{filename}
 	ld d,$90
-	call queueDmaTransfer
+	call queueDmaTransferFromRom
 
 	; insert the non-overlapped empty heart tile
 	ldbc $00, :{filename}
@@ -4804,7 +4804,7 @@ drawHeartDisplay:
 		; use vram bank 1
 		inc e
 	+
-	call queueDmaTransfer
+	call queueDmaTransferFromRom
 	pop bc
 	pop de
 	pop af
@@ -4975,7 +4975,7 @@ drawHeartDisplay:
 	jr z,+
 	ld e,$b1 ; vram bank 1
 +
-	call queueDmaTransfer
+	call queueDmaTransferFromRom
 
 	pop hl
 	pop de

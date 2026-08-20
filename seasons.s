@@ -831,7 +831,9 @@ m_section_free Seasons_Interactions_Bank15 NAMESPACE seasonsInteractionsBank15
 	.REDEFINE DATA_BANK TEXT_END_BANK
 
 	.include {"{GAME_DATA_DIR}/roomLayoutData.s"}
+.ifndef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
 	.include {"{GAME_DATA_DIR}/gfxDataMain.s"}
+.endif
 
 
 .BANK $3d SLOT 1
@@ -848,7 +850,7 @@ m_section_superfree Menu_Code_2 NAMESPACE menuCode2
 .ends
 
 .ifdef ENABLE_NEW_GAME_PLUS
-m_section_free Part_Code_3 NAMESPACE partCodeExt
+m_section_superfree Part_Code_3 NAMESPACE partCodeExt
 	.include "object_code/common/parts/commonCode.s"
 
 	.include "object_code/seasons/parts/holesFloortrap.s"
@@ -945,3 +947,19 @@ m_section_superfree Data_Loading NAMESPACE dataLoading
 
 ; HACK-BASE: Expanded tileset data
 .include {"{GAME_DATA_DIR}/expandedTilesets.s"}
+
+
+.REDEFINE DATA_ADDR $4000
+.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
+	.REDEFINE DATA_BANK MIN_RAWDATA_BANK_NUM
+.else
+	.REDEFINE DATA_BANK $40
+.endif
+
+
+.BANK DATA_BANK SLOT 1
+.ORG 0
+.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
+	.include {"{GAME_DATA_DIR}/gfxDataMain.s"}
+.endif
+	.include {"{GAME_DATA_DIR}/expandedTilesetsGfxData.s"}

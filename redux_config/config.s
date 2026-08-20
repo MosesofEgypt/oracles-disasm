@@ -24,17 +24,19 @@
 	.endif
 .endif
 
-.if defined(ROM_COMBO) || defined(ENABLE_NEW_GAME_PLUS)
+.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE
+	.redefine I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND	1
+	; WLA refuses to work with me on banks 256 and higher
+	;.redefine I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
+.endif
+
+.if defined(ROM_COMBO) || defined(ENABLE_NEW_GAME_PLUS) || defined(I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX)
 	.ifndef INCREASE_GFX_SPACE
 		.define INCREASE_GFX_SPACE			1
 	.endif
 .endif
 
 .if defined(ROM_COMBO)
-	.ifndef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE
-		;.define I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE	1
-	.endif
-
 	.ifndef SUPERFREE_OAM_DATA_BANKS
 		.define SUPERFREE_OAM_DATA_BANKS	1
 	.endif

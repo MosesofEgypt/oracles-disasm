@@ -39,8 +39,7 @@
 .ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE
 	.redefine ROM_BANKS 512
 	.redefine ROM_SIZE  08
-	.define MIN_RAWDATA_BANK_NUM	MAX_BANK_NUM+1
-	.define MAX_RAWDATA_BANK_NUM	ROM_BANKS-1
+	.redefine MIN_RAWDATA_BANK_NUM	256
 .endif
 
 .rombanks ROM_BANKS

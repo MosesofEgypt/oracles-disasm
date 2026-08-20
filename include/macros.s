@@ -148,16 +148,16 @@
 	.endif
 .endm
 
-.macro m_section_superfree_audio
+.macro m_section_superfree_snd
 	.if NARGS == 1
-		.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE
+		.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND
 			.section \1 SEMISUPERFREE BANKS 256-511
 		.else
 			m_section_superfree \1
 		.endif
 	.else
 		.assert NARGS == 3
-		.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE
+		.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND
 			.section \1 \2 \3 SEMISUPERFREE BANKS 256-511
 		.else
 			m_section_superfree \1 \2 \3

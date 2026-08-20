@@ -2237,19 +2237,19 @@ func_53eb:
 	ld hl,{filename}
 	ld de,$95d0
 	ldbc $00, :{filename}
-	call queueDmaTransfer
+	call queueDmaTransferFromRom
 
 	ld hl,{filename}+$10
 	ld e,$f0
-	call queueDmaTransfer
+	call queueDmaTransferFromRom
 
 	ld hl,{filename}+$20
 	ld de,$97c0
-	call queueDmaTransfer
+	call queueDmaTransferFromRom
 
 	ld hl,{filename}+$30
 	ld e,$e0
-	jp queueDmaTransfer
+	jp queueDmaTransferFromRom
 
 ;;
 ; This is called when an item is first selected.

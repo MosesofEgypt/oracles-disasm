@@ -598,48 +598,48 @@
 	m_GfxData spr_caravan ; $0e3ca0
 	m_GfxData gfx_harp_inventory
 
-	m_GfxDataAligned spr_link
-	m_GfxDataAligned spr_ricky
-	m_GfxDataAligned spr_dimitri
-	m_GfxDataAligned spr_moosh
-	m_GfxDataAligned spr_maple
-	m_GfxDataAligned spr_link_retro
-	m_GfxDataAligned spr_octorok_leever_tektite_zora
-	m_GfxDataAligned spr_moblin
-	m_GfxDataAligned spr_ballandchain_likelike
-	m_GfxDataAligned spr_link_baby
-	m_GfxDataAligned spr_subrosian
-	m_GfxDataAligned spr_dungeon_sprites
+	m_GfxData spr_link
+	m_GfxData spr_ricky
+	m_GfxData spr_dimitri
+	m_GfxData spr_moosh
+	m_GfxData spr_maple
+	m_GfxData spr_link_retro
+	m_GfxData spr_octorok_leever_tektite_zora
+	m_GfxData spr_moblin
+	m_GfxData spr_ballandchain_likelike
+	m_GfxData spr_link_baby
+	m_GfxData spr_subrosian
+	m_GfxData spr_dungeon_sprites
 
-	m_GfxDataAligned gfx_font $e0
-	m_GfxDataAligned gfx_font_jp
-	m_GfxDataAligned gfx_font_tradeitems
-	m_GfxDataAligned gfx_font_heartpiece
-	m_GfxDataAligned gfx_animations_1
-	m_GfxDataAligned gfx_animations_2
-	m_GfxDataAligned gfx_animations_3
-	m_GfxDataAligned gfx_063940
-	m_GfxDataAligned gfx_key_orechunk
-	m_GfxDataAligned gfx_partial_hearts
-	m_GfxDataAligned map_rings
+	m_GfxData gfx_font $e0
+	m_GfxData gfx_font_jp
+	m_GfxData gfx_font_tradeitems
+	m_GfxData gfx_font_heartpiece
+	m_GfxData gfx_animations_1
+	m_GfxData gfx_animations_2
+	m_GfxData gfx_animations_3
+	m_GfxData gfx_063940
+	m_GfxData gfx_key_orechunk
+	m_GfxData gfx_partial_hearts
+	m_GfxData map_rings
 
-	m_GfxDataAligned spr_boomerang
-	m_GfxDataAligned spr_swords
-	m_GfxDataAligned spr_rod_of_seasons
-	m_GfxDataAligned spr_hyperslingshot_inventory
-	m_GfxDataAligned spr_cane_of_somaria
-	m_GfxDataAligned spr_switch_hook
-	m_GfxDataAligned spr_seed_shooter
-	m_GfxDataAligned spr_magnet_gloves
-	m_GfxDataAligned spr_slingshot
-	m_GfxDataAligned spr_credits_sprites_2
+	m_GfxData spr_boomerang
+	m_GfxData spr_swords
+	m_GfxData spr_rod_of_seasons
+	m_GfxData spr_hyperslingshot_inventory
+	m_GfxData spr_cane_of_somaria
+	m_GfxData spr_switch_hook
+	m_GfxData spr_seed_shooter
+	m_GfxData spr_magnet_gloves
+	m_GfxData spr_slingshot
+	m_GfxData spr_credits_sprites_2
 
-	m_GfxDataAligned spr_item_icons_1
-	m_GfxDataAligned spr_item_icons_2
-	m_GfxDataAligned spr_item_icons_3
+	m_GfxData spr_item_icons_1
+	m_GfxData spr_item_icons_2
+	m_GfxData spr_item_icons_3
 
 .ifdef ENABLE_DOUBLE_HEART_CAP
-	m_GfxDataAligned gfx_overlap_hearts
+	m_GfxData gfx_overlap_hearts
 .endif
 
 .ifdef ENABLE_NEW_GAME_PLUS
@@ -652,10 +652,10 @@
 	m_GfxData gfx_savescreen_dungeon_ngp ; ????
 	m_GfxData flg_save_menu_middle_dungeon_ngp_gameover ; ????
 	m_GfxData map_save_menu_middle_dungeon_ngp_gameover ; ????
-	m_GfxDataAligned gfx_make ; ????
-	m_GfxDataAligned spr_item_icons_sword_shield_l4
+	m_GfxData gfx_make ; ????
+	m_GfxData spr_item_icons_sword_shield_l4
 	.ifndef WIDE_INVENTORY_SPRITES
-		m_GfxDataAligned spr_item_icons_life_vial_slim
+		m_GfxData spr_item_icons_life_vial_slim
 	.endif
 .endif
 
@@ -666,36 +666,36 @@
 	m_GfxData flg_inventory_screen_4_page_1
 	m_GfxData map_inventory_screen_4_page_2
 	m_GfxData flg_inventory_screen_4_page_2
-	m_GfxDataAligned gfx_settings_text_page_0
-	m_GfxDataAligned gfx_settings_text_page_1
-	m_GfxDataAligned gfx_settings_text_page_2
-	m_GfxDataAligned gfx_rings_uncomp
+	m_GfxData gfx_settings_text_page_0
+	m_GfxData gfx_settings_text_page_1
+	m_GfxData gfx_settings_text_page_2
+	m_GfxData gfx_rings_uncomp
 .endif
 
 .ifdef WIDE_INVENTORY_SPRITES
-	m_GfxDataAligned spr_item_icons_wide
-	m_GfxDataAligned spr_item_icons_wide_boomerang_l2
-	m_GfxDataAligned spr_item_icons_wide_bracelet_l2
-	m_GfxDataAligned spr_item_icons_wide_feather_l2
-	m_GfxDataAligned spr_item_icons_wide_magnet_glove_n
-	m_GfxDataAligned spr_item_icons_wide_seeds_sprite
-	m_GfxDataAligned spr_item_icons_song_sprites
-	m_GfxDataAligned spr_item_icons_wide_shield_l2
-	m_GfxDataAligned spr_item_icons_wide_shield_l3
-	m_GfxDataAligned spr_item_icons_wide_sword_l2
-	m_GfxDataAligned spr_item_icons_wide_sword_l3
-	m_GfxDataAligned spr_item_icons_wide_switch_hook_l2
-	m_GfxDataAligned spr_item_icons_wide_songs
-	m_GfxDataAligned spr_item_icons_wide_flute_partners
-	m_GfxDataAligned gfx_item_icons_wide_fixup_tiles
-	m_GfxDataAligned spr_item_icons_wide_rod_hud
-	m_GfxDataAligned spr_item_icons_wide_satchel_hud
-	m_GfxDataAligned spr_item_icons_wide_shooter_hud
-	m_GfxDataAligned spr_item_icons_wide_slingshot_l1_hud
-	m_GfxDataAligned spr_item_icons_wide_slingshot_l2_hud
+	m_GfxData spr_item_icons_wide
+	m_GfxData spr_item_icons_wide_boomerang_l2
+	m_GfxData spr_item_icons_wide_bracelet_l2
+	m_GfxData spr_item_icons_wide_feather_l2
+	m_GfxData spr_item_icons_wide_magnet_glove_n
+	m_GfxData spr_item_icons_wide_seeds_sprite
+	m_GfxData spr_item_icons_song_sprites
+	m_GfxData spr_item_icons_wide_shield_l2
+	m_GfxData spr_item_icons_wide_shield_l3
+	m_GfxData spr_item_icons_wide_sword_l2
+	m_GfxData spr_item_icons_wide_sword_l3
+	m_GfxData spr_item_icons_wide_switch_hook_l2
+	m_GfxData spr_item_icons_wide_songs
+	m_GfxData spr_item_icons_wide_flute_partners
+	m_GfxData gfx_item_icons_wide_fixup_tiles
+	m_GfxData spr_item_icons_wide_rod_hud
+	m_GfxData spr_item_icons_wide_satchel_hud
+	m_GfxData spr_item_icons_wide_shooter_hud
+	m_GfxData spr_item_icons_wide_slingshot_l1_hud
+	m_GfxData spr_item_icons_wide_slingshot_l2_hud
 	.ifdef ENABLE_NEW_GAME_PLUS
-		m_GfxDataAligned spr_item_icons_life_vial
-		m_GfxDataAligned spr_item_icons_wide_sword_l4
-		m_GfxDataAligned spr_item_icons_wide_shield_l4
+		m_GfxData spr_item_icons_life_vial
+		m_GfxData spr_item_icons_wide_sword_l4
+		m_GfxData spr_item_icons_wide_shield_l4
 	.endif
 .endif

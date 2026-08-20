@@ -6,7 +6,7 @@
 .macro m_TilesetGfxPointer
 	m_ReadGfxDataHashedFilename \1
 	dwbe {filename}
-	.db :{filename}
+	.db (:{filename})&$ff
 .endm
 
 .macro m_TilesetMappingPointer
@@ -23,7 +23,6 @@ tilesetMappings\1:
 .ends
 .endm
 
-.SLOT 1
 .section ExpandedTilesetPointers SUPERFREE
 
 expandedTilesetGfxTable:
@@ -37,20 +36,6 @@ expandedTilesetMappingsTable:
 	m_TilesetMappingPointer tilesetMappings{%.2x{tmpi}}
 .ENDR
 .ends
-
-
-.BANK $40 SLOT 1
-.ORGA $4000
-
-.redefine DATA_ADDR $4000
-.redefine DATA_BANK $40
-
-	; For simplicity I'm using the "m_GfxData" macro, which can handle data crossing banks.
-	; But since each tileset is exactly 0x1000 bytes (and is uncompressed) it doesn't actually
-	; cross over any banks.
-.REPT $80 index tmpi
-	m_GfxData gfx_tileset{%.2x{tmpi}}
-.ENDR
 
 .REPT $80 index tmpi
 	m_TilesetMappingSection {"{%.2x{tmpi}}"}
