@@ -6,15 +6,23 @@ partCodeTable:
 	.repeat NUM_PARTS index COUNT
 		.if defined(ROM_COMBO)
 			; NOTE: TEMPORARY UNTIL PARTS ARE MERGED IN
-				.dw partCodeNil
-		.elif defined(ENABLE_NEW_GAME_PLUS)
-			.ifdef partCode{%.2x{COUNT}}
+			3BytePointer partCodeNil
+		.elif defined(ROM_COMBO) || defined(ENABLE_NEW_GAME_PLUS)
+			.ifndef PART_{%.2x{COUNT}}_IN_EXT
 				3BytePointer partCode{%.2x{COUNT}}
-			.else
+			.elif PART_{%.2x{COUNT}}_IN_EXT == 1
 				3BytePointer partCodeExt.partCode{%.2x{COUNT}}
+			.elif PART_{%.2x{COUNT}}_IN_EXT == 2
+				3BytePointer partCodeExt2.partCode{%.2x{COUNT}}
+			.elif PART_{%.2x{COUNT}}_IN_EXT == 3
+				3BytePointer partCodeExt3.partCode{%.2x{COUNT}}
+			.elif PART_{%.2x{COUNT}}_IN_EXT == 1
+				3BytePointer partCodeExt.partCode{%.2x{COUNT}}
+			.else
+				fail "Unknown part bank extension."
 			.endif
 		.else
-			.ifdef partCode{%.2x{COUNT}}
+			.ifndef PART_{%.2x{COUNT}}_IN_EXT
 				.dw partCode{%.2x{COUNT}}
 			.else
 				.dw partCodeExt.partCode{%.2x{COUNT}}
@@ -22,19 +30,19 @@ partCodeTable:
 		.endif
 	.endr
 
-.ifdef ROM_AGES
-partCode0a:
-partCode0d:
-.else
-partCode34:
-partCode35:
-partCode36:
-partCode37:
+.if defined(ROM_AGES)
+m_PartCode $0a
+m_PartCode $0d
+.elif defined(ROM_SEASONS)
+m_PartCode $34
+m_PartCode $35
+m_PartCode $36
+m_PartCode $37
 .endif
 ;;
 partCodeNil:
 	ret
 
 ;;
-partCode00:
+m_PartCode $00
 	jp partDelete

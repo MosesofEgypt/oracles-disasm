@@ -176,6 +176,15 @@
 ; Data macros
 ; ==================================================================================================
 
+.MACRO m_PartCode
+	.assert NARGS == 1
+
+	partCode{%.2x{\1}}:
+	.ifdef EXTENDED_SECTION
+		.define PART_{%.2x{\1}}_IN_EXT EXTENDED_SECTION EXPORT
+	.endif
+.ENDM
+
 ; Pointers
 .MACRO 3BytePointer
 	.assert NARGS == 1

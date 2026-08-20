@@ -4,7 +4,7 @@
 ; Variables:
 ;   var30: Position of tile it's on
 ; ==================================================================================================
-partCode05:
+m_PartCode $05
 	jr z,@normalStatus
 
 	; Just hit

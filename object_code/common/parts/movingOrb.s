@@ -5,7 +5,7 @@
 ;   var32: Dest Y position (from movement script)
 ;   var33: Dest X position (from movement script)
 ; ==================================================================================================
-partCode0b:
+m_PartCode $0b
 	cp PARTSTATUS_JUST_HIT
 	jr nz,@normalStatus
 

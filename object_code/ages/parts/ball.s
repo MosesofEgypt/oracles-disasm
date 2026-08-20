@@ -2,7 +2,7 @@
 ; PART_BALL
 ; Ball for the shooting gallery
 ; ==================================================================================================
-partCode38:
+m_PartCode $38
 	jr z,@normalStatus
 	ld e,$ea
 	ld a,(de)

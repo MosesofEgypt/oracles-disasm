@@ -5,7 +5,7 @@
 ;   var30: yh to spawn boulder at
 ;   var31: xh to spawn boulder at
 ; ==================================================================================================
-partCode45:
+m_PartCode $45
 	ld e,Part.state
 	ld a,(de)
 	rst_jumpTable

@@ -2,7 +2,7 @@
 ; PART_3b
 ; Used by head thwomp (purple face); a boulder.
 ; ==================================================================================================
-partCode3b:
+m_PartCode $3b
 	ld e,$c2
 	ld a,(de)
 	ld e,$c4

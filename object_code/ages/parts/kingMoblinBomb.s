@@ -6,7 +6,7 @@
 ;   var30: If nonzero, damage has been applied to Link
 ;   var31: Number of red flashes before it explodes
 ; ==================================================================================================
-partCode3f:
+m_PartCode $3f
 	ld e,Part.state
 	ld a,(de)
 	rst_jumpTable

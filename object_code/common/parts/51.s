@@ -2,7 +2,7 @@
 ; PART_51
 ; Used by Ganon
 ; ==================================================================================================
-partCode51:
+m_PartCode $51
 	ld a,$04
 	call objectGetRelatedObject1Var
 	ld a,(hl)

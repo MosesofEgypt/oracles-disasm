@@ -4,7 +4,7 @@
 ; Variables:
 ;   var30: gravity
 ; ==================================================================================================
-partCode48:
+m_PartCode $48
 	jr z,@normalStatus
 
 	; For subid 1 only, delete self on collision with anything?

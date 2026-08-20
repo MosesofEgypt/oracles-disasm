@@ -3,7 +3,7 @@
 ; When this object exists, it applies the effects of whirlpool and pollution tiles.
 ; It's a bit weird to put this functionality in an object...
 ; ==================================================================================================
-partCode2e:
+m_PartCode $2e
 	ld e,Part.state
 	ld a,(de)
 	or a

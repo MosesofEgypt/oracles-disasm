@@ -2,7 +2,7 @@
 ; PART_JABU_JABUS_BUBBLES
 ; Bubble spawned from Jabu Jabu?
 ; ==================================================================================================
-partCode16:
+m_PartCode $16
 	ld e,$c4
 	ld a,(de)
 	rst_jumpTable

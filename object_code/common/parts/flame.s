@@ -5,7 +5,7 @@
 ;   var30: ID of enemy hit (relatedObj1)
 ;   var31: Old health value of enemy
 ; ==================================================================================================
-partCode12:
+m_PartCode $12
 	ld e,Part.state
 	ld a,(de)
 	or a

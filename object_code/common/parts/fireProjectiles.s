@@ -2,8 +2,8 @@
 ; PART_ZORA_FIRE
 ; PART_GOPONGA_PROJECTILE
 ; ==================================================================================================
-partCode19:
-partCode31:
+m_PartCode $19
+m_PartCode $31
 	jp nz,partDelete
 	ld e,Part.state
 	ld a,(de)

@@ -6,7 +6,7 @@
 ;   counter2: Countdown until firing another detection projectile in an arbitrary
 ;             direction (for close-range detection)
 ; ==================================================================================================
-partCode0e:
+m_PartCode $0e
 	jp nz,partDelete
 	ld e,Part.subid
 	ld a,(de)

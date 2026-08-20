@@ -2,7 +2,7 @@
 ; PART_BABY_BALL
 ; Turns Link into a baby
 ; ==================================================================================================
-partCode2f:
+m_PartCode $2f
 	jp nz,partDelete
 	ld a,Object.health 
 	call objectGetRelatedObject1Var

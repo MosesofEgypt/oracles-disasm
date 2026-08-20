@@ -5,7 +5,7 @@
 ;   var30: next yh to move to
 ;   var31: next xh to move to
 ; ==================================================================================================
-partCode59:
+m_PartCode $59
 	ld e,$c4
 	ld a,(de)
 	rst_jumpTable

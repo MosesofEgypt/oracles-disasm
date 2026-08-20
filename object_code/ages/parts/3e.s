@@ -4,7 +4,7 @@
 ; Variables:
 ;   var30-3f: stores enemy index of every loaded Ambi Guard
 ; ==================================================================================================
-partCode3e:
+m_PartCode $3e
 	ld e,$c4
 	ld a,(de)
 	rst_jumpTable

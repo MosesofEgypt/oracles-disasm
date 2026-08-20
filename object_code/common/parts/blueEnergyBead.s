@@ -2,7 +2,7 @@
 ; PART_BLUE_ENERGY_BEAD
 ; Used by "createEnergySwirl" functions
 ; ==================================================================================================
-partCode53:
+m_PartCode $53
 	ld e,$c4
 	ld a,(de)
 	or a

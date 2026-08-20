@@ -4,7 +4,7 @@
 ; Variables:
 ;   var03: Bitset to use with wToggleBlocksState (derived from subid)
 ; ==================================================================================================
-partCode03:
+m_PartCode $03
 	cp PARTSTATUS_JUST_HIT
 	jr nz,@notJustHit
 

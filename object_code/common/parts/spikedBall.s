@@ -8,7 +8,7 @@
 ;                or PART_SPIKED_BALL (the head; for subids 1-3).
 ;   var30: Distance away from origin point
 ; ==================================================================================================
-partCode2a:
+m_PartCode $2a
 	jr z,@normalStatus
 
 	; Check for sword or shield collision

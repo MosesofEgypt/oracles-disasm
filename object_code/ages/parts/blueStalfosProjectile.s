@@ -5,7 +5,7 @@
 ;   var03: 0 for reflectable ball type, 1 otherwise
 ;   relatedObj1: Instance of ENEMY_BLUE_STALFOS
 ; ==================================================================================================
-partCode3d:
+m_PartCode $3d
 	jr z,@normalStatus
 
 	ld h,d

@@ -5,7 +5,7 @@
 ;   relatedObj1: Object that this shadow is for
 ;   var30: ID of relatedObj1 (deletes self if it changes)
 ; ==================================================================================================
-partCode07:
+m_PartCode $07
 	ld e,Part.state
 	ld a,(de)
 	or a

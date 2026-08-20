@@ -4,7 +4,7 @@
 ;   var30 - pointer to tile at part's position
 ;   wEyePuzzleCorrectDirection - set to 1 when button in hallway to D3 miniboss is pressed
 ; ==================================================================================================
-partCode0a:
+m_PartCode $0a
 	ld e,Part.subid
 	ld a,(de)
 	rst_jumpTable

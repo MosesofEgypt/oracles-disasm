@@ -615,12 +615,51 @@ m_section_free Seasons_Interactions_Bank0f NAMESPACE seasonsInteractionsBank0f
 	.include "object_code/seasons/interactions/d7.s"
 .ends
 
+; NOTE: This section MUST be processed BEFORE "data/partCodeTable.s"
+.ifdef ENABLE_NEW_GAME_PLUS
+m_section_superfree Part_Code_3 NAMESPACE partCodeExt
+	.include "object_code/common/parts/commonCode.s"
+	.define EXTENDED_SECTION 1
+
+	.include "object_code/seasons/parts/holesFloortrap.s"
+	.include "object_code/seasons/parts/slingshotEyeStatue.s"
+	.include "object_code/seasons/parts/16.s"
+	.include "object_code/seasons/parts/shootingDragonHead.s"
+	.include "object_code/seasons/parts/arrowShooter.s"
+	.include "object_code/seasons/parts/wallFlameShooterFlames.s"
+	.include "object_code/seasons/parts/buriedMoldorm.s"
+	.include "object_code/seasons/parts/kingMoblinsCannons.s"
+	.include "object_code/seasons/parts/2e.s"
+	.include "object_code/seasons/parts/2f.s"
+	.include "object_code/seasons/parts/poppableBubble.s"
+	.include "object_code/seasons/parts/33.s"
+	.include "object_code/seasons/parts/38.s"
+	.include "object_code/seasons/parts/39.s"
+	.include "object_code/common/parts/vireProjectile.s"
+	.include "object_code/seasons/parts/3b.s"
+	.include "object_code/seasons/parts/poeSisterFlame.s"
+	.include "object_code/seasons/parts/3d.s"
+	.include "object_code/seasons/parts/3e.s"
+	.include "object_code/seasons/parts/kingMoblinBomb.s"
+	.include "object_code/seasons/parts/aquamentusProjectile.s"
+	.include "object_code/seasons/parts/dodongoFireball.s"
+	.include "object_code/seasons/parts/mothulaProjectile2.s"
+	.include "object_code/seasons/parts/43.s"
+	.include "object_code/seasons/parts/44.s"
+	.include "object_code/seasons/parts/45.s"
+	.include "object_code/seasons/parts/46.s"
+	.include "object_code/seasons/parts/47.s"
+	.include "object_code/seasons/parts/48.s"
+	.include "object_code/seasons/parts/49.s"
+	.include "object_code/seasons/parts/4a.s"
+	.include "object_code/seasons/parts/dinCrystal.s"
+	.undefine EXTENDED_SECTION
+.ends
+.endif
+
 
 .BANK $10 SLOT 1
 .ORG 0
-
-	.define PART_BANK $10
-	.export PART_BANK
 
 m_section_free Part_Code NAMESPACE partCode
 	.include "object_code/common/parts/commonCode.s"
@@ -848,45 +887,6 @@ m_section_superfree Menu_Code_2 NAMESPACE menuCode2
 		.include "code/menu_code/settingsMenu.s"
 	.endif
 .ends
-
-.ifdef ENABLE_NEW_GAME_PLUS
-m_section_superfree Part_Code_3 NAMESPACE partCodeExt
-	.include "object_code/common/parts/commonCode.s"
-
-	.include "object_code/seasons/parts/holesFloortrap.s"
-	.include "object_code/seasons/parts/slingshotEyeStatue.s"
-	.include "object_code/seasons/parts/16.s"
-	.include "object_code/seasons/parts/shootingDragonHead.s"
-	.include "object_code/seasons/parts/arrowShooter.s"
-	.include "object_code/seasons/parts/wallFlameShooterFlames.s"
-	.include "object_code/seasons/parts/buriedMoldorm.s"
-	.include "object_code/seasons/parts/kingMoblinsCannons.s"
-	.include "object_code/seasons/parts/2e.s"
-	.include "object_code/seasons/parts/2f.s"
-	.include "object_code/seasons/parts/poppableBubble.s"
-	.include "object_code/seasons/parts/33.s"
-	.include "object_code/seasons/parts/38.s"
-	.include "object_code/seasons/parts/39.s"
-	.include "object_code/common/parts/vireProjectile.s"
-	.include "object_code/seasons/parts/3b.s"
-	.include "object_code/seasons/parts/poeSisterFlame.s"
-	.include "object_code/seasons/parts/3d.s"
-	.include "object_code/seasons/parts/3e.s"
-	.include "object_code/seasons/parts/kingMoblinBomb.s"
-	.include "object_code/seasons/parts/aquamentusProjectile.s"
-	.include "object_code/seasons/parts/dodongoFireball.s"
-	.include "object_code/seasons/parts/mothulaProjectile2.s"
-	.include "object_code/seasons/parts/43.s"
-	.include "object_code/seasons/parts/44.s"
-	.include "object_code/seasons/parts/45.s"
-	.include "object_code/seasons/parts/46.s"
-	.include "object_code/seasons/parts/47.s"
-	.include "object_code/seasons/parts/48.s"
-	.include "object_code/seasons/parts/49.s"
-	.include "object_code/seasons/parts/4a.s"
-	.include "object_code/seasons/parts/dinCrystal.s"
-.ends
-.endif
 
 .BANK $3e SLOT 1
 .ORG 0

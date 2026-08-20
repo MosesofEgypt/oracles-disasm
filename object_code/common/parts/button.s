@@ -6,7 +6,7 @@
 ;   counter1: ?
 ;   var30: 1 if button is pressed
 ; ==================================================================================================
-partCode09:
+m_PartCode $09
 	ld e,Part.state
 	ld a,(de)
 	or a

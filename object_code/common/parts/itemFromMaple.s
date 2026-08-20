@@ -2,8 +2,8 @@
 ; PART_ITEM_FROM_MAPLE
 ; PART_ITEM_FROM_MAPLE_2
 ; ==================================================================================================
-partCode14:
-partCode15:
+m_PartCode $14
+m_PartCode $15
 	ld e,Part.subid
 	jr z,@normalStatus
 	cp PARTSTATUS_DEAD

@@ -10735,25 +10735,28 @@ partAnimate:
 	ld l,Part.animCounter
 	dec (hl)
 	ret nz
-.if defined(ROM_COMBO)
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
 	ld a,:partAnimationTable_seasons
 .else
 	ld a,:partAnimationTable
 .endif
 	setrombank
 	ld l,Part.animPointer
-	jr _partNextAnimationFrame
+	call _partNextAnimationFrame
+	pop af
+	setrombank
+	ret
 
 ;;
 partSetAnimation:
 	add a
 	ld c,a
 	ld b,$00
-.if defined(ROM_COMBO)
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
 	ld a,:partAnimationTable_seasons
 	ld hl,partAnimationTable_seasons
 	call wIsSeasons
@@ -10775,6 +10778,11 @@ partSetAnimation:
 	ld h,(hl)
 	ld l,a
 	add hl,bc
+
+	call _partNextAnimationFrame
+	pop af
+	setrombank
+	ret
 
 ;;
 ; Note: this sets the ROM bank to $11 before returning.
@@ -10843,14 +10851,6 @@ _partNextAnimationFrame:
 	and $3f
 	or $40
 	ld (de),a
-
-.if defined(ROM_COMBO)
-	pop af
-	ldh (<hRomBank),a
-.else
-	ld a,PART_BANK
-.endif
-	setrombank
 	ret
 
 ;;
@@ -14701,9 +14701,6 @@ interactionDelete:
 .if defined(ROM_COMBO)
 updateInteractions:
 	jpfrombank0 objectUpdating.updateInteractions
-
-updateInteraction:
-	jpfrombank0 objectUpdating.updateInteraction
 
 .else
 ;;

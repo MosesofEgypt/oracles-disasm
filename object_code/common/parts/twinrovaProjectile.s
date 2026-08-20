@@ -6,8 +6,8 @@
 ;   relatedObj1: Instance of ENEMY_TWINROVA that fired the projectile
 ;   relatedObj2: Instance of ENEMY_TWINROVA that could be hit by the projectile
 ; ==================================================================================================
-partCode4b:
-partCode4d:
+m_PartCode $4b
+m_PartCode $4d
 	jr z,@normalStatus
 
 	ld e,Part.var2a

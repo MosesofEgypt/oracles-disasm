@@ -8,7 +8,7 @@
 ;   var33: Counter until collisions are enabled (fairy only)
 ;   var34: Set to $01 when it hits water in a sidescrolling area
 ; ==================================================================================================
-partCode01:
+m_PartCode $01
 	jr z,@normalStatus
 	cp PARTSTATUS_DEAD
 	jp z,@linkCollectedItem

@@ -669,11 +669,61 @@ m_section_free Ages_Interactions_Bank10 NAMESPACE agesInteractionsBank10
 .ends
 
 
+; NOTE: This section MUST be processed BEFORE "data/partCodeTable.s"
+.ifdef ENABLE_NEW_GAME_PLUS
+m_section_superfree Part_Code_2 NAMESPACE partCodeExt
+	.include "object_code/common/parts/commonCode.s"
+	.define EXTENDED_SECTION 1
+
+	.include "object_code/ages/parts/jabuJabusBubbles.s"
+	.include "object_code/ages/parts/grottoCrystal.s"
+	.include "object_code/ages/parts/wallArrowShooter.s"
+	.include "object_code/ages/parts/sparkle.s"
+	.include "object_code/ages/parts/timewarpAnimation.s"
+	.include "object_code/ages/parts/donkeyKongFlame.s"
+	.include "object_code/ages/parts/veranFairyProjectile.s"
+	.include "object_code/ages/parts/seaEffects.s"
+	.include "object_code/ages/parts/babyBall.s"
+	.include "object_code/ages/parts/subterrorDirt.s"
+	.include "object_code/ages/parts/rotatableSeedThing.s"
+	.include "object_code/ages/parts/ramrockSeedFormLaser.s"
+	.include "object_code/ages/parts/ramrockGloveFormArm.s"
+	.include "object_code/ages/parts/candleFlame.s"
+	.include "object_code/ages/parts/veranProjectile.s"
+	.include "object_code/ages/parts/ball.s"
+	.include "object_code/ages/parts/headThwompFireball.s"
+	.include "object_code/common/parts/vireProjectile.s"
+	.include "object_code/ages/parts/3b.s"
+	.include "object_code/ages/parts/headThwompCircularProjectile.s"
+	.include "object_code/ages/parts/blueStalfosProjectile.s"
+	.include "object_code/ages/parts/3e.s"
+	.include "object_code/ages/parts/kingMoblinBomb.s"
+	.include "object_code/ages/parts/headThwompBombDropper.s"
+	.include "object_code/ages/parts/shadowHagShadow.s"
+	.include "object_code/ages/parts/pumpkinHeadProjectile.s"
+	.include "object_code/ages/parts/plasmarineProjectile.s"
+	.include "object_code/ages/parts/tingleBalloon.s"
+	.include "object_code/ages/parts/fallingBoulderSpawner.s"
+	.include "object_code/ages/parts/seedShooterEyeStatue.s"
+	.include "object_code/ages/parts/bomb.s"
+	.include "object_code/ages/parts/octogonDepthCharge.s"
+	.include "object_code/ages/parts/bigBangBombSpawner.s"
+	.include "object_code/ages/parts/smogProjectile.s"
+	.include "object_code/ages/parts/ramrockSeedFormOrb.s"
+	.include "object_code/ages/parts/roomOfRitesFallingBoulder.s"
+	.include "object_code/ages/parts/octogonBubble.s"
+	.include "object_code/ages/parts/veranSpiderweb.s"
+	.include "object_code/ages/parts/veranAcidPool.s"
+	.include "object_code/ages/parts/veranBeeProjectile.s"
+	.include "object_code/ages/parts/blackTowerMovingFlames.s"
+	.include "object_code/ages/parts/triforceStone.s"
+	.undefine EXTENDED_SECTION
+.ends
+.endif
+
+
 .BANK $11 SLOT 1
 .ORG 0
-
-	.define PART_BANK $11
-	.export PART_BANK
 
 m_section_free Bank_11 NAMESPACE partCode
 	.include "object_code/common/parts/commonCode.s"
@@ -929,56 +979,6 @@ m_section_superfree Menu_Code_2 NAMESPACE menuCode2
 		.include "code/menu_code/settingsMenu.s"
 	.endif
 .ends
-
-
-.ifdef ENABLE_NEW_GAME_PLUS
-m_section_superfree Part_Code_2 NAMESPACE partCodeExt
-	.include "object_code/common/parts/commonCode.s"
-
-	.include "object_code/ages/parts/jabuJabusBubbles.s"
-	.include "object_code/ages/parts/grottoCrystal.s"
-	.include "object_code/ages/parts/wallArrowShooter.s"
-	.include "object_code/ages/parts/sparkle.s"
-	.include "object_code/ages/parts/timewarpAnimation.s"
-	.include "object_code/ages/parts/donkeyKongFlame.s"
-	.include "object_code/ages/parts/veranFairyProjectile.s"
-	.include "object_code/ages/parts/seaEffects.s"
-	.include "object_code/ages/parts/babyBall.s"
-	.include "object_code/ages/parts/subterrorDirt.s"
-	.include "object_code/ages/parts/rotatableSeedThing.s"
-	.include "object_code/ages/parts/ramrockSeedFormLaser.s"
-	.include "object_code/ages/parts/ramrockGloveFormArm.s"
-	.include "object_code/ages/parts/candleFlame.s"
-	.include "object_code/ages/parts/veranProjectile.s"
-	.include "object_code/ages/parts/ball.s"
-	.include "object_code/ages/parts/headThwompFireball.s"
-	.include "object_code/common/parts/vireProjectile.s"
-	.include "object_code/ages/parts/3b.s"
-	.include "object_code/ages/parts/headThwompCircularProjectile.s"
-	.include "object_code/ages/parts/blueStalfosProjectile.s"
-	.include "object_code/ages/parts/3e.s"
-	.include "object_code/ages/parts/kingMoblinBomb.s"
-	.include "object_code/ages/parts/headThwompBombDropper.s"
-	.include "object_code/ages/parts/shadowHagShadow.s"
-	.include "object_code/ages/parts/pumpkinHeadProjectile.s"
-	.include "object_code/ages/parts/plasmarineProjectile.s"
-	.include "object_code/ages/parts/tingleBalloon.s"
-	.include "object_code/ages/parts/fallingBoulderSpawner.s"
-	.include "object_code/ages/parts/seedShooterEyeStatue.s"
-	.include "object_code/ages/parts/bomb.s"
-	.include "object_code/ages/parts/octogonDepthCharge.s"
-	.include "object_code/ages/parts/bigBangBombSpawner.s"
-	.include "object_code/ages/parts/smogProjectile.s"
-	.include "object_code/ages/parts/ramrockSeedFormOrb.s"
-	.include "object_code/ages/parts/roomOfRitesFallingBoulder.s"
-	.include "object_code/ages/parts/octogonBubble.s"
-	.include "object_code/ages/parts/veranSpiderweb.s"
-	.include "object_code/ages/parts/veranAcidPool.s"
-	.include "object_code/ages/parts/veranBeeProjectile.s"
-	.include "object_code/ages/parts/blackTowerMovingFlames.s"
-	.include "object_code/ages/parts/triforceStone.s"
-.ends
-.endif
 
 .BANK $3e SLOT 1
 .ORG 0

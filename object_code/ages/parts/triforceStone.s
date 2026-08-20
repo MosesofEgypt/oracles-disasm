@@ -2,7 +2,7 @@
 ; PART_TRIFORCE_STONE
 ; Stone blocking path to Nayru at the start of the game (only after being moved)
 ; ==================================================================================================
-partCode5a:
+m_PartCode $5a
 	ld e,Part.state
 	ld a,(de)
 	or a

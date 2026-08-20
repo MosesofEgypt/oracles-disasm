@@ -5,7 +5,7 @@
 ;   counter1: Number of lightable torches in the room
 ;   counter2: Number of torches currently lit (last time it checked)
 ; ==================================================================================================
-partCode08:
+m_PartCode $08
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
