@@ -8,7 +8,7 @@ m_EnemyCode $5a
 	ld e,Enemy.state
 	ld a,(de)
 	or a
-	jr nz,@state1
+	jp nz,@state1
 
 
 ; Initialization
@@ -59,7 +59,7 @@ m_EnemyCode $5a
 	swap a
 	and $0f
 	ldh (<hFF8B),a
-.ifdef defined(ROM_COMBO)
+.if defined(ROM_COMBO)
 	jr +
 	++
 .endif

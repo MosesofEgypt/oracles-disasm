@@ -494,24 +494,23 @@ with open(outputDir + "/partData.s", "w") as f:
     f.write(new_data)
 
 
-start = len(types_new)
-new_data = f".enum ${start:02x}\n"
-for i in range(max(len(ages_types_new_only),
-                   len(seasons_types_new_only))
+new_data = f".enum 0\n"
+for i in range(max(len(ages_types_new),
+                   len(seasons_types_new))
                ):
     enum_name = ""
-    if i in range(len(ages_types_new_only)):
-        enum_name = ages_types_new_only[i]
+    if i in range(len(ages_types_new)):
+        enum_name = ages_types_new[i]
 
-    if i in range(len(seasons_types_new_only)):
+    if i >= len(types_new) and i in range(len(seasons_types_new)):
         if enum_name:
-            new_data += f"\t{enum_name}\t.db ; ${start+i:02x}\n"
+            new_data += f"\t{enum_name}\t.db ; ${i:02x}\n"
 
-        enum_name = seasons_types_new_only[i]
+        enum_name = seasons_types_new[i]
 
-    new_data += f"\t{enum_name}\tdb ; ${start+i:02x}\n"
+    new_data += f"\t{enum_name}\tdb ; ${i:02x}\n"
 
 
 new_data += ".ende"
-with open(outputDir + "/enemyCollisionModesExt.s", "w") as f:
+with open(outputDir + "/enemyCollisionModes.s", "w") as f:
     f.write(new_data)

@@ -140,7 +140,7 @@ GAMEDATAFILES = $(shell find data/$(GAME)/ -name '*.s')
 GAMEDATAFILES += $(BUILD_DIR)/paletteData.s
 GAMEDATAFILES += $(BUILD_DIR)/paletteHeaders.s
 GAMEDATAFILES += $(BUILD_DIR)/objectCollisionTable.s
-GAMEDATAFILES += $(BUILD_DIR)/enemyCollisionModesExt.s
+GAMEDATAFILES += $(BUILD_DIR)/enemyCollisionModes.s
 GAMEDATAFILES += $(BUILD_DIR)/animationData.s
 GAMEDATAFILES += $(BUILD_DIR)/animationGroups.s
 GAMEDATAFILES += $(BUILD_DIR)/partData.s
@@ -186,7 +186,7 @@ $(BUILD_DIR)/$(GAME).o: rooms/seasons/*.bin
 $(BUILD_DIR)/$(GAME).o: $(HASHFILES)
 $(BUILD_DIR)/%.o: code/%.s
 
-$(BUILD_DIR)/audio.o: $(AUDIO_FILES) $(BUILD_DIR)/enemyCollisionModesExt.s 
+$(BUILD_DIR)/audio.o: $(AUDIO_FILES) $(BUILD_DIR)/enemyCollisionModes.s
 $(BUILD_DIR)/*.o: $(COMMON_INCLUDE_FILES) Makefile
 
 # HACK-BASE: $(GAME).o depends on new expanded tileset layout files.
@@ -206,7 +206,7 @@ GEN_FILES += constants/common/enemyCollisionModes.s
 $(BUILD_DIR)/objectCollisionTable.s:   $(GEN_FILES) | $(BUILD_DIR)
 $(BUILD_DIR)/partData.s:               $(GEN_FILES) $(BUILD_DIR)/objectCollisionTable.s | $(BUILD_DIR)
 $(BUILD_DIR)/enemyData.s:              $(GEN_FILES) $(BUILD_DIR)/partData.s | $(BUILD_DIR)
-$(BUILD_DIR)/enemyCollisionModesExt.s: $(BUILD_DIR)/enemyData.s | $(BUILD_DIR)
+$(BUILD_DIR)/enemyCollisionModes.s: $(BUILD_DIR)/enemyData.s | $(BUILD_DIR)
 	@echo "Combining enemy, part, and collision data..."
 	@$(PYTHON) tools/build/makeComboCollisionModesAndEnemyPartData.py $(BUILD_DIR) data/ages data/seasons
 

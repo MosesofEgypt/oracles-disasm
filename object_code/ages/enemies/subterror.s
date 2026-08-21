@@ -249,7 +249,11 @@ subterror_stateA:
 	ld a,(de)
 	sla a
 	jr nc,@noShovel
+.if defined(ROM_COMBO)
+	cp ITEMCOLLISION_SHOVEL_S<<1
+.else
 	cp ITEMCOLLISION_SHOVEL<<1
+.endif
 	jr nz,@noShovel
 
 	; Shovel was used; will now pop out of ground

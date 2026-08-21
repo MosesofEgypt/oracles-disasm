@@ -7,7 +7,11 @@
 .include "constants/common/collisionEffects.s"
 .include "constants/common/cutsceneIndices.s"
 .include "constants/common/dungeonRoomProperties.s"
-.include "constants/common/enemyCollisionModes.s"
+.if defined(ROM_COMBO)
+	.include {"{BUILD_DIR}/enemyCollisionModes.s"}
+.else
+    .include "constants/common/enemyCollisionModes.s"
+.endif
 .include "constants/common/enemyStates.s"
 .include "constants/common/enemies.s"
 .include "constants/common/globalFlags.s"

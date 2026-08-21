@@ -160,8 +160,20 @@ waterTektite_getAdjacentWallsBitsetGivenAngle:
 	or e
 	ld e,a
 	ld a,(de)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+
+		sub TILEINDEX_PUDDLE_AGES
+		cp TILEINDEX_FD-TILEINDEX_PUDDLE_AGES+1
+		jr ++
+	+
+		sub TILEINDEX_PUDDLE_SEASONS
+		cp TILEINDEX_FD-TILEINDEX_PUDDLE_SEASONS+1
+	++
+.else
 	sub TILEINDEX_PUDDLE
 	cp TILEINDEX_FD-TILEINDEX_PUDDLE+1
+.endif
 	ldh a,(<hFF8B)
 	rla
 	ldh (<hFF8B),a

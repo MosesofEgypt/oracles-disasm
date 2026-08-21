@@ -264,7 +264,3 @@
 ; Can't have values that are $80 or higher without changing how this works
 
 .ende
-
-.if defined(ROM_COMBO)
-	.include {"{BUILD_DIR}/enemyCollisionModesExt.s"}
-.endif

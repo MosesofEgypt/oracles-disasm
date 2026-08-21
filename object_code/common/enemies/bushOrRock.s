@@ -37,6 +37,15 @@ m_EnemyCode $58
 	ld (de),a
 
 	ld a,(hl)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+		cp TILEINDEX_OVERWORLD_BUSH_1_AGES
+		jr nz,+
+			; use seasons overworld bush tile index
+			ld a,TILEINDEX_OVERWORLD_BUSH_1_SEASONS
+	+
+.endif
 	call objectMimicBgTile
 
 	call @checkDisableDestruction
@@ -46,7 +55,11 @@ m_EnemyCode $58
 
 
 @collisionAndTileData:
+.if defined(ROM_COMBO)
+	.db ENEMYCOLLISION_BUSH, TILEINDEX_OVERWORLD_BUSH_1_AGES ; Subid 0
+.else
 	.db ENEMYCOLLISION_BUSH, TILEINDEX_OVERWORLD_BUSH_1 ; Subid 0
+.endif
 	.db ENEMYCOLLISION_BUSH, TILEINDEX_DUNGEON_BUSH     ; Subid 1
 	.db ENEMYCOLLISION_ROCK, TILEINDEX_DUNGEON_POT      ; Subid 2
 	.db ENEMYCOLLISION_ROCK, TILEINDEX_OVERWORLD_ROCK   ; Subid 3

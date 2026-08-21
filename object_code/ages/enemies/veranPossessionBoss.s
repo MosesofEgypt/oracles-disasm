@@ -901,7 +901,7 @@ veranPossessionBoss_wasHit:
 	; Direct attacks from Link cause damage to Link, not Veran
 	sub ITEMCOLLISION_L1_SWORD
 	ret c
-	cp ITEMCOLLISION_SHOVEL - ITEMCOLLISION_L1_SWORD + 1
+	cp ITEMCOLLISION_SHOVEL_A - ITEMCOLLISION_L1_SWORD + 1
 	ret nc
 
 	ld l,Enemy.invincibilityCounter

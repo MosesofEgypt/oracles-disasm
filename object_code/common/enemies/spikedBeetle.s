@@ -31,7 +31,17 @@ m_EnemyCode $14
 	; Check if the collision was a shovel or shield (enemy will flip over)
 	ld e,Enemy.var2a
 	ld a,(de)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+
+		cp $80|ITEMCOLLISION_SHOVEL_A
+		jr ++
+	+
+		cp $80|ITEMCOLLISION_SHOVEL_S
+	++
+.else
 	cp $80|ITEMCOLLISION_SHOVEL
+.endif
 	jr z,++
 	res 7,a
 	sub ITEMCOLLISION_L1_SHIELD

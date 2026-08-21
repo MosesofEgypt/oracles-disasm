@@ -66,27 +66,26 @@
 .define TILEINDEX_OVERWORLD_LIT_TORCH	$a1 ; overworld only (might only be used in seasons?)
 .define TILEINDEX_OVERWORLD_ROCK	$c0 ; outdoors only
 .define TILEINDEX_DUG_HOLE		$e1 ; outdoors only
+.define TILEINDEX_STAIRS		$d0
 
 .if defined(ROM_COMBO)
-	.define TILEINDEX_STAIRS		$d0
+	.define TILEINDEX_OVERWORLD_BUSH_1_AGES		$c5
+	.define TILEINDEX_VINE_TOP_AGES				$d4
+	.define TILEINDEX_VINE_MIDDLE_AGES			$d5
+	.define TILEINDEX_VINE_BOTTOM_AGES			$d6
 
-	.define TILEINDEX_VINE_TOP_AGES		$d4
-	.define TILEINDEX_VINE_MIDDLE_AGES		$d5
-	.define TILEINDEX_VINE_BOTTOM_AGES		$d6
-
-	.define TILEINDEX_VINE_TOP_SEASONS		$dd
+	.define TILEINDEX_OVERWORLD_BUSH_1_SEASONS	$c4
+	.define TILEINDEX_VINE_TOP_SEASONS			$dd
 	.define TILEINDEX_VINE_MIDDLE_SEASONS		$de
 	.define TILEINDEX_VINE_BOTTOM_SEASONS		$df
 .elif defined(ROM_AGES) ; Ages only
 	.define TILEINDEX_OVERWORLD_BUSH_1	$c5 ; Overworld only
-	.define TILEINDEX_STAIRS		$d0
-	.define TILEINDEX_VINE_TOP		$d4
+	.define TILEINDEX_VINE_TOP			$d4
 	.define TILEINDEX_VINE_MIDDLE		$d5
 	.define TILEINDEX_VINE_BOTTOM		$d6
 .else;
 	.define TILEINDEX_OVERWORLD_BUSH_1	$c4 ; Overworld only
-	.define TILEINDEX_STAIRS		$d0
-	.define TILEINDEX_VINE_TOP		$dd
+	.define TILEINDEX_VINE_TOP			$dd
 	.define TILEINDEX_VINE_MIDDLE		$de
 	.define TILEINDEX_VINE_BOTTOM		$df
 .endif

@@ -14,20 +14,25 @@ m_EnemyCode $13
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 	; CROSSITEMS: In Ages, the boomerang collisions aren't adjacent values, so this code must be
 	; changed.
-	cp ITEMCOLLISION_L1_BOOMERANG
-	jr z,@boomerangCollision
 .if defined(ROM_COMBO)
 	call wIsSeasons
 	jr c,++
+		cp ITEMCOLLISION_L1_BOOMERANG_A
+		jr z,@boomerangCollision
 		cp ITEMCOLLISION_L2_BOOMERANG_A
 		jr +
 	++
+		cp ITEMCOLLISION_L1_BOOMERANG_S
+		jr z,@boomerangCollision
 		cp ITEMCOLLISION_L2_BOOMERANG_S
 	+
 .else
+	cp ITEMCOLLISION_L1_BOOMERANG
+	jr z,@boomerangCollision
 	cp ITEMCOLLISION_L2_BOOMERANG
 .endif
 	jr nz,@normalStatus
+
 .else
 	sub ITEMCOLLISION_L1_BOOMERANG
 	cp MAX_BOOMERANG_LEVEL

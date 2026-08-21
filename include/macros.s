@@ -195,7 +195,7 @@
 			.define {DEF_PREFIX}_{ID}_EXT_SECT_SEASONS EXTENDED_SECTION EXPORT
 			;.print {"SEASONS {CODE_PREFIX}{ID}\n"}
 		.else
-			.define {DEF_PREFIX}_{ID}_EXISTS 0 EXPORT
+			.define {DEF_PREFIX}_{ID}_EXT_SECT EXTENDED_SECTION EXPORT
 		.endif
 	.else
 		.define {DEF_PREFIX}_{ID}_EXISTS 0 EXPORT
@@ -217,7 +217,14 @@
 
 .MACRO m_InteractionCode
 	.assert NARGS == 1
-	m_ObjectCode \1 "INTERACTION" "interactionCode"
+
+	; NOTE: TEMPORARY UNTIL INTERACTION CODE TABLE IS REDONE
+	.define ID {"{%.2x{\1}}"}
+	interactionCode{ID}:
+	.undefine ID
+	; NOTE: TEMPORARY UNTIL INTERACTION CODE TABLE IS REDONE
+
+	;m_ObjectCode \1 "INTERACTION" "interactionCode"
 .ENDM
 
 .MACRO m_CodePointer

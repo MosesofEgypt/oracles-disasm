@@ -208,7 +208,11 @@ m_InteractionCode $9e
 	ld c,$69
 
 @setWaterTileAndIncSubstate:
+.if defined(ROM_COMBO)
+	ld a,TILEINDEX_WATER_AGES
+.else
 	ld a,TILEINDEX_WATER
+.endif
 	call setTile
 	jp interactionIncSubstate
 
@@ -273,7 +277,11 @@ m_InteractionCode $9e
 @setPuddleTile:
 	push bc
 	ld c,a
+.if defined(ROM_COMBO)
+	ld a,TILEINDEX_PUDDLE_AGES
+.else
 	ld a,TILEINDEX_PUDDLE
+.endif
 	call setTile
 	pop bc
 	ret

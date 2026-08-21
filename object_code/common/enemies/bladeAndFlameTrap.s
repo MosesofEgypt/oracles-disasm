@@ -11,7 +11,7 @@
 ;   var32: Radius of circle for circular traps
 ; ==================================================================================================
 m_EnemyCode $0e
-.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
 m_EnemyCode $2b
 .endif
 	dec a
