@@ -10,7 +10,7 @@
 ;   var30/var31: Target position (directly in front of ball object)
 ;   var32: Nonzero if already initialized
 ; ==================================================================================================
-enemyCode74:
+m_EnemyCode $74
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

@@ -5,7 +5,7 @@
 ;   subid: If bit 7 is set, it's a real armos; otherwise it's an armos spawner.
 ;   var31: The initial position of the armos (subid 1 only)
 ; ==================================================================================================
-enemyCode1d:
+m_EnemyCode $1d
 	call ecom_checkHazards
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH

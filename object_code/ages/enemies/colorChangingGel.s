@@ -6,7 +6,7 @@
 ;   var32: Tile index at current position (purposely outdated so there's lag in updating
 ;          the color)
 ; ==================================================================================================
-enemyCode47:
+m_EnemyCode $47
 	call ecom_checkHazards
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH

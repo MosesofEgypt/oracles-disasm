@@ -14,7 +14,7 @@
 ;   var38: Used as a signal by "web" objects?
 ;   var39: Bee form: quadrant the bee entered the screen from
 ; ==================================================================================================
-enemyCode02:
+m_EnemyCode $02
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

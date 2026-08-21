@@ -5,7 +5,7 @@
 ;   counter2: Cooldown until rope can charge at Link again
 ;   var30: Hazards are checked iff bit 7 is set.
 ; ==================================================================================================
-enemyCode10:
+m_EnemyCode $10
 	call rope_checkHazardsIfApplicable
 .ifdef ENABLE_NEW_GAME_PLUS
 	push af

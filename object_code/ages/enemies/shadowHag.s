@@ -6,7 +6,7 @@
 ;   var30: Number of bugs on-screen
 ;   var31: Set if the hag couldn't spawn because Link was in a bad position
 ; ==================================================================================================
-enemyCode7a:
+m_EnemyCode $7a
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

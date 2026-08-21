@@ -5,7 +5,7 @@
 ;   var30: Animation index ($02 if in cukeman form)
 ;   var31: "pressedAButton" variable (set to $01 when pressed A, only in cukeman form)
 ; ==================================================================================================
-enemyCode18:
+m_EnemyCode $18
 	call ecom_checkHazards
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH

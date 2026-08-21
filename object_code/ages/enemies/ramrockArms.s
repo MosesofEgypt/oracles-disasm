@@ -11,7 +11,7 @@
 ;   var37: ?
 ;   var38: Used by bomb phase?
 ; ==================================================================================================
-enemyCode05:
+m_EnemyCode $05
 	ld e,Enemy.state
 	ld a,(de)
 	rst_jumpTable

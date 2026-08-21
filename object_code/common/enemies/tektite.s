@@ -5,7 +5,7 @@
 ;   var30: Gravity
 ;   var31: Minimum value for counter1 (lower value = more frequent jumping)
 ; ==================================================================================================
-enemyCode30:
+m_EnemyCode $30
 	call ecom_checkHazards
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH

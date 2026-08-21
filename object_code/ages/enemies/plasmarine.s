@@ -8,7 +8,7 @@
 ;   var33: ?
 ;   var34: Number of projectiles to fire in one attack
 ; ==================================================================================================
-enemyCode7e:
+m_EnemyCode $7e
 	jr z,@normalStatus
 
 	sub ENEMYSTATUS_NO_HEALTH

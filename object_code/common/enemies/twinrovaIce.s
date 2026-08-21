@@ -4,7 +4,7 @@
 ; Variables:
 ;   var3e: ?
 ; ==================================================================================================
-enemyCode5d:
+m_EnemyCode $5d
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

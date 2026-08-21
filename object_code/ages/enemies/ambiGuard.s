@@ -17,7 +17,7 @@
 ;   var3b: When set to $ff, the guard immediately notices Link. (Written to by
 ;          PART_DETECTION_HELPER.)
 ; ==================================================================================================
-enemyCode54:
+m_EnemyCode $54
 	jr z,@normalStatus	 
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

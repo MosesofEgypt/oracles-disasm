@@ -11,7 +11,7 @@
 ;   var32: Index in position differenc buffer?
 ;   var33-var3a: Position difference buffer?
 ; ==================================================================================================
-enemyCode77:
+m_EnemyCode $77
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

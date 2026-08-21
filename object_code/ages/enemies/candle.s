@@ -4,7 +4,7 @@
 ; Variables:
 ;   relatedObj1: reference to INTERAC_EXPLOSION while exploding
 ; ==================================================================================================
-enemyCode55:
+m_EnemyCode $55
 	call ecom_checkHazards
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH

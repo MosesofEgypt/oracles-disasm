@@ -5,7 +5,7 @@
 ;   zh: Equals 2 when underwater
 ;   var30: Current animation index
 ; ==================================================================================================
-enemyCode1e:
+m_EnemyCode $1e
 	jr z,@normalStatus
 	sub $03
 	jr c,@stunned

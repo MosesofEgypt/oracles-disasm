@@ -6,7 +6,7 @@
 ; Variables:
 ;   var30: Animation index
 ; ==================================================================================================
-enemyCode4e:
+m_EnemyCode $4e
 	call ecom_checkHazards
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH

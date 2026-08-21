@@ -6,7 +6,7 @@
 ;          (red wizzrobes only)
 ;   var31/var32: Target position (blue wizzrobes only)
 ; ==================================================================================================
-enemyCode40:
+m_EnemyCode $40
 	call ecom_checkHazardsNoAnimationForHoles
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH

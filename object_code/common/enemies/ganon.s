@@ -8,7 +8,7 @@
 ;   var32: Related to animation for state A?
 ;   var35+: Pointer to sequence of attack states to iterate through
 ; ==================================================================================================
-enemyCode04:
+m_EnemyCode $04
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

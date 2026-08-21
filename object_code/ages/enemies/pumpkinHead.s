@@ -15,7 +15,7 @@
 ;   var31: Link's direction last frame
 ;   var32: Head's orientation when it was picked up
 ; ==================================================================================================
-enemyCode78:
+m_EnemyCode $78
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

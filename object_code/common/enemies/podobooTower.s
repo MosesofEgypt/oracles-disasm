@@ -4,7 +4,7 @@
 ; Variables:
 ;   var30: Base y-position. (Actual y-position changes as it emerges from the ground.)
 ; ==================================================================================================
-enemyCode2d:
+m_EnemyCode $2d
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

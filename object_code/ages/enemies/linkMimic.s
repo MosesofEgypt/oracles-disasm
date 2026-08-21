@@ -3,7 +3,7 @@
 ;
 ; Shares code with ENEMY_ARM_MIMIC.
 ; ==================================================================================================
-enemyCode64:
+m_EnemyCode $64
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

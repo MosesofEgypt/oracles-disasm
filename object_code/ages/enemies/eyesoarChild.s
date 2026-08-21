@@ -10,7 +10,7 @@
 ;
 ; See also ENEMY_EYESOAR variables.
 ; ==================================================================================================
-enemyCode11:
+m_EnemyCode $11
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

@@ -4,7 +4,7 @@
 ; Variables:
 ;   var30: Enemy ID of parent object
 ; ==================================================================================================
-enemyCode58:
+m_EnemyCode $58
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

@@ -12,7 +12,7 @@
 ;   var34/var35: Original Y/X position (for subid 2 respawning)
 ;   var36: Counter until "fire projectile" animation will begin
 ; ==================================================================================================
-enemyCode7c:
+m_EnemyCode $7c
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

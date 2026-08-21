@@ -4,7 +4,7 @@
 ; Variables:
 ;   var30: $00 normally, $01 when flipped over.
 ; ==================================================================================================
-enemyCode14:
+m_EnemyCode $14
 	call ecom_checkHazards
 	jr z,@normalStatus
 

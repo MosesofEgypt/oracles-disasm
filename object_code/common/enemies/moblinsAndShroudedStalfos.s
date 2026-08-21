@@ -5,9 +5,9 @@
 ;
 ; These enemies and ENEMY_ARROW_DARKNUT share some code.
 ; ==================================================================================================
-enemyCode0c:
-enemyCode20:
-enemyCode22:
+m_EnemyCode $0c
+m_EnemyCode $20
+m_EnemyCode $22
 	call ecom_checkHazards
 	jr z,@normalStatus
 

@@ -4,7 +4,7 @@
 ; Variables:
 ;   relatedObj1: reference to other subid (main <-> antenna)
 ; ==================================================================================================
-enemyCode76:
+m_EnemyCode $76
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

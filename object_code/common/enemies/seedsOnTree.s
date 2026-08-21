@@ -4,7 +4,7 @@
 ; Variables:
 ;   var03: Child "PART_SEED_ON_TREE" objects write here when Link touches them?
 ; ==================================================================================================
-enemyCode5a:
+m_EnemyCode $5a
 	ld e,Enemy.state
 	ld a,(de)
 	or a

@@ -13,7 +13,7 @@
 ;   var31/var32: Parent object's position last frame
 ;   var33-var3b: Offset buffer. Stores the parent's movement offsets for up to 8 frames.
 ; ==================================================================================================
-enemyCode4f:
+m_EnemyCode $4f
 	call moldorm_checkHazards
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH

@@ -10,7 +10,7 @@
 ;   var34: Current pillar index
 ;   var35: Bit 0 set if already showed veran's "taunting" text after using switch hook
 ; ==================================================================================================
-enemyCode61:
+m_EnemyCode $61
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

@@ -4,7 +4,7 @@
 ; Variables:
 ;   var03: How far to travel (copied to counter1)
 ; ==================================================================================================
-enemyCode2c:
+m_EnemyCode $2c
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

@@ -10,7 +10,7 @@
 ;   var36: If nonzero, spawns baby moths instead of ring of fire
 ;   var37: Counter until mothula will shoot a fireball (while circling around room)
 ; ==================================================================================================
-enemyCode7a:
+m_EnemyCode $7a
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

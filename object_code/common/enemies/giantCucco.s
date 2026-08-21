@@ -3,7 +3,7 @@
 ;
 ; Variables are the same as ENEMY_CUCCO.
 ; ==================================================================================================
-enemyCode3b:
+m_EnemyCode $3b
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

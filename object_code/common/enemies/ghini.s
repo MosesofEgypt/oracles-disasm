@@ -4,7 +4,7 @@
 ; Variables:
 ;   var30/31: Target Y/X position for subid 2 only
 ; ==================================================================================================
-enemyCode17:
+m_EnemyCode $17
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	jr c,@stunned

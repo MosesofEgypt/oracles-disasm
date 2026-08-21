@@ -2,9 +2,9 @@
 ; ENEMY_HARDHAT_BEETLE
 ; ENEMY_HARMLESS_HARDHAT_BEETLE (ages only)
 ; ==================================================================================================
-enemyCode4d:
+m_EnemyCode $4d
 .if defined(ROM_AGES) || defined(ROM_COMBO)
-enemyCode5f:
+m_EnemyCode $5f
 .endif
 	call ecom_checkHazards
 	jr z,@normalStatus

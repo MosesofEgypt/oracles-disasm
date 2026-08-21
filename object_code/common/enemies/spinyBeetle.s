@@ -6,7 +6,7 @@
 ;          this to determine relative Z position. Bit 7 is set to indicate it's grabbable.
 ;   var3b: Probably unused?
 ; ==================================================================================================
-enemyCode1b:
+m_EnemyCode $1b
 	call ecom_checkHazards
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH

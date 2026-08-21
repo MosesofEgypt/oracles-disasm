@@ -176,27 +176,124 @@
 ; Data macros
 ; ==================================================================================================
 
-.MACRO m_PartCode
-	.assert NARGS == 1
-	; wla is such a picky prick when it comes to string interpolation
-	.define partid {"{%.2x{\1}}"}
+.MACRO m_ObjectCode
+	.assert NARGS == 3
 
-	partCode{partid}:
+	; wla is such a picky prick when it comes to string interpolation
+	.define ID {"{%.2x{\1}}"}
+	.define DEF_PREFIX \2
+	.define CODE_PREFIX \3
+
+	{CODE_PREFIX}{ID}:
 	.ifdef EXTENDED_SECTION
 		.ifndef ROM_COMBO
-			.define PART_{partid}_IN_EXT EXTENDED_SECTION EXPORT
+			.define {DEF_PREFIX}_{ID}_EXT_SECT EXTENDED_SECTION EXPORT
 		.elif defined(ROM_AGES)
-			.define PART_{partid}_IN_EXT_AGES EXTENDED_SECTION EXPORT
+			.define {DEF_PREFIX}_{ID}_EXT_SECT_AGES EXTENDED_SECTION EXPORT
+			;.print {"AGES {CODE_PREFIX}{ID}\n"}
 		.elif defined(ROM_SEASONS)
-			.define PART_{partid}_IN_EXT_SEASONS EXTENDED_SECTION EXPORT
+			.define {DEF_PREFIX}_{ID}_EXT_SECT_SEASONS EXTENDED_SECTION EXPORT
+			;.print {"SEASONS {CODE_PREFIX}{ID}\n"}
 		.else
-			.define PART_{partid}_EXISTS 0 EXPORT
+			.define {DEF_PREFIX}_{ID}_EXISTS 0 EXPORT
 		.endif
 	.else
-		.define PART_{partid}_EXISTS 0 EXPORT
+		.define {DEF_PREFIX}_{ID}_EXISTS 0 EXPORT
 	.endif
-	.undefine partid
+	.undefine ID
+	.undefine DEF_PREFIX
+	.undefine CODE_PREFIX
 .ENDM
+
+.MACRO m_PartCode
+	.assert NARGS == 1
+	m_ObjectCode \1 "PART" "partCode"
+.ENDM
+
+.MACRO m_EnemyCode
+	.assert NARGS == 1
+	m_ObjectCode \1 "ENEMY" "enemyCode"
+.ENDM
+
+.MACRO m_InteractionCode
+	.assert NARGS == 1
+	m_ObjectCode \1 "INTERACTION" "interactionCode"
+.ENDM
+
+.MACRO m_CodePointer
+	.assert NARGS == 1
+	.if defined(ENABLE_NEW_GAME_PLUS)
+		3BytePointer \1
+	.else
+		.dw \1
+	.endif
+.ENDM
+
+.MACRO m_GenerateCodeTable
+	.assert NARGS == 4 || NARGS == 6
+	.define ITER_COUNT \1
+	.define NIL_FUNC \2
+	.define DEF_PREFIX \3
+	.define CODE_PREFIX \4
+
+	.if NARGS == 5
+		.define GAME_TYPE_UPPER \4
+		.define GAME_TYPE \5
+	.else
+		.define GAME_TYPE_UPPER ""
+		.define GAME_TYPE ""
+	.endif
+
+	.repeat ITER_COUNT index COUNT
+		.redefine ID {"{%.2x{COUNT}}"}
+		.redefine SECTION ""
+
+		.if defined({DEF_PREFIX}_{ID}_EXT_SECT)
+			.define SECTION_NUM {DEF_PREFIX}_{ID}_EXT_SECT
+			.define EXISTS
+
+		.elif defined({DEF_PREFIX}_{ID}_EXT_SECT_{GAME_TYPE_UPPER})
+			.define SECTION_NUM {DEF_PREFIX}_{ID}_EXT_SECT_{GAME_TYPE_UPPER}
+			.define IS_GAME_SPECIFIC
+			.define EXISTS
+
+		.elif defined({DEF_PREFIX}_{ID}_EXISTS)
+			.define EXISTS
+		.else
+			m_CodePointer NIL_FUNC
+			;.print {"FAIL TO FIND {CODE_PREFIX}{ID}\n"}
+		.endif
+
+		.ifdef EXISTS
+			.ifdef IS_GAME_SPECIFIC
+				.redefine SECTION {"{CODE_PREFIX}{GAME_TYPE}"}
+				.undefine IS_GAME_SPECIFIC
+			.else
+				.redefine SECTION {"{CODE_PREFIX}"}
+			.endif
+
+			.ifdef SECTION_NUM
+				.if SECTION_NUM > 0
+					.redefine SECTION {"{SECTION}Ext{SECTION_NUM}"}
+				.endif
+				.undefine SECTION_NUM
+			.endif
+
+			m_CodePointer {SECTION}.{CODE_PREFIX}{ID}
+
+			.undefine EXISTS
+		.endif
+
+	.endr
+
+	.undefine ID
+	.undefine SECTION
+	.undefine GAME_TYPE_UPPER
+	.undefine GAME_TYPE
+	.undefine NIL_FUNC
+	.undefine DEF_PREFIX
+	.undefine CODE_PREFIX
+.endm
 
 ; Pointers
 .MACRO 3BytePointer

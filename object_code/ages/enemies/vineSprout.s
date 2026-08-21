@@ -6,7 +6,7 @@
 ;   var32: Short-form position of vine sprout
 ;   var33: Nonzero if the "tile properties" underneath this sprout have been modified
 ; ==================================================================================================
-enemyCode62:
+m_EnemyCode $62
 	call objectReplaceWithAnimationIfOnHazard
 	ret c
 

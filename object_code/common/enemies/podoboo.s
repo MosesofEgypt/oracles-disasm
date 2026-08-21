@@ -6,7 +6,7 @@
 ;   var30: Animation index
 ;   var31: Initial Y position; the point at which the podoboo returns back to the lava
 ; ==================================================================================================
-enemyCode29:
+m_EnemyCode $29
 	; Return for ENEMYSTATUS_01 or ENEMYSTATUS_STUNNED
 	dec a
 	ret z

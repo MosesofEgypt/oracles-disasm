@@ -18,7 +18,7 @@
 ;   relatedObj2: Reference to subid 2 (sprites)
 ;   var30: Current animation
 ; ==================================================================================================
-enemyCode78:
+m_EnemyCode $78
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

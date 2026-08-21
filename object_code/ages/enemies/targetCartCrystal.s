@@ -4,7 +4,7 @@
 ; Variables:
 ;   var03: 0 for no movement, 1 for up/down, 2 for left/right
 ; ==================================================================================================
-enemyCode63:
+m_EnemyCode $63
 	jr z,@normalStatus	 
 
 	; ENEMYSTATUS_JUST_HIT

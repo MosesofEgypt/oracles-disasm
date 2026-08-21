@@ -671,7 +671,7 @@ m_section_free Ages_Interactions_Bank10 NAMESPACE agesInteractionsBank10
 
 ; NOTE: This section MUST be processed BEFORE "data/partCodeTable.s"
 .ifdef ENABLE_NEW_GAME_PLUS
-m_section_superfree Part_Code_2 NAMESPACE partCodeExt
+m_section_superfree Part_Code_2 NAMESPACE partCodeExt1
 	.include "object_code/common/parts/commonCode.s"
 	.define EXTENDED_SECTION 1
 

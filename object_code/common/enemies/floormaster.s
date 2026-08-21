@@ -17,7 +17,7 @@
 ;          (High nibble of original Y value.)
 ;   var34: Subid for child objects (high nibble of original X value, plus one)
 ; ==================================================================================================
-enemyCode35:
+m_EnemyCode $35
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

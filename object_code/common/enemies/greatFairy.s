@@ -6,7 +6,7 @@
 ;   var30: Counter used to update Z-position as she floats up and down
 ;   var31: Number of hearts spawned (the ones that circle around Link)
 ; ==================================================================================================
-enemyCode38:
+m_EnemyCode $38
 	ld e,Enemy.state
 	ld a,(de)
 	rst_jumpTable

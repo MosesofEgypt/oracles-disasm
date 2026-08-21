@@ -6,7 +6,7 @@
 ;   var31: Target stomp position (short-form)
 ;   var32/var33: Target stomp position (long-form)
 ; ==================================================================================================
-enemyCode71:
+m_EnemyCode $71
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

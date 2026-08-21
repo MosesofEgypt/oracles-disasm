@@ -14,7 +14,7 @@
 ;   relatedObj1: Reference to subid 1
 ;   var30: Nonzero if Link was caught?
 ; ==================================================================================================
-enemyCode7b:
+m_EnemyCode $7b
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

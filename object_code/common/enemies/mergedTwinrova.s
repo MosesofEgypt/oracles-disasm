@@ -15,7 +15,7 @@
 ;   var3a: Counter until twinrova's vulnerability ends and room will be swapped
 ;   var3b: # frames to wait in place before choosing new target position
 ; ==================================================================================================
-enemyCode01:
+m_EnemyCode $01
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

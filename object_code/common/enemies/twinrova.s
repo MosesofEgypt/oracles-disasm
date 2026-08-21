@@ -24,7 +24,7 @@
 ;   var38: Index in "attack pattern"? (0-7)
 ;   var39: Some kind of counter?
 ; ==================================================================================================
-enemyCode03:
+m_EnemyCode $03
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

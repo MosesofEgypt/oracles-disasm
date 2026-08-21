@@ -14,7 +14,7 @@
 ;   var37: Health value from when octogon appeared here (used to decide when to surface or
 ;          not)
 ; ==================================================================================================
-enemyCode7d:
+m_EnemyCode $7d
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

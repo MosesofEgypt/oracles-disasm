@@ -10,7 +10,7 @@
 ;          2: Ball should be thrown at Link.
 ;   var31: State to return to after switch hook is used on enemy
 ; ==================================================================================================
-enemyCode4b:
+m_EnemyCode $4b
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

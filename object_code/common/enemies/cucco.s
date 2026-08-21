@@ -11,7 +11,7 @@
 ;   var32: Counter used while being held
 ;   var33: Counter until next PART_CUCCO_ATTACKER is spawned
 ; ==================================================================================================
-enemyCode36:
+m_EnemyCode $36
 	jr z,@normalStatus
 
 	ld h,d

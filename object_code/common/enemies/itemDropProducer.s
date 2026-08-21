@@ -4,7 +4,7 @@
 ; Variables:
 ;   var30: Tile at position (item drop will spawn when this changes)
 ; ==================================================================================================
-enemyCode59:
+m_EnemyCode $59
 	ld e,Enemy.state
 	ld a,(de)
 	or a

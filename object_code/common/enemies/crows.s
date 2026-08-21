@@ -7,8 +7,8 @@
 ;   var31: Actual animation index
 ;   var32/var33: Target position (subid 1 only)
 ; ==================================================================================================
-enemyCode41:
-enemyCode4c:
+m_EnemyCode $41
+m_EnemyCode $4c
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

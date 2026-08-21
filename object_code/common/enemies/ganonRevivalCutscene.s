@@ -5,7 +5,7 @@
 ;   var30: Copied to counter2?
 ;   var31: Nonzero if initialization has occurred? (spawner only)
 ; ==================================================================================================
-enemyCode60:
+m_EnemyCode $60
 	ld e,Enemy.subid
 	ld a,(de)
 	or a

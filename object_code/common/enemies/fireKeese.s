@@ -10,7 +10,7 @@
 ;   var35: Angular rotation for subid 0. (set to -1 or 1 randomly on initialization, for
 ;          counterclockwise or clockwise movement)
 ; ==================================================================================================
-enemyCode39:
+m_EnemyCode $39
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

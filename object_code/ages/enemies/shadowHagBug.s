@@ -4,7 +4,7 @@
 ; Variables:
 ;   counter2: Lifetime counter
 ; ==================================================================================================
-enemyCode42:
+m_EnemyCode $42
 	jr z,++
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

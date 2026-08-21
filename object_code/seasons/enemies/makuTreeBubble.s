@@ -4,7 +4,7 @@
 ; Variables:
 ;   wTmpcfc0.normal.cfc0: bit 7 set when popped
 ; ==================================================================================================
-enemyCode56:
+m_EnemyCode $56
 	jr z,@normalStatus
 	ld e,Enemy.state
 	ld a,$02

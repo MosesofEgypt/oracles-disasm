@@ -9,9 +9,9 @@
 ;   var30: Nonzero if enemyCollisionMode was changed to ignore sword damage (due to the
 ;          enemy's sword blocking it)
 ; ==================================================================================================
-enemyCode3d:
-enemyCode49:
-enemyCode4a:
+m_EnemyCode $3d
+m_EnemyCode $49
+m_EnemyCode $4a
 	call ecom_checkHazards
 	call @runState
 	jp swordEnemy_updateEnemyCollisionMode
@@ -309,7 +309,7 @@ swordEnemy_gotoState8:
 ; ==================================================================================================
 ; ENEMY_SWORD_DARKNUT
 ; ==================================================================================================
-enemyCode48:
+m_EnemyCode $48
 	call ecom_seasonsFunc_4446
 	call @runState
 	jp swordDarknut_updateEnemyCollisionMode

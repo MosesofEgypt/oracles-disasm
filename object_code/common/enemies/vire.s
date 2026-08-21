@@ -15,7 +15,7 @@
 ;   var30: Rotation angle?
 ;   var35/var36: Target position?
 ; ==================================================================================================
-enemyCode75:
+m_EnemyCode $75
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

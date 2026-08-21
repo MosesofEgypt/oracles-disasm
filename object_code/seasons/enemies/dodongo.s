@@ -7,7 +7,7 @@
 ;   var32: Index in the "attack pattern" ($00-$0f).
 ;   var33: Animation index?
 ; ==================================================================================================
-enemyCode79:
+m_EnemyCode $79
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

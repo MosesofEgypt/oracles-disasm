@@ -10,7 +10,7 @@
 ;   var36: ?
 ;   var38: Timer to stay still after doing a movement pattern
 ; ==================================================================================================
-enemyCode06:
+m_EnemyCode $06
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

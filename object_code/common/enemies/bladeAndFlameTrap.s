@@ -10,9 +10,9 @@
 ;   var31: Center X for circular traps
 ;   var32: Radius of circle for circular traps
 ; ==================================================================================================
-enemyCode0e:
+m_EnemyCode $0e
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
-enemyCode2b:
+m_EnemyCode $2b
 .endif
 	dec a
 	ret z

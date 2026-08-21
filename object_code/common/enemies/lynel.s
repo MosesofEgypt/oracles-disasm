@@ -5,7 +5,7 @@
 ;   var30: Determines probability that the Lynel turns toward Link whenever it turns (less
 ;          bits set = more likely).
 ; ==================================================================================================
-enemyCode0d:
+m_EnemyCode $0d
 	call ecom_checkHazards
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH

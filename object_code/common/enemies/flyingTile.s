@@ -4,7 +4,7 @@
 ; Variables:
 ;   var30/var31: Pointer to current address in flyingTile_layoutData
 ; ==================================================================================================
-enemyCode52:
+m_EnemyCode $52
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

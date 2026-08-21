@@ -8,7 +8,7 @@
 ; Variables for actual beetles (subid 1+):
 ;   relatedObj1: Reference to spawner object (optional)
 ; ==================================================================================================
-enemyCode51:
+m_EnemyCode $51
 	call beetle_checkHazards
 	or a
 	jr z,@normalStatus

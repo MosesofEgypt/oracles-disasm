@@ -4,7 +4,7 @@
 ; Variables:
 ;   var30: Original y-position (where it returns to after stomping)
 ; ==================================================================================================
-enemyCode2e:
+m_EnemyCode $2e
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

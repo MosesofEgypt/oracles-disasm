@@ -8,7 +8,7 @@
 ;   var32: Target x-position to walk toward to grab bomb
 ;   var33: Signal from ENEMY_KING_MOBLIN_MINION to trigger warp to the outside
 ; ==================================================================================================
-enemyCode7f:
+m_EnemyCode $7f
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

@@ -6,7 +6,7 @@
 ;                area. For subid 0 (large baris) only.)
 ;   var32: Counter for "bobbing" of Z position
 ; ==================================================================================================
-enemyCode3c:
+m_EnemyCode $3c
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

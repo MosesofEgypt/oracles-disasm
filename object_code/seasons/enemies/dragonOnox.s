@@ -29,7 +29,7 @@
 ;   wTmpcfc0.genericCutscene.cfde - Pointer to left shoulder sphere (subid $08)
 ;   wTmpcfc0.genericCutscene.cfdf - Pointer to right shoulder sphere (subid $09)
 ; ==================================================================================================
-enemyCode05:
+m_EnemyCode $05
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

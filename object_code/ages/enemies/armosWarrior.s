@@ -21,7 +21,7 @@
 ;                collision box, so need to be reset to these values each frame)
 ;   var34: If nonzero, checks for collision with shield
 ; ==================================================================================================
-enemyCode73:
+m_EnemyCode $73
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

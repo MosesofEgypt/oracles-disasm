@@ -21,7 +21,7 @@
 ;   var3b: Current "angle" (rotation offset for children)
 ;   var3c: Counter until bit 0 of var39 gets reset
 ; ==================================================================================================
-enemyCode7b:
+m_EnemyCode $7b
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

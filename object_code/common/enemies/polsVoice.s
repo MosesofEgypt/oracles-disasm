@@ -4,7 +4,7 @@
 ; Variables:
 ;   var30: gravity
 ; ==================================================================================================
-enemyCode23:
+m_EnemyCode $23
 	call ecom_checkHazardsNoAnimationForHoles
 	call polsVoice_checkLinkPlayingInstrument
 	jr z,@normalStatus

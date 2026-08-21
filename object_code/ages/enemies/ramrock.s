@@ -6,7 +6,7 @@
 ;   var35: Incremented by hands when hit by bomb?
 ;   var36: Written to by shield hands?
 ; ==================================================================================================
-enemyCode07:
+m_EnemyCode $07
 	ld e,Enemy.state
 	ld a,(de)
 	rst_jumpTable

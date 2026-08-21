@@ -6,7 +6,7 @@
 ;   relatedObj2: For spawner (subid 0): reference to actual wallmaster.
 ;   var30: Nonzero if collided with Link (currently warping him out)
 ; ==================================================================================================
-enemyCode28:
+m_EnemyCode $28
 	jr z,@normalStatus
 	sub $03
 	ret c

@@ -617,7 +617,7 @@ m_section_free Seasons_Interactions_Bank0f NAMESPACE seasonsInteractionsBank0f
 
 ; NOTE: This section MUST be processed BEFORE "data/partCodeTable.s"
 .ifdef ENABLE_NEW_GAME_PLUS
-m_section_superfree Part_Code_3 NAMESPACE partCodeExt
+m_section_superfree Part_Code_3 NAMESPACE partCodeExt1
 	.include "object_code/common/parts/commonCode.s"
 	.define EXTENDED_SECTION 1
 

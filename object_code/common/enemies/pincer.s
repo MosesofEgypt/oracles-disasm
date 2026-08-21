@@ -7,7 +7,7 @@
 ;   var33: Amount extended (0 means still in hole)
 ;   var34: Copy of parent's "id" value. For body parts only.
 ; ==================================================================================================
-enemyCode45:
+m_EnemyCode $45
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
 	ret c

@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; ENEMY_GEL
 ; ==================================================================================================
-enemyCode43:
+m_EnemyCode $43
 	call ecom_checkHazardsNoAnimationForHoles
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH

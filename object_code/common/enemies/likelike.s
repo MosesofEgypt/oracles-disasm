@@ -5,7 +5,7 @@
 ;   relatedObj1: Pointer to the like-like spawner (subid 1), if one exists.
 ;   var30: Number of like-likes on-screen (for subid 1)
 ; ==================================================================================================
-enemyCode24:
+m_EnemyCode $24
 	call likelike_checkHazards
 	jr z,@normalStatus
 	sub ENEMYSTATUS_NO_HEALTH
