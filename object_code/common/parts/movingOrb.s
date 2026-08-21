@@ -115,3 +115,6 @@ m_PartCode $0b
 	dec (hl)
 	ret nz
 	jp objectRunMovementScript
+
+
+.include {"{GAME_DATA_DIR}/orbMovementScript.s"}

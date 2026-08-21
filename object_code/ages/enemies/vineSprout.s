@@ -444,7 +444,7 @@ vineSprout_getDefaultPosition:
 	ret
 
 @defaultVinePositions:
-	.include {"{GAME_DATA_DIR}/defaultVinePositions.s"}
+	.include "data/ages/defaultVinePositions.s"
 
 
 .ifndef REGION_JP

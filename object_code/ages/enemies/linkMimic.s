@@ -17,20 +17,24 @@ m_EnemyCode $64
 	ld a,(de)
 	rst_jumpTable
 	.dw @state_uninitialized
-	.dw armMimic_state_stub
-	.dw armMimic_state_stub
-	.dw armMimic_state_switchHook
-	.dw armMimic_state_stub
+	.dw linkMimic_state_stub
+	.dw linkMimic_state_stub
+	.dw linkMimic_state_switchHook
+	.dw linkMimic_state_stub
 	.dw ecom_blownByGaleSeedState
-	.dw armMimic_state_stub
-	.dw armMimic_state_stub
+	.dw linkMimic_state_stub
+	.dw linkMimic_state_stub
 	.dw linkMimic_state8
 
 
 @state_uninitialized:
 	ld a,PALH_82
 	call loadPaletteHeader
+.if defined(ROM_COMBO)
+	callab enemyCodeExt1.armMimic_uninitialized
+.else
 	call armMimic_uninitialized
+.endif
 	jp objectSetVisible83
 
 
@@ -38,4 +42,22 @@ linkMimic_state8:
 	ld a,(wDisabledObjects)
 	or a
 	ret nz
+.if defined(ROM_COMBO)
+	jpab enemyCodeExt1.armMimic_state8
+.else
 	jr armMimic_state8
+.endif
+
+linkMimic_state_switchHook:
+	inc e
+	ld a,(de)
+	rst_jumpTable
+	.dw ecom_incSubstate
+	.dw @substate1
+	.dw @substate2
+	.dw ecom_fallToGroundAndSetState8
+
+@substate1:
+@substate2:
+linkMimic_state_stub:
+	ret

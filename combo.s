@@ -225,7 +225,7 @@ m_section_superfree Interaction_Code_Group1 NAMESPACE commonInteractions1
 ;	.include "object_code/common/interactions/overworldKeySprite.s"
 ;	.include "object_code/common/interactions/faroresMemory.s"
 ;	.include "object_code/common/interactions/doorController.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_superfree Interaction_Code_Group2 NAMESPACE commonInteractions2
 ;	.include "object_code/common/interactions/shopkeeper.s"
@@ -233,7 +233,7 @@ m_section_superfree Interaction_Code_Group2 NAMESPACE commonInteractions2
 	.include "object_code/common/interactions/introSprites1.s"
 ;	.include "object_code/common/interactions/seasonsFairy.s"
 ;	.include "object_code/common/interactions/explosion.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_superfree Interaction_Code_Group3 NAMESPACE commonInteractions3
 ;	.include "object_code/common/interactions/bombFlower.s"
@@ -243,12 +243,12 @@ m_section_superfree Interaction_Code_Group3 NAMESPACE commonInteractions3
 ;	.include "object_code/common/interactions/spinner.s"
 ;	.include "object_code/common/interactions/minibossPortal.s"
 ;	.include "object_code/common/interactions/essence.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_superfree Interaction_Code_Group4 NAMESPACE commonInteractions4
 ;	.include "object_code/common/interactions/vasu.s"
 ;	.include "object_code/common/interactions/bubble.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_superfree Interaction_Code_Group5 NAMESPACE commonInteractions5
 ;	.include "object_code/common/interactions/woodenTunnel.s"
@@ -259,7 +259,7 @@ m_section_superfree Interaction_Code_Group5 NAMESPACE commonInteractions5
 ;	.include "object_code/common/interactions/kissHeart.s"
 ;	.include "object_code/common/interactions/banana.s"
 ;	.include "object_code/common/interactions/createObjectAtEachTileindex.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_superfree Interaction_Code_Group6 NAMESPACE commonInteractions6
 ;	.include "object_code/common/interactions/businessScrub.s"
@@ -269,18 +269,18 @@ m_section_superfree Interaction_Code_Group6 NAMESPACE commonInteractions6
 	.include "object_code/common/interactions/titlescreenClouds.s"
 	.include "object_code/common/interactions/introBird.s"
 ;	.include "object_code/common/interactions/linkShip.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_superfree Interaction_Code_Group7 NAMESPACE commonInteractions7
 ;	.include "object_code/common/interactions/faroreGiveItem.s"
 ;	.include "object_code/common/interactions/zeldaApproachTrigger.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_superfree Interaction_Code_Group8 NAMESPACE commonInteractions8
 ;	.include "object_code/common/interactions/eraOrSeasonInfo.s"
 ;	.include "object_code/common/interactions/statueEyeball.s"
 ;	.include "object_code/common/interactions/ringHelpBook.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_superfree Ages_Interactions_Bank8 NAMESPACE agesInteractionsBank08
 ;	.include "object_code/ages/interactions/toggleFloor.s"
@@ -316,7 +316,7 @@ m_section_superfree Ages_Interactions_Bank8 NAMESPACE agesInteractionsBank08
 ;	.include "object_code/ages/interactions/femaleVillager.s"
 ;	.include "object_code/ages/interactions/boy.s"
 ;	.include "object_code/ages/interactions/oldLady.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_superfree Ages_Interactions_Bank9 NAMESPACE agesInteractionsBank09
 ;	.include "object_code/ages/interactions/ghostVeran.s"
@@ -354,7 +354,7 @@ m_section_superfree Ages_Interactions_Bank9 NAMESPACE agesInteractionsBank09
 ;	.include "object_code/ages/interactions/raftwreckCutsceneHelper.s"
 ;	.include "object_code/ages/interactions/comedian.s"
 ;	.include "object_code/ages/interactions/goron.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_superfree Ages_Interactions_BankA NAMESPACE agesInteractionsBank0a
 ;	.include "object_code/common/interactions/companionSpawner.s"
@@ -396,7 +396,7 @@ m_section_superfree Ages_Interactions_BankA NAMESPACE agesInteractionsBank0a
 ;	.include "object_code/ages/interactions/ball.s"
 ;	.include "object_code/ages/interactions/moblin.s"
 ;	.include "object_code/ages/interactions/97.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_superfree Ages_Interactions_Bank0b NAMESPACE agesInteractionsBank0b
 ;	.include "object_code/ages/interactions/explosionWithDebris.s"
@@ -450,7 +450,7 @@ m_section_superfree Ages_Interactions_Bank0b NAMESPACE agesInteractionsBank0b
 ;	.include "object_code/ages/interactions/makuSeedAndEssences.s"
 ;	.include "object_code/ages/interactions/leverLavaFiller.s"
 ;	.include "object_code/ages/interactions/slateSlot.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_superfree Ages_Interactions_Bank10 NAMESPACE agesInteractionsBank10
 ;	.include "object_code/ages/interactions/miscellaneous2.s"
@@ -460,13 +460,13 @@ m_section_superfree Ages_Interactions_Bank10 NAMESPACE agesInteractionsBank10
 ;	.include "object_code/ages/interactions/timeportalSpawner.s"
 ;	.include "object_code/ages/interactions/knowItAllBird.s"
 ;	.include "object_code/ages/interactions/raft.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_superfree Ages_Interactions_Bank11 NAMESPACE agesInteractionsBank11
 ;	.include "object_code/ages/interactions/tuniNutMain.s"
 ;	.include "object_code/ages/interactions/monkeyMain.s"
 ;	.include "object_code/ages/interactions/rabbitMain.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_superfree Seasons_Interactions_Bank08 NAMESPACE seasonsInteractionsBank08
 ;	.include "object_code/seasons/interactions/usedRodOfSeasons.s"
@@ -513,7 +513,7 @@ m_section_superfree Seasons_Interactions_Bank08 NAMESPACE seasonsInteractionsBan
 ;	.include "object_code/seasons/interactions/lostWoodsDekuScrub.s"
 ;	.include "object_code/seasons/interactions/lavaSoupSubrosian.s"
 ;	.include "object_code/seasons/interactions/tradeItem.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_superfree Seasons_Interactions_Bank09 NAMESPACE seasonsInteractionsBank09
 ;	.include "object_code/seasons/interactions/quicksand.s"
@@ -552,7 +552,7 @@ m_section_superfree Seasons_Interactions_Bank09 NAMESPACE seasonsInteractionsBan
 
 makuTree_setAppropriateStage:
 	ret
-.ends
+m_EndObjectCodeSection
 
 m_section_superfree Seasons_Interactions_Bank0a NAMESPACE seasonsInteractionsBank0a
 ;	.include "object_code/seasons/interactions/sunkenCityNpcs.s"
@@ -603,7 +603,7 @@ m_section_superfree Seasons_Interactions_Bank0a NAMESPACE seasonsInteractionsBan
 ;	.include "object_code/seasons/interactions/zeldaVillagersRoom.s"
 ;	.include "object_code/seasons/interactions/d4HolesFloortrapRoom.s"
 ;	.include "object_code/seasons/interactions/herosCaveSwordChest.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_superfree Seasons_Interactions_Bank0f NAMESPACE seasonsInteractionsBank0f
 ;	.include "object_code/seasons/interactions/boomerangSubrosian.s"
@@ -615,7 +615,7 @@ m_section_superfree Seasons_Interactions_Bank0f NAMESPACE seasonsInteractionsBan
 ;	.include "object_code/seasons/interactions/greatFairy.s"
 ;	.include "object_code/seasons/interactions/dekuScrub.s"
 ;	.include "object_code/seasons/interactions/d7.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_superfree Seasons_Interactions_Bank15 NAMESPACE seasonsInteractionsBank15
 ;	.include "object_code/seasons/interactions/linkedFountainLady.s"
@@ -629,9 +629,9 @@ m_section_superfree Seasons_Interactions_Bank15 NAMESPACE seasonsInteractionsBan
 ;	.include "object_code/seasons/interactions/linkedHerosCaveOldMan.s"
 ;	.include "object_code/seasons/interactions/getRodOfSeasons.s"
 ;	.include "object_code/seasons/interactions/loneZora.s"
-.ends
+m_EndObjectCodeSection
 
-m_section_superfree Enemy_Code_1 NAMESPACE enemyCode
+m_EnemyCodeSection
 	.include "object_code/common/enemies/commonCode.s"
 
 	.include "object_code/common/enemies/riverZora.s"
@@ -656,27 +656,9 @@ m_section_superfree Enemy_Code_1 NAMESPACE enemyCode
 	.include "object_code/common/enemies/armos.s"
 	.include "object_code/common/enemies/piranha.s"
 	.include "object_code/common/enemies/ironMask.s"
+m_EndObjectCodeSection
 
-;	.include "object_code/ages/enemies/veranSpider.s"
-;	.include "object_code/ages/enemies/eyesoarChild.s"
-;	.include "object_code/ages/enemies/veranChildBee.s"
-;	.include "object_code/ages/enemies/enableSidescrollDownTransition.s"
-
-;	.include "object_code/seasons/enemies/magunesu.s"
-;	.include "object_code/seasons/enemies/unusedTemplate.s"
-;	.include "object_code/seasons/enemies/gohmaGel.s"
-;	.include "object_code/seasons/enemies/mothulaChild.s"
-;	.include "object_code/seasons/enemies/blaino.s"
-;	.include "object_code/seasons/enemies/miniDigdogger.s"
-;	.include "object_code/seasons/enemies/makuTreeBubble.s"
-;	.include "object_code/seasons/enemies/sandPuff.s"
-;	.include "object_code/seasons/enemies/wallFlameShooter.s"
-;	.include "object_code/seasons/enemies/blainosGloves.s"
-
-.ends
-
-m_section_superfree Enemy_Code_2 NAMESPACE enemyCodeExt1
-	.define EXTENDED_SECTION 1
+m_EnemyCodeSection
 	.include "object_code/common/enemies/commonCode.s"
 
 	.include "object_code/common/enemies/swordEnemies.s"
@@ -700,24 +682,10 @@ m_section_superfree Enemy_Code_2 NAMESPACE enemyCodeExt1
 	.include "object_code/common/enemies/twinrovaBat.s"
 	.include "object_code/common/enemies/ganonRevivalCutscene.s"
 
-;	.include "object_code/ages/enemies/linkMimic.s"
-;	.include "object_code/ages/enemies/bari.s"
-;	.include "object_code/ages/enemies/giantGhiniChild.s"
-;	.include "object_code/ages/enemies/shadowHagBug.s"
-;	.include "object_code/ages/enemies/colorChangingGel.s"
-;	.include "object_code/ages/enemies/ambiGuard.s"
-;	.include "object_code/ages/enemies/candle.s"
-;	.include "object_code/ages/enemies/kingMoblinMinion.s"
-;	.include "object_code/ages/enemies/veranPossessionBoss.s"
-;	.include "object_code/ages/enemies/vineSprout.s"
-;	.include "object_code/ages/enemies/targetCartCrystal.s"
-
 	.include {"{GAME_DATA_DIR}/movingSidescrollPlatform.s"}
-	.undefine EXTENDED_SECTION
-.ends
+m_EndObjectCodeSection
 
-m_section_superfree Enemy_Code_3 NAMESPACE enemyCodeExt2
-	.define EXTENDED_SECTION 2
+m_EnemyCodeSection
 	.include "object_code/common/enemies/commonCode.s"
 
 	.include "object_code/common/enemies/polsVoice.s"
@@ -744,107 +712,120 @@ m_section_superfree Enemy_Code_3 NAMESPACE enemyCodeExt2
 	.include "object_code/common/enemies/greatFairy.s"
 	.include "object_code/common/enemies/fireKeese.s"
 	.include "object_code/common/enemies/waterTektite.s"
-	.undefine EXTENDED_SECTION
-.ends
+m_EndObjectCodeSection
 
-m_section_superfree Enemy_Code_Ages_1 NAMESPACE enemyCodeAges
-	.define ROM_AGES
+m_EnemyCodeSection
 	.include "object_code/common/enemies/commonCode.s"
 	.include "object_code/common/enemies/commonBossCode.s"
 
-;	.include "object_code/common/enemies/vire.s"
-;	.include "object_code/ages/enemies/giantGhini.s"
-;	.include "object_code/ages/enemies/swoop.s"
-;	.include "object_code/ages/enemies/subterror.s"
-;	.include "object_code/ages/enemies/armosWarrior.s"
-;	.include "object_code/ages/enemies/smasher.s"
-;	.include "object_code/ages/enemies/anglerFish.s"
-;	.include "object_code/ages/enemies/blueStalfos.s"
-	.undefine ROM_AGES
-.ends
+	.include "object_code/common/enemies/vire.s"
+	.include "object_code/common/enemies/mergedTwinrova.s"
+	.include "object_code/common/enemies/twinrova.s"
+	.include "object_code/common/enemies/ganon.s"
+	.include "object_code/common/enemies/none.s"
+m_EndObjectCodeSection
 
-m_section_superfree Enemy_Code_Seasons_1 NAMESPACE enemyCodeSeasons
-	.define ROM_SEASONS
+m_EnemyCodeSection Ages
+	.include "object_code/common/enemies/commonCode.s"
+
+	.include "object_code/ages/enemies/eyesoarChild.s"
+	.include "object_code/ages/enemies/veranChildBee.s"
+	.include "object_code/ages/enemies/enableSidescrollDownTransition.s"
+	.include "object_code/ages/enemies/linkMimic.s"
+	.include "object_code/ages/enemies/bari.s"
+	.include "object_code/ages/enemies/giantGhiniChild.s"
+	.include "object_code/ages/enemies/shadowHagBug.s"
+	.include "object_code/ages/enemies/colorChangingGel.s"
+	.include "object_code/ages/enemies/ambiGuard.s"
+	.include "object_code/ages/enemies/candle.s"
+	.include "object_code/ages/enemies/vineSprout.s"
+	.include "object_code/ages/enemies/targetCartCrystal.s"
+m_EndObjectCodeSection
+
+m_EnemyCodeSection Ages
 	.include "object_code/common/enemies/commonCode.s"
 	.include "object_code/common/enemies/commonBossCode.s"
 
-;	.include "object_code/common/enemies/vire.s"
-;	.include "object_code/seasons/enemies/brotherGoriyas.s"
-;	.include "object_code/seasons/enemies/facade.s"
-;	.include "object_code/seasons/enemies/omuai.s"
-;	.include "object_code/seasons/enemies/agunima.s"
-;	.include "object_code/seasons/enemies/syger.s"
-;	.include "object_code/seasons/enemies/poeSister2.s"
-;	.include "object_code/seasons/enemies/poeSister1.s"
-;	.include "object_code/seasons/enemies/frypolar.s"
-;	.include "object_code/seasons/enemies/aquamentus.s"
-;	.include "object_code/seasons/enemies/dodongo.s"
-;	.include "object_code/seasons/enemies/mothula.s"
-;	.include "object_code/seasons/enemies/gohma.s"
-;	.include "object_code/seasons/enemies/digdogger.s"
-;	.include "object_code/seasons/enemies/manhandla.s"
-;	.include "object_code/seasons/enemies/medusaHead.s"
-	.undefine ROM_SEASONS
-.ends
+	.include "object_code/ages/enemies/pumpkinHead.s"
+	.include "object_code/ages/enemies/headThwomp.s"
+	.include "object_code/ages/enemies/shadowHag.s"
+	.include "object_code/ages/enemies/eyesoar.s"
+	.include "object_code/ages/enemies/smog.s"
+	.include "object_code/ages/enemies/octogon.s"
+	.include "object_code/ages/enemies/plasmarine.s"
+	.include "object_code/ages/enemies/kingMoblin.s"
+	.include "object_code/ages/enemies/ramrock.s"
+	.include "object_code/ages/enemies/ramrockArms.s"
+m_EndObjectCodeSection
 
-m_section_superfree Enemy_Code_Ages_2 NAMESPACE enemyCodeAgesExt1
-	.define ROM_AGES
-	.define EXTENDED_SECTION 1
+m_EnemyCodeSection Ages
 	.include "object_code/common/enemies/commonCode.s"
 	.include "object_code/common/enemies/commonBossCode.s"
 
-;	.include "object_code/ages/enemies/pumpkinHead.s"
-;	.include "object_code/ages/enemies/headThwomp.s"
-;	.include "object_code/ages/enemies/shadowHag.s"
-;	.include "object_code/ages/enemies/eyesoar.s"
-;	.include "object_code/ages/enemies/smog.s"
-;	.include "object_code/ages/enemies/octogon.s"
-;	.include "object_code/ages/enemies/plasmarine.s"
-;	.include "object_code/ages/enemies/kingMoblin.s"
-	.undefine EXTENDED_SECTION
-	.undefine ROM_AGES
-.ends
+	.include "object_code/ages/enemies/giantGhini.s"
+	.include "object_code/ages/enemies/swoop.s"
+	.include "object_code/ages/enemies/subterror.s"
+	.include "object_code/ages/enemies/armosWarrior.s"
+	.include "object_code/ages/enemies/smasher.s"
+	.include "object_code/ages/enemies/anglerFish.s"
+	.include "object_code/ages/enemies/blueStalfos.s"
 
-m_section_superfree Enemy_Code_Ages_3 NAMESPACE enemyCodeAgesExt2
-	.define ROM_AGES
-	.define EXTENDED_SECTION 2
+	.include "object_code/ages/enemies/kingMoblinMinion.s"
+	.include "object_code/ages/enemies/kingMoblinMinionMain.s"
+	.include "object_code/ages/enemies/veranFinalForm.s"
+	.include "object_code/ages/enemies/veranFairy.s"
+	.include "object_code/ages/enemies/veranSpider.s"
+	.include "object_code/ages/enemies/veranPossessionBoss.s"
+m_EndObjectCodeSection
+
+m_EnemyCodeSection Seasons
+	.include "object_code/common/enemies/commonCode.s"
+
+	.include "object_code/seasons/enemies/magunesu.s"
+	.include "object_code/seasons/enemies/unusedTemplate.s"
+	.include "object_code/seasons/enemies/gohmaGel.s"
+	.include "object_code/seasons/enemies/mothulaChild.s"
+	.include "object_code/seasons/enemies/blaino.s"
+	.include "object_code/seasons/enemies/miniDigdogger.s"
+	.include "object_code/seasons/enemies/makuTreeBubble.s"
+	.include "object_code/seasons/enemies/sandPuff.s"
+	.include "object_code/seasons/enemies/wallFlameShooter.s"
+	.include "object_code/seasons/enemies/blainosGloves.s"
+m_EndObjectCodeSection
+
+m_EnemyCodeSection Seasons
 	.include "object_code/common/enemies/commonCode.s"
 	.include "object_code/common/enemies/commonBossCode.s"
 
-;	.include "object_code/common/enemies/mergedTwinrova.s"
-;	.include "object_code/common/enemies/twinrova.s"
-;	.include "object_code/common/enemies/ganon.s"
-;	.include "object_code/common/enemies/none.s"
+	.include "object_code/seasons/enemies/aquamentus.s"
+	.include "object_code/seasons/enemies/dodongo.s"
+	.include "object_code/seasons/enemies/mothula.s"
+	.include "object_code/seasons/enemies/gohma.s"
+	.include "object_code/seasons/enemies/digdogger.s"
+	.include "object_code/seasons/enemies/manhandla.s"
+	.include "object_code/seasons/enemies/medusaHead.s"
+	.include "object_code/seasons/enemies/gleeok.s"
+m_EndObjectCodeSection
 
-;	.include "object_code/ages/enemies/veranFinalForm.s"
-;	.include "object_code/ages/enemies/ramrockArms.s"
-;	.include "object_code/ages/enemies/veranFairy.s"
-;	.include "object_code/ages/enemies/ramrock.s"
-;	.include "object_code/ages/enemies/kingMoblinMinionMain.s"
-	.undefine EXTENDED_SECTION
-	.undefine ROM_AGES
-.ends
-
-m_section_superfree Enemy_Code_Seasons_2 NAMESPACE enemyCodeSeasonsExt1
-	.define ROM_SEASONS
-	.define EXTENDED_SECTION 1
+m_EnemyCodeSection Seasons
 	.include "object_code/common/enemies/commonCode.s"
 	.include "object_code/common/enemies/commonBossCode.s"
 
-;	.include "object_code/common/enemies/mergedTwinrova.s"
-;	.include "object_code/common/enemies/twinrova.s"
-;	.include "object_code/common/enemies/ganon.s"
-;	.include "object_code/common/enemies/none.s"
+	.include "object_code/seasons/enemies/brotherGoriyas.s"
+	.include "object_code/seasons/enemies/facade.s"
+	.include "object_code/seasons/enemies/omuai.s"
+	.include "object_code/seasons/enemies/agunima.s"
+	.include "object_code/seasons/enemies/syger.s"
+	.include "object_code/seasons/enemies/poeSister2.s"
+	.include "object_code/seasons/enemies/poeSister1.s"
+	.include "object_code/seasons/enemies/frypolar.s"
 
-;	.include "object_code/seasons/enemies/generalOnox.s"
-;	.include "object_code/seasons/enemies/dragonOnox.s"
-;	.include "object_code/seasons/enemies/gleeok.s"
-;	.include "object_code/seasons/enemies/kingMoblin.s"
-	.undefine EXTENDED_SECTION
-	.undefine ROM_SEASONS
-.ends
+	.include "object_code/seasons/enemies/generalOnox.s"
+	.include "object_code/seasons/enemies/dragonOnox.s"
+	.include "object_code/seasons/enemies/kingMoblin.s"
+m_EndObjectCodeSection
 
-m_section_superfree Part_Code_1 NAMESPACE partCode
+m_PartCodeSection
 	.include "object_code/common/parts/commonCode.s"
 
 	.include "object_code/common/parts/itemDrop.s"
@@ -890,14 +871,11 @@ m_section_superfree Part_Code_1 NAMESPACE partCode
 	.include "object_code/common/parts/51.s"
 	.include "object_code/common/parts/52.s"
 	.include "object_code/common/parts/blueEnergyBead.s"
-
-.ends
+m_EndObjectCodeSection
 
 ; NOTE: This section MUST be processed BEFORE "data/partCodeTable.s"
-m_section_superfree Part_Code_2 NAMESPACE partCodeAges
+m_PartCodeSection Ages
 	.include "object_code/common/parts/commonCode.s"
-	.define ROM_AGES
-	.define EXTENDED_SECTION
 
 	.include "object_code/ages/parts/jabuJabusBubbles.s"
 	.include "object_code/ages/parts/grottoCrystal.s"
@@ -945,16 +923,11 @@ m_section_superfree Part_Code_2 NAMESPACE partCodeAges
 	m_PartCode $0a
 	m_PartCode $0d
 		ret
-
-	.undefine EXTENDED_SECTION
-	.undefine ROM_AGES
-.ends
+m_EndObjectCodeSection
 
 ; NOTE: This section MUST be processed BEFORE "data/partCodeTable.s"
-m_section_superfree Part_Code_3 NAMESPACE partCodeSeasons
+m_PartCodeSection Seasons
 	.include "object_code/common/parts/commonCode.s"
-	.define ROM_SEASONS
-	.define EXTENDED_SECTION
 
 	.include "object_code/seasons/parts/holesFloortrap.s"
 	.include "object_code/seasons/parts/slingshotEyeStatue.s"
@@ -994,19 +967,11 @@ m_section_superfree Part_Code_3 NAMESPACE partCodeSeasons
 	m_PartCode $36
 	m_PartCode $37
 		ret
-
-	.undefine EXTENDED_SECTION
-	.undefine ROM_SEASONS
-.ends
+m_EndObjectCodeSection
 
 m_section_superfree Terrain_Effects NAMESPACE terrainEffects
 	.include "data/terrainEffects.s"
 	.include "code/terrainEffects.s"
-.ends
-
-m_section_superfree Object_Movement namespace objectMovement
-	.include {"{GAME_DATA_DIR}/orbMovementScript.s"}
-	.include "code/objectMovementScript.s"
 .ends
 
 m_section_superfree Bank16_2 NAMESPACE bank16

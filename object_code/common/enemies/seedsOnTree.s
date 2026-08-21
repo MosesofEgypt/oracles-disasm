@@ -16,20 +16,6 @@ m_EnemyCode $5a
 	ld a,$01
 	ld (de),a ; [state]
 
-.ifdef ENABLE_RING_REDUX
-	; make tree visible(so azuchu can see it), but have it use
-	; a blank tile so it doesn't actually look like anything.
-	ld e,Enemy.visible
-	ld a,$80
-	ld (de),a
-	swap a
-	ld e,Enemy.oamDataAddress
-	ld (de),a
-	xor a
-	inc e
-	ld (de),a
-.endif
-
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
 	call wIsSeasons
@@ -88,6 +74,24 @@ m_EnemyCode $5a
 	and (hl)
 	jp z,enemyDelete
 	+
+.endif
+
+.ifdef ENABLE_RING_REDUX
+	; make tree visible(so azuchu can see it), but have it use
+	; a blank tile so it doesn't actually look like anything.
+	ld e,Enemy.visible
+	ld a,$80
+	ld (de),a
+.if defined(ROM_COMBO)
+	xor a
+.else
+	ld a,$08
+.endif
+	ld e,Enemy.oamDataAddress
+	ld (de),a
+	xor a
+	inc e
+	ld (de),a
 .endif
 
 	; Spawn the 3 seed objects

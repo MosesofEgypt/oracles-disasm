@@ -35,7 +35,11 @@ m_EnemyCode $47
 	; Only allow switch hook and sword attacks to kill the gel
 	ldi a,(hl)
 	res 7,a
+.if defined(ROM_COMBO)
+	cp ITEMCOLLISION_SWITCH_HOOK_A
+.else
 	cp ITEMCOLLISION_SWITCH_HOOK
+.endif
 	jr z,@wasDamagingAttack
 	sub ITEMCOLLISION_L1_SWORD
 	cp ITEMCOLLISION_SWORD_HELD-ITEMCOLLISION_L1_SWORD + 1

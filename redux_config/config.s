@@ -5,6 +5,10 @@
 ;		Setting the define value to '0' or something won't disable it.
 ;;
 
+; prints information about each dynamically created object
+; code section and the object code references within it
+;.define DEBUG_SECTION_PRINTOUT
+
 .ifdef ENABLE_FULL_REDUX
 	; if ENABLE_FULL_REDUX is enabled, the options below will
 	; be enabled. This is the easiest way to enable everything.

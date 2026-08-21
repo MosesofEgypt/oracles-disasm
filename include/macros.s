@@ -165,6 +165,107 @@
 	.endif
 .endm
 
+.macro m_ObjectCodeSection
+	.assert NARGS == 2 || NARGS == 3
+
+	.define EXTENDED_SECTION \1
+	.define SECTION_NAME {"\2"}
+	.define GAME_TYPE ""
+	.if NARGS > 2
+		.redefine GAME_TYPE {"\3"}
+		.redefine SECTION_NAME {"{SECTION_NAME}{GAME_TYPE}"}
+	.endif
+
+	.assert GAME_TYPE == "" || GAME_TYPE == "Ages" || GAME_TYPE == "Seasons"
+
+	.if EXTENDED_SECTION != 0
+		.redefine SECTION_NAME {"{SECTION_NAME}Ext{EXTENDED_SECTION}"}
+	.endif
+
+	.if defined(ROM_COMBO) && GAME_TYPE != ""
+		.if GAME_TYPE == "Ages"
+			.define ROM_AGES
+		.elif GAME_TYPE == "Seasons"
+			.define ROM_SEASONS
+		.endif
+	.endif
+
+	.if defined(DEBUG_SECTION_PRINTOUT)
+		.print {"Creating section: {SECTION_NAME}\n"}
+	.endif
+	m_section_superfree {SECTION_NAME}_Section NAMESPACE SECTION_NAME
+
+	.undefine GAME_TYPE
+.endm
+
+.macro m_EnemyCodeSection
+	.assert NARGS == 0 || NARGS == 1
+	.ifndef ENEMY_SECTION_COUNT
+		.define ENEMY_SECTION_COUNT 0
+	.endif
+
+	.if NARGS == 1
+		m_ObjectCodeSection ENEMY_SECTION_COUNT "enemyCode" \1
+	.else
+		m_ObjectCodeSection ENEMY_SECTION_COUNT "enemyCode"
+	.endif
+
+	.redefine ENEMY_SECTION_COUNT ENEMY_SECTION_COUNT+1
+.endm
+
+.macro m_PartCodeSection
+	.assert NARGS == 0 || NARGS == 1
+	.ifndef PART_SECTION_COUNT
+		.define PART_SECTION_COUNT 0
+	.endif
+
+	.if NARGS == 1
+		m_ObjectCodeSection PART_SECTION_COUNT "partCode" \1
+	.else
+		m_ObjectCodeSection PART_SECTION_COUNT "partCode"
+	.endif
+
+	.redefine PART_SECTION_COUNT PART_SECTION_COUNT+1
+.endm
+
+.macro m_InteractionObjectCodeSection
+	.assert NARGS == 0 || NARGS == 1
+	.ifndef INTERACTION_SECTION_COUNT
+		.define INTERACTION_SECTION_COUNT 0
+	.endif
+
+	.if NARGS == 1
+		m_ObjectCodeSection INTERACTION_SECTION_COUNT "interactionCode" \1
+	.else
+		m_ObjectCodeSection INTERACTION_SECTION_COUNT "interactionCode"
+	.endif
+
+	.redefine INTERACTION_SECTION_COUNT INTERACTION_SECTION_COUNT+1
+.endm
+
+.macro m_EndObjectCodeSection
+	.if defined(SECTION_NAME)
+		.if defined(DEBUG_SECTION_PRINTOUT)
+			.print {"Ending section: {SECTION_NAME}\n"}
+		.endif
+		.undefine SECTION_NAME
+	.endif
+
+	.if defined(ROM_COMBO)
+		.ifdef ROM_AGES
+			.undefine ROM_AGES
+		.endif
+		.ifdef ROM_SEASONS
+			.undefine ROM_SEASONS
+		.endif
+	.endif
+	.ifdef EXTENDED_SECTION
+		.undefine EXTENDED_SECTION
+	.endif
+
+	.ends
+.endm
+
 ; Include something from the "rooms" directory based on the game
 .macro m_IncRoomData
 	.assert NARGS == 2
@@ -185,24 +286,35 @@
 	.define CODE_PREFIX \3
 
 	{CODE_PREFIX}{ID}:
-	.ifdef EXTENDED_SECTION
+	.define DEF_NAME {"{DEF_PREFIX}_{ID}"}
+	.if EXTENDED_SECTION != 0
+		.redefine DEF_NAME {"{DEF_NAME}_EXT_SECT"}
 		.ifndef ROM_COMBO
-			.define {DEF_PREFIX}_{ID}_EXT_SECT EXTENDED_SECTION EXPORT
+			.define {DEF_NAME} EXTENDED_SECTION EXPORT
+			.define SECT_DESC {"extended section {EXTENDED_SECTION} with define {DEF_NAME}"}
 		.elif defined(ROM_AGES)
-			.define {DEF_PREFIX}_{ID}_EXT_SECT_AGES EXTENDED_SECTION EXPORT
-			;.print {"AGES {CODE_PREFIX}{ID}\n"}
+			.define {DEF_NAME}_AGES EXTENDED_SECTION EXPORT
+			.define SECT_DESC {"extended ages section {EXTENDED_SECTION} with define {DEF_NAME}_AGES"}
 		.elif defined(ROM_SEASONS)
-			.define {DEF_PREFIX}_{ID}_EXT_SECT_SEASONS EXTENDED_SECTION EXPORT
-			;.print {"SEASONS {CODE_PREFIX}{ID}\n"}
+			.define {DEF_NAME}_SEASONS EXTENDED_SECTION EXPORT
+			.define SECT_DESC {"extended seasons section {EXTENDED_SECTION} with define {DEF_NAME}_SEASONS"}
 		.else
-			.define {DEF_PREFIX}_{ID}_EXT_SECT EXTENDED_SECTION EXPORT
+			.define {DEF_NAME} EXTENDED_SECTION EXPORT
+			.define SECT_DESC {"extended common section {EXTENDED_SECTION} with define {DEF_NAME}"}
 		.endif
 	.else
-		.define {DEF_PREFIX}_{ID}_EXISTS 0 EXPORT
+		.define {DEF_NAME}_EXISTS 0 EXPORT
+		.define SECT_DESC "common section"
+	.endif
+
+	.if defined(DEBUG_SECTION_PRINTOUT)
+		.print {"\tCreated label {CODE_PREFIX}{ID} in {SECT_DESC}\n"}
 	.endif
 	.undefine ID
 	.undefine DEF_PREFIX
+	.undefine DEF_NAME
 	.undefine CODE_PREFIX
+	.undefine SECT_DESC
 .ENDM
 
 .MACRO m_PartCode
@@ -243,9 +355,9 @@
 	.define DEF_PREFIX \3
 	.define CODE_PREFIX \4
 
-	.if NARGS == 5
-		.define GAME_TYPE_UPPER \4
-		.define GAME_TYPE \5
+	.if NARGS == 6
+		.define GAME_TYPE_UPPER \5
+		.define GAME_TYPE \6
 	.else
 		.define GAME_TYPE_UPPER ""
 		.define GAME_TYPE ""
@@ -254,7 +366,6 @@
 	.repeat ITER_COUNT index COUNT
 		.redefine ID {"{%.2x{COUNT}}"}
 		.redefine SECTION ""
-
 		.if defined({DEF_PREFIX}_{ID}_EXT_SECT)
 			.define SECTION_NUM {DEF_PREFIX}_{ID}_EXT_SECT
 			.define EXISTS
@@ -268,7 +379,7 @@
 			.define EXISTS
 		.else
 			m_CodePointer NIL_FUNC
-			;.print {"FAIL TO FIND {CODE_PREFIX}{ID}\n"}
+			.print {"FAIL TO FIND {CODE_PREFIX}{ID}\n"}
 		.endif
 
 		.ifdef EXISTS
@@ -287,6 +398,7 @@
 			.endif
 
 			m_CodePointer {SECTION}.{CODE_PREFIX}{ID}
+			.print {"Found {SECTION}.{CODE_PREFIX}{ID}\n"}
 
 			.undefine EXISTS
 		.endif

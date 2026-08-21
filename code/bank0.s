@@ -8452,7 +8452,6 @@ objectUpdateSpeedZAndBounce:
 	call objectUpdateSpeedZ_paramC
 	ret nz
 
-.if !defined(ROM_COMBO)
 ;;
 ; Inverts an object's Z speed and halves it. Used for bombs when bouncing on the ground.
 ;
@@ -8503,7 +8502,6 @@ objectNegateAndHalveSpeedZ:
 
 	xor a
 	ret
-.endif
 
 ;;
 ; @param	bc	speedZ

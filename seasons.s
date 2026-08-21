@@ -236,7 +236,7 @@ m_section_free Interaction_Code_Group1 NAMESPACE commonInteractions1
 	.include "object_code/common/interactions/faroresMemory.s"
 	.include "object_code/seasons/interactions/rupeeRoomRupees.s" ; Unique to Seasons
 	.include "object_code/common/interactions/doorController.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_free Interaction_Code_Group2 NAMESPACE commonInteractions2
 	.include "object_code/common/interactions/shopkeeper.s"
@@ -244,7 +244,7 @@ m_section_free Interaction_Code_Group2 NAMESPACE commonInteractions2
 	.include "object_code/common/interactions/introSprites1.s"
 	.include "object_code/common/interactions/seasonsFairy.s"
 	.include "object_code/common/interactions/explosion.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_free Seasons_Interactions_Bank08 NAMESPACE seasonsInteractionsBank08
 	.include "object_code/seasons/interactions/usedRodOfSeasons.s"
@@ -291,8 +291,7 @@ m_section_free Seasons_Interactions_Bank08 NAMESPACE seasonsInteractionsBank08
 	.include "object_code/seasons/interactions/lostWoodsDekuScrub.s"
 	.include "object_code/seasons/interactions/lavaSoupSubrosian.s"
 	.include "object_code/seasons/interactions/tradeItem.s"
-.ends
-
+m_EndObjectCodeSection
 
 .BANK $09 SLOT 1
 .ORG 0
@@ -307,7 +306,7 @@ m_section_free Interaction_Code_Group3 NAMESPACE commonInteractions3
 	.include "object_code/common/interactions/spinner.s"
 	.include "object_code/common/interactions/minibossPortal.s"
 	.include "object_code/common/interactions/essence.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_free Seasons_Interactions_Bank09 NAMESPACE seasonsInteractionsBank09
 	.include "object_code/seasons/interactions/quicksand.s"
@@ -343,7 +342,7 @@ m_section_free Seasons_Interactions_Bank09 NAMESPACE seasonsInteractionsBank09
 	.include "object_code/seasons/interactions/templeSinkingExplosion.s"
 	.include "object_code/seasons/interactions/makuTree.s"
 	.include "object_code/seasons/interactions/88.s"
-.ends
+m_EndObjectCodeSection
 
 
 .BANK $0a SLOT 1
@@ -352,7 +351,7 @@ m_section_free Seasons_Interactions_Bank09 NAMESPACE seasonsInteractionsBank09
 m_section_free Interaction_Code_Group4 NAMESPACE commonInteractions4
 	.include "object_code/common/interactions/vasu.s"
 	.include "object_code/common/interactions/bubble.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_free Interaction_Code_Group5 NAMESPACE commonInteractions5
 	.include "object_code/common/interactions/woodenTunnel.s"
@@ -363,7 +362,7 @@ m_section_free Interaction_Code_Group5 NAMESPACE commonInteractions5
 	.include "object_code/common/interactions/kissHeart.s"
 	.include "object_code/common/interactions/banana.s"
 	.include "object_code/common/interactions/createObjectAtEachTileindex.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_free Seasons_Interactions_Bank0a NAMESPACE seasonsInteractionsBank0a
 	.include "object_code/seasons/interactions/sunkenCityNpcs.s"
@@ -414,7 +413,7 @@ m_section_free Seasons_Interactions_Bank0a NAMESPACE seasonsInteractionsBank0a
 	.include "object_code/seasons/interactions/zeldaVillagersRoom.s"
 	.include "object_code/seasons/interactions/d4HolesFloortrapRoom.s"
 	.include "object_code/seasons/interactions/herosCaveSwordChest.s"
-.ends
+m_EndObjectCodeSection
 
 
 .BANK $0b SLOT 1
@@ -425,12 +424,10 @@ m_section_free Seasons_Interactions_Bank0a NAMESPACE seasonsInteractionsBank0a
 		.include "scripts/seasons/scripts.s"
 	.ends
 
-
 .BANK $0c SLOT 1
 .ORG 0
 
-m_section_free Enemy_Code_1 NAMESPACE enemyCode
-
+m_EnemyCodeSection
 	.include "object_code/common/enemies/commonCode.s"
 
 	.include "object_code/common/enemies/riverZora.s"
@@ -471,7 +468,7 @@ m_section_free Enemy_Code_1 NAMESPACE enemyCode
 	.include "object_code/seasons/enemies/rollingSpikeTrap.s"
 	.include "object_code/seasons/enemies/pokey.s"
 	.include "object_code/common/enemies/ironMask.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_superfree Enemy_Animations
 	.include {"{GAME_DATA_DIR}/enemyAnimations.s"}
@@ -480,9 +477,7 @@ m_section_superfree Enemy_Animations
 .BANK $0d SLOT 1
 .ORG 0
 
-m_section_free Enemy_Code_2 NAMESPACE enemyCodeExt1
-	.define EXTENDED_SECTION 1
-
+m_EnemyCodeSection
 	.include "object_code/common/enemies/commonCode.s"
 
 .ifndef ENABLE_NEW_GAME_PLUS
@@ -532,22 +527,13 @@ m_section_free Enemy_Code_2 NAMESPACE enemyCodeExt1
 	.include "object_code/seasons/enemies/blainosGloves.s"
 
 	.include {"{GAME_DATA_DIR}/movingSidescrollPlatform.s"}
-
-	.undefine EXTENDED_SECTION
-.ends
-
-m_section_superfree Object_Movement namespace objectMovement
-	.include {"{GAME_DATA_DIR}/orbMovementScript.s"}
-	.include "code/objectMovementScript.s"
-.ends
+m_EndObjectCodeSection
 
 
 .BANK $0e SLOT 1
 .ORG 0
 
-m_section_free Enemy_Code_3 NAMESPACE enemyCodeExt2
-	.define EXTENDED_SECTION 2
-
+m_EnemyCodeSection
 	.include "object_code/common/enemies/commonCode.s"
 	.include "object_code/common/enemies/commonBossCode.s"
 
@@ -567,15 +553,12 @@ m_section_free Enemy_Code_3 NAMESPACE enemyCodeExt2
 	.include "object_code/seasons/enemies/digdogger.s"
 	.include "object_code/seasons/enemies/manhandla.s"
 	.include "object_code/seasons/enemies/medusaHead.s"
-
-	.undefine EXTENDED_SECTION
-.ends
+m_EndObjectCodeSection
 
 .BANK $0f SLOT 1
 .ORG 0
 
-m_section_free Enemy_Code_4 NAMESPACE enemyCodeExt3
-	.define EXTENDED_SECTION 3
+m_EnemyCodeSection
 
 	.include "object_code/common/enemies/commonCode.s"
 	.include "object_code/common/enemies/commonBossCode.s"
@@ -591,15 +574,7 @@ m_section_free Enemy_Code_4 NAMESPACE enemyCodeExt3
 	.include "object_code/seasons/enemies/kingMoblin.s"
 
 	.include "code/seasons/cutscenes/transitionToDragonOnox.s"
-
-	.undefine EXTENDED_SECTION
-.ends
-
-.ifdef BUILD_VANILLA
-	.REPT $87
-	.db $0f ; emptyfill (TODO: replace this with ORGA, update md5 for emptyfill-0)
-	.ENDR
-.endif
+m_EndObjectCodeSection
 
 m_section_free Interaction_Code_Group6 NAMESPACE commonInteractions6
 	.include "object_code/common/interactions/businessScrub.s"
@@ -609,7 +584,7 @@ m_section_free Interaction_Code_Group6 NAMESPACE commonInteractions6
 	.include "object_code/common/interactions/titlescreenClouds.s"
 	.include "object_code/common/interactions/introBird.s"
 	.include "object_code/common/interactions/linkShip.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_free Seasons_Interactions_Bank0f NAMESPACE seasonsInteractionsBank0f
 	.include "object_code/seasons/interactions/boomerangSubrosian.s"
@@ -621,55 +596,12 @@ m_section_free Seasons_Interactions_Bank0f NAMESPACE seasonsInteractionsBank0f
 	.include "object_code/seasons/interactions/greatFairy.s"
 	.include "object_code/seasons/interactions/dekuScrub.s"
 	.include "object_code/seasons/interactions/d7.s"
-.ends
+m_EndObjectCodeSection
 
 ; NOTE: This section MUST be processed BEFORE "data/partCodeTable.s"
 .ifdef ENABLE_NEW_GAME_PLUS
-m_section_superfree Part_Code_3 NAMESPACE partCodeExt1
-	.include "object_code/common/parts/commonCode.s"
-	.define EXTENDED_SECTION 1
 
-	.include "object_code/seasons/parts/holesFloortrap.s"
-	.include "object_code/seasons/parts/slingshotEyeStatue.s"
-	.include "object_code/seasons/parts/16.s"
-	.include "object_code/seasons/parts/shootingDragonHead.s"
-	.include "object_code/seasons/parts/arrowShooter.s"
-	.include "object_code/seasons/parts/wallFlameShooterFlames.s"
-	.include "object_code/seasons/parts/buriedMoldorm.s"
-	.include "object_code/seasons/parts/kingMoblinsCannons.s"
-	.include "object_code/seasons/parts/2e.s"
-	.include "object_code/seasons/parts/2f.s"
-	.include "object_code/seasons/parts/poppableBubble.s"
-	.include "object_code/seasons/parts/33.s"
-	.include "object_code/seasons/parts/38.s"
-	.include "object_code/seasons/parts/39.s"
-	.include "object_code/common/parts/vireProjectile.s"
-	.include "object_code/seasons/parts/3b.s"
-	.include "object_code/seasons/parts/poeSisterFlame.s"
-	.include "object_code/seasons/parts/3d.s"
-	.include "object_code/seasons/parts/3e.s"
-	.include "object_code/seasons/parts/kingMoblinBomb.s"
-	.include "object_code/seasons/parts/aquamentusProjectile.s"
-	.include "object_code/seasons/parts/dodongoFireball.s"
-	.include "object_code/seasons/parts/mothulaProjectile2.s"
-	.include "object_code/seasons/parts/43.s"
-	.include "object_code/seasons/parts/44.s"
-	.include "object_code/seasons/parts/45.s"
-	.include "object_code/seasons/parts/46.s"
-	.include "object_code/seasons/parts/47.s"
-	.include "object_code/seasons/parts/48.s"
-	.include "object_code/seasons/parts/49.s"
-	.include "object_code/seasons/parts/4a.s"
-	.include "object_code/seasons/parts/dinCrystal.s"
-	.undefine EXTENDED_SECTION
-.ends
-.endif
-
-
-.BANK $10 SLOT 1
-.ORG 0
-
-m_section_free Part_Code NAMESPACE partCode
+m_PartCodeSection
 	.include "object_code/common/parts/commonCode.s"
 
 	.include "object_code/common/parts/itemDrop.s"
@@ -715,12 +647,13 @@ m_section_free Part_Code NAMESPACE partCode
 	.include "object_code/common/parts/51.s"
 	.include "object_code/common/parts/52.s"
 	.include "object_code/common/parts/blueEnergyBead.s"
-.ends
+m_EndObjectCodeSection
 
-	.include "code/roomInitialization.s"
+.BANK $10 SLOT 1
+.ORG 0
+m_PartCodeSection
+	.include "object_code/common/parts/commonCode.s"
 
-m_section_free Part_Code_2 NAMESPACE partCode
-.ifndef ENABLE_NEW_GAME_PLUS
 	.include "object_code/seasons/parts/holesFloortrap.s"
 	.include "object_code/seasons/parts/slingshotEyeStatue.s"
 	.include "object_code/seasons/parts/16.s"
@@ -753,8 +686,47 @@ m_section_free Part_Code_2 NAMESPACE partCode
 	.include "object_code/seasons/parts/49.s"
 	.include "object_code/seasons/parts/4a.s"
 	.include "object_code/seasons/parts/dinCrystal.s"
+m_EndObjectCodeSection
 .endif
-.ends
+
+	.include "code/roomInitialization.s"
+
+.ifndef ENABLE_NEW_GAME_PLUS
+m_PartCodeSection
+	.include "object_code/seasons/parts/holesFloortrap.s"
+	.include "object_code/seasons/parts/slingshotEyeStatue.s"
+	.include "object_code/seasons/parts/16.s"
+	.include "object_code/seasons/parts/shootingDragonHead.s"
+	.include "object_code/seasons/parts/arrowShooter.s"
+	.include "object_code/seasons/parts/wallFlameShooterFlames.s"
+	.include "object_code/seasons/parts/buriedMoldorm.s"
+	.include "object_code/seasons/parts/kingMoblinsCannons.s"
+	.include "object_code/seasons/parts/2e.s"
+	.include "object_code/seasons/parts/2f.s"
+	.include "object_code/seasons/parts/poppableBubble.s"
+	.include "object_code/seasons/parts/33.s"
+	.include "object_code/seasons/parts/38.s"
+	.include "object_code/seasons/parts/39.s"
+	.include "object_code/common/parts/vireProjectile.s"
+	.include "object_code/seasons/parts/3b.s"
+	.include "object_code/seasons/parts/poeSisterFlame.s"
+	.include "object_code/seasons/parts/3d.s"
+	.include "object_code/seasons/parts/3e.s"
+	.include "object_code/seasons/parts/kingMoblinBomb.s"
+	.include "object_code/seasons/parts/aquamentusProjectile.s"
+	.include "object_code/seasons/parts/dodongoFireball.s"
+	.include "object_code/seasons/parts/mothulaProjectile2.s"
+	.include "object_code/seasons/parts/43.s"
+	.include "object_code/seasons/parts/44.s"
+	.include "object_code/seasons/parts/45.s"
+	.include "object_code/seasons/parts/46.s"
+	.include "object_code/seasons/parts/47.s"
+	.include "object_code/seasons/parts/48.s"
+	.include "object_code/seasons/parts/49.s"
+	.include "object_code/seasons/parts/4a.s"
+	.include "object_code/seasons/parts/dinCrystal.s"
+m_EndObjectCodeSection
+.endif
 
 .BANK $11 SLOT 1
 .ORG 0
@@ -815,13 +787,13 @@ m_section_free serialCode NAMESPACE serialCode
 m_section_free Interaction_Code_Group7 NAMESPACE commonInteractions7
 	.include "object_code/common/interactions/faroreGiveItem.s"
 	.include "object_code/common/interactions/zeldaApproachTrigger.s"
-.ends
+m_EndObjectCodeSection
 
 m_section_free Interaction_Code_Group8 NAMESPACE commonInteractions8
 	.include "object_code/common/interactions/eraOrSeasonInfo.s"
 	.include "object_code/common/interactions/statueEyeball.s"
 	.include "object_code/common/interactions/ringHelpBook.s"
-.ends
+m_EndObjectCodeSection
 
 	.include "data/seasons/endgameCutsceneOamData.s"
 
@@ -846,7 +818,7 @@ m_section_free Seasons_Interactions_Bank15 NAMESPACE seasonsInteractionsBank15
 	.include "object_code/seasons/interactions/linkedHerosCaveOldMan.s"
 	.include "object_code/seasons/interactions/getRodOfSeasons.s"
 	.include "object_code/seasons/interactions/loneZora.s"
-.ends
+m_EndObjectCodeSection
 
 	.include {"{GAME_DATA_DIR}/partAnimations.s"}
 
@@ -896,9 +868,8 @@ m_section_superfree Menu_Code_2 NAMESPACE menuCode2
 .BANK $3e SLOT 1
 .ORG 0
 
-m_section_free Enemy_Code_5 NAMESPACE enemyCodeExt4
 .ifdef ENABLE_NEW_GAME_PLUS
-	.define EXTENDED_SECTION 4
+m_EnemyCodeSection
 	.include "object_code/common/enemies/commonCode.s"
 
 	.include "object_code/common/enemies/polsVoice.s"
@@ -925,9 +896,8 @@ m_section_free Enemy_Code_5 NAMESPACE enemyCodeExt4
 	.include "object_code/common/enemies/greatFairy.s"
 	.include "object_code/common/enemies/fireKeese.s"
 	.include "object_code/common/enemies/waterTektite.s"
-	.undefine EXTENDED_SECTION
+m_EndObjectCodeSection
 .endif
-.ends
 
 m_section_superfree Breakable_Tiles NAMESPACE breakableTiles
 	.include "code/breakableTiles.s"

@@ -1,23 +1,6 @@
 ; For some reason this code shifts places between Ages and Seasons.
 
-;;
-; @param	hl
-objectLoadMovementScript:
-	ldh a,(<hRomBank)
-	push af
-	callfrombank0 objectMovement.objectLoadMovementScript_body
-	pop af
-	rst_setrombank
-	ret
-
-;;
-objectRunMovementScript:
-	ldh a,(<hRomBank)
-	push af
-	callfrombank0 objectMovement.objectRunMovementScript_body
-	pop af
-	rst_setrombank
-	ret
+.include "code/objectMovementScript.s"
 
 ;;
 decCbb3:

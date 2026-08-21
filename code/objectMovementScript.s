@@ -1,8 +1,8 @@
 ;;
-; Called from objectRunMovementScript in bank0. See include/movementscript_commands.s.
+; See include/movementscript_commands.s.
 ;
 ; @param	hl	Script address
-objectLoadMovementScript_body:
+objectLoadMovementScript:
 	ldh a,(<hActiveObjectType)
 	add Object.subid
 	ld e,a
@@ -32,8 +32,8 @@ objectLoadMovementScript_body:
 	ld (de),a
 
 ;;
-; Called from objectRunMovementScript in bank0. See include/movementscript_commands.s.
-objectRunMovementScript_body:
+; See include/movementscript_commands.s.
+objectRunMovementScript:
 	ldh a,(<hActiveObjectType)
 	add Object.var30
 	ld e,a
@@ -63,84 +63,55 @@ objectRunMovementScript_body:
 	rst_derefHl
 	jr @nextOp
 
-
 @moveUp:
 	pop bc
 	ld h,d
-	ldh a,(<hActiveObjectType)
-	add Object.var32
-	ld l,a
-	ld a,(bc)
-	ld (hl),a
-
-	ld a,l
-	add Object.angle-Object.var32
-	ld l,a
-	ld (hl),ANGLE_UP
-
-	add Object.state-Object.angle
-	ld l,a
-	ld (hl),$08
-	jr @storePointer
-
-
-@moveRight:
-	pop bc
-	ld h,d
-	ldh a,(<hActiveObjectType)
-	add Object.var33
-	ld l,a
-	ld a,(bc)
-	ld (hl),a
-
-	ld a,l
-	add Object.angle-Object.var33
-	ld l,a
-	ld (hl),ANGLE_RIGHT
-
-	add Object.state-Object.angle
-	ld l,a
-	ld (hl),$09
-	jr @storePointer
-
+	ldde $08,ANGLE_UP
+	scf
+	jr @move
 
 @moveDown:
 	pop bc
 	ld h,d
+	ldde $0a,ANGLE_DOWN
+	scf
+	jr @move
+
+@moveLeft:
+	pop bc
+	ld h,d
+	ldde $0b,ANGLE_LEFT
+	scf
+	ccf
+	jr @move
+
+@moveRight:
+	pop bc
+	ld h,d
+	ldde $09,ANGLE_RIGHT
+	scf
+	ccf
+
+@move:
 	ldh a,(<hActiveObjectType)
+	jr c,+
+		inc a
+	+
 	add Object.var32
 	ld l,a
 	ld a,(bc)
 	ld (hl),a
 
 	ld a,l
-	add Object.angle-Object.var32
+	and $c0
+	add Object.angle
 	ld l,a
-	ld (hl),ANGLE_DOWN
+	ld (hl),e
 
 	add Object.state-Object.angle
 	ld l,a
-	ld (hl),$0a
-	jr @storePointer
-
-
-@moveLeft:
-	pop bc
-	ld h,d
-	ldh a,(<hActiveObjectType)
-	add Object.var33
-	ld l,a
-	ld a,(bc)
-	ld (hl),a
-
-	ld a,l
-	add Object.angle-Object.var33
-	ld l,a
-	ld (hl),ANGLE_LEFT
-
-	add Object.state-Object.angle
-	ld l,a
-	ld (hl),$0b
+	ld (hl),d
+	ld d,h
 	jr @storePointer
 
 

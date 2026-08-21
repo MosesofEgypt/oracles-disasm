@@ -158,16 +158,15 @@ GAMEDATAFILES += $(BUILD_DIR)/specialObjectOamData.s
 GAMEDATAFILES += $(BUILD_DIR)/specialObjectAnimationData.s
 GAMEDATAFILES += $(BUILD_DIR)/specialObjectAnimationPointers.s
 
-MAIN_ASM_FILES = 
 AUDIO_FILES =
-MAIN_ASM_FILES = $(shell find code/ object_code/ objects/ scripts/ -name '*.s' | grep -v '/ages/' | grep -v '/seasons/')
+MAIN_ASM_FILES = $(shell find code/ object_code/ objects/ scripts/ -name '*.s')
 AUDIO_FILES  = $(shell find audio/ -name '*.s')
 AUDIO_FILES += $(shell find audio/combo/ -name '*.bin')
 AUDIO_FILES += $(shell find audio/ages/mus/ -name '*.bin')
 AUDIO_FILES += $(shell find audio/ages/sfx/ -name '*.bin')
 AUDIO_FILES += $(shell find audio/seasons/mus/ -name '*.bin')
 AUDIO_FILES += $(shell find audio/seasons/sfx/ -name '*.bin')
-COMMON_INCLUDE_FILES = $(shell find constants/ include/ -name '*.s' | grep -v '/ages/' | grep -v '/seasons/')
+COMMON_INCLUDE_FILES = $(shell find constants/ include/ -name '*.s')
 
 OPTIMIZE := -o
 
