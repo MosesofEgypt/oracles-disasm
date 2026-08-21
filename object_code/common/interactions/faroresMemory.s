@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_FARORES_MEMORY
 ; ==================================================================================================
-interactionCode1c:
+m_InteractionCode $1c
 	call checkInteractionState
 	jp nz,interactionRunScript
 

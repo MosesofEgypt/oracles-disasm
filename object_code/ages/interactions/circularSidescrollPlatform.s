@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_CIRCULAR_SIDESCROLL_PLATFORM
 ; ==================================================================================================
-interactionCodea4:
+m_InteractionCode $a4
 	call sidescrollPlatform_checkLinkOnPlatform
 	call @updateState
 	jp sidescrollingPlatformCommon

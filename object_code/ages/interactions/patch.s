@@ -5,7 +5,7 @@
 ;   var38: 0 if Link has the broken tuni nut; 1 otherwise (upstairs script)
 ;   var39: Set by another object (subid 3) when all beetles are killed
 ; ==================================================================================================
-interactionCode94:
+m_InteractionCode $94
 	ld e,Interaction.subid
 	ld a,(de)
 	ld e,Interaction.state

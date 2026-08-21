@@ -5,7 +5,7 @@
 ;   var3e: Doesn't do anything
 ;   var3f: Text to show
 ; ==================================================================================================
-interactionCode8a:
+m_InteractionCode $8a
 	ld e,Interaction.subid
 	ld a,(de)
 	rst_jumpTable

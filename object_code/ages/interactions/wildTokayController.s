@@ -8,7 +8,7 @@
 ;   var3b: ?
 ;   var3e/3f: Link's B/A button items, saved
 ; ==================================================================================================
-interactionCode70:
+m_InteractionCode $70
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

@@ -4,7 +4,7 @@
 ; Variables:
 ;   var35: $01 if Link has at least 5 essences
 ; ==================================================================================================
-interactionCode8f:
+m_InteractionCode $8f
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

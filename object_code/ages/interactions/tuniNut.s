@@ -1,11 +1,6 @@
 ; ==================================================================================================
 ; INTERAC_TUNI_NUT
 ; ==================================================================================================
-interactionCodeb1:
-.if defined(ROM_COMBO)
+m_InteractionCode $b1
 	jpab agesInteractionsBank11.interactionCodeb1_body
-.elif defined(ENABLE_NEW_GAME_PLUS)
-	jpab bank3e.interactionCodeb1_body
-.else
-	jpab dataLoading.interactionCodeb1_body
-.endif
+

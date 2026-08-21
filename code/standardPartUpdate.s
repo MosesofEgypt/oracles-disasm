@@ -1,7 +1,7 @@
 
 ;;
 ; Analagous to the "enemyStandardUpdate" function.
-partCommon_standardUpdate:
+partStandardUpdate:
 	ld h,d
 	ld l,Part.state
 	ld a,(hl)

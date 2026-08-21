@@ -6,7 +6,7 @@
 ; wShopHaveEnoughRupees - result of fight - $01 if won, $02 if lost, $03 if cheated
 ; wShootingGalleryBallStatus - $00 on init, $01 when starting fight, $03 when fight done
 ; ==================================================================================================
-interactionCode72:
+m_InteractionCode $72
 	ld e,Interaction.subid
 	ld a,(de)
 	or a

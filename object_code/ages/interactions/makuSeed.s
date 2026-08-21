@@ -4,7 +4,7 @@
 ; Variables:
 ;   var38: ?
 ; ==================================================================================================
-interactionCodea6:
+m_InteractionCode $a6
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

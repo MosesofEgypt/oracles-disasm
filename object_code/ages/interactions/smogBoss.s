@@ -14,7 +14,7 @@
 ;   var35:    Remembers the value of "subid" at the start of this phase so it can be
 ;             restored if Link hits the reset button.
 ; ==================================================================================================
-interactionCode33:
+m_InteractionCode $33
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

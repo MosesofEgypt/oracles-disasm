@@ -8,7 +8,7 @@
 ;   var3c: The treasure ID of this item (feather/bracelet only)
 ;   var3d: Set if Link has the shield
 ; ==================================================================================================
-interactionCode81:
+m_InteractionCode $81
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

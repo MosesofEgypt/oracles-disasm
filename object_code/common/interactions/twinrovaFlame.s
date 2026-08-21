@@ -2,9 +2,9 @@
 ; INTERAC_TWINROVA_FLAME
 ; ==================================================================================================
 .ifdef ROM_AGES
-interactionCodea9:
+m_InteractionCode $a9
 .else
-interactionCodeb0:
+m_InteractionCode $b0
 .endif
 	ld e,Interaction.state
 	ld a,(de)

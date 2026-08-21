@@ -7,7 +7,7 @@
 ;   var30: Original X-position, where it returns to
 ;   var31: Counter before showing "it's too heavy to move" text.
 ; ==================================================================================================
-interactionCode7a:
+m_InteractionCode $7a
 	call retIfTextIsActive
 	ld e,Interaction.state
 	ld a,(de)

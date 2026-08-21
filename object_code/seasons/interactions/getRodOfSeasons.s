@@ -6,7 +6,7 @@
 ;   var3b:    Initial time for each seasons' sparkle to start dropping sparkles
 ;   wccd4:    Set to 1 when Rod disappears, to remove its aura, and continue cutscene
 ; ==================================================================================================
-interactionCodee6:
+m_InteractionCode $e6
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

@@ -7,7 +7,7 @@
 ;   var3b:
 ;   var3c:
 ; ==================================================================================================
-interactionCode48:
+m_InteractionCode $48
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

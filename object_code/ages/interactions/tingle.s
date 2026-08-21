@@ -6,7 +6,7 @@
 ;   var3e: Nonzero if Link has 3 seed types or more
 ;   var3f: Signal for the script, set to 1 when his "kooloo-limpah" animation ends
 ; ==================================================================================================
-interactionCodec8:
+m_InteractionCode $c8
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

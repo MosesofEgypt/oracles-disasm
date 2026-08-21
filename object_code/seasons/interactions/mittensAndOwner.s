@@ -2,8 +2,8 @@
 ; INTERAC_MITTENS
 ; INTERAC_MITTENS_OWNER
 ; ==================================================================================================
-interactionCode25:
-interactionCode26:
+m_InteractionCode $25
+m_InteractionCode $26
 	ld e,$44
 	ld a,(de)
 	rst_jumpTable

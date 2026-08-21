@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_DUNGEON_SCRIPT
 ; ==================================================================================================
-interactionCode20:
+m_InteractionCode $20
 	call interactionDeleteAndRetIfEnabled02
 	ld e,Interaction.state
 	ld a,(de)

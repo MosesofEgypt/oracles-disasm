@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_NAYRU_SAVED_CUTSCENE
 ; ==================================================================================================
-interactionCode6e:
+m_InteractionCode $6e
 	ld e,Interaction.subid
 	ld a,(de)
 	ld e,Interaction.state

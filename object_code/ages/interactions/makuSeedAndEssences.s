@@ -4,7 +4,7 @@
 ; Variables:
 ;   counter1: Essence index (for the maku seed / spawner object)
 ; ==================================================================================================
-interactionCoded7:
+m_InteractionCode $d7
 	ld e,Interaction.subid
 	ld a,(de)
 	rst_jumpTable

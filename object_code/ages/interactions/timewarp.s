@@ -5,7 +5,7 @@
 ;   var03: ?
 ;   relatedObj2: ?
 ; ==================================================================================================
-interactionCodedd:
+m_InteractionCode $dd
 	ld e,Interaction.subid
 	ld a,(de)
 	rst_jumpTable

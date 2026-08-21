@@ -20,7 +20,7 @@ m_section_free Interaction_Code_Treasure NAMESPACE treasureInteraction
 ;
 ;   var39: If set, this is part of the chest minigame? Gets written to "wDisabledObjects"?
 ; ==================================================================================================
-interactionCode60:
+m_InteractionCode $60
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

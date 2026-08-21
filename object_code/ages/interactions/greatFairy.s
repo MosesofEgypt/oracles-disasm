@@ -5,7 +5,7 @@
 ;   var3e: ?
 ;   var3f: Secret index (for "linkedGameNpcScript")
 ; ==================================================================================================
-interactionCoded5:
+m_InteractionCode $d5
 	ld e,Interaction.subid
 	ld a,(de)
 	rst_jumpTable

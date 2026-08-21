@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_ENDGAME_CUTSCENE_BIPSOM_FAMILY
 ; ==================================================================================================
-interactionCodea7:
+m_InteractionCode $a7
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

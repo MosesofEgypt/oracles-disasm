@@ -4,7 +4,7 @@
 ; Variables:
 ;   var3a: Index for "loadAngleAndCounterPreset" function
 ; ==================================================================================================
-interactionCode93:
+m_InteractionCode $93
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

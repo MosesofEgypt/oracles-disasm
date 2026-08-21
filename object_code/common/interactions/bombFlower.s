@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_BOMB_FLOWER
 ; ==================================================================================================
-interactionCode6f:
+m_InteractionCode $6f
 .if defined(ROM_COMBO)
 	call wIsSeasons
 	jp nc,interactionDelete

@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_PLAY_NAYRU_MUSIC
 ; ==================================================================================================
-interactionCode2f:
+m_InteractionCode $2f
 	ld a,GLOBALFLAG_INTRO_DONE
 	call checkGlobalFlag
 	jp nz,interactionDelete

@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_88
 ; ==================================================================================================
-interactionCode88:
+m_InteractionCode $88
 	call checkInteractionState
 	jr nz,@nonZeroState
 	ld a,(wPaletteThread_mode)

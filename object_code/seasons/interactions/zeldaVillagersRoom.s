@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_ZELDA_VILLAGERS_ROOM
 ; ==================================================================================================
-interactionCodec4:
+m_InteractionCode $c4
 	call checkZeldaVillagersSeenButNoMakuSeed
 	ld a,$00
 	jr nz,+

@@ -4,7 +4,7 @@
 ; var3e: Animations don't update when nonzero. (Used when disappearing.)
 ; var3f: If nonzero, doesn't face toward Link.
 ; ==================================================================================================
-interactionCode59:
+m_InteractionCode $59
 	call checkInteractionState
 	jr nz,@state1
 

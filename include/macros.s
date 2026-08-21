@@ -286,13 +286,14 @@
 
 	.endr
 
-	.undefine ID
 	.undefine SECTION
-	.undefine GAME_TYPE_UPPER
-	.undefine GAME_TYPE
+	.undefine ITER_COUNT
 	.undefine NIL_FUNC
 	.undefine DEF_PREFIX
 	.undefine CODE_PREFIX
+	.undefine GAME_TYPE_UPPER
+	.undefine GAME_TYPE
+	.undefine ID
 .endm
 
 ; Pointers

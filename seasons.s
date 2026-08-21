@@ -429,7 +429,7 @@ m_section_free Seasons_Interactions_Bank0a NAMESPACE seasonsInteractionsBank0a
 .BANK $0c SLOT 1
 .ORG 0
 
-m_section_free Enemy_Code_Bank0c NAMESPACE bank0c
+m_section_free Enemy_Code_1 NAMESPACE enemyCode
 
 	.include "object_code/common/enemies/commonCode.s"
 
@@ -480,7 +480,8 @@ m_section_superfree Enemy_Animations
 .BANK $0d SLOT 1
 .ORG 0
 
-m_section_free Enemy_Code_Bank0d NAMESPACE bank0d
+m_section_free Enemy_Code_2 NAMESPACE enemyCodeExt1
+	.define EXTENDED_SECTION 1
 
 	.include "object_code/common/enemies/commonCode.s"
 
@@ -519,8 +520,6 @@ m_section_free Enemy_Code_Bank0d NAMESPACE bank0d
 	.include "object_code/common/enemies/twinrovaBat.s"
 	.include "object_code/common/enemies/ganonRevivalCutscene.s"
 
-	.include {"{GAME_DATA_DIR}/orbMovementScript.s"}
-
 	.include "object_code/seasons/enemies/magunesu.s"
 	.include "object_code/seasons/enemies/unusedTemplate.s"
 	.include "object_code/seasons/enemies/gohmaGel.s"
@@ -532,16 +531,22 @@ m_section_free Enemy_Code_Bank0d NAMESPACE bank0d
 	.include "object_code/seasons/enemies/wallFlameShooter.s"
 	.include "object_code/seasons/enemies/blainosGloves.s"
 
-	.include "code/objectMovementScript.s"
 	.include {"{GAME_DATA_DIR}/movingSidescrollPlatform.s"}
 
+	.undefine EXTENDED_SECTION
+.ends
+
+m_section_superfree Object_Movement namespace objectMovement
+	.include {"{GAME_DATA_DIR}/orbMovementScript.s"}
+	.include "code/objectMovementScript.s"
 .ends
 
 
 .BANK $0e SLOT 1
 .ORG 0
 
-m_section_free Enemy_Code_Bank0e NAMESPACE bank0e
+m_section_free Enemy_Code_3 NAMESPACE enemyCodeExt2
+	.define EXTENDED_SECTION 2
 
 	.include "object_code/common/enemies/commonCode.s"
 	.include "object_code/common/enemies/commonBossCode.s"
@@ -563,12 +568,14 @@ m_section_free Enemy_Code_Bank0e NAMESPACE bank0e
 	.include "object_code/seasons/enemies/manhandla.s"
 	.include "object_code/seasons/enemies/medusaHead.s"
 
+	.undefine EXTENDED_SECTION
 .ends
 
 .BANK $0f SLOT 1
 .ORG 0
 
-m_section_free Enemy_Code_Bank0f NAMESPACE bank0f
+m_section_free Enemy_Code_4 NAMESPACE enemyCodeExt3
+	.define EXTENDED_SECTION 3
 
 	.include "object_code/common/enemies/commonCode.s"
 	.include "object_code/common/enemies/commonBossCode.s"
@@ -585,6 +592,7 @@ m_section_free Enemy_Code_Bank0f NAMESPACE bank0f
 
 	.include "code/seasons/cutscenes/transitionToDragonOnox.s"
 
+	.undefine EXTENDED_SECTION
 .ends
 
 .ifdef BUILD_VANILLA
@@ -712,9 +720,6 @@ m_section_free Part_Code NAMESPACE partCode
 	.include "code/roomInitialization.s"
 
 m_section_free Part_Code_2 NAMESPACE partCode
-	.include "code/updateParts.s"
-	.include "data/partCodeTable.s"
-
 .ifndef ENABLE_NEW_GAME_PLUS
 	.include "object_code/seasons/parts/holesFloortrap.s"
 	.include "object_code/seasons/parts/slingshotEyeStatue.s"
@@ -891,8 +896,9 @@ m_section_superfree Menu_Code_2 NAMESPACE menuCode2
 .BANK $3e SLOT 1
 .ORG 0
 
-m_section_free enemyCode_Bank3e NAMESPACE bank3e
+m_section_free Enemy_Code_5 NAMESPACE enemyCodeExt4
 .ifdef ENABLE_NEW_GAME_PLUS
+	.define EXTENDED_SECTION 4
 	.include "object_code/common/enemies/commonCode.s"
 
 	.include "object_code/common/enemies/polsVoice.s"
@@ -919,8 +925,11 @@ m_section_free enemyCode_Bank3e NAMESPACE bank3e
 	.include "object_code/common/enemies/greatFairy.s"
 	.include "object_code/common/enemies/fireKeese.s"
 	.include "object_code/common/enemies/waterTektite.s"
+	.undefine EXTENDED_SECTION
 .endif
+.ends
 
+m_section_superfree Breakable_Tiles NAMESPACE breakableTiles
 	.include "code/breakableTiles.s"
 	.include {"{GAME_DATA_DIR}/tile_properties/breakableTiles.s"}
 .ends
@@ -942,6 +951,21 @@ m_section_superfree Data_Loading NAMESPACE dataLoading
 
 	.include {"{GAME_DATA_DIR}/treasureCollectionBehaviours.s"}
 	.include {"{GAME_DATA_DIR}/treasureDisplayData.s"}
+.ends
+
+m_section_superfree Object_Updating_Interactions NAMESPACE objectUpdating
+	.include "code/updateInteractions.s"
+	.include "data/interactionCodeTable.s"
+.ends
+
+m_section_superfree Object_Updating_Parts NAMESPACE objectUpdating
+	.include "code/updateParts.s"
+	.include "data/partCodeTable.s"
+.ends
+
+m_section_superfree Object_Updating_Enemies NAMESPACE objectUpdating
+	.include "code/updateEnemies.s"
+	.include "data/enemyCodeTable.s"
 .ends
 
 

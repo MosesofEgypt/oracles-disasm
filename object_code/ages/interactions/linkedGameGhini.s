@@ -4,7 +4,7 @@
 ; Variables:
 ;   var3f: Secret index (for "linkedGameNpcScript")
 ; ==================================================================================================
-interactionCodecb:
+m_InteractionCode $cb
 	call checkInteractionState
 	jr nz,@state1
 

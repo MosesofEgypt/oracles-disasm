@@ -3,9 +3,9 @@
 ; INTERAC_bd
 ; INTERAC_be
 ; ==================================================================================================
-interactionCodebc:
-interactionCodebd:
-interactionCodebe:
+m_InteractionCode $bc
+m_InteractionCode $bd
+m_InteractionCode $be
 	ld e,$42
 	ld a,(de)
 	rst_jumpTable

@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_RICKYS_GLOVE_SPAWNER
 ; ==================================================================================================
-interactionCode74:
+m_InteractionCode $74
 	; Delete self if already returned gloves, haven't talked to Ricky, or already got
 	; gloves
 	ld a,(wRickyState)

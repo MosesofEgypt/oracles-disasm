@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_MOVING_SIDESCROLL_PLATFORM
 ; ==================================================================================================
-interactionCodea1:
+m_InteractionCode $a1
 	call sidescrollPlatform_checkLinkOnPlatform
 	call @updateSubid
 	jp sidescrollingPlatformCommon
@@ -19,11 +19,7 @@ interactionCodea1:
 	.dw movingPlatform_stateC
 
 @state0To7:
-.ifdef ROM_AGES
-	ld hl,bank0e.movingSidescrollPlatformScriptTable
-.else
-	ld hl,bank0d.movingSidescrollPlatformScriptTable
-.endif
+	ld hl,enemyCodeExt1.movingSidescrollPlatformScriptTable
 	call objectLoadMovementScript
 	call interactionInitGraphics
 	ld e,Interaction.direction

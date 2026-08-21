@@ -12,7 +12,7 @@
 ;   var3d: number of entries in "position list" data (minus one)?
 ;   var3e/3f: pointer to "position list" data for when the child moves around
 ; ==================================================================================================
-interactionCode35:
+m_InteractionCode $35
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

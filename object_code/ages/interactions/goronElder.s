@@ -4,7 +4,7 @@
 ; Variables:
 ;   var3f: If zero, elder should face Link when he's close?
 ; ==================================================================================================
-interactionCode8b:
+m_InteractionCode $8b
 	ld e,Interaction.subid
 	ld a,(de)
 	rst_jumpTable

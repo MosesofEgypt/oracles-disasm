@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_VERAN_CUTSCENE_WALLMASTER
 ; ==================================================================================================
-interactionCode2c:
+m_InteractionCode $2c
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

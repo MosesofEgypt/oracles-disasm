@@ -5,7 +5,7 @@
 ;   var3e: 0 if the deku scrub is hiding, 1 if not
 ;   var3f: Secret index (for "linkedGameNpcScript")
 ; ==================================================================================================
-interactionCoded6:
+m_InteractionCode $d6
 	call checkInteractionState
 	jr nz,@state1
 

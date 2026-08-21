@@ -8,7 +8,7 @@
 ;   var32: ?
 ;   var33: ?
 ; ==================================================================================================
-interactionCodeae:
+m_InteractionCode $ae
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

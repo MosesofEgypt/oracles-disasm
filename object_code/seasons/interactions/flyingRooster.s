@@ -9,7 +9,7 @@
 ;          position)
 ;   var35: X-position at which the "destination" is (Link loses control)
 ; ==================================================================================================
-interactionCode8c:
+m_InteractionCode $8c
 	ld e,Interaction.subid
 	ld a,(de)
 	bit 7,a

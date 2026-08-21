@@ -10,7 +10,7 @@
 ; var34:    Y offset of Link relative to lever when he's pulling it
 ; var35:    Nonzero if lever was pulled last frame.
 ; ==================================================================================================
-interactionCode61:
+m_InteractionCode $61
 	ld e,Interaction.subid
 	ld a,(de)
 	rlca

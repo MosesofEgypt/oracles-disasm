@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_TILE_FILLER
 ; ==================================================================================================
-interactionCode25:
+m_InteractionCode $25
 	call returnIfScrollMode01Unset
 	ld e,Interaction.state
 	ld a,(de)

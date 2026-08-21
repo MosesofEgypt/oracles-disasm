@@ -14,20 +14,20 @@
 ; INTERAC_FOUNTAIN_OLD_MAN
 ; INTERAC_TICK_TOCK
 ; ==================================================================================================
-interactionCode24:
-interactionCode29:
-interactionCode2c:
-interactionCode2d:
-interactionCode2f:
-interactionCode33:
-interactionCode36:
-interactionCode37:
-interactionCode38:
-interactionCode39:
-interactionCode3a:
-interactionCode3c:
-interactionCode3d:
-interactionCode3f:
+m_InteractionCode $24
+m_InteractionCode $29
+m_InteractionCode $2c
+m_InteractionCode $2d
+m_InteractionCode $2f
+m_InteractionCode $33
+m_InteractionCode $36
+m_InteractionCode $37
+m_InteractionCode $38
+m_InteractionCode $39
+m_InteractionCode $3a
+m_InteractionCode $3c
+m_InteractionCode $3d
+m_InteractionCode $3f
 	ld e,$44
 	ld a,(de)
 	rst_jumpTable

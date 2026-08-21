@@ -5,7 +5,7 @@
 ;   var36: Counter until bird should turn around?
 ;   var37: Set while being talked to (signal to change animation)
 ; ==================================================================================================
-interactionCodee3:
+m_InteractionCode $e3
 	call checkInteractionState
 	jr nz,@state1
 

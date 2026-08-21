@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_LINKED_HEROS_CAVE_OLD_MAN
 ; ==================================================================================================
-interactionCodee4:
+m_InteractionCode $e4
 	call checkInteractionState
 	jr z,+
 	call interactionRunScript

@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_COLORED_CUBE_FLAME
 ; ==================================================================================================
-interactionCode1a:
+m_InteractionCode $1a
 	call checkInteractionState
 	jr nz,@initialized
 	ld a,(wRotatingCubePos)

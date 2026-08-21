@@ -2,8 +2,8 @@
 ; INTERAC_PIRATIAN
 ; INTERAC_PIRATIAN_CAPTAIN
 ; ==================================================================================================
-interactionCode40:
-interactionCode41:
+m_InteractionCode $40
+m_InteractionCode $41
 	ld e,$44
 	ld a,(de)
 	rst_jumpTable

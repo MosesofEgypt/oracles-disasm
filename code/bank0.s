@@ -8604,14 +8604,27 @@ eitherRingActive:
 
 .endif
 
-.ifdef ENABLE_NEW_GAME_PLUS
-updatePartCaller:
-	call @execPartCode
+.if defined(ENABLE_NEW_GAME_PLUS) || defined(ROM_COMBO)
+updateObjectCaller:
+	push bc
+
+	ld b,$00
+	ld c,a
+
+	; hl = objectCodeTable + [Enemy.id] * 3
+	add hl,bc
+	add hl,bc
+	add hl,bc
+
+	pop bc
+	ldh a,(<hRomBank)
+	push af
+	call @execObjectCode
 	pop af
 	setrombank
 	ret
 
-@execPartCode:
+@execObjectCode:
 	ldi a,(hl)
 	push af
 	ldi a,(hl)
@@ -8623,7 +8636,9 @@ updatePartCaller:
 	ld a,c
 	or a
 	jp hl
+.endif
 
+.if defined(ENABLE_NEW_GAME_PLUS)
 getFlaskChargePrice:
 	ldh a,(<hRomBank)
 	push af
@@ -10544,138 +10559,6 @@ enemyDie:
 	ld a,SND_KILLENEMY
 	jp playSound
 
-;;
-; This function is called for every enemy before calling their regular code.
-;
-; Knockback and stun counters are updated, and various values are returned in 'c' based on
-; the enemy's current status.
-;
-; The returned value of 'c' from here is moved to 'a' before the enemy-specific code is
-; called, so that code can check the return value of this function.
-;
-; @param[out]	c	"Enemy status" (see constants/common/enemyStates.s).
-;			$00 normally
-;			$02 if stunned
-;			$03 if health is 0
-;			$04 if something hit the enemy?
-;			$05 if the enemy is experiencing knockback
-enemyStandardUpdate:
-	ld h,d
-	ld l,Enemy.state
-	ld a,(hl)
-	or a
-	jr z,@uninitialized
-
-	ld l,Enemy.var2a
-	bit 7,(hl)
-	jr nz,@ret04
-
-	ld e,Enemy.knockbackCounter
-	ld a,(de)
-	and $7f
-	jr nz,@knockback
-
-	; Enemy.health
-	dec l
-	ld a,(hl)
-	or a
-	jr z,@healthZero
-
-	; Enemy.stunCounter
-	inc e
-	ld a,(de)
-	or a
-	jr nz,@stunned
-
-@ret00:
-	ld c,$00
-	ret
-
-@uninitialized:
-.if defined(ROM_COMBO)
-	callab gfxLoading.enemyLoadGraphicsAndProperties
-.else
-	callab dataLoading.enemyLoadGraphicsAndProperties
-.endif
-	call getRandomNumber_noPreserveVars
-	ld e,Enemy.var3d
-	ld (de),a
-	inc e
-	ld a,$01
-	ld (de),a
-	jr @ret00
-
-@ret04:
-	ld c,$04
-	ret
-
-@knockback:
-	ld l,e
-	dec (hl)
-	ld c,$05
-	ret
-
-@healthZero:
-	ld l,Enemy.var3f
-	bit 1,(hl)
-	jr nz,@ret00
-	ld c,$03
-	ret
-
-@stunned:
-	ld a,(wFrameCounter)
-	rrca
-	jr nc,++
-
-	; Decrement Enemy.stunCounter
-	ld l,e
-	dec (hl)
-
-	; With 30 frames before being unstunned, make the enemy shake back and forth
-	ld a,(hl)
-	cp 30
-	jr nc,++
-	rrca
-	jr nc,++
-
-	ld l,Enemy.xh
-	ld a,(hl)
-	xor $01
-	ld (hl),a
-++
-	; Have the enemy fall down to the ground and bounce
-
-	ld l,Enemy.state
-	ld a,(hl)
-.ifdef ENABLE_RING_REDUX
-	cp $02
-	jr z,@ret02
-.endif
-	cp $08
-	jr c,@reachedGround
-
-	ld l,Enemy.zh
-	ld a,(hl)
-	dec a
-	cp $08
-	jr c,@reachedGround
-
-	ld c,$20
-	call objectUpdateSpeedZAndBounce
-	jr nc,@ret02
-
-	ld h,d
-
-@reachedGround:
-	ld l,Enemy.speedZ
-	xor a
-	ldi (hl),a
-	ld (hl),a
-
-@ret02:
-	ld c,$02
-	ret
-
 .ifdef ENABLE_RING_REDUX
 animateEnemyShakingWhileHeld:
 	; only animate enemies shaking
@@ -11385,11 +11268,7 @@ tryToBreakTile:
 	ldh (<hFF8F),a
 	ldh a,(<hRomBank)
 	push af
-.if defined(ROM_COMBO)
 	callfrombank0 breakableTiles.tryToBreakTile_body
-.else
-	callfrombank0 bank3e.tryToBreakTile_body
-.endif
 	rl e
 	pop af
 	setrombank
@@ -11977,246 +11856,6 @@ enemyReplaceWithID:
 	inc l
 	ld (hl),c
 	ret
-
-;;
-; Update all enemies with 'state' variables equal to 0.
-_updateEnemiesIfStateIsZero:
-	ld a,Enemy.start
-	ldh (<hActiveObjectType),a
-	ld d,FIRST_ENEMY_INDEX
-	ld a,d
---
-	ldh (<hActiveObject),a
-	ld h,d
-	ld l,Enemy.enabled
-	ld a,(hl)
-	or a
-	jr z,@next
-
-	ld l,Enemy.state
-	ldi a,(hl)
-	or (hl)
-	call z,updateEnemy
-	ld e,Enemy.oamFlagsBackup
-	ld a,(de)
-	inc e
-	ld (de),a
-@next:
-	inc d
-	ld a,d
-	cp LAST_ENEMY_INDEX+1
-	jr c,--
-	ret
-
-;;
-; Update all enemies by calling their enemy-specific code and doing other common enemy
-; stuff.
-;
-updateEnemies:
-	ld a,(wScrollMode)
-	and $0e
-	jr nz,_updateEnemiesIfStateIsZero
-
-	ld a,(wTextIsActive)
-	or a
-	jr nz,_updateEnemiesIfStateIsZero
-
-	ld a,(wDisabledObjects)
-	and $84
-	jr nz,_updateEnemiesIfStateIsZero
-
-	ld a,(wPaletteThread_mode)
-	or a
-	jr nz,_updateEnemiesIfStateIsZero
-
-	ld a,Enemy.start
-	ldh (<hActiveObjectType),a
-	ld d,FIRST_ENEMY_INDEX
-	ld a,d
---
-	ldh (<hActiveObject),a
-
-	ld e,Enemy.enabled
-	ld a,(de)
-	or a
-	jr z,@next
-
-	call updateEnemy
-
-	; Reset bit 7 of var2a to indicate that, if any collision has occurred, it's no
-	; longer the first frame of the collision.
-	ld h,d
-	ld l,Enemy.var2a
-	res 7,(hl)
-
-	; Increment/decrement invincibilityCounter if applicable, update palette
-	inc l
-	ld a,(hl) ; a = [enemy.invincibilityCounter]
-	or a
-	jr z,@label_00_349
-
-	rlca
-	jr c,@label_00_348
-
-	dec (hl)
-	jr z,@label_00_349
-
-	ld a,(wFrameCounter)
-	bit 2,a
-	jr nz,@label_00_349
-
-	ld b,$05
-	ld l,Enemy.oamFlagsBackup
-	ldi a,(hl)
-	and $07
-	cp b
-	jr nz,+
-	ld b,$02
-+
-	ld a,(hl)
-	and $f8
-	or b
-	ld (hl),a
-	jr @next
-
-@label_00_348:
-	inc (hl)
-@label_00_349:
-	ld l,Enemy.oamFlagsBackup
-	ldi a,(hl)
-	ld (hl),a
-@next:
-	inc d
-	ld a,d
-	cp LAST_ENEMY_INDEX+1
-	jr c,--
-	ret
-
-;;
-; @param	d	Enemy to update
-updateEnemy:
-	call enemyStandardUpdate
-	ld e,Enemy.id
-	ld a,(de)
-
-.ifdef ROM_AGES
-	; Calculate bank number in 'b'
-.ifdef ENABLE_NEW_GAME_PLUS
-	ld b,$10
-	cp $08
-	jr c,++
-	ld b,$3c
-	cp $78
-	jr nc,++
-	ld b,$0f
-	cp $70
-	jr nc,++
-	dec b
-	; we need more code space for New Game Plus, so we
-	; need to move a chunk of enemy code to a free bank
-	cp $3c
-	jr nc,+
-	dec b
-	cp $23
-	jr c,+
-	cp $2b
-	jr z,+
-	ld b,$3e
-.else
-	ld b,$0f
-	cp $70
-	jr nc,++
-	dec b
-	cp $30
-	jr nc,++
-	dec b
-	cp $08
-	jr nc,++
-	ld b,$10
-.endif
-
-.else ; ROM_SEASONS
-
-	ld b,$0f
-	cp $08
-	jr c,+
-	dec b
-	cp $70
-	jr nc,+
-	dec b
-.ifdef ENABLE_NEW_GAME_PLUS
-	; we need more code space for New Game Plus, so we
-	; need to move a chunk of enemy code to a free bank
-	cp $3c
-	jr nc,+
-	dec b
-	cp $23
-	jr c,+
-	cp $2b
-	jr z,+
-	ld b,$3e
-.else
-	cp $30
-	jr nc,+
-	dec b
-.endif
-+
-	; Seasons sets the rom bank here instead of later, for no particular reason...?
-	ld e,a
-	ld a,b
-	setrombank
-	ld a,e
-.endif
-
-++
-.ifdef ENABLE_RING_REDUX
-	call judoMasterComboActive
-	jr nz,+
-		call isValidTargetForJudo
-		jr z,+
-			push af
-			push hl
-			call objectAddToGrabbableObjectBuffer
-			pop hl
-			pop af
-	+
-.endif
-	; hl = enemyCodeTable + a*2
-	add a
-	add <enemyCodeTable
-	ld l,a
-	ld a,$00
-	adc >enemyCodeTable
-	ld h,a
-
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
-.ifdef ROM_AGES
-	ld a,b
-	setrombank
-.endif
-	ld a,c
-	or a
-.ifdef ENABLE_RING_REDUX
-	jr z,+
-		; if enemy is in held state, treat it like it's normal
-		ld e,Enemy.state
-		ld a,(de)
-		cp a,ENEMYSTATE_GRABBED
-		ld a,c
-	+
-.endif
-.if defined(ROM_COMBO)	; NOTE: TEMPORARY UNTIL INTERACTIONS ARE MERGED IN
-	ret
-.endif
-	jp hl
-
-.if !defined(ROM_COMBO) 	; NOTE: TEMPORARY FOR TESTING
-.include "data/enemyCodeTable.s"
-.else
-enemyCodeTable:
-.endif					; NOTE: TEMPORARY FOR TESTING
 
 
 .if defined(ROM_AGES) && !defined(ROM_COMBO)
@@ -13107,7 +12746,11 @@ dismountCompanionAndSetRememberedPositionToScreenCenter:
 seasonsFunc_331b:
 	ldh a,(<hRomBank)
 	push af
-	callfrombank0 bank0f.seasonsFunc_0f_6f75
+.if defined(ROM_COMBO)
+	callfrombank0 bank3Cutscenes_seasons.seasonsFunc_0f_6f75
+.else
+	callfrombank0 enemyCodeExt3.seasonsFunc_0f_6f75
+.endif
 	pop af
 	rst_setrombank
 	ret
@@ -13115,10 +12758,13 @@ seasonsFunc_331b:
 seasonsFunc_332f:
 	ldh a,(<hRomBank)
 	push af
-	ld a,$0f
-	rst_setrombank
-	call bank0f.seasonsFunc_0f_704d
-	call bank0f.seasonsFunc_0f_7182
+.if defined(ROM_COMBO)
+	callfrombank0 bank3Cutscenes_seasons.seasonsFunc_0f_704d
+	callfrombank0 bank3Cutscenes_seasons.seasonsFunc_0f_6f75
+.else
+	callfrombank0 enemyCodeExt3.seasonsFunc_0f_704d
+	callfrombank0 enemyCodeExt3.seasonsFunc_0f_7182
+.endif
 	pop af
 	rst_setrombank
 	ret
@@ -13156,13 +12802,10 @@ updateAllObjects:
 	callfrombank0 bank5.updateSpecialObjects
 	callfrombank0 itemCode.updateItems
 	call          setEnemyTargetToLinkPosition
-	call          updateEnemies
-.if defined(ROM_COMBO)
+
+	callfrombank0 objectUpdating.updateEnemies
 	callfrombank0 objectUpdating.updateParts
-.else
-	callfrombank0 partCode.updateParts
-.endif
-	call updateInteractions
+	callfrombank0 objectUpdating.updateInteractions
 	callfrombank0 bank1.func_4000
 
 	; Call func_410d if Link is riding something
@@ -13205,7 +12848,7 @@ updateSpecialObjectsAndInteractions:
 	ldh a,(<hRomBank)
 	push af
 	callfrombank0 bank5.updateSpecialObjects
-	call          updateInteractions
+	callfrombank0 objectUpdating.updateInteractions
 	call          loadLinkAndCompanionAnimationFrame
 	xor a
 	ld (wc4b6),a
@@ -13217,7 +12860,7 @@ updateSpecialObjectsAndInteractions:
 updateInteractionsAndDrawAllSprites:
 	ldh a,(<hRomBank)
 	push af
-	call updateInteractions
+	callfrombank0 objectUpdating.updateInteractions
 	call drawAllSprites
 	xor a
 	ld (wc4b6),a
@@ -13237,13 +12880,10 @@ func_3539:
 	jr c,+
 .endif
 	callfrombank0 itemCode.updateItems
-	call          updateEnemies
-.if defined(ROM_COMBO)
+	callfrombank0 objectUpdating.updateEnemies
 	callfrombank0 objectUpdating.updateParts
-.else
-	callfrombank0 partCode.updateParts
-.endif
-	call updateInteractions
+
+	callfrombank0 objectUpdating.updateInteractions
 	callfrombank0 itemCode.updateItemsPost
 
 .if defined(ROM_COMBO)
@@ -13253,8 +12893,8 @@ func_3539:
 .endif
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
-	call updateEnemies
-	call updateInteractions
+	callfrombank0 objectUpdating.updateEnemies
+	callfrombank0 objectUpdating.updateInteractions
 ++
 .endif
 	call loadLinkAndCompanionAnimationFrame
@@ -13273,17 +12913,13 @@ seasonsFunc_34a0:
 	push af
 	callfrombank0 bank5.updateSpecialObjects
 	callfrombank0 itemCode.updateItems
-	call          updateEnemies
-.if defined(ROM_COMBO)
+	callfrombank0 objectUpdating.updateEnemies
 	callfrombank0 objectUpdating.updateParts
-.else
-	callfrombank0 partCode.updateParts
-.endif
-	call updateInteractions
+	callfrombank0 objectUpdating.updateInteractions
 .if defined(ROM_COMBO)
 	callfrombank0 bank3Cutscenes_seasons.seasonsFunc_0f_7159
 .else
-	callfrombank0 bank0f.seasonsFunc_0f_7159
+	callfrombank0 enemyCodeExt3.seasonsFunc_0f_7159
 .endif
 
 .if defined(ROM_COMBO)
@@ -13305,7 +12941,7 @@ seasonsFunc_34a0:
 .if defined(ROM_COMBO)
 	callfrombank0 bank3Cutscenes_seasons.seasonsFunc_0f_7182
 .else
-	callfrombank0 bank0f.seasonsFunc_0f_7182
+	callfrombank0 enemyCodeExt3.seasonsFunc_0f_7182
 .endif
 	callfrombank0 tilesets.updateChangedTileQueue
 
@@ -14698,122 +14334,6 @@ interactionDelete:
 	jr nz,-
 	ret
 
-.if defined(ROM_COMBO)
-updateInteractions:
-	jpfrombank0 objectUpdating.updateInteractions
-
-.else
-;;
-_updateInteractionsIfStateIsZero:
-	ld a,Interaction.start
-	ldh (<hActiveObjectType),a
-	ld a,FIRST_INTERACTION_INDEX
---
-	ldh (<hActiveObject),a
-	ld d,a
-	ld e,Interaction.enabled
-	ld a,(de)
-	or a
-	jr z,@next
-
-	rlca
-	jr c,+
-
-	ld e,Interaction.state
-	ld a,(de)
-	or a
-	jr nz,@next
-+
-	call updateInteraction
-@next:
-	ldh a,(<hActiveObject)
-	inc a
-	cp LAST_INTERACTION_INDEX+1
-	jr c,--
-	ret
-
-;;
-updateInteractions:
-	ld a,(wScrollMode)
-	cp $08
-	jr z,_updateInteractionsIfStateIsZero
-
-	ld a,(wDisabledObjects)
-	and $02
-	jr nz,_updateInteractionsIfStateIsZero
-
-	ld a,(wTextIsActive)
-	or a
-	jr nz,_updateInteractionsIfStateIsZero
-
-	ld a,Interaction.start
-	ldh (<hActiveObjectType),a
-	ld a,FIRST_INTERACTION_INDEX
-@next:
-	ldh (<hActiveObject),a
-	ld d,a
-	ld e,Interaction.enabled
-	ld a,(de)
-	or a
-	call nz,updateInteraction
-	ldh a,(<hActiveObject)
-	inc a
-	cp LAST_INTERACTION_INDEX+1
-	jr c,@next
-	ret
-
-;;
-; Run once per frame for each interaction.
-;
-; @param	d	Interaction to update
-updateInteraction:
-	ld e,Interaction.id
-	ld a,(de)
-
-.ifdef ROM_AGES
-	; Get the bank number in 'b'
-	ld b,$08
-	cp $3e
-	jr c,@cnt
-	inc b
-	cp $67
-	jr c,@cnt
-	inc b
-	cp $98
-	jr c,@cnt
-	inc b
-	cp $dc
-	jr c,@cnt
-	ld b,$10
-
-.else ; ROM_SEASONS
-
-	ld b,$08
-	cp $5e
-	jr c,@cnt
-	inc b
-	cp $89
-	jr c,@cnt
-	inc b
-	cp $c8
-	jr c,@cnt
-	ld b,$0f
-	cp $d8
-	jr c,@cnt
-	ld b,$15
-.endif
-
-@cnt:
-	ld a,b
-	rst_setrombank
-	ld a,(de)
-	ld hl,interactionCodeTable
-	rst_addDoubleIndex
-	rst_derefHl
-	jp hl
-
-.include "data/interactionCodeTable.s"
-.endif
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 

@@ -59,7 +59,6 @@ kingMoblinMinion_state0:
 	.db 150, $01, $08, $88
 
 
-
 ; Fight just started
 kingMoblinMinion_state2:
 	ld h,d
@@ -264,50 +263,3 @@ kingMoblinMinion_stateA:
 	call objectGetRelatedObject1Var
 	ld (hl),$01
 	jp enemyDelete
-
-
-blackTower_getMovingFlamesNextTileCoords:
-	ld e,$c2
-	ld a,(de)
-	ld hl,@table
-	rst_addDoubleIndex
-	rst_derefHl
-	ld e,$c7
-	ld a,(de)
-	rst_addAToHl
-	ld b,(hl)
-	ld a,b
-	and $f0
-	add $08
-	ld e,$f0
-	ld (de),a
-	inc e
-	ld a,b
-	and $0f
-	swap a
-	add $08
-	ld (de),a
-	ret
-
-@table:
-	.dw @leftFlame
-	.dw @topFlame
-	.dw @rightFlame
-	.dw @bottomFlame
-
-@leftFlame:
-	.db $51 $91 $93 $13 $19 $39 $3d $9d
-	.db $97 $77 $7a $8a $00
-
-@topFlame:
-	.db $17 $13 $73 $7d $3d $39 $99 $91
-	.db $61 $62 $00
-
-@rightFlame:
-	.db $5d $9d $95 $55 $51 $11 $1b $3b
-	.db $35 $25 $26 $00
-
-@bottomFlame:
-	.db $97 $99 $79 $7d $9d $9b $3b $3d
-	.db $1d $1b $3b $35 $55 $53 $93 $98
-	.db $88 $00

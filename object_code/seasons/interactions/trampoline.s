@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_TRAMPOLINE
 ; ==================================================================================================
-interactionCode7c:
+m_InteractionCode $7c
 	call objectSetPriorityRelativeToLink
 	ld e,Interaction.state
 	ld a,(de)

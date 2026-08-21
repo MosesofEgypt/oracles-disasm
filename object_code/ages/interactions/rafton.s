@@ -4,7 +4,7 @@
 ; Variables:
 ;   var38: "behaviour" (what he does based on the stage in the game)
 ; ==================================================================================================
-interactionCode69:
+m_InteractionCode $69
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

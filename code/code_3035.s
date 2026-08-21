@@ -5,13 +5,7 @@
 objectLoadMovementScript:
 	ldh a,(<hRomBank)
 	push af
-.if defined(ROM_COMBO)
 	callfrombank0 objectMovement.objectLoadMovementScript_body
-.elif defined(ROM_AGES)
-	callfrombank0 bank0e.objectLoadMovementScript_body
-.else
-	callfrombank0 bank0d.objectLoadMovementScript_body
-.endif
 	pop af
 	rst_setrombank
 	ret
@@ -20,13 +14,7 @@ objectLoadMovementScript:
 objectRunMovementScript:
 	ldh a,(<hRomBank)
 	push af
-.if defined(ROM_COMBO)
 	callfrombank0 objectMovement.objectRunMovementScript_body
-.elif defined(ROM_AGES)
-	callfrombank0 bank0e.objectRunMovementScript_body
-.else
-	callfrombank0 bank0d.objectRunMovementScript_body
-.endif
 	pop af
 	rst_setrombank
 	ret

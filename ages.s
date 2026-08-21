@@ -484,7 +484,7 @@ m_section_free Ages_Interactions_Bank0b NAMESPACE agesInteractionsBank0b
 .BANK $0d SLOT 1
 .ORG 0
 
-m_section_free Enemy_Code_Bank0d NAMESPACE bank0d
+m_section_free Enemy_Code_1 NAMESPACE enemyCode
 
 	.include "object_code/common/enemies/commonCode.s"
 
@@ -542,7 +542,8 @@ m_section_superfree Enemy_Animations
 .BANK $0e SLOT 1
 .ORG 0
 
-m_section_free Enemy_Code_Bank0e NAMESPACE bank0e
+m_section_free Enemy_Code_2 NAMESPACE enemyCodeExt1
+	.define EXTENDED_SECTION 1
 
 	.include "object_code/common/enemies/commonCode.s"
 
@@ -582,9 +583,6 @@ m_section_free Enemy_Code_Bank0e NAMESPACE bank0e
 	.include "object_code/common/enemies/twinrovaBat.s"
 	.include "object_code/common/enemies/ganonRevivalCutscene.s"
 
-	.include {"{GAME_DATA_DIR}/orbMovementScript.s"}
-	.include "code/objectMovementScript.s"
-
 	.include "object_code/ages/enemies/bari.s"
 	.include "object_code/ages/enemies/giantGhiniChild.s"
 	.include "object_code/ages/enemies/shadowHagBug.s"
@@ -598,12 +596,19 @@ m_section_free Enemy_Code_Bank0e NAMESPACE bank0e
 
 	.include {"{GAME_DATA_DIR}/movingSidescrollPlatform.s"}
 
+	.undefine EXTENDED_SECTION
+.ends
+
+m_section_superfree Object_Movement namespace objectMovement
+	.include {"{GAME_DATA_DIR}/orbMovementScript.s"}
+	.include "code/objectMovementScript.s"
 .ends
 
 .BANK $0f SLOT 1
 .ORG 0
 
-m_section_free Enemy_Code_Bank0f NAMESPACE bank0f
+m_section_free Enemy_Code_3 NAMESPACE enemyCodeExt2
+	.define EXTENDED_SECTION 2
 
 	.include "object_code/common/enemies/commonCode.s"
 	.include "object_code/common/enemies/commonBossCode.s"
@@ -626,12 +631,14 @@ m_section_free Enemy_Code_Bank0f NAMESPACE bank0f
 	.include "object_code/ages/enemies/kingMoblin.s"
 .endif
 
+	.undefine EXTENDED_SECTION
 .ends
 
 .BANK $10 SLOT 1
 .ORG 0
 
-m_section_free Enemy_Code_Bank10 NAMESPACE bank10
+m_section_free Enemy_Code_4 NAMESPACE enemyCodeExt3
+	.define EXTENDED_SECTION 3
 
 	.include "object_code/common/enemies/commonCode.s"
 	.include "object_code/common/enemies/commonBossCode.s"
@@ -647,6 +654,7 @@ m_section_free Enemy_Code_Bank10 NAMESPACE bank10
 	.include "object_code/ages/enemies/ramrock.s"
 	.include "object_code/ages/enemies/kingMoblinMinionMain.s"
 
+	.undefine EXTENDED_SECTION
 .ends
 
 
@@ -666,6 +674,12 @@ m_section_free Ages_Interactions_Bank10 NAMESPACE agesInteractionsBank10
 	.include "object_code/ages/interactions/timeportalSpawner.s"
 	.include "object_code/ages/interactions/knowItAllBird.s"
 	.include "object_code/ages/interactions/raft.s"
+.ends
+
+m_section_superfree Ages_Interactions_Bank11 NAMESPACE agesInteractionsBank11
+	.include "object_code/ages/interactions/monkeyMain.s"
+	.include "object_code/ages/interactions/rabbitMain.s"
+	.include "object_code/ages/interactions/tuniNutMain.s"
 .ends
 
 
@@ -771,9 +785,6 @@ m_section_free Bank_11 NAMESPACE partCode
 	.include "object_code/common/parts/51.s"
 	.include "object_code/common/parts/52.s"
 	.include "object_code/common/parts/blueEnergyBead.s"
-
-	.include "code/updateParts.s"
-	.include "data/partCodeTable.s"
 
 .ifndef ENABLE_NEW_GAME_PLUS
 	.include "object_code/ages/parts/jabuJabusBubbles.s"
@@ -952,8 +963,9 @@ m_section_free Bank16_2 NAMESPACE bank16
 .BANK $3c SLOT 1
 .ORG 0
 
-m_section_free Enemy_Code_Bank3c NAMESPACE bank3c
+m_section_free Enemy_Code_5 NAMESPACE enemyCodeExt4
 .ifdef ENABLE_NEW_GAME_PLUS
+	.define EXTENDED_SECTION 4
 	.include "object_code/common/enemies/commonCode.s"
 	.include "object_code/common/enemies/commonBossCode.s"
 	.include "object_code/ages/enemies/pumpkinHead.s"
@@ -964,6 +976,7 @@ m_section_free Enemy_Code_Bank3c NAMESPACE bank3c
 	.include "object_code/ages/enemies/octogon.s"
 	.include "object_code/ages/enemies/plasmarine.s"
 	.include "object_code/ages/enemies/kingMoblin.s"
+	.undefine EXTENDED_SECTION
 .endif
 .ends
 
@@ -983,8 +996,9 @@ m_section_superfree Menu_Code_2 NAMESPACE menuCode2
 .BANK $3e SLOT 1
 .ORG 0
 
-m_section_free enemyCode_Bank3e NAMESPACE bank3e
+m_section_free Enemy_Code_6 NAMESPACE enemyCodeExt5
 .ifdef ENABLE_NEW_GAME_PLUS
+	.define EXTENDED_SECTION 5
 	.include "object_code/common/enemies/commonCode.s"
 
 	.include "object_code/common/enemies/polsVoice.s"
@@ -1013,8 +1027,11 @@ m_section_free enemyCode_Bank3e NAMESPACE bank3e
 	.include "object_code/common/enemies/waterTektite.s"
 
 	.include "object_code/ages/enemies/anglerFishBubble.s"
+	.undefine EXTENDED_SECTION
 .endif
+.ends
 
+m_section_superfree Breakable_Tiles NAMESPACE breakableTiles
 	.include "code/breakableTiles.s"
 	.include {"{GAME_DATA_DIR}/tile_properties/breakableTiles.s"}
 .ends
@@ -1022,10 +1039,6 @@ m_section_free enemyCode_Bank3e NAMESPACE bank3e
 m_section_free roomGfxChanges NAMESPACE roomGfxChanges
 	.include "code/ages/roomGfxChanges.s"
 .ends
-
-.ifdef ENABLE_NEW_GAME_PLUS
-.include "object_code/ages/interactions/tuniNutMain.s"
-.endif
 
 m_section_superfree Data_Loading NAMESPACE dataLoading
 
@@ -1054,14 +1067,21 @@ m_section_superfree Data_Loading NAMESPACE dataLoading
 
 .include "data/ages/blackTowerOamData.s"
 .include "data/ages/nayruSingingOamData.s"
+.ends
 
+m_section_superfree Object_Updating_Interactions NAMESPACE objectUpdating
+	.include "code/updateInteractions.s"
+	.include "data/interactionCodeTable.s"
+.ends
 
-.include "object_code/ages/interactions/monkeyMain.s"
-.include "object_code/ages/interactions/rabbitMain.s"
-.ifndef ENABLE_NEW_GAME_PLUS
-.include "object_code/ages/interactions/tuniNutMain.s"
-.endif
+m_section_superfree Object_Updating_Parts NAMESPACE objectUpdating
+	.include "code/updateParts.s"
+	.include "data/partCodeTable.s"
+.ends
 
+m_section_superfree Object_Updating_Enemies NAMESPACE objectUpdating
+	.include "code/updateEnemies.s"
+	.include "data/enemyCodeTable.s"
 .ends
 
 

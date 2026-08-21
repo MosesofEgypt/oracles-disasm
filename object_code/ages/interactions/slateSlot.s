@@ -4,7 +4,7 @@
 ; Variables:
 ;   var3f: Counter to push against this object until the slate will be placed
 ; ==================================================================================================
-interactionCodedb:
+m_InteractionCode $db
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_PUSHBLOCK_TRIGGER
 ; ==================================================================================================
-interactionCode13:
+m_InteractionCode $13
 	call interactionDeleteAndRetIfEnabled02
 	call returnIfScrollMode01Unset
 	ld e,Interaction.state

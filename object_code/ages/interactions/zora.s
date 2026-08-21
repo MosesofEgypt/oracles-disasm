@@ -5,7 +5,7 @@
 ;   var03: ?
 ;   var38: ?
 ; ==================================================================================================
-interactionCodeab:
+m_InteractionCode $ab
 	ld e,Interaction.subid
 	ld a,(de)
 	rst_jumpTable

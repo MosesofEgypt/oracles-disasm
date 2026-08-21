@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_ROSA_HIDING
 ; ==================================================================================================
-interactionCode6c:
+m_InteractionCode $6c
 	ld e,Interaction.subid
 	ld a,(de)
 	rst_jumpTable
@@ -11,7 +11,7 @@ interactionCode6c:
 ; ==================================================================================================
 ; INTERAC_STRANGE_BROTHERS_HIDING
 ; ==================================================================================================
-interactionCode6d:
+m_InteractionCode $6d
 	ld e,Interaction.subid
 	ld a,(de)
 	rst_jumpTable

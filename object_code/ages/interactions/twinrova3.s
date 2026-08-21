@@ -6,7 +6,7 @@
 ;   var3d: # of values in the position list (var3c must stop here).
 ;   var3e/var3f: A pointer to a list of target positions.
 ; ==================================================================================================
-interactionCodebc:
+m_InteractionCode $bc
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

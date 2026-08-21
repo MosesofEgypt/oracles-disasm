@@ -4,7 +4,7 @@
 ; Variables:
 ;   var03: Short-form position
 ; ==================================================================================================
-interactionCodede:
+m_InteractionCode $de
 	ld a,$02
 	ld (wcddd),a
 	ld a,(wMenuDisabled)

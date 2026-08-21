@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_TRIGGER_TRANSLATOR
 ; ==================================================================================================
-interactionCode24:
+m_InteractionCode $24
 	call interactionDeleteAndRetIfEnabled02
 	ld e,Interaction.subid
 	ld a,(de)

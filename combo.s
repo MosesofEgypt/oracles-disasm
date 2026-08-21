@@ -45,11 +45,7 @@ checkNpcShouldExistAtGameStage_body:
 m_section_free Bank_a_test NAMESPACE agesInteractionsBank0a
 func_0a_7877:
 	ret
-.ends
 
-m_section_free Bank_10_test NAMESPACE bank10
-blackTower_getMovingFlamesNextTileCoords:
-	ret
 .ends
 
 m_section_free Bank_15_test NAMESPACE seasonsInteractionsBank15
@@ -635,51 +631,52 @@ m_section_superfree Seasons_Interactions_Bank15 NAMESPACE seasonsInteractionsBan
 ;	.include "object_code/seasons/interactions/loneZora.s"
 .ends
 
-m_section_superfree Enemy_Code_Bank_1 NAMESPACE enemyCode1
-;	.include "object_code/common/enemies/commonCode.s"
+m_section_superfree Enemy_Code_1 NAMESPACE enemyCode
+	.include "object_code/common/enemies/commonCode.s"
 
-;	.include "object_code/common/enemies/riverZora.s"
-;	.include "object_code/common/enemies/octorok.s"
-;	.include "object_code/common/enemies/boomerangMoblin.s"
-;	.include "object_code/common/enemies/leever.s"
-;	.include "object_code/common/enemies/moblinsAndShroudedStalfos.s"
-;	.include "object_code/common/enemies/arrowDarknut.s"
-;	.include "object_code/common/enemies/lynel.s"
-;	.include "object_code/common/enemies/bladeAndFlameTrap.s"
-;	.include "object_code/common/enemies/rope.s"
-;	.include "object_code/common/enemies/gibdo.s"
-;	.include "object_code/common/enemies/spark.s"
-;	.include "object_code/common/enemies/whisp.s"
-;	.include "object_code/common/enemies/spikedBeetle.s"
-;	.include "object_code/common/enemies/bubble.s"
-;	.include "object_code/common/enemies/beamos.s"
-;	.include "object_code/common/enemies/ghini.s"
-;	.include "object_code/common/enemies/buzzblob.s"
-;	.include "object_code/common/enemies/sandCrab.s"
-;	.include "object_code/common/enemies/spinyBeetle.s"
-;	.include "object_code/common/enemies/armos.s"
-;	.include "object_code/common/enemies/piranha.s"
+	.include "object_code/common/enemies/riverZora.s"
+	.include "object_code/common/enemies/octorok.s"
+	.include "object_code/common/enemies/boomerangMoblin.s"
+	.include "object_code/common/enemies/leever.s"
+	.include "object_code/common/enemies/moblinsAndShroudedStalfos.s"
+	.include "object_code/common/enemies/arrowDarknut.s"
+	.include "object_code/common/enemies/lynel.s"
+	.include "object_code/common/enemies/bladeAndFlameTrap.s"
+	.include "object_code/common/enemies/rope.s"
+	.include "object_code/common/enemies/gibdo.s"
+	.include "object_code/common/enemies/spark.s"
+	.include "object_code/common/enemies/whisp.s"
+	.include "object_code/common/enemies/spikedBeetle.s"
+	.include "object_code/common/enemies/bubble.s"
+	.include "object_code/common/enemies/beamos.s"
+	.include "object_code/common/enemies/ghini.s"
+	.include "object_code/common/enemies/buzzblob.s"
+	.include "object_code/common/enemies/sandCrab.s"
+	.include "object_code/common/enemies/spinyBeetle.s"
+	.include "object_code/common/enemies/armos.s"
+	.include "object_code/common/enemies/piranha.s"
 
-;	.include "object_code/ages/enemies/veranSpider.s"
-;	.include "object_code/ages/enemies/eyesoarChild.s"
-;	.include "object_code/common/enemies/ironMask.s"
-;	.include "object_code/ages/enemies/veranChildBee.s"
-;	.include "object_code/ages/enemies/enableSidescrollDownTransition.s"
+	.include "object_code/ages/enemies/veranSpider.s"
+	.include "object_code/ages/enemies/eyesoarChild.s"
+	.include "object_code/common/enemies/ironMask.s"
+	.include "object_code/ages/enemies/veranChildBee.s"
+	.include "object_code/ages/enemies/enableSidescrollDownTransition.s"
 
-;	.include "object_code/seasons/enemies/magunesu.s"
-;	.include "object_code/seasons/enemies/unusedTemplate.s"
-;	.include "object_code/seasons/enemies/gohmaGel.s"
-;	.include "object_code/seasons/enemies/mothulaChild.s"
-;	.include "object_code/seasons/enemies/blaino.s"
-;	.include "object_code/seasons/enemies/miniDigdogger.s"
-;	.include "object_code/seasons/enemies/makuTreeBubble.s"
-;	.include "object_code/seasons/enemies/sandPuff.s"
-;	.include "object_code/seasons/enemies/wallFlameShooter.s"
-;	.include "object_code/seasons/enemies/blainosGloves.s"
+	.include "object_code/seasons/enemies/magunesu.s"
+	.include "object_code/seasons/enemies/unusedTemplate.s"
+	.include "object_code/seasons/enemies/gohmaGel.s"
+	.include "object_code/seasons/enemies/mothulaChild.s"
+	.include "object_code/seasons/enemies/blaino.s"
+	.include "object_code/seasons/enemies/miniDigdogger.s"
+	.include "object_code/seasons/enemies/makuTreeBubble.s"
+	.include "object_code/seasons/enemies/sandPuff.s"
+	.include "object_code/seasons/enemies/wallFlameShooter.s"
+	.include "object_code/seasons/enemies/blainosGloves.s"
 
 .ends
 
-m_section_superfree Enemy_Code_Bank_2 NAMESPACE enemyCode2
+m_section_superfree Enemy_Code_2 NAMESPACE enemyCodeExt1
+	.define EXTENDED_SECTION 1
 	.include "object_code/common/enemies/commonCode.s"
 
 ;	.include "object_code/common/enemies/swordEnemies.s"
@@ -716,9 +713,11 @@ m_section_superfree Enemy_Code_Bank_2 NAMESPACE enemyCode2
 ;	.include "object_code/ages/enemies/targetCartCrystal.s"
 
 	.include {"{GAME_DATA_DIR}/movingSidescrollPlatform.s"}
+	.undefine EXTENDED_SECTION
 .ends
 
-m_section_superfree enemyCode_Bank3e NAMESPACE bank3e
+m_section_superfree Enemy_Code_3 NAMESPACE enemyCodeExt2
+	.define EXTENDED_SECTION 2
 	.include "object_code/common/enemies/commonCode.s"
 
 ;	.include "object_code/common/enemies/polsVoice.s"
@@ -745,9 +744,11 @@ m_section_superfree enemyCode_Bank3e NAMESPACE bank3e
 ;	.include "object_code/common/enemies/greatFairy.s"
 ;	.include "object_code/common/enemies/fireKeese.s"
 ;	.include "object_code/common/enemies/waterTektite.s"
+	.undefine EXTENDED_SECTION
 .ends
 
-m_section_superfree Boss_Code_Bank_1 NAMESPACE bossCode1
+m_section_superfree Enemy_Code_Ages_1 NAMESPACE enemyCodeAges
+	.define ROM_AGES
 	.include "object_code/common/enemies/commonCode.s"
 	.include "object_code/common/enemies/commonBossCode.s"
 
@@ -759,10 +760,11 @@ m_section_superfree Boss_Code_Bank_1 NAMESPACE bossCode1
 ;	.include "object_code/common/enemies/vire.s"
 ;	.include "object_code/ages/enemies/anglerFish.s"
 ;	.include "object_code/ages/enemies/blueStalfos.s"
-
+	.undefine ROM_AGES
 .ends
 
-m_section_superfree Boss_Code_Bank_2 NAMESPACE bossCode2
+m_section_superfree Enemy_Code_Seasons_1 NAMESPACE enemyCodeSeasons
+	.define ROM_SEASONS
 	.include "object_code/common/enemies/commonCode.s"
 	.include "object_code/common/enemies/commonBossCode.s"
 
@@ -782,10 +784,12 @@ m_section_superfree Boss_Code_Bank_2 NAMESPACE bossCode2
 ;	.include "object_code/seasons/enemies/digdogger.s"
 ;	.include "object_code/seasons/enemies/manhandla.s"
 ;	.include "object_code/seasons/enemies/medusaHead.s"
-
+	.undefine ROM_SEASONS
 .ends
 
-m_section_superfree Boss_Code_Bank_3 NAMESPACE bossCode3
+m_section_superfree Enemy_Code_Ages_2 NAMESPACE enemyCodeAgesExt1
+	.define ROM_AGES
+	.define EXTENDED_SECTION 1
 	.include "object_code/common/enemies/commonCode.s"
 	.include "object_code/common/enemies/commonBossCode.s"
 
@@ -797,12 +801,16 @@ m_section_superfree Boss_Code_Bank_3 NAMESPACE bossCode3
 ;	.include "object_code/ages/enemies/octogon.s"
 ;	.include "object_code/ages/enemies/plasmarine.s"
 ;	.include "object_code/ages/enemies/kingMoblin.s"
+	.undefine EXTENDED_SECTION
+	.undefine ROM_AGES
 .ends
 
-m_section_superfree Boss_Code_Bank_4 NAMESPACE bossCode4
+m_section_superfree Enemy_Code_Ages_2 NAMESPACE enemyCodeAgesExt2
+	.define ROM_AGES
+	.define EXTENDED_SECTION 2
 	.include "object_code/common/enemies/commonCode.s"
 	.include "object_code/common/enemies/commonBossCode.s"
-;
+
 ;	.include "object_code/common/enemies/mergedTwinrova.s"
 ;	.include "object_code/common/enemies/twinrova.s"
 ;	.include "object_code/common/enemies/ganon.s"
@@ -813,16 +821,27 @@ m_section_superfree Boss_Code_Bank_4 NAMESPACE bossCode4
 ;	.include "object_code/ages/enemies/veranFairy.s"
 ;	.include "object_code/ages/enemies/ramrock.s"
 ;	.include "object_code/ages/enemies/kingMoblinMinionMain.s"
+	.undefine EXTENDED_SECTION
+	.undefine ROM_AGES
 .ends
 
-m_section_superfree Boss_Code_Bank_5 NAMESPACE bossCode5
+m_section_superfree Enemy_Code_Seasons_2 NAMESPACE enemyCodeSeasonsExt1
+	.define ROM_SEASONS
+	.define EXTENDED_SECTION 1
 	.include "object_code/common/enemies/commonCode.s"
 	.include "object_code/common/enemies/commonBossCode.s"
+
+;	.include "object_code/common/enemies/mergedTwinrova.s"
+;	.include "object_code/common/enemies/twinrova.s"
+;	.include "object_code/common/enemies/ganon.s"
+;	.include "object_code/common/enemies/none.s"
 
 ;	.include "object_code/seasons/enemies/generalOnox.s"
 ;	.include "object_code/seasons/enemies/dragonOnox.s"
 ;	.include "object_code/seasons/enemies/gleeok.s"
 ;	.include "object_code/seasons/enemies/kingMoblin.s"
+	.undefine EXTENDED_SECTION
+	.undefine ROM_SEASONS
 .ends
 
 m_section_superfree Part_Code_1 NAMESPACE partCode
@@ -1036,12 +1055,19 @@ m_section_superfree Bank_7_Data namespace bank7
 	.include {"{BUILD_DIR}/objectCollisionTable.s"}
 .ends
 
-m_section_superfree Update_Interactions NAMESPACE objectUpdating
-	.include "code/combo/updateInteractions.s"
+m_section_superfree Object_Updating_Interactions NAMESPACE objectUpdating
+	.include "code/updateInteractions.s"
+	.include "data/interactionCodeTable.s"
+.ends
 
-	.include "code/standardPartUpdate.s"
+m_section_superfree Object_Updating_Parts NAMESPACE objectUpdating
 	.include "code/updateParts.s"
 	.include "data/partCodeTable.s"
+.ends
+
+m_section_superfree Object_Updating_Enemies NAMESPACE objectUpdating
+	.include "code/updateEnemies.s"
+	.include "data/enemyCodeTable.s"
 .ends
 
 m_section_superfree Bank_3_Cutscenes NAMESPACE bank3Cutscenes

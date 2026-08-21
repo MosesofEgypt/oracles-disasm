@@ -6,7 +6,7 @@
 ;   var36: Target x-position
 ;   var37: ?
 ; ==================================================================================================
-interactionCodeb9:
+m_InteractionCode $b9
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

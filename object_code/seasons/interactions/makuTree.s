@@ -6,7 +6,7 @@
 ;   wc6e5: ???
 ;   ws_c6e0: ???
 ; ==================================================================================================
-interactionCode87:
+m_InteractionCode $87
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

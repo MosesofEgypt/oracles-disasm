@@ -4,7 +4,7 @@
 ; Variables:
 ;   var3f: Nonzero if the carpenter has returned to the boss
 ; ==================================================================================================
-interactionCode9a:
+m_InteractionCode $9a
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

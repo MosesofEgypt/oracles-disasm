@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_COLORED_CUBE
 ; ==================================================================================================
-interactionCode19:
+m_InteractionCode $19
 	call objectReplaceWithAnimationIfOnHazard
 	ret c
 	ld e,Interaction.state

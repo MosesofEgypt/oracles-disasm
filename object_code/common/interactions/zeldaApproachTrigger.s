@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_ZELDA_APPROACH_TRIGGER
 ; ==================================================================================================
-interactionCodeda:
+m_InteractionCode $da
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

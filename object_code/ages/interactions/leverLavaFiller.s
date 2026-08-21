@@ -5,7 +5,7 @@
 ;   counter2: Number of frames between two lava tiles being filled. Effectively this sets the
 ;             "speed" of the lava filler (lower is faster).
 ; ==================================================================================================
-interactionCoded8:
+m_InteractionCode $d8
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

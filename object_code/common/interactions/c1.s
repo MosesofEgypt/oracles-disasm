@@ -5,7 +5,7 @@
 ;   counter1/counter2: 16-bit counter
 ;   var36: Counter for sparkle spawning
 ; ==================================================================================================
-interactionCodec1:
+m_InteractionCode $c1
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

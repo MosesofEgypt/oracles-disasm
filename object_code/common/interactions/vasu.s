@@ -6,7 +6,7 @@
 ;   var37: Nonzero if Link has unappraised rings?
 ;   var38: Nonzero if Link has rings in the ring list?
 ; ==================================================================================================
-interactionCode89:
+m_InteractionCode $89
 	ld a,(wTextIsActive)
 	or a
 	jr nz,++

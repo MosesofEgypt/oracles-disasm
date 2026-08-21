@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_SMALL_VOLCANO
 ; ==================================================================================================
-interactionCode51:
+m_InteractionCode $51
 	call checkInteractionState
 	jr z,@state0
 	ld a,(wFrameCounter)

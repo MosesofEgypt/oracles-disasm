@@ -5,7 +5,7 @@
 ;   var37: base animation index ($00 for no mustache, $04 for mustache)
 ;   var3e: animation index (to be added to var37)
 ; ==================================================================================================
-interactionCode65:
+m_InteractionCode $65
 	call checkInteractionState
 	jr nz,@state1
 

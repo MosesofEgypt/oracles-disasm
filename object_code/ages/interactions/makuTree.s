@@ -7,7 +7,7 @@
 ;   var3e: "Script mode"; mainly determines animation (see makuTree_subid00Script_body)
 ;   var3f: Text index to show for (sometimes shows the one after it as well)
 ; ==================================================================================================
-interactionCode87:
+m_InteractionCode $87
 	ld e,Interaction.subid
 	ld a,(de)
 	rst_jumpTable

@@ -4,7 +4,7 @@
 ; Variables:
 ;   var3f: for some subids, ralph's animations only updates when this is 0.
 ; ==================================================================================================
-interactionCode37:
+m_InteractionCode $37
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

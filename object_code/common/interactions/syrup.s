@@ -8,10 +8,10 @@
 ;   var3b: Object index of item that Link is holding
 ; ==================================================================================================
 .ifdef ROM_AGES
-interactionCode5f:
+m_InteractionCode $5f
 	callab commonInteractions2.checkReloadShopItemTiles
 .else
-interactionCode43:
+m_InteractionCode $43
 	call commonInteractions2.checkReloadShopItemTiles
 .endif
 	call @runState

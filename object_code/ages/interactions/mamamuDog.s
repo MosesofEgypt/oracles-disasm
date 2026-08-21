@@ -8,7 +8,7 @@
 ;   var3e: Used as a counter in script
 ;   var3f: Animation index
 ; ==================================================================================================
-interactionCode54:
+m_InteractionCode $54
 	ld e,Interaction.subid
 	ld a,(de)
 	rst_jumpTable

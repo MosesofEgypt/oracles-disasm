@@ -2,9 +2,9 @@
 ; INTERAC_COMPANION_SPAWNER
 ; ==================================================================================================
 .ifdef ROM_AGES
-interactionCode67:
+m_InteractionCode $67
 .else
-interactionCode5f:
+m_InteractionCode $5f
 .endif
 	ld e,Interaction.subid
 	ld a,(de)

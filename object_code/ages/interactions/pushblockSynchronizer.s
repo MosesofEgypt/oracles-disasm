@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_PUSHBLOCK_SYNCHRONIZER
 ; ==================================================================================================
-interactionCodebd:
+m_InteractionCode $bd
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

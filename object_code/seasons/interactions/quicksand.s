@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_QUICKSAND
 ; ==================================================================================================
-interactionCode5e:
+m_InteractionCode $5e
 	call returnIfScrollMode01Unset
 	ld e,Interaction.state
 	ld a,(de)

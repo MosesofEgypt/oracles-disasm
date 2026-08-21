@@ -5,7 +5,7 @@
 ;   var30: Value to add to angle
 ;   var31: Number of times to add [var30] to angle before switching direction
 ; ==================================================================================================
-interactionCode91:
+m_InteractionCode $91
 	ld e,Interaction.subid
 	ld a,(de)
 	or a

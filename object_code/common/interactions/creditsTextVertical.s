@@ -4,7 +4,7 @@
 ; Variables:
 ;   var30/var31: 16-bit counter?
 ; ==================================================================================================
-interactionCodeaf:
+m_InteractionCode $af
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

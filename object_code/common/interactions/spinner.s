@@ -4,7 +4,7 @@
 ; Variables:
 ;   var3a: Bitmask for wSpinnerState (former value of "xh")
 ; ==================================================================================================
-interactionCode7d:
+m_InteractionCode $7d
 	ld e,Interaction.subid
 	ld a,(de)
 	rst_jumpTable

@@ -14,7 +14,7 @@
 	GASHATREASURE_5_HEARTS		db ; $09
 .ende
 
-interactionCodeb6:
+m_InteractionCode $b6
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

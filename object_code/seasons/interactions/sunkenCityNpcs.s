@@ -3,9 +3,9 @@
 ; INTERAC_MASTER_DIVERS_WIFE
 ; INTERAC_MASTER_DIVER
 ; ==================================================================================================
-interactionCode8a:
-interactionCode8b:
-interactionCode8d:
+m_InteractionCode $8a
+m_InteractionCode $8b
+m_InteractionCode $8d
 	call checkInteractionState
 	jr nz,@state1
 	ld a,$01

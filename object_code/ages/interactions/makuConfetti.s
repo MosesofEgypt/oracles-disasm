@@ -18,7 +18,7 @@
 ;   var3c/3d: Y acceleration?
 ;   var3e/3f: X acceleration?
 ; ==================================================================================================
-interactionCode62:
+m_InteractionCode $62
 	ld e,Interaction.subid
 	ld a,(de)
 	rst_jumpTable

@@ -1,5 +1,5 @@
 .MACRO m_InteracPointer
-	.if defined(ROM_COMBO)
+	.if defined(ROM_COMBO) || defined(ENABLE_NEW_GAME_PLUS)
 		.db :\1
 	.endif
 	.dw \1

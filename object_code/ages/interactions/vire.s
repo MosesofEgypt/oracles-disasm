@@ -5,7 +5,7 @@
 ;   relatedObj1: Zelda object (for vire subid 2 only)
 ;   var38: If nonzero, the script is run (subids 0 and 1 only)
 ; ==================================================================================================
-interactionCodeb8:
+m_InteractionCode $b8
 	ld e,Interaction.subid
 	ld a,(de)
 	rst_jumpTable

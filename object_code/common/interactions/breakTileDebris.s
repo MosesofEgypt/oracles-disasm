@@ -2,19 +2,19 @@
 ; INTERAC_GRASSDEBRIS (and other animations)
 ; ==================================================================================================
 
-interactionCode00:
-interactionCode01:
-interactionCode02:
-interactionCode03:
-interactionCode04:
-interactionCode05:
-interactionCode06:
-interactionCode07:
-interactionCode08:
-interactionCode09:
-interactionCode0a:
-interactionCode0b:
-interactionCode0c:
+m_InteractionCode $00
+m_InteractionCode $01
+m_InteractionCode $02
+m_InteractionCode $03
+m_InteractionCode $04
+m_InteractionCode $05
+m_InteractionCode $06
+m_InteractionCode $07
+m_InteractionCode $08
+m_InteractionCode $09
+m_InteractionCode $0a
+m_InteractionCode $0b
+m_InteractionCode $0c
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

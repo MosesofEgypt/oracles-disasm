@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_MOVING_SIDESCROLL_CONVEYOR
 ; ==================================================================================================
-interactionCodea2:
+m_InteractionCode $a2
 	call interactionAnimate
 	call sidescrollPlatform_checkLinkOnPlatform
 	call nz,sidescrollPlatform_updateLinkKnockbackForConveyor
@@ -21,11 +21,7 @@ interactionCodea2:
 	.dw movingPlatform_stateC
 
 @state0To7:
-.ifdef ROM_AGES
-	ld hl,bank0e.movingSidescrollConveyorScriptTable
-.else
-	ld hl,bank0d.movingSidescrollConveyorScriptTable
-.endif
+	ld hl,enemyCodeExt1.movingSidescrollConveyorScriptTable
 	call objectLoadMovementScript
 	call interactionInitGraphics
 	ld h,d

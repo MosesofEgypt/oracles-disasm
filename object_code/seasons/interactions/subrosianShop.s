@@ -5,7 +5,7 @@
 ;   var38 - number of 2nd currency required
 ;   var39 - ore chunk cost
 ; ==================================================================================================
-interactionCode81:
+m_InteractionCode $81
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

@@ -6,7 +6,7 @@
 ;   var39: For some subids, animations only update when var39 is zero
 ;   var3d: Saved X position?
 ; ==================================================================================================
-interactionCode3a:
+m_InteractionCode $3a
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

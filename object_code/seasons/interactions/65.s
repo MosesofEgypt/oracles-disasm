@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_D6_CRYSTAL_TRAP_ROOM
 ; ==================================================================================================
-interactionCode65:
+m_InteractionCode $65
 	call returnIfScrollMode01Unset
 	call func_5258
 	jp nz,interactionDelete

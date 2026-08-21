@@ -4,7 +4,7 @@
 ; Variables:
 ;   var3f: Nonzero when "napping" (link is far away)
 ; ==================================================================================================
-interactionCode66:
+m_InteractionCode $66
 	ld e,Interaction.subid
 	ld a,(de)
 	rst_jumpTable

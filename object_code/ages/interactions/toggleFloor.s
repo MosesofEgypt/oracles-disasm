@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_TOGGLE_FLOOR: red/yellow/blue floor tiles that change color when jumped over.
 ; ==================================================================================================
-interactionCode15:
+m_InteractionCode $15
 	ld e,Interaction.subid
 	ld a,(de)
 	or a

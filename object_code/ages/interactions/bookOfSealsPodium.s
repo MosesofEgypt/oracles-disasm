@@ -4,7 +4,7 @@
 ; Variables:
 ;   var03: Tile index to replace path with?
 ; ==================================================================================================
-interactionCodeb4:
+m_InteractionCode $b4
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

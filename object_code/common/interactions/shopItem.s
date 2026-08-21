@@ -4,7 +4,7 @@
 ; Variables:
 ;   var30/31: Y/X position where the item rests in the selection area
 ; ==================================================================================================
-interactionCode47:
+m_InteractionCode $47
 	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable

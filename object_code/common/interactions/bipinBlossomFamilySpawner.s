@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_BIPIN_BLOSSOM_FAMILY_SPAWNER
 ; ==================================================================================================
-interactionCodeac:
+m_InteractionCode $ac
 	ld a,GLOBALFLAG_FINISHEDGAME
 	call checkGlobalFlag
 	jp nz,interactionDelete

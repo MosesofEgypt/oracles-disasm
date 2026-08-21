@@ -448,7 +448,7 @@ veranPossessionBoss_nayruAmbi_state13:
 	ret nz
 
 	call ecom_incState
-	jpab clearAllItemsAndPutLinkOnGround
+	jp clearAllItemsAndPutLinkOnGround
 
 
 ; Delete all objects (including self), resume cutscene with a newly created object

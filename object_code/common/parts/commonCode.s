@@ -58,9 +58,6 @@ partCommon_getTileCollisionInFront_allowHoles:
 	dec a
 	jp checkGivenCollision_allowHoles
 
-
-.include "code/standardPartUpdate.s"
-
 ;;
 ; Checks for collisions. Considers "screen boundaries" to be collisions.
 ;

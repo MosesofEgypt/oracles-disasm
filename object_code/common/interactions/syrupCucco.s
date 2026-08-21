@@ -7,9 +7,9 @@
 ;   var3e: Also an animation index?
 ; ==================================================================================================
 .ifdef ROM_AGES
-interactionCodec9:
+m_InteractionCode $c9
 .else
-interactionCode49:
+m_InteractionCode $49
 .endif
 	call @runState
 	jp @updateAnimation

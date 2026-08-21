@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_DOOR_CONTROLLER
 ; ==================================================================================================
-interactionCode1e:
+m_InteractionCode $1e
 	call interactionDeleteAndRetIfEnabled02
 	call returnIfScrollMode01Unset
 .if defined(ROM_AGES) || defined(ROM_COMBO)
