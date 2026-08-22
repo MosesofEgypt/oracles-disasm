@@ -1421,9 +1421,9 @@ createClinkInteraction:
 
 ;;
 ; Apply damage to the enemy/part
+; @param	a	Enemy damage type (see enum below)
 ; @param	b	Item/Link object
 ; @param	d	Enemy/Part object
-; @param	e	Enemy damage type (see enum below)
 ; @param	hFF90	CollisionType
 applyDamageToEnemyOrPart:
 	ld hl,@damageTypeTable

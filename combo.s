@@ -450,6 +450,8 @@ m_section_superfree Ages_Interactions_Bank0b NAMESPACE agesInteractionsBank0b
 ;	.include "object_code/ages/interactions/makuSeedAndEssences.s"
 ;	.include "object_code/ages/interactions/leverLavaFiller.s"
 ;	.include "object_code/ages/interactions/slateSlot.s"
+
+	.include {"{GAME_DATA_DIR}/movingSidescrollPlatform.s"}
 m_EndObjectCodeSection
 
 m_section_superfree Ages_Interactions_Bank10 NAMESPACE agesInteractionsBank10
@@ -681,8 +683,6 @@ m_EnemyCodeSection
 	.include "object_code/common/enemies/twinrovaIce.s"
 	.include "object_code/common/enemies/twinrovaBat.s"
 	.include "object_code/common/enemies/ganonRevivalCutscene.s"
-
-	.include {"{GAME_DATA_DIR}/movingSidescrollPlatform.s"}
 m_EndObjectCodeSection
 
 m_EnemyCodeSection

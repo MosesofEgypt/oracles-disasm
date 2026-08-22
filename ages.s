@@ -468,6 +468,8 @@ m_section_free Ages_Interactions_Bank0b NAMESPACE agesInteractionsBank0b
 	.include "object_code/ages/interactions/makuSeedAndEssences.s"
 	.include "object_code/ages/interactions/leverLavaFiller.s"
 	.include "object_code/ages/interactions/slateSlot.s"
+
+	.include {"{GAME_DATA_DIR}/movingSidescrollPlatform.s"}
 .ends
 
 
@@ -592,7 +594,6 @@ m_EnemyCodeSection
 	.include "object_code/ages/enemies/vineSprout.s"
 	.include "object_code/ages/enemies/targetCartCrystal.s"
 
-	.include {"{GAME_DATA_DIR}/movingSidescrollPlatform.s"}
 m_EndObjectCodeSection
 
 .BANK $0f SLOT 1

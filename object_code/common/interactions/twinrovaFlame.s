@@ -19,7 +19,15 @@ m_InteractionCode $b0
 
 	ld e,Interaction.subid
 	ld a,(de)
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+
+		cp $06
+		jr ++
+	+
+		cp $0b
+	++
+.elif defined(ROM_AGES)
 	cp $06
 .else
 	cp $0b

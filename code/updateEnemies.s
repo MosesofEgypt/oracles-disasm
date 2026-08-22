@@ -152,6 +152,7 @@ updateEnemy:
 			ld c,ENEMYSTATUS_NORMAL
 	+
 .endif
+	ld e,Enemy.id
 	ld a,(de)
 	call getEnemyCodeTable
 

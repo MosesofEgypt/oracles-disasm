@@ -46,12 +46,12 @@ m_PartCode $0b
 @state0To7:
 .if defined(ROM_COMBO)
 	call wIsSeasons
-	ld hl,objectMovement.orbMovementScript_seasons
+	ld hl,orbMovementScript_seasons
 	jr c,+
-		ld hl,objectMovement.orbMovementScript_ages
+		ld hl,orbMovementScript_ages
 	+
 .elif defined(ROM_AGES)
-	ld hl,objectMovement.orbMovementScript
+	ld hl,orbMovementScript
 .endif
 	call objectLoadMovementScript
 

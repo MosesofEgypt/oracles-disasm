@@ -360,8 +360,13 @@ seasons_types_new = [
     *seasons_types_new_only
     ]
 
-remapped_ages    = [ages_types_old.index(n) for n in ages_types_new]
-remapped_seasons = [seasons_types_old.index(n) for n in seasons_types_new]
+# maps old ENEMYCOLLISION values to new ones
+remapped_ages        = [ages_types_new.index(n) for n in ages_types_old]
+remapped_seasons     = [seasons_types_new.index(n) for n in seasons_types_old]
+
+# maps new ENEMYCOLLISION values to old ones
+inv_remapped_ages    = [remapped_ages.index(i) for i in range(len(remapped_ages))]
+inv_remapped_seasons = [remapped_seasons.index(i) for i in range(len(remapped_seasons))]
 
 
 with open(agesDataDir + "/objectCollisionTable.s") as f:
@@ -371,20 +376,20 @@ with open(seasonsDataDir + "/objectCollisionTable.s") as f:
 
 
 new_data = ""
-for mapping, data, game in [
-        (remapped_ages,    ages_data,    "ages"),
-        (remapped_seasons, seasons_data, "seasons"),
+for mapping, inv_mapping, data, game in [
+        (remapped_ages,    inv_remapped_ages,    ages_data,    "ages"),
+        (remapped_seasons, inv_remapped_seasons, seasons_data, "seasons"),
         ]:
     data_lines = []
     data_val_count = 0
+    found_start = False
     for line in data.split("\n"):
         line = line.strip()
-        if not data_lines:
-            if "objectCollisionTable" in line and line[0] != ";":
-                data_lines.append(f"objectCollisionTable_{game}:")
-                data_lines.append("")
+        if found_start and line:
+            i = mapping[len(data_lines)-1]
+            if "(0x" in line:
+                line = line.split("(0x", 1)[0] + f"(0x{i:02x})"
 
-        elif line:
             data_lines[-1] += "\t" + line + "\n"
             data_val_count += line.count("$")*(
                 1 if line.startswith(".db") else
@@ -396,12 +401,20 @@ for mapping, data, game in [
                     f"Unexpected collision type byte count: {data_val_count}\n"
                     "Cannot merge objectCollisionTables."
                     )
+            elif len(mapping) == len(data_lines):
+                break
             elif data_val_count == 32:
                 data_lines.append("")
                 data_val_count = 0
 
+        elif "objectCollisionTable" in line and line[0] != ";":
+            found_start = True
+            data_lines.append("")
+
+
     new_data += "\n".join([
-        data_lines[i+1] for i in (-1, *mapping)
+        f"objectCollisionTable_{game}:",
+        *(data_lines[inv_mapping[i]] for i in range(len(inv_mapping)))
         ])
     new_data += "\n\n"
 
@@ -452,14 +465,17 @@ for mapping, data, game in [
     new_data += "\n".join(data_lines)
     new_data += "\n\n"
 
+
 with open(outputDir + "/enemyData.s", "w") as f:
     f.write(new_data)
 
 
 with open(agesDataDir + "/partData.s") as f:
     ages_data = f.read()
+
 with open(seasonsDataDir + "/partData.s") as f:
     seasons_data = f.read()
+
 
 new_data = ""
 for mapping, data, game in [

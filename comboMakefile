@@ -205,7 +205,7 @@ GEN_FILES += constants/common/enemyCollisionModes.s
 $(BUILD_DIR)/objectCollisionTable.s:   $(GEN_FILES) | $(BUILD_DIR)
 $(BUILD_DIR)/partData.s:               $(GEN_FILES) $(BUILD_DIR)/objectCollisionTable.s | $(BUILD_DIR)
 $(BUILD_DIR)/enemyData.s:              $(GEN_FILES) $(BUILD_DIR)/partData.s | $(BUILD_DIR)
-$(BUILD_DIR)/enemyCollisionModes.s: $(BUILD_DIR)/enemyData.s | $(BUILD_DIR)
+$(BUILD_DIR)/enemyCollisionModes.s: $(BUILD_DIR)/enemyData.s $(BUILD_DIR)/partData.s $(BUILD_DIR)/objectCollisionTable.s | $(BUILD_DIR)
 	@echo "Combining enemy, part, and collision data..."
 	@$(PYTHON) tools/build/makeComboCollisionModesAndEnemyPartData.py $(BUILD_DIR) data/ages data/seasons
 

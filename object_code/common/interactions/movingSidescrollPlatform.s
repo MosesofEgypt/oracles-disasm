@@ -19,7 +19,7 @@ m_InteractionCode $a1
 	.dw movingPlatform_stateC
 
 @state0To7:
-	ld hl,enemyCodeExt1.movingSidescrollPlatformScriptTable
+	ld hl,movingSidescrollPlatformScriptTable
 	call objectLoadMovementScript
 	call interactionInitGraphics
 	ld e,Interaction.direction

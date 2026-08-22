@@ -21,7 +21,7 @@ m_InteractionCode $a2
 	.dw movingPlatform_stateC
 
 @state0To7:
-	ld hl,enemyCodeExt1.movingSidescrollConveyorScriptTable
+	ld hl,movingSidescrollConveyorScriptTable
 	call objectLoadMovementScript
 	call interactionInitGraphics
 	ld h,d

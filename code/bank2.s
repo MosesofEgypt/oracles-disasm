@@ -5194,21 +5194,27 @@ loadItemIconGfx:
 				ldi a,(hl)
 				; break if we hit the terminator
 				or a
-				jr z,+
+				jr z,+++
 				cp c
-				jr nz,-
-					; found a match
-					ldi a,(hl)
-					ld c,b
-					ld b,a
-					rst_derefHl
-					bit 0,c
-					jr z,++
-						; second half of tile
-						ld a,$20
-						rst_addAToHl
-					++
-					jp copy20BytesFromBank
+				jr z,+
+					; no match. skip tile pointer data and retry
+					inc hl
+					inc hl
+					inc hl
+					jr -
+				+
+				; found a match
+				ldi a,(hl)
+				ld c,b
+				ld b,a
+				rst_derefHl
+				bit 0,c
+				jr z,++
+					; second half of tile
+					ld a,$20
+					rst_addAToHl
+				++
+				jp copy20BytesFromBank
 	+++
 
 	; check for item level upgrades
@@ -7913,7 +7919,6 @@ inventorySubscreen2_drawTreasures:
 	rlca
 .if defined(ROM_COMBO)
 	jr ++
-+
 .endif
 .endif
 
@@ -8711,7 +8716,19 @@ mapMenu_state0:
 	; - GFXH_PAST_MAP (ages) / GFXH_SUBROSIA_MAP (seasons)
 	; - GFXH_DUNGEON_MAP
 	ld a,(wMapMenu.mode)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+
+		; ages overworld
+		add GFXH_OVERWORLD_MAP_PRESENT
+		jr ++
+	+
+		; seasons overworld
+		add GFXH_OVERWORLD_MAP
+	++
+.else
 	add GFXH_OVERWORLD_MAP
+.endif
 	call loadGfxHeader
 
 	ld a,(wMapMenu.mode)
@@ -9197,8 +9214,8 @@ mapGetRoomTextOrReturn:
 mapGetRoomText:
 	call mapGetRoomIndexWithoutUnusedColumns
 .ifdef ROM_COMBO
-	ld hl,presentMapTextIndices_seasons
-	jr nc,+
+	jr c,+
+		ld hl,presentMapTextIndices_seasons
 		call wIsSeasons
 		jr c,++
 			ld hl,presentMapTextIndices_ages
@@ -11689,7 +11706,7 @@ mapIconOamTable_seasons:
 	.db $08 $00 $68 $04
 	.db $08 $08 $6a $04
 
-.endif ; ROM_SEASONS
+.endif
 
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)

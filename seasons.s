@@ -413,6 +413,8 @@ m_section_free Seasons_Interactions_Bank0a NAMESPACE seasonsInteractionsBank0a
 	.include "object_code/seasons/interactions/zeldaVillagersRoom.s"
 	.include "object_code/seasons/interactions/d4HolesFloortrapRoom.s"
 	.include "object_code/seasons/interactions/herosCaveSwordChest.s"
+
+	.include {"{GAME_DATA_DIR}/movingSidescrollPlatform.s"}
 m_EndObjectCodeSection
 
 
@@ -525,8 +527,6 @@ m_EnemyCodeSection
 	.include "object_code/seasons/enemies/sandPuff.s"
 	.include "object_code/seasons/enemies/wallFlameShooter.s"
 	.include "object_code/seasons/enemies/blainosGloves.s"
-
-	.include {"{GAME_DATA_DIR}/movingSidescrollPlatform.s"}
 m_EndObjectCodeSection
 
 

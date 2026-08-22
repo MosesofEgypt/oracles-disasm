@@ -14851,7 +14851,7 @@ toggleIsSeasons:
 ;;
 ; @param	cflag	If set, game will be set to seasons
 setIsSeasons:
-	; insert a small 3-byte program into hRAM for
+	; insert a small 3-byte program into wRAM for
 	; quickly determining which game is being run
 	push hl
 	ld hl,wIsSeasons

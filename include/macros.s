@@ -379,7 +379,9 @@
 			.define EXISTS
 		.else
 			m_CodePointer NIL_FUNC
-			.print {"FAIL TO FIND {CODE_PREFIX}{ID}\n"}
+			.if defined(DEBUG_SECTION_PRINTOUT)
+				.print {"FAIL TO FIND {CODE_PREFIX}{ID}\n"}
+			.endif
 		.endif
 
 		.ifdef EXISTS
@@ -398,7 +400,9 @@
 			.endif
 
 			m_CodePointer {SECTION}.{CODE_PREFIX}{ID}
-			.print {"Found {SECTION}.{CODE_PREFIX}{ID}\n"}
+			.if defined(DEBUG_SECTION_PRINTOUT)
+				.print {"Found {SECTION}.{CODE_PREFIX}{ID}\n"}
+			.endif
 
 			.undefine EXISTS
 		.endif
