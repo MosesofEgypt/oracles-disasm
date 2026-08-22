@@ -90,7 +90,7 @@ specialObjectNextAnimationFrame:
 	ret
 
 
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	.include {"{BUILD_DIR}/specialObjectAnimationPointers.s"}
 .else
 	.include {"{GAME_DATA_DIR}/specialObjectAnimationPointers.s"}
@@ -223,7 +223,7 @@ getSpecialObjectGraphicsFrame:
 	ld a,e
 .endif
 
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	ld hl,specialObjectGraphicsTable_seasons
 	call wIsSeasons
 	jr c,+
@@ -347,7 +347,7 @@ func_4553:
 ; @param[out]	a	Value written to w1Link.var34
 @getLinkWalkingAnimation:
 .if defined(ROM_AGES) || defined(ROM_COMBO)
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	call wIsSeasons
 	jr c,@notUnderwater
 .endif
@@ -560,26 +560,26 @@ getItemForTileBeingPushedOn:
 	call getTileAtPosition
 	cp TILETYPE_STUMP
 	ld a,$00
-	ret z
-
-	ld hl,@breakableSourcesAndItems
-	-
-		ldi a,(hl)
-		or a
-		jr z,+
-			push hl
-			call tryToBreakTile
-			pop hl
+	jr z,++
+		ld hl,@breakableSourcesAndItems
+		-
 			ldi a,(hl)
-			jr nc,-
-				pop bc
+			or a
+			jr z,+
+				push hl
+				call tryToBreakTile
 				pop hl
-				ret
-		+
+				ldi a,(hl)
+				jr nc,-
+					pop bc
+					pop hl
+					ret
+			+
+		; if none of the above, default to bracelet
+		ld a,ITEM_BRACELET
+	++
 	pop bc
 	pop hl
-	; if none of the above, default to bracelet
-	ld a,ITEM_BRACELET
 	ret
 
 @facingOffsets:

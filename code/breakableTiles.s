@@ -150,7 +150,7 @@ tryToBreakTile_body:
 	call setTile
 
 @doneSettingTile:
-.ifdef ROM_AGES
+.if defined(ROM_AGES) && !defined(ROM_COMBO)
 	ldh a,(<hFF92)
 	cp TILEINDEX_SOMARIA_BLOCK
 	jr z,@somariaBlock

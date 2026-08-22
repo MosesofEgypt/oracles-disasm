@@ -10692,12 +10692,12 @@ _partNextAnimationFrame:
 	ld c,a
 	ld b,$00
 
-	; Item.animParameter
+	; Part.animParameter
 	inc e
 	ldi a,(hl)
 	ld (de),a
 
-	; Item.animPointer
+	; Part.animPointer
 	inc e
 	; Save the current position in the animation
 	ld a,l
@@ -14897,6 +14897,11 @@ func_3ee4:
 ; Tile index $f9 normally behaves like a grass tile, but since it's unused indoors, that
 ; functionality is disabled.
 getSomariaBlockIndex:
+.if defined(ROM_COMBO)
+	ld b,TILEINDEX_SOMARIA_BLOCK
+	call wIsSeasons
+	ret nc
+.endif
 	ld a,(wActiveCollisions)
 	ld b,$3f ; Overworld
 	or a

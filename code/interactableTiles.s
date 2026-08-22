@@ -308,13 +308,7 @@ nextToPushableBlock:
 	call checkTileAfterNext
 	jr nc,@end
 
-.ifdef ROM_COMBO
-	ldh a,(<hFF8B)
-	call wIsSeasons
-	ld b,TILEINDEX_SOMARIA_BLOCK
-	call c,getSomariaBlockIndex
-	cp b
-.elif defined(ROM_AGES)
+.if defined(ROM_AGES) && !defined(ROM_COMBO)
 	ldh a,(<hFF8B)
 	cp TILEINDEX_SOMARIA_BLOCK
 .else

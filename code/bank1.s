@@ -4472,57 +4472,59 @@ updateQuickSwapItems:
 	jr z,+
 		; select not held, or both select and start held
 		bit 6,a
-		jr z,++
-			; reset the flag indicating items were swapped, as below we're
-			; either going to decide to leave them swapped, or swap back
-			ld a,(wRingReduxFlagsExt)
+		ret z
 
-			; before resetting flag 7, we need to check it for A/B being pressed
-			bit 7,a
+		; reset the flag indicating items were swapped, as below we're
+		; either going to decide to leave them swapped, or swap back
+		ld a,(wRingReduxFlagsExt)
 
-			res 6,a
-			res 7,a
-			ld (wRingReduxFlagsExt),a
+		; before resetting flag 7, we need to check it for A/B being pressed
+		bit 7,a
 
-			jr nz,++
-				; A or B wasn't pressed while select was held, so set
-				; select directly for one frame to allow opening menu
-				ld a,(wKeysPressed)
-				set BTN_BIT_SELECT,a
-				ld (wKeysPressed),a
+		res 6,a
+		res 7,a
+		ld (wRingReduxFlagsExt),a
 
-				ld a,(wKeysJustPressed)
-				set BTN_BIT_SELECT,a
-				ld (wKeysJustPressed),a
+		ret nz
 
-				; swap the items back since they weren't used
-				call @swapButtonItems
-				jr ++
-	+
-		; just select being held
-		bit 6,a
-
-		call z,@swapButtonItems
-
-		; if either A or B were pressed since select was held, store
-		; that to a flag so we know not to open the map when released
+		; A or B wasn't pressed while select was held, so set
+		; select directly for one frame to allow opening menu
 		ld a,(wKeysPressed)
-		and (BTN_A|BTN_B)
-		jr z,+
-			ld a,(wRingReduxFlagsExt)
-			set 7,a
-			ld (wRingReduxFlagsExt),a
-		+
-
-		; unset select so the menu doesn't open until we allow it
-		ld a,(wKeysPressed)
-		res BTN_BIT_SELECT,a
+		set BTN_BIT_SELECT,a
 		ld (wKeysPressed),a
 
 		ld a,(wKeysJustPressed)
-		res BTN_BIT_SELECT,a
+		set BTN_BIT_SELECT,a
 		ld (wKeysJustPressed),a
-	++
+
+		; swap the items back since they weren't used
+		jr @swapButtonItems
+	+
+
+	; just select being held
+	bit 6,a
+
+	call z,@swapButtonItems
+
+	; if either A or B were pressed since select was held, store
+	; that to a flag so we know not to open the map when released
+	ld a,(wKeysPressed)
+	and (BTN_A|BTN_B)
+	jr z,+
+		ld a,(wRingReduxFlagsExt)
+		set 7,a
+		ld (wRingReduxFlagsExt),a
+	+
+
+	; unset select so the menu doesn't open until we allow it
+	ld a,(wKeysPressed)
+	res BTN_BIT_SELECT,a
+	ld (wKeysPressed),a
+
+	ld a,(wKeysJustPressed)
+	res BTN_BIT_SELECT,a
+	ld (wKeysJustPressed),a
+
 	ret
 
 @swapButtonItems
