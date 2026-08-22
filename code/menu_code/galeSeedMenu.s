@@ -121,6 +121,19 @@ galeSeedMenu_state3:
 	ld (wWarpTransition2),a
 	jp closeMenu
 
+galeSeedMenu_anyWarpsAvailable:
+	; returns cflag set if we have visisted at least one tree
+	push de
+	push hl
+	push af
+	xor a
+	call galeSeedMenu_addOffsetToWarpIndex
+	pop hl
+	ld a,h
+	pop hl
+	pop de
+	ret
+
 ;;
 ; @param	a	Value to add to wMapMenu.warpIndex
 ; @param[out]	zflag	nz if the warp index changed.
@@ -128,6 +141,8 @@ galeSeedMenu_addOffsetToWarpIndex:
 	ld e,a
 	ld a,(wMapMenu.warpIndex)
 	ld d,a
+	push bc
+	ld b,$09
 --
 	; Keep adding the offset to the index until we reach a valid entry.
 	ld a,d
@@ -136,12 +151,20 @@ galeSeedMenu_addOffsetToWarpIndex:
 	ld d,a
 	call getTreeWarpDataIndex
 	ld a,(hl)
+	dec b
+	jr nz,+
+		pop bc
+		scf
+		ccf
+		ret
+	+
 	or a
 	jr z,--
 
 	; We can only use entry if we've visited the room.
 	call mapMenu_checkRoomVisited
 	jr z,--
+	pop bc
 
 	ldi a,(hl)
 	ld (wMapMenu.cursorIndex),a
@@ -150,4 +173,5 @@ galeSeedMenu_addOffsetToWarpIndex:
 	ld a,d
 	cp (hl)
 	ld (hl),a
+	scf
 	ret

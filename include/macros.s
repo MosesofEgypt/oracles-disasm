@@ -28,6 +28,32 @@
 	.ENDIF
 .ENDM
 
+; Call Across Bank and return af
+.MACRO callabaf
+	.IF NARGS == 1
+		ld hl,\1
+		ld e,:\1
+		call interBankCallReturnAf
+	.ELSE
+		ld hl,\2
+		ld e,\1
+		call interBankCallReturnAf
+	.ENDIF
+.ENDM
+
+; Jump Across Bank and return af
+.MACRO jpabaf
+	.IF NARGS == 1
+		ld hl,\1
+		ld e,:\1
+		jp interBankCallReturnAf
+	.ELSE
+		ld hl,\2
+		ld e,\1
+		jp interBankCallReturnAf
+	.ENDIF
+.ENDM
+
 ; lda: same as ld a, except lda $00 optimizes to xor a
 .MACRO lda
 	.IF \1 == 0

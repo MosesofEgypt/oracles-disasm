@@ -171,6 +171,28 @@ interBankCall:
 	ret
 
 ;;
+; Call a function in any bank, from any bank.
+; Returns the "af" register the called function
+; @param e Bank of the function to call
+; @param hl Address of the function to call
+interBankCallReturnAf:
+	push hl
+	ld a,(hRomBank)
+	push af
+	ld a,e
+	ld (hRomBank),a
+	ld ($2222),a
+	call jpHl
+	pop hl
+	push af
+	ld a,h
+	ld (hRomBank),a
+	ld ($2222),a
+	pop af
+	pop hl
+	ret
+
+;;
 ; Jump to hl.
 ; @param hl Address to jump to.
 jpHl:

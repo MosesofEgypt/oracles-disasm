@@ -841,6 +841,17 @@ galeSeedTryToWarpLink:
 
 	ld a,$02
 	ld (w1Link.substate),a
+
+	callabaf bank2.galeSeedMenu_anyWarpsAvailable
+	jr c,+
+		; no warps available, so just drop link
+		xor a
+		ld (wMenuDisabled),a
+		ld (wLinkCanPassNpcs),a
+		ld (wDisableScreenTransitions),a
+		jp seedItemDelete
+	+
+
 	ld a,CUTSCENE_IN_GALE_SEED_MENU
 	ld (wCutsceneTrigger),a
 
