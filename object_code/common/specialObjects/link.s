@@ -4791,10 +4791,8 @@ updateLinkSpeed_withParam:
 	; Unused?
 	.db SPEED_080, $03, SPEED_0c0, SPEED_080, SPEED_100, SPEED_120, SPEED_0c0, SPEED_180
 
-.if defined(ROM_AGES) || defined(ROM_COMBO)
 	; Mermaid suit movement
 	.db SPEED_000, $05, SPEED_120, SPEED_120, SPEED_120, SPEED_120, SPEED_120, SPEED_120
-.endif
 
 .ifdef ENABLE_RING_REDUX
 @hasteSpeedUpgradeTable:
