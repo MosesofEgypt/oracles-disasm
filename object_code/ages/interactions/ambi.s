@@ -57,7 +57,7 @@ m_InteractionCode $4d
 
 ; Same cutscene as subid $03, but second part
 @initSubid04:
-	callab agesInteractionsBank08.nayruState0@init0e
+	callab interactionCodeAges1.nayruState0@init0e
 	jp ambi_loadScript
 
 
@@ -75,7 +75,7 @@ m_InteractionCode $4d
 ; Cutscene where Ralph confronts Ambi
 @initSubid05:
 	; Call some of nayru's code to load possessed palette
-	callab agesInteractionsBank08.nayruState0@init0e
+	callab interactionCodeAges1.nayruState0@init0e
 
 	call objectSetVisiblec3
 	jp ambi_loadScript
@@ -194,7 +194,7 @@ ambi_runSubid01:
 	cp $0e
 	jr nz,ambi_updateAnimationAndRunScript
 
-	callab agesInteractionsBank08.startJump
+	callab interactionCodeAges1.startJump
 	jp interactionIncSubstate
 
 @substate1:

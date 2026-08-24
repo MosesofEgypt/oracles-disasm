@@ -59,7 +59,7 @@ m_InteractionCode $3d
 
 @initSubid2:
 	; This NPC only exists between saving Nayru and beating d7?
-	callab agesInteractionsBank09.getGameProgress_1
+	callab interactionCodeAges2.getGameProgress_1
 	ld e,Interaction.subid
 	ld a,(de)
 	cp b

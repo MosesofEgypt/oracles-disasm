@@ -35,12 +35,3 @@ m_InteractionCode $10
 	call objectSetCollideRadii
 	call interactionRunScript
 	jp interactionAnimate
-
-
-.if defined(ROM_SEASONS) || defined(ROM_COMBO)
-
-; Indirect caller for INTERAC_FARORE_MAKECHEST
-interactionCode11_caller:
-	jpab dataLoading.interactionCode11
-
-.endif

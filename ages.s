@@ -218,11 +218,7 @@ m_section_superfree Bank_6_Raft NAMESPACE bank6Raft
 		.include {"{GAME_DATA_DIR}/objectCollisionTable.s"}
 	.ends
 
-
-.BANK $08 SLOT 1
-.ORG 0
-
-m_section_free Interaction_Code_Group1 NAMESPACE commonInteractions1
+m_InteractionObjectCodeSection
 	.include "object_code/common/interactions/breakTileDebris.s"
 	.include "object_code/common/interactions/fallDownHole.s"
 	.include "object_code/common/interactions/farore.s"
@@ -235,9 +231,65 @@ m_section_free Interaction_Code_Group1 NAMESPACE commonInteractions1
 	.include "object_code/common/interactions/overworldKeySprite.s"
 	.include "object_code/common/interactions/faroresMemory.s"
 	.include "object_code/common/interactions/doorController.s"
-.ends
+m_EndObjectCodeSection
 
-m_section_free Ages_Interactions_Bank8 NAMESPACE agesInteractionsBank08
+m_InteractionObjectCodeSection
+	.include "object_code/common/interactions/shopkeeper.s"
+	.include "object_code/common/interactions/shopItem.s"
+	.include "object_code/common/interactions/introSprites1.s"
+	.include "object_code/common/interactions/seasonsFairy.s"
+	.include "object_code/common/interactions/explosion.s"
+	.include "object_code/common/interactions/treasure.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection
+	.include "object_code/common/interactions/bombFlower.s"
+	.include "object_code/common/interactions/switchTileToggler.s"
+	.include "object_code/common/interactions/movingPlatform.s"
+	.include "object_code/common/interactions/roller.s"
+	.include "object_code/common/interactions/spinner.s"
+	.include "object_code/common/interactions/minibossPortal.s"
+	.include "object_code/common/interactions/essence.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection
+	.include "object_code/common/interactions/vasu.s"
+	.include "object_code/common/interactions/bubble.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection
+	.include "object_code/common/interactions/woodenTunnel.s"
+	.include "object_code/common/interactions/exclamationMark.s"
+	.include "object_code/common/interactions/floatingImage.s"
+	.include "object_code/common/interactions/bipinBlossomFamilySpawner.s"
+	.include "object_code/common/interactions/gashaSpot.s"
+	.include "object_code/common/interactions/kissHeart.s"
+	.include "object_code/common/interactions/banana.s"
+	.include "object_code/common/interactions/createObjectAtEachTileindex.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection
+	.include "object_code/common/interactions/businessScrub.s"
+	.include "object_code/common/interactions/cf.s"
+	.include "object_code/common/interactions/companionTutorial.s"
+	.include "object_code/common/interactions/gameCompleteDialog.s"
+	.include "object_code/common/interactions/titlescreenClouds.s"
+	.include "object_code/common/interactions/introBird.s"
+	.include "object_code/common/interactions/linkShip.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection
+	.include "object_code/common/interactions/faroreGiveItem.s"
+	.include "object_code/common/interactions/zeldaApproachTrigger.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection
+	.include "object_code/common/interactions/eraOrSeasonInfo.s"
+	.include "object_code/common/interactions/statueEyeball.s"
+	.include "object_code/common/interactions/ringHelpBook.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection "Ages"
 	.include "object_code/ages/interactions/toggleFloor.s"
 	.include "object_code/ages/interactions/coloredCube.s"
 	.include "object_code/ages/interactions/coloredCubeFlame.s"
@@ -271,23 +323,9 @@ m_section_free Ages_Interactions_Bank8 NAMESPACE agesInteractionsBank08
 	.include "object_code/ages/interactions/femaleVillager.s"
 	.include "object_code/ages/interactions/boy.s"
 	.include "object_code/ages/interactions/oldLady.s"
-.ends
+m_EndObjectCodeSection
 
-
-.BANK $09 SLOT 1
-.ORG 0
-
-m_section_free Interaction_Code_Group2 NAMESPACE commonInteractions2
-	.include "object_code/common/interactions/shopkeeper.s"
-	.include "object_code/common/interactions/shopItem.s"
-	.include "object_code/common/interactions/introSprites1.s"
-	.include "object_code/common/interactions/seasonsFairy.s"
-	.include "object_code/common/interactions/explosion.s"
-.ends
-
-	.include "object_code/common/interactions/treasure.s"
-
-m_section_free Ages_Interactions_Bank9 NAMESPACE agesInteractionsBank09
+m_InteractionObjectCodeSection "Ages"
 	.include "object_code/ages/interactions/ghostVeran.s"
 	.include "object_code/ages/interactions/boy2.s"
 	.include "object_code/ages/interactions/soldier.s"
@@ -323,28 +361,9 @@ m_section_free Ages_Interactions_Bank9 NAMESPACE agesInteractionsBank09
 	.include "object_code/ages/interactions/raftwreckCutsceneHelper.s"
 	.include "object_code/ages/interactions/comedian.s"
 	.include "object_code/ages/interactions/goron.s"
-.ends
+m_EndObjectCodeSection
 
-
-.BANK $0a SLOT 1
-.ORG 0
-
-m_section_free Interaction_Code_Group3 NAMESPACE commonInteractions3
-	.include "object_code/common/interactions/bombFlower.s"
-	.include "object_code/common/interactions/switchTileToggler.s"
-	.include "object_code/common/interactions/movingPlatform.s"
-	.include "object_code/common/interactions/roller.s"
-	.include "object_code/common/interactions/spinner.s"
-	.include "object_code/common/interactions/minibossPortal.s"
-	.include "object_code/common/interactions/essence.s"
-.ends
-
-m_section_free Interaction_Code_Group4 NAMESPACE commonInteractions4
-	.include "object_code/common/interactions/vasu.s"
-	.include "object_code/common/interactions/bubble.s"
-.ends
-
-m_section_free Ages_Interactions_BankA NAMESPACE agesInteractionsBank0a
+m_InteractionObjectCodeSection "Ages"
 	.include "object_code/common/interactions/companionSpawner.s"
 	.include "object_code/ages/interactions/rosa.s"
 	.include "object_code/ages/interactions/rafton.s"
@@ -384,39 +403,9 @@ m_section_free Ages_Interactions_BankA NAMESPACE agesInteractionsBank0a
 	.include "object_code/ages/interactions/ball.s"
 	.include "object_code/ages/interactions/moblin.s"
 	.include "object_code/ages/interactions/97.s"
-.ends
+m_EndObjectCodeSection
 
-
-.BANK $0b SLOT 1
-.ORG 0
-
-m_section_free Interaction_Code_Group5 NAMESPACE commonInteractions5
-	.include "object_code/common/interactions/woodenTunnel.s"
-	.include "object_code/common/interactions/exclamationMark.s"
-	.include "object_code/common/interactions/floatingImage.s"
-	.include "object_code/common/interactions/bipinBlossomFamilySpawner.s"
-	.include "object_code/common/interactions/gashaSpot.s"
-	.include "object_code/common/interactions/kissHeart.s"
-	.include "object_code/common/interactions/banana.s"
-	.include "object_code/common/interactions/createObjectAtEachTileindex.s"
-.ends
-
-m_section_free Interaction_Code_Group6 NAMESPACE commonInteractions6
-	.include "object_code/common/interactions/businessScrub.s"
-	.include "object_code/common/interactions/cf.s"
-	.include "object_code/common/interactions/companionTutorial.s"
-	.include "object_code/common/interactions/gameCompleteDialog.s"
-	.include "object_code/common/interactions/titlescreenClouds.s"
-	.include "object_code/common/interactions/introBird.s"
-	.include "object_code/common/interactions/linkShip.s"
-.ends
-
-m_section_free Interaction_Code_Group7 NAMESPACE commonInteractions7
-	.include "object_code/common/interactions/faroreGiveItem.s"
-	.include "object_code/common/interactions/zeldaApproachTrigger.s"
-.ends
-
-m_section_free Ages_Interactions_Bank0b NAMESPACE agesInteractionsBank0b
+m_InteractionObjectCodeSection "Ages"
 	.include "object_code/ages/interactions/explosionWithDebris.s"
 	.include "object_code/ages/interactions/carpenter.s"
 	.include "object_code/ages/interactions/raftwreckCutscene.s"
@@ -470,7 +459,23 @@ m_section_free Ages_Interactions_Bank0b NAMESPACE agesInteractionsBank0b
 	.include "object_code/ages/interactions/slateSlot.s"
 
 	.include {"{GAME_DATA_DIR}/movingSidescrollPlatform.s"}
-.ends
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection "Ages"
+	.include "object_code/ages/interactions/miscellaneous2.s"
+	.include "object_code/ages/interactions/timewarp.s"
+	.include "object_code/ages/interactions/timeportal.s"
+	.include "object_code/common/interactions/nayruRalphCredits.s"
+	.include "object_code/ages/interactions/timeportalSpawner.s"
+	.include "object_code/ages/interactions/knowItAllBird.s"
+	.include "object_code/ages/interactions/raft.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection "Ages"
+	.include "object_code/ages/interactions/monkeyMain.s"
+	.include "object_code/ages/interactions/rabbitMain.s"
+	.include "object_code/ages/interactions/tuniNutMain.s"
+m_EndObjectCodeSection
 
 
 .BANK $0c SLOT 1
@@ -641,30 +646,7 @@ m_EnemyCodeSection
 	.include "object_code/ages/enemies/kingMoblinMinionMain.s"
 m_EndObjectCodeSection
 
-
-m_section_free Interaction_Code_Group8 NAMESPACE commonInteractions8
-	.include "object_code/common/interactions/eraOrSeasonInfo.s"
-	.include "object_code/common/interactions/statueEyeball.s"
-	.include "object_code/common/interactions/ringHelpBook.s"
-.ends
-
 	.include "code/ages/cutscenes/bank10.s"
-
-m_section_free Ages_Interactions_Bank10 NAMESPACE agesInteractionsBank10
-	.include "object_code/ages/interactions/miscellaneous2.s"
-	.include "object_code/ages/interactions/timewarp.s"
-	.include "object_code/ages/interactions/timeportal.s"
-	.include "object_code/common/interactions/nayruRalphCredits.s"
-	.include "object_code/ages/interactions/timeportalSpawner.s"
-	.include "object_code/ages/interactions/knowItAllBird.s"
-	.include "object_code/ages/interactions/raft.s"
-.ends
-
-m_section_superfree Ages_Interactions_Bank11 NAMESPACE agesInteractionsBank11
-	.include "object_code/ages/interactions/monkeyMain.s"
-	.include "object_code/ages/interactions/rabbitMain.s"
-	.include "object_code/ages/interactions/tuniNutMain.s"
-.ends
 
 
 ; NOTE: This section MUST be processed BEFORE "data/partCodeTable.s"

@@ -69,7 +69,7 @@ m_InteractionCode $3a
 	jp @loadScript
 
 @initSubid03:
-	callab agesInteractionsBank09.getGameProgress_1
+	callab interactionCodeAges2.getGameProgress_1
 	ld a,b
 	ld hl,@subid03ScriptTable
 	rst_addDoubleIndex
@@ -82,7 +82,7 @@ m_InteractionCode $3a
 	ld e,Interaction.oamFlags
 	ld (de),a
 
-	callab agesInteractionsBank09.getGameProgress_1
+	callab interactionCodeAges2.getGameProgress_1
 	ld c,$04
 	ld a,$03
 	call checkNpcShouldExistAtGameStage
@@ -96,7 +96,7 @@ m_InteractionCode $3a
 
 @initSubid06:
 @initSubid07:
-	callab agesInteractionsBank09.getGameProgress_2
+	callab interactionCodeAges2.getGameProgress_2
 	ld c,$06
 	ld a,$04
 	call checkNpcShouldExistAtGameStage
@@ -114,7 +114,7 @@ m_InteractionCode $3a
 	ld (de),a
 
 	; Delete if you haven't beaten d7 yet?
-	callab agesInteractionsBank09.getGameProgress_2
+	callab interactionCodeAges2.getGameProgress_2
 	ld a,b
 	cp $04
 	jp c,interactionDelete

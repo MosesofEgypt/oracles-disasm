@@ -220,13 +220,11 @@ m_section_free Bank_6 NAMESPACE bank6
 	.ends
 
 
-.BANK $08 SLOT 1
-.ORG 0
-
-m_section_free Interaction_Code_Group1 NAMESPACE commonInteractions1
+m_InteractionObjectCodeSection
 	.include "object_code/common/interactions/breakTileDebris.s"
 	.include "object_code/common/interactions/fallDownHole.s"
 	.include "object_code/common/interactions/farore.s"
+	.include "object_code/common/interactions/faroreMakeChest.s"
 	.include "object_code/common/interactions/dungeonStuff.s"
 	.include "object_code/common/interactions/pushblockTrigger.s"
 	.include "object_code/common/interactions/pushblock.s"
@@ -238,15 +236,63 @@ m_section_free Interaction_Code_Group1 NAMESPACE commonInteractions1
 	.include "object_code/common/interactions/doorController.s"
 m_EndObjectCodeSection
 
-m_section_free Interaction_Code_Group2 NAMESPACE commonInteractions2
+m_InteractionObjectCodeSection
 	.include "object_code/common/interactions/shopkeeper.s"
 	.include "object_code/common/interactions/shopItem.s"
 	.include "object_code/common/interactions/introSprites1.s"
 	.include "object_code/common/interactions/seasonsFairy.s"
 	.include "object_code/common/interactions/explosion.s"
+	.include "object_code/common/interactions/treasure.s"
 m_EndObjectCodeSection
 
-m_section_free Seasons_Interactions_Bank08 NAMESPACE seasonsInteractionsBank08
+m_InteractionObjectCodeSection
+	.include "object_code/common/interactions/bombFlower.s"
+	.include "object_code/common/interactions/switchTileToggler.s"
+	.include "object_code/common/interactions/movingPlatform.s"
+	.include "object_code/common/interactions/roller.s"
+	.include "object_code/common/interactions/spinner.s"
+	.include "object_code/common/interactions/minibossPortal.s"
+	.include "object_code/common/interactions/essence.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection
+	.include "object_code/common/interactions/vasu.s"
+	.include "object_code/common/interactions/bubble.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection
+	.include "object_code/common/interactions/woodenTunnel.s"
+	.include "object_code/common/interactions/exclamationMark.s"
+	.include "object_code/common/interactions/floatingImage.s"
+	.include "object_code/common/interactions/bipinBlossomFamilySpawner.s"
+	.include "object_code/common/interactions/gashaSpot.s"
+	.include "object_code/common/interactions/kissHeart.s"
+	.include "object_code/common/interactions/banana.s"
+	.include "object_code/common/interactions/createObjectAtEachTileindex.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection
+	.include "object_code/common/interactions/businessScrub.s"
+	.include "object_code/common/interactions/cf.s"
+	.include "object_code/common/interactions/companionTutorial.s"
+	.include "object_code/common/interactions/gameCompleteDialog.s"
+	.include "object_code/common/interactions/titlescreenClouds.s"
+	.include "object_code/common/interactions/introBird.s"
+	.include "object_code/common/interactions/linkShip.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection
+	.include "object_code/common/interactions/faroreGiveItem.s"
+	.include "object_code/common/interactions/zeldaApproachTrigger.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection
+	.include "object_code/common/interactions/eraOrSeasonInfo.s"
+	.include "object_code/common/interactions/statueEyeball.s"
+	.include "object_code/common/interactions/ringHelpBook.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection "Seasons"
 	.include "object_code/seasons/interactions/usedRodOfSeasons.s"
 	.include "object_code/seasons/interactions/specialWarp.s"
 	.include "object_code/seasons/interactions/dungeonScript.s"
@@ -293,22 +339,7 @@ m_section_free Seasons_Interactions_Bank08 NAMESPACE seasonsInteractionsBank08
 	.include "object_code/seasons/interactions/tradeItem.s"
 m_EndObjectCodeSection
 
-.BANK $09 SLOT 1
-.ORG 0
-
-	.include "object_code/common/interactions/treasure.s"
-
-m_section_free Interaction_Code_Group3 NAMESPACE commonInteractions3
-	.include "object_code/common/interactions/bombFlower.s"
-	.include "object_code/common/interactions/switchTileToggler.s"
-	.include "object_code/common/interactions/movingPlatform.s"
-	.include "object_code/common/interactions/roller.s"
-	.include "object_code/common/interactions/spinner.s"
-	.include "object_code/common/interactions/minibossPortal.s"
-	.include "object_code/common/interactions/essence.s"
-m_EndObjectCodeSection
-
-m_section_free Seasons_Interactions_Bank09 NAMESPACE seasonsInteractionsBank09
+m_InteractionObjectCodeSection "Seasons"
 	.include "object_code/seasons/interactions/quicksand.s"
 	.include "object_code/common/interactions/companionSpawner.s"
 	.include "object_code/seasons/interactions/unicornsCave4ChestPuzzle.s"
@@ -344,27 +375,7 @@ m_section_free Seasons_Interactions_Bank09 NAMESPACE seasonsInteractionsBank09
 	.include "object_code/seasons/interactions/88.s"
 m_EndObjectCodeSection
 
-
-.BANK $0a SLOT 1
-.ORG 0
-
-m_section_free Interaction_Code_Group4 NAMESPACE commonInteractions4
-	.include "object_code/common/interactions/vasu.s"
-	.include "object_code/common/interactions/bubble.s"
-m_EndObjectCodeSection
-
-m_section_free Interaction_Code_Group5 NAMESPACE commonInteractions5
-	.include "object_code/common/interactions/woodenTunnel.s"
-	.include "object_code/common/interactions/exclamationMark.s"
-	.include "object_code/common/interactions/floatingImage.s"
-	.include "object_code/common/interactions/bipinBlossomFamilySpawner.s"
-	.include "object_code/common/interactions/gashaSpot.s"
-	.include "object_code/common/interactions/kissHeart.s"
-	.include "object_code/common/interactions/banana.s"
-	.include "object_code/common/interactions/createObjectAtEachTileindex.s"
-m_EndObjectCodeSection
-
-m_section_free Seasons_Interactions_Bank0a NAMESPACE seasonsInteractionsBank0a
+m_InteractionObjectCodeSection "Seasons"
 	.include "object_code/seasons/interactions/sunkenCityNpcs.s"
 	.include "object_code/seasons/interactions/flyingRooster.s"
 	.include "object_code/seasons/interactions/8e.s"
@@ -417,17 +428,32 @@ m_section_free Seasons_Interactions_Bank0a NAMESPACE seasonsInteractionsBank0a
 	.include {"{GAME_DATA_DIR}/movingSidescrollPlatform.s"}
 m_EndObjectCodeSection
 
+m_InteractionObjectCodeSection "Seasons"
+	.include "object_code/seasons/interactions/boomerangSubrosian.s"
+	.include "object_code/seasons/interactions/boomerang.s"
+	.include "object_code/seasons/interactions/troy.s"
+	.include "object_code/seasons/interactions/linkedGameGhini.s"
+	.include "object_code/seasons/interactions/goldenCaveSubrosian.s"
+	.include "object_code/seasons/interactions/linkedMasterDiver.s"
+	.include "object_code/seasons/interactions/greatFairy.s"
+	.include "object_code/seasons/interactions/dekuScrub.s"
+	.include "object_code/seasons/interactions/d7.s"
+m_EndObjectCodeSection
 
-.BANK $0b SLOT 1
-.ORG 0
+m_InteractionObjectCodeSection "Seasons"
+	.include "object_code/seasons/interactions/linkedFountainLady.s"
+	.include "object_code/seasons/interactions/linkedSecredGivers.s"
+	.include "object_code/seasons/interactions/miscPuzzles.s"
+	.include "object_code/seasons/interactions/goldenBeastOldMan.s"
+	.include "object_code/seasons/interactions/makuSeedAndEssences.s"
+	.include "object_code/common/interactions/nayruRalphCredits.s"
+	.include "object_code/seasons/interactions/portalSpawner.s"
+	.include "object_code/seasons/interactions/vire.s"
+	.include "object_code/seasons/interactions/linkedHerosCaveOldMan.s"
+	.include "object_code/seasons/interactions/getRodOfSeasons.s"
+	.include "object_code/seasons/interactions/loneZora.s"
+m_EndObjectCodeSection
 
-	 m_section_free Scripts namespace mainScripts
-		.include "code/scripting.s"
-		.include "scripts/seasons/scripts.s"
-	.ends
-
-.BANK $0c SLOT 1
-.ORG 0
 
 m_EnemyCodeSection
 	.include "object_code/common/enemies/commonCode.s"
@@ -471,13 +497,6 @@ m_EnemyCodeSection
 	.include "object_code/seasons/enemies/pokey.s"
 	.include "object_code/common/enemies/ironMask.s"
 m_EndObjectCodeSection
-
-m_section_superfree Enemy_Animations
-	.include {"{GAME_DATA_DIR}/enemyAnimations.s"}
-.ends
-
-.BANK $0d SLOT 1
-.ORG 0
 
 m_EnemyCodeSection
 	.include "object_code/common/enemies/commonCode.s"
@@ -529,10 +548,6 @@ m_EnemyCodeSection
 	.include "object_code/seasons/enemies/blainosGloves.s"
 m_EndObjectCodeSection
 
-
-.BANK $0e SLOT 1
-.ORG 0
-
 m_EnemyCodeSection
 	.include "object_code/common/enemies/commonCode.s"
 	.include "object_code/common/enemies/commonBossCode.s"
@@ -555,11 +570,7 @@ m_EnemyCodeSection
 	.include "object_code/seasons/enemies/medusaHead.s"
 m_EndObjectCodeSection
 
-.BANK $0f SLOT 1
-.ORG 0
-
 m_EnemyCodeSection
-
 	.include "object_code/common/enemies/commonCode.s"
 	.include "object_code/common/enemies/commonBossCode.s"
 
@@ -574,28 +585,6 @@ m_EnemyCodeSection
 	.include "object_code/seasons/enemies/kingMoblin.s"
 
 	.include "code/seasons/cutscenes/transitionToDragonOnox.s"
-m_EndObjectCodeSection
-
-m_section_free Interaction_Code_Group6 NAMESPACE commonInteractions6
-	.include "object_code/common/interactions/businessScrub.s"
-	.include "object_code/common/interactions/cf.s"
-	.include "object_code/common/interactions/companionTutorial.s"
-	.include "object_code/common/interactions/gameCompleteDialog.s"
-	.include "object_code/common/interactions/titlescreenClouds.s"
-	.include "object_code/common/interactions/introBird.s"
-	.include "object_code/common/interactions/linkShip.s"
-m_EndObjectCodeSection
-
-m_section_free Seasons_Interactions_Bank0f NAMESPACE seasonsInteractionsBank0f
-	.include "object_code/seasons/interactions/boomerangSubrosian.s"
-	.include "object_code/seasons/interactions/boomerang.s"
-	.include "object_code/seasons/interactions/troy.s"
-	.include "object_code/seasons/interactions/linkedGameGhini.s"
-	.include "object_code/seasons/interactions/goldenCaveSubrosian.s"
-	.include "object_code/seasons/interactions/linkedMasterDiver.s"
-	.include "object_code/seasons/interactions/greatFairy.s"
-	.include "object_code/seasons/interactions/dekuScrub.s"
-	.include "object_code/seasons/interactions/d7.s"
 m_EndObjectCodeSection
 
 ; NOTE: This section MUST be processed BEFORE "data/partCodeTable.s"
@@ -649,8 +638,6 @@ m_PartCodeSection
 	.include "object_code/common/parts/blueEnergyBead.s"
 m_EndObjectCodeSection
 
-.BANK $10 SLOT 1
-.ORG 0
 m_PartCodeSection
 	.include "object_code/common/parts/commonCode.s"
 
@@ -689,8 +676,6 @@ m_PartCodeSection
 m_EndObjectCodeSection
 .endif
 
-	.include "code/roomInitialization.s"
-
 .ifndef ENABLE_NEW_GAME_PLUS
 m_PartCodeSection
 	.include "object_code/seasons/parts/holesFloortrap.s"
@@ -727,6 +712,51 @@ m_PartCodeSection
 	.include "object_code/seasons/parts/dinCrystal.s"
 m_EndObjectCodeSection
 .endif
+
+.ifdef ENABLE_NEW_GAME_PLUS
+m_EnemyCodeSection
+	.include "object_code/common/enemies/commonCode.s"
+
+	.include "object_code/common/enemies/polsVoice.s"
+	.include "object_code/common/enemies/likelike.s"
+	.include "object_code/common/enemies/gopongaFlower.s"
+	.include "object_code/common/enemies/dekuScrub.s"
+	.include "object_code/common/enemies/wallmaster.s"
+	.include "object_code/common/enemies/podoboo.s"
+	.include "object_code/common/enemies/giantBladeTrap.s"
+	.include "object_code/common/enemies/cheepcheep.s"
+	.include "object_code/common/enemies/podobooTower.s"
+	.include "object_code/common/enemies/thwimp.s"
+	.include "object_code/common/enemies/thwomp.s"
+
+	.include "object_code/common/enemies/tektite.s"
+	.include "object_code/common/enemies/stalfos.s"
+	.include "object_code/common/enemies/keese.s"
+	.include "object_code/common/enemies/babyCucco.s"
+	.include "object_code/common/enemies/zol.s"
+	.include "object_code/common/enemies/floormaster.s"
+	.include "object_code/common/enemies/cucco.s"
+	.include "object_code/common/enemies/giantCucco.s"
+	.include "object_code/common/enemies/butterfly.s"
+	.include "object_code/common/enemies/greatFairy.s"
+	.include "object_code/common/enemies/fireKeese.s"
+	.include "object_code/common/enemies/waterTektite.s"
+m_EndObjectCodeSection
+.endif
+
+.BANK $0b SLOT 1
+.ORG 0
+
+	 m_section_free Scripts namespace mainScripts
+		.include "code/scripting.s"
+		.include "scripts/seasons/scripts.s"
+	.ends
+
+m_section_superfree Enemy_Animations
+	.include {"{GAME_DATA_DIR}/enemyAnimations.s"}
+.ends
+
+	.include "code/roomInitialization.s"
 
 .BANK $11 SLOT 1
 .ORG 0
@@ -784,17 +814,6 @@ m_section_free serialCode NAMESPACE serialCode
 
 	.include "scripts/common/scriptHelper.s"
 
-m_section_free Interaction_Code_Group7 NAMESPACE commonInteractions7
-	.include "object_code/common/interactions/faroreGiveItem.s"
-	.include "object_code/common/interactions/zeldaApproachTrigger.s"
-m_EndObjectCodeSection
-
-m_section_free Interaction_Code_Group8 NAMESPACE commonInteractions8
-	.include "object_code/common/interactions/eraOrSeasonInfo.s"
-	.include "object_code/common/interactions/statueEyeball.s"
-	.include "object_code/common/interactions/ringHelpBook.s"
-m_EndObjectCodeSection
-
 	.include "data/seasons/endgameCutsceneOamData.s"
 
 	.include "code/staticObjects.s"
@@ -805,20 +824,6 @@ m_EndObjectCodeSection
 	m_section_free Bank_15_3 NAMESPACE scriptHelp
 		.include "scripts/seasons/scriptHelper.s"
 	.ends
-
-m_section_free Seasons_Interactions_Bank15 NAMESPACE seasonsInteractionsBank15
-	.include "object_code/seasons/interactions/linkedFountainLady.s"
-	.include "object_code/seasons/interactions/linkedSecredGivers.s"
-	.include "object_code/seasons/interactions/miscPuzzles.s"
-	.include "object_code/seasons/interactions/goldenBeastOldMan.s"
-	.include "object_code/seasons/interactions/makuSeedAndEssences.s"
-	.include "object_code/common/interactions/nayruRalphCredits.s"
-	.include "object_code/seasons/interactions/portalSpawner.s"
-	.include "object_code/seasons/interactions/vire.s"
-	.include "object_code/seasons/interactions/linkedHerosCaveOldMan.s"
-	.include "object_code/seasons/interactions/getRodOfSeasons.s"
-	.include "object_code/seasons/interactions/loneZora.s"
-m_EndObjectCodeSection
 
 	.include {"{GAME_DATA_DIR}/partAnimations.s"}
 
@@ -868,37 +873,6 @@ m_section_superfree Menu_Code_2 NAMESPACE menuCode2
 .BANK $3e SLOT 1
 .ORG 0
 
-.ifdef ENABLE_NEW_GAME_PLUS
-m_EnemyCodeSection
-	.include "object_code/common/enemies/commonCode.s"
-
-	.include "object_code/common/enemies/polsVoice.s"
-	.include "object_code/common/enemies/likelike.s"
-	.include "object_code/common/enemies/gopongaFlower.s"
-	.include "object_code/common/enemies/dekuScrub.s"
-	.include "object_code/common/enemies/wallmaster.s"
-	.include "object_code/common/enemies/podoboo.s"
-	.include "object_code/common/enemies/giantBladeTrap.s"
-	.include "object_code/common/enemies/cheepcheep.s"
-	.include "object_code/common/enemies/podobooTower.s"
-	.include "object_code/common/enemies/thwimp.s"
-	.include "object_code/common/enemies/thwomp.s"
-
-	.include "object_code/common/enemies/tektite.s"
-	.include "object_code/common/enemies/stalfos.s"
-	.include "object_code/common/enemies/keese.s"
-	.include "object_code/common/enemies/babyCucco.s"
-	.include "object_code/common/enemies/zol.s"
-	.include "object_code/common/enemies/floormaster.s"
-	.include "object_code/common/enemies/cucco.s"
-	.include "object_code/common/enemies/giantCucco.s"
-	.include "object_code/common/enemies/butterfly.s"
-	.include "object_code/common/enemies/greatFairy.s"
-	.include "object_code/common/enemies/fireKeese.s"
-	.include "object_code/common/enemies/waterTektite.s"
-m_EndObjectCodeSection
-.endif
-
 m_section_superfree Breakable_Tiles NAMESPACE breakableTiles
 	.include "code/breakableTiles.s"
 	.include {"{GAME_DATA_DIR}/tile_properties/breakableTiles.s"}
@@ -909,7 +883,6 @@ m_section_superfree Data_Loading NAMESPACE dataLoading
 	.include "code/loadGraphics.s"
 	.include "code/treasureAndDrops.s"
 	.include "code/textbox.s"
-	.include "object_code/common/interactions/faroreMakeChest.s"
 
 	.include {"{GAME_DATA_DIR}/objectGfxHeaders.s"}
 	.include {"{GAME_DATA_DIR}/treeGfxHeaders.s"}

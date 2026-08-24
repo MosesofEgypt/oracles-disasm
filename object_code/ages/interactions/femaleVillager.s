@@ -42,7 +42,7 @@ m_InteractionCode $3b
 
 @initSubid01:
 @initSubid02:
-	callab agesInteractionsBank09.getGameProgress_1
+	callab interactionCodeAges2.getGameProgress_1
 	ld c,$01
 	xor a
 	call checkNpcShouldExistAtGameStage
@@ -57,7 +57,7 @@ m_InteractionCode $3b
 
 @initSubid03:
 @initSubid04:
-	callab agesInteractionsBank09.getGameProgress_2
+	callab interactionCodeAges2.getGameProgress_2
 	ld c,$03
 	ld a,$01
 	call checkNpcShouldExistAtGameStage
@@ -74,7 +74,7 @@ m_InteractionCode $3b
 	ld a,$01
 	ld e,Interaction.oamFlags
 	ld (de),a
-	callab agesInteractionsBank09.getGameProgress_2
+	callab interactionCodeAges2.getGameProgress_2
 	ld c,$05
 	ld a,$02
 	call checkNpcShouldExistAtGameStage

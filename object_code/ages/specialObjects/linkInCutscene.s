@@ -569,7 +569,7 @@ linkCutsceneFunc_73e8:
 	and $07
 	ret nz
 
-	callab agesInteractionsBank0a.func_0a_7877
+	callab interactionCodeAges3.func_0a_7877
 	call objectGetRelativeAngle
 	call convertAngleToDirection
 	ld h,d

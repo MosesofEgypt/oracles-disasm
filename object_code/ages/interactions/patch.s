@@ -515,7 +515,7 @@ patch_subid03:
 	.dw @state2
 
 @state0:
-	callab commonInteractions1.clearFallDownHoleEventBuffer
+	callab interactionCode1.clearFallDownHoleEventBuffer
 	call interactionIncState
 	ld l,Interaction.counter1
 	ld (hl),60
@@ -602,7 +602,7 @@ patch_subid03:
 	inc l
 	inc (hl)
 ++
-	jpab commonInteractions1.clearFallDownHoleEventBuffer
+	jpab interactionCode1.clearFallDownHoleEventBuffer
 
 @allBeetlesKilled:
 	; Set parent object's "var39" to indicate that the game's over

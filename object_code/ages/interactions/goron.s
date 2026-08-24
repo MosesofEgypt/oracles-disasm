@@ -89,7 +89,7 @@ goronSubid00:
 @scriptDone:
 	; Dance begins when script ends
 	ld b,$0a
-	callab agesInteractionsBank08.shootingGallery_initializeGameRounds
+	callab interactionCodeAges1.shootingGallery_initializeGameRounds
 
 	ld a,DIR_DOWN
 	ld (wTmpcfc0.goronDance.danceAnimation),a
@@ -648,7 +648,7 @@ goronDance_initNextRound:
 	ld a,(wTmpcfc0.goronDance.remainingRounds)
 	or a
 	jr z,goronDance_clearDanceVariables
-	callab agesInteractionsBank08.shootingGallery_getNextTargetLayout
+	callab interactionCodeAges1.shootingGallery_getNextTargetLayout
 
 ;;
 goronDance_clearDanceVariables:

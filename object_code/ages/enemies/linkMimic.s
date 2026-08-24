@@ -31,7 +31,7 @@ m_EnemyCode $64
 	ld a,PALH_82
 	call loadPaletteHeader
 .if defined(ROM_COMBO)
-	callab enemyCodeExt1.armMimic_uninitialized
+	callab enemyCode2.armMimic_uninitialized
 .else
 	call armMimic_uninitialized
 .endif
@@ -43,7 +43,7 @@ linkMimic_state8:
 	or a
 	ret nz
 .if defined(ROM_COMBO)
-	jpab enemyCodeExt1.armMimic_state8
+	jpab enemyCode2.armMimic_state8
 .else
 	jr armMimic_state8
 .endif

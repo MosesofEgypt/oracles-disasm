@@ -2,4 +2,4 @@
 ; INTERAC_MONKEY
 ; ==================================================================================================
 m_InteractionCode $39
-	jpab agesInteractionsBank11.interactionCode39_body
+	jpab interactionCodeAges6.interactionCode39_body

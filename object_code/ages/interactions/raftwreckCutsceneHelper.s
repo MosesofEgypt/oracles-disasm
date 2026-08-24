@@ -28,7 +28,7 @@ m_InteractionCode $64
 
 @loadAngleAndCounterPreset:
 	ld b,$03
-	callab agesInteractionsBank0a.loadAngleAndCounterPreset
+	callab interactionCodeAges3.loadAngleAndCounterPreset
 	ld a,b
 	or a
 	ret

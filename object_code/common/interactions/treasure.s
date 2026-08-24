@@ -1,4 +1,3 @@
-m_section_free Interaction_Code_Treasure NAMESPACE treasureInteraction
 
 ; ==================================================================================================
 ; INTERAC_TREASURE
@@ -616,5 +615,3 @@ m_InteractionCode $60
 ++
 	xor a
 	ret
-
-.ends

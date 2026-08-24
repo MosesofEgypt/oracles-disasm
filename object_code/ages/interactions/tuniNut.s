@@ -2,5 +2,5 @@
 ; INTERAC_TUNI_NUT
 ; ==================================================================================================
 m_InteractionCode $b1
-	jpab agesInteractionsBank11.interactionCodeb1_body
+	jpab interactionCodeAges6.interactionCodeb1_body
 

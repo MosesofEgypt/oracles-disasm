@@ -23,7 +23,7 @@ m_InteractionCode $38
 	.dw @subid0Init
 
 @subid0Init:
-	callab agesInteractionsBank09.getGameProgress_2
+	callab interactionCodeAges2.getGameProgress_2
 
 	; NPC doesn't exist between beating d2 and saving Nayru
 	ld a,b

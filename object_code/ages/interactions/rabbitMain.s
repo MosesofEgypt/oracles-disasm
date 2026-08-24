@@ -56,7 +56,7 @@ interactionCode4b_body:
 	ld e,Interaction.counter1
 	ld a,180
 	ld (de),a
-	callab agesInteractionsBank08.loadStoneNpcPalette
+	callab interactionCodeAges1.loadStoneNpcPalette
 	jp rabbitSubid2SetRandomSpawnDelay
 
 @initSubid6:
@@ -70,7 +70,7 @@ interactionCode4b_body:
 	bit 6,a
 	jp z,interactionDelete
 
-	callab agesInteractionsBank08.loadStoneNpcPalette
+	callab interactionCodeAges1.loadStoneNpcPalette
 	ld a,$06
 	call objectSetCollideRadius
 
@@ -254,7 +254,7 @@ rabbitSubid1:
 	jp interactionIncSubstate
 
 @substate3:
-	callab agesInteractionsBank08.interactionOscillateXRandomly
+	callab interactionCodeAges1.interactionOscillateXRandomly
 	call interactionDecCounter2
 	ret nz
 	ld (hl),20
@@ -348,7 +348,7 @@ rabbitSubid3:
 @substate1:
 	call interactionDecCounter1
 	jr z,+
-	jpab agesInteractionsBank08.childFlickerBetweenStone
+	jpab interactionCodeAges1.childFlickerBetweenStone
 +
 	call interactionIncSubstate
 	ld l,Interaction.oamFlags

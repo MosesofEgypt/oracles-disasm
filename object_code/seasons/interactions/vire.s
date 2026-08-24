@@ -45,7 +45,7 @@ m_InteractionCode $e3
 	call interactionSetAnimation
 	jp interactionAnimateAsNpc
 @substate1:
-	callab seasonsInteractionsBank0a.seasonsFunc_0a_71ce
+	callab interactionCodeSeasons3.seasonsFunc_0a_71ce
 	call interactionRunScript
 	jr c,+
 	jp interactionAnimateAsNpc

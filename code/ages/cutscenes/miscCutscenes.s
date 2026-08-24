@@ -1146,7 +1146,7 @@ nayruWarpToMakuTreeCutsceneHandler:
 	ld a,(wFrameCounter)
 	and $07
 	ret nz
-	callab agesInteractionsBank0a.func_0a_7877
+	callab interactionCodeAges3.func_0a_7877
 	ld de,w1Link.yh
 	call objectGetRelativeAngle
 	call convertAngleToDirection

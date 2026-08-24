@@ -12,7 +12,7 @@ m_InteractionCode $5b
 @state0:
 	call @loadScriptAndInitGraphics
 	call interactionSetAlwaysUpdateBit
-	callab commonInteractions1.clearFallDownHoleEventBuffer
+	callab interactionCode1.clearFallDownHoleEventBuffer
 
 
 ; Normal script is running; waiting for Link to talk or for something to fall into a hole.
@@ -51,7 +51,7 @@ m_InteractionCode $5b
 
 @scriptEnded:
 	call @loadScript
-	callab commonInteractions1.clearFallDownHoleEventBuffer
+	callab interactionCode1.clearFallDownHoleEventBuffer
 	ld e,Interaction.state
 	ld a,$01
 	ld (de),a

@@ -115,12 +115,12 @@ m_InteractionCode $43
 	ld a,(wTmpcfc0.genericCutscene.cfd1)
 	cp $01
 	ret nz
-	jpab agesInteractionsBank08.setCounter1To120AndPlaySoundEffectAndIncSubstate
+	jpab interactionCodeAges1.setCounter1To120AndPlaySoundEffectAndIncSubstate
 
 @@substate1:
 	call interactionDecCounter1
 	jr z,+
-	jpab agesInteractionsBank08.childFlickerBetweenStone
+	jpab interactionCodeAges1.childFlickerBetweenStone
 +
 	call interactionIncSubstate
 	ld l,Interaction.oamFlags

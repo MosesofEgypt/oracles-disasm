@@ -10228,7 +10228,7 @@ interactionSetMiniScript:
 objectOscillateZ:
 	ldh a,(<hRomBank)
 	push af
-	callfrombank0 commonInteractions2.objectOscillateZ_body
+	callfrombank0 interactionCode2.objectOscillateZ_body
 	pop af
 	rst_setrombank
 	ret
@@ -10297,10 +10297,10 @@ objectCreateExclamationMark:
 	ldh (<hFF8B),a
 	ldh a,(<hRomBank)
 	push af
-	ld a,:commonInteractions5.objectCreateExclamationMark_body
+	ld a,:interactionCode5.objectCreateExclamationMark_body
 	rst_setrombank
 	ldh a,(<hFF8B)
-	call commonInteractions5.objectCreateExclamationMark_body
+	call interactionCode5.objectCreateExclamationMark_body
 	pop af
 	rst_setrombank
 	ret
@@ -10327,7 +10327,7 @@ objectCreateFloatingMusicNote:
 	ldh (<hFF8D),a
 	ldh a,(<hRomBank)
 	push af
-	callfrombank0 commonInteractions5.objectCreateFloatingImage
+	callfrombank0 interactionCode5.objectCreateFloatingImage
 	pop af
 	rst_setrombank
 	ret
@@ -10765,7 +10765,7 @@ createEnergySwirlGoingIn:
 	ld l,a
 	ldh a,(<hRomBank)
 	push af
-	callfrombank0 partCode.createEnergySwirlGoingIn_body
+	callfrombank0 partCode1.createEnergySwirlGoingIn_body
 	pop af
 	rst_setrombank
 	ret
@@ -10779,7 +10779,7 @@ createEnergySwirlGoingOut:
 	ld l,a
 	ldh a,(<hRomBank)
 	push af
-	callfrombank0 partCode.createEnergySwirlGoingOut_body
+	callfrombank0 partCode1.createEnergySwirlGoingOut_body
 	pop af
 	rst_setrombank
 	ret
@@ -12769,7 +12769,7 @@ seasonsFunc_331b:
 .if defined(ROM_COMBO)
 	callfrombank0 bank3Cutscenes_seasons.seasonsFunc_0f_6f75
 .else
-	callfrombank0 enemyCodeExt3.seasonsFunc_0f_6f75
+	callfrombank0 enemyCode4.seasonsFunc_0f_6f75
 .endif
 	pop af
 	rst_setrombank
@@ -12782,8 +12782,8 @@ seasonsFunc_332f:
 	callfrombank0 bank3Cutscenes_seasons.seasonsFunc_0f_704d
 	callfrombank0 bank3Cutscenes_seasons.seasonsFunc_0f_6f75
 .else
-	callfrombank0 enemyCodeExt3.seasonsFunc_0f_704d
-	callfrombank0 enemyCodeExt3.seasonsFunc_0f_7182
+	callfrombank0 enemyCode4.seasonsFunc_0f_704d
+	callfrombank0 enemyCode4.seasonsFunc_0f_7182
 .endif
 	pop af
 	rst_setrombank
@@ -12939,7 +12939,7 @@ seasonsFunc_34a0:
 .if defined(ROM_COMBO)
 	callfrombank0 bank3Cutscenes_seasons.seasonsFunc_0f_7159
 .else
-	callfrombank0 enemyCodeExt3.seasonsFunc_0f_7159
+	callfrombank0 enemyCode4.seasonsFunc_0f_7159
 .endif
 
 .if defined(ROM_COMBO)
@@ -12961,7 +12961,7 @@ seasonsFunc_34a0:
 .if defined(ROM_COMBO)
 	callfrombank0 bank3Cutscenes_seasons.seasonsFunc_0f_7182
 .else
-	callfrombank0 enemyCodeExt3.seasonsFunc_0f_7182
+	callfrombank0 enemyCode4.seasonsFunc_0f_7182
 .endif
 	callfrombank0 tilesets.updateChangedTileQueue
 
@@ -13275,7 +13275,7 @@ loadAnimationData:
 roomTileChangesAfterLoad02_seasons:
 	ldh a,(<hRomBank)
 	push af
-	callfrombank0 seasonsInteractionsBank09.roomTileChangesAfterLoad02_body
+	callfrombank0 interactionCodeSeasons2.roomTileChangesAfterLoad02_body
 	pop af
 	rst_setrombank
 	ret
@@ -14368,7 +14368,7 @@ createSokraSnore:
 checkGotMakuSeedDidNotSeeZeldaKidnapped:
 	ldh a,(<hRomBank)
 	push af
-	callfrombank0 seasonsInteractionsBank0a.checkGotMakuSeedDidNotSeeZeldaKidnapped_body
+	callfrombank0 interactionCodeSeasons3.checkGotMakuSeedDidNotSeeZeldaKidnapped_body
 	push af
 	pop bc
 	pop af
@@ -14391,7 +14391,7 @@ checkObjectIsCloseToPosition:
 	ldh a,(<hRomBank)
 	push af
 
-	callfrombank0 agesInteractionsBank08.checkObjectIsCloseToPosition
+	callfrombank0 interactionCodeAges1.checkObjectIsCloseToPosition
 	ld b,$00
 	jr nc,+
 	inc b
@@ -14417,10 +14417,10 @@ checkNpcShouldExistAtGameStage:
 	ldh (<hFF8B),a
 	ldh a,(<hRomBank)
 	push af
-	ld a,:agesInteractionsBank09.checkNpcShouldExistAtGameStage_body
+	ld a,:interactionCodeAges2.checkNpcShouldExistAtGameStage_body
 	rst_setrombank
 	ldh a,(<hFF8B)
-	call agesInteractionsBank09.checkNpcShouldExistAtGameStage_body
+	call interactionCodeAges2.checkNpcShouldExistAtGameStage_body
 	ld c,$00
 	jr z,+
 	inc c
@@ -14685,7 +14685,7 @@ setLinkDirection:
 checkIfHoronVillageNPCShouldBeSeen:
 	ldh a,(<hRomBank)
 	push af
-	callfrombank0 seasonsInteractionsBank08.checkHoronVillageNPCShouldBeSeen_body@main
+	callfrombank0 interactionCodeSeasons1.checkHoronVillageNPCShouldBeSeen_body@main
 	ld c,$01
 	jr c,+
 	dec c
@@ -14699,7 +14699,7 @@ checkIfHoronVillageNPCShouldBeSeen:
 setMakuTreeStageAndMapText:
 	ldh a,(<hRomBank)
 	push af
-	callfrombank0 seasonsInteractionsBank09.makuTree_setAppropriateStage
+	callfrombank0 interactionCodeSeasons2.makuTree_setAppropriateStage
 	callfrombank0 scriptHelp.makuTree_setMapTextBasedOnStage
 	pop af
 	rst_setrombank
@@ -14710,7 +14710,7 @@ setMakuTreeStageAndMapText:
 getSunkenCityNPCVisibleSubId_caller:
 	ldh a,(<hRomBank)
 	push af
-	callfrombank0 seasonsInteractionsBank08.getSunkenCityNPCVisibleSubId@main
+	callfrombank0 interactionCodeSeasons1.getSunkenCityNPCVisibleSubId@main
 	pop af
 	rst_setrombank
 	ret
@@ -14719,10 +14719,10 @@ getSunkenCityNPCVisibleSubId_caller:
 setUpCharactersAfterMoblinKeepDestroyed:
 	ldh a,(<hRomBank)
 	push af
-	callfrombank0 seasonsInteractionsBank0a.moblinKeepScene_setLinkDirectionAndPositionAfterDestroyed 
+	callfrombank0 interactionCodeSeasons3.moblinKeepScene_setLinkDirectionAndPositionAfterDestroyed 
 	ld a,$01
-	call seasonsInteractionsBank0a.moblinKeepScene_spawnKingMoblin
-	call seasonsInteractionsBank0a.moblinKeepScene_spawn2MoblinsAfterKeepDestroyed
+	call interactionCodeSeasons3.moblinKeepScene_spawnKingMoblin
+	call interactionCodeSeasons3.moblinKeepScene_spawn2MoblinsAfterKeepDestroyed
 	pop af
 	rst_setrombank
 	ret

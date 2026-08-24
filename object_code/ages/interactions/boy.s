@@ -159,7 +159,7 @@ m_InteractionCode $3c
 	jp boyLoadScript
 
 @initSubid02:
-	callab agesInteractionsBank09.getGameProgress_1
+	callab interactionCodeAges2.getGameProgress_1
 	ld a,b
 	or a
 	jr nz,++

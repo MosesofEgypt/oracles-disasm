@@ -706,7 +706,7 @@ ralphSubid08:
 
 @getNextAngle:
 	ld b,$02
-	callab agesInteractionsBank0a.loadAngleAndCounterPreset
+	callab interactionCodeAges3.loadAngleAndCounterPreset
 	ld a,b
 	or a
 	ret

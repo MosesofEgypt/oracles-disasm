@@ -126,7 +126,7 @@ miscPuzzles_subid00:
 @state3:
 	ld a,$01
 	ld (wActiveTriggers),a
-	jpab agesInteractionsBank08.spawnChestAndDeleteSelf
+	jpab interactionCodeAges1.spawnChestAndDeleteSelf
 
 @alreadyOpened:
 	ld a,$01
@@ -143,7 +143,7 @@ miscPuzzles_subid01:
 	ld hl,@diamondPositions
 	call miscPuzzles_verifyTilesAtPositions
 	ret nz
-	jpab agesInteractionsBank08.spawnChestAndDeleteSelf
+	jpab interactionCodeAges1.spawnChestAndDeleteSelf
 
 @diamondPositions:
 	.db TILEINDEX_SWITCH_DIAMOND
@@ -190,7 +190,7 @@ miscPuzzles_subid03:
 	ld hl,@wantedFloorTiles
 	call miscPuzzles_verifyTilesAtPositions
 	ret nz
-	jpab agesInteractionsBank08.spawnChestAndDeleteSelf
+	jpab interactionCodeAges1.spawnChestAndDeleteSelf
 
 @wantedFloorTiles:
 	.db TILEINDEX_STANDARD_FLOOR
@@ -1141,7 +1141,7 @@ miscPuzzles_subid1a:
 	ld hl,@wantedTiles
 	call miscPuzzles_verifyTilesAtPositions
 	ret nz
-	jpab agesInteractionsBank08.spawnChestAndDeleteSelf
+	jpab interactionCodeAges1.spawnChestAndDeleteSelf
 
 @wantedTiles:
 	.db TILEINDEX_RED_PUSHABLE_BLOCK    $4a $4b $4c $ff

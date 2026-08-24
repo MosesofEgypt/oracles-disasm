@@ -9,10 +9,10 @@
 ; ==================================================================================================
 .ifdef ROM_AGES
 m_InteractionCode $5f
-	callab commonInteractions2.checkReloadShopItemTiles
+	callab interactionCode2.checkReloadShopItemTiles
 .else
 m_InteractionCode $43
-	call commonInteractions2.checkReloadShopItemTiles
+	call interactionCode2.checkReloadShopItemTiles
 .endif
 	call @runState
 	jp interactionAnimateAsNpc
@@ -98,7 +98,7 @@ m_InteractionCode $43
 
 	; Check if Link has the rupees for it
 	ld a,b
-	ld hl,commonInteractions2.shopItemPrices
+	ld hl,interactionCode2.shopItemPrices
 	rst_addAToHl
 	ld a,(hl)
 	call cpRupeeValue
@@ -155,7 +155,7 @@ m_InteractionCode $43
 	jr @setScriptAndGotoState2
 
 @talkToSyrupWithoutItem:
-	call commonInteractions2.shopkeeperCheckAllItemsBought
+	call interactionCode2.shopkeeperCheckAllItemsBought
 	jr z,@showWelcomeText
 
 	ld hl,mainScripts.syrupScript_showClosedText

@@ -186,7 +186,7 @@ initializeFile:
 	ld a,VICTORY_RING | $40
 	ld (wUnappraisedRings),a
 ++
-	callab commonInteractions5.initializeChildOnGameStart
+	callab interactionCode5.initializeChildOnGameStart
 .ifdef ROM_COMBO
 	call wIsSeasons
 	jr c,saveFile

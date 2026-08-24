@@ -2,4 +2,4 @@
 ; INTERAC_RABBIT
 ; ==================================================================================================
 m_InteractionCode $4b
-	jpab agesInteractionsBank11.interactionCode4b_body
+	jpab interactionCodeAges6.interactionCode4b_body

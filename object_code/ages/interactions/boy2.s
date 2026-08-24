@@ -74,7 +74,7 @@ m_InteractionCode $3f
 	cp $01
 	ret nz
 	call interactionIncSubstate
-	jpab agesInteractionsBank08.startJump
+	jpab interactionCodeAges1.startJump
 
 @@substate1:
 	ld c,$20
@@ -86,7 +86,7 @@ m_InteractionCode $3f
 	ret
 
 @@substate2:
-	jpab agesInteractionsBank08.boyRunSubid03
+	jpab interactionCodeAges1.boyRunSubid03
 
 
 @subid3:
@@ -94,7 +94,7 @@ m_InteractionCode $3f
 	jr z,@@state0
 
 @@state1:
-	jpab agesInteractionsBank08.boyRunSubid09
+	jpab interactionCodeAges1.boyRunSubid09
 
 @@state0:
 	call @initGraphicsAndIncState

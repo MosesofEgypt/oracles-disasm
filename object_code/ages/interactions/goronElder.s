@@ -30,7 +30,7 @@ m_InteractionCode $8b
 	ld a,GLOBALFLAG_FINISHEDGAME
 	call checkGlobalFlag
 	jp z,interactionDelete
-	jpab agesInteractionsBank08.shootingGalleryNpc
+	jpab interactionCodeAges1.shootingGalleryNpc
 
 
 @initGraphics: ; unused

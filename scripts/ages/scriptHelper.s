@@ -398,7 +398,7 @@ createSparkle:
 ;;
 ; Writes to the tilemap to replace all "target" tiles with floor tiles.
 shootingGallery_removeAllTargets:
-	jpab agesInteractionsBank08.shootingGallery_removeAllTargets
+	jpab interactionCodeAges1.shootingGallery_removeAllTargets
 
 ;;
 ; @param	a	0 to create the entrance, 2 to remove it
@@ -1278,7 +1278,7 @@ turnToFaceSomethingAtInterval:
 	ld a,(wFrameCounter)
 	and b
 	ret nz
-	callab agesInteractionsBank0a.func_0a_7877
+	callab interactionCodeAges3.func_0a_7877
 	call objectGetRelativeAngle
 	call convertAngleToDirection
 	ld h,d
@@ -1736,7 +1736,7 @@ createExclamationMark:
 
 ;;
 oscillateXRandomly:
-	jpab agesInteractionsBank08.interactionOscillateXRandomly
+	jpab interactionCodeAges1.interactionOscillateXRandomly
 
 ;;
 ; Forces the next animation frame to be loaded; does something with var38 and wTmpcfc0.genericCutscene.cfd3?
@@ -2047,8 +2047,8 @@ soldierSetSimulatedInputToEscortLink:
 	ld c,a
 	push de
 
-	ld hl,agesInteractionsBank09.linkEnterPalaceSimulatedInput
-	ld a,:agesInteractionsBank09.linkEnterPalaceSimulatedInput
+	ld hl,interactionCodeAges2.linkEnterPalaceSimulatedInput
+	ld a,:interactionCodeAges2.linkEnterPalaceSimulatedInput
 	call setSimulatedInputAddress
 
 	pop de
@@ -2067,8 +2067,8 @@ soldierSetSimulatedInputToEscortLink:
 
 @exitPalace:
 	push de
-	ld hl,agesInteractionsBank09.linkExitPalaceSimulatedInput
-	ld a,:agesInteractionsBank09.linkExitPalaceSimulatedInput
+	ld hl,interactionCodeAges2.linkExitPalaceSimulatedInput
+	ld a,:interactionCodeAges2.linkExitPalaceSimulatedInput
 	call setSimulatedInputAddress
 	pop de
 	ret
@@ -3850,7 +3850,7 @@ goronDance_restartGame:
 	ld hl,w1Link.direction
 	ld (hl),DIR_DOWN
 	ld b,$0a
-	jpab agesInteractionsBank08.shootingGallery_initializeGameRounds
+	jpab interactionCodeAges1.shootingGallery_initializeGameRounds
 
 ;;
 ; @param[out]	zflag	Set if in present (in wcddb)
