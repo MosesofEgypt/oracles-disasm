@@ -176,7 +176,11 @@ cutscene06Func4:
 	ld (hl),a
 	call seasonsFunc_03_74aa
 	ld hl,$de90
-	ld bc,$44e8
+.if defined(ROM_COMBO)
+	ld bc,paletteData44e8_seasons
+.else
+	ld bc,paletteData44e8
+.endif
 	call func_13c6
 	ld a,SNDCTRL_STOPMUSIC
 	call playSound
@@ -1018,10 +1022,17 @@ seasonsFunc_03_7a3b:
 	jp func_35ec
 
 seasonsTable_03_7a5e:
-	.db $b0 $49
-	.db $10 $4a
-	.db $e0 $49
-	.db $40 $4a
+.if defined(ROM_COMBO)
+	.dw paletteData49b0_seasons
+	.dw paletteData4a10_seasons
+	.dw paletteData49e0_seasons
+	.dw paletteData4a40_seasons
+.else
+	.dw paletteData49b0
+	.dw paletteData4a10
+	.dw paletteData49e0
+	.dw paletteData4a40
+.endif
 
 ;;
 ; There is an identical function named "incCutsceneState" in bank3Cutscenes.s.

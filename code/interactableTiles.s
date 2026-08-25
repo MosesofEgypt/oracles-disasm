@@ -262,19 +262,16 @@ checkFacingBottomOfTile:
 ;;
 ; Deals with pushing blocks, pots, etc.
 nextToPushableBlock:
-.ifdef ROM_COMBO
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
 	call wIsSeasons
 	jr c,+
-		; No pushing underwater
-		ld a,(wTilesetFlags)
-		and TILESETFLAG_UNDERWATER
-		ret nz
-	+
-.elif defined(ROM_AGES)
+.endif
 	; No pushing underwater
 	ld a,(wTilesetFlags)
 	and TILESETFLAG_UNDERWATER
 	ret nz
++
 .endif
 
 	; Check that he's actually pushing and wait for counters
@@ -308,7 +305,7 @@ nextToPushableBlock:
 	call checkTileAfterNext
 	jr nc,@end
 
-.if defined(ROM_AGES) && !defined(ROM_COMBO)
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 	ldh a,(<hFF8B)
 	cp TILEINDEX_SOMARIA_BLOCK
 .else
@@ -350,11 +347,11 @@ nextToPushableBlock:
 	dec (hl)
 	dec (hl)
 
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 .ifdef ROM_COMBO
 	call wIsSeasons
 	jr c,+
 .endif
-.if defined(ROM_AGES) || defined(ROM_COMBO)
 	; If the tile being pushed is a grave hiding a door, disable link's movement
 	; temporarily
 	ldh a,(<hFF8B)
@@ -366,8 +363,9 @@ nextToPushableBlock:
 
 	; Note: this assumes that TILESETFLAG_OUTDOORS == 1.
 	ld (wDisabledObjects),a
+	+
 .endif
-+
+
 
 @end:
 	xor a
@@ -572,58 +570,52 @@ nextToOverworldKeyhole:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 
-.ifdef ROM_COMBO
-@roomsWithKeyholesTableSeasons:
-	.dw @group0Seasons
-
-@group0Seasons:
-	.db <ROOM_SEASONS_096 TREASURE_GNARLED_KEY
-	.db <ROOM_SEASONS_081 TREASURE_FLOODGATE_KEY
-	.db <ROOM_SEASONS_00d TREASURE_DRAGON_KEY
-	.db $00
-.endif
-
 @roomsWithKeyholesTable:
-	.dw @group0
-	.dw @group1
-	.dw @group2
-	.dw @group3
-	.dw @group4
-	.dw @group5
+	.dw @@group0
+	.dw @@group1
+	.dw @@group2
+	.dw @@group3
+	.dw @@group4
+	.dw @@group5
 
 ; Data format:
 ; b0: room index
 ; b1: Item needed to unlock the room (see constants/common/treasure.s)
-@group0:
+@@group0:
 	.db <ROOM_AGES_05c TREASURE_GRAVEYARD_KEY
 	.db <ROOM_AGES_00a TREASURE_CROWN_KEY
 	.db <ROOM_AGES_0a5 TREASURE_LIBRARY_KEY ; unused since the present library doesn't have a keyhole
 	.db $00
-@group1:
+@@group1:
 	.db <ROOM_AGES_10e TREASURE_OLD_MERMAID_KEY
 	.db <ROOM_AGES_1a5 TREASURE_LIBRARY_KEY
 	.db $00
-@group3:
+@@group3:
 	.db <ROOM_AGES_30f TREASURE_MERMAID_KEY
 	.db $00
 
-@group2:
-@group4:
-@group5:
+@@group2:
+@@group4:
+@@group5:
 	.db $00
 
-.else; ROM_SEASONS
+.endif
 
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+@roomsWithKeyholesTableSeasons:
+.else
 @roomsWithKeyholesTable:
-	.dw @group0
+.endif
+	.dw @@group0
 
-@group0:
+@@group0:
 	.db <ROOM_SEASONS_096 TREASURE_GNARLED_KEY
 	.db <ROOM_SEASONS_081 TREASURE_FLOODGATE_KEY
 	.db <ROOM_SEASONS_00d TREASURE_DRAGON_KEY
 	.db $00
 
-.endif ; ROM_SEASONS
+.endif
 
 
 jumpToShowInfoText:
@@ -808,7 +800,7 @@ showInfoTextForTile:
 
 ;;
 ; @param d Special object (Link)
-; @param[out] zflag Set if the object is pushing against the tile.
+; @param[out] zflag Set if the object is not pushing against the tile.
 specialObjectCheckPushingAgainstTile:
 	ld a,(wLinkPushingDirection)
 	rlca

@@ -359,11 +359,10 @@ updateSoundFrequencyAndPlay:
 
 @endVibratoWait:
 	ld a,$10
-
 	ld hl,wChannelVibratoActive
 	call writeChannelDataToHl
-	xor a
 
+	xor a
 	ld hl,wChannelVibratoCounters
 	call writeChannelDataToHl
 
@@ -453,8 +452,7 @@ updatePlayedFrequency:
 	add hl,de
 	ld a,(hl)
 	or a
-	jr z,@square
-	ret
+	ret nz
 
 @square:
 	ld a,(wSoundChannel)
@@ -478,19 +476,18 @@ updatePlayedFrequency:
 	ld ($ff00+c),a
 	inc c
 
-	ld hl,wChannelDutyCycles
-	call readChannelDataFromHl
-	push af
 	ld a,R_NR11
 	add b
 	ld c,a
-	pop af
+	ld hl,wChannelDutyCycles
+	call readChannelDataFromHl
 	ld ($ff00+c),a
+	inc c
 	ret
 
 @wave:
 	call isWaveChannelUnavailable
-	jr nz,label_39_030
+	ret nz
 	ld a,l
 	ld ($ff00+R_NR33),a
 	ld a,h
@@ -546,7 +543,7 @@ getNextChannelByte:
 
 	; move to the next byte in the data
 	ld a,b
-	sla a
+	add a
 	add <hSoundChannelAddresses
 	ld c,a
 	ld a,l
@@ -888,8 +885,7 @@ setChannelWaitCounter:
 	call getNextChannelByte
 	dec a
 	ld hl,wChannelWaitCounters
-	call writeChannelDataToHl
-	ret
+	jp writeChannelDataToHl
 
 ;;
 ; Determines the time to wait until the envelope with sweep 
@@ -1030,7 +1026,7 @@ updateChannelVolume:
 
 	ld a,(wMusicVolume)
 	or a
-	jr z,@ret
+	ret z
 
 	ld a,(wSoundChannel)
 	inc a
@@ -1041,9 +1037,7 @@ updateChannelVolume:
 	add hl,de
 	ld a,(hl)
 	or a
-	jr z,++
-@ret:
-	ret
+	ret nz
 ++
 	ld a,(wSoundChannel)
 	and $01
@@ -1060,10 +1054,12 @@ updateChannelVolume:
 	sla a
 	sla a
 	add b
+	ld b,a
 	add R_NR12
 	ld c,a
 	ld a,(wSoundCmdEnvelope)
 	ld ($ff00+c),a
+	inc c
 	ld hl,wChannelFrequencyModeAndLengthTimerEnabled
 	call readChannelDataFromHl
 
@@ -1114,8 +1110,7 @@ getChannelVolume:
 
 @fullVolume:
 	ld hl,wChannelVolumes
-	call readChannelDataFromHl
-	ret
+	jp readChannelDataFromHl
 @halfVolume:
 	ld hl,wChannelVolumes
 	call readChannelDataFromHl
@@ -1151,7 +1146,7 @@ standardCmdChannels4To5:
 	ld hl,wChannelIsPlayingRest
 	call writeChannelDataToHl
 
-	xor a
+	xor a ; volume guaranteed to be 0 because we just set rest to 1
 	ld hl,wWaveChannelVolume
 	call writeChannelDataToHl
 	call isWaveChannelUnavailable
@@ -1408,7 +1403,7 @@ setWaveform:
 	and $80
 	jr z,-
 
-	; Restart channel 3
+	; Restart channel 3 (but trashes lower frequency bits?)
 	ld a,$80
 	ld ($ff00+R_NR34),a
 	ret
@@ -1421,7 +1416,7 @@ channelCmdfe:
 	call getNextChannelByte
 	ld h,a
 	ld a,(wSoundChannel)
-	sla a
+	add a
 	add <hSoundChannelAddresses
 	ld c,a
 	ld a,l

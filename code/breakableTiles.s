@@ -107,7 +107,11 @@ tryToBreakTile_body:
 	or a
 	jr z,@doneSettingTile
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+
+.endif
 	ldh a,(<hFF92)
 	cp TILEINDEX_SWITCH_DIAMOND
 	jr z,@useOriginalLayout
@@ -117,11 +121,17 @@ tryToBreakTile_body:
 	jr z,@activeCollisions1Or2
 	cp $01
 	jr nz,@useGivenValue
+.if defined(ROM_COMBO)
+	jr ++
+	+
+.endif
+.endif
 
-.else; ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	ld a,(wActiveGroup)
 	cp $03
 	jr c,@useGivenValue
+	++
 .endif
 
 @activeCollisions1Or2:

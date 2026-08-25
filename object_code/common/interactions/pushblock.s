@@ -231,11 +231,11 @@ m_InteractionCode $14
 ;;
 ; Loads var31-var34 with some variables relating to pushable blocks (see below).
 @loadPushableTileProperties:
-.ifdef ROM_AGES
-	ld a,(wActiveCollisions)
-.else
-	ld a,(wActiveGroup)
-.endif
+	.ifdef ROM_AGES
+		ld a,(wActiveCollisions)
+	.else
+		ld a,(wActiveGroup)
+	.endif
 	.if !defined(ROM_COMBO)
 		ld hl,pushableTilePropertiesTable
 	.elif defined(ROM_AGES)

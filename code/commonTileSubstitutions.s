@@ -3,7 +3,7 @@
 ;;
 ; Replaces a shutter link is about to walk on to with empty floor.
 replaceShutterForLinkEntering:
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	call wIsSeasons
 	jr nc,+
 		ld a,(wDungeonIndex)
@@ -153,7 +153,15 @@ replaceOpenedChest:
 ; Replaces switch tiles and whatever they control if the switch is set.
 ; Groups 4 and 5 only.
 replaceSwitchTiles:
-	ld hl,@group4SwitchData
+	.if defined(ROM_COMBO)
+		call wIsSeasons
+		ld hl,@group4SwitchData_seasons
+		jr c,+
+			ld hl,@group4SwitchData_ages
+		+
+	.else
+		ld hl,@group4SwitchData
+	.endif
 	ld a,(wActiveGroup)
 	sub NUM_SMALL_GROUPS
 	jr z,+
@@ -161,7 +169,15 @@ replaceSwitchTiles:
 	dec a
 	ret nz
 
-	ld hl,@group5SwitchData
+	.if defined(ROM_COMBO)
+		call wIsSeasons
+		ld hl,@group5SwitchData_seasons
+		jr c,+
+			ld hl,@group5SwitchData_ages
+		+
+	.else
+		ld hl,@group5SwitchData
+	.endif
 +
 	ld a,(wActiveRoom)
 	ld b,a
@@ -203,7 +219,11 @@ replaceSwitchTiles:
 	;   b2: New tile index
 	;   b3: Position of tile to replace
 
+	.if defined(ROM_COMBO)
+	@group4SwitchData_ages:
+	.else
 	@group4SwitchData:
+	.endif
 		.db $2f $02 $0b $79
 		.db $2f $02 $5a $6c
 		.db $3b $20 $af $79
@@ -218,12 +238,20 @@ replaceSwitchTiles:
 		.db $c7 $01 $0b $68
 		.db $00
 
+	.if defined(ROM_COMBO)
+	@group5SwitchData_ages:
+	.else
 	@group5SwitchData:
+	.endif
 		.db $00
+.endif
 
-.else; ROM_SEASONS
-
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+	.if defined(ROM_COMBO)
+	@group4SwitchData_seasons:
+	.else
 	@group4SwitchData:
+	.endif
 		.db $0f $01 $0b $33
 		.db $0f $01 $5a $74
 		.db $6f $01 $0b $8c
@@ -242,7 +270,11 @@ replaceSwitchTiles:
 		.db $a0 $02 $0b $78
 		.db $00
 
+	.if defined(ROM_COMBO)
+	@group5SwitchData_seasons:
+	.else
 	@group5SwitchData:
+	.endif
 		.db $7e $01 $5c $2b
 		.db $7e $01 $0b $78
 		.db $00
@@ -257,7 +289,7 @@ applySingleTileChanges:
 	ld c,a
 	ld d,>wRoomLayout
 	ld a,(wActiveGroup)
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	ld hl,singleTileChangeGroupTable_seasons
 	call wIsSeasons
 	jr c,+

@@ -2029,6 +2029,11 @@ clearMemoryOnScreenReload:
 	ld hl,wLinkInAir
 	ld b,wcce9-wLinkInAir
 	call clearMemory
+.if defined(ROM_COMBO)
+	ld hl,wGrabbableObjectBuffer
+	ld b,wGrabbableObjectBufferEnd-wGrabbableObjectBuffer
+	call clearMemory
+.endif
 
 	; Initialize wLinkObjectIndex (set it to >w1Link unless it's already set to
 	; >w1Companion).
@@ -3711,6 +3716,9 @@ standardGameState:
 .if defined(ROM_COMBO)	; NOTE: TEMPORARY UNTIL COMBO TESTING IS DONE
 	; allow toggling this being seasons or not by pressing select
 	ld a,(wKeysJustPressed)
+	cp BTN_SELECT
+	jr nz,+
+	ld a,(wKeysPressed)
 	cp BTN_SELECT
 	jr nz,+
 	ld a,(wOpenedMenuType)

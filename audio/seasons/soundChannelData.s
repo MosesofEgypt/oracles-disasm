@@ -19,10 +19,8 @@ sndadChannel2:
 sndadChannel7:
 sndb6Channel2:
 sndb6Channel7:
-bank39ChannelFallback:
 	cmdff
 
-.redefine MUSIC_CHANNEL_FALLBACK bank39ChannelFallback
 
 
 .include "audio/common/sfx/fairyCutscene.s"
@@ -87,10 +85,7 @@ mus42Channel0:
 mus42Channel1:
 mus42Channel4:
 mus42Channel6:
-bank3aChannelFallback:
 	cmdff
-
-.redefine MUSIC_CHANNEL_FALLBACK bank3aChannelFallback
 
 
 .include "audio/common/mus/indoors.s"
@@ -219,10 +214,7 @@ mus45Channel0:
 mus45Channel1:
 mus45Channel4:
 mus45Channel6:
-bank3bChannelFallback:
 	cmdff
-
-.redefine MUSIC_CHANNEL_FALLBACK bank3bChannelFallback
 
 
 .include "audio/seasons/mus/horonVillage.s"
@@ -258,11 +250,6 @@ bank3bChannelFallback:
 
 m_section_superfree_snd AudioData4
 
-bank3cChannelFallback:
-	cmdff
-
-.redefine MUSIC_CHANNEL_FALLBACK bank3cChannelFallback
-
 
 .include "audio/seasons/mus/makuTree.s"
 .include "audio/seasons/mus/swordAndShieldMaze.s"
@@ -294,11 +281,8 @@ bank3cChannelFallback:
 
 m_section_superfree_snd AudioData5
 
-bank3dChannelFallback:
 mus24Channel6:
 	cmdff
-
-.redefine MUSIC_CHANNEL_FALLBACK bank3dChannelFallback
 
 .include "audio/common/mus/triumphant.s"
 .include "audio/common/mus/disaster.s"
@@ -370,10 +354,7 @@ mus4bChannel0:
 mus4bChannel1:
 mus4bChannel4:
 mus4bChannel6:
-bank3eChannelFallback:
 	cmdff
-
-.redefine MUSIC_CHANNEL_FALLBACK bank3eChannelFallback
 
 .include "audio/seasons/sfx/danceMove.s"
 .include "audio/common/sfx/dimitri.s"

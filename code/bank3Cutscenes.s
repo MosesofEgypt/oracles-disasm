@@ -219,7 +219,7 @@ twinrovaCutscene_deleteAllInteractionsExceptFlames:
 ;;
 ; Loads the "angry-looking" version of the flames.
 twinrovaCutscene_loadAngryFlames:
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	; NOTE: these are the same constant between games, so we
 	;       don't need to do anything special for the combo.
 	ld a,PALH_af

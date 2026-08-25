@@ -20,7 +20,7 @@ parseStaticObjects:
 	ld a,c
 	add $08
 	ld e,a
-.ifdef ROM_AGES
+.if defined(ROM_AGES) ||defined(ROM_COMBO)
 	cp <(wStaticObjects+_sizeof_wStaticObjects)
 	jr c,@next
 .else

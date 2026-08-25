@@ -106,6 +106,12 @@ loadLinkAndCompanionAnimationFrame_body:
 	call func_4553
 	ld a,(w1Link.id)
 	ld hl,@data
+	.ifdef ROM_COMBO
+		call wIsSeasons
+		jr c,+
+			ld hl,@data_ages
+		+
+	.endif
 	rst_addAToHl
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
@@ -171,6 +177,19 @@ loadLinkAndCompanionAnimationFrame_body:
 
 ; These are animation frame indices; frame indices under the given value don't have link's direction
 ; added to them?
+.if defined(ROM_COMBO)
+@data_ages:
+	.db $54 ; SPECIALOBJECT_LINK
+	.db $20
+	.db $00
+	.db $00
+	.db $00
+	.db $00
+	.db $00
+	.db $00
+	.db $ff ; SPECIALOBJECT_LINK_CUTSCENE
+	.db $ff ; SPECIALOBJECT_LINK_RIDING_ANIMAL
+.endif
 @data:
 	.db $54 ; SPECIALOBJECT_LINK
 	.db $20
@@ -180,7 +199,7 @@ loadLinkAndCompanionAnimationFrame_body:
 	.db $00
 	.db $00
 	.db $00
-.ifdef ROM_AGES
+.if defined(ROM_AGES)
 	.db $ff ; SPECIALOBJECT_LINK_CUTSCENE
 .else; ROM_SEASONS
 	.db $40

@@ -530,6 +530,9 @@ parentItemUpdate:
 
 .if defined(ROM_COMBO)
 ; bank is too full in rom combo, so need to split these out
+parentItemCode_boomerang:
+	jpab itemParentsExt.parentItemCode_boomerang
+
 parentItemCode_shovel:
 	jpab itemParentsExt.parentItemCode_shovel
 

@@ -52,13 +52,13 @@ shopItemState0:
 	jr nz,++
 	ld a,TREASURE_BOMBS
 	call checkTreasureObtained
-	jp nc,shopItemPopStackAndDeleteSelf
+	jp nc,interactionDelete
 	jr @checkFlutePurchasable
 ++
 .else
 	ld a,TREASURE_SWORD
 	call checkTreasureObtained
-	jp nc,shopItemPopStackAndDeleteSelf
+	jp nc,interactionDelete
 	ld e,Interaction.subid
 	ld a,(de)
 .endif
@@ -151,7 +151,7 @@ shopItemState0:
 	inc hl
 	ldi a,(hl)
 	bit 7,a
-	jr nz,shopItemPopStackAndDeleteSelf
+	jp nz,interactionDelete
 
 	; Try this item. Need to run the above checks again.
 	ld (de),a
@@ -182,14 +182,6 @@ shopItemState5:
 	xor a
 	ld (wDisabledObjects),a
 	ld (wMenuDisabled),a
-
-
-;;
-; The fact that this pops the stack means that it will return one level higher than it's
-; supposed to? This ultimately isn't a big deal, it just means that other interactions
-; won't be updated until next frame, but it's probably unintentional...
-shopItemPopStackAndDeleteSelf:
-	pop af
 	jp interactionDelete
 
 

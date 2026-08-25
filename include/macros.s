@@ -189,6 +189,11 @@
 			m_section_superfree \1 \2 \3
 		.endif
 	.endif
+
+	\1ChannelFallback:
+		cmdff
+
+	.redefine MUSIC_CHANNEL_FALLBACK \1ChannelFallback
 .endm
 
 .macro m_ObjectCodeSection

@@ -3065,7 +3065,7 @@ hideStatusBar_body:
 	ld a,(<wEquippedItemOamTail)
 	or a
 	ld b,a
-	ret nz
+	ret z
 
 	xor a
 	ld (wEquippedItemOamTail),a
@@ -5726,13 +5726,17 @@ inventoryMenuState0:
 	ld a,$01
 +
 	ld (wInventory.submenu2CursorPos2),a
+.if defined(ROM_COMBO)
+	jr +
 ++
+.endif
 .endif
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 	ld (wInventory.submenu2CursorPos2),a
 	dec a
 	ld (wInventory.activeText),a
+	+
 .endif
 
 	call loadCommonGraphics
@@ -7912,7 +7916,7 @@ inventorySubscreen2_drawTreasures:
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
 	call wIsSeasons
-	jr nc,+
+	jr c,+
 .endif
 	ld a,(wTilesetFlags)
 	and TILESETFLAG_PAST
@@ -7923,6 +7927,7 @@ inventorySubscreen2_drawTreasures:
 .endif
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
++
 	call checkWhetherToDisplaySeasonInSubscreen
 	ld hl,w4TileMap+$4d
 	ldbc $04,$06

@@ -88,7 +88,7 @@ updateInteraction:
 	jp updateObjectCaller
 
 .else
-	.ifdef ROM_AGES
+	.if defined(ROM_AGES)
 		; Get the bank number in 'b'
 		ld b,$08
 		cp $3e

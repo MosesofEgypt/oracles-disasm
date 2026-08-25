@@ -809,6 +809,7 @@ paletteData44b0:
 	m_RGB16 $1d $1f $1f
 	m_RGB16 $07 $0f $1f
 
+paletteData44e8:
 	m_RGB16 $07 $10 $13
 	m_RGB16 $06 $0a $0d
 	m_RGB16 $02 $03 $0b

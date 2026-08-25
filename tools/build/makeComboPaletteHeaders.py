@@ -38,7 +38,6 @@ def parse_palette_data(data, headers, header_order):
             continue
 
         elif line.startswith("m_PaletteHeaderEnd"):
-            headers[name] += ("m_PaletteHeaderEnd", )
             in_header = False
 
         if name:

@@ -401,7 +401,7 @@ for mapping, inv_mapping, data, game in [
                     f"Unexpected collision type byte count: {data_val_count}\n"
                     "Cannot merge objectCollisionTables."
                     )
-            elif len(mapping) == len(data_lines):
+            elif len(mapping) == len(data_lines)-1:
                 break
             elif data_val_count == 32:
                 data_lines.append("")

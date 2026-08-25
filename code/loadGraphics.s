@@ -462,6 +462,10 @@ refreshObjectGfx_body:
 	add hl,de
 	add hl,de
 	add hl,de
+.if defined(INCREASE_GFX_SPACE)
+	add hl,de
+	inc hl
+.endif
 	bit 7,(hl)
 	ld a,b
 	jr z,@nextExtraGfxIndex

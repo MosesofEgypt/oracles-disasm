@@ -1314,7 +1314,6 @@ m_section_superfree Item_Parents NAMESPACE itemParents
 	.include "object_code/common/itemParents/switchHookParent.s"
 	.include "object_code/common/itemParents/caneOfSomariaParent.s"
 	.include "object_code/common/itemParents/swordParent.s"
-	.include "object_code/common/itemParents/boomerangParent.s"
 	.include "object_code/common/itemParents/bombsBraceletParent.s"
 	.include "object_code/common/itemParents/featherParent.s"
 
@@ -1334,6 +1333,7 @@ m_section_superfree Item_Parents_2 NAMESPACE itemParentsExt
 	.include "object_code/common/itemParents/shovelParent.s"
 	.include "object_code/common/itemParents/lifeVialParent.s"
 	.include "object_code/common/itemParents/magnetGloveParent.s"
+	.include "object_code/common/itemParents/boomerangParent.s"
 
 	.include {"{GAME_DATA_DIR}/itemUsageTables.s"}
 .ends

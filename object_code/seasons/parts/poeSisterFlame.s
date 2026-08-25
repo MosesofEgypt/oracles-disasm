@@ -8,7 +8,7 @@ m_PartCode $3c
 	jr z,@state0
 	ld bc,$0104
 	call partCommon_decCounter1IfNonzero
-	jr z,@delete
+	jp z,partDelete
 	ld a,(hl)
 	cp $46
 	jr z,+
@@ -22,9 +22,6 @@ m_PartCode $3c
 	ld (hl),c
 	ld a,b
 	jp partSetAnimation
-@delete:
-	pop hl
-	jp partDelete
 @state0:
 	ld h,d
 	ld l,e

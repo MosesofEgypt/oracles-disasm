@@ -27,7 +27,7 @@
 		.db
 
 	wc010:	; padding
-		.dsb $4
+		dsb $4
 .endif
 
 wSoundFadeCounter: ; $c014
@@ -202,13 +202,13 @@ wMusicQueue: ; $c0a0
 ; Stacks grow down on the gameboy. So the main stack is from $c0b0-$c10f?
 wMainStack:		dsb $60
 wMainStackTop:		.db	; $c110
-wThread0Stack: 		dsb $70
+wThread0Stack: 		dsb $70		; intro thread
 wThread0StackTop: 	.db	; $c180
-wThread1Stack: 		dsb $a0
+wThread1Stack: 		dsb $a0		; main thread
 wThread1StackTop: 	.db	; $c220
-wThread2Stack: 		dsb $50
+wThread2Stack: 		dsb $50		; text thread
 wThread2StackTop: 	.db	; $c270
-wThread3Stack: 		dsb $50
+wThread3Stack: 		dsb $50		; palette thread
 wThread3StackTop: 	.db	; $c2c0
 
 wc2c0:
@@ -2016,15 +2016,6 @@ wLoadedItemGraphic1: ; $cc1b/$cc1a
 wLoadedItemGraphic2: ; $cc1c/$cc1b
 	db
 
-wEnemyIDToLoadExtraGfx: ; $cc1d/$cc1c
-; An enemy can write its ID byte here to request that "extra graphics" get loaded for it.
-; It will continue loading subsequent object gfx headers until the "stop" bit is encountered.
-; Can't use this at the same time as "wInteractionIDToLoadExtraGraphics"?
-	db
-wInteractionIDToLoadExtraGfx: ; $cc1e/$cc1d
-; Same as above, but for interactions.
-	db
-
 .if defined(ROM_COMBO)
 .union
 	; seasons variables
@@ -2039,6 +2030,17 @@ wInteractionIDToLoadExtraGfx: ; $cc1e/$cc1d
 wcc1e: ; -/$cc1e
 	db
 .endif
+
+; NOTE: these are not capped at 1 byte length.
+;       need to determine how many are actually used
+wEnemyIDToLoadExtraGfx: ; $cc1d/$cc1c
+; An enemy can write its ID byte here to request that "extra graphics" get loaded for it.
+; It will continue loading subsequent object gfx headers until the "stop" bit is encountered.
+; Can't use this at the same time as "wInteractionIDToLoadExtraGraphics"?
+	db
+wInteractionIDToLoadExtraGfx: ; $cc1e/$cc1d
+; Same as above, but for interactions.
+	db
 
 .ENDS
 
@@ -2247,8 +2249,11 @@ wWarpDestVariablesEnd: ; $cc4c/$cc68
 wcc4c: ; $cc4c/$cc68/$cc71
 	db
 
-.ifndef ROM_COMBO
+.if defined(ROM_COMBO)
 wSeedTreeRefilledBitset: ; $cc4d/$cc69
+	dsb $02
+.else
+wSeedTreeRefilledBitset:
 	dsb NUM_SEED_TREES/8
 .endif
 
@@ -2400,14 +2405,20 @@ wLinkClimbingVine: ; $cc68/$cc83
 ; Set to $ff when link climbs certain ladders. Forces him to face upwards.
 	db
 
-.ifndef ROM_COMBO
-.ifdef ROM_AGES
-wLinkRaisedFloorOffset: ; $cc69
-; This shifts the Y position at which link is drawn.
-; Used by the raisable platforms in various dungeons.
-; If nonzero, Link is allowed to walk on raised floors.
-	db
-.endif
+.if defined(ROM_COMBO)
+.union
+	wLinkRaisedFloorOffset:
+		db
+.nextu
+	wSpringBloomFlowerState:
+		db
+.endu
+.elif defined(ROM_AGES)
+	wLinkRaisedFloorOffset: ; $cc69
+	; This shifts the Y position at which link is drawn.
+	; Used by the raisable platforms in various dungeons.
+	; If nonzero, Link is allowed to walk on raised floors.
+		db
 .endif
 
 wPushingAgainstTileCounter: ; $cc6a/$cc84
@@ -2633,9 +2644,16 @@ wBlockPushAngle: ; $cca6/$ccc0
 ; The angle a block is being pushed toward? bit 7 does something?
 	db
 
-.ifndef ROM_COMBO
-.ifdef ROM_SEASONS
+.ifdef ROM_COMBO
+.union
+	wPirateSkullRandomNumber:
+		db
+.nextu
+	wcca7:
+		db
+.endu
 
+.elif defined(ROM_SEASONS)
 wPirateSkullRandomNumber: ; -/$ccc1
 ; Set to a random number from $01-$04 from var38 of INTERAC_PIRATE_SKULL.
 ; Bit 7 set if INTERAC_QUICKSAND subid matches.
@@ -2647,7 +2665,6 @@ wPirateSkullRandomNumber: ; -/$ccc1
 wcca7: ; $cca7
 ; Probably unused
 	db
-.endif
 .endif
 
 wUpgradesObtained: ; $cca8/$ccc2
@@ -2671,9 +2688,7 @@ wccaa: ; $ccaa/$ccc5/$ccbb
 	db
 
 
-.ifndef ROM_COMBO
-.ifdef ROM_AGES
-
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 wLever1PullDistance: ; $ccab
 ; Number of pixels out a lever has been pulled. Bit 7 set when fully pulled.
 	db
@@ -2689,7 +2704,6 @@ wRotatingCubePos: ; $ccae
 	db
 
 .endif
-.endif
 
 
 wccaf: ; $ccaf/$ccc6
@@ -2703,15 +2717,21 @@ wccb1: ; $ccb1
 ; Disables PART_BUTTON when nonzero?
 	db
 
-.ifndef ROM_COMBO
-.ifdef ROM_AGES
+.if defined(ROM_COMBO)
+.union
+    wInBoxingMatch:
+        db
+.nextu
+	wDisableWarps:
+		db
+.endu
+.elif defined(ROM_AGES)
 wDisableWarps: ; $ccb2
 ; Used by INTERAC_BLACK_TOWER_DOOR_HANDLER to stop the warp from sending you anywhere.
 	db
 .else
 wInBoxingMatch: ; -/$ccc9
 	db
-.endif
 .endif
 
 wAButtonSensitiveObjectList: ; $ccb3/$ccca
@@ -2791,12 +2811,10 @@ wIsLinkBeingShocked: ; $ccdb/$ccf2
 wLinkShockCounter: ; $ccdc
 	db
 
-.ifndef ROM_COMBO
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 wSwitchHookState: ; $ccdd
 ; Used when swapping with the switch hook
 	db
-.endif
 .endif
 
 wDiggingUpEnemiesForbidden: ; $ccde/$ccf4
@@ -2833,45 +2851,10 @@ wFollowingLinkObjectType: ; $cce7/$ccfd
 wFollowingLinkObject: ; $cce8/$ccfe/$ccf3
 	db
 
-.ifndef ROM_COMBO
-.ifdef ROM_SEASONS
+.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
 wSwitchHookState: ; -/$ccff
 ; Used when swapping with the switch hook.
 	db
-.endif
-.endif
-
-.if defined(ROM_COMBO)
-wSwitchHookState:
-    db
-wSeedTreeRefilledBitset:
-	dsb $02
-
-.union
-	; seasons variables
-    wPirateSkullRandomNumber:
-        db
-    wSpringBloomFlowerState:
-        db
-    wInBoxingMatch:
-        db
-.nextu
-	; ages variables
-    wLever1PullDistance:
-        db
-    wLever2PullDistance:
-        db
-    wRotatingCubeColor:
-        db
-    wRotatingCubePos:
-        db
-	wDisableWarps:
-		db
-	wcca7:
-		db
-	wLinkRaisedFloorOffset:
-		db
-.endu
 .endif
 
 wcce9: ; $cce9/$cd00

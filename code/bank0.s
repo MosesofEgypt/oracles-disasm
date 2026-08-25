@@ -5540,8 +5540,8 @@ retrieveTextCharacter:
 .if defined(ROM_COMBO)
 	call wIsSeasons
 	jr nc,+
-		or a
-		jr z,+
+		cp $02
+		jr nz,+
 			; use seasons gfx font trade items
 			inc a
 	+
@@ -5550,6 +5550,7 @@ retrieveTextCharacter:
 	add a
 	add h
 	ld hl,@data
+	rst_addAToHl
 	ldi a,(hl)
 	setrombank
 
@@ -9678,7 +9679,7 @@ _scriptFunc_setupAsmCall:
 	ret
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 ; Looks like the management of script addresses differs between games?
 
@@ -9688,6 +9689,10 @@ _scriptFunc_setupAsmCall:
 ; @param	hl	Current address of script, whose contents point to the address to
 ;			jump to
 scriptFunc_jump_scf:
+	.if defined(ROM_COMBO)
+		call wIsSeasons
+		jr c,scriptFunc_jump_scf_seasons
+	.endif
 	call scriptFunc_jump
 	scf
 	ret
@@ -9700,6 +9705,10 @@ scriptFunc_jump_scf:
 ; @param	hl	Current address of script, whose contents point to the address to
 ;			jump to
 scriptFunc_jump:
+	.if defined(ROM_COMBO)
+		call wIsSeasons
+		jr c,scriptFunc_jump_seasons
+	.endif
 	ld a,h
 	cp $80
 	jr c,++
@@ -9725,16 +9734,25 @@ scriptFunc_jump:
 	ld d,a
 	xor a
 	ret
+.endif
 
-.else ; ROM_SEASONS
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 ;;
+.if defined(ROM_COMBO)
+scriptFunc_jump_scf_seasons:
+.else
 scriptFunc_jump_scf:
+.endif
 	scf
 	jr ++
 
 ;;
+.if defined(ROM_COMBO)
+scriptFunc_jump_seasons:
+.else
 scriptFunc_jump:
+.endif
 	xor a
 ++
 	rst_derefHl

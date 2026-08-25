@@ -12,14 +12,7 @@ snddeChannel1:
 snddeChannel4:
 snddeChannel6:
 	cmdff
-
-
-bank39ChannelFallback:
-	cmdff
-	cmdff
 .endif
-
-.redefine MUSIC_CHANNEL_FALLBACK bank39ChannelFallback
 
 
 .ifndef ROM_COMBO
@@ -99,13 +92,6 @@ m_section_superfree_snd AudioData8
 .else
 m_section_superfree_snd AudioData2
 .endif
-
-.ifndef ROM_COMBO
-bank3aChannelFallback:
-	cmdff
-.endif
-
-.redefine MUSIC_CHANNEL_FALLBACK bank3aChannelFallback
 
 
 .ifndef ROM_COMBO
@@ -232,13 +218,6 @@ m_section_superfree_snd AudioData3
 .endif
 
 .ifndef ROM_COMBO
-bank3bChannelFallback:
-	cmdff
-.endif
-
-.redefine MUSIC_CHANNEL_FALLBACK bank3bChannelFallback
-
-.ifndef ROM_COMBO
 .include "audio/common/mus/minigame.s"
 .include "audio/common/mus/fileSelect.s"
 .include "audio/common/mus/fairyFountain.s"
@@ -290,13 +269,6 @@ m_section_superfree_snd AudioData10
 m_section_superfree_snd AudioData4
 .endif
 
-.ifndef ROM_COMBO
-bank3cChannelFallback:
-	cmdff
-.endif
-
-.redefine MUSIC_CHANNEL_FALLBACK bank3cChannelFallback
-
 
 .include "audio/ages/mus/moonlitGrotto.s"
 
@@ -345,13 +317,6 @@ m_section_superfree_snd AudioData11
 .else
 m_section_superfree_snd AudioData5
 .endif
-
-.ifndef ROM_COMBO
-bank3dChannelFallback:
-	cmdff
-.endif
-
-.redefine MUSIC_CHANNEL_FALLBACK bank3dChannelFallback
 
 
 .ifndef ROM_COMBO
@@ -403,13 +368,6 @@ m_section_superfree_snd AudioData12
 .else
 m_section_superfree_snd AudioData6
 .endif
-
-.ifndef ROM_COMBO
-bank3eChannelFallback:
-	cmdff
-.endif
-
-.redefine MUSIC_CHANNEL_FALLBACK bank3eChannelFallback
 
 
 .ifndef ROM_COMBO
