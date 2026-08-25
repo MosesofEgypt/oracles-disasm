@@ -48,13 +48,13 @@ ralphState0:
 
 
 @initSubid06:
-	ld hl,mainScripts.ralphSubid06Script_part1
+	ld hl,{SCRIPTS_1}.ralphSubid06Script_part1
 	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $0b
 	jr nz,++
 	ld bc,$4850
 	call interactionSetPosition
-	ld hl,mainScripts.ralphSubid06Script_part2
+	ld hl,{SCRIPTS_1}.ralphSubid06Script_part2
 ++
 	call interactionSetScript
 
@@ -70,7 +70,7 @@ ralphState0:
 	ld a,$09
 	call interactionSetAnimation
 
-	ld hl,mainScripts.ralphSubid02Script
+	ld hl,{SCRIPTS_1}.ralphSubid02Script
 	call interactionSetScript
 
 	call interactionLoadExtraGraphics
@@ -104,23 +104,23 @@ ralphState0:
 	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $03
 	jr z,++
-	ld hl,mainScripts.ralphSubid04Script_part1
+	ld hl,{SCRIPTS_1}.ralphSubid04Script_part1
 	call interactionSetScript
 	jp objectSetInvisible
 ++
-	ld hl,mainScripts.ralphSubid04Script_part2
+	ld hl,{SCRIPTS_1}.ralphSubid04Script_part2
 	call interactionSetScript
 	jp objectSetVisiblec2
 
 @initSubid07:
-	ld hl,mainScripts.ralphSubid07Script
+	ld hl,{SCRIPTS_1}.ralphSubid07Script
 	call interactionSetScript
 	jp objectSetInvisible
 
 @initSubid08:
-	callab scriptHelp.ralph_createLinkedSwordAnimation
+	callab {SCRIPTS_HELP}.ralph_createLinkedSwordAnimation
 
-	ld hl,mainScripts.ralphSubid08Script
+	ld hl,{SCRIPTS_1}.ralphSubid08Script
 	call interactionSetScript
 	jp objectSetVisiblec2
 
@@ -156,7 +156,7 @@ ralphState0:
 	ld a,(wScreenTransitionDirection)
 	ld (w1Link.direction),a
 
-	ld hl,mainScripts.ralphSubid09Script
+	ld hl,{SCRIPTS_1}.ralphSubid09Script
 	call interactionSetScript
 	xor a
 	call interactionSetAnimation
@@ -176,7 +176,7 @@ ralphState0:
 	jp nz,interactionDelete
 
 	call checkIsLinkedGame
-	ld hl,mainScripts.ralphSubid0aScript_unlinked
+	ld hl,{SCRIPTS_1}.ralphSubid0aScript_unlinked
 	jr z,@@setScript
 
 	; Linked game: adjust position, load a different script
@@ -186,7 +186,7 @@ ralphState0:
 	ld l,Interaction.var38
 	ld (hl),$1e
 
-	ld hl,mainScripts.ralphSubid0aScript_linked
+	ld hl,{SCRIPTS_1}.ralphSubid0aScript_linked
 
 @@setScript:
 	call interactionSetScript
@@ -201,7 +201,7 @@ ralphState0:
 	ld e,Interaction.var3f
 	ld a,$ff
 	ld (de),a
-	ld hl,mainScripts.ralphSubid0eScript
+	ld hl,{SCRIPTS_1}.ralphSubid0eScript
 	jr @setScriptAndRunState1
 
 @initSubid0f:
@@ -209,7 +209,7 @@ ralphState0:
 	jp @setAnimation
 
 @initSubid01:
-	ld hl,mainScripts.ralphSubid01Script
+	ld hl,{SCRIPTS_1}.ralphSubid01Script
 
 @setScriptAndRunState1:
 	call interactionSetScript
@@ -235,7 +235,7 @@ ralphState0:
 	cp $24
 	jr nz,@delete
 
-	ld hl,mainScripts.ralphSubid0bScript
+	ld hl,{SCRIPTS_1}.ralphSubid0bScript
 
 @setScriptAndDisableObjects:
 	call interactionSetScript
@@ -260,7 +260,7 @@ ralphState0:
 	cp $17
 	jp nz,interactionDelete
 
-	ld hl,mainScripts.ralphSubid10Script
+	ld hl,{SCRIPTS_1}.ralphSubid10Script
 	jr @setScriptAndDisableObjects
 
 @initSubid11:
@@ -270,7 +270,7 @@ ralphState0:
 
 	ld a,$03
 	call interactionSetAnimation
-	ld hl,mainScripts.ralphSubid11Script
+	ld hl,{SCRIPTS_1}.ralphSubid11Script
 	call interactionSetScript
 	jr ralphRunSubid
 
@@ -280,8 +280,8 @@ ralphState0:
 	jp nz,interactionDelete
 
 	call interactionLoadExtraGraphics
-	callab scriptHelp.ralph_createLinkedSwordAnimation
-	ld hl,mainScripts.ralphSubid0cScript
+	callab {SCRIPTS_HELP}.ralph_createLinkedSwordAnimation
+	ld hl,{SCRIPTS_1}.ralphSubid0cScript
 	call interactionSetScript
 	xor a
 	ld (wTmpcfc0.genericCutscene.cfde),a
@@ -297,7 +297,7 @@ ralphState0:
 	bit 7,(hl)
 	jp z,interactionDelete
 	call objectSetVisiblec2
-	ld hl,mainScripts.ralphSubid12Script
+	ld hl,{SCRIPTS_1}.ralphSubid12Script
 	jp interactionSetScript
 
 @initSubid0d:
@@ -305,7 +305,7 @@ ralphState0:
 	cp $01
 	jp nz,interactionDelete
 
-	ld hl,mainScripts.ralphSubid0dScript
+	ld hl,{SCRIPTS_1}.ralphSubid0dScript
 	call interactionSetScript
 	call objectSetVisiblec0
 
@@ -358,7 +358,7 @@ ralphSubid00:
 	ld a,$03
 	call interactionSetAnimation
 
-	ld hl,mainScripts.ralphSubid00Script
+	ld hl,{SCRIPTS_1}.ralphSubid00Script
 	jp interactionSetScript
 
 @substate1:
@@ -393,7 +393,7 @@ ralphSubid02:
 	jp interactionIncSubstate
 
 @state1:
-	callab scriptHelp.objectWritePositionTocfd5
+	callab {SCRIPTS_HELP}.objectWritePositionTocfd5
 	ld e,Interaction.counter2
 	ld a,(de)
 	or a
@@ -540,7 +540,7 @@ ralphSubid03:
 
 @startScript:
 	call interactionIncSubstate
-	ld hl,mainScripts.ralphSubid03Script
+	ld hl,{SCRIPTS_1}.ralphSubid03Script
 	jp interactionSetScript
 
 @substate8:
@@ -569,7 +569,7 @@ ralphSubid04:
 	jp nz,nayruFlipDirectionAtRandomIntervals
 
 	call interactionIncSubstate
-	ld hl,mainScripts.ralphSubid04Script_part3
+	ld hl,{SCRIPTS_1}.ralphSubid04Script_part3
 	call interactionSetScript
 	jp @substate2
 
@@ -602,7 +602,7 @@ ralphSubid05:
 	ld c,$20
 	call objectUpdateSpeedZ_paramC
 	ret nz
-	ld hl,mainScripts.ralphSubid05Script
+	ld hl,{SCRIPTS_1}.ralphSubid05Script
 	call interactionSetScript
 	jp interactionIncSubstate
 
@@ -635,7 +635,7 @@ ralphSubid06:
 	.dw ralphRunScript
 
 @substate0:
-	callab scriptHelp.objectWritePositionTocfd5
+	callab {SCRIPTS_HELP}.objectWritePositionTocfd5
 	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $08
 	jp nz,interactionRunScript
@@ -654,7 +654,7 @@ ralphSubid06:
 ;;
 ; Cutscene postgame where they warp to the maku tree, Ralph notices the statue
 ralphSubid07:
-	callab scriptHelp.objectWritePositionTocfd5
+	callab {SCRIPTS_HELP}.objectWritePositionTocfd5
 	ld e,Interaction.substate
 	ld a,(de)
 	rst_jumpTable

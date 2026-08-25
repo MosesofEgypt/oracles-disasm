@@ -532,97 +532,97 @@ miscNPC_scriptTable:
 	
 @mayorsHouseScripts:
 @stub:
-	.dw mainScripts.mayorsScript
-	.dw mainScripts.mayorsScript
-	.dw mainScripts.mayorsScript
-	.dw mainScripts.mayorsHouseLadyScript
+	.dw {SCRIPTS_1}.mayorsScript
+	.dw {SCRIPTS_1}.mayorsScript
+	.dw {SCRIPTS_1}.mayorsScript
+	.dw {SCRIPTS_1}.mayorsHouseLadyScript
 
 @mrsRuulScripts:
-	.dw mainScripts.mrsRuulScript
+	.dw {SCRIPTS_1}.mrsRuulScript
 
 @mrWriteScripts:
-	.dw mainScripts.mrWriteScript
+	.dw {SCRIPTS_1}.mrWriteScript
 
 @fickleLadyScripts:
-	.dw mainScripts.fickleLadyScript_text1
-	.dw mainScripts.fickleLadyScript_text2
-	.dw mainScripts.fickleLadyScript_text2
-	.dw mainScripts.fickleLadyScript_text2
-	.dw mainScripts.fickleLadyScript_text3
-	.dw mainScripts.fickleLadyScript_text4
-	.dw mainScripts.fickleLadyScript_text5
-	.dw mainScripts.fickleLadyScript_text5
-	.dw mainScripts.fickleLadyScript_text6
-	.dw mainScripts.fickleLadyScript_text2
-	.dw mainScripts.fickleLadyScript_text7
+	.dw {SCRIPTS_1}.fickleLadyScript_text1
+	.dw {SCRIPTS_1}.fickleLadyScript_text2
+	.dw {SCRIPTS_1}.fickleLadyScript_text2
+	.dw {SCRIPTS_1}.fickleLadyScript_text2
+	.dw {SCRIPTS_1}.fickleLadyScript_text3
+	.dw {SCRIPTS_1}.fickleLadyScript_text4
+	.dw {SCRIPTS_1}.fickleLadyScript_text5
+	.dw {SCRIPTS_1}.fickleLadyScript_text5
+	.dw {SCRIPTS_1}.fickleLadyScript_text6
+	.dw {SCRIPTS_1}.fickleLadyScript_text2
+	.dw {SCRIPTS_1}.fickleLadyScript_text7
 
 @malonScripts:
-	.dw mainScripts.malonScript
+	.dw {SCRIPTS_1}.malonScript
 
 @bathingSubrosiansScripts:
-	.dw mainScripts.bathingSubrosianScript_text1
-	.dw mainScripts.bathingSubrosianScript_stub
-	.dw mainScripts.bathingSubrosianScript_2
-	.dw mainScripts.bathingSubrosianScript_text3
-	.dw mainScripts.bathingSubrosianScript_stub
-	.dw mainScripts.bathingSubrosianScript_stub
+	.dw {SCRIPTS_1}.bathingSubrosianScript_text1
+	.dw {SCRIPTS_1}.bathingSubrosianScript_stub
+	.dw {SCRIPTS_1}.bathingSubrosianScript_2
+	.dw {SCRIPTS_1}.bathingSubrosianScript_text3
+	.dw {SCRIPTS_1}.bathingSubrosianScript_stub
+	.dw {SCRIPTS_1}.bathingSubrosianScript_stub
 
 @masterDiversSonScripts:
-	.dw mainScripts.masterDiversSonScript
-	.dw mainScripts.masterDiversSonScript_4thEssenceGotten
-	.dw mainScripts.masterDiversSonScript_8thEssenceGotten
-	.dw mainScripts.masterDiversSonScript_ZeldaKidnapped
-	.dw mainScripts.masterDiversSonScript_gameFinished
+	.dw {SCRIPTS_1}.masterDiversSonScript
+	.dw {SCRIPTS_1}.masterDiversSonScript_4thEssenceGotten
+	.dw {SCRIPTS_1}.masterDiversSonScript_8thEssenceGotten
+	.dw {SCRIPTS_1}.masterDiversSonScript_ZeldaKidnapped
+	.dw {SCRIPTS_1}.masterDiversSonScript_gameFinished
 
 @fickleManScripts:
-	.dw mainScripts.ficklManScript_text1
-	.dw mainScripts.ficklManScript_text1
-	.dw mainScripts.ficklManScript_text2
-	.dw mainScripts.ficklManScript_text4
-	.dw mainScripts.ficklManScript_text5
-	.dw mainScripts.ficklManScript_text6
-	.dw mainScripts.ficklManScript_text7
-	.dw mainScripts.ficklManScript_text7
-	.dw mainScripts.ficklManScript_text8
-	.dw mainScripts.ficklManScript_text3
-	.dw mainScripts.ficklManScript_text9
-	.dw mainScripts.ficklManScript_textA
+	.dw {SCRIPTS_1}.ficklManScript_text1
+	.dw {SCRIPTS_1}.ficklManScript_text1
+	.dw {SCRIPTS_1}.ficklManScript_text2
+	.dw {SCRIPTS_1}.ficklManScript_text4
+	.dw {SCRIPTS_1}.ficklManScript_text5
+	.dw {SCRIPTS_1}.ficklManScript_text6
+	.dw {SCRIPTS_1}.ficklManScript_text7
+	.dw {SCRIPTS_1}.ficklManScript_text7
+	.dw {SCRIPTS_1}.ficklManScript_text8
+	.dw {SCRIPTS_1}.ficklManScript_text3
+	.dw {SCRIPTS_1}.ficklManScript_text9
+	.dw {SCRIPTS_1}.ficklManScript_textA
 
 @dungeonWiseOldManScripts:
-	.dw mainScripts.dungeonWiseOldManScript
+	.dw {SCRIPTS_1}.dungeonWiseOldManScript
 
 @sunkenCityTreasureHunterScripts:
-	.dw mainScripts.treasureHunterScript_text1
-	.dw mainScripts.treasureHunterScript_text2
-	.dw mainScripts.treasureHunterScript_text3
-	.dw mainScripts.treasureHunterScript_text4
-	.dw mainScripts.treasureHunterScript_text3
+	.dw {SCRIPTS_1}.treasureHunterScript_text1
+	.dw {SCRIPTS_1}.treasureHunterScript_text2
+	.dw {SCRIPTS_1}.treasureHunterScript_text3
+	.dw {SCRIPTS_1}.treasureHunterScript_text4
+	.dw {SCRIPTS_1}.treasureHunterScript_text3
 
 @villageFarmerScripts:
-	.dw mainScripts.oldLadyFarmerScript_text1
-	.dw mainScripts.oldLadyFarmerScript_text1
-	.dw mainScripts.oldLadyFarmerScript_text2
-	.dw mainScripts.oldLadyFarmerScript_text2
-	.dw mainScripts.oldLadyFarmerScript_text3
-	.dw mainScripts.oldLadyFarmerScript_text4
-	.dw mainScripts.oldLadyFarmerScript_text5
-	.dw mainScripts.oldLadyFarmerScript_text5
-	.dw mainScripts.oldLadyFarmerScript_text6
-	.dw mainScripts.oldLadyFarmerScript_text2
-	.dw mainScripts.oldLadyFarmerScript_text7
+	.dw {SCRIPTS_1}.oldLadyFarmerScript_text1
+	.dw {SCRIPTS_1}.oldLadyFarmerScript_text1
+	.dw {SCRIPTS_1}.oldLadyFarmerScript_text2
+	.dw {SCRIPTS_1}.oldLadyFarmerScript_text2
+	.dw {SCRIPTS_1}.oldLadyFarmerScript_text3
+	.dw {SCRIPTS_1}.oldLadyFarmerScript_text4
+	.dw {SCRIPTS_1}.oldLadyFarmerScript_text5
+	.dw {SCRIPTS_1}.oldLadyFarmerScript_text5
+	.dw {SCRIPTS_1}.oldLadyFarmerScript_text6
+	.dw {SCRIPTS_1}.oldLadyFarmerScript_text2
+	.dw {SCRIPTS_1}.oldLadyFarmerScript_text7
 
 @villageFountainManScripts:
-	.dw mainScripts.fountainOldManScript_text1
-	.dw mainScripts.fountainOldManScript_text2
-	.dw mainScripts.fountainOldManScript_text3
-	.dw mainScripts.fountainOldManScript_text4
-	.dw mainScripts.fountainOldManScript_text6
-	.dw mainScripts.fountainOldManScript_text7
-	.dw mainScripts.fountainOldManScript_text8
-	.dw mainScripts.fountainOldManScript_text8
-	.dw mainScripts.fountainOldManScript_text9
-	.dw mainScripts.fountainOldManScript_text5
-	.dw mainScripts.fountainOldManScript_textA
+	.dw {SCRIPTS_1}.fountainOldManScript_text1
+	.dw {SCRIPTS_1}.fountainOldManScript_text2
+	.dw {SCRIPTS_1}.fountainOldManScript_text3
+	.dw {SCRIPTS_1}.fountainOldManScript_text4
+	.dw {SCRIPTS_1}.fountainOldManScript_text6
+	.dw {SCRIPTS_1}.fountainOldManScript_text7
+	.dw {SCRIPTS_1}.fountainOldManScript_text8
+	.dw {SCRIPTS_1}.fountainOldManScript_text8
+	.dw {SCRIPTS_1}.fountainOldManScript_text9
+	.dw {SCRIPTS_1}.fountainOldManScript_text5
+	.dw {SCRIPTS_1}.fountainOldManScript_textA
 
 @tickTockScripts:
-	.dw mainScripts.tickTockScript
+	.dw {SCRIPTS_1}.tickTockScript

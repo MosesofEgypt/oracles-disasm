@@ -444,7 +444,7 @@ impaSubid0:
 
 	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld (hl),$02
-	ld hl,mainScripts.impaScript_moveAwayFromRock
+	ld hl,{SCRIPTS_1}.impaScript_moveAwayFromRock
 	call interactionSetScript
 	jp interactionIncSubstate
 
@@ -459,7 +459,7 @@ impaSubid0:
 	call setLinkIDOverride
 	ld l,<w1Link.direction
 	ld (hl),DIR_UP
-	ld hl,mainScripts.impaScript_waitForRockToBeMoved
+	ld hl,{SCRIPTS_1}.impaScript_waitForRockToBeMoved
 	call interactionSetScript
 	jp interactionIncSubstate
 
@@ -474,7 +474,7 @@ impaSubid0:
 
 ; The rock has started moving.
 
-	ld hl,mainScripts.impaScript_rockJustMoved
+	ld hl,{SCRIPTS_1}.impaScript_rockJustMoved
 	call interactionSetScript
 	jp interactionIncSubstate
 
@@ -500,7 +500,7 @@ impaSubid0:
 	call clearFollowingLinkObject
 	ldbc $68,$38
 	call interactionSetPosition
-	ld hl,mainScripts.impaScript_revealPossession
+	ld hl,{SCRIPTS_1}.impaScript_revealPossession
 	jp interactionSetScript
 
 @substateE:
@@ -710,7 +710,7 @@ impaSubid2Substate7:
 	ld a,(wTmpcfc0.normal.cfc0)
 	cp $03
 	ret c
-	jpab scriptHelp.turnToFaceSomething
+	jpab {SCRIPTS_HELP}.turnToFaceSomething
 
 ;;
 ; Impa tells you about Ralph's heritage (unlinked)
@@ -908,7 +908,7 @@ impaSubid9:
 	ld a,(de)
 	or a
 	jr z,++
-	callab scriptHelp.objectWritePositionTocfd5
+	callab {SCRIPTS_HELP}.objectWritePositionTocfd5
 ++
 	jp impaAnimateAndRunScript
 
@@ -1023,13 +1023,13 @@ impaPreventLinkFromLeavingStoneScreen:
 	jp showText
 
 impaScriptTable:
-	.dw mainScripts.impaScript0
-	.dw mainScripts.impaScript1
-	.dw mainScripts.impaScript2
-	.dw mainScripts.impaScript3
-	.dw mainScripts.impaScript4
-	.dw mainScripts.impaScript5
-	.dw mainScripts.impaScript6
-	.dw mainScripts.impaScript7
-	.dw mainScripts.impaScript8
-	.dw mainScripts.impaScript9
+	.dw {SCRIPTS_1}.impaScript0
+	.dw {SCRIPTS_1}.impaScript1
+	.dw {SCRIPTS_1}.impaScript2
+	.dw {SCRIPTS_1}.impaScript3
+	.dw {SCRIPTS_1}.impaScript4
+	.dw {SCRIPTS_1}.impaScript5
+	.dw {SCRIPTS_1}.impaScript6
+	.dw {SCRIPTS_1}.impaScript7
+	.dw {SCRIPTS_1}.impaScript8
+	.dw {SCRIPTS_1}.impaScript9

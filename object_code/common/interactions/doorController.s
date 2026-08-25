@@ -4,15 +4,10 @@
 m_InteractionCode $1e
 	call interactionDeleteAndRetIfEnabled02
 	call returnIfScrollMode01Unset
-.if defined(ROM_AGES) || defined(ROM_COMBO)
-.if defined(ROM_COMBO)
-	call wIsSeasons
-	jr c,+
-.endif
+.if defined(ROM_AGES)
 	ld a,(wSwitchHookState)
 	cp $02
 	ret z
-	+
 .endif
 
 	ld e,Interaction.state
@@ -147,16 +142,7 @@ m_InteractionCode $1e
 @state3Substate0:
 	; The tile at this position must not be solid
 	call objectGetTileAtPosition
-.if defined(ROM_COMBO)
-	call wIsSeasons
-	ld b,TILEINDEX_SOMARIA_BLOCK
-	jr nc,+
-		push af
-		call getSomariaBlockIndex
-		pop af
-	+
-	cp b
-.elif defined(ROM_AGES) 
+.if defined(ROM_AGES) 
 	cp TILEINDEX_SOMARIA_BLOCK
 .else
 	push af
@@ -289,29 +275,29 @@ m_InteractionCode $1e
 
 
 @scriptSubidTable:
-	/* $00 */ .dw mainScripts.doorOpenerScript
-	/* $01 */ .dw mainScripts.stubScript
-	/* $02 */ .dw mainScripts.stubScript
-	/* $03 */ .dw mainScripts.stubScript
-	/* $04 */ .dw mainScripts.doorController_controlledByTriggers_up
-	/* $05 */ .dw mainScripts.doorController_controlledByTriggers_right
-	/* $06 */ .dw mainScripts.doorController_controlledByTriggers_down
-	/* $07 */ .dw mainScripts.doorController_controlledByTriggers_left
-	/* $08 */ .dw mainScripts.doorController_shutUntilEnemiesDead_up
-	/* $09 */ .dw mainScripts.doorController_shutUntilEnemiesDead_right
-	/* $0a */ .dw mainScripts.doorController_shutUntilEnemiesDead_down
-	/* $0b */ .dw mainScripts.doorController_shutUntilEnemiesDead_left
-	/* $0c */ .dw mainScripts.doorController_minecartDoor_up
-	/* $0d */ .dw mainScripts.doorController_minecartDoor_right
-	/* $0e */ .dw mainScripts.doorController_minecartDoor_down
-	/* $0f */ .dw mainScripts.doorController_minecartDoor_left
-	/* $10 */ .dw mainScripts.doorController_closeAfterLinkEnters_up
-	/* $11 */ .dw mainScripts.doorController_closeAfterLinkEnters_right
-	/* $12 */ .dw mainScripts.doorController_closeAfterLinkEnters_down
-	/* $13 */ .dw mainScripts.doorController_closeAfterLinkEnters_left
-	/* $14 */ .dw mainScripts.doorController_openWhenTorchesLit_up_2Torches
-	/* $15 */ .dw mainScripts.doorController_openWhenTorchesLit_left_2Torches
-.if defined(ROM_AGES) || defined(ROM_COMBO)
-	/* $16 */ .dw mainScripts.doorController_openWhenTorchesLit_down_1Torch
-	/* $17 */ .dw mainScripts.doorController_openWhenTorchesLit_left_1Torch
+	/* $00 */ .dw {SCRIPTS_1}.doorOpenerScript
+	/* $01 */ .dw {SCRIPTS_1}.stubScript
+	/* $02 */ .dw {SCRIPTS_1}.stubScript
+	/* $03 */ .dw {SCRIPTS_1}.stubScript
+	/* $04 */ .dw {SCRIPTS_1}.doorController_controlledByTriggers_up
+	/* $05 */ .dw {SCRIPTS_1}.doorController_controlledByTriggers_right
+	/* $06 */ .dw {SCRIPTS_1}.doorController_controlledByTriggers_down
+	/* $07 */ .dw {SCRIPTS_1}.doorController_controlledByTriggers_left
+	/* $08 */ .dw {SCRIPTS_1}.doorController_shutUntilEnemiesDead_up
+	/* $09 */ .dw {SCRIPTS_1}.doorController_shutUntilEnemiesDead_right
+	/* $0a */ .dw {SCRIPTS_1}.doorController_shutUntilEnemiesDead_down
+	/* $0b */ .dw {SCRIPTS_1}.doorController_shutUntilEnemiesDead_left
+	/* $0c */ .dw {SCRIPTS_1}.doorController_minecartDoor_up
+	/* $0d */ .dw {SCRIPTS_1}.doorController_minecartDoor_right
+	/* $0e */ .dw {SCRIPTS_1}.doorController_minecartDoor_down
+	/* $0f */ .dw {SCRIPTS_1}.doorController_minecartDoor_left
+	/* $10 */ .dw {SCRIPTS_1}.doorController_closeAfterLinkEnters_up
+	/* $11 */ .dw {SCRIPTS_1}.doorController_closeAfterLinkEnters_right
+	/* $12 */ .dw {SCRIPTS_1}.doorController_closeAfterLinkEnters_down
+	/* $13 */ .dw {SCRIPTS_1}.doorController_closeAfterLinkEnters_left
+	/* $14 */ .dw {SCRIPTS_1}.doorController_openWhenTorchesLit_up_2Torches
+	/* $15 */ .dw {SCRIPTS_1}.doorController_openWhenTorchesLit_left_2Torches
+.if defined(ROM_AGES)
+	/* $16 */ .dw {SCRIPTS_1}.doorController_openWhenTorchesLit_down_1Torch
+	/* $17 */ .dw {SCRIPTS_1}.doorController_openWhenTorchesLit_left_1Torch
 .endif

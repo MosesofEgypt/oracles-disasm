@@ -16,7 +16,7 @@ m_InteractionCode $2d
 	call interactionSetAlwaysUpdateBit
 	ld a,PALH_87
 	call loadPaletteHeader
-	ld hl,mainScripts.veranFaceCutsceneScript
+	ld hl,{SCRIPTS_1}.veranFaceCutsceneScript
 	call interactionSetScript
 
 @state2:

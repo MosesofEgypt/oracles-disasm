@@ -11,7 +11,7 @@ m_InteractionCode $ba
 	call interactionIncState
 	ld bc,$0e06
 	call objectSetCollideRadii
-	ld hl,mainScripts.childJabuScript
+	ld hl,{SCRIPTS_1}.childJabuScript
 	call interactionSetScript
 	jp objectSetVisible82
 

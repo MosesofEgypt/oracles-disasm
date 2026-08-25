@@ -200,7 +200,11 @@
 	.if NARGS > 2
 		.redefine GAME_TYPE {"\3"}
 		.redefine SECTION_NAME {"{SECTION_NAME}{GAME_TYPE}"}
-		.redefine SECTION_TRACKER {"{SECTION_TRACKER}_AGES"}
+		.if GAME_TYPE == "Ages"
+			.redefine SECTION_TRACKER {"{SECTION_TRACKER}_AGES"}
+		.else
+			.redefine SECTION_TRACKER {"{SECTION_TRACKER}_SEASONS"}
+		.endif
 		.define GAME_SPECIFIC_SECTION
 	.endif
 	.assert GAME_TYPE == "" || GAME_TYPE == "Ages" || GAME_TYPE == "Seasons"
@@ -211,12 +215,18 @@
 	.define SECTION_NUM {SECTION_TRACKER}
 	.redefine SECTION_NAME {"{SECTION_NAME}{SECTION_NUM}"}
 
+	.define SCRIPTS_1    "scripts1"
+	.define SCRIPTS_2    "scripts2"
+	.define SCRIPTS_HELP "scriptHelp"
 	.if defined(ROM_COMBO) && GAME_TYPE != ""
 		.if GAME_TYPE == "Ages"
 			.define ROM_AGES
 		.elif GAME_TYPE == "Seasons"
 			.define ROM_SEASONS
 		.endif
+		.redefine SCRIPTS_1    {"{SCRIPTS_1}{GAME_TYPE}"}
+		.redefine SCRIPTS_2    {"{SCRIPTS_2}{GAME_TYPE}"}
+		.redefine SCRIPTS_HELP {"{SCRIPTS_HELP}{GAME_TYPE}"}
 	.endif
 
 	.if defined(DEBUG_SECTION_PRINTOUT)
@@ -265,6 +275,10 @@
 		.undefine SECTION_NAME
 	.endif
 
+	.undefine SCRIPTS_1
+	.undefine SCRIPTS_2
+	.undefine SCRIPTS_HELP
+
 	.if defined(ROM_COMBO)
 		.ifdef ROM_AGES
 			.undefine ROM_AGES
@@ -279,6 +293,68 @@
 	.endif
 	.ifdef SECTION_NUM
 		.undefine SECTION_NUM
+	.endif
+	.ends
+.endm
+
+.macro m_ScriptSectionHelper
+	.assert NARGS == 3
+
+	.define SECTION_NAME    \1
+	.define GAME_TYPE       \2
+	.define GAME_TYPE_UPPER \3
+
+	.assert SECTION_NAME == "scripts1" || SECTION_NAME == "scripts2" || SECTION_NAME == "scriptHelp"
+	.assert GAME_TYPE_UPPER == "AGES" || GAME_TYPE_UPPER == "SEASONS"
+	.assert GAME_TYPE == "Ages" || GAME_TYPE == "Seasons"
+
+	.define SCRIPTS_1    "scripts1"
+	.define SCRIPTS_2    "scripts2"
+	.define SCRIPTS_HELP "scriptHelp"
+	.if defined(ROM_COMBO) && GAME_TYPE_UPPER != ""
+		.define ROM_{GAME_TYPE_UPPER}
+
+		.redefine SCRIPTS_1    {"{SCRIPTS_1}{GAME_TYPE}"}
+		.redefine SCRIPTS_2    {"{SCRIPTS_2}{GAME_TYPE}"}
+		.redefine SCRIPTS_HELP {"{SCRIPTS_HELP}{GAME_TYPE}"}
+		.redefine SECTION_NAME {"{SECTION_NAME}{GAME_TYPE}"}
+	.endif
+
+	m_section_superfree {SECTION_NAME}_Section NAMESPACE SECTION_NAME
+	.if defined(DEBUG_SECTION_PRINTOUT)
+		.print {"Creating section: {SECTION_NAME}\n"}
+	.endif
+
+	.undefine GAME_TYPE
+	.undefine GAME_TYPE_UPPER
+.endm
+
+.macro m_ScriptSectionAges
+	m_ScriptSectionHelper \1 "Ages" "AGES"
+.endm
+
+.macro m_ScriptSectionSeasons
+	m_ScriptSectionHelper \1 "Seasons" "SEASONS"
+.endm
+
+.macro m_EndScriptSection
+	.undefine SCRIPTS_1
+	.undefine SCRIPTS_2
+	.undefine SCRIPTS_HELP
+	.if defined(SECTION_NAME)
+		.if defined(DEBUG_SECTION_PRINTOUT)
+			.print {"Ending section: {SECTION_NAME}\n"}
+		.endif
+		.undefine SECTION_NAME
+	.endif
+
+	.if defined(ROM_COMBO)
+		.ifdef ROM_AGES
+			.undefine ROM_AGES
+		.endif
+		.ifdef ROM_SEASONS
+			.undefine ROM_SEASONS
+		.endif
 	.endif
 	.ends
 .endm
@@ -311,11 +387,10 @@
 		.redefine OBJECT_SECTION_ID {"{OBJECT_SECTION_ID}_SEASONS"}
 	.endif
 
-	.define {OBJECT_SECTION_ID} SECTION_NUM EXPORT
-
 	.if defined(DEBUG_SECTION_PRINTOUT)
 		.print {"\tCreated label {SECTION_NAME}.{CODE_PREFIX}{ID}\n"}
 	.endif
+	.define {OBJECT_SECTION_ID} SECTION_NUM EXPORT
 
 	.undefine ID
 	.undefine DEF_PREFIX

@@ -250,7 +250,7 @@ shopkeeperState2:
 .ifdef ROM_SEASONS
 	ld a,TREASURE_SWORD
 	call checkTreasureObtained
-	ld hl,mainScripts.shopkeeperScript_notOpenYet
+	ld hl,{SCRIPTS_1}.shopkeeperScript_notOpenYet
 	jr nc,shopkeeperLoadScript
 .endif
 
@@ -274,7 +274,7 @@ shopkeeperState2:
 	ld e,Interaction.var37
 	ld a,(de)
 	call shopkeeperCheckLinkHasItemAlready
-	ld hl,mainScripts.shopkeeperScript_purchaseItem
+	ld hl,{SCRIPTS_1}.shopkeeperScript_purchaseItem
 	jp shopkeeperLoadScript
 
 @holdingNothing:
@@ -284,9 +284,9 @@ shopkeeperState2:
 	ld e,Interaction.subid
 	ld a,(de)
 	cp $02
-	ld hl,mainScripts.shopkeeperScript_lynnaShopWelcome
+	ld hl,{SCRIPTS_1}.shopkeeperScript_lynnaShopWelcome
 	jr nz,shopkeeperLoadScript
-	ld hl,mainScripts.shopkeeperScript_advanceShopWelcome
+	ld hl,{SCRIPTS_1}.shopkeeperScript_advanceShopWelcome
 
 
 shopkeeperLoadScript:
@@ -299,14 +299,14 @@ shopkeeperLoadScript:
 shopkeeperPromptChestGame:
 	ld a,$0c
 	call shopkeeperGetItemPrice
-	ld hl,mainScripts.shopkeeperChestGameScript
+	ld hl,{SCRIPTS_1}.shopkeeperChestGameScript
 	jr shopkeeperLoadScript
 
 
 ; State 3: Seasons - block Link access
 shopkeeperState3:
 .ifdef ROM_SEASONS
-	ld hl,mainScripts.shopkeeperScript_blockLinkAccess
+	ld hl,{SCRIPTS_1}.shopkeeperScript_blockLinkAccess
 	jp shopkeeperLoadScript
 .endif
 
@@ -449,7 +449,7 @@ shopkeeperState5:
 	; Talked to shopkeep
 	xor a
 	ld (de),a
-	ld hl,mainScripts.shopkeeperScript_talkDuringChestGame
+	ld hl,{SCRIPTS_1}.shopkeeperScript_talkDuringChestGame
 	jp shopkeeperLoadScript
 ++
 	; Check if Link's opened a chest
@@ -477,7 +477,7 @@ shopkeeperState5:
 
 	; Wrong chest
 	ld (hl),a
-	ld hl,mainScripts.shopkeeperScript_openedWrongChest
+	ld hl,{SCRIPTS_1}.shopkeeperScript_openedWrongChest
 	jp shopkeeperLoadScript
 
 @correctChest:
@@ -508,7 +508,7 @@ shopkeeperState5:
 	ld a,(bc)
 	ld (hl),a
 
-	ld hl,mainScripts.shopkeeperScript_openedCorrectChest
+	ld hl,{SCRIPTS_1}.shopkeeperScript_openedCorrectChest
 	jp shopkeeperLoadScript
 
 @substate2:
@@ -667,7 +667,7 @@ shopkeeperCheckAllItemsBought:
 	cp LAST_INTERACTION_INDEX+1
 	jr c,---
 
-	ld hl,mainScripts.shopkeeperScript_boughtEverything
+	ld hl,{SCRIPTS_1}.shopkeeperScript_boughtEverything
 	or d
 	ret
 
@@ -683,12 +683,12 @@ shopkeeperTurnToFaceLink:
 
 shopkeeperTheftPreventionScriptTable:
 .ifdef ROM_AGES
-	.dw mainScripts.shopkeeperSubid0Script_stopLink
+	.dw {SCRIPTS_1}.shopkeeperSubid0Script_stopLink
 .else
-	.dw mainScripts.shopkeeperSubid2Script_stopLink
+	.dw {SCRIPTS_1}.shopkeeperSubid2Script_stopLink
 .endif
-	.dw mainScripts.shopkeeperSubid1Script_stopLink
-	.dw mainScripts.shopkeeperSubid2Script_stopLink
+	.dw {SCRIPTS_1}.shopkeeperSubid1Script_stopLink
+	.dw {SCRIPTS_1}.shopkeeperSubid2Script_stopLink
 
 
 ; X positions of the chests in the chest minigame (used for spawning rupee "prizes")

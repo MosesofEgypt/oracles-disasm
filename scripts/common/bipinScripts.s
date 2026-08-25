@@ -24,7 +24,7 @@ bipinScript1:
 	checkabutton
 	setdisabledobjectsto91
 	setanimation $02
-	asm15 scriptHelp.bipin_showText_subid1To9
+	asm15 {SCRIPTS_HELP}.bipin_showText_subid1To9
 	wait 30
 	callscript bipinSayRandomTip
 	enableallobjects
@@ -37,7 +37,7 @@ bipinScript2:
 @loop:
 	checkabutton
 	setdisabledobjectsto91
-	asm15 scriptHelp.bipin_showText_subid1To9
+	asm15 {SCRIPTS_HELP}.bipin_showText_subid1To9
 	enableallobjects
 	scriptjump @loop
 
@@ -52,8 +52,8 @@ bipinSayRandomTip:
 	retscript
 
 
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 ; "Past" version of Bipin who gives you a gasha seed
 bipinScript3:
-	loadscript scriptHelp.bipinScript3
+	loadscript {SCRIPTS_HELP}.bipinScript3
 .endif

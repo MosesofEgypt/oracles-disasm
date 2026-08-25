@@ -33,7 +33,7 @@ m_InteractionCode $28
 	.dw @bipin1
 	.dw @bipin1
 	.dw @bipin1
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 	.dw @bipin3
 .endif
 
@@ -68,7 +68,7 @@ m_InteractionCode $28
 	jp @updateCollisionAndVisibility
 
 
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 ; "Past" version of Bipin who gives you a gasha seed
 @bipin3:
 	ld a,$09
@@ -91,7 +91,7 @@ m_InteractionCode $28
 	.dw @runScriptAndAnimate
 	.dw @runScriptAndAnimate
 	.dw @runScriptAndAnimate
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 	.dw @runScriptAndAnimate
 .endif
 
@@ -134,16 +134,16 @@ m_InteractionCode $28
 
 
 @scriptTable:
-	.dw mainScripts.bipinScript0
-	.dw mainScripts.bipinScript1
-	.dw mainScripts.bipinScript1
-	.dw mainScripts.bipinScript1
-	.dw mainScripts.bipinScript1
-	.dw mainScripts.bipinScript2
-	.dw mainScripts.bipinScript1
-	.dw mainScripts.bipinScript1
-	.dw mainScripts.bipinScript1
-	.dw mainScripts.bipinScript1
-.if defined(ROM_AGES) || defined(ROM_COMBO)
-	.dw mainScripts.bipinScript3
+	.dw {SCRIPTS_1}.bipinScript0
+	.dw {SCRIPTS_1}.bipinScript1
+	.dw {SCRIPTS_1}.bipinScript1
+	.dw {SCRIPTS_1}.bipinScript1
+	.dw {SCRIPTS_1}.bipinScript1
+	.dw {SCRIPTS_1}.bipinScript2
+	.dw {SCRIPTS_1}.bipinScript1
+	.dw {SCRIPTS_1}.bipinScript1
+	.dw {SCRIPTS_1}.bipinScript1
+	.dw {SCRIPTS_1}.bipinScript1
+.if defined(ROM_AGES)
+	.dw {SCRIPTS_1}.bipinScript3
 .endif

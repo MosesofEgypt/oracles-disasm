@@ -64,7 +64,7 @@ m_InteractionCode $be
 	call interactionIncState
 	ld l,$7e
 	ld (hl),$02
-	ld hl,mainScripts.linkedGameNpcScript
+	ld hl,{SCRIPTS_1}.linkedGameNpcScript
 	call interactionSetScript
 @@state1:
 	call interactionRunScript
@@ -163,21 +163,21 @@ ba_to_beScripts:
 	.dw bdScripts
 	.dw beScripts
 baScripts:
-	.dw mainScripts.zeldaNPCScript_stub
-	.dw mainScripts.zeldaNPCScript_ba_subid1
-	.dw mainScripts.zeldaNPCScript_stub
-	.dw mainScripts.zeldaNPCScript_ba_subid3
+	.dw {SCRIPTS_1}.zeldaNPCScript_stub
+	.dw {SCRIPTS_1}.zeldaNPCScript_ba_subid1
+	.dw {SCRIPTS_1}.zeldaNPCScript_stub
+	.dw {SCRIPTS_1}.zeldaNPCScript_ba_subid3
 bbScripts:
-	.dw mainScripts.zeldaNPCScript_stub
+	.dw {SCRIPTS_1}.zeldaNPCScript_stub
 bcScripts:
-	.dw mainScripts.zeldaNPCScript_stub
-	.dw mainScripts.zeldaNPCScript_bc_subid1
-	.dw mainScripts.zeldaNPCScript_bc_subid2
+	.dw {SCRIPTS_1}.zeldaNPCScript_stub
+	.dw {SCRIPTS_1}.zeldaNPCScript_bc_subid1
+	.dw {SCRIPTS_1}.zeldaNPCScript_bc_subid2
 bdScripts:
-	.dw mainScripts.zeldaNPCScript_stub
-	.dw mainScripts.zeldaNPCScript_bd_subid1
-	.dw mainScripts.zeldaNPCScript_bd_subid2
+	.dw {SCRIPTS_1}.zeldaNPCScript_stub
+	.dw {SCRIPTS_1}.zeldaNPCScript_bd_subid1
+	.dw {SCRIPTS_1}.zeldaNPCScript_bd_subid2
 beScripts:
-	.dw mainScripts.zeldaNPCScript_stub
-	.dw mainScripts.zeldaNPCScript_be_subid1
-	.dw mainScripts.zeldaNPCScript_be_subid2
+	.dw {SCRIPTS_1}.zeldaNPCScript_stub
+	.dw {SCRIPTS_1}.zeldaNPCScript_be_subid1
+	.dw {SCRIPTS_1}.zeldaNPCScript_be_subid2

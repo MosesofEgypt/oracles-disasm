@@ -1,7 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_SYRUP
 ; ==================================================================================================
-.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_SEASONS)
 syrupScript_notTradedMushroomYet:
 	checkabutton
 	showtext TX_0b3e
@@ -49,7 +49,7 @@ syrupScript_showClosedText:
 	scriptend
 
 syrupScript_purchaseItem:
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 	jumptable_objectbyte Interaction.var37
 .else
 	jumptable_objectbyte Interaction.var38
@@ -78,7 +78,7 @@ syrupScript_purchaseItem:
 	jumpiftextoptioneq $00, @tryToPurchase
 
 	; Said "no" when asked to purchase
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 	writeobjectbyte Interaction.var3a, $ff
 .else
 	writeobjectbyte Interaction.var3b, $ff
@@ -88,7 +88,7 @@ syrupScript_purchaseItem:
 	scriptend
 
 @tryToPurchase:
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 	jumpifmemoryeq wShopHaveEnoughRupees, $00, @enoughRupees
 	writeobjectbyte Interaction.var3a, $ff
 .else
@@ -103,7 +103,7 @@ syrupScript_purchaseItem:
 	scriptend
 
 @enoughRupees:
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 	jumptable_objectbyte Interaction.var38
 	.dw @buy
 	.dw shopkeeperCantBuy

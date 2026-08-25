@@ -34,7 +34,7 @@ m_InteractionCode $6a
 	.dw @@state5
 @@state0:
 	call @@func_5c21
-	ld hl,mainScripts.dancecLeaderScript_promptToStartDancing
+	ld hl,{SCRIPTS_1}.dancecLeaderScript_promptToStartDancing
 	jp interactionSetScript
 @@func_5c21:
 	ld a,$01
@@ -65,7 +65,7 @@ m_InteractionCode $6a
 	ld (wTmpcfc0.normal.cfc0+$1a),a
 	ld a,$50
 	ld (wTmpcfc0.genericCutscene.cfd3),a
-	ld hl,mainScripts.danceLeaderScript_promptForTutorial
+	ld hl,{SCRIPTS_1}.danceLeaderScript_promptForTutorial
 	jp interactionSetScript
 @@@substate2:
 	ld a,(wPaletteThread_mode)
@@ -318,26 +318,26 @@ m_InteractionCode $6a
 	ld a,(wRickyState)
 	and $20
 	jr nz,@@@func_5e56
-	ld hl,mainScripts.danceLeaderScript_giveFlute
+	ld hl,{SCRIPTS_1}.danceLeaderScript_giveFlute
 	jr @@@func_5e68
 @@@func_5e40:
-	callab scriptHelp.seasonsFunc_15_5e20
+	callab {SCRIPTS_HELP}.seasonsFunc_15_5e20
 	bit 7,b
 	jr nz,+
 	ld c,$00
 	call giveRingToLink
-	ld hl,mainScripts.danceLeaderScript_itemGiven
+	ld hl,{SCRIPTS_1}.danceLeaderScript_itemGiven
 	jr @@@func_5e68
 @@@func_5e56:
 	call getRandomNumber
 	cp $60
-	ld hl,mainScripts.danceLeaderScript_giveOreChunks
+	ld hl,{SCRIPTS_1}.danceLeaderScript_giveOreChunks
 	jr nc,@@@func_5e68
 +
-	ld hl,mainScripts.danceLeaderScript_gashaSeed
+	ld hl,{SCRIPTS_1}.danceLeaderScript_gashaSeed
 	jr @@@func_5e68
 @@@func_5e25:
-	ld hl,mainScripts.danceLeaderScript_boomerang
+	ld hl,{SCRIPTS_1}.danceLeaderScript_boomerang
 @@@func_5e68:
 	call interactionSetScript
 	ld e,Interaction.substate
@@ -495,7 +495,7 @@ m_InteractionCode $6a
 	ld l,$4b
 	ld a,(hl)
 	call setShortPosition
-	ld hl,mainScripts.danceLeaderScript_showLoadedText
+	ld hl,{SCRIPTS_1}.danceLeaderScript_showLoadedText
 	jp interactionSetScript
 @@table_5f72:
 	.db <TX_010b, <TX_010c, <TX_010d

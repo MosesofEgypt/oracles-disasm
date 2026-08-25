@@ -158,7 +158,7 @@ m_InteractionCode $90
 	ld (w1Link.direction),a
 
 	call interactionIncSubstate
-	ld hl,mainScripts.jewelHelperScript_insertedJewel
+	ld hl,{SCRIPTS_1}.jewelHelperScript_insertedJewel
 	call interactionSetScript
 
 
@@ -179,7 +179,7 @@ m_InteractionCode $90
 
 @insertedAllJewels:
 	call interactionIncSubstate
-	ld hl,mainScripts.jewelHelperScript_insertedAllJewels
+	ld hl,{SCRIPTS_1}.jewelHelperScript_insertedAllJewels
 	call interactionSetScript
 
 
@@ -448,11 +448,11 @@ m_InteractionCode $90
 	.db $28 $60
 
 @scriptTable:
-	.dw mainScripts.jewelHelperScript_insertedJewel
-	.dw mainScripts.jewelHelperScript_underwaterPyramidJewel
-	.dw mainScripts.jewelHelperScript_createBridgeToXJewelMoldorm
-	.dw mainScripts.jewelHelperScript_XjewelMoldorm
-	.dw mainScripts.jewelHelperScript_spoolSwampSquareJewel
-	.dw mainScripts.jewelHelperScript_eyeglassLakeSquareJewel
-	.dw mainScripts.jewelHelperScript_stub
-	.dw mainScripts.jewelHelperScript_stub
+	.dw {SCRIPTS_1}.jewelHelperScript_insertedJewel
+	.dw {SCRIPTS_1}.jewelHelperScript_underwaterPyramidJewel
+	.dw {SCRIPTS_1}.jewelHelperScript_createBridgeToXJewelMoldorm
+	.dw {SCRIPTS_1}.jewelHelperScript_XjewelMoldorm
+	.dw {SCRIPTS_1}.jewelHelperScript_spoolSwampSquareJewel
+	.dw {SCRIPTS_1}.jewelHelperScript_eyeglassLakeSquareJewel
+	.dw {SCRIPTS_1}.jewelHelperScript_stub
+	.dw {SCRIPTS_1}.jewelHelperScript_stub

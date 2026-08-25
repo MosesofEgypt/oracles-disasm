@@ -236,7 +236,13 @@ m_InteractionCode $14
 .else
 	ld a,(wActiveGroup)
 .endif
-	ld hl,pushableTilePropertiesTable
+	.if !defined(ROM_COMBO)
+		ld hl,pushableTilePropertiesTable
+	.elif defined(ROM_AGES)
+		ld hl,pushableTilePropertiesTable_ages
+	.else
+		ld hl,pushableTilePropertiesTable_seasons
+	.endif
 	rst_addAToHl
 	ld a,(hl)
 	rst_addAToHl

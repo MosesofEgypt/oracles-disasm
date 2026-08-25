@@ -105,7 +105,7 @@ impaNpc_determineTextAndPositionInHouse:
 	ld a,<TX_0121
 	call @setTextAndPosition
 	ld (de),a
-	ld hl,mainScripts.impaNpcScript_lookingAtPassage
+	ld hl,{SCRIPTS_1}.impaNpcScript_lookingAtPassage
 	ret
 
 @val02:
@@ -141,7 +141,7 @@ impaNpc_determineTextAndPositionInHouse:
 	ld a,$02
 	ld (de),a
 
-	ld hl,mainScripts.genericNpcScript
+	ld hl,{SCRIPTS_1}.genericNpcScript
 	xor a
 	ret
 
@@ -172,7 +172,7 @@ impaNpc_setTextIndexAndLoadGenericNpcScript:
 	ld a,$02
 	ld (de),a
 
-	ld hl,mainScripts.genericNpcScript
+	ld hl,{SCRIPTS_1}.genericNpcScript
 	jp impaNpc_setScriptAndInitialize
 
 

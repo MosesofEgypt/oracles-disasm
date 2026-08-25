@@ -110,13 +110,13 @@ zelda_state1:
 	jr @animateAndRunScript
 
 table_6ea3:
-	.dw mainScripts.zeldaScript_ganonBeat
-	.dw mainScripts.zeldaScript_afterEscapingRoomOfRites
-	.dw mainScripts.zeldaScript_zeldaKidnapped
-	.dw mainScripts.script5fe6
-	.dw mainScripts.script5fe6
-	.dw mainScripts.script5fea
-	.dw mainScripts.script5fee
-	.dw mainScripts.zeldaScript_withAnimalsHopefulText
-	.dw mainScripts.zeldaScript_blessingBeforeFightingOnox
-	.dw mainScripts.zeldaScript_healLinkIfNeeded
+	.dw {SCRIPTS_1}.zeldaScript_ganonBeat
+	.dw {SCRIPTS_1}.zeldaScript_afterEscapingRoomOfRites
+	.dw {SCRIPTS_1}.zeldaScript_zeldaKidnapped
+	.dw {SCRIPTS_1}.script5fe6
+	.dw {SCRIPTS_1}.script5fe6
+	.dw {SCRIPTS_1}.script5fea
+	.dw {SCRIPTS_1}.script5fee
+	.dw {SCRIPTS_1}.zeldaScript_withAnimalsHopefulText
+	.dw {SCRIPTS_1}.zeldaScript_blessingBeforeFightingOnox
+	.dw {SCRIPTS_1}.zeldaScript_healLinkIfNeeded

@@ -1,6 +1,7 @@
 ; ==================================================================================================
 ; INTERAC_GASHA_SPOT
 ; ==================================================================================================
+.ifndef GASHATREASURE_HEART_PIECE
 .enum 0
 	GASHATREASURE_HEART_PIECE	db ; $00
 	GASHATREASURE_TIER0_RING	db ; $01
@@ -13,6 +14,7 @@
 	GASHATREASURE_FAIRY		db ; $08
 	GASHATREASURE_5_HEARTS		db ; $09
 .ende
+.endif
 
 m_InteractionCode $b6
 	ld e,Interaction.state
@@ -52,14 +54,12 @@ m_InteractionCode $b6
 	call playSound
 +
 	call objectGetTileAtPosition
-.if defined(ROM_COMBO)
-	cp TILEINDEX_SOFT_SOIL_SEASONS
-	call wIsSeasons
-	jr c,+
-		cp TILEINDEX_SOFT_SOIL_AGES
-	+
-.else
+.if !defined(ROM_COMBO)
 	cp TILEINDEX_SOFT_SOIL
+.elif defined(ROM_AGES)
+	cp TILEINDEX_SOFT_SOIL_AGES
+.else
+	cp TILEINDEX_SOFT_SOIL_SEASONS
 .endif
 	ret nz
 @unearthed:
@@ -683,14 +683,12 @@ m_InteractionCode $b6
 .ifdef ROM_AGES
 .ifndef REGION_JP
 	; Overwrite the 4 tiles making up the gasha tree in wRoomLayout
-.if defined(ROM_COMBO)
-	ld a,TILEINDEX_GASHA_TREE_TL_SEASONS
-	call wIsSeasons
-	jr c,+
-		ld a,TILEINDEX_GASHA_TREE_TL_AGES
-	+
-.else
+.if !defined(ROM_COMBO)
 	ld a,TILEINDEX_GASHA_TREE_TL
+.elif defined(ROM_AGES)
+	ld a,TILEINDEX_GASHA_TREE_TL_AGES
+.else
+	ld a,TILEINDEX_GASHA_TREE_TL_SEASONS
 .endif
 	call findTileInRoom
 	ret nz

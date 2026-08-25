@@ -186,7 +186,13 @@ initializeFile:
 	ld a,VICTORY_RING | $40
 	ld (wUnappraisedRings),a
 ++
-	callab interactionCode5.initializeChildOnGameStart
+	.if defined(ROM_COMBO)
+		; the code for creating the exclamation mark is the same
+		; for both games, so we're just using ages for both
+		callab interactionCodeAges11.initializeChildOnGameStart
+	.else
+		callab interactionCode5.initializeChildOnGameStart
+	.endif
 .ifdef ROM_COMBO
 	call wIsSeasons
 	jr c,saveFile

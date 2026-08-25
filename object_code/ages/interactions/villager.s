@@ -295,7 +295,7 @@ m_InteractionCode $3a
 
 	; Link tried to approach; move over to block his path
 	call interactionIncSubstate
-	ld hl,mainScripts.villagerSubid02Script_part2
+	ld hl,{SCRIPTS_1}.villagerSubid02Script_part2
 	call interactionSetScript
 ++
 	ld hl,w1Link.yh
@@ -457,51 +457,51 @@ m_InteractionCode $3a
 
 
 @scriptTable:
-	.dw mainScripts.stubScript
-	.dw mainScripts.villagerSubid01Script
-	.dw mainScripts.villagerSubid02Script_part1
-	.dw mainScripts.stubScript
-	.dw mainScripts.stubScript
-	.dw mainScripts.stubScript
-	.dw mainScripts.stubScript
-	.dw mainScripts.stubScript
-	.dw mainScripts.stubScript
-	.dw mainScripts.villagerSubid09Script
-	.dw mainScripts.stubScript
-	.dw mainScripts.villagerSubid0bScript
-	.dw mainScripts.villagerSubid0cScript
-	.dw mainScripts.villagerSubid0dScript
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.villagerSubid01Script
+	.dw {SCRIPTS_1}.villagerSubid02Script_part1
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.villagerSubid09Script
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.villagerSubid0bScript
+	.dw {SCRIPTS_1}.villagerSubid0cScript
+	.dw {SCRIPTS_1}.villagerSubid0dScript
 
 
 @subid03ScriptTable:
-	.dw mainScripts.villagerSubid03Script_befored3
-	.dw mainScripts.villagerSubid03Script_afterd3
-	.dw mainScripts.villagerSubid03Script_afterNayruSaved
-	.dw mainScripts.villagerSubid03Script_afterd7
-	.dw mainScripts.villagerSubid03Script_afterGotMakuSeed
-	.dw mainScripts.villagerSubid03Script_postGame
+	.dw {SCRIPTS_1}.villagerSubid03Script_befored3
+	.dw {SCRIPTS_1}.villagerSubid03Script_afterd3
+	.dw {SCRIPTS_1}.villagerSubid03Script_afterNayruSaved
+	.dw {SCRIPTS_1}.villagerSubid03Script_afterd7
+	.dw {SCRIPTS_1}.villagerSubid03Script_afterGotMakuSeed
+	.dw {SCRIPTS_1}.villagerSubid03Script_postGame
 
 
 @subid4And5ScriptTable:
-	.dw mainScripts.villagerSubid4And5Script_befored3
-	.dw mainScripts.villagerSubid4And5Script_afterd3
-	.dw mainScripts.villagerSubid4And5Script_afterGotMakuSeed
-	.dw mainScripts.villagerSubid4And5Script_afterGotMakuSeed
-	.dw mainScripts.villagerSubid4And5Script_afterGotMakuSeed
-	.dw mainScripts.villagerSubid4And5Script_postGame
+	.dw {SCRIPTS_1}.villagerSubid4And5Script_befored3
+	.dw {SCRIPTS_1}.villagerSubid4And5Script_afterd3
+	.dw {SCRIPTS_1}.villagerSubid4And5Script_afterGotMakuSeed
+	.dw {SCRIPTS_1}.villagerSubid4And5Script_afterGotMakuSeed
+	.dw {SCRIPTS_1}.villagerSubid4And5Script_afterGotMakuSeed
+	.dw {SCRIPTS_1}.villagerSubid4And5Script_postGame
 
 @subid6And7ScriptTable:
-	.dw mainScripts.villagerSubid6And7Script_befored2
-	.dw mainScripts.villagerSubid6And7Script_afterd2
-	.dw mainScripts.villagerSubid6And7Script_afterd4
-	.dw mainScripts.villagerSubid6And7Script_afterNayruSaved
-	.dw mainScripts.villagerSubid6And7Script_afterd7
-	.dw mainScripts.villagerSubid6And7Script_afterGotMakuSeed
-	.dw mainScripts.villagerSubid6And7Script_twinrovaKidnappedZelda
-	.dw mainScripts.villagerSubid6And7Script_postGame
+	.dw {SCRIPTS_1}.villagerSubid6And7Script_befored2
+	.dw {SCRIPTS_1}.villagerSubid6And7Script_afterd2
+	.dw {SCRIPTS_1}.villagerSubid6And7Script_afterd4
+	.dw {SCRIPTS_1}.villagerSubid6And7Script_afterNayruSaved
+	.dw {SCRIPTS_1}.villagerSubid6And7Script_afterd7
+	.dw {SCRIPTS_1}.villagerSubid6And7Script_afterGotMakuSeed
+	.dw {SCRIPTS_1}.villagerSubid6And7Script_twinrovaKidnappedZelda
+	.dw {SCRIPTS_1}.villagerSubid6And7Script_postGame
 
 @subid08ScriptTable:
-	.dw mainScripts.villagerSubid08Script_afterd7
-	.dw mainScripts.villagerSubid08Script_afterGotMakuSeed
-	.dw mainScripts.villagerSubid08Script_twinrovaKidnappedZelda
-	.dw mainScripts.villagerSubid08Script_postGame
+	.dw {SCRIPTS_1}.villagerSubid08Script_afterd7
+	.dw {SCRIPTS_1}.villagerSubid08Script_afterGotMakuSeed
+	.dw {SCRIPTS_1}.villagerSubid08Script_twinrovaKidnappedZelda
+	.dw {SCRIPTS_1}.villagerSubid08Script_postGame

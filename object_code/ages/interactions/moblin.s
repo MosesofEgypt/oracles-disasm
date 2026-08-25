@@ -42,5 +42,5 @@ m_InteractionCode $96
 	jp interactionIncState
 
 @scriptTable:
-	.dw mainScripts.moblin_subid00Script
-	.dw mainScripts.moblin_subid01Script
+	.dw {SCRIPTS_1}.moblin_subid00Script
+	.dw {SCRIPTS_1}.moblin_subid01Script

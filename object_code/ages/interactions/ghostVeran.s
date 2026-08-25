@@ -32,7 +32,7 @@ m_InteractionCode $3e
 	ld (hl),$10
 	ld l,Interaction.speed
 	ld (hl),SPEED_c0
-	ld hl,mainScripts.ghostVeranSubid1Script
+	ld hl,{SCRIPTS_1}.ghostVeranSubid1Script
 	call interactionSetScript
 	call interactionSetAlwaysUpdateBit
 	jp objectSetVisible81
@@ -97,7 +97,7 @@ runVeranGhostSubid0:
 	call interactionDecCounter1
 	jp nz,objectApplySpeed
 	call interactionIncSubstate
-	ld hl,mainScripts.ghostVeranSubid0Script_part1
+	ld hl,{SCRIPTS_1}.ghostVeranSubid0Script_part1
 	jp interactionSetScript
 
 @substate2:
@@ -202,7 +202,7 @@ runVeranGhostSubid0:
 	ret nz
 
 	call interactionIncSubstate
-	ld hl,mainScripts.ghostVeranSubid1Script_part2
+	ld hl,{SCRIPTS_1}.ghostVeranSubid1Script_part2
 	call interactionSetScript
 	call objectSetVisible80
 

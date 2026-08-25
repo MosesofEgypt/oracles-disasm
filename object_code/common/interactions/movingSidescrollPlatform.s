@@ -19,7 +19,13 @@ m_InteractionCode $a1
 	.dw movingPlatform_stateC
 
 @state0To7:
-	ld hl,movingSidescrollPlatformScriptTable
+	.if !defined(ROM_COMBO)
+		ld hl,movingSidescrollPlatformScriptTable
+	.elif defined(ROM_AGES)
+		ld hl,movingSidescrollPlatformScriptTable_ages
+	.else
+		ld hl,movingSidescrollPlatformScriptTable_seasons
+	.endif
 	call objectLoadMovementScript
 	call interactionInitGraphics
 	ld e,Interaction.direction

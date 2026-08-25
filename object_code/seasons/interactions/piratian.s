@@ -251,18 +251,18 @@ table_6cb2:
 	.db $00
 
 table_6cbf:
-	.dw mainScripts.piratianCaptainScript_inHouse
-	.dw mainScripts.piratian1FScript_text1BasedOnD6Beaten
-	.dw mainScripts.piratian1FScript_text1BasedOnD6Beaten
-	.dw mainScripts.piratian1FScript_text1BasedOnD6Beaten
-	.dw mainScripts.piratian1FScript_text1BasedOnD6Beaten
-	.dw mainScripts.piratian1FScript_text2BasedOnD6Beaten
-	.dw mainScripts.piratian1FScript_text2BasedOnD6Beaten
-	.dw mainScripts.unluckySailorScript
-	.dw mainScripts.piratian2FScript_textBasedOnD6Beaten
-	.dw mainScripts.piratianRoofScript
-	.dw mainScripts.samasaGatePiratianScript
-	.dw mainScripts.piratianCaptainByShipScript
-	.dw mainScripts.piratianFromShipScript
-	.dw mainScripts.piratianByCaptainWhenDeparting1Script
-	.dw mainScripts.piratianByCaptainWhenDeparting2Script
+	.dw {SCRIPTS_1}.piratianCaptainScript_inHouse
+	.dw {SCRIPTS_1}.piratian1FScript_text1BasedOnD6Beaten
+	.dw {SCRIPTS_1}.piratian1FScript_text1BasedOnD6Beaten
+	.dw {SCRIPTS_1}.piratian1FScript_text1BasedOnD6Beaten
+	.dw {SCRIPTS_1}.piratian1FScript_text1BasedOnD6Beaten
+	.dw {SCRIPTS_1}.piratian1FScript_text2BasedOnD6Beaten
+	.dw {SCRIPTS_1}.piratian1FScript_text2BasedOnD6Beaten
+	.dw {SCRIPTS_1}.unluckySailorScript
+	.dw {SCRIPTS_1}.piratian2FScript_textBasedOnD6Beaten
+	.dw {SCRIPTS_1}.piratianRoofScript
+	.dw {SCRIPTS_1}.samasaGatePiratianScript
+	.dw {SCRIPTS_1}.piratianCaptainByShipScript
+	.dw {SCRIPTS_1}.piratianFromShipScript
+	.dw {SCRIPTS_1}.piratianByCaptainWhenDeparting1Script
+	.dw {SCRIPTS_1}.piratianByCaptainWhenDeparting2Script

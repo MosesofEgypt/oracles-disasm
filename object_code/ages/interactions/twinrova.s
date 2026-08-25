@@ -119,7 +119,7 @@ twinrova_genericInitialize:
 	call twinrova_updateDirectionFromAngle
 	ld a,SND_BEAM2
 	call playSound
-	jpab scriptHelp.objectWritePositionTocfd5
+	jpab {SCRIPTS_HELP}.objectWritePositionTocfd5
 
 ;;
 twinrova_loadAngleAndCounterPreset:
@@ -335,7 +335,7 @@ twinrova_state1:
 	.dw @subid00State2
 
 @subid00State0:
-	callab scriptHelp.objectWritePositionTocfd5
+	callab {SCRIPTS_HELP}.objectWritePositionTocfd5
 	call interactionAnimate
 	call objectApplySpeed
 	call interactionDecCounter1
@@ -352,7 +352,7 @@ twinrova_state1:
 
 	ld a,SND_BEAM2
 	call playSound
-	callab scriptHelp.objectWritePositionTocfd5
+	callab {SCRIPTS_HELP}.objectWritePositionTocfd5
 	call interactionIncSubstate
 	ld l,Interaction.counter2
 	ld (hl),$00
@@ -361,7 +361,7 @@ twinrova_state1:
 	jp twinrova_loadAngleAndCounterPreset
 
 @subid00State2:
-	callab scriptHelp.objectWritePositionTocfd5
+	callab {SCRIPTS_HELP}.objectWritePositionTocfd5
 	call interactionAnimate
 	call objectApplySpeed
 	call interactionDecCounter1
@@ -415,13 +415,13 @@ twinrova_loadScript:
 	jp interactionSetScript
 
 @scriptTable:
-	.dw mainScripts.twinrova_subid00Script
-	.dw mainScripts.stubScript
-	.dw mainScripts.twinrova_subid02Script
-	.dw mainScripts.stubScript
-	.dw mainScripts.twinrova_subid04Script
-	.dw mainScripts.stubScript
-	.dw mainScripts.twinrova_subid06Script
+	.dw {SCRIPTS_1}.twinrova_subid00Script
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.twinrova_subid02Script
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.twinrova_subid04Script
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.twinrova_subid06Script
 
 ;;
 ; Gets a position stored in wTmpcfc0.genericCutscene.cfd5/$cfd6?

@@ -33,7 +33,7 @@ m_InteractionCode $e5
 
 	ld e,Interaction.subid
 	ld a,(de)
-	ld hl,mainScripts.ringHelpBookSubid0Script
+	ld hl,{SCRIPTS_1}.ringHelpBookSubid0Script
 	or a
 	jr z,++
 
@@ -41,7 +41,7 @@ m_InteractionCode $e5
 	ld a,(de)
 	inc a
 	ld (de),a
-	ld hl,mainScripts.ringHelpBookSubid1Script
+	ld hl,{SCRIPTS_1}.ringHelpBookSubid1Script
 ++
 	call interactionSetScript
 	ld e,Interaction.pressedAButton

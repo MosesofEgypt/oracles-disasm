@@ -63,7 +63,7 @@ possessedNayru_subid00:
 	ld (wMenuDisabled),a
 	call interactionIncState
 	call objectSetVisible82
-	ld hl,mainScripts.possessedNayru_beginFightScript
+	ld hl,{SCRIPTS_1}.possessedNayru_beginFightScript
 	jp interactionSetScript
 
 @state1:
@@ -118,7 +118,7 @@ possessedNayru_ghost:
 	ld l,Interaction.speed
 	ld (hl),SPEED_80
 	call objectSetVisible81
-	ld hl,mainScripts.possessedNayru_veranGhostScript
+	ld hl,{SCRIPTS_1}.possessedNayru_veranGhostScript
 	jp interactionSetScript
 
 @state2:

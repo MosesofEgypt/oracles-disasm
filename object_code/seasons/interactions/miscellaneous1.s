@@ -51,7 +51,7 @@ floodgateKeeper:
 	ld a,$01
 	ld (de),a
 	call interactionInitGraphics
-	ld hl,mainScripts.floodgateKeeperScript
+	ld hl,{SCRIPTS_1}.floodgateKeeperScript
 	call interactionSetScript
 	call objectSetVisible82
 	xor a
@@ -79,7 +79,7 @@ floodgateKeeperSwitchScript:
 	call objectSetInvisible
 	xor a
 	ld (wSwitchState),a
-	ld hl,mainScripts.floodgateSwitchScript
+	ld hl,{SCRIPTS_1}.floodgateSwitchScript
 	jp interactionSetScript
 @state1:
 	call interactionAnimate
@@ -101,7 +101,7 @@ floodgateKeyhole:
 	call getThisRoomFlags
 	bit 7,(hl)
 	jp nz,interactionDelete
-	ld hl,mainScripts.floodgateKeyholeScript_keyEntered
+	ld hl,{SCRIPTS_1}.floodgateKeyholeScript_keyEntered
 	jp interactionSetScript
 @state2:
 	ld a,$04
@@ -146,7 +146,7 @@ d4KeyHole:
 	call objectSetReservedBit1
 	ld a,$01
 	ld (wScreenShakeMagnitude),a
-	ld hl,mainScripts.d4KeyholeScript_disableThingsAndScreenShake
+	ld hl,{SCRIPTS_1}.d4KeyholeScript_disableThingsAndScreenShake
 	jp interactionSetScript
 @state1:
 	ld a,(wActiveRoom)
@@ -155,7 +155,7 @@ d4KeyHole:
 	call interactionRunScript
 	ret nc
 	call interactionIncState
-	ld hl,scripts2.simpleScript_waterfallEmptyingAboveD4
+	ld hl,{SCRIPTS_2}.simpleScript_waterfallEmptyingAboveD4
 	jp interactionSetSimpleScript
 @func_621c:
 	ld h,d
@@ -174,7 +174,7 @@ d4KeyHole:
 	ld a,$1d
 	ld b,$02
 	call func_1383
-	callab scriptHelp.d4KeyHolw_disableAllSorts
+	callab {SCRIPTS_HELP}.d4KeyHolw_disableAllSorts
 	ret
 @state3:
 	ld a,(wScreenVariables)
@@ -183,7 +183,7 @@ d4KeyHole:
 	call getThisRoomFlags
 	set 7,(hl)
 	call interactionIncState
-	ld hl,scripts2.simpleScript_waterfallEmptyingAtD4
+	ld hl,{SCRIPTS_2}.simpleScript_waterfallEmptyingAtD4
 	jp interactionSetSimpleScript
 @state4:
 	ld a,$3c
@@ -222,7 +222,7 @@ floodgateKey:
 	set 7,(hl)
 	ld a,$01
 	ld (wMenuDisabled),a
-	ld hl,mainScripts.floodgateKeyScript_keeperNoticesKey
+	ld hl,{SCRIPTS_1}.floodgateKeyScript_keeperNoticesKey
 	jp interactionSetScript
 
 dragonKey:
@@ -241,7 +241,7 @@ tarmArmosUnlockingStairs:
 	and $40
 	jp nz,interactionDelete
 	call interactionIncState
-	ld hl,mainScripts.tarmArmosUnlockingStairsScript
+	ld hl,{SCRIPTS_1}.tarmArmosUnlockingStairsScript
 	jp interactionSetScript
 @state1:
 	call objectGetTileAtPosition
@@ -433,7 +433,7 @@ piratesBellRoomWhenFallingIn:
 	ld a,$01
 	ld (wMenuDisabled),a
 	call interactionIncState
-	ld hl,mainScripts.piratesBellRoomDroppingInScript
+	ld hl,{SCRIPTS_1}.piratesBellRoomDroppingInScript
 	jp interactionSetScript
 
 greenJoyRing:
@@ -501,7 +501,7 @@ masterDiverPuzzle:
 +
 	ld l,$44
 	ld (hl),$03
-	ld hl,mainScripts.masterDiverPuzzleScript_solved
+	ld hl,{SCRIPTS_1}.masterDiverPuzzleScript_solved
 	call interactionSetScript
 @state3:
 	call interactionRunScript
@@ -572,7 +572,7 @@ natzuSwitch:
 	call getThisRoomFlags
 	set 6,(hl)
 	call interactionIncState
-	ld hl,scripts2.simpleScript_creatingBridgeToNatzu
+	ld hl,{SCRIPTS_2}.simpleScript_creatingBridgeToNatzu
 	jp interactionSetSimpleScript
 @state2:
 	call d4KeyHole@func_621c
@@ -627,7 +627,7 @@ unblockingD3Dam:
 	call checkInteractionState
 	jr nz,@state1
 	call interactionIncState
-	ld hl,scripts2.simpleScript_unblockingD3Dam
+	ld hl,{SCRIPTS_2}.simpleScript_unblockingD3Dam
 	jp interactionSetSimpleScript
 @state1:
 	call interactionRunSimpleScript
@@ -921,6 +921,6 @@ interactionCode6bSubid25:
 interactionCode6bSubid26:
 	call checkInteractionState
 	jp nz,interactionRunScript
-	ld hl,mainScripts.subrosianScript_templeFallenText
+	ld hl,{SCRIPTS_1}.subrosianScript_templeFallenText
 	call interactionSetScript
 	jp interactionIncState

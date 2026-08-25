@@ -397,18 +397,18 @@ func_7973:
 	jp removeOreChunkValue
 	
 table_7994:
-	.dw mainScripts.subrosianShopScript_ribbon
-	.dw mainScripts.subrosianShopScript_bombUpgrade
-	.dw mainScripts.subrosianShopScript_gashaSeed
-	.dw mainScripts.subrosianShopScript_gashaSeed
-	.dw mainScripts.subrosianShopScript_pieceOfHeart
-	.dw mainScripts.subrosianShopScript_ring1
-	.dw mainScripts.subrosianShopScript_ring2
-	.dw mainScripts.subrosianShopScript_ring3
-	.dw mainScripts.subrosianShopScript_ring4
-	.dw mainScripts.subrosianShopScript_emberSeeds
-	.dw mainScripts.subrosianShopScript_shield
-	.dw mainScripts.subrosianShopScript_pegasusSeeds
-	.dw mainScripts.subrosianShopScript_heartRefill
-	.dw mainScripts.subrosianShopScript_membersCard
-	.dw mainScripts.subrosianShopScript_oreChunks
+	.dw {SCRIPTS_1}.subrosianShopScript_ribbon
+	.dw {SCRIPTS_1}.subrosianShopScript_bombUpgrade
+	.dw {SCRIPTS_1}.subrosianShopScript_gashaSeed
+	.dw {SCRIPTS_1}.subrosianShopScript_gashaSeed
+	.dw {SCRIPTS_1}.subrosianShopScript_pieceOfHeart
+	.dw {SCRIPTS_1}.subrosianShopScript_ring1
+	.dw {SCRIPTS_1}.subrosianShopScript_ring2
+	.dw {SCRIPTS_1}.subrosianShopScript_ring3
+	.dw {SCRIPTS_1}.subrosianShopScript_ring4
+	.dw {SCRIPTS_1}.subrosianShopScript_emberSeeds
+	.dw {SCRIPTS_1}.subrosianShopScript_shield
+	.dw {SCRIPTS_1}.subrosianShopScript_pegasusSeeds
+	.dw {SCRIPTS_1}.subrosianShopScript_heartRefill
+	.dw {SCRIPTS_1}.subrosianShopScript_membersCard
+	.dw {SCRIPTS_1}.subrosianShopScript_oreChunks

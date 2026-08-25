@@ -43,13 +43,13 @@ faroreUnlinked:
 	scriptjump @npcLoop
 
 @sayOtherGameSecret:
-	asm15 scriptHelp.faroreGenerateGameTransferSecret
+	asm15 {SCRIPTS_HELP}.faroreGenerateGameTransferSecret
 	showtextlowindex <TX_551a
 	scriptjump @npcLoop
 
 @askForPassword:
 	askforsecret $ff
-	asm15 scriptHelp.faroreCheckSecretValidity
+	asm15 {SCRIPTS_HELP}.faroreCheckSecretValidity
 	jumptable_objectbyte Interaction.var3f
 	.dw @offerOtherGameSecret
 	.dw @offerOtherGameSecret
@@ -63,7 +63,7 @@ faroreUnlinked:
 	scriptjump @offerOtherGameSecret
 
 @secretOK: ; The secret is fine, but you're supposed to tell it to someone else.
-	asm15 scriptHelp.faroreShowTextForSecretHint
+	asm15 {SCRIPTS_HELP}.faroreShowTextForSecretHint
 	wait 30
 	showtextlowindex <TX_5504
 	scriptjump @offerOtherGameSecret
@@ -90,7 +90,7 @@ faroreLinked:
 
 @showPasswordScreen:
 	askforsecret $ff
-	asm15 scriptHelp.faroreCheckSecretValidity
+	asm15 {SCRIPTS_HELP}.faroreCheckSecretValidity
 	jumptable_objectbyte Interaction.var3f
 	.dw @script4667
 	.dw @secretOK
@@ -104,7 +104,7 @@ faroreLinked:
 	scriptjump @npcLoop
 
 @secretOK:
-	asm15 scriptHelp.faroreSpawnSecretChest
+	asm15 {SCRIPTS_HELP}.faroreSpawnSecretChest
 	checkcfc0bit 1
 	xorcfc0bit 1
 	enableinput
@@ -198,7 +198,7 @@ faroresMemoryScript:
 
 doorController_updateRespawnWhenLinkNotTouching:
 	checknotcollidedwithlink_ignorez
-	asm15 scriptHelp.doorController_updateLinkRespawn
+	asm15 {SCRIPTS_HELP}.doorController_updateLinkRespawn
 	retscript
 
 
@@ -237,7 +237,7 @@ doorController_controlledByTriggers_left:
 doorController_controlledByTriggers:
 	callscript doorController_updateRespawnWhenLinkNotTouching
 @loop:
-	asm15 scriptHelp.doorController_decideActionBasedOnTriggers
+	asm15 {SCRIPTS_HELP}.doorController_decideActionBasedOnTriggers
 	jumptable_memoryaddress wTmpcfc0.normal.doorControllerState
 	.dw @loop
 	.dw @open
@@ -298,7 +298,7 @@ doorController_shutUntilEnemiesDead_left:
 	scriptjump doorController_shutUntilEnemiesDead
 
 doorController_openOnMinecartCollision:
-	asm15 scriptHelp.doorController_checkMinecartCollidedWithDoor
+	asm15 {SCRIPTS_HELP}.doorController_checkMinecartCollidedWithDoor
 	jumptable_memoryaddress wTmpcfc0.normal.doorControllerState
 	.dw doorController_openOnMinecartCollision
 	.dw @incState
@@ -312,7 +312,7 @@ doorController_closeDoorWhenLinkNotTouching:
 	scriptend
 
 doorController_minecart:
-	asm15 scriptHelp.doorController_checkTileIsMinecartTrack
+	asm15 {SCRIPTS_HELP}.doorController_checkTileIsMinecartTrack
 	jumptable_memoryaddress wTmpcfc0.normal.doorControllerState
 	.dw doorController_openOnMinecartCollision ; Not minecart track (door is closed)
 	.dw doorController_closeDoorWhenLinkNotTouching ; Minecart track (door is open)
@@ -389,7 +389,7 @@ doorController_shutUntilTorchesLit:
 	callscript doorController_updateRespawnWhenLinkNotTouching
 	setstate $03
 @loop:
-	asm15 scriptHelp.doorController_checkEnoughTorchesLit
+	asm15 {SCRIPTS_HELP}.doorController_checkEnoughTorchesLit
 	jumptable_memoryaddress wTmpcec0
 	.dw @loop
 	.dw @torchesLit
@@ -414,7 +414,7 @@ doorController_openWhenTorchesLit_left_2Torches:
 	setspeed $02
 	scriptjump doorController_shutUntilTorchesLit
 
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 ; Subid $16
 doorController_openWhenTorchesLit_down_1Torch:
 	setcollisionradii $0a, $08
@@ -435,7 +435,7 @@ doorController_openWhenTorchesLit_left_1Torch:
 ; INTERAC_SHOPKEEPER
 ; ==================================================================================================
 
-.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_SEASONS)
 shopkeeperScript_blockLinkAccess:
 	setspeed SPEED_200
 	setdisabledobjectsto11
@@ -498,7 +498,7 @@ shopkeeperScript_purchaseItem:
 	.dw @buyL2Shield
 	.dw @buyL3Shield
 	.dw @buyNormalShopGashaSeed
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 	.dw @buyUpgradeableItem
 	.dw @buyHiddenShopHeartPiece
 .endif
@@ -615,7 +615,7 @@ shopkeeperScript_purchaseItem:
 	ormemory wBoughtShopItems1, $20
 	scriptend
 
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 @buyHiddenShopHeartPiece:
 	showtextnonexitablelowindex <TX_0e01
 	callscript shopkeeperConfirmPurchase
@@ -695,7 +695,7 @@ shopkeeperSubid1Script_stopLink:
 	enableallobjects
 	scriptend
 
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 ; Lynna city shopkeeper prevents Link from stealing something
 shopkeeperSubid0Script_stopLink:
 	setspeed SPEED_200
@@ -732,7 +732,7 @@ shopkeeperChestGameScript:
 
 @answeredYes:
 	jumpifmemoryeq wShootingGalleryccd5, $01, shopkeeperNotEnoughRupees
-	asm15 scriptHelp.shopkeeper_take10Rupees
+	asm15 {SCRIPTS_HELP}.shopkeeper_take10Rupees
 	setspeed SPEED_200
 	setcollisionradii $06, $06
 	moveup    $08
@@ -743,7 +743,7 @@ shopkeeperChestGameScript:
 	scriptjump ++
 
 @playAgain:
-	asm15 scriptHelp.shopkeeper_take10Rupees
+	asm15 {SCRIPTS_HELP}.shopkeeper_take10Rupees
 ++
 	setangleandanimation $08
 	writeobjectbyte Interaction.substate, $02 ; Signal to close whichever chest he faces
@@ -862,7 +862,7 @@ shopkeeperScript_notOpenYet:
 	scriptend
 
 
-.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_SEASONS)
 ; ==================================================================================================
 ; INTERAC_BOMB_FLOWER
 ; ==================================================================================================
@@ -878,7 +878,7 @@ bombflower_unblockAutumnTemple:
 	playsound SND_FADEOUT
 	asm15 fadeoutToWhite
 	shakescreen 120
-	asm15 scriptHelp.createBossDeathExplosion
+	asm15 {SCRIPTS_HELP}.createBossDeathExplosion
 	wait 20
 	playsound SND_FADEOUT
 	asm15 fadeoutToWhite
@@ -924,7 +924,7 @@ spinnerScript_waitForLink:
 ; ==================================================================================================
 essenceScript_essenceGetCutscene:
 	playsound MUS_ESSENCE
-	asm15 scriptHelp.essence_createEnergySwirl
+	asm15 {SCRIPTS_HELP}.essence_createEnergySwirl
 	wait 180
 	wait 180
 	playsound SND_FADEOUT
@@ -934,7 +934,7 @@ essenceScript_essenceGetCutscene:
 	playsound SND_FADEOUT
 	wait 40
 	playsound SND_FADEOUT
-	asm15 scriptHelp.essence_stopEnergySwirl
+	asm15 {SCRIPTS_HELP}.essence_stopEnergySwirl
 	scriptend
 
 
@@ -961,7 +961,7 @@ vasuScript:
 
 	; Give ring box in linked game
 	showtextlowindex <TX_303b
-	asm15 scriptHelp.vasu_giveRingBox
+	asm15 {SCRIPTS_HELP}.vasu_giveRingBox
 	wait 1
 ++
 	setdisabledobjectsto11
@@ -979,26 +979,26 @@ vasuScript:
 
 	; Give ring box in unlinked game
 	showtextlowindex <TX_303b
-	asm15 scriptHelp.vasu_giveRingBox
+	asm15 {SCRIPTS_HELP}.vasu_giveRingBox
 	wait 1
 	setdisabledobjectsto11
 	checktext
 ++
 	; Give friendship ring
 	showtextlowindex <TX_303f
-	asm15 scriptHelp.vasu_giveFriendshipRing
+	asm15 {SCRIPTS_HELP}.vasu_giveFriendshipRing
 	wait 1
 	setdisabledobjectsto11
 	checktext
 
 	; Force Link to appraise it
 	showtextlowindex <TX_3033
-	asm15 scriptHelp.vasu_openRingMenu, $00
+	asm15 {SCRIPTS_HELP}.vasu_openRingMenu, $00
 	wait 10
 
 	; Open ring list
 	showtextlowindex <TX_3013
-	asm15 scriptHelp.vasu_openRingMenu, $01
+	asm15 {SCRIPTS_HELP}.vasu_openRingMenu, $01
 	wait 10
 	showtextlowindex <TX_3008
 
@@ -1011,7 +1011,7 @@ vasuScript:
 
 @alreadyGaveRingBox:
 	; Check whether to give special rings
-	asm15 scriptHelp.vasu_checkEarnedSpecialRing
+	asm15 {SCRIPTS_HELP}.vasu_checkEarnedSpecialRing
 	jumptable_objectbyte Interaction.var3b
 	.dw @giveSlayersRing
 	.dw @giveWealthRing
@@ -1030,7 +1030,7 @@ vasuScript:
 	showtextlowindex <TX_3039
 @giveSpecialRing:
 	checktext
-	asm15 scriptHelp.vasu_giveRingInVar3a
+	asm15 {SCRIPTS_HELP}.vasu_giveRingInVar3a
 	scriptjump @npcLoop
 
 
@@ -1047,12 +1047,12 @@ vasuScript:
 
 @appraise:
 	jumpifobjectbyteeq Interaction.var37, $00, @noUnappraisedRings
-	asm15 scriptHelp.vasu_openRingMenu, $00
+	asm15 {SCRIPTS_HELP}.vasu_openRingMenu, $00
 	scriptjump @exitedRingMenu
 
 @list:
 	jumpifobjectbyteeq Interaction.var38, $00, @noAppraisedRings
-	asm15 scriptHelp.vasu_openRingMenu, $01
+	asm15 {SCRIPTS_HELP}.vasu_openRingMenu, $01
 
 @exitedRingMenu:
 	wait 10
@@ -1066,7 +1066,7 @@ vasuScript:
 	showtextlowindex <TX_3038
 	checktext
 	unsetglobalflag GLOBALFLAG_APPRAISED_HUNDREDTH_RING
-	asm15 scriptHelp.vasu_giveHundredthRing
+	asm15 {SCRIPTS_HELP}.vasu_giveHundredthRing
 	scriptjump @npcLoop
 
 
@@ -1118,7 +1118,7 @@ blueSnakeScript_linked:
 
 blueSnake_linkOrFortune:
 	setdisabledobjectsto11
-	asm15 scriptHelp.blueSnake_linkOrFortune
+	asm15 {SCRIPTS_HELP}.blueSnake_linkOrFortune
 	wait 1
 	scriptend
 
@@ -1143,14 +1143,14 @@ redSnakeScript_linked:
 	jumpiftextoptioneq $00, @tellSecretToSnake
 
 	; Generate a secret
-	asm15 scriptHelp.redSnake_generateRingSecret
+	asm15 {SCRIPTS_HELP}.redSnake_generateRingSecret
 @tellSecretToLink:
 	showtextnonexitablelowindex <TX_301d
 	jumpiftextoptioneq $00, @tellSecretToLink
 	scriptjump @quit
 
 @tellSecretToSnake:
-	asm15 scriptHelp.redSnake_openSecretInputMenu
+	asm15 {SCRIPTS_HELP}.redSnake_openSecretInputMenu
 	wait 1
 	jumpifmemoryeq wTextInputResult, $00, @toldValidSecret
 
@@ -1170,7 +1170,7 @@ redSnakeScript_linked:
 blueSnakeScript_successfulFortune:
 	setdisabledobjectsto11
 	showtextlowindex <TX_3023
-	asm15 scriptHelp.vasu_giveRingInVar3a
+	asm15 {SCRIPTS_HELP}.vasu_giveRingInVar3a
 	wait 1
 	checktext
 	enableallobjects
@@ -1190,7 +1190,7 @@ gameCompleteDialogScript:
 	jumpiftextoptioneq $00, @dontSave
 
 	; Save
-	asm15 scriptHelp.gameCompleteDialog_markGameAsComplete
+	asm15 {SCRIPTS_HELP}.gameCompleteDialog_markGameAsComplete
 	asm15 saveFile
 	wait 30
 	scriptjump ++

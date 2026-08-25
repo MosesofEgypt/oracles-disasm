@@ -84,8 +84,8 @@ m_InteractionCode $b3
 	ret
 
 @scriptTable:
-	.dw mainScripts.linkedCutsceneScript_witches1
-	.dw mainScripts.linkedCutsceneScript_witches2
-	.dw mainScripts.linkedCutsceneScript_zeldaVillagers
-	.dw mainScripts.linkedCutsceneScript_zeldaKidnapped
-	.dw mainScripts.linkedCutsceneScript_flamesOfDestruction
+	.dw {SCRIPTS_1}.linkedCutsceneScript_witches1
+	.dw {SCRIPTS_1}.linkedCutsceneScript_witches2
+	.dw {SCRIPTS_1}.linkedCutsceneScript_zeldaVillagers
+	.dw {SCRIPTS_1}.linkedCutsceneScript_zeldaKidnapped
+	.dw {SCRIPTS_1}.linkedCutsceneScript_flamesOfDestruction

@@ -56,7 +56,7 @@ m_InteractionCode $32
 	call objectSetSpeedZ
 	ld a,>TX_4100
 	call interactionSetHighTextIndex
-	ld hl,mainScripts.greatFairyOctorokScript
+	ld hl,{SCRIPTS_1}.greatFairyOctorokScript
 	jr @init1
 
 @init1:
@@ -133,9 +133,9 @@ impaOctorokCode:
 
 
 impaOctorokScriptTable: ; These scripts do nothing
-	.dw mainScripts.impaOctorokScript
-	.dw mainScripts.impaOctorokScript
-	.dw mainScripts.impaOctorokScript
+	.dw {SCRIPTS_1}.impaOctorokScript
+	.dw {SCRIPTS_1}.impaOctorokScript
+	.dw {SCRIPTS_1}.impaOctorokScript
 
 
 greatFairyOctorokCode:

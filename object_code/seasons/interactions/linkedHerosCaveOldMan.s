@@ -16,7 +16,7 @@ m_InteractionCode $e4
 	call objectSetVisible82
 	ld a,>TX_3300
 	call interactionSetHighTextIndex
-	ld hl,mainScripts.linkedHerosCaveOldManScript
+	ld hl,{SCRIPTS_1}.linkedHerosCaveOldManScript
 	jp interactionSetScript
 
 linkedHerosCaveOldMan_spawnChests:

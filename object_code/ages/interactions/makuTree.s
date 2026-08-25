@@ -108,14 +108,14 @@ m_InteractionCode $87
 	call @setVisibleAndSpawnFlower
 
 	ld b,$00
-	ld hl,mainScripts.makuTree_subid06Script_part1
+	ld hl,{SCRIPTS_1}.makuTree_subid06Script_part1
 	ld a,GLOBALFLAG_GOT_MAKU_SEED
 	push hl
 	call checkGlobalFlag
 	pop hl
 	jr z,+
 	ld b,$04
-	ld hl,mainScripts.makuTree_subid06Script_part2
+	ld hl,{SCRIPTS_1}.makuTree_subid06Script_part2
 +
 	call interactionSetScript
 	ld a,>TX_0500
@@ -285,10 +285,10 @@ m_InteractionCode $87
 	jp objectCopyPosition
 
 @scriptTable:
-	.dw mainScripts.makuTree_subid00Script
-	.dw mainScripts.makuTree_subid01Script
-	.dw mainScripts.makuTree_subid02Script
-	.dw mainScripts.makuTree_subid03Script
-	.dw mainScripts.makuTree_subid04Script
-	.dw mainScripts.makuTree_subid05Script
-	.dw mainScripts.makuTree_subid06Script_part3
+	.dw {SCRIPTS_1}.makuTree_subid00Script
+	.dw {SCRIPTS_1}.makuTree_subid01Script
+	.dw {SCRIPTS_1}.makuTree_subid02Script
+	.dw {SCRIPTS_1}.makuTree_subid03Script
+	.dw {SCRIPTS_1}.makuTree_subid04Script
+	.dw {SCRIPTS_1}.makuTree_subid05Script
+	.dw {SCRIPTS_1}.makuTree_subid06Script_part3

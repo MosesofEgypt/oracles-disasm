@@ -26,7 +26,7 @@ m_InteractionCode $cd
 	ld a,GLOBALFLAG_DONE_DIVER_SECRET
 	call checkGlobalFlag
 	jp z,@notDoneDiverSecret
-	ld hl,mainScripts.masterDiverScript_secretDone
+	ld hl,{SCRIPTS_1}.masterDiverScript_secretDone
 	jr @setScript
 @notDoneDiverSecret:
 	ld a,$07
@@ -35,14 +35,14 @@ m_InteractionCode $cd
 	and $40
 	jr z,+
 	res 6,(hl)
-	ld hl,mainScripts.masterDiverScript_swimmingChallengeDone
+	ld hl,{SCRIPTS_1}.masterDiverScript_swimmingChallengeDone
 	jr @setScript
 +
 	ld a,GLOBALFLAG_BEGAN_DIVER_SECRET
 	call checkGlobalFlag
-	ld hl,mainScripts.masterDiverScript_beginningSecret
+	ld hl,{SCRIPTS_1}.masterDiverScript_beginningSecret
 	jr z,@setScript
-	ld hl,mainScripts.masterDiverScript_begunSecret
+	ld hl,{SCRIPTS_1}.masterDiverScript_begunSecret
 @setScript:
 	call interactionSetScript
 	xor a
@@ -66,7 +66,7 @@ m_InteractionCode $cd
 	call unsetGlobalFlag
 	ld a,>TX_4c00
 	call interactionSetHighTextIndex
-	ld hl,mainScripts.masterDiverScript_swimmingChallengeText
+	ld hl,{SCRIPTS_1}.masterDiverScript_swimmingChallengeText
 	call interactionSetScript
 	call objectSetReservedBit1
 	jr @state2
@@ -76,7 +76,7 @@ m_InteractionCode $cd
 	ld (hl),$02
 	ld a,>TX_4c00
 	call interactionSetHighTextIndex
-	ld hl,mainScripts.masterDiverScript_spawnFakeStarOre
+	ld hl,{SCRIPTS_1}.masterDiverScript_spawnFakeStarOre
 	call interactionSetScript
 	jr @state2
 @state1:

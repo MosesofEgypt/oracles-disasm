@@ -35,7 +35,7 @@ m_InteractionCode $31
 	ld a,$04
 	ld (de),a
 +
-	ld hl,mainScripts.rosaScript_goOnDate
+	ld hl,{SCRIPTS_1}.rosaScript_goOnDate
 	call interactionSetScript
 	ld a,>TX_2900
 	call interactionSetHighTextIndex
@@ -213,7 +213,7 @@ m_InteractionCode $31
 	ld (w1Link.direction),a
 	ld a,$29
 	call interactionSetHighTextIndex
-	ld hl,mainScripts.rosaScript_dateEnded
+	ld hl,{SCRIPTS_1}.rosaScript_dateEnded
 	jp interactionSetScript
 @@@substate1:
 	ld c,$20

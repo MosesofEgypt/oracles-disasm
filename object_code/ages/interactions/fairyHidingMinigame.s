@@ -59,7 +59,7 @@ fairyHidingMinigame_subid00:
 	ld (w1Link.direction),a
 	ld a,$01
 	ld (wTmpcfc0.fairyHideAndSeek.active),a
-	ld hl,mainScripts.fairyHidingMinigame_subid00Script
+	ld hl,{SCRIPTS_1}.fairyHidingMinigame_subid00Script
 	jp interactionSetScript
 
 @state2:
@@ -144,7 +144,7 @@ fairyHidingMinigame_subid01:
 	ld (hl),a
 	call objectCreatePuff
 	call interactionIncState
-	ld hl,mainScripts.fairyHidingMinigame_subid01Script
+	ld hl,{SCRIPTS_1}.fairyHidingMinigame_subid01Script
 	jp interactionSetScript
 
 @state3:
@@ -199,7 +199,7 @@ fairyHidingMinigame_subid02:
 	call fairyHidingMinigame_checkMinigameActive
 	jp nc,interactionDelete
 	call interactionIncState
-	ld hl,mainScripts.fairyHidingMinigame_subid02Script
+	ld hl,{SCRIPTS_1}.fairyHidingMinigame_subid02Script
 	jp interactionSetScript
 
 ;;

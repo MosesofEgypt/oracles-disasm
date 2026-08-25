@@ -18,7 +18,7 @@ m_InteractionCode $dd
 	call objectSetVisible82
 	ld a,>TX_1f00
 	call interactionSetHighTextIndex
-	ld hl,mainScripts.goldenBeastOldManScript
+	ld hl,{SCRIPTS_1}.goldenBeastOldManScript
 	jp interactionSetScript
 
 checkGoldenBeastsKilled:

@@ -100,5 +100,5 @@ twinrovaInCutscene_loadScript:
 	jp interactionSetScript
 
 @scriptTable:
-	.dw mainScripts.twinrovaInCutsceneScript
-	.dw mainScripts.stubScript
+	.dw {SCRIPTS_1}.twinrovaInCutsceneScript
+	.dw {SCRIPTS_1}.stubScript

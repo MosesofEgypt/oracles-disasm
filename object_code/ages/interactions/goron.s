@@ -586,7 +586,7 @@ goronSubid09:
 	call getThisRoomFlags
 	bit 7,(hl)
 	jr z,++
-	callab scriptHelp.goron_targetCarts_reloadCrystalsInFirstRoom
+	callab {SCRIPTS_HELP}.goron_targetCarts_reloadCrystalsInFirstRoom
 ++
 	call interactionRunScript
 	jr @state1
@@ -627,7 +627,7 @@ goronSubid0f:
 	call goron_initGraphicsAndIncState
 	ld l,Interaction.var3f
 	ld (hl),$08
-	ld hl,mainScripts.linkedGameNpcScript
+	ld hl,{SCRIPTS_1}.linkedGameNpcScript
 	call interactionSetScript
 	call interactionRunScript
 @state1:
@@ -1142,48 +1142,48 @@ goron_loadScriptFromTable:
 	jp interactionIncState
 
 goron_scriptTable:
-	.dw mainScripts.stubScript
-	.dw mainScripts.goron_subid01Script
-	.dw mainScripts.stubScript
-	.dw mainScripts.goron_subid03Script
-	.dw mainScripts.goron_subid04Script
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.goron_subid01Script
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.goron_subid03Script
+	.dw {SCRIPTS_1}.goron_subid04Script
 	.dw @subid05ScriptTable
 	.dw @subid06ScriptTable
-	.dw mainScripts.goron_subid07Script
-	.dw mainScripts.goron_subid08Script
+	.dw {SCRIPTS_1}.goron_subid07Script
+	.dw {SCRIPTS_1}.goron_subid08Script
 	.dw @subid09ScriptTable
-	.dw mainScripts.goron_subid0aScript
+	.dw {SCRIPTS_1}.goron_subid0aScript
 	.dw @subid0bScriptTable
-	.dw mainScripts.goron_subid0cScript
-	.dw mainScripts.goron_subid0dScript
-	.dw mainScripts.goron_subid0eScript
+	.dw {SCRIPTS_1}.goron_subid0cScript
+	.dw {SCRIPTS_1}.goron_subid0dScript
+	.dw {SCRIPTS_1}.goron_subid0eScript
 .ifndef REGION_JP
-	.dw mainScripts.stubScript
-	.dw mainScripts.goron_subid10Script
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.goron_subid10Script
 .endif
 
 @subid05ScriptTable:
-	.dw mainScripts.goron_subid05Script_A
-	.dw mainScripts.goron_subid05Script_A
-	.dw mainScripts.goron_subid05Script_A
-	.dw mainScripts.goron_subid05Script_B
-	.dw mainScripts.goron_subid05Script_B
-	.dw mainScripts.goron_subid05Script_B
+	.dw {SCRIPTS_1}.goron_subid05Script_A
+	.dw {SCRIPTS_1}.goron_subid05Script_A
+	.dw {SCRIPTS_1}.goron_subid05Script_A
+	.dw {SCRIPTS_1}.goron_subid05Script_B
+	.dw {SCRIPTS_1}.goron_subid05Script_B
+	.dw {SCRIPTS_1}.goron_subid05Script_B
 
 @subid06ScriptTable:
-	.dw mainScripts.goron_subid06Script_A
-	.dw mainScripts.goron_subid06Script_B
+	.dw {SCRIPTS_1}.goron_subid06Script_A
+	.dw {SCRIPTS_1}.goron_subid06Script_B
 
 @subid09ScriptTable:
-	.dw mainScripts.goron_subid09Script_A
-	.dw mainScripts.goron_subid09Script_B
+	.dw {SCRIPTS_1}.goron_subid09Script_A
+	.dw {SCRIPTS_1}.goron_subid09Script_B
 
 @subid0bScriptTable:
-	.dw mainScripts.goron_subid0bScript
-	.dw mainScripts.goron_subid0bScript
+	.dw {SCRIPTS_1}.goron_subid0bScript
+	.dw {SCRIPTS_1}.goron_subid0bScript
 
 
 goronDanceScriptTable:
-	.dw mainScripts.goron_subid00Script
-	.dw mainScripts.goronDanceScript_failedRound
-	.dw mainScripts.goronDanceScript_givePrize
+	.dw {SCRIPTS_1}.goron_subid00Script
+	.dw {SCRIPTS_1}.goronDanceScript_failedRound
+	.dw {SCRIPTS_1}.goronDanceScript_givePrize

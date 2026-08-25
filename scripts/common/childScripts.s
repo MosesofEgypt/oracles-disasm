@@ -35,7 +35,7 @@ childScript_stage5_hyperactive:
 @loop:
 	checkabutton
 	showtext TX_4701
-	asm15 scriptHelp.setNextChildStage, $06
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $06
 	scriptjump @loop
 
 childScript_stage5_shy:
@@ -43,7 +43,7 @@ childScript_stage5_shy:
 @loop:
 	checkabutton
 	showtext TX_4201
-	asm15 scriptHelp.setNextChildStage, $06
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $06
 	scriptjump @loop
 
 childScript_stage5_curious:
@@ -51,7 +51,7 @@ childScript_stage5_curious:
 @loop:
 	checkabutton
 	showtext TX_4901
-	asm15 scriptHelp.setNextChildStage, $06
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $06
 	scriptjump @loop
 
 
@@ -60,13 +60,13 @@ childScript_stage5_curious:
 
 childScript_stage6_hyperactive:
 	initcollisions
-	asm15 scriptHelp.checkc6e2BitSet, $04
+	asm15 {SCRIPTS_HELP}.checkc6e2BitSet, $04
 	jumpifobjectbyteeq Interaction.var3b, $01, @alreadyAnswered
 	checkabutton
 	disableinput
 	showtext TX_4702
-	asm15 scriptHelp.setc6e2Bit, $04
-	asm15 scriptHelp.setNextChildStage, $07
+	asm15 {SCRIPTS_HELP}.setc6e2Bit, $04
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $07
 	jumptable_memoryaddress wSelectedTextOption
 	.dw @answeredYes
 	.dw @answeredNo
@@ -74,7 +74,7 @@ childScript_stage6_hyperactive:
 @answeredYes:
 	wait 30
 	showtext TX_4703
-	asm15 scriptHelp.child_addValueToChildStatus, $04
+	asm15 {SCRIPTS_HELP}.child_addValueToChildStatus, $04
 	enableinput
 	scriptjump @alreadyAnswered
 
@@ -91,13 +91,13 @@ childScript_stage6_hyperactive:
 
 childScript_stage6_shy:
 	initcollisions
-	asm15 scriptHelp.checkc6e2BitSet, $04
+	asm15 {SCRIPTS_HELP}.checkc6e2BitSet, $04
 	jumpifobjectbyteeq Interaction.var3b, $01, @alreadyAnswered
 	checkabutton
 	disableinput
 	showtext TX_4202
-	asm15 scriptHelp.setc6e2Bit, $04
-	asm15 scriptHelp.setNextChildStage, $07
+	asm15 {SCRIPTS_HELP}.setc6e2Bit, $04
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $07
 	jumptable_memoryaddress wSelectedTextOption
 	.dw @answeredYes
 	.dw @answeredNo
@@ -105,7 +105,7 @@ childScript_stage6_shy:
 @answeredYes:
 	wait 30
 	showtext TX_4203
-	asm15 scriptHelp.child_addValueToChildStatus, $04
+	asm15 {SCRIPTS_HELP}.child_addValueToChildStatus, $04
 	enableinput
 	scriptjump @alreadyAnswered
 
@@ -122,13 +122,13 @@ childScript_stage6_shy:
 
 childScript_stage6_curious:
 	initcollisions
-	asm15 scriptHelp.checkc6e2BitSet, $04
+	asm15 {SCRIPTS_HELP}.checkc6e2BitSet, $04
 	jumpifobjectbyteeq Interaction.var3b, $01, @alreadyAnswered
 	checkabutton
 	disableinput
 	showtext TX_4902
-	asm15 scriptHelp.setc6e2Bit, $04
-	asm15 scriptHelp.setNextChildStage, $07
+	asm15 {SCRIPTS_HELP}.setc6e2Bit, $04
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $07
 	jumptable_memoryaddress wSelectedTextOption
 	.dw @answeredChicken
 	.dw @answeredEgg
@@ -136,7 +136,7 @@ childScript_stage6_curious:
 @answeredChicken:
 	wait 30
 	showtext TX_4903
-	asm15 scriptHelp.child_addValueToChildStatus, $04
+	asm15 {SCRIPTS_HELP}.child_addValueToChildStatus, $04
 	enableinput
 	scriptjump @alreadyAnswered
 
@@ -158,7 +158,7 @@ childScript_stage7_slacker:
 @loop:
 	checkabutton
 	showtext TX_4b00
-	asm15 scriptHelp.setNextChildStage, $08
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $08
 	scriptjump @loop
 
 childScript_stage7_warrior:
@@ -166,7 +166,7 @@ childScript_stage7_warrior:
 @loop:
 	checkabutton
 	showtext TX_4a00
-	asm15 scriptHelp.setNextChildStage, $08
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $08
 	scriptjump @loop
 
 childScript_stage7_arborist:
@@ -174,7 +174,7 @@ childScript_stage7_arborist:
 @loop:
 	checkabutton
 	showtext TX_4800
-	asm15 scriptHelp.setNextChildStage, $08
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $08
 	scriptjump @loop
 
 childScript_stage7_singer:
@@ -182,7 +182,7 @@ childScript_stage7_singer:
 @loop:
 	checkabutton
 	showtext TX_4600
-	asm15 scriptHelp.setNextChildStage, $08
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $08
 	scriptjump @loop
 
 
@@ -190,7 +190,7 @@ childScript_stage7_singer:
 
 childScript_stage8_slacker:
 	initcollisions
-	asm15 scriptHelp.checkc6e2BitSet, $05
+	asm15 {SCRIPTS_HELP}.checkc6e2BitSet, $05
 	jumpifobjectbyteeq Interaction.var3b, $01, @alreadyAnswered
 
 @loop:
@@ -211,12 +211,12 @@ childScript_stage8_slacker:
 	.dw @answered0Rupees
 
 @answered100Rupees:
-	asm15 scriptHelp.child_checkHasRupees, RUPEEVAL_100
+	asm15 {SCRIPTS_HELP}.child_checkHasRupees, RUPEEVAL_100
 	jumpifobjectbyteeq Interaction.var3c, $01, @notEnoughRupees
 	asm15 removeRupeeValue, RUPEEVAL_100
-	asm15 scriptHelp.child_setStage8Response, $00
-	asm15 scriptHelp.setc6e2Bit, $05
-	asm15 scriptHelp.setNextChildStage, $09
+	asm15 {SCRIPTS_HELP}.child_setStage8Response, $00
+	asm15 {SCRIPTS_HELP}.setc6e2Bit, $05
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $09
 	wait 30
 	enableinput
 @answered100Loop:
@@ -225,12 +225,12 @@ childScript_stage8_slacker:
 	scriptjump @answered100Loop
 
 @answered50Rupees:
-	asm15 scriptHelp.child_checkHasRupees, RUPEEVAL_050
+	asm15 {SCRIPTS_HELP}.child_checkHasRupees, RUPEEVAL_050
 	jumpifobjectbyteeq Interaction.var3c, $01, @notEnoughRupees
 	asm15 removeRupeeValue, RUPEEVAL_050
-	asm15 scriptHelp.child_setStage8Response, $01
-	asm15 scriptHelp.setc6e2Bit, $05
-	asm15 scriptHelp.setNextChildStage, $09
+	asm15 {SCRIPTS_HELP}.child_setStage8Response, $01
+	asm15 {SCRIPTS_HELP}.setc6e2Bit, $05
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $09
 	wait 30
 	enableinput
 @answered50Loop:
@@ -239,12 +239,12 @@ childScript_stage8_slacker:
 	scriptjump @answered50Loop
 
 @answered10Rupees:
-	asm15 scriptHelp.child_checkHasRupees, RUPEEVAL_010
+	asm15 {SCRIPTS_HELP}.child_checkHasRupees, RUPEEVAL_010
 	jumpifobjectbyteeq Interaction.var3c, $01, @notEnoughRupees
 	asm15 removeRupeeValue, RUPEEVAL_010
-	asm15 scriptHelp.child_setStage8Response, $02
-	asm15 scriptHelp.setc6e2Bit, $05
-	asm15 scriptHelp.setNextChildStage, $09
+	asm15 {SCRIPTS_HELP}.child_setStage8Response, $02
+	asm15 {SCRIPTS_HELP}.setc6e2Bit, $05
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $09
 	wait 30
 	enableinput
 @answered10Loop:
@@ -253,12 +253,12 @@ childScript_stage8_slacker:
 	scriptjump @answered10Loop
 
 @answered0Rupees: ; He takes 1 rupee anyway...
-	asm15 scriptHelp.child_checkHasRupees, RUPEEVAL_001
+	asm15 {SCRIPTS_HELP}.child_checkHasRupees, RUPEEVAL_001
 	jumpifobjectbyteeq Interaction.var3c, $01, @notEnoughRupees
 	asm15 removeRupeeValue, RUPEEVAL_001
-	asm15 scriptHelp.child_setStage8Response, $03
-	asm15 scriptHelp.setc6e2Bit, $05
-	asm15 scriptHelp.setNextChildStage, $09
+	asm15 {SCRIPTS_HELP}.child_setStage8Response, $03
+	asm15 {SCRIPTS_HELP}.setc6e2Bit, $05
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $09
 	wait 30
 	enableinput
 @answered0Loop:
@@ -287,7 +287,7 @@ childScript_stage8_slacker:
 ; Asks Link what will make him mightiest.
 childScript_stage8_warrior:
 	initcollisions
-	asm15 scriptHelp.checkc6e2BitSet, $05
+	asm15 {SCRIPTS_HELP}.checkc6e2BitSet, $05
 	jumpifobjectbyteeq Interaction.var3b, $01, @alreadyAnswered
 	checkabutton
 	disableinput
@@ -311,9 +311,9 @@ childScript_stage8_warrior:
 	.dw @answeredNo_3
 
 @answeredNo_3: ; He gives up asking
-	asm15 scriptHelp.child_setStage8Response, $03
-	asm15 scriptHelp.setc6e2Bit, $05
-	asm15 scriptHelp.setNextChildStage, $09
+	asm15 {SCRIPTS_HELP}.child_setStage8Response, $03
+	asm15 {SCRIPTS_HELP}.setc6e2Bit, $05
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $09
 	wait 30
 	showtext TX_4a04
 	enableinput
@@ -321,19 +321,19 @@ childScript_stage8_warrior:
 	scriptjump @alreadyAnswered
 
 @answeredDailyTraining:
-	asm15 scriptHelp.child_setStage8Response, $00
+	asm15 {SCRIPTS_HELP}.child_setStage8Response, $00
 	scriptjump @gaveResponse
 
 @answeredNaturalTalent:
-	asm15 scriptHelp.child_setStage8Response, $01
+	asm15 {SCRIPTS_HELP}.child_setStage8Response, $01
 	scriptjump @gaveResponse
 
 @answeredCaringHeart:
-	asm15 scriptHelp.child_setStage8Response, $02
+	asm15 {SCRIPTS_HELP}.child_setStage8Response, $02
 
 @gaveResponse:
-	asm15 scriptHelp.setc6e2Bit, $05
-	asm15 scriptHelp.setNextChildStage, $09
+	asm15 {SCRIPTS_HELP}.setc6e2Bit, $05
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $09
 	wait 30
 	showtext TX_4a05
 	wait 30
@@ -348,15 +348,15 @@ childScript_stage8_warrior:
 ; Gives Link a gasha seed.
 childScript_stage8_arborist:
 	initcollisions
-	asm15 scriptHelp.checkc6e2BitSet, $05
+	asm15 {SCRIPTS_HELP}.checkc6e2BitSet, $05
 	jumpifobjectbyteeq Interaction.var3b, $01, @alreadyGaveSeed
 
 	checkabutton
 	disableinput
 	showtext TX_4801
 	giveitem TREASURE_GASHA_SEED, $03
-	asm15 scriptHelp.setc6e2Bit, $05
-	asm15 scriptHelp.setNextChildStage, $09
+	asm15 {SCRIPTS_HELP}.setc6e2Bit, $05
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $09
 	wait 30
 	showtext TX_4802
 	wait 30
@@ -371,15 +371,15 @@ childScript_stage8_arborist:
 ; Asks link what's more important, love or courage.
 childScript_stage8_singer:
 	initcollisions
-	asm15 scriptHelp.checkc6e2BitSet, $05
+	asm15 {SCRIPTS_HELP}.checkc6e2BitSet, $05
 	jumpifobjectbyteeq Interaction.var3b, $01, @alreadyAnswered
 
 	checkabutton
 	disableinput
 	showtext TX_4601
-	asm15 scriptHelp.child_setStage8ResponseToSelectedTextOption, $00
-	asm15 scriptHelp.setc6e2Bit, $05
-	asm15 scriptHelp.setNextChildStage, $09
+	asm15 {SCRIPTS_HELP}.child_setStage8ResponseToSelectedTextOption, $00
+	asm15 {SCRIPTS_HELP}.setc6e2Bit, $05
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $09
 	wait 30
 	enableinput
 	scriptjump @showResponseText
@@ -395,12 +395,12 @@ childScript_stage8_singer:
 
 childScript_stage9_slacker:
 	initcollisions
-	asm15 scriptHelp.checkc6e2BitSet, $06
+	asm15 {SCRIPTS_HELP}.checkc6e2BitSet, $06
 	jumpifobjectbyteeq Interaction.var3b, $01, @alreadyGaveReward
 	checkabutton
 	disableinput
 	showtext TX_4b0a
-	asm15 scriptHelp.setc6e2Bit, $06
+	asm15 {SCRIPTS_HELP}.setc6e2Bit, $06
 	wait 30
 	jumptable_memoryaddress wChildStage8Response
 	.dw @fillSatchel
@@ -414,7 +414,7 @@ childScript_stage9_slacker:
 	scriptjump @justGaveReward
 
 @give200Rupees:
-	asm15 scriptHelp.child_giveRupees, RUPEEVAL_200
+	asm15 {SCRIPTS_HELP}.child_giveRupees, RUPEEVAL_200
 	showtext TX_0009
 	scriptjump @justGaveReward
 
@@ -439,14 +439,14 @@ childScript_stage9_slacker:
 
 childScript_stage9_warrior:
 	initcollisions
-	asm15 scriptHelp.checkc6e2BitSet, $06
+	asm15 {SCRIPTS_HELP}.checkc6e2BitSet, $06
 	jumpifobjectbyteeq Interaction.var3b, $01, @alreadyGaveReward
 	checkabutton
 	disableinput
 	showtext TX_4a06
 	wait 30
 	showtext TX_4a07
-	asm15 scriptHelp.setc6e2Bit, $06
+	asm15 {SCRIPTS_HELP}.setc6e2Bit, $06
 	wait 30
 	jumptable_memoryaddress wChildStage8Response
 	.dw @give100Rupees
@@ -455,22 +455,22 @@ childScript_stage9_warrior:
 	.dw @give1Rupee
 
 @give100Rupees:
-	asm15 scriptHelp.child_giveRupees, RUPEEVAL_100
+	asm15 {SCRIPTS_HELP}.child_giveRupees, RUPEEVAL_100
 	showtext TX_0007
 	scriptjump @justGaveReward
 
 @give1Heart:
-	asm15 scriptHelp.child_giveOneHeart, $01
+	asm15 {SCRIPTS_HELP}.child_giveOneHeart, $01
 	showtext TX_0051
 	scriptjump @justGaveReward
 
 @restoreHealth:
-	asm15 scriptHelp.child_giveHeartRefill
+	asm15 {SCRIPTS_HELP}.child_giveHeartRefill
 	showtext TX_0053
 	scriptjump @justGaveReward
 
 @give1Rupee:
-	asm15 scriptHelp.child_giveRupees, RUPEEVAL_001
+	asm15 {SCRIPTS_HELP}.child_giveRupees, RUPEEVAL_001
 	showtext TX_0001
 
 @justGaveReward:
@@ -515,8 +515,8 @@ childScript_stage9_singer:
 	.dw @selectedNo
 
 @selectedYes:
-	asm15 scriptHelp.child_playMusic
-	asm15 scriptHelp.child_giveHeartRefill
+	asm15 {SCRIPTS_HELP}.child_playMusic
+	asm15 {SCRIPTS_HELP}.child_giveHeartRefill
 	wait 30
 	enableinput
 

@@ -289,7 +289,7 @@ interaction7f_subid00:
 	call retIfTextIsActive
 
 	call interactionIncState
-	ld hl,mainScripts.essenceScript_essenceGetCutscene
+	ld hl,{SCRIPTS_1}.essenceScript_essenceGetCutscene
 	jp interactionSetScript
 
 

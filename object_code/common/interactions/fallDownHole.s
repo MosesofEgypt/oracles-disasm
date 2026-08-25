@@ -35,10 +35,7 @@ m_InteractionCode $0f
 	rlca
 	ld a,SND_FALLINHOLE
 	call nc,playSound
-.if defined(ROM_COMBO)
-	call wIsSeasons
-	call nc,@checkUpdateHoleEvent
-.elif defined(ROM_AGES)
+.if defined(ROM_AGES)
 	call @checkUpdateHoleEvent
 .endif
 	jp objectSetVisible83
@@ -96,7 +93,7 @@ m_InteractionCode $0f
 	jp interactionDelete
 
 
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 ;;
 ; Certain rooms have things happen when something falls into a hole; this writes something
 ; around wTmpcfc0.fallDownHoleEvent.cfd8 to provide a signal?

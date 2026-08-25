@@ -106,7 +106,7 @@ m_InteractionCode $58
 	jp interactionIncState
 
 @scriptTable:
-	.dw mainScripts.hardhatWorkerSubid00Script
-	.dw mainScripts.hardhatWorkerSubid01Script
-	.dw mainScripts.hardhatWorkerSubid02Script
-	.dw mainScripts.hardhatWorkerSubid03Script
+	.dw {SCRIPTS_1}.hardhatWorkerSubid00Script
+	.dw {SCRIPTS_1}.hardhatWorkerSubid01Script
+	.dw {SCRIPTS_1}.hardhatWorkerSubid02Script
+	.dw {SCRIPTS_1}.hardhatWorkerSubid03Script

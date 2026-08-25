@@ -87,8 +87,8 @@ func_740a:
 	ret
 
 table_7432:
-	.dw mainScripts.ambiScript_mrsRuulsHouse
-	.dw mainScripts.ambiScript_outsideSyrupHut
-	.dw mainScripts.ambiScript_samasaShore
-	.dw mainScripts.ambiScript_enteringPirateHouseBeforePiratesLeave
-	.dw mainScripts.ambiScript_pirateHouseAfterTheyLeft
+	.dw {SCRIPTS_1}.ambiScript_mrsRuulsHouse
+	.dw {SCRIPTS_1}.ambiScript_outsideSyrupHut
+	.dw {SCRIPTS_1}.ambiScript_samasaShore
+	.dw {SCRIPTS_1}.ambiScript_enteringPirateHouseBeforePiratesLeave
+	.dw {SCRIPTS_1}.ambiScript_pirateHouseAfterTheyLeft

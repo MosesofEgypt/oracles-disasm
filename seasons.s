@@ -17,28 +17,49 @@
 
 .include {"{BUILD_DIR}/textDefines.s"}
 
+; NOTE: need to ensure the slot is setup or pointers will be off by $4000
+.BANK $01 SLOT 1
+m_ScriptSectionSeasons "scripts1"
+	scriptsStart:
+	.define SCRIPT_BANK :scriptsStart
+
+	.include "code/scripting.s"
+	.include "scripts/seasons/scripts.s"
+m_EndScriptSection
+
+m_ScriptSectionSeasons "scripts2"
+	simpleScriptsStart:
+	.define SIMPLE_SCRIPT_BANK :simpleScriptsStart
+
+	.include "scripts/seasons/scripts2.s"
+m_EndScriptSection
+
+m_ScriptSectionSeasons "scriptHelp"
+	scriptHelpStart:
+	.define SCRIPT_HELP_BANK :scriptHelpStart
+
+	.include "scripts/common/scriptHelper.s"
+	.include "scripts/seasons/scriptHelper.s"
+m_EndScriptSection
+
 
 .BANK $00 SLOT 0
 .ORG 0
-
 	.include "code/bank0.s"
 
 
 .BANK $01 SLOT 1
 .ORG 0
-
 	.include "code/bank1.s"
 
 
 .BANK $02 SLOT 1
 .ORG 0
-
 	.include "code/bank2.s"
 
 
 .BANK $03 SLOT 1
 .ORG 0
-
 	.include "code/bank3.s"
 
 	; Note: There appears to be exactly one function call (in seasons) that performs a call from
@@ -56,7 +77,6 @@
 
 .BANK $04 SLOT 1
 .ORG 0
-
 	.include "code/bank4.s"
 
 	 m_section_superfree RoomPacksAndMusicAssignments NAMESPACE bank4Data1
@@ -98,12 +118,6 @@
 	 m_section_free Tileset_Loading_2 NAMESPACE tilesets
 		.include "code/loadTilesToRam.s"
 		.include "code/seasons/loadTilesetData.s"
-	.ends
-
-	; Must be in same bank as "code/bank4.s"
-	 m_section_free Warp_Data NAMESPACE bank4
-		.include {"{GAME_DATA_DIR}/warpDestinations.s"}
-		.include {"{GAME_DATA_DIR}/warpSources.s"}
 	.ends
 
 
@@ -747,11 +761,6 @@ m_EndObjectCodeSection
 .BANK $0b SLOT 1
 .ORG 0
 
-	 m_section_free Scripts namespace mainScripts
-		.include "code/scripting.s"
-		.include "scripts/seasons/scripts.s"
-	.ends
-
 m_section_superfree Enemy_Animations
 	.include {"{GAME_DATA_DIR}/enemyAnimations.s"}
 .ends
@@ -797,34 +806,25 @@ m_section_superfree Terrain_Effects NAMESPACE terrainEffects
 
 	.include {"{GAME_DATA_DIR}/data_4556.s"}
 
-	; TODO: "SIMPLE_SCRIPT_BANK" define should be tied to this section somehow
-	 m_section_free Scripts2 NAMESPACE scripts2
-		.include "scripts/seasons/scripts2.s"
-	.ends
-
 	.include {"{GAME_DATA_DIR}/interactionAnimations.s"}
 
 
 .BANK $15 SLOT 1
 .ORG 0
 
-m_section_free serialCode NAMESPACE serialCode
-	.include "code/serialFunctions.s"
-.ends
+	m_section_free serialCode NAMESPACE serialCode
+		.include "code/serialFunctions.s"
+	.ends
 
-	.include "scripts/common/scriptHelper.s"
+	m_section_superfree Treasure_Data NAMESPACE treasureData
+		.include "code/loadTreasureData.s"
+		.include {"{GAME_DATA_DIR}/treasureObjectData.s"}
+	.ends
 
 	.include "data/seasons/endgameCutsceneOamData.s"
 
 	.include "code/staticObjects.s"
-	.include {"{GAME_DATA_DIR}/staticDungeonObjects.s"}
 	.include {"{GAME_DATA_DIR}/chestData.s"}
-	.include {"{GAME_DATA_DIR}/treasureObjectData.s"}
-
-	m_section_free Bank_15_3 NAMESPACE scriptHelp
-		.include "scripts/seasons/scriptHelper.s"
-	.ends
-
 	.include {"{GAME_DATA_DIR}/partAnimations.s"}
 
 

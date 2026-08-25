@@ -263,7 +263,7 @@ soldierSubid08:
 	jp objectSetVisible82
 
 @state1:
-	callab scriptHelp.turnToFaceSomething
+	callab {SCRIPTS_HELP}.turnToFaceSomething
 	jp interactionAnimate
 
 
@@ -407,17 +407,17 @@ soldierCheckBeatD6:
 	ret
 
 soldierScriptTable:
-	.dw mainScripts.soldierSubid00Script
-	.dw mainScripts.soldierSubid01Script
-	.dw mainScripts.soldierSubid02Script
-	.dw mainScripts.soldierSubid03Script
-	.dw mainScripts.soldierSubid04Script
-	.dw mainScripts.soldierSubid05Script
-	.dw mainScripts.soldierSubid06Script
-	.dw mainScripts.soldierSubid07Script
-	.dw mainScripts.stubScript
-	.dw mainScripts.soldierSubid09Script
-	.dw mainScripts.soldierSubid0aScript
-	.dw mainScripts.stubScript
-	.dw mainScripts.soldierSubid0cScript
-	.dw mainScripts.soldierSubid0dScript
+	.dw {SCRIPTS_1}.soldierSubid00Script
+	.dw {SCRIPTS_1}.soldierSubid01Script
+	.dw {SCRIPTS_1}.soldierSubid02Script
+	.dw {SCRIPTS_1}.soldierSubid03Script
+	.dw {SCRIPTS_1}.soldierSubid04Script
+	.dw {SCRIPTS_1}.soldierSubid05Script
+	.dw {SCRIPTS_1}.soldierSubid06Script
+	.dw {SCRIPTS_1}.soldierSubid07Script
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.soldierSubid09Script
+	.dw {SCRIPTS_1}.soldierSubid0aScript
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.soldierSubid0cScript
+	.dw {SCRIPTS_1}.soldierSubid0dScript

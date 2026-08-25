@@ -46,7 +46,7 @@ m_InteractionCode $9d
 	ld l,$42
 	ld (hl),$01
 ++
-	ld hl,mainScripts.impaScript_afterOnoxTakesDin
+	ld hl,{SCRIPTS_1}.impaScript_afterOnoxTakesDin
 	jr @@setScript
 @@subid1:
 	call checkZeldaVillagersSeenButNoMakuSeed
@@ -212,16 +212,16 @@ simulatedInput_5ec3:
 table_5ec8:
 	; for subid1, if Zelda Kidnapped not seen,
 	; the rest are indexed by highest essence count
-	.dw mainScripts.impaScript_after1stEssence
-	.dw mainScripts.impaScript_after2ndEssence
-	.dw mainScripts.impaScript_after3rdEssence
-	.dw mainScripts.impaScript_after4thEssence
-	.dw mainScripts.impaScript_after5thEssence
-	.dw mainScripts.impaScript_after6thEssence
-	.dw mainScripts.impaScript_after7thEssence
-	.dw mainScripts.impaScript_after8thEssence
-	.dw mainScripts.impaScript_villagersSeenButNoMakuSeed ; mainScripts.subid2
-	.dw mainScripts.impaScript_gotMakuSeedDidntSeeZeldaKidnapped ; mainScripts.subid3
-	.dw mainScripts.impaScript_askingToSaveZelda; mainScripts.subid4
-	.dw mainScripts.impaScript_askedToSaveZeldaButHavent ; mainScripts.subid5
-	.dw mainScripts.impaScript_afterZeldaKidnapped ; subid1 - zelda kidnapped mainScripts.seen
+	.dw {SCRIPTS_1}.impaScript_after1stEssence
+	.dw {SCRIPTS_1}.impaScript_after2ndEssence
+	.dw {SCRIPTS_1}.impaScript_after3rdEssence
+	.dw {SCRIPTS_1}.impaScript_after4thEssence
+	.dw {SCRIPTS_1}.impaScript_after5thEssence
+	.dw {SCRIPTS_1}.impaScript_after6thEssence
+	.dw {SCRIPTS_1}.impaScript_after7thEssence
+	.dw {SCRIPTS_1}.impaScript_after8thEssence
+	.dw {SCRIPTS_1}.impaScript_villagersSeenButNoMakuSeed ; {SCRIPTS_1}.subid2
+	.dw {SCRIPTS_1}.impaScript_gotMakuSeedDidntSeeZeldaKidnapped ; {SCRIPTS_1}.subid3
+	.dw {SCRIPTS_1}.impaScript_askingToSaveZelda; {SCRIPTS_1}.subid4
+	.dw {SCRIPTS_1}.impaScript_askedToSaveZeldaButHavent ; {SCRIPTS_1}.subid5
+	.dw {SCRIPTS_1}.impaScript_afterZeldaKidnapped ; subid1 - zelda kidnapped {SCRIPTS_1}.seen

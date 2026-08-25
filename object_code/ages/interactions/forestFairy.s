@@ -323,9 +323,9 @@ forestFairy_initCollisionRadiusAndSetZAndIncState:
 
 ; Scripts used for fairy NPCs after being discovered
 forestFairyDiscoveredScriptTable:
-	.dw mainScripts.forestFairyScript_firstDiscovered
-	.dw mainScripts.forestFairyScript_secondDiscovered
-	.dw mainScripts.stubScript
+	.dw {SCRIPTS_1}.forestFairyScript_firstDiscovered
+	.dw {SCRIPTS_1}.forestFairyScript_secondDiscovered
+	.dw {SCRIPTS_1}.stubScript
 
 forestFairy_discoveredPositions:
 	.db $48 $38
@@ -491,7 +491,7 @@ forestFairy_initNpcFromData:
 
 	ld l,Interaction.textID+1
 	ld (hl),>TX_1100
-	ld hl,mainScripts.forestFairyScript_genericNpc
+	ld hl,{SCRIPTS_1}.forestFairyScript_genericNpc
 	call interactionSetScript
 	jp objectSetVisiblec1
 
@@ -568,7 +568,7 @@ forestFairy_subid0b:
 	ld a,$01
 	ldd (hl),a
 	ld (hl),a
-	ld hl,mainScripts.forestFairyScript_heartContainerSecret
+	ld hl,{SCRIPTS_1}.forestFairyScript_heartContainerSecret
 	call interactionSetScript
 	jp objectSetVisiblec1
 

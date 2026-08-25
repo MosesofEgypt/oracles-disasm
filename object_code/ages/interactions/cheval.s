@@ -40,4 +40,4 @@ m_InteractionCode $6a
 	jp interactionSetScript
 
 @scriptTable:
-	.dw mainScripts.cheval_subid00Script
+	.dw {SCRIPTS_1}.cheval_subid00Script

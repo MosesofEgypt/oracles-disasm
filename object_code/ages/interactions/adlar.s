@@ -40,5 +40,5 @@ m_InteractionCode $29
 	ld (de),a
 	call objectSetVisiblec2
 
-	ld hl,mainScripts.adlarScript
+	ld hl,{SCRIPTS_1}.adlarScript
 	jp interactionSetScript

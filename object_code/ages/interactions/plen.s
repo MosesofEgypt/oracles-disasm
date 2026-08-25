@@ -33,4 +33,4 @@ m_InteractionCode $cc
 	jp interactionIncState
 
 @scriptTable:
-	.dw mainScripts.plenSubid0Script
+	.dw {SCRIPTS_1}.plenSubid0Script

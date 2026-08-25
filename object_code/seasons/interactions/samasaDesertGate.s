@@ -41,7 +41,7 @@ m_InteractionCode $9e
 	ld (wDisabledObjects),a
 	ld a,$80
 	ld (wMenuDisabled),a
-	ld hl,mainScripts.script7556
+	ld hl,{SCRIPTS_1}.script7556
 	jp interactionSetScript
 @substate1:
 	call func_5f87

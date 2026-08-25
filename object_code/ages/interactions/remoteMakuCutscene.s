@@ -175,5 +175,5 @@ m_InteractionCode $8a
 	jp interactionIncState
 
 @scriptTable:
-	.dw mainScripts.remoteMakuCutsceneScript
-	.dw mainScripts.remoteMakuCutsceneScript
+	.dw {SCRIPTS_1}.remoteMakuCutsceneScript
+	.dw {SCRIPTS_1}.remoteMakuCutsceneScript

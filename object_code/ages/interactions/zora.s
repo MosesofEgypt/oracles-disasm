@@ -78,7 +78,7 @@ zora_subid0F:
 	cp $06
 	jp nc,interactionDelete
 ++
-	ld hl,mainScripts.genericNpcScript
+	ld hl,{SCRIPTS_1}.genericNpcScript
 
 zora_commonInitWithScript:
 	call interactionSetScript
@@ -115,9 +115,9 @@ zora_subid0D:
 	ld e,Interaction.subid
 	ld a,(de)
 	cp $0c
-	ld hl,mainScripts.zoraSubid0cScript
+	ld hl,{SCRIPTS_1}.zoraSubid0cScript
 	jr z,zora_commonInitWithScript
-	ld hl,mainScripts.zoraSubid0dScript
+	ld hl,{SCRIPTS_1}.zoraSubid0dScript
 	jr zora_commonInitWithScript
 
 
@@ -255,9 +255,9 @@ zora_subid12:
 	ret
 
 @scriptTable:
-	.dw mainScripts.zoraSubid10Script
-	.dw mainScripts.zoraSubid11And12Script
-	.dw mainScripts.zoraSubid11And12Script
+	.dw {SCRIPTS_1}.zoraSubid10Script
+	.dw {SCRIPTS_1}.zoraSubid11And12Script
+	.dw {SCRIPTS_1}.zoraSubid11And12Script
 
 @state1:
 	call interactionRunScript
@@ -294,7 +294,7 @@ zora_subid0E:
 	xor a
 	call interactionSetAnimation
 	call objectSetVisiblec2
-	ld hl,mainScripts.zoraSubid0eScript
+	ld hl,{SCRIPTS_1}.zoraSubid0eScript
 	jp interactionSetScript
 
 
@@ -332,7 +332,7 @@ zora_subid1B:
 	ld e,Interaction.textID
 	ld a,(hl)
 	ld (de),a
-	ld hl,mainScripts.genericNpcScript
+	ld hl,{SCRIPTS_1}.genericNpcScript
 	jp interactionSetScript
 
 

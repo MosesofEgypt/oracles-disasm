@@ -56,7 +56,7 @@ interaction6e_subid00:
 	ld a,$0a
 	call interactionSetAnimation
 	call objectSetVisible82
-	ld hl,mainScripts.interaction6e_subid00Script
+	ld hl,{SCRIPTS_1}.interaction6e_subid00Script
 	jp interactionSetScript
 
 @state1:
@@ -97,7 +97,7 @@ interaction6e_subid01:
 	ldi (hl),a
 	ld (hl),a
 	call objectSetVisiblec2
-	ld hl,mainScripts.interaction6e_subid01Script_part1
+	ld hl,{SCRIPTS_1}.interaction6e_subid01Script_part1
 	jp interactionSetScript
 
 @state1:
@@ -169,7 +169,7 @@ interaction6e_subid01:
 	ld a,$06
 	ldd (hl),a
 	ld (hl),a
-	ld hl,mainScripts.interaction6e_subid01Script_part2
+	ld hl,{SCRIPTS_1}.interaction6e_subid01Script_part2
 	call interactionSetScript
 
 	ld a,SND_LIGHTNING
@@ -330,7 +330,7 @@ interaction6e_initRalph:
 	ld l,Interaction.speed
 	ld (hl),SPEED_200
 	call objectSetVisible82
-	ld hl,mainScripts.interaction6e_subid03Script
+	ld hl,{SCRIPTS_1}.interaction6e_subid03Script
 	jp interactionSetScript
 
 
@@ -360,9 +360,9 @@ interaction6e_subid04:
 	jp interactionSetScript
 
 @scriptTable:
-	.dw mainScripts.interaction6e_guard0Script
-	.dw mainScripts.interaction6e_guard1Script
-	.dw mainScripts.interaction6e_guard2Script
-	.dw mainScripts.interaction6e_guard3Script
-	.dw mainScripts.interaction6e_guard4Script
-	.dw mainScripts.interaction6e_guard5Script
+	.dw {SCRIPTS_1}.interaction6e_guard0Script
+	.dw {SCRIPTS_1}.interaction6e_guard1Script
+	.dw {SCRIPTS_1}.interaction6e_guard2Script
+	.dw {SCRIPTS_1}.interaction6e_guard3Script
+	.dw {SCRIPTS_1}.interaction6e_guard4Script
+	.dw {SCRIPTS_1}.interaction6e_guard5Script

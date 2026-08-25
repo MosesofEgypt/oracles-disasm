@@ -29,4 +29,4 @@ m_InteractionCode $51
 	jp interactionIncState
 
 @scriptTable:
-	.dw mainScripts.dumbbellManScript
+	.dw {SCRIPTS_1}.dumbbellManScript

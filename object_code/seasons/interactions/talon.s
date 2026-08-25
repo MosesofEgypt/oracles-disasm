@@ -24,7 +24,7 @@ m_InteractionCode $45
 	ld (hl),$01
 	ld a,>TX_0b00
 	call interactionSetHighTextIndex
-	ld hl,mainScripts.caveTalonScript
+	ld hl,{SCRIPTS_1}.caveTalonScript
 	call interactionSetScript
 	ld a,$03
 	call interactionSetAnimation
@@ -38,7 +38,7 @@ m_InteractionCode $45
 	call func_6f3c
 	ld a,>TX_0b00
 	call interactionSetHighTextIndex
-	ld hl,mainScripts.returnedTalonScript
+	ld hl,{SCRIPTS_1}.returnedTalonScript
 	call interactionSetScript
 	jp interactionAnimateAsNpc
 @state1:

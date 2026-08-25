@@ -1,9 +1,3 @@
-.if defined(ROM_AGES)
-.define SIMPLE_SCRIPT_BANK $0c
-.elif defined(ROM_SEASONS)
-.define SIMPLE_SCRIPT_BANK $14
-.endif
-
 ;;
 ; @param a Command to execute
 ; @param hl Current address of script
@@ -82,7 +76,7 @@ runScriptCommand:
 	.dw scriptCmd_none ; 0xc2
 	.dw scriptCmd_jumpIfCBA5Eq ; 0xc3
 	.dw scriptCmd_jumpRandom ; 0xc4
-	.dw scriptCmd_none ; 0xc5
+	.dw scriptCmd_asmCall ; 0xc5
 	.dw scriptCmd_jumpTable ; 0xc6
 	.dw scriptCmd_jumpIfMemorySet ; 0xc7
 	.dw scriptCmd_jumpIfSomething ; 0xc8
@@ -105,7 +99,7 @@ runScriptCommand:
 	.dw scriptCmd_checkHeartDisplayUpdated ; 0xd9
 	.dw scriptCmd_checkRupeeDisplayUpdated ; 0xda
 	.dw scriptCmd_checkCollidedWithLink_ignoreZ ; 0xdb
-	.dw scriptCmd_none ; 0xdc
+	.dw scriptCmd_asmCallWithParam ; 0xdc
 	.dw scriptCmd_spawnItem ; 0xdd
 	.dw scriptCmd_spawnItem ; 0xde
 	.dw scriptCmd_df ; 0xdf
@@ -176,21 +170,14 @@ scriptCmd_showPasswordScreen:
 	ld b,a
 	swap a
 	and $03
-.if defined(ROM_COMBO)
-	call wIsSeasons
-	jr nc,+
-		add $04
-	+
-.endif
 	rst_jumpTable
 
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 	.dw @askForSecret
 	.dw @generateSecret
 	.dw @generateSecret
 	.dw @askForSecret
-.endif
-.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.else
 	.dw @generateSecret
 	.dw @askForSecret
 	.dw @askForSecret
@@ -303,11 +290,7 @@ scriptCmd_setSubstate:
 ; This is for all commands under $80.
 scriptCmd_jump:
 
-.if defined(ROM_AGES) || defined(ROM_COMBO)
-.if defined(ROM_COMBO)
-	call wIsSeasons
-	jr c,++
-.endif
+.if defined(ROM_AGES)
 	ld a,h
 	cp $80
 	jr c,++
@@ -1045,20 +1028,15 @@ scriptCmd_jumpIfCBA5Eq:
 	jp scriptFunc_add3ToHl_scf
 
 scriptCmd_jumpRandom:
-.if defined(ROM_AGES) && !defined(ROM_COMBO)
 	pop hl
 	inc hl
-	jp scriptFunc_jump_scf
-
-.else; ROM_SEASONS
-	pop hl
-	inc hl
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	call getRandomNumber
 	and $01
 	add a
 	rst_addAToHl
-	jp scriptFunc_jump_scf
 .endif
+	jp scriptFunc_jump_scf
 
 scriptCmd_jumpTable:
 	pop hl
@@ -1264,16 +1242,11 @@ scriptCmd_setOrUnsetGlobalFlag:
 	ret
 
 scriptCmd_initNpcHitbox:
-.if defined(ROM_AGES) || defined(ROM_COMBO)
-.if defined(ROM_COMBO)
-	call wIsSeasons
-	jr c,++
-.endif
+.if defined(ROM_AGES)
 	ld e,Interaction.collisionRadiusY
 	ld a,(de)
 	or a
 	jr nz,+
-++
 .endif
 
 	ld a,$06

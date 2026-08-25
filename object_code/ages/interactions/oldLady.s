@@ -83,7 +83,7 @@ m_InteractionCode $3d
 ++
 	ld e,Interaction.var3f
 	ld (de),a
-	ld hl,mainScripts.linkedGameNpcScript
+	ld hl,{SCRIPTS_1}.linkedGameNpcScript
 	call interactionSetScript
 	call interactionRunScript
 	jr @state1
@@ -210,7 +210,7 @@ m_InteractionCode $3d
 
 
 oldLadyScriptTable:
-	.dw mainScripts.oldLadySubid0Script
-	.dw mainScripts.oldLadySubid1Script
-	.dw mainScripts.oldLadySubid2Script
-	.dw mainScripts.oldLadySubid3Script
+	.dw {SCRIPTS_1}.oldLadySubid0Script
+	.dw {SCRIPTS_1}.oldLadySubid1Script
+	.dw {SCRIPTS_1}.oldLadySubid2Script
+	.dw {SCRIPTS_1}.oldLadySubid3Script

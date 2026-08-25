@@ -35,7 +35,7 @@ m_InteractionCode $27
 	bit 6,a
 	jp nz,interactionDelete
 +
-	ld hl,mainScripts.sokraScript_inVillage
+	ld hl,{SCRIPTS_1}.sokraScript_inVillage
 	call interactionSetScript
 	jr @@runScriptSetVisible
 @@subid1:
@@ -45,7 +45,7 @@ m_InteractionCode $27
 	call getThisRoomFlags
 	bit 6,a
 	jr nz,+
-	ld hl,mainScripts.sokraScript_easternSuburbsPortal
+	ld hl,{SCRIPTS_1}.sokraScript_easternSuburbsPortal
 	call interactionSetScript
 	jr @@runScriptSetVisible
 +
@@ -65,7 +65,7 @@ m_InteractionCode $27
 	jp interactionDelete
 +
 	set 6,(hl)
-	ld hl,mainScripts.sokraScript_needSummerForD3
+	ld hl,{SCRIPTS_1}.sokraScript_needSummerForD3
 	call interactionSetScript
 	jr @@runScriptSetVisible
 @state1:

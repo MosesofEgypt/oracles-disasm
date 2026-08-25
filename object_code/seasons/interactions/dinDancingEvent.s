@@ -189,7 +189,7 @@ m_InteractionCode $4e
 	cp $3f
 	jp nz,@@subid9@func75b5
 	call interactionIncSubstate
-	ld hl,mainScripts.troupeScript_startDanceScene
+	ld hl,{SCRIPTS_1}.troupeScript_startDanceScene
 	call interactionSetScript
 @@@substate1:
 	call @@subid9@func75b5
@@ -265,7 +265,7 @@ m_InteractionCode $4e
 	cp $06
 	ret nz
 	call interactionIncSubstate
-	ld hl,mainScripts.troupeScript_tornadoEnd
+	ld hl,{SCRIPTS_1}.troupeScript_tornadoEnd
 	jp interactionSetScript
 @@@substate2:
 	call interactionRunScript
@@ -288,14 +288,14 @@ m_InteractionCode $4e
 	jp @@subid9@animate
 
 table_770a:
-	.dw mainScripts.troupeScript1
-	.dw mainScripts.troupeScript2
-	.dw mainScripts.troupeScript3
-	.dw mainScripts.troupeScript4
-	.dw mainScripts.troupeScript_Impa
-	.dw mainScripts.troupeScript_stub
-	.dw mainScripts.troupeScript_Din
-	.dw mainScripts.troupeScript_tornadoStart
-	.dw mainScripts.troupeScript_stub
-	.dw mainScripts.troupeScript_stub
-	.dw mainScripts.troupeScript_inHoronVillage
+	.dw {SCRIPTS_1}.troupeScript1
+	.dw {SCRIPTS_1}.troupeScript2
+	.dw {SCRIPTS_1}.troupeScript3
+	.dw {SCRIPTS_1}.troupeScript4
+	.dw {SCRIPTS_1}.troupeScript_Impa
+	.dw {SCRIPTS_1}.troupeScript_stub
+	.dw {SCRIPTS_1}.troupeScript_Din
+	.dw {SCRIPTS_1}.troupeScript_tornadoStart
+	.dw {SCRIPTS_1}.troupeScript_stub
+	.dw {SCRIPTS_1}.troupeScript_stub
+	.dw {SCRIPTS_1}.troupeScript_inHoronVillage

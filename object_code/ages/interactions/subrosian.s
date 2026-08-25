@@ -30,12 +30,12 @@ subrosian_subid00:
 	callab getGameProgress_2
 	ld a,b
 	cp $05
-	ld hl,mainScripts.subrosianInVillageScript_afterGotMakuSeed
+	ld hl,{SCRIPTS_1}.subrosianInVillageScript_afterGotMakuSeed
 	jr z,@setScript
 	cp $07
 	jp nz,interactionDeleteAndUnmarkSolidPosition
 
-	ld hl,mainScripts.subrosianInVillageScript_postGame
+	ld hl,{SCRIPTS_1}.subrosianInVillageScript_postGame
 
 @setScript:
 	call interactionSetScript
@@ -86,7 +86,7 @@ subrosian_subid04:
 @initSecretTellingNpc:
 	ld e,Interaction.var3f
 	ld (de),a
-	ld hl,mainScripts.linkedGameNpcScript
+	ld hl,{SCRIPTS_1}.linkedGameNpcScript
 	call interactionSetScript
 	call interactionRunScript
 @state1:
@@ -145,10 +145,10 @@ subrosian_getScriptPtr:
 	ret
 
 @scriptTable:
-	.dw mainScripts.stubScript
-	.dw mainScripts.stubScript
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.stubScript
 	.dw @subid02Scripts
 
 @subid02Scripts:
-	.dw mainScripts.subrosianAtGoronDanceScript_greenNpc
-	.dw mainScripts.subrosianAtGoronDanceScript_redNpc
+	.dw {SCRIPTS_1}.subrosianAtGoronDanceScript_greenNpc
+	.dw {SCRIPTS_1}.subrosianAtGoronDanceScript_redNpc

@@ -564,43 +564,43 @@ shootingGallery_addValueToScore:
 ; NPC scripts
 shootingGalleryScriptTable:
 	; NPCs waiting to be talked to
-	.dw mainScripts.shootingGalleryScript_humanNpc
-	.dw mainScripts.shootingGalleryScript_goronNpc
-	.dw mainScripts.shootingGalleryScript_goronElderNpc
+	.dw {SCRIPTS_1}.shootingGalleryScript_humanNpc
+	.dw {SCRIPTS_1}.shootingGalleryScript_goronNpc
+	.dw {SCRIPTS_1}.shootingGalleryScript_goronElderNpc
 
 	; Cleanup after finishing a game
-	.dw mainScripts.shootingGalleryScript_humanNpc_gameDone
-	.dw mainScripts.shootingGalleryScript_goronNpc_gameDone
-	.dw mainScripts.shootingGalleryScript_goronElderNpc_gameDone
+	.dw {SCRIPTS_1}.shootingGalleryScript_humanNpc_gameDone
+	.dw {SCRIPTS_1}.shootingGalleryScript_goronNpc_gameDone
+	.dw {SCRIPTS_1}.shootingGalleryScript_goronElderNpc_gameDone
 
 	; NPCs ask if you want to play again
-	.dw mainScripts.shootingGalleryScript_humanNpc@tryAgain
-	.dw mainScripts.shootingGalleryScript_goronNpc@tryAgain
-	.dw mainScripts.shootingGalleryScript_goronElderNpc@beginGame
+	.dw {SCRIPTS_1}.shootingGalleryScript_humanNpc@tryAgain
+	.dw {SCRIPTS_1}.shootingGalleryScript_goronNpc@tryAgain
+	.dw {SCRIPTS_1}.shootingGalleryScript_goronElderNpc@beginGame
 
 
 ; Scripts to run when tile(s) of the corresponding types are hit.
 shootingGalleryHitScriptTable:
-	.dw mainScripts.shootingGalleryScript_hit1Blue        ; $00
-	.dw mainScripts.shootingGalleryScript_hit1Fairy       ; $01
-	.dw mainScripts.shootingGalleryScript_hit1Red         ; $02
-	.dw mainScripts.shootingGalleryScript_hit1Imp         ; $03
-	.dw mainScripts.shootingGalleryScript_hit2Blue        ; $04
-	.dw mainScripts.shootingGalleryScript_hit1Blue1Fairy  ; $05
-	.dw mainScripts.shootingGalleryScript_hit1Red1Blue    ; $06
-	.dw mainScripts.shootingGalleryScript_hit1Blue1Imp    ; $07
-	.dw mainScripts.shootingGalleryScript_hit1Blue1Fairy  ; $08
-	.dw mainScripts.shootingGalleryScript_hit2Blue        ; $09
-	.dw mainScripts.shootingGalleryScript_hit1Red1Fairy   ; $0a
-	.dw mainScripts.shootingGalleryScript_hit1Fairy1Imp   ; $0b
-	.dw mainScripts.shootingGalleryScript_hit1Red1Blue    ; $0c
-	.dw mainScripts.shootingGalleryScript_hit1Red1Fairy   ; $0d
-	.dw mainScripts.shootingGalleryScript_hit2Red         ; $0e
-	.dw mainScripts.shootingGalleryScript_hit1Red1Imp     ; $0f
-	.dw mainScripts.shootingGalleryScript_hit1Blue1Imp    ; $10
-	.dw mainScripts.shootingGalleryScript_hit1Fairy1Imp   ; $11
-	.dw mainScripts.shootingGalleryScript_hit1Red1Imp     ; $12
-	.dw mainScripts.shootingGalleryScript_hit2Red         ; $13
+	.dw {SCRIPTS_1}.shootingGalleryScript_hit1Blue        ; $00
+	.dw {SCRIPTS_1}.shootingGalleryScript_hit1Fairy       ; $01
+	.dw {SCRIPTS_1}.shootingGalleryScript_hit1Red         ; $02
+	.dw {SCRIPTS_1}.shootingGalleryScript_hit1Imp         ; $03
+	.dw {SCRIPTS_1}.shootingGalleryScript_hit2Blue        ; $04
+	.dw {SCRIPTS_1}.shootingGalleryScript_hit1Blue1Fairy  ; $05
+	.dw {SCRIPTS_1}.shootingGalleryScript_hit1Red1Blue    ; $06
+	.dw {SCRIPTS_1}.shootingGalleryScript_hit1Blue1Imp    ; $07
+	.dw {SCRIPTS_1}.shootingGalleryScript_hit1Blue1Fairy  ; $08
+	.dw {SCRIPTS_1}.shootingGalleryScript_hit2Blue        ; $09
+	.dw {SCRIPTS_1}.shootingGalleryScript_hit1Red1Fairy   ; $0a
+	.dw {SCRIPTS_1}.shootingGalleryScript_hit1Fairy1Imp   ; $0b
+	.dw {SCRIPTS_1}.shootingGalleryScript_hit1Red1Blue    ; $0c
+	.dw {SCRIPTS_1}.shootingGalleryScript_hit1Red1Fairy   ; $0d
+	.dw {SCRIPTS_1}.shootingGalleryScript_hit2Red         ; $0e
+	.dw {SCRIPTS_1}.shootingGalleryScript_hit1Red1Imp     ; $0f
+	.dw {SCRIPTS_1}.shootingGalleryScript_hit1Blue1Imp    ; $10
+	.dw {SCRIPTS_1}.shootingGalleryScript_hit1Fairy1Imp   ; $11
+	.dw {SCRIPTS_1}.shootingGalleryScript_hit1Red1Imp     ; $12
+	.dw {SCRIPTS_1}.shootingGalleryScript_hit2Red         ; $13
 
-	.dw mainScripts.shootingGalleryScript_hitNothing      ; $14
-	.dw mainScripts.shootingGalleryScript_strike          ; $15
+	.dw {SCRIPTS_1}.shootingGalleryScript_hitNothing      ; $14
+	.dw {SCRIPTS_1}.shootingGalleryScript_strike          ; $15

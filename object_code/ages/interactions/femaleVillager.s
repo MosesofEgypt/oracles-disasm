@@ -104,7 +104,7 @@ m_InteractionCode $3b
 	xor a
 	call interactionSetAnimation
 
-	ld hl,mainScripts.villagerGalSubid07Script
+	ld hl,{SCRIPTS_1}.villagerGalSubid07Script
 	jp interactionSetScript
 
 @initSubid08:
@@ -115,14 +115,14 @@ m_InteractionCode $3b
 	ld a,>TX_0f03
 	ld (de),a
 
-	ld hl,mainScripts.genericNpcScript
+	ld hl,{SCRIPTS_1}.genericNpcScript
 	jp interactionSetScript
 
 @initSubid06:
 	ld a,$05
 	ld e,Interaction.var3f
 	ld (de),a
-	ld hl,mainScripts.linkedGameNpcScript
+	ld hl,{SCRIPTS_1}.linkedGameNpcScript
 	call interactionSetScript
 	call interactionRunScript
 
@@ -227,38 +227,38 @@ m_InteractionCode $3b
 
 
 @scriptTable:
-	.dw mainScripts.villagerGalSubid00Script
-	.dw mainScripts.stubScript
-	.dw mainScripts.stubScript
-	.dw mainScripts.stubScript
-	.dw mainScripts.stubScript
-	.dw mainScripts.stubScript
-	.dw mainScripts.stubScript
+	.dw {SCRIPTS_1}.villagerGalSubid00Script
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.stubScript
 
 @subid1And2ScriptTable:
-	.dw mainScripts.villagerGalSubid1And2Script_befored3
-	.dw mainScripts.villagerGalSubid1And2Script_afterd3
-	.dw mainScripts.villagerGalSubid1And2Script_afterNayruSaved
-	.dw mainScripts.villagerGalSubid1And2Script_afterd7
-	.dw mainScripts.villagerGalSubid1And2Script_afterGotMakuSeed
-	.dw mainScripts.villagerGalSubid1And2Script_postGame
+	.dw {SCRIPTS_1}.villagerGalSubid1And2Script_befored3
+	.dw {SCRIPTS_1}.villagerGalSubid1And2Script_afterd3
+	.dw {SCRIPTS_1}.villagerGalSubid1And2Script_afterNayruSaved
+	.dw {SCRIPTS_1}.villagerGalSubid1And2Script_afterd7
+	.dw {SCRIPTS_1}.villagerGalSubid1And2Script_afterGotMakuSeed
+	.dw {SCRIPTS_1}.villagerGalSubid1And2Script_postGame
 
 @subid3And4ScriptTable:
-	.dw mainScripts.villagerGalSubid3And4Script_befored2
-	.dw mainScripts.villagerGalSubid3And4Script_afterd2
-	.dw mainScripts.villagerGalSubid3And4Script_afterd4
-	.dw mainScripts.villagerGalSubid3And4Script_afterNayruSaved
-	.dw mainScripts.villagerGalSubid3And4Script_afterd7
-	.dw mainScripts.villagerGalSubid3And4Script_afterGotMakuSeed
-	.dw mainScripts.villagerGalSubid3And4Script_twinrovaKidnappedZelda
-	.dw mainScripts.villagerGalSubid3And4Script_postGame
+	.dw {SCRIPTS_1}.villagerGalSubid3And4Script_befored2
+	.dw {SCRIPTS_1}.villagerGalSubid3And4Script_afterd2
+	.dw {SCRIPTS_1}.villagerGalSubid3And4Script_afterd4
+	.dw {SCRIPTS_1}.villagerGalSubid3And4Script_afterNayruSaved
+	.dw {SCRIPTS_1}.villagerGalSubid3And4Script_afterd7
+	.dw {SCRIPTS_1}.villagerGalSubid3And4Script_afterGotMakuSeed
+	.dw {SCRIPTS_1}.villagerGalSubid3And4Script_twinrovaKidnappedZelda
+	.dw {SCRIPTS_1}.villagerGalSubid3And4Script_postGame
 
 @subid5ScriptTable:
-	.dw mainScripts.villagerGalSubid05Script_befored2
-	.dw mainScripts.villagerGalSubid05Script_afterd2
-	.dw mainScripts.villagerGalSubid05Script_afterd4
-	.dw mainScripts.villagerGalSubid05Script_afterNayruSaved
-	.dw mainScripts.villagerGalSubid05Script_afterd7
-	.dw mainScripts.villagerGalSubid05Script_afterd7
-	.dw mainScripts.villagerGalSubid05Script_twinrovaKidnappedZelda
-	.dw mainScripts.villagerGalSubid05Script_twinrovaKidnappedZelda ; Not used
+	.dw {SCRIPTS_1}.villagerGalSubid05Script_befored2
+	.dw {SCRIPTS_1}.villagerGalSubid05Script_afterd2
+	.dw {SCRIPTS_1}.villagerGalSubid05Script_afterd4
+	.dw {SCRIPTS_1}.villagerGalSubid05Script_afterNayruSaved
+	.dw {SCRIPTS_1}.villagerGalSubid05Script_afterd7
+	.dw {SCRIPTS_1}.villagerGalSubid05Script_afterd7
+	.dw {SCRIPTS_1}.villagerGalSubid05Script_twinrovaKidnappedZelda
+	.dw {SCRIPTS_1}.villagerGalSubid05Script_twinrovaKidnappedZelda ; Not used

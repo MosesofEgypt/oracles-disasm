@@ -56,7 +56,7 @@ m_InteractionCode $72
 
 	ld a,$02
 	call fadeinFromWhiteWithDelay
-	ld hl,mainScripts.kingMoblinDefeated_kingScript
+	ld hl,{SCRIPTS_1}.kingMoblinDefeated_kingScript
 
 @setScriptAndInitStuff:
 	call interactionSetScript
@@ -95,7 +95,7 @@ m_InteractionCode $72
 	jp interactionDelete
 
 @subid1State0:
-	ld hl,mainScripts.kingMoblinDefeated_helperMoblinScript
+	ld hl,{SCRIPTS_1}.kingMoblinDefeated_helperMoblinScript
 	jr @setScriptAndInitStuff
 
 
@@ -161,10 +161,10 @@ m_InteractionCode $72
 	ret
 
 @scriptTable:
-	.dw mainScripts.kingMoblinDefeated_goron0
-	.dw mainScripts.kingMoblinDefeated_goron1
-	.dw mainScripts.kingMoblinDefeated_goron2
-	.dw mainScripts.kingMoblinDefeated_goron3
+	.dw {SCRIPTS_1}.kingMoblinDefeated_goron0
+	.dw {SCRIPTS_1}.kingMoblinDefeated_goron1
+	.dw {SCRIPTS_1}.kingMoblinDefeated_goron2
+	.dw {SCRIPTS_1}.kingMoblinDefeated_goron3
 
 ; b0: Y
 ; b1: X

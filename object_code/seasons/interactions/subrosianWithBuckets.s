@@ -48,11 +48,11 @@ m_InteractionCode $32
 @animateAsNpc:
 	jp interactionAnimateAsNpc
 @scriptTable:
-	.dw mainScripts.bucketSubrosianScript_text1
-	.dw mainScripts.bucketSubrosianScript_text2
-	.dw mainScripts.bucketSubrosianScript_text3
-	.dw mainScripts.bucketSubrosianScript_text4
-	.dw mainScripts.bucketSubrosianScript_text5
-	.dw mainScripts.bucketSubrosianScript_text6
-	.dw mainScripts.bucketSubrosianScript_text1
-	.dw mainScripts.bucketSubrosianScript_text1
+	.dw {SCRIPTS_1}.bucketSubrosianScript_text1
+	.dw {SCRIPTS_1}.bucketSubrosianScript_text2
+	.dw {SCRIPTS_1}.bucketSubrosianScript_text3
+	.dw {SCRIPTS_1}.bucketSubrosianScript_text4
+	.dw {SCRIPTS_1}.bucketSubrosianScript_text5
+	.dw {SCRIPTS_1}.bucketSubrosianScript_text6
+	.dw {SCRIPTS_1}.bucketSubrosianScript_text1
+	.dw {SCRIPTS_1}.bucketSubrosianScript_text1

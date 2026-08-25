@@ -58,56 +58,56 @@ m_InteractionCode $20
 
 @dungeon0:
 @dungeond:
-	.dw mainScripts.makuPathScript_spawnChestWhenActiveTriggersEq01
-	.dw mainScripts.makuPathScript_spawnDownStairsWhenEnemiesKilled
-	.dw mainScripts.makuPathScript_spawn30Rupees
-	.dw mainScripts.makuPathScript_keyFallsFromCeilingWhen1TorchLit
-	.dw mainScripts.makuPathScript_spawnUpStairsWhen2TorchesLit
+	.dw {SCRIPTS_1}.makuPathScript_spawnChestWhenActiveTriggersEq01
+	.dw {SCRIPTS_1}.makuPathScript_spawnDownStairsWhenEnemiesKilled
+	.dw {SCRIPTS_1}.makuPathScript_spawn30Rupees
+	.dw {SCRIPTS_1}.makuPathScript_keyFallsFromCeilingWhen1TorchLit
+	.dw {SCRIPTS_1}.makuPathScript_spawnUpStairsWhen2TorchesLit
 @dungeon1:
-	.dw mainScripts.dungeonScript_spawnChestOnTriggerBit0
-	.dw mainScripts.spiritsGraveScript_spawnBracelet
-	.dw mainScripts.dungeonScript_minibossDeath
-	.dw mainScripts.dungeonScript_bossDeath
-	.dw mainScripts.spiritsGraveScript_stairsToBraceletRoom
-	.dw mainScripts.spiritsGraveScript_spawnMovingPlatform
+	.dw {SCRIPTS_1}.dungeonScript_spawnChestOnTriggerBit0
+	.dw {SCRIPTS_1}.spiritsGraveScript_spawnBracelet
+	.dw {SCRIPTS_1}.dungeonScript_minibossDeath
+	.dw {SCRIPTS_1}.dungeonScript_bossDeath
+	.dw {SCRIPTS_1}.spiritsGraveScript_stairsToBraceletRoom
+	.dw {SCRIPTS_1}.spiritsGraveScript_spawnMovingPlatform
 @dungeon2:
-	.dw mainScripts.wingDungeonScript_spawnFeather
-	.dw mainScripts.wingDungeonScript_spawn30Rupees
-	.dw mainScripts.dungeonScript_minibossDeath
-	.dw mainScripts.wingDungeonScript_bossDeath
+	.dw {SCRIPTS_1}.wingDungeonScript_spawnFeather
+	.dw {SCRIPTS_1}.wingDungeonScript_spawn30Rupees
+	.dw {SCRIPTS_1}.dungeonScript_minibossDeath
+	.dw {SCRIPTS_1}.wingDungeonScript_bossDeath
 @dungeon3:
-	.dw mainScripts.dungeonScript_minibossDeath
-	.dw mainScripts.dungeonScript_bossDeath
-	.dw mainScripts.moonlitGrottoScript_spawnChestWhen2TorchesLit
+	.dw {SCRIPTS_1}.dungeonScript_minibossDeath
+	.dw {SCRIPTS_1}.dungeonScript_bossDeath
+	.dw {SCRIPTS_1}.moonlitGrottoScript_spawnChestWhen2TorchesLit
 @dungeon4:
-	.dw mainScripts.dungeonScript_minibossDeath
-	.dw mainScripts.dungeonScript_bossDeath
-	.dw mainScripts.skullDungeonScript_spawnChestWhenOrb0Hit
-	.dw mainScripts.skullDungeonScript_spawnChestWhenOrb1Hit
+	.dw {SCRIPTS_1}.dungeonScript_minibossDeath
+	.dw {SCRIPTS_1}.dungeonScript_bossDeath
+	.dw {SCRIPTS_1}.skullDungeonScript_spawnChestWhenOrb0Hit
+	.dw {SCRIPTS_1}.skullDungeonScript_spawnChestWhenOrb1Hit
 @dungeon5:
-	.dw mainScripts.dungeonScript_minibossDeath
-	.dw mainScripts.dungeonScript_bossDeath
-	.dw mainScripts.crownDungeonScript_spawnChestWhen3TriggersActive
+	.dw {SCRIPTS_1}.dungeonScript_minibossDeath
+	.dw {SCRIPTS_1}.dungeonScript_bossDeath
+	.dw {SCRIPTS_1}.crownDungeonScript_spawnChestWhen3TriggersActive
 @dungeon6:
-	.dw mainScripts.dungeonScript_minibossDeath
+	.dw {SCRIPTS_1}.dungeonScript_minibossDeath
 @dungeon7:
-	.dw mainScripts.dungeonScript_bossDeath
+	.dw {SCRIPTS_1}.dungeonScript_bossDeath
 @dungeon8:
-	.dw mainScripts.dungeonScript_minibossDeath
-	.dw mainScripts.dungeonScript_bossDeath
-	.dw mainScripts.ancientTombScript_spawnSouthStairsWhenTrigger0Active
-	.dw mainScripts.ancientTombScript_spawnNorthStairsWhenTrigger0Active
-	.dw mainScripts.ancientTombScript_retractWallWhenTrigger0Active
-	.dw mainScripts.ancientTombScript_spawnDownStairsWhenEnemiesKilled
-	.dw mainScripts.ancientTombScript_spawnVerticalBridgeWhenTorchLit
+	.dw {SCRIPTS_1}.dungeonScript_minibossDeath
+	.dw {SCRIPTS_1}.dungeonScript_bossDeath
+	.dw {SCRIPTS_1}.ancientTombScript_spawnSouthStairsWhenTrigger0Active
+	.dw {SCRIPTS_1}.ancientTombScript_spawnNorthStairsWhenTrigger0Active
+	.dw {SCRIPTS_1}.ancientTombScript_retractWallWhenTrigger0Active
+	.dw {SCRIPTS_1}.ancientTombScript_spawnDownStairsWhenEnemiesKilled
+	.dw {SCRIPTS_1}.ancientTombScript_spawnVerticalBridgeWhenTorchLit
 @dungeon9:
 @dungeona:
 @dungeonb:
-	.dw mainScripts.dungeonScript_spawnChestOnTriggerBit0
-	.dw mainScripts.herosCaveScript_spawnChestWhen4TriggersActive
-	.dw mainScripts.herosCaveScript_spawnBridgeWhenTriggerPressed
-	.dw mainScripts.herosCaveScript_spawnNorthStairsWhenEnemiesKilled
+	.dw {SCRIPTS_1}.dungeonScript_spawnChestOnTriggerBit0
+	.dw {SCRIPTS_1}.herosCaveScript_spawnChestWhen4TriggersActive
+	.dw {SCRIPTS_1}.herosCaveScript_spawnBridgeWhenTriggerPressed
+	.dw {SCRIPTS_1}.herosCaveScript_spawnNorthStairsWhenEnemiesKilled
 @dungeonc:
-	.dw mainScripts.dungeonScript_bossDeath
-	.dw mainScripts.mermaidsCaveScript_spawnBridgeWhenOrbHit
-	.dw mainScripts.mermaidsCaveScript_updateTrigger2BasedOnTriggers0And1
+	.dw {SCRIPTS_1}.dungeonScript_bossDeath
+	.dw {SCRIPTS_1}.mermaidsCaveScript_spawnBridgeWhenOrbHit
+	.dw {SCRIPTS_1}.mermaidsCaveScript_updateTrigger2BasedOnTriggers0And1

@@ -15,7 +15,7 @@ m_InteractionCode $a4
 	ld a,>TX_3b00
 	call interactionSetHighTextIndex
 	call @func_6418
-	ld hl,mainScripts.subrosianSmithyScript
+	ld hl,{SCRIPTS_1}.subrosianSmithyScript
 	call interactionSetScript
 	call interactionAnimateAsNpc
 	ld a,$02

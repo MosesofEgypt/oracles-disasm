@@ -15,7 +15,7 @@ m_InteractionCode $52
 	call objectSetVisible82
 	ld a,>TX_0b00
 	call interactionSetHighTextIndex
-	ld hl,mainScripts.biggoronScript
+	ld hl,{SCRIPTS_1}.biggoronScript
 	jp interactionSetScript
 @state1:
 	call interactionAnimate

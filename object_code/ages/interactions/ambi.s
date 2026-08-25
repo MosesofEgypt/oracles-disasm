@@ -44,7 +44,7 @@ m_InteractionCode $4d
 	jp nz,ambi_loadScript
 	call checkIsLinkedGame
 	ret nz
-	ld hl,mainScripts.ambiSubid01Script_part2
+	ld hl,{SCRIPTS_1}.ambiSubid01Script_part2
 	jp interactionSetScript
 
 
@@ -179,7 +179,7 @@ ambi_runSubid01:
 	jp c,@updateSubstate
 
 	call interactionAnimate
-	jpab scriptHelp.turnToFaceSomething
+	jpab {SCRIPTS_HELP}.turnToFaceSomething
 
 @updateSubstate:
 	ld e,Interaction.substate
@@ -376,14 +376,14 @@ ambi_loadScript:
 	jp interactionSetScript
 
 @scriptTable:
-	.dw mainScripts.ambiSubid00Script
-	.dw mainScripts.ambiSubid01Script_part1
-	.dw mainScripts.ambiSubid02Script
-	.dw mainScripts.ambiSubid03Script
-	.dw mainScripts.ambiSubid04Script
-	.dw mainScripts.ambiSubid05Script
-	.dw mainScripts.ambiSubid06Script
-	.dw mainScripts.ambiSubid07Script
-	.dw mainScripts.ambiSubid08Script
-	.dw mainScripts.stubScript
-	.dw mainScripts.ambiSubid0aScript
+	.dw {SCRIPTS_1}.ambiSubid00Script
+	.dw {SCRIPTS_1}.ambiSubid01Script_part1
+	.dw {SCRIPTS_1}.ambiSubid02Script
+	.dw {SCRIPTS_1}.ambiSubid03Script
+	.dw {SCRIPTS_1}.ambiSubid04Script
+	.dw {SCRIPTS_1}.ambiSubid05Script
+	.dw {SCRIPTS_1}.ambiSubid06Script
+	.dw {SCRIPTS_1}.ambiSubid07Script
+	.dw {SCRIPTS_1}.ambiSubid08Script
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.ambiSubid0aScript

@@ -52,11 +52,11 @@ m_InteractionCode $38
 
 
 @scriptTable:
-	.dw mainScripts.pastGirlScript_earlyGame
-	.dw mainScripts.pastGirlScript_afterNayruSaved
-	.dw mainScripts.pastGirlScript_afterNayruSaved
-	.dw mainScripts.pastGirlScript_afterNayruSaved
-	.dw mainScripts.pastGirlScript_afterd7
-	.dw mainScripts.pastGirlScript_afterGotMakuSeed
-	.dw mainScripts.pastGirlScript_twinrovaKidnappedZelda
-	.dw mainScripts.pastGirlScript_gameFinished
+	.dw {SCRIPTS_1}.pastGirlScript_earlyGame
+	.dw {SCRIPTS_1}.pastGirlScript_afterNayruSaved
+	.dw {SCRIPTS_1}.pastGirlScript_afterNayruSaved
+	.dw {SCRIPTS_1}.pastGirlScript_afterNayruSaved
+	.dw {SCRIPTS_1}.pastGirlScript_afterd7
+	.dw {SCRIPTS_1}.pastGirlScript_afterGotMakuSeed
+	.dw {SCRIPTS_1}.pastGirlScript_twinrovaKidnappedZelda
+	.dw {SCRIPTS_1}.pastGirlScript_gameFinished

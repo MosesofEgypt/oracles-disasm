@@ -80,7 +80,7 @@ m_InteractionCode $9c
 
 	ld a,GLOBALFLAG_FINISHEDGAME
 	call checkGlobalFlag
-	ld hl,mainScripts.kingZoraScript_present_afterD7
+	ld hl,{SCRIPTS_1}.kingZoraScript_present_afterD7
 	ret z
 
 	ld a,TREASURE_SWORD
@@ -88,28 +88,28 @@ m_InteractionCode $9c
 	and $01
 	ld e,Interaction.var03
 	ld (de),a
-	ld hl,mainScripts.kingZoraScript_present_postGame
+	ld hl,{SCRIPTS_1}.kingZoraScript_present_postGame
 	ret
 
 @@pollutionNotFixed:
 	ld a,TREASURE_LIBRARY_KEY
 	call checkTreasureObtained
-	ld hl,mainScripts.kingZoraScript_present_acceptedTask
+	ld hl,{SCRIPTS_1}.kingZoraScript_present_acceptedTask
 	ret c
 
 	call getThisRoomFlags
 	bit 6,(hl)
-	ld hl,mainScripts.kingZoraScript_present_firstTime
+	ld hl,{SCRIPTS_1}.kingZoraScript_present_firstTime
 	ret z
-	ld hl,mainScripts.kingZoraScript_present_giveKey
+	ld hl,{SCRIPTS_1}.kingZoraScript_present_giveKey
 	ret
 
 @@justCleanedWater:
 	ld a,GLOBALFLAG_GOT_PERMISSION_TO_ENTER_JABU
 	call checkGlobalFlag
-	ld hl,mainScripts.kingZoraScript_present_justCleanedWater
+	ld hl,{SCRIPTS_1}.kingZoraScript_present_justCleanedWater
 	ret z
-	ld hl,mainScripts.kingZoraScript_present_cleanedWater
+	ld hl,{SCRIPTS_1}.kingZoraScript_present_cleanedWater
 	ret
 
 @choosePastKingZoraScript:
@@ -119,21 +119,21 @@ m_InteractionCode $9c
 
 	ld a,GLOBALFLAG_WATER_POLLUTION_FIXED
 	call checkGlobalFlag
-	ld hl,mainScripts.kingZoraScript_past_justCured
+	ld hl,{SCRIPTS_1}.kingZoraScript_past_justCured
 	ret z
 
 	ld a,TREASURE_ESSENCE
 	call checkTreasureObtained
 	bit 6,a
-	ld hl,mainScripts.kingZoraScript_past_cleanedWater
+	ld hl,{SCRIPTS_1}.kingZoraScript_past_cleanedWater
 	ret z
-	ld hl,mainScripts.kingZoraScript_past_afterD7
+	ld hl,{SCRIPTS_1}.kingZoraScript_past_afterD7
 	ret
 
 @@notCured:
 	ld a,TREASURE_POTION
 	call checkTreasureObtained
-	ld hl,mainScripts.kingZoraScript_past_dontHavePotion
+	ld hl,{SCRIPTS_1}.kingZoraScript_past_dontHavePotion
 	ret nc
-	ld hl,mainScripts.kingZoraScript_past_havePotion
+	ld hl,{SCRIPTS_1}.kingZoraScript_past_havePotion
 	ret

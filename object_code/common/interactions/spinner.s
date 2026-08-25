@@ -54,7 +54,7 @@ m_InteractionCode $7d
 	call setShortPosition
 
 	call interactionInitGraphics
-	ld hl,mainScripts.spinnerScript_initialization
+	ld hl,{SCRIPTS_1}.spinnerScript_initialization
 	call interactionSetScript
 	call objectSetVisible82
 
@@ -84,7 +84,7 @@ m_InteractionCode $7d
 	ld e,Interaction.state
 	ld a,$01
 	ld (de),a
-	ld hl,mainScripts.spinnerScript_waitForLink
+	ld hl,{SCRIPTS_1}.spinnerScript_waitForLink
 	jp interactionSetScript
 
 @beginTurning:
@@ -209,7 +209,7 @@ m_InteractionCode $7d
 	; Go back to state 1
 	ld l,Interaction.state
 	ld (hl),$01
-	ld hl,mainScripts.spinnerScript_waitForLinkAfterDelay
+	ld hl,{SCRIPTS_1}.spinnerScript_waitForLinkAfterDelay
 	jp interactionSetScript
 
 

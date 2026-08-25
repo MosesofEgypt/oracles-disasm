@@ -38,7 +38,7 @@ m_InteractionCode $68
 	ret
 
 @@alreadyGaveShovel:
-	ld hl,mainScripts.rosa_subid00Script_alreadyGaveShovel
+	ld hl,{SCRIPTS_1}.rosa_subid00Script_alreadyGaveShovel
 	jp interactionSetScript
 
 @@state1:
@@ -106,8 +106,8 @@ m_InteractionCode $68
 	ret
 
 @scriptTable:
-	.dw mainScripts.rosa_subid00Script
+	.dw {SCRIPTS_1}.rosa_subid00Script
 	.dw @scriptTable2
 
 @scriptTable2:
-	.dw mainScripts.rosa_subid01Script
+	.dw {SCRIPTS_1}.rosa_subid01Script

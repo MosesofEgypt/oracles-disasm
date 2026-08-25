@@ -165,7 +165,11 @@ m_InteractionCode $57
 
 	ld a,UNCMP_GFXH_2d
 	call loadUncompressedGfxHeader
+.if defined(ROM_COMBO)
+	ld a,PALH_TILESET_MAKU_TREE_AGES
+.else
 	ld a,PALH_TILESET_MAKU_TREE
+.endif
 	call loadPaletteHeader
 	ld a,GFXH_CREDITS_SCENE_MAKU_TREE_PAST
 	call loadGfxHeader
@@ -294,13 +298,13 @@ m_InteractionCode $57
 
 
 @scriptTable:
-	.dw mainScripts.pickaxeWorkerSubid00Script
-	.dw mainScripts.pickaxeWorkerSubid01Script_part1
-	.dw mainScripts.pickaxeWorkerSubid02Script_part1
-	.dw mainScripts.pickaxeWorkerSubid03Script
+	.dw {SCRIPTS_1}.pickaxeWorkerSubid00Script
+	.dw {SCRIPTS_1}.pickaxeWorkerSubid01Script_part1
+	.dw {SCRIPTS_1}.pickaxeWorkerSubid02Script_part1
+	.dw {SCRIPTS_1}.pickaxeWorkerSubid03Script
 
 @subid1And2ScriptTable:
-	.dw mainScripts.pickaxeWorkerSubid01Script_part2
-	.dw mainScripts.pickaxeWorkerSubid02Script_part2
-	.dw mainScripts.pickaxeWorkerSubid01Script_part3
-	.dw mainScripts.pickaxeWorkerSubid02Script_part3
+	.dw {SCRIPTS_1}.pickaxeWorkerSubid01Script_part2
+	.dw {SCRIPTS_1}.pickaxeWorkerSubid02Script_part2
+	.dw {SCRIPTS_1}.pickaxeWorkerSubid01Script_part3
+	.dw {SCRIPTS_1}.pickaxeWorkerSubid02Script_part3

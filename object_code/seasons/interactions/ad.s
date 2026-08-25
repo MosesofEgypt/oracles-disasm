@@ -14,7 +14,7 @@ m_InteractionCode $ad
 	call objectGetAngleTowardLink
 	ld e,$49
 	ld (de),a
-	ld hl,mainScripts.script779e
+	ld hl,{SCRIPTS_1}.script779e
 	call interactionSetScript
 	ld e,$42
 	ld a,(de)

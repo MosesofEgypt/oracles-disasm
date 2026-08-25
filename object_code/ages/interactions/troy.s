@@ -51,5 +51,5 @@ m_InteractionCode $ca
 	jp interactionIncState
 
 @scriptTable:
-	.dw mainScripts.troySubid0Script
-	.dw mainScripts.troySubid1Script
+	.dw {SCRIPTS_1}.troySubid0Script
+	.dw {SCRIPTS_1}.troySubid1Script

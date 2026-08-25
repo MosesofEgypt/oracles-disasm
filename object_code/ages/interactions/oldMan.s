@@ -121,7 +121,7 @@ m_InteractionCode $52
 	call interactionSetAnimation
 	call objectSetVisiblec2
 
-	ld hl,mainScripts.oldManScript_generic
+	ld hl,{SCRIPTS_1}.oldManScript_generic
 	jp interactionSetScript
 
 
@@ -157,6 +157,6 @@ m_InteractionCode $52
 	jp interactionIncState
 
 @scriptTable:
-	.dw mainScripts.oldManScript_givesShieldUpgrade
-	.dw mainScripts.oldManScript_givesBookOfSeals
-	.dw mainScripts.oldManScript_givesFairyPowder
+	.dw {SCRIPTS_1}.oldManScript_givesShieldUpgrade
+	.dw {SCRIPTS_1}.oldManScript_givesBookOfSeals
+	.dw {SCRIPTS_1}.oldManScript_givesFairyPowder

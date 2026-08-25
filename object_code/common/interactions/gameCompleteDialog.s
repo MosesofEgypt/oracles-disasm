@@ -13,5 +13,5 @@ m_InteractionCode $d1
 	ld (de),a
 	ld c,a
 	callab bank1.loadDeathRespawnBufferPreset
-	ld hl,mainScripts.gameCompleteDialogScript
+	ld hl,{SCRIPTS_1}.gameCompleteDialogScript
 	jp interactionSetScript

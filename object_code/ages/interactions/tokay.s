@@ -1107,35 +1107,35 @@ tokayLoadScript:
 	jp interactionSetScript
 
 tokayScriptTable:
-	/* $00 */ .dw mainScripts.tokayThiefScript
-	/* $01 */ .dw mainScripts.tokayThiefScript
-	/* $02 */ .dw mainScripts.tokayMainThiefScript
-	/* $03 */ .dw mainScripts.tokayThiefScript
-	/* $04 */ .dw mainScripts.tokayThiefScript
-	/* $05 */ .dw mainScripts.tokayCookScript
-	/* $06 */ .dw mainScripts.tokayHoldingItemScript
-	/* $07 */ .dw mainScripts.tokayHoldingItemScript
-	/* $08 */ .dw mainScripts.tokayHoldingItemScript
-	/* $09 */ .dw mainScripts.tokayHoldingItemScript
-	/* $0a */ .dw mainScripts.tokayHoldingItemScript
-	/* $0b */ .dw mainScripts.tokayRunningFromRosaScript
-	/* $0c */ .dw mainScripts.stubScript
-	/* $0d */ .dw mainScripts.tokayGameManagerScript_past
-	/* $0e */ .dw mainScripts.tokayShopkeeperScript
-	/* $0f */ .dw mainScripts.tokayWithDimitri1Script
-	/* $10 */ .dw mainScripts.tokayWithDimitri2Script
-	/* $11 */ .dw mainScripts.tokayAtSeedlingPlotScript
-	/* $12 */ .dw mainScripts.genericNpcScript
-	/* $13 */ .dw mainScripts.genericNpcScript
-	/* $14 */ .dw mainScripts.genericNpcScript
-	/* $15 */ .dw mainScripts.genericNpcScript
-	/* $16 */ .dw mainScripts.genericNpcScript
-	/* $17 */ .dw mainScripts.genericNpcScript
-	/* $18 */ .dw mainScripts.genericNpcScript
-	/* $19 */ .dw mainScripts.tokayGameManagerScript_present
+	/* $00 */ .dw {SCRIPTS_1}.tokayThiefScript
+	/* $01 */ .dw {SCRIPTS_1}.tokayThiefScript
+	/* $02 */ .dw {SCRIPTS_1}.tokayMainThiefScript
+	/* $03 */ .dw {SCRIPTS_1}.tokayThiefScript
+	/* $04 */ .dw {SCRIPTS_1}.tokayThiefScript
+	/* $05 */ .dw {SCRIPTS_1}.tokayCookScript
+	/* $06 */ .dw {SCRIPTS_1}.tokayHoldingItemScript
+	/* $07 */ .dw {SCRIPTS_1}.tokayHoldingItemScript
+	/* $08 */ .dw {SCRIPTS_1}.tokayHoldingItemScript
+	/* $09 */ .dw {SCRIPTS_1}.tokayHoldingItemScript
+	/* $0a */ .dw {SCRIPTS_1}.tokayHoldingItemScript
+	/* $0b */ .dw {SCRIPTS_1}.tokayRunningFromRosaScript
+	/* $0c */ .dw {SCRIPTS_1}.stubScript
+	/* $0d */ .dw {SCRIPTS_1}.tokayGameManagerScript_past
+	/* $0e */ .dw {SCRIPTS_1}.tokayShopkeeperScript
+	/* $0f */ .dw {SCRIPTS_1}.tokayWithDimitri1Script
+	/* $10 */ .dw {SCRIPTS_1}.tokayWithDimitri2Script
+	/* $11 */ .dw {SCRIPTS_1}.tokayAtSeedlingPlotScript
+	/* $12 */ .dw {SCRIPTS_1}.genericNpcScript
+	/* $13 */ .dw {SCRIPTS_1}.genericNpcScript
+	/* $14 */ .dw {SCRIPTS_1}.genericNpcScript
+	/* $15 */ .dw {SCRIPTS_1}.genericNpcScript
+	/* $16 */ .dw {SCRIPTS_1}.genericNpcScript
+	/* $17 */ .dw {SCRIPTS_1}.genericNpcScript
+	/* $18 */ .dw {SCRIPTS_1}.genericNpcScript
+	/* $19 */ .dw {SCRIPTS_1}.tokayGameManagerScript_present
 	/* $1a */ .dw $0000
 	/* $1b */ .dw $0000
 	/* $1c */ .dw $0000
-	/* $1d */ .dw mainScripts.tokayWithShieldUpgradeScript
-	/* $1e */ .dw mainScripts.tokayExplainingVinesScript
-	/* $1f */ .dw mainScripts.genericNpcScript
+	/* $1d */ .dw {SCRIPTS_1}.tokayWithShieldUpgradeScript
+	/* $1e */ .dw {SCRIPTS_1}.tokayExplainingVinesScript
+	/* $1f */ .dw {SCRIPTS_1}.genericNpcScript

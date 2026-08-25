@@ -112,7 +112,7 @@ bombUpgradeFairy_subid00:
 	call objectCreateInteraction
 
 	call objectSetVisible81
-	ld hl,mainScripts.bombUpgradeFairyScript
+	ld hl,{SCRIPTS_1}.bombUpgradeFairyScript
 	call interactionSetScript
 
 	ld b,$00

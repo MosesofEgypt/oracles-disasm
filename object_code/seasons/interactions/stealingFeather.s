@@ -94,7 +94,7 @@ m_InteractionCode $6e
 	call getThisRoomFlags
 	bit 6,(hl)
 	jp nz,interactionDelete
-	ld hl,mainScripts.stealingFeatherScript
+	ld hl,{SCRIPTS_1}.stealingFeatherScript
 	jp interactionSetScript
 @@state2:
 	ld e,Interaction.substate

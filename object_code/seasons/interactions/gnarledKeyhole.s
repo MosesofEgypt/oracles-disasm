@@ -20,7 +20,7 @@ m_InteractionCode $21
 	ld a,$01
 	ld (wDisableWarpTiles),a
 	call func_5469
-	ld hl,mainScripts.gnarledKeyholeScript
+	ld hl,{SCRIPTS_1}.gnarledKeyholeScript
 	jp interactionSetScript
 @state2:
 	call interactionIncState

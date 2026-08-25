@@ -20,14 +20,14 @@ m_InteractionCode $ca
 	ld a,GLOBALFLAG_DONE_CLOCK_SHOP_SECRET
 	call checkGlobalFlag
 	jr z,+
-	ld hl,mainScripts.troyScript_doneSecret
+	ld hl,{SCRIPTS_1}.troyScript_doneSecret
 	jr ++
 +
 	ld a,GLOBALFLAG_BEGAN_CLOCK_SHOP_SECRET
 	call checkGlobalFlag
-	ld hl,mainScripts.troyScript_beginningSecret
+	ld hl,{SCRIPTS_1}.troyScript_beginningSecret
 	jr z,++
-	ld hl,mainScripts.troyScript_beganSecret
+	ld hl,{SCRIPTS_1}.troyScript_beganSecret
 ++
 	call interactionSetScript
 	ld a,$02
@@ -72,8 +72,8 @@ m_InteractionCode $ca
 	ld (hl),a
 	ld l,$44
 	ld (hl),$01
-	callab scriptHelp.linkedFunc_15_6430
-	ld hl,mainScripts.troyScript_gameBegun
+	callab {SCRIPTS_HELP}.linkedFunc_15_6430
+	ld hl,{SCRIPTS_1}.troyScript_gameBegun
 	call interactionSetScript
 	ret
 	ld hl,wcce1

@@ -29,7 +29,7 @@ m_InteractionCode $87
 	call interactionSetAlwaysUpdateBit
 	call makuTree_setAppropriateStage
 	call makuTree_spawnGnarledKey
-	ld hl,mainScripts.script710b
+	ld hl,{SCRIPTS_1}.script710b
 	call interactionSetScript
 	ld a,(ws_cc39)
 	or a
@@ -51,7 +51,7 @@ m_InteractionCode $87
 	ld (de),a
 	call interactionInitGraphics
 	call objectSetVisible83
-	ld hl,mainScripts.script7255
+	ld hl,{SCRIPTS_1}.script7255
 	call interactionSetScript
 	jp interactionRunScript
 
@@ -62,7 +62,7 @@ m_InteractionCode $87
 	call interactionInitGraphics
 	call objectSetVisible83
 	call interactionSetAlwaysUpdateBit
-	ld hl,mainScripts.script7261
+	ld hl,{SCRIPTS_1}.script7261
 	call interactionSetScript
 	jp interactionRunScript
 

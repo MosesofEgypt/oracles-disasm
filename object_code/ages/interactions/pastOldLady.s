@@ -68,11 +68,11 @@ m_InteractionCode $45
 
 
 @scriptTable:
-	.dw mainScripts.pastOldLadySubid0Script
-	.dw mainScripts.stubScript
+	.dw {SCRIPTS_1}.pastOldLadySubid0Script
+	.dw {SCRIPTS_1}.stubScript
 
 @subid1ScriptTable:
-	.dw mainScripts.pastOldLadySubid1Script_befored2
-	.dw mainScripts.pastOldLadySubid1Script_afterd2
-	.dw mainScripts.pastOldLadySubid1Script_afterd4
-	.dw mainScripts.pastOldLadySubid1Script_afterSavedNayru
+	.dw {SCRIPTS_1}.pastOldLadySubid1Script_befored2
+	.dw {SCRIPTS_1}.pastOldLadySubid1Script_afterd2
+	.dw {SCRIPTS_1}.pastOldLadySubid1Script_afterd4
+	.dw {SCRIPTS_1}.pastOldLadySubid1Script_afterSavedNayru

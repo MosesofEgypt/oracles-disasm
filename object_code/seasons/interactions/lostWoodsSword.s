@@ -28,7 +28,7 @@ m_InteractionCode $59
 	call interactionIncState
 	call objectSetVisible
 	call objectSetVisible80
-	ld hl,mainScripts.lostWoodsSwordScript
+	ld hl,{SCRIPTS_1}.lostWoodsSwordScript
 	call interactionSetScript
 	ld a,$4d
 	call playSound

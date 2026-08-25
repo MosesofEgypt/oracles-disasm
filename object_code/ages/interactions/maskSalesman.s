@@ -26,4 +26,4 @@ m_InteractionCode $5c
 	jp interactionIncState
 
 @scriptTable:
-	.dw mainScripts.maskSalesmanScript
+	.dw {SCRIPTS_1}.maskSalesmanScript

@@ -30,5 +30,5 @@ m_InteractionCode $2e
 	jp npcFaceLinkAndAnimate
 
 @scriptTable:
-	.dw mainScripts.oldManScript_givesRupees
-	.dw mainScripts.oldManScript_takesRupees
+	.dw {SCRIPTS_1}.oldManScript_givesRupees
+	.dw {SCRIPTS_1}.oldManScript_takesRupees

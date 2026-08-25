@@ -49,5 +49,5 @@ m_InteractionCode $8b
 	jp interactionIncState
 
 @scriptTable:
-	.dw mainScripts.goronElderScript_subid00
-	.dw mainScripts.goronElderScript_subid01
+	.dw {SCRIPTS_1}.goronElderScript_subid00
+	.dw {SCRIPTS_1}.goronElderScript_subid01

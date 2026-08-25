@@ -138,14 +138,12 @@ m_InteractionCode $91
 @@sidescrolling:
 	; Check if it's still in water
 	call objectGetTileAtPosition
-.if defined(ROM_COMBO)
-	ld hl,hazardCollisionTable_seasons
-	call wIsSeasons
-	jr c,+
-		ld hl,hazardCollisionTable_ages
-	+
-.else
+.if !defined(ROM_COMBO)
 	ld hl,hazardCollisionTable
+.elif defined(ROM_AGES)
+	ld hl,hazardCollisionTable_ages
+.else
+	ld hl,hazardCollisionTable_seasons
 .endif
 	call lookupCollisionTable
 	ccf

@@ -191,4 +191,4 @@ greatFairy_initialize:
 	jp interactionIncState
 
 @scriptTable:
-	.dw mainScripts.greatFairySubid0Script
+	.dw {SCRIPTS_1}.greatFairySubid0Script

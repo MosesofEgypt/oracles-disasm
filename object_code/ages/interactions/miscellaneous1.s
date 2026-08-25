@@ -584,7 +584,7 @@ interaction6b_subid0f:
 	call getThisRoomFlags
 	set 6,(hl)
 	call interactionIncState
-	ld hl,mainScripts.interaction6b_bridgeToNuunSimpleScript
+	ld hl,{SCRIPTS_1}.interaction6b_bridgeToNuunSimpleScript
 	jp interactionSetSimpleScript
 
 @state2:
@@ -819,20 +819,20 @@ interaction6b_checkLinkPressedUpAtScreenEdge:
 	ret
 
 interaction6b_scriptTable:
-	.dw mainScripts.interaction6b_stubScript
-	.dw mainScripts.interaction6b_stubScript
-	.dw mainScripts.interaction6b_subid02Script
-	.dw mainScripts.interaction6b_stubScript
-	.dw mainScripts.interaction6b_subid04Script
-	.dw mainScripts.interaction6b_subid05Script
-	.dw mainScripts.interaction6b_stubScript
-	.dw mainScripts.interaction6b_stubScript
-	.dw mainScripts.interaction6b_stubScript
-	.dw mainScripts.interaction6b_stubScript
-	.dw mainScripts.interaction6b_subid0aScript
-	.dw mainScripts.interaction6b_subid0aScript
-	.dw mainScripts.interaction6b_subid0aScript
-	.dw mainScripts.interaction6b_stubScript
-	.dw mainScripts.interaction6b_stubScript
-	.dw mainScripts.interaction6b_stubScript
-	.dw mainScripts.interaction6b_subid10Script
+	.dw {SCRIPTS_1}.interaction6b_stubScript
+	.dw {SCRIPTS_1}.interaction6b_stubScript
+	.dw {SCRIPTS_1}.interaction6b_subid02Script
+	.dw {SCRIPTS_1}.interaction6b_stubScript
+	.dw {SCRIPTS_1}.interaction6b_subid04Script
+	.dw {SCRIPTS_1}.interaction6b_subid05Script
+	.dw {SCRIPTS_1}.interaction6b_stubScript
+	.dw {SCRIPTS_1}.interaction6b_stubScript
+	.dw {SCRIPTS_1}.interaction6b_stubScript
+	.dw {SCRIPTS_1}.interaction6b_stubScript
+	.dw {SCRIPTS_1}.interaction6b_subid0aScript
+	.dw {SCRIPTS_1}.interaction6b_subid0aScript
+	.dw {SCRIPTS_1}.interaction6b_subid0aScript
+	.dw {SCRIPTS_1}.interaction6b_stubScript
+	.dw {SCRIPTS_1}.interaction6b_stubScript
+	.dw {SCRIPTS_1}.interaction6b_stubScript
+	.dw {SCRIPTS_1}.interaction6b_subid10Script

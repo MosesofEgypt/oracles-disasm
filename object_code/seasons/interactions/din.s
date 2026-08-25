@@ -50,10 +50,10 @@ dinState0:
 	ld (hl),$a0
 	ret
 @subid2:
-	ld hl,mainScripts.dinScript_subid2Init
+	ld hl,{SCRIPTS_1}.dinScript_subid2Init
 	jp interactionSetScript
 @subid4:
-	ld hl,mainScripts.dinScript_subid4Init
+	ld hl,{SCRIPTS_1}.dinScript_subid4Init
 	jp interactionSetScript
 @subid6:
 	ld h,d
@@ -65,7 +65,7 @@ dinState0:
 @subidStub:
 	ret
 @subid7:
-	ld hl,mainScripts.dinScript_stubInit
+	ld hl,{SCRIPTS_1}.dinScript_stubInit
 	jp interactionSetScript
 @subid8:
 	ld a,GLOBALFLAG_FINISHEDGAME
@@ -76,13 +76,13 @@ dinState0:
 	ld a,INTERAC_DIN
 	ld (wInteractionIDToLoadExtraGfx),a
 	ld (wLoadedTreeGfxIndex),a
-	ld hl,mainScripts.dinScript_subid8Init
+	ld hl,{SCRIPTS_1}.dinScript_subid8Init
 	jp interactionSetScript
 @subid9:
 	call getThisRoomFlags
 	bit 6,a
 	jp nz,interactionDelete
-	ld hl,mainScripts.dinScript_discoverLinkCollapsed
+	ld hl,{SCRIPTS_1}.dinScript_discoverLinkCollapsed
 	jp interactionSetScript
 
 dinState1:

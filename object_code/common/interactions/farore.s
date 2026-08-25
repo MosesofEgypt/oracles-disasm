@@ -17,7 +17,7 @@ m_InteractionCode $10
 	ld a,>TX_5500
 	call interactionSetHighTextIndex
 
-	ld hl,mainScripts.faroreScript
+	ld hl,{SCRIPTS_1}.faroreScript
 	call interactionSetScript
 
 	ld a,GLOBALFLAG_SECRET_CHEST_WAITING

@@ -22,7 +22,7 @@ m_InteractionCode $53
 	ld a,$01
 	ld (de),a
 	call interactionInitGraphics
-	ld hl,mainScripts.headSmelterAtTempleScript
+	ld hl,{SCRIPTS_1}.headSmelterAtTempleScript
 	call interactionSetScript
 	jp objectSetVisible82
 @@state1:
@@ -50,7 +50,7 @@ m_InteractionCode $53
 	ld a,$01
 	ld (de),a
 	call interactionInitGraphics
-	ld hl,mainScripts.headSmelterAtFurnaceScript
+	ld hl,{SCRIPTS_1}.headSmelterAtFurnaceScript
 	call interactionSetScript
 	jp objectSetVisible82
 @@state3:

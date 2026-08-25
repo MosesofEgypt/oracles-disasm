@@ -24,14 +24,14 @@ m_InteractionCode $80
 	call interactionRunScript
 	jp interactionAnimateAsNpc
 @table_7717:
-	.dw mainScripts.fickleOldManScript_text1
-	.dw mainScripts.fickleOldManScript_text1
-	.dw mainScripts.fickleOldManScript_text2
-	.dw mainScripts.fickleOldManScript_text2
-	.dw mainScripts.fickleOldManScript_text3
-	.dw mainScripts.fickleOldManScript_text4
-	.dw mainScripts.fickleOldManScript_text4
-	.dw mainScripts.fickleOldManScript_text4
-	.dw mainScripts.fickleOldManScript_text5
-	.dw mainScripts.fickleOldManScript_text2
-	.dw mainScripts.fickleOldManScript_text6
+	.dw {SCRIPTS_1}.fickleOldManScript_text1
+	.dw {SCRIPTS_1}.fickleOldManScript_text1
+	.dw {SCRIPTS_1}.fickleOldManScript_text2
+	.dw {SCRIPTS_1}.fickleOldManScript_text2
+	.dw {SCRIPTS_1}.fickleOldManScript_text3
+	.dw {SCRIPTS_1}.fickleOldManScript_text4
+	.dw {SCRIPTS_1}.fickleOldManScript_text4
+	.dw {SCRIPTS_1}.fickleOldManScript_text4
+	.dw {SCRIPTS_1}.fickleOldManScript_text5
+	.dw {SCRIPTS_1}.fickleOldManScript_text2
+	.dw {SCRIPTS_1}.fickleOldManScript_text6

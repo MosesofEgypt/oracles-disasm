@@ -93,4 +93,4 @@ m_InteractionCode $59
 	jp interactionIncState
 
 @scriptTable:
-	.dw mainScripts.poeScript
+	.dw {SCRIPTS_1}.poeScript

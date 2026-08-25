@@ -190,7 +190,7 @@ rosaSubId1:
 	jr z,+
 	jr @substate3
 +
-	ld hl,mainScripts.rosaHidingScript_caught
+	ld hl,{SCRIPTS_1}.rosaHidingScript_caught
 	call interactionSetScript
 	jp interactionRunScript
 @substate5:
@@ -249,12 +249,12 @@ func_6919:
 	ld (wDisableScreenTransitions),a
 	jp interactionDelete
 table_6931:
-	.dw mainScripts.rosaHidingScript_1stScreen
-	.dw mainScripts.rosaHidingScript_2ndScreen
-	.dw mainScripts.rosaHidingScript_3rdScreen
-	.dw mainScripts.rosaHidingScript_4thScreen
-	.dw mainScripts.rosaHidingScript_portalScreen
-	.dw mainScripts.rosaHidingScript_caught
+	.dw {SCRIPTS_1}.rosaHidingScript_1stScreen
+	.dw {SCRIPTS_1}.rosaHidingScript_2ndScreen
+	.dw {SCRIPTS_1}.rosaHidingScript_3rdScreen
+	.dw {SCRIPTS_1}.rosaHidingScript_4thScreen
+	.dw {SCRIPTS_1}.rosaHidingScript_portalScreen
+	.dw {SCRIPTS_1}.rosaHidingScript_caught
 
 strangeBrothersSubId0:
 	ld e,Interaction.state
@@ -459,21 +459,21 @@ strangeBrothersSubId2:
 	.dw @table_6a96
 	.dw @table_6aa4
 @table_6a96:
-	.dw mainScripts.strangeBrother1Script_1stScreen
-	.dw mainScripts.strangeBrother1Script_2ndScreen
-	.dw mainScripts.strangeBrother1Script_3rdScreen
-	.dw mainScripts.strangeBrother1Script_4thScreen
-	.dw mainScripts.strangeBrother1Script_5thScreen
-	.dw mainScripts.strangeBrother1Script_6thScreen
-	.dw mainScripts.strangeBrother1Script_finishedScreen
+	.dw {SCRIPTS_1}.strangeBrother1Script_1stScreen
+	.dw {SCRIPTS_1}.strangeBrother1Script_2ndScreen
+	.dw {SCRIPTS_1}.strangeBrother1Script_3rdScreen
+	.dw {SCRIPTS_1}.strangeBrother1Script_4thScreen
+	.dw {SCRIPTS_1}.strangeBrother1Script_5thScreen
+	.dw {SCRIPTS_1}.strangeBrother1Script_6thScreen
+	.dw {SCRIPTS_1}.strangeBrother1Script_finishedScreen
 @table_6aa4:
-	.dw mainScripts.strangeBrother2Script_1stScreen
-	.dw mainScripts.strangeBrother2Script_2ndScreen
-	.dw mainScripts.strangeBrother2Script_3rdScreen
-	.dw mainScripts.strangeBrother2Script_4thScreen
-	.dw mainScripts.strangeBrother2Script_5thScreen
-	.dw mainScripts.strangeBrother2Script_6thScreen
-	.dw mainScripts.strangeBrother2Script_finishedScreen
+	.dw {SCRIPTS_1}.strangeBrother2Script_1stScreen
+	.dw {SCRIPTS_1}.strangeBrother2Script_2ndScreen
+	.dw {SCRIPTS_1}.strangeBrother2Script_3rdScreen
+	.dw {SCRIPTS_1}.strangeBrother2Script_4thScreen
+	.dw {SCRIPTS_1}.strangeBrother2Script_5thScreen
+	.dw {SCRIPTS_1}.strangeBrother2Script_6thScreen
+	.dw {SCRIPTS_1}.strangeBrother2Script_finishedScreen
 @state1:
 	ld a,(wLinkPlayingInstrument)
 	or a

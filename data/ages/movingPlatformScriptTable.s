@@ -1,3 +1,4 @@
+.ifndef PLATFORM_MACROS_DEFINED
 .macro plat_wait
 	.db $00, \1
 .endm
@@ -28,6 +29,8 @@
 .macro plat_left
 	.db $0b, \1
 .endm
+.define PLATFORM_MACROS_DEFINED 0 EXPORT
+.endif
 
 .ifdef ROM_COMBO
 movingPlatform_scriptTable_ages:

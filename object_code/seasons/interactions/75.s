@@ -14,7 +14,7 @@ m_InteractionCode $75
 	ld a,(de)
 	or a
 	jr nz,@notSubdId0
-	ld hl,mainScripts.script6f48
+	ld hl,{SCRIPTS_1}.script6f48
 	call interactionSetScript
 	jp objectSetVisible82
 @notSubdId0:

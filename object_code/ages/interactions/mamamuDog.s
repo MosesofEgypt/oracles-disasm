@@ -107,7 +107,7 @@ dog_subid01:
 	call c,dog_incTargetPositionIndex
 	jr c,@delete
 
-	callab scriptHelp.mamamuDog_updateSpeedZ
+	callab {SCRIPTS_HELP}.mamamuDog_updateSpeedZ
 	call interactionAnimate
 	call objectSetPriorityRelativeToLink_withTerrainEffects
 	jp objectAddToGrabbableObjectBuffer
@@ -376,4 +376,4 @@ dog_setTargetPositionIndex:
 
 
 dog_scriptTable:
-	.dw mainScripts.dogInMamamusHouseScript
+	.dw {SCRIPTS_1}.dogInMamamusHouseScript

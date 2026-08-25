@@ -90,7 +90,7 @@ m_InteractionCode $9b
 ++
 	; Begin the script
 	call interactionIncSubstate
-	ld hl,mainScripts.raftwreckCutsceneScript
+	ld hl,{SCRIPTS_1}.raftwreckCutsceneScript
 	jp interactionSetScript
 
 @substate2:

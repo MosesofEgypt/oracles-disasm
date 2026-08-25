@@ -43,7 +43,7 @@ vire_subid0:
 
 	ld a,MUS_GREAT_MOBLIN
 	call playSound
-	ld hl,mainScripts.vireSubid0Script
+	ld hl,{SCRIPTS_1}.vireSubid0Script
 
 vire_setScript:
 	call interactionSetScript
@@ -74,7 +74,7 @@ vire_subid1:
 
 	call getThisRoomFlags
 	bit 6,(hl)
-	ld hl,mainScripts.vireSubid1Script
+	ld hl,{SCRIPTS_1}.vireSubid1Script
 	jr z,vire_setScript
 
 	ld a,(wActiveMusic)
@@ -171,7 +171,7 @@ vire_subid2:
 	ld a,h
 	ld (de),a
 
-	ld hl,mainScripts.vireSubid2Script
+	ld hl,{SCRIPTS_1}.vireSubid2Script
 	call vire_setScript
 	ld l,Interaction.counter1
 	ld (hl),$08

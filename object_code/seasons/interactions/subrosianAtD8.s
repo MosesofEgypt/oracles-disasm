@@ -22,7 +22,7 @@ subrosianAtD8_subid0:
 	jp c,interactionDelete
 
 	call interactionInitGraphics
-	ld hl,mainScripts.subrosianAtD8Script
+	ld hl,{SCRIPTS_1}.subrosianAtD8Script
 	call interactionSetScript
 
 	ld a,$06
@@ -65,7 +65,7 @@ subrosianAtD8_subid0:
 	ld l,Interaction.substate
 	inc (hl)
 	call objectSetVisiblec2
-	ld hl,mainScripts.subrosianAtD8Script_tossItemIntoHole
+	ld hl,{SCRIPTS_1}.subrosianAtD8Script_tossItemIntoHole
 	jp interactionSetScript
 ++
 	xor a

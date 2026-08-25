@@ -42,7 +42,7 @@ m_InteractionCode $b4
 	bit 6,a
 	ret nz
 	call interactionIncState
-	ld hl,mainScripts.bookOfSealsPodiumScript
+	ld hl,{SCRIPTS_1}.bookOfSealsPodiumScript
 	jp interactionSetScript
 
 @state1:

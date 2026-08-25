@@ -1375,7 +1375,7 @@ headSmelter_loseBombFlower:
 
 headSmelter_loadHideFromBombScript:
 	ld hl,wTmpcfc0.genericCutscene.cfde
-	ld bc,mainScripts.headSmelterAtTempleScript_hideFromBomb
+	ld bc,{SCRIPTS_1}.headSmelterAtTempleScript_hideFromBomb
 	jr headSmelter_loadScriptIntoWram
 
 headSmelter_loadDanceMovements:
@@ -1390,10 +1390,10 @@ headSmelter_loadDanceMovements:
 	ld l,<w1Link.angle
 	ld (hl),ANGLE_DOWN
 	ld hl,wTmpcfc0.genericCutscene.cfde
-	ld bc,mainScripts.headSmelterScript_danceMovementText1
+	ld bc,{SCRIPTS_1}.headSmelterScript_danceMovementText1
 	call headSmelter_loadScriptIntoWram
 	ld hl,wTmpcfc0.shootingGallery.disableGoronNpcs
-	ld bc,mainScripts.headSmelterScript_danceMovementText2
+	ld bc,{SCRIPTS_1}.headSmelterScript_danceMovementText2
 
 headSmelter_loadScriptIntoWram:
 	ldi a,(hl)

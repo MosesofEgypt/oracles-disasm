@@ -17,6 +17,27 @@
 
 .include {"{BUILD_DIR}/textDefines.s"}
 
+; NOTE: need to ensure the slot is setup or pointers will be off by $4000
+.BANK $01 SLOT 1
+m_ScriptSectionAges "scripts1"
+	scriptsStart:
+	simpleScriptsStart:
+
+	.define SCRIPT_BANK :scriptsStart
+	.define SIMPLE_SCRIPT_BANK :simpleScriptsStart
+
+	.include "code/scripting.s"
+	.include "scripts/ages/scripts.s"
+m_EndScriptSection
+
+m_ScriptSectionAges "scriptHelp"
+	scriptHelpStart:
+	.define SCRIPT_HELP_BANK :scriptHelpStart
+
+	.include "scripts/common/scriptHelper.s"
+	.include "scripts/ages/scriptHelper.s"
+m_EndScriptSection
+
 
 .BANK $00 SLOT 0
 .ORG 0
@@ -89,12 +110,6 @@
 	 m_section_free Tileset_Loading_2 NAMESPACE tilesets
 		.include "code/loadTilesToRam.s"
 		.include "code/ages/loadTilesetData.s"
-	.ends
-
-		; Must be in same bank as "code/bank4.s"
-	 m_section_free Warp_Data NAMESPACE bank4
-		.include {"{GAME_DATA_DIR}/warpDestinations.s"}
-		.include {"{GAME_DATA_DIR}/warpSources.s"}
 	.ends
 
 
@@ -478,16 +493,6 @@ m_InteractionObjectCodeSection "Ages"
 m_EndObjectCodeSection
 
 
-.BANK $0c SLOT 1
-.ORG 0
-
-	; TODO: "SIMPLE_SCRIPT_BANK" define should be tied to this section somehow
-	 m_section_free Scripts namespace mainScripts
-		.include "code/scripting.s"
-		.include "scripts/ages/scripts.s"
-	.ends
-
-
 .BANK $0d SLOT 1
 .ORG 0
 
@@ -850,27 +855,24 @@ m_section_superfree Terrain_Effects NAMESPACE terrainEffects
 .BANK $15 SLOT 1
 .ORG 0
 
-	.include "scripts/common/scriptHelper.s"
-
 	 m_section_free Object_Pointers namespace objectData
-
 		.include "code/ages/objectData.s"
 		.include "objects/ages/pointers.s"
 
 	.ENDS
 
-	 m_section_free Bank_15_3 NAMESPACE scriptHelp
-		.include "scripts/ages/scriptHelper.s"
-	.ends
-
 
 .BANK $16 SLOT 1
 .ORG 0
 
-m_section_free serialCode NAMESPACE serialCode
-	.include "code/serialFunctions.s"
-.ends
-	.include "code/loadTreasureData.s"
+	m_section_superfree Treasure_Data NAMESPACE treasureData
+		.include "code/loadTreasureData.s"
+		.include {"{GAME_DATA_DIR}/treasureObjectData.s"}
+	.ends
+
+	m_section_free serialCode NAMESPACE serialCode
+		.include "code/serialFunctions.s"
+	.ends
 
 	 m_section_free Bank16 NAMESPACE bank16
 		.include {"{GAME_DATA_DIR}/data_4556.s"}
@@ -879,9 +881,7 @@ m_section_free serialCode NAMESPACE serialCode
 
 
 	.include "code/staticObjects.s"
-	.include {"{GAME_DATA_DIR}/staticDungeonObjects.s"}
 	.include {"{GAME_DATA_DIR}/chestData.s"}
-	.include {"{GAME_DATA_DIR}/treasureObjectData.s"}
 
 m_section_free Bank16_2 NAMESPACE bank16
 	.include "code/ages/d6FloorUpdateCode.s"

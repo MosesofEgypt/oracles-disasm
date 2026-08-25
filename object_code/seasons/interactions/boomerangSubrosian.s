@@ -16,7 +16,7 @@ m_InteractionCode $c8
 	call interactionInitGraphics
 	call objectGetTileAtPosition
 	ld (hl),$00
-	ld hl,mainScripts.boomerangSubrosianScript
+	ld hl,{SCRIPTS_1}.boomerangSubrosianScript
 	call interactionSetScript
 	call @func_78cc
 @state1:

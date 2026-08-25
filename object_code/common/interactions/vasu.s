@@ -63,7 +63,7 @@ m_InteractionCode $89
 	ld a,$04
 	ld e,Interaction.state
 	ld (de),a
-	ld hl,mainScripts.vasuScript
+	ld hl,{SCRIPTS_1}.vasuScript
 	jp interactionSetScript
 
 
@@ -143,10 +143,10 @@ m_InteractionCode $89
 	ret
 
 @scriptTable:
-	.dw mainScripts.blueSnakeScript_linked
-	.dw mainScripts.blueSnakeScript_preLinked
-	.dw mainScripts.redSnakeScript_linked
-	.dw mainScripts.redSnakeScript_preLinked
+	.dw {SCRIPTS_1}.blueSnakeScript_linked
+	.dw {SCRIPTS_1}.blueSnakeScript_preLinked
+	.dw {SCRIPTS_1}.redSnakeScript_linked
+	.dw {SCRIPTS_1}.redSnakeScript_preLinked
 
 
 ; State 3: Cleaning up after a script?
@@ -231,7 +231,7 @@ m_InteractionCode $89
 	jr nz,@label_0a_036
 	xor a
 	ld ($ff00+R_SB),a
-	ld hl,mainScripts.blueSnakeExitScript_cableNotConnected
+	ld hl,{SCRIPTS_1}.blueSnakeExitScript_cableNotConnected
 	ld b,$80
 	jr @setBlueSnakeExitScript
 
@@ -280,18 +280,18 @@ m_InteractionCode $89
 	ld (de),a
 	call interactionDecCounter1
 	ret nz
-	ld hl,mainScripts.blueSnakeScript_successfulFortune
+	ld hl,{SCRIPTS_1}.blueSnakeScript_successfulFortune
 	jr @setBlueSnakeExitScript
 
 @blueSnakeErrorCondition:
-	ld hl,mainScripts.blueSnakeScript_doNotRemoveCable
+	ld hl,{SCRIPTS_1}.blueSnakeScript_doNotRemoveCable
 	ld a,e
 	cp $8f
 	jr z,@setBlueSnakeExitScript
-	ld hl,mainScripts.blueSnakeExitScript_noValidFile
+	ld hl,{SCRIPTS_1}.blueSnakeExitScript_noValidFile
 	cp $85
 	jr z,@setBlueSnakeExitScript
-	ld hl,mainScripts.blueSnakeExitScript_linkFailed
+	ld hl,{SCRIPTS_1}.blueSnakeExitScript_linkFailed
 
 @setBlueSnakeExitScript:
 	xor a
@@ -326,7 +326,7 @@ m_InteractionCode $89
 	or e
 	jr nz,@blueSnakeErrorCondition
 
-	ld hl,mainScripts.blueSnakeScript_successfulRingTransfer
+	ld hl,{SCRIPTS_1}.blueSnakeScript_successfulRingTransfer
 	jr @setBlueSnakeExitScript
 
 

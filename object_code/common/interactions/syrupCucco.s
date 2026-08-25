@@ -113,11 +113,11 @@ m_InteractionCode $49
 	ld h,a
 	ld e,Interaction.var3a
 	ld (de),a
-	ld hl,mainScripts.syrupCuccoScript_awaitingMushroomText
+	ld hl,{SCRIPTS_1}.syrupCuccoScript_awaitingMushroomText
 	jp @setScriptAndGotoState4
 
 @gotoState4:
-	ld hl,mainScripts.syrupCuccoScript_awaitingMushroomText
+	ld hl,{SCRIPTS_1}.syrupCuccoScript_awaitingMushroomText
 
 @setScriptAndGotoState4:
 	ld e,Interaction.state
@@ -141,7 +141,7 @@ m_InteractionCode $49
 	ld e,Interaction.var3d
 	xor a
 	ld (de),a
-	ld hl,mainScripts.syrupCuccoScript_triedToSteal
+	ld hl,{SCRIPTS_1}.syrupCuccoScript_triedToSteal
 	jp @setScriptAndGotoState4
 
 

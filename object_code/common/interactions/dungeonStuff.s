@@ -10,7 +10,7 @@ m_InteractionCode $12
 	.dw @subid02
 	.dw @subid03
 	.dw @subid04
-.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_SEASONS)
 	.dw @subid05
 .endif
 
@@ -100,7 +100,7 @@ m_InteractionCode $12
 @@substate0:
 	ld a,$01
 	ld (de),a
-	ld hl,mainScripts.dropSmallKeyWhenNoEnemiesScript
+	ld hl,{SCRIPTS_1}.dropSmallKeyWhenNoEnemiesScript
 	call interactionSetScript
 
 @runScript:
@@ -121,7 +121,7 @@ m_InteractionCode $12
 @@substate0:
 	ld a,$01
 	ld (de),a
-	ld hl,mainScripts.createChestWhenNoEnemiesScript
+	ld hl,{SCRIPTS_1}.createChestWhenNoEnemiesScript
 	call interactionSetScript
 	jr @runScript
 
@@ -139,7 +139,7 @@ m_InteractionCode $12
 
 	ld a,$01
 	ld (de),a
-	ld hl,mainScripts.setRoomFlagBit7WhenNoEnemiesScript
+	ld hl,{SCRIPTS_1}.setRoomFlagBit7WhenNoEnemiesScript
 	call interactionSetScript
 	jr @runScript
 
@@ -196,7 +196,7 @@ m_InteractionCode $12
 	ld l,Interaction.yh
 	jp setShortPosition_paramC
 
-.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_SEASONS)
 @subid05:
 	ld e,Interaction.state
 	ld a,(de)

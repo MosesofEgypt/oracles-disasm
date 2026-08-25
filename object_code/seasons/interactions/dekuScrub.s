@@ -26,20 +26,20 @@ m_InteractionCode $d6
 
 	ld a,GLOBALFLAG_FINISHEDGAME
 	call checkGlobalFlag
-	ld hl,mainScripts.dekuScrubScript_notFinishedGame
+	ld hl,{SCRIPTS_1}.dekuScrubScript_notFinishedGame
 	jr z,@setScript
 
 	ld a,GLOBALFLAG_DONE_DEKU_SECRET
 	call checkGlobalFlag
-	ld hl,mainScripts.dekuScrubScript_doneSecret
+	ld hl,{SCRIPTS_1}.dekuScrubScript_doneSecret
 	jr nz,@setScript
 
 	call getThisRoomFlags
 	bit 7,a
-	ld hl,mainScripts.dekuScrubScript_gaveSecret
+	ld hl,{SCRIPTS_1}.dekuScrubScript_gaveSecret
 	jr nz,@setScript
 
-	ld hl,mainScripts.dekuScrubScript_beginningSecret
+	ld hl,{SCRIPTS_1}.dekuScrubScript_beginningSecret
 @setScript:
 	jp interactionSetScript
 @table_7f74:

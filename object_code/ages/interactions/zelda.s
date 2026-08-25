@@ -76,7 +76,7 @@ zelda_state0:
 	inc e
 	ld a,>TX_0600
 	ld (de),a
-	ld hl,mainScripts.genericNpcScript
+	ld hl,{SCRIPTS_1}.genericNpcScript
 	jp interactionSetScript
 
 @initSubid08:
@@ -176,14 +176,14 @@ zelda_loadScript:
 	jp interactionSetScript
 
 @scriptTable:
-	.dw mainScripts.zeldaSubid00Script
-	.dw mainScripts.zeldaSubid01Script
-	.dw mainScripts.zeldaSubid02Script
-	.dw mainScripts.zeldaSubid03Script
-	.dw mainScripts.zeldaSubid04Script
-	.dw mainScripts.zeldaSubid05Script
-	.dw mainScripts.zeldaSubid06Script
-	.dw mainScripts.stubScript
-	.dw mainScripts.stubScript
-	.dw mainScripts.zeldaSubid09Script
-	.dw mainScripts.stubScript
+	.dw {SCRIPTS_1}.zeldaSubid00Script
+	.dw {SCRIPTS_1}.zeldaSubid01Script
+	.dw {SCRIPTS_1}.zeldaSubid02Script
+	.dw {SCRIPTS_1}.zeldaSubid03Script
+	.dw {SCRIPTS_1}.zeldaSubid04Script
+	.dw {SCRIPTS_1}.zeldaSubid05Script
+	.dw {SCRIPTS_1}.zeldaSubid06Script
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.zeldaSubid09Script
+	.dw {SCRIPTS_1}.stubScript

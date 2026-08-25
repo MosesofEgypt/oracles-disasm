@@ -17,7 +17,7 @@ m_InteractionCode $d8
 	call interactionIncState
 	ld l,$7e
 	ld (hl),GLOBALFLAG_BEGAN_FAIRY_SECRET-GLOBALFLAG_FIRST_SEASONS_BEGAN_SECRET
-	ld hl,mainScripts.linkedGameNpcScript
+	ld hl,{SCRIPTS_1}.linkedGameNpcScript
 	call interactionSetScript
 @state1:
 	call interactionRunScript

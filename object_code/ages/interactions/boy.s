@@ -942,28 +942,28 @@ boyLoadScript:
 	jp interactionSetScript
 
 @scriptTable:
-	.dw mainScripts.boySubid00Script
-	.dw mainScripts.boySubid01Script
-	.dw mainScripts.boyStubScript
-	.dw mainScripts.boySubid03Script
-	.dw mainScripts.boySubid04Script
-	.dw mainScripts.boySubid05Script
-	.dw mainScripts.boySubid06Script
-	.dw mainScripts.boySubid07Script
-	.dw mainScripts.boyStubScript
-	.dw mainScripts.boyStubScript
-	.dw mainScripts.boySubid0aScript
-	.dw mainScripts.boySubid0bScript
-	.dw mainScripts.boySubid0cScript
-	.dw mainScripts.boySubid0dScript
-	.dw mainScripts.boySubid0eScript
-	.dw mainScripts.boySubid0fScript
-	.dw mainScripts.boySubid00Script
+	.dw {SCRIPTS_1}.boySubid00Script
+	.dw {SCRIPTS_1}.boySubid01Script
+	.dw {SCRIPTS_1}.boyStubScript
+	.dw {SCRIPTS_1}.boySubid03Script
+	.dw {SCRIPTS_1}.boySubid04Script
+	.dw {SCRIPTS_1}.boySubid05Script
+	.dw {SCRIPTS_1}.boySubid06Script
+	.dw {SCRIPTS_1}.boySubid07Script
+	.dw {SCRIPTS_1}.boyStubScript
+	.dw {SCRIPTS_1}.boyStubScript
+	.dw {SCRIPTS_1}.boySubid0aScript
+	.dw {SCRIPTS_1}.boySubid0bScript
+	.dw {SCRIPTS_1}.boySubid0cScript
+	.dw {SCRIPTS_1}.boySubid0dScript
+	.dw {SCRIPTS_1}.boySubid0eScript
+	.dw {SCRIPTS_1}.boySubid0fScript
+	.dw {SCRIPTS_1}.boySubid00Script
 
 boySubid02ScriptTable:
-	.dw mainScripts.boySubid02Script_afterGotSeedSatchel
-	.dw mainScripts.boySubid02Script_afterd3
-	.dw mainScripts.boySubid02Script_afterNayruSaved
-	.dw mainScripts.boySubid02Script_afterd7
-	.dw mainScripts.boySubid02Script_afterGotMakuSeed
-	.dw mainScripts.boySubid02Script_postGame
+	.dw {SCRIPTS_1}.boySubid02Script_afterGotSeedSatchel
+	.dw {SCRIPTS_1}.boySubid02Script_afterd3
+	.dw {SCRIPTS_1}.boySubid02Script_afterNayruSaved
+	.dw {SCRIPTS_1}.boySubid02Script_afterd7
+	.dw {SCRIPTS_1}.boySubid02Script_afterGotMakuSeed
+	.dw {SCRIPTS_1}.boySubid02Script_postGame

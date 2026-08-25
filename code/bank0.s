@@ -9480,14 +9480,32 @@ objectUnmarkSolidPosition:
 _interactionActuallyRunScript:
 	ldh a,(<hRomBank)
 	push af
-	ld a,:mainScripts.runScriptCommand
+.if defined(ROM_COMBO)
+	ld a,SCRIPT_BANK_SEASONS
+	call wIsSeasons
+	jr c,+
+		ld a,SCRIPT_BANK_AGES
+	+
+.else
+	ld a,SCRIPT_BANK
+.endif
 	rst_setrombank
 --
 	ld a,(hl)
 	or a
 	jr z,++
 
-	call mainScripts.runScriptCommand
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+
+		call scripts1Ages.runScriptCommand
+		jr +++
+	+
+		call scripts1Seasons.runScriptCommand
+	+++
+.else
+	call scripts1.runScriptCommand
+.endif
 	jr c,--
 
 	pop af
@@ -9589,13 +9607,26 @@ _interactionSaveScriptAddress:
 ;;
 scriptCmd_asmCall:
 	pop hl
-	call _scriptFunc_setupAsmCall
+	ldi a,(hl)
+	cp $c5
+	jr z,+
+		call _scriptFunc_setupAsmCall
+		jr ++
+	+
+	call _scriptFunc_setupAsmCallAnyBank
 	jr ++
 
 ;;
 scriptCmd_asmCallWithParam:
 	pop hl
-	call _scriptFunc_setupAsmCall
+	ldi a,(hl)
+	cp $dc
+	jr z,+
+		call _scriptFunc_setupAsmCall
+		jr +++
+	+
+		call _scriptFunc_setupAsmCallAnyBank
+	+++
 	ldi a,(hl)
 	ld e,a
 ++
@@ -9624,9 +9655,22 @@ _scriptCmd_asmRetFunc:
 	ret
 
 ;;
+_scriptFunc_setupAsmCallAnyBank:
+	ldi a,(hl)
+	ld d,a
+	jr +
+
+;;
 _scriptFunc_setupAsmCall:
-	inc hl
-	ld d,$15
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	ld d,SCRIPT_HELP_SEASONS_BANK
+	jr c,+
+		ld d,SCRIPT_HELP_AGES_BANK
+.else
+	ld d,SCRIPT_HELP_BANK
+.endif
+	+
 	ldi a,(hl)
 	ld c,a
 	ldi a,(hl)
@@ -10228,7 +10272,17 @@ interactionSetMiniScript:
 objectOscillateZ:
 	ldh a,(<hRomBank)
 	push af
-	callfrombank0 interactionCode2.objectOscillateZ_body
+	.if defined(ROM_COMBO)
+		call wIsSeasons
+		jr c,+
+			callfrombank0 interactionCodeAges8.objectOscillateZ_body
+			jr ++
+		+
+			callfrombank0 interactionCodeSeasons8.objectOscillateZ_body
+		++
+	.else
+		callfrombank0 interactionCode2.objectOscillateZ_body
+	.endif
 	pop af
 	rst_setrombank
 	ret
@@ -10297,10 +10351,20 @@ objectCreateExclamationMark:
 	ldh (<hFF8B),a
 	ldh a,(<hRomBank)
 	push af
-	ld a,:interactionCode5.objectCreateExclamationMark_body
-	rst_setrombank
-	ldh a,(<hFF8B)
-	call interactionCode5.objectCreateExclamationMark_body
+	.if defined(ROM_COMBO)
+		; the code for creating the exclamation mark is the same
+		; for both games, so we're just using ages for both
+		ld a,:interactionCodeAges11.objectCreateExclamationMark_body
+		rst_setrombank
+		ldh a,(<hFF8B)
+		call interactionCodeAges11.objectCreateExclamationMark_body
+	.else
+		ld a,:interactionCode5.objectCreateExclamationMark_body
+		rst_setrombank
+		ldh a,(<hFF8B)
+		call interactionCode5.objectCreateExclamationMark_body
+	.endif
+
 	pop af
 	rst_setrombank
 	ret
@@ -10327,7 +10391,13 @@ objectCreateFloatingMusicNote:
 	ldh (<hFF8D),a
 	ldh a,(<hRomBank)
 	push af
-	callfrombank0 interactionCode5.objectCreateFloatingImage
+	.if defined(ROM_COMBO)
+		; the code for creating the exclamation mark is the same
+		; for both games, so we're just using ages for both
+		callfrombank0 interactionCodeAges11.objectCreateFloatingImage
+	.else
+		callfrombank0 interactionCode5.objectCreateFloatingImage
+	.endif
 	pop af
 	rst_setrombank
 	ret
@@ -12359,9 +12429,11 @@ fadeinFromBlack:
 
 
 
-.ifdef ROM_AGES
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 ; Room darkening-related code was slightly rewritten in Ages, compared to Seasons?
+; we're using this for the rom combo due to it being effectively
+; the same, and having more functionality than the seasons code
 
 ;;
 ; Darkens a room half as much as "darkenRoomLightly".
@@ -14462,7 +14534,11 @@ interactionRunSimpleScript:
 	ldh a,(<hRomBank)
 	push af
 .if defined(ROM_COMBO)
-	ld a,:mainScripts.runScriptCommand
+	ld a,SIMPLE_SCRIPT_BANK_SEASONS
+	call wIsSeasons
+	jr c,+
+		ld a,SIMPLE_SCRIPT_BANK_AGES
+	+
 .else
 	ld a,SIMPLE_SCRIPT_BANK
 .endif
@@ -14700,7 +14776,11 @@ setMakuTreeStageAndMapText:
 	ldh a,(<hRomBank)
 	push af
 	callfrombank0 interactionCodeSeasons2.makuTree_setAppropriateStage
-	callfrombank0 scriptHelp.makuTree_setMapTextBasedOnStage
+	.if defined(ROM_COMBO)
+		callfrombank0 scriptHelpSeasons.makuTree_setMapTextBasedOnStage
+	.else
+		callfrombank0 scriptHelp.makuTree_setMapTextBasedOnStage
+	.endif
 	pop af
 	rst_setrombank
 	ret

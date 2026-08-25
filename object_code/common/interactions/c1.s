@@ -88,13 +88,7 @@ m_InteractionCode $c1
 	dec (hl)
 	ret nz
 	ld (hl),$06 ; [var36]
-.if defined(ROM_COMBO)
-	call wIsSeasons
-	ldbc INTERAC_SPARKLE, $05
-	jr c,+
-		ldbc INTERAC_SPARKLE, $09
-	+
-.elif defined(ROM_AGES)
+.if defined(ROM_AGES)
 	ldbc INTERAC_SPARKLE, $09
 .else
 	ldbc INTERAC_SPARKLE, $05

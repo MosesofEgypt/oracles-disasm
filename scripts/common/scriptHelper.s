@@ -1,5 +1,3 @@
-m_section_free Bank_15 NAMESPACE scriptHelp
-
 ; ==================================================================================================
 ; INTERAC_FARORE
 ; ==================================================================================================
@@ -260,17 +258,7 @@ shopkeeper_take10Rupees:
 	ld a,RUPEEVAL_10
 	jp removeRupeeValue
 
-.ends
-
-
-.if defined(ROM_SEASONS) && !defined(ROM_COMBO)
-	.include "code/loadTreasureData.s"
-.endif
-
-
-m_section_free Bank_15_2 NAMESPACE scriptHelp
-
-.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_SEASONS)
 
 createBossDeathExplosion:
 	call getFreePartSlot
@@ -293,14 +281,12 @@ movingPlatform_loadScript:
 	jr nz,@inDungeon
 
 	; Not in dungeon
-.ifdef ROM_COMBO
-	ld hl,movingPlatform_nonDungeonScriptTable
-	call wIsSeasons
-	jr c,+
+.if defined(ROM_AGES)
+	.ifdef ROM_COMBO
 		ld hl,movingPlatform_scriptTable_ages
-	+
-.elif defined(ROM_AGES)
-	ld hl,movingPlatform_scriptTable
+	.else
+		ld hl,movingPlatform_scriptTable
+	.endif
 .else
 	ld hl,movingPlatform_nonDungeonScriptTable
 .endif
@@ -309,11 +295,11 @@ movingPlatform_loadScript:
 @inDungeon:
 	ld a,b
 .ifdef ROM_COMBO
-	ld hl,movingPlatform_scriptTable_seasons
-	call wIsSeasons
-	jr c,+
+	.if defined(ROM_AGES)
 		ld hl,movingPlatform_scriptTable_ages
-	+
+	.else
+		ld hl,movingPlatform_scriptTable_seasons
+	.endif
 .else
 	ld hl,movingPlatform_scriptTable
 .endif
@@ -632,5 +618,3 @@ gameCompleteDialog_markGameAsComplete:
 .endif
 	ld a,GLOBALFLAG_FINISHEDGAME
 	jp setGlobalFlag
-
-.ends

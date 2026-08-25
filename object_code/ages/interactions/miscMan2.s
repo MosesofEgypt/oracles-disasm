@@ -315,26 +315,26 @@ checkNpcShouldExistAtGameStage_body:
 
 
 miscMan2ScriptTable:
-	.dw mainScripts.pastHobo2Script
-	.dw mainScripts.npcTurnedToOldManCutsceneScript
-	.dw mainScripts.stubScript
-	.dw mainScripts.stubScript
-	.dw mainScripts.stubScript
+	.dw {SCRIPTS_1}.pastHobo2Script
+	.dw {SCRIPTS_1}.npcTurnedToOldManCutsceneScript
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.stubScript
 
 lynnaMan2ScriptTable:
-	.dw mainScripts.lynnaMan2Script_befored3
-	.dw mainScripts.lynnaMan2Script_afterd3
-	.dw mainScripts.lynnaMan2Script_afterNayruSaved
-	.dw mainScripts.lynnaMan2Script_afterd7
-	.dw mainScripts.lynnaMan2Script_afterGotMakuSeed
-	.dw mainScripts.lynnaMan2Script_postGame
+	.dw {SCRIPTS_1}.lynnaMan2Script_befored3
+	.dw {SCRIPTS_1}.lynnaMan2Script_afterd3
+	.dw {SCRIPTS_1}.lynnaMan2Script_afterNayruSaved
+	.dw {SCRIPTS_1}.lynnaMan2Script_afterd7
+	.dw {SCRIPTS_1}.lynnaMan2Script_afterGotMakuSeed
+	.dw {SCRIPTS_1}.lynnaMan2Script_postGame
 
 pastHoboScriptTable:
-	.dw mainScripts.pastHoboScript_befored2
-	.dw mainScripts.pastHoboScript_afterd2
-	.dw mainScripts.pastHoboScript_afterd4
-	.dw mainScripts.pastHoboScript_afterSavedNayru
-	.dw mainScripts.pastHoboScript_afterSavedNayru
-	.dw mainScripts.pastHoboScript_afterGotMakuSeed
-	.dw mainScripts.pastHoboScript_twinrovaKidnappedZelda
-	.dw mainScripts.pastHoboScript_postGame
+	.dw {SCRIPTS_1}.pastHoboScript_befored2
+	.dw {SCRIPTS_1}.pastHoboScript_afterd2
+	.dw {SCRIPTS_1}.pastHoboScript_afterd4
+	.dw {SCRIPTS_1}.pastHoboScript_afterSavedNayru
+	.dw {SCRIPTS_1}.pastHoboScript_afterSavedNayru
+	.dw {SCRIPTS_1}.pastHoboScript_afterGotMakuSeed
+	.dw {SCRIPTS_1}.pastHoboScript_twinrovaKidnappedZelda
+	.dw {SCRIPTS_1}.pastHoboScript_postGame

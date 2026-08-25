@@ -60,15 +60,15 @@ m_InteractionCode $d5
 	ld e,$42
 	ld a,(de)
 	or a
-	ld hl,mainScripts.linkedGameNpcScript
+	ld hl,{SCRIPTS_1}.linkedGameNpcScript
 	jr nz,@setScript
 
 	ld a,GLOBALFLAG_DONE_TEMPLE_SECRET
 	call checkGlobalFlag
-	ld hl,mainScripts.templeGreatFairyScript_beginningSecret
+	ld hl,{SCRIPTS_1}.templeGreatFairyScript_beginningSecret
 	jr z,@setScript
 
-	ld hl,mainScripts.templeGreatFairyScript_doneSecret
+	ld hl,{SCRIPTS_1}.templeGreatFairyScript_doneSecret
 @setScript:
 	jp interactionSetScript
 @substate1:

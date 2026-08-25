@@ -25,7 +25,7 @@ m_InteractionCode $58
 	call func_7e20
 	ld a,>TX_0b00
 	call interactionSetHighTextIndex
-	ld hl,mainScripts.guruGuruScript
+	ld hl,{SCRIPTS_1}.guruGuruScript
 	call interactionSetScript
 	jp func_7ddc
 @state1:

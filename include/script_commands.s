@@ -772,6 +772,23 @@
 	.ENDIF
 .ENDM
 
+; Call an assembly function in any bank at the specified address.
+;
+; param1:	Reference to the assembly to run
+; param2[opt]:	Value to set the 'a' and 'e' registers to before calling the asm
+.MACRO asm
+	.IF NARGS == 1
+		.db $c5
+		.db :\1
+		.dw \1
+	.ELSE
+		.db $dc
+		.db :\1
+		.dw \1
+		.db \2
+	.ENDIF
+.ENDM
+
 ; Create a puff at this interaction's position. Script execution resumes next frame.
 .MACRO createpuff
 	.db $e2
@@ -1036,7 +1053,7 @@
 .ENDM
 
 .MACRO maketorcheslightable
-	asm15 scriptHelp.makeTorchesLightable
+	asm15 {SCRIPTS_HELP}.makeTorchesLightable
 .ENDM
 
 .MACRO createpuffnodelay

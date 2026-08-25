@@ -145,4 +145,5 @@ loadStaticObjects_body:
 	inc e
 	jr @next
 
+.include {"{GAME_DATA_DIR}/staticDungeonObjects.s"}
 .ends

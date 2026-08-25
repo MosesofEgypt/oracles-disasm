@@ -16,67 +16,71 @@
 .include {"{BUILD_DIR}/ages_textDefines.s"}
 .include {"{BUILD_DIR}/seasons_textDefines.s"}
 
+; NOTE: need to ensure the slot is setup or pointers will be off by $4000
+;       these sections cant exist in bank0, but are otherwise superfree
+.BANK $01 SLOT 1
+m_ScriptSectionAges "scripts1"
+	scriptsStart:
+	.define SCRIPT_BANK_AGES :scriptsStart
+
+	simpleScriptsStart:
+	.define SIMPLE_SCRIPT_BANK_AGES :simpleScriptsStart
+
+	.include "code/scripting.s"
+	.include "scripts/ages/scripts.s"
+m_EndScriptSection
+
+m_ScriptSectionAges "scriptHelp"
+	scriptHelpStart:
+	.define SCRIPT_HELP_AGES_BANK :scriptHelpStart
+
+	.include "scripts/common/scriptHelper.s"
+	.include "scripts/ages/scriptHelper.s"
+m_EndScriptSection
+
+m_ScriptSectionSeasons "scripts1"
+	scriptsStart:
+	.define SCRIPT_BANK_SEASONS :scriptsStart
+
+	.include "code/scripting.s"
+	.include "scripts/seasons/scripts.s"
+m_EndScriptSection
+
+m_ScriptSectionSeasons "scripts2"
+	simpleScriptsStart:
+	.define SIMPLE_SCRIPT_BANK_SEASONS :simpleScriptsStart
+
+	.include "scripts/seasons/scripts2.s"
+m_EndScriptSection
+
+m_ScriptSectionSeasons "scriptHelp"
+	scriptHelpStart:
+	.define SCRIPT_HELP_SEASONS_BANK :scriptHelpStart
+
+	.include "scripts/common/scriptHelper.s"
+	.include "scripts/seasons/scriptHelper.s"
+m_EndScriptSection
+
 
 .BANK $00 SLOT 0
 .ORG 0
-
 	.include "code/bank0.s"
-
-m_section_free Main_Scripts_test NAMESPACE mainScripts
-script6f48:
-	ret
-.ends
-
-m_section_free Script_Help NAMESPACE scriptHelp
-makuTree_setMapTextBasedOnStage:
-	ret
-.ends	; NOTE: TEMPORARY UNTIL MANY BANKS CAN BE MERGED
-
 
 .BANK $01 SLOT 1
 .ORG 0
-
 	.include "code/bank1.s"
-
 
 .BANK $02 SLOT 1
 .ORG 0
 	.include "code/bank2.s"
 
-
 .BANK $03 SLOT 1
 .ORG 0
 	.include "code/bank3.s"
 
-
 .BANK $04 SLOT 1
 .ORG 0
 	.include "code/bank4.s"
-	 m_section_free Warp_Data NAMESPACE bank4
-		.include {"{GAME_DATA_DIR}/warpDestinations.s"}
-		.include {"{GAME_DATA_DIR}/warpSources.s"}
-	.ends
-
-.BANK $14 SLOT 1
-.ORG 0
-
-	 m_section_free Scripts2 NAMESPACE scripts2
-;		.include "scripts/seasons/scripts2.s"
-	.ends
-
-
-.BANK $15 SLOT 1
-.ORG 0
-
-	.include "code/staticObjects.s"
-	.include {"{GAME_DATA_DIR}/staticDungeonObjects.s"}
-
-;	.include "scripts/common/scriptHelper.s"
-
-	 m_section_free Bank_15_3 NAMESPACE scriptHelp
-;		.include "scripts/ages/scriptHelper.s"
-;		.include "scripts/seasons/scriptHelper.s"
-	.ends
 
 
 ; NOTE: These includes define their own .bank and .orga
@@ -102,7 +106,6 @@ makuTree_setMapTextBasedOnStage:
 	.REDEFINE DATA_BANK $70
 .endif
 
-
 .BANK DATA_BANK SLOT 1
 .ORG 0
 	.include {"{GAME_DATA_DIR}/gfxDataMain.s"}
@@ -110,10 +113,11 @@ makuTree_setMapTextBasedOnStage:
 
 
 ; #################################################################################
-; NOTE: All sections below here are superfree
+; NOTE: All sections and includes below here are superfree
 ; #################################################################################
 
 .include "code/roomInitialization.s"
+.include "code/staticObjects.s"
 
 m_section_superfree Bank_5 NAMESPACE bank5
 	.define SKIP_COMPANION_COMMON_CODE
@@ -159,79 +163,8 @@ m_section_superfree Bank_6_Ext NAMESPACE bank6Ext
 	.include {"{BUILD_DIR}/specialObjectAnimationData.s"}
 .ends
 
-m_InteractionObjectCodeSection
-	.include "object_code/common/interactions/breakTileDebris.s"
-	.include "object_code/common/interactions/fallDownHole.s"
-	.include "object_code/common/interactions/farore.s"
-	.include "object_code/common/interactions/faroreMakeChest.s"
-	.include "object_code/common/interactions/dungeonStuff.s"
-	.include "object_code/common/interactions/pushblockTrigger.s"
-	.include "object_code/common/interactions/pushblock.s"
-	.include "object_code/common/interactions/minecart.s"
-	.include "object_code/common/interactions/dungeonKeySprite.s"
-	.include "object_code/common/interactions/overworldKeySprite.s"
-	.include "object_code/common/interactions/faroresMemory.s"
-	.include "object_code/seasons/interactions/rupeeRoomRupees.s" ; Unique to Seasons
-	.include "object_code/common/interactions/doorController.s"
-m_EndObjectCodeSection
-
-m_InteractionObjectCodeSection
-	.include "object_code/common/interactions/shopkeeper.s"
-	.include "object_code/common/interactions/shopItem.s"
-	.include "object_code/common/interactions/introSprites1.s"
-	.include "object_code/common/interactions/seasonsFairy.s"
-	.include "object_code/common/interactions/explosion.s"
-	.include "object_code/common/interactions/treasure.s"
-m_EndObjectCodeSection
-
-m_InteractionObjectCodeSection
-	.include "object_code/common/interactions/bombFlower.s"
-	.include "object_code/common/interactions/switchTileToggler.s"
-	.include "object_code/common/interactions/movingPlatform.s"
-	.include "object_code/common/interactions/roller.s"
-	.include "object_code/common/interactions/spinner.s"
-	.include "object_code/common/interactions/minibossPortal.s"
-	.include "object_code/common/interactions/essence.s"
-m_EndObjectCodeSection
-
-m_InteractionObjectCodeSection
-	.include "object_code/common/interactions/vasu.s"
-	.include "object_code/common/interactions/bubble.s"
-m_EndObjectCodeSection
-
-m_InteractionObjectCodeSection
-	.include "object_code/common/interactions/woodenTunnel.s"
-	.include "object_code/common/interactions/exclamationMark.s"
-	.include "object_code/common/interactions/floatingImage.s"
-	.include "object_code/common/interactions/bipinBlossomFamilySpawner.s"
-	.include "object_code/common/interactions/gashaSpot.s"
-	.include "object_code/common/interactions/kissHeart.s"
-	.include "object_code/common/interactions/banana.s"
-	.include "object_code/common/interactions/createObjectAtEachTileindex.s"
-m_EndObjectCodeSection
-
-m_InteractionObjectCodeSection
-	.include "object_code/common/interactions/businessScrub.s"
-	.include "object_code/common/interactions/cf.s"
-	.include "object_code/common/interactions/companionTutorial.s"
-	.include "object_code/common/interactions/gameCompleteDialog.s"
-	.include "object_code/common/interactions/titlescreenClouds.s"
-	.include "object_code/common/interactions/introBird.s"
-	.include "object_code/common/interactions/linkShip.s"
-m_EndObjectCodeSection
-
-m_InteractionObjectCodeSection
-	.include "object_code/common/interactions/faroreGiveItem.s"
-	.include "object_code/common/interactions/zeldaApproachTrigger.s"
-m_EndObjectCodeSection
-
-m_InteractionObjectCodeSection
-	.include "object_code/common/interactions/eraOrSeasonInfo.s"
-	.include "object_code/common/interactions/statueEyeball.s"
-	.include "object_code/common/interactions/ringHelpBook.s"
-m_EndObjectCodeSection
-
 m_InteractionObjectCodeSection "Ages"
+	; interactionCodeAges1
 	.include "object_code/ages/interactions/toggleFloor.s"
 	.include "object_code/ages/interactions/coloredCube.s"
 	.include "object_code/ages/interactions/coloredCubeFlame.s"
@@ -268,6 +201,7 @@ m_InteractionObjectCodeSection "Ages"
 m_EndObjectCodeSection
 
 m_InteractionObjectCodeSection "Ages"
+	; interactionCodeAges2
 	.include "object_code/ages/interactions/ghostVeran.s"
 	.include "object_code/ages/interactions/boy2.s"
 	.include "object_code/ages/interactions/soldier.s"
@@ -306,6 +240,7 @@ m_InteractionObjectCodeSection "Ages"
 m_EndObjectCodeSection
 
 m_InteractionObjectCodeSection "Ages"
+	; interactionCodeAges3
 	.include "object_code/common/interactions/companionSpawner.s"
 	.include "object_code/ages/interactions/rosa.s"
 	.include "object_code/ages/interactions/rafton.s"
@@ -348,6 +283,7 @@ m_InteractionObjectCodeSection "Ages"
 m_EndObjectCodeSection
 
 m_InteractionObjectCodeSection "Ages"
+	; interactionCodeAges4
 	.include "object_code/ages/interactions/explosionWithDebris.s"
 	.include "object_code/ages/interactions/carpenter.s"
 	.include "object_code/ages/interactions/raftwreckCutscene.s"
@@ -404,6 +340,7 @@ m_InteractionObjectCodeSection "Ages"
 m_EndObjectCodeSection
 
 m_InteractionObjectCodeSection "Ages"
+	; interactionCodeAges5
 	.include "object_code/ages/interactions/miscellaneous2.s"
 	.include "object_code/ages/interactions/timewarp.s"
 	.include "object_code/ages/interactions/timeportal.s"
@@ -414,12 +351,93 @@ m_InteractionObjectCodeSection "Ages"
 m_EndObjectCodeSection
 
 m_InteractionObjectCodeSection "Ages"
+	; interactionCodeAges6
 	.include "object_code/ages/interactions/monkeyMain.s"
 	.include "object_code/ages/interactions/rabbitMain.s"
 	.include "object_code/ages/interactions/tuniNutMain.s"
 m_EndObjectCodeSection
 
+m_InteractionObjectCodeSection "Ages"
+	; interactionCodeAges7
+	.include "object_code/common/interactions/breakTileDebris.s"
+	.include "object_code/common/interactions/fallDownHole.s"
+	.include "object_code/common/interactions/farore.s"
+	.include "object_code/common/interactions/faroreMakeChest.s"
+	.include "object_code/common/interactions/dungeonStuff.s"
+	.include "object_code/common/interactions/pushblockTrigger.s"
+	.include "object_code/common/interactions/pushblock.s"
+	.include "object_code/common/interactions/minecart.s"
+	.include "object_code/common/interactions/dungeonKeySprite.s"
+	.include "object_code/common/interactions/overworldKeySprite.s"
+	.include "object_code/common/interactions/faroresMemory.s"
+	.include "object_code/common/interactions/doorController.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection "Ages"
+	; interactionCodeAges8
+	.include "object_code/common/interactions/shopkeeper.s"
+	.include "object_code/common/interactions/shopItem.s"
+	.include "object_code/common/interactions/introSprites1.s"
+	.include "object_code/common/interactions/seasonsFairy.s"
+	.include "object_code/common/interactions/explosion.s"
+	.include "object_code/common/interactions/treasure.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection "Ages"
+	; interactionCodeAges9
+	.include "object_code/common/interactions/bombFlower.s"
+	.include "object_code/common/interactions/switchTileToggler.s"
+	.include "object_code/common/interactions/movingPlatform.s"
+	.include "object_code/common/interactions/roller.s"
+	.include "object_code/common/interactions/spinner.s"
+	.include "object_code/common/interactions/minibossPortal.s"
+	.include "object_code/common/interactions/essence.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection "Ages"
+	; interactionCodeAges10
+	.include "object_code/common/interactions/vasu.s"
+	.include "object_code/common/interactions/bubble.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection "Ages"
+	; interactionCodeAges11
+	.include "object_code/common/interactions/woodenTunnel.s"
+	.include "object_code/common/interactions/exclamationMark.s"
+	.include "object_code/common/interactions/floatingImage.s"
+	.include "object_code/common/interactions/bipinBlossomFamilySpawner.s"
+	.include "object_code/common/interactions/gashaSpot.s"
+	.include "object_code/common/interactions/kissHeart.s"
+	.include "object_code/common/interactions/banana.s"
+	.include "object_code/common/interactions/createObjectAtEachTileindex.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection "Ages"
+	; interactionCodeAges12
+	.include "object_code/common/interactions/businessScrub.s"
+	.include "object_code/common/interactions/cf.s"
+	.include "object_code/common/interactions/companionTutorial.s"
+	.include "object_code/common/interactions/gameCompleteDialog.s"
+	.include "object_code/common/interactions/titlescreenClouds.s"
+	.include "object_code/common/interactions/introBird.s"
+	.include "object_code/common/interactions/linkShip.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection "Ages"
+	; interactionCodeAges13
+	.include "object_code/common/interactions/faroreGiveItem.s"
+	.include "object_code/common/interactions/zeldaApproachTrigger.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection "Ages"
+	; interactionCodeAges14
+	.include "object_code/common/interactions/eraOrSeasonInfo.s"
+	.include "object_code/common/interactions/statueEyeball.s"
+	.include "object_code/common/interactions/ringHelpBook.s"
+m_EndObjectCodeSection
+
 m_InteractionObjectCodeSection "Seasons"
+	; interactionCodeSeasons1
 	.include "object_code/seasons/interactions/usedRodOfSeasons.s"
 	.include "object_code/seasons/interactions/specialWarp.s"
 	.include "object_code/seasons/interactions/dungeonScript.s"
@@ -467,6 +485,7 @@ m_InteractionObjectCodeSection "Seasons"
 m_EndObjectCodeSection
 
 m_InteractionObjectCodeSection "Seasons"
+	; interactionCodeSeasons2
 	.include "object_code/seasons/interactions/quicksand.s"
 	.include "object_code/common/interactions/companionSpawner.s"
 	.include "object_code/seasons/interactions/unicornsCave4ChestPuzzle.s"
@@ -503,6 +522,7 @@ m_InteractionObjectCodeSection "Seasons"
 m_EndObjectCodeSection
 
 m_InteractionObjectCodeSection "Seasons"
+	; interactionCodeSeasons3
 	.include "object_code/seasons/interactions/sunkenCityNpcs.s"
 	.include "object_code/seasons/interactions/flyingRooster.s"
 	.include "object_code/seasons/interactions/8e.s"
@@ -556,6 +576,7 @@ m_InteractionObjectCodeSection "Seasons"
 m_EndObjectCodeSection
 
 m_InteractionObjectCodeSection "Seasons"
+	; interactionCodeSeasons4
 	.include "object_code/seasons/interactions/boomerangSubrosian.s"
 	.include "object_code/seasons/interactions/boomerang.s"
 	.include "object_code/seasons/interactions/troy.s"
@@ -568,6 +589,7 @@ m_InteractionObjectCodeSection "Seasons"
 m_EndObjectCodeSection
 
 m_InteractionObjectCodeSection "Seasons"
+	; interactionCodeSeasons5
 	.include "object_code/seasons/interactions/linkedFountainLady.s"
 	.include "object_code/seasons/interactions/linkedSecredGivers.s"
 	.include "object_code/seasons/interactions/miscPuzzles.s"
@@ -580,6 +602,92 @@ m_InteractionObjectCodeSection "Seasons"
 	.include "object_code/seasons/interactions/getRodOfSeasons.s"
 	.include "object_code/seasons/interactions/loneZora.s"
 m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection "Seasons"
+	; interactionCodeSeasons6
+	; NOTE: creating an empty one to pad the section numbers so they're equal
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection "Seasons"
+	; interactionCodeSeasons7
+	.include "object_code/common/interactions/breakTileDebris.s"
+	.include "object_code/common/interactions/fallDownHole.s"
+	.include "object_code/common/interactions/farore.s"
+	.include "object_code/common/interactions/faroreMakeChest.s"
+	.include "object_code/common/interactions/dungeonStuff.s"
+	.include "object_code/common/interactions/pushblockTrigger.s"
+	.include "object_code/common/interactions/pushblock.s"
+	.include "object_code/common/interactions/minecart.s"
+	.include "object_code/common/interactions/dungeonKeySprite.s"
+	.include "object_code/common/interactions/overworldKeySprite.s"
+	.include "object_code/common/interactions/faroresMemory.s"
+	.include "object_code/seasons/interactions/rupeeRoomRupees.s" ; Unique to Seasons
+	.include "object_code/common/interactions/doorController.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection "Seasons"
+	; interactionCodeSeasons8
+	.include "object_code/common/interactions/shopkeeper.s"
+	.include "object_code/common/interactions/shopItem.s"
+	.include "object_code/common/interactions/introSprites1.s"
+	.include "object_code/common/interactions/seasonsFairy.s"
+	.include "object_code/common/interactions/explosion.s"
+	.include "object_code/common/interactions/treasure.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection "Seasons"
+	; interactionCodeSeasons9
+	.include "object_code/common/interactions/bombFlower.s"
+	.include "object_code/common/interactions/switchTileToggler.s"
+	.include "object_code/common/interactions/movingPlatform.s"
+	.include "object_code/common/interactions/roller.s"
+	.include "object_code/common/interactions/spinner.s"
+	.include "object_code/common/interactions/minibossPortal.s"
+	.include "object_code/common/interactions/essence.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection "Seasons"
+	; interactionCodeSeasons10
+	.include "object_code/common/interactions/vasu.s"
+	.include "object_code/common/interactions/bubble.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection "Seasons"
+	; interactionCodeSeasons11
+	.include "object_code/common/interactions/woodenTunnel.s"
+	.include "object_code/common/interactions/exclamationMark.s"
+	.include "object_code/common/interactions/floatingImage.s"
+	.include "object_code/common/interactions/bipinBlossomFamilySpawner.s"
+	.include "object_code/common/interactions/gashaSpot.s"
+	.include "object_code/common/interactions/kissHeart.s"
+	.include "object_code/common/interactions/banana.s"
+	.include "object_code/common/interactions/createObjectAtEachTileindex.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection "Seasons"
+	; interactionCodeSeasons12
+	.include "object_code/common/interactions/businessScrub.s"
+	.include "object_code/common/interactions/cf.s"
+	.include "object_code/common/interactions/companionTutorial.s"
+	.include "object_code/common/interactions/gameCompleteDialog.s"
+	.include "object_code/common/interactions/titlescreenClouds.s"
+	.include "object_code/common/interactions/introBird.s"
+	.include "object_code/common/interactions/linkShip.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection "Seasons"
+	; interactionCodeSeasons13
+	.include "object_code/common/interactions/faroreGiveItem.s"
+	.include "object_code/common/interactions/zeldaApproachTrigger.s"
+m_EndObjectCodeSection
+
+m_InteractionObjectCodeSection "Seasons"
+	; interactionCodeSeasons14
+	.include "object_code/common/interactions/eraOrSeasonInfo.s"
+	.include "object_code/common/interactions/statueEyeball.s"
+	.include "object_code/common/interactions/ringHelpBook.s"
+m_EndObjectCodeSection
+
 
 m_EnemyCodeSection
 	.include "object_code/common/enemies/commonCode.s"
@@ -1167,17 +1275,6 @@ m_section_superfree chestData NAMESPACE chestData
 
 m_section_superfree serialCode NAMESPACE serialCode
 	.include "code/serialFunctions.s"
-.ends
-
-m_section_superfree Scripts namespace mainScripts
-	.include "code/scripting.s"
-;	.include {"{BUILD_DIR}/scripts.s"}
-
-; NOTE: TEMPORARY CODE UNTIL ALL SCRIPTS CAN BE INCLUDED
-	stubScript:
-	genericNpcScript:
-		scriptend
-; NOTE: TEMPORARY CODE UNTIL ALL SCRIPTS CAN BE INCLUDED
 .ends
 
 m_section_superfree Breakable_Tiles NAMESPACE breakableTiles

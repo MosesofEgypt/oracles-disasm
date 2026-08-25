@@ -64,7 +64,7 @@ nayruState0:
 
 	call objectSetInvisible
 
-	ld hl,mainScripts.nayruScript01
+	ld hl,{SCRIPTS_1}.nayruScript01
 	call interactionSetScript
 
 @init0e: ; This is also called from ambi subids 4 and 5 (to initialize possessed palettes)
@@ -84,18 +84,18 @@ nayruState0:
 
 	ld a,$05
 	call interactionSetAnimation
-	ld hl,mainScripts.nayruScript02_part1
+	ld hl,{SCRIPTS_1}.nayruScript02_part1
 	call interactionSetScript
 	jp objectSetInvisible
 ++
 	ld a,$02
 	call interactionSetAnimation
 
-	ld hl,mainScripts.nayruScript02_part2
+	ld hl,{SCRIPTS_1}.nayruScript02_part2
 	jp interactionSetScript
 
 @init04:
-	ld hl,mainScripts.nayruScript04_part1
+	ld hl,{SCRIPTS_1}.nayruScript04_part1
 	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	cp $0b
 	jr nz,++
@@ -105,7 +105,7 @@ nayruState0:
 	call checkIsLinkedGame
 	jr nz,@init03
 
-	ld hl,mainScripts.nayruScript04_part2
+	ld hl,{SCRIPTS_1}.nayruScript04_part2
 ++
 	call interactionSetScript
 
@@ -116,7 +116,7 @@ nayruState0:
 @init05:
 	ld a,$05
 	call interactionSetAnimation
-	ld hl,mainScripts.nayruScript05
+	ld hl,{SCRIPTS_1}.nayruScript05
 	call interactionSetScript
 	jp objectSetInvisible
 
@@ -132,14 +132,14 @@ nayruState0:
 	jp interactionSetAlwaysUpdateBit
 
 @init08:
-	ld hl,mainScripts.nayruScript08
+	ld hl,{SCRIPTS_1}.nayruScript08
 	call interactionSetScript
 	call objectSetVisible82
 	ld a,$03
 	jp interactionSetAnimation
 
 @init09:
-	ld hl,mainScripts.nayruScript09
+	ld hl,{SCRIPTS_1}.nayruScript09
 	jp interactionSetScript
 
 @init0a:
@@ -156,7 +156,7 @@ nayruState0:
 
 	ld a,$01
 	call interactionSetAnimation
-	ld hl,mainScripts.nayruScript0a
+	ld hl,{SCRIPTS_1}.nayruScript0a
 	jp interactionSetScript
 
 @init0b:
@@ -180,7 +180,7 @@ nayruState0:
 	inc e
 	ld a,>TX_1d00
 	ld (de),a
-	ld hl,mainScripts.genericNpcScript
+	ld hl,{SCRIPTS_1}.genericNpcScript
 	jp interactionSetScript
 
 @init0c:
@@ -232,16 +232,16 @@ nayruState0:
 	ld e,Interaction.var3f
 	ld a,$ff
 	ld (de),a
-	ld hl,mainScripts.nayruScript10
+	ld hl,{SCRIPTS_1}.nayruScript10
 	jp interactionSetScript
 
 @init11:
 	xor a
 	call interactionSetAnimation
-	callab scriptHelp.objectWritePositionTocfd5
+	callab {SCRIPTS_HELP}.objectWritePositionTocfd5
 	ld a,>TX_1d00
 	call interactionSetHighTextIndex
-	ld hl,mainScripts.nayruScript11
+	ld hl,{SCRIPTS_1}.nayruScript11
 	jp interactionSetScript
 
 @init12:
@@ -254,7 +254,7 @@ nayruState0:
 	call checkGlobalFlag
 	jp z,interactionDelete
 
-	ld hl,mainScripts.nayruScript13
+	ld hl,{SCRIPTS_1}.nayruScript13
 	call interactionSetScript
 
 	ld a,>TX_1d00
@@ -328,7 +328,7 @@ nayruSubid00:
 	ldi (hl),a
 	ldi (hl),a
 	ld (hl),$01
-	ld hl,mainScripts.nayruScript00_part1
+	ld hl,{SCRIPTS_1}.nayruScript00_part1
 	jp interactionSetScript
 
 ; This is also called from outside subid 0
@@ -495,7 +495,7 @@ nayruSubid00:
 	ld (wTmpcfc0.genericCutscene.cfd0),a
 
 	; Start next script
-	ld hl,mainScripts.nayruScript00_part2
+	ld hl,{SCRIPTS_1}.nayruScript00_part2
 	call interactionSetScript
 	ld a,SND_SLASH
 	call playSound
@@ -597,7 +597,7 @@ nayruSubid02Substate1:
 
 	call interactionIncSubstate
 
-	ld hl,mainScripts.nayruScript02_part3
+	ld hl,{SCRIPTS_1}.nayruScript02_part3
 	call interactionSetScript
 
 	ld a,$01
@@ -652,7 +652,7 @@ nayruSubid03:
 	ld c,$24
 	call objectUpdateSpeedZ_paramC
 	ret nz
-	ld hl,mainScripts.nayruScript03
+	ld hl,{SCRIPTS_1}.nayruScript03
 	call interactionSetScript
 	jp interactionIncSubstate
 
@@ -670,7 +670,7 @@ nayruSubid04:
 	cp $0b
 	jr c,nayruAnimateAndRunScript
 	call interactionAnimate
-	jpab scriptHelp.turnToFaceSomething
+	jpab {SCRIPTS_HELP}.turnToFaceSomething
 
 ;;
 ; Subid $05: ?
@@ -683,7 +683,7 @@ nayruSubid05:
 	cp $05
 	ret nc
 
-	jpab scriptHelp.turnToFaceSomething
+	jpab {SCRIPTS_HELP}.turnToFaceSomething
 
 ;;
 ; For Nayru subid 0 (getting possessed cutscene), this updates var3a, var3b representing
@@ -792,7 +792,7 @@ nayruSubid07:
 	ld (wActiveMusic),a
 	call playSound
 
-	ld hl,mainScripts.nayruScript07
+	ld hl,{SCRIPTS_1}.nayruScript07
 	jp interactionSetScript
 
 @substate1:

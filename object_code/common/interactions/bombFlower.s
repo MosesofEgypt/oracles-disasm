@@ -2,10 +2,7 @@
 ; INTERAC_BOMB_FLOWER
 ; ==================================================================================================
 m_InteractionCode $6f
-.if defined(ROM_COMBO)
-	call wIsSeasons
-	jp nc,interactionDelete
-.elif defined(ROM_AGES)
+.if defined(ROM_AGES)
 	jp interactionDelete
 .else
 	ld e,Interaction.subid
@@ -120,7 +117,7 @@ bomb_flower_subid1:
 	ld a,$01
 	ld (de),a
 
-	ld hl,mainScripts.bombflower_unblockAutumnTemple
+	ld hl,{SCRIPTS_1}.bombflower_unblockAutumnTemple
 	call interactionSetScript
 	call interactionInitGraphics
 	xor a

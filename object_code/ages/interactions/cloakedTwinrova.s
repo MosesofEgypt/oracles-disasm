@@ -134,6 +134,6 @@ m_InteractionCode $8d
 	jp interactionSetScript
 
 @scriptTable:
-	.dw mainScripts.cloakedTwinrova_subid00Script
-	.dw mainScripts.stubScript
-	.dw mainScripts.cloakedTwinrova_subid02Script
+	.dw {SCRIPTS_1}.cloakedTwinrova_subid00Script
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.cloakedTwinrova_subid02Script

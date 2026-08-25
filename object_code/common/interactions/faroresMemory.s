@@ -16,7 +16,7 @@ m_InteractionCode $1c
 	call interactionInitGraphics
 	call objectSetVisible83
 
-	ld hl,mainScripts.faroresMemoryScript
+	ld hl,{SCRIPTS_1}.faroresMemoryScript
 	call interactionSetScript
 
 	jp interactionIncState

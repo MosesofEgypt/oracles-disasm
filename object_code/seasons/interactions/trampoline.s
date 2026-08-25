@@ -93,7 +93,7 @@ m_InteractionCode $7c
 	ld a,(de)
 	or a
 	jr nz,+
-	callab scriptHelp.trampoline_bounce
+	callab {SCRIPTS_HELP}.trampoline_bounce
 +
 	ld e,Interaction.state
 	ld a,$04

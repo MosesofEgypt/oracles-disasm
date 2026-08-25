@@ -59,7 +59,7 @@ patch_subid00:
 	call objectSetVisiblec2
 	ld a,GLOBALFLAG_PATCH_REPAIRED_EVERYTHING
 	call checkGlobalFlag
-	ld hl,mainScripts.patch_upstairsRepairedEverythingScript
+	ld hl,{SCRIPTS_1}.patch_upstairsRepairedEverythingScript
 	jr nz,@setScript
 
 	ld a,<TX_5813
@@ -83,7 +83,7 @@ patch_subid00:
 	and $01
 .endif
 	ld (wTmpcfc0.patchMinigame.swordLevel),a
-	ld hl,mainScripts.patch_upstairsRepairSwordScript
+	ld hl,{SCRIPTS_1}.patch_upstairsRepairSwordScript
 	jr @setScript
 
 @notRepairingSword:
@@ -95,7 +95,7 @@ patch_subid00:
 	; Set var38 to 1 if Link doesn't have the broken tuni nut
 	ld a,TREASURE_TUNI_NUT
 	call checkTreasureObtained
-	ld hl,mainScripts.patch_upstairsRepairTuniNutScript
+	ld hl,{SCRIPTS_1}.patch_upstairsRepairTuniNutScript
 	jr nc,++
 	or a
 	jr z,@setScript
@@ -116,7 +116,7 @@ patch_subid00:
 	; Done the script; now load another script to move downstairs
 
 	call interactionIncState
-	ld hl,mainScripts.patch_upstairsMoveToStaircaseScript
+	ld hl,{SCRIPTS_1}.patch_upstairsMoveToStaircaseScript
 	jp interactionSetScript
 
 
@@ -166,7 +166,7 @@ patch_subid01:
 	ld (hl),a  ; [wTmpcfc0.patchMinigame.screenFadedOut]
 	inc a
 	ld (wDiggingUpEnemiesForbidden),a
-	ld hl,mainScripts.patch_downstairsScript
+	ld hl,{SCRIPTS_1}.patch_downstairsScript
 	jp interactionSetScript
 
 ; Waiting for Link to talk to Patch to start the minigame
@@ -213,7 +213,7 @@ patch_subid01:
 	call interactionIncState
 	ld l,Interaction.var39
 	ld (hl),$00
-	ld hl,mainScripts.patch_duringMinigameScript
+	ld hl,{SCRIPTS_1}.patch_duringMinigameScript
 	call interactionSetScript
 
 ; The minigame is running; wait for all enemies to be killed?
@@ -272,7 +272,7 @@ patch_subid01:
 	ld (hl),d
 
 	call interactionIncState
-	ld hl,mainScripts.patch_linkWonMinigameScript
+	ld hl,{SCRIPTS_1}.patch_linkWonMinigameScript
 	call interactionSetScript
 	ld a,SND_SOLVEPUZZLE_2
 	call playSound
@@ -307,7 +307,7 @@ patch_subid01:
 	ld e,Interaction.state
 	ld a,$04
 	ld (de),a
-	ld hl,mainScripts.patch_downstairsAfterBeatingMinigameScript
+	ld hl,{SCRIPTS_1}.patch_downstairsAfterBeatingMinigameScript
 	jp interactionSetScript
 
 ; NPC after winning the game
@@ -356,7 +356,7 @@ patch_subid01:
 	ld a,(wActiveMusic2)
 	ld (wActiveMusic),a
 	call playSound
-	ld hl,mainScripts.patch_linkFailedMinigameScript
+	ld hl,{SCRIPTS_1}.patch_linkFailedMinigameScript
 	jp interactionSetScript
 
 @state6:
@@ -515,7 +515,13 @@ patch_subid03:
 	.dw @state2
 
 @state0:
+.if !defined(ROM_COMBO)
 	callab interactionCode1.clearFallDownHoleEventBuffer
+.elif defined(ROM_AGES)
+	callab interactionCodeAges7.clearFallDownHoleEventBuffer
+.else
+	callab interactionCodeSeasons7.clearFallDownHoleEventBuffer
+.endif
 	call interactionIncState
 	ld l,Interaction.counter1
 	ld (hl),60
@@ -602,7 +608,13 @@ patch_subid03:
 	inc l
 	inc (hl)
 ++
+.if !defined(ROM_COMBO)
 	jpab interactionCode1.clearFallDownHoleEventBuffer
+.elif defined(ROM_AGES)
+	jpab interactionCodeAges7.clearFallDownHoleEventBuffer
+.else
+	jpab interactionCodeSeasons7.clearFallDownHoleEventBuffer
+.endif
 
 @allBeetlesKilled:
 	; Set parent object's "var39" to indicate that the game's over

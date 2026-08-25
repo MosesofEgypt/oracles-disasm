@@ -16,12 +16,12 @@ m_InteractionCode $c3
 	ld a,GLOBALFLAG_ZELDA_SAVED_FROM_VIRE
 	call checkGlobalFlag
 	jp nz,interactionDelete
-	callab scriptHelp.zeldaKidnappedRoom_loadZeldaAndMoblins
+	callab {SCRIPTS_HELP}.zeldaKidnappedRoom_loadZeldaAndMoblins
 	jp interactionIncSubstate
 @substate1:
 	call returnIfScrollMode01Unset
 	call interactionIncState
-	ld hl,mainScripts.ZeldaBeingKidnappedScript
+	ld hl,{SCRIPTS_1}.ZeldaBeingKidnappedScript
 	call interactionSetScript
 @state1:
 	jp interactionRunScript

@@ -14,7 +14,7 @@ m_InteractionCode $d6
 	call interactionSetAlwaysUpdateBit
 	ld l,Interaction.var3f
 	ld (hl),DEKU_SECRET & $0f
-	ld hl,mainScripts.linkedGameNpcScript
+	ld hl,{SCRIPTS_1}.linkedGameNpcScript
 	call interactionSetScript
 	call interactionRunScript
 

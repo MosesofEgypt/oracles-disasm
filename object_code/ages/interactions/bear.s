@@ -40,7 +40,7 @@ bear_state0:
 	add $10
 	ld (de),a
 ++
-	ld hl,mainScripts.bearSubid00Script_part1
+	ld hl,{SCRIPTS_1}.bearSubid00Script_part1
 	jp interactionSetScript
 
 @initSubid01:
@@ -85,7 +85,7 @@ bear_state0:
 	ld a,$02
 ++
 	call @chooseTextID
-	ld hl,mainScripts.bearSubid02Script
+	ld hl,{SCRIPTS_1}.bearSubid02Script
 	jp interactionSetScript
 
 @chooseTextID:
@@ -145,7 +145,7 @@ bear_state1:
 	ld l,<w1Link.subid
 	ld (hl),$03
 
-	ld hl,mainScripts.bearSubid00Script_part2
+	ld hl,{SCRIPTS_1}.bearSubid00Script_part2
 	call interactionSetScript
 	call interactionIncSubstate
 

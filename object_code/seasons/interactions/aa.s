@@ -23,7 +23,7 @@ m_InteractionCode $aa
 	call interactionAnimate
 	jp interactionRunScript
 @scriptTable:
-	.dw mainScripts.script769f
-	.dw mainScripts.script76ad
-	.dw mainScripts.script76b7
-	.dw mainScripts.script76dc
+	.dw {SCRIPTS_1}.script769f
+	.dw {SCRIPTS_1}.script76ad
+	.dw {SCRIPTS_1}.script76b7
+	.dw {SCRIPTS_1}.script76dc

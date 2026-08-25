@@ -108,7 +108,7 @@ m_InteractionCode $b9
 	ret
 
 @subid7Init:
-	ld hl,mainScripts.horonDogCreditsScript
+	ld hl,{SCRIPTS_1}.horonDogCreditsScript
 	jp interactionSetScript
 
 

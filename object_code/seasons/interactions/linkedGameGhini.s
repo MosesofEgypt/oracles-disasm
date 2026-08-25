@@ -30,14 +30,14 @@ m_InteractionCode $cb
 	ld a,GLOBALFLAG_DONE_GRAVEYARD_SECRET
 	call checkGlobalFlag
 	jr z,@@notDoneSecret
-	ld hl,mainScripts.linkedGhiniScript_doneSecret
+	ld hl,{SCRIPTS_1}.linkedGhiniScript_doneSecret
 	jr @@setScript
 @@notDoneSecret:
 	ld a,GLOBALFLAG_BEGAN_GRAVEYARD_SECRET
 	call checkGlobalFlag
-	ld hl,mainScripts.linkedGhiniScript_beginningSecret
+	ld hl,{SCRIPTS_1}.linkedGhiniScript_beginningSecret
 	jr z,@@setScript
-	ld hl,mainScripts.linkedGhiniScript_begunSecret
+	ld hl,{SCRIPTS_1}.linkedGhiniScript_begunSecret
 @@setScript:
 	call interactionSetScript
 	jp objectSetVisible81
@@ -93,7 +93,7 @@ m_InteractionCode $cb
 	ld (hl),$03
 	ld l,$7e
 	ld (hl),GLOBALFLAG_BEGAN_LIBRARY_SECRET-GLOBALFLAG_FIRST_SEASONS_BEGAN_SECRET
-	ld hl,mainScripts.linkedGameNpcScript
+	ld hl,{SCRIPTS_1}.linkedGameNpcScript
 	call interactionSetScript
 	jp interactionAnimateAsNpc
 
@@ -125,7 +125,7 @@ m_InteractionCode $cb
 	ret nz
 	ld l,$45
 	inc (hl)
-	ld hl,mainScripts.linkedGhiniScript_startRound
+	ld hl,{SCRIPTS_1}.linkedGhiniScript_startRound
 	call interactionSetScript
 @@substate3:
 	call interactionAnimate

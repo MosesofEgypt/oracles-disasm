@@ -22,7 +22,7 @@ m_InteractionCode $db
 	ld a,(hl)
 	ld e,$7e
 	ld (de),a
-	ld hl,mainScripts.linkedGameNpcScript
+	ld hl,{SCRIPTS_1}.linkedGameNpcScript
 	call interactionSetScript
 	call interactionInitGraphics
 	jp objectSetVisiblec2

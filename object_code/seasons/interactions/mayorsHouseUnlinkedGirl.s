@@ -11,7 +11,7 @@ m_InteractionCode $c2
 	ld a,$01
 	ld (de),a
 	call interactionInitGraphics
-	ld hl,mainScripts.mayorsHouseGirlScript
+	ld hl,{SCRIPTS_1}.mayorsHouseGirlScript
 	call interactionSetScript
 	jp interactionAnimateAsNpc
 @state1:

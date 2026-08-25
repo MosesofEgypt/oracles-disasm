@@ -21,10 +21,10 @@ m_InteractionCode $2a
 	ld a,GLOBALFLAG_ZELDA_SAVED_FROM_VIRE
 	call checkGlobalFlag
 	jp nz,interactionDelete
-	ld hl,mainScripts.panickingBirdScript
+	ld hl,{SCRIPTS_1}.panickingBirdScript
 	jr @setScript
 @knowItAllBird:
-	ld hl,mainScripts.knowItAllBirdScript
+	ld hl,{SCRIPTS_1}.knowItAllBirdScript
 @setScript:
 	call interactionSetScript
 

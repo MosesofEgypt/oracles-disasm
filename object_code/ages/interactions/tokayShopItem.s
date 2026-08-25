@@ -54,7 +54,7 @@ m_InteractionCode $81
 	call @checkTransformItem
 	jp nz,interactionDelete
 
-	ld hl,mainScripts.tokayShopItemScript
+	ld hl,{SCRIPTS_1}.tokayShopItemScript
 	call interactionSetScript
 	ld e,Interaction.pressedAButton
 	call objectAddToAButtonSensitiveObjectList

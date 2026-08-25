@@ -185,6 +185,6 @@ m_InteractionCode $88
 	jp interactionIncState
 
 @scriptTable:
-	.dw mainScripts.makuSprout_subid00Script
-	.dw mainScripts.makuSprout_subid01Script
-	.dw mainScripts.stubScript
+	.dw {SCRIPTS_1}.makuSprout_subid00Script
+	.dw {SCRIPTS_1}.makuSprout_subid01Script
+	.dw {SCRIPTS_1}.stubScript

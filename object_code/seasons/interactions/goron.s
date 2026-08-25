@@ -161,21 +161,21 @@ m_InteractionCode $3b
 	ret
 
 @biggoronColdNotHealed:
-	.dw mainScripts.goronScript_pacingLeftAndRight
-	.dw mainScripts.goronScript_text1_biggoronSick
-	.dw mainScripts.goronScript_text2
-	.dw mainScripts.goronScript_text3_biggoronSick
-	.dw mainScripts.goronScript_text4_biggoronSick
-	.dw mainScripts.goronScript_text5
-	.dw mainScripts.goronScript_upgradeRingBox
-	.dw mainScripts.goronScript_giveSubrosianSecret
+	.dw {SCRIPTS_1}.goronScript_pacingLeftAndRight
+	.dw {SCRIPTS_1}.goronScript_text1_biggoronSick
+	.dw {SCRIPTS_1}.goronScript_text2
+	.dw {SCRIPTS_1}.goronScript_text3_biggoronSick
+	.dw {SCRIPTS_1}.goronScript_text4_biggoronSick
+	.dw {SCRIPTS_1}.goronScript_text5
+	.dw {SCRIPTS_1}.goronScript_upgradeRingBox
+	.dw {SCRIPTS_1}.goronScript_giveSubrosianSecret
 
 @biggoronColdHealed:
-	.dw mainScripts.goronScript_pacingLeftAndRight
-	.dw mainScripts.goronScript_text1_biggoronHealed
-	.dw mainScripts.goronScript_text2
-	.dw mainScripts.goronScript_text3_biggoronHealed
-	.dw mainScripts.goronScript_text4_biggoronHealed
-	.dw mainScripts.goronScript_text5
-	.dw mainScripts.goronScript_upgradeRingBox
-	.dw mainScripts.goronScript_giveSubrosianSecret
+	.dw {SCRIPTS_1}.goronScript_pacingLeftAndRight
+	.dw {SCRIPTS_1}.goronScript_text1_biggoronHealed
+	.dw {SCRIPTS_1}.goronScript_text2
+	.dw {SCRIPTS_1}.goronScript_text3_biggoronHealed
+	.dw {SCRIPTS_1}.goronScript_text4_biggoronHealed
+	.dw {SCRIPTS_1}.goronScript_text5
+	.dw {SCRIPTS_1}.goronScript_upgradeRingBox
+	.dw {SCRIPTS_1}.goronScript_giveSubrosianSecret

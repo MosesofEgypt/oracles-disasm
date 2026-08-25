@@ -19,7 +19,7 @@ m_InteractionCode $8f
 	ld a,>TX_3600
 	call interactionSetHighTextIndex
 
-	ld hl,mainScripts.oldManWithJewelScript
+	ld hl,{SCRIPTS_1}.oldManWithJewelScript
 	call interactionSetScript
 	call @checkHaveEssences
 

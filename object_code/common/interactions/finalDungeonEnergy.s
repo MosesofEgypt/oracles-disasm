@@ -19,13 +19,7 @@ m_InteractionCode $b5
 	set 6,(hl) ; [room flags]
 	call setDeathRespawnPoint
 
-.if defined(ROM_COMBO)
-	call wIsSeasons
-	jr nc,+
-		ld a,$09
-		ld (wc6e5),a
-	+
-.elif defined(ROM_SEASONS)
+.if defined(ROM_SEASONS)
 	ld a,$09
 	ld (wc6e5),a
 .endif
@@ -89,7 +83,7 @@ m_InteractionCode $b5
 	ld (wDisabledObjects),a
 	ld (wMenuDisabled),a
 
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 	ld (wUseSimulatedInput),a
 .endif
 

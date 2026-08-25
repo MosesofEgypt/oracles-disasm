@@ -117,10 +117,6 @@ m_InteractionCode $0c
 	jp interactionSetAnimation
 
 @interac00:
-.if defined(ROM_COMBO)
-	call wIsSeasons
-	jr c,+
-.endif
 .if defined(ROM_AGES)
 	ld a,(wTilesetFlags)
 	and TILESETFLAG_UNDERWATER
@@ -129,7 +125,6 @@ m_InteractionCode $0c
 	ld a,$0e
 	jr ++
 .endif
-+
 	ld a,(wGrassAnimationModifier)
 	and $03
 	or $08

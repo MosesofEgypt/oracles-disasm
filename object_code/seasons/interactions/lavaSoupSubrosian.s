@@ -14,7 +14,7 @@ m_InteractionCode $5c
 	ld (hl),$04
 	ld a,>TX_0b00
 	call interactionSetHighTextIndex
-	ld hl,mainScripts.lavaSoupSubrosianScript
+	ld hl,{SCRIPTS_1}.lavaSoupSubrosianScript
 	call interactionSetScript
 @state1:
 	call interactionRunScript

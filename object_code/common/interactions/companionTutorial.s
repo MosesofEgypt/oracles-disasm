@@ -125,7 +125,7 @@ m_InteractionCode $d0
 @goToDelete:
 	jr @delete
 
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 @setFlagAndDeleteWhenCompanionIsAboveAndLinkInXRange:
 	call @checkLinkInXRange
 	ret nz

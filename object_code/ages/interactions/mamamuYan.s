@@ -32,4 +32,4 @@ m_InteractionCode $53
 	jp interactionIncState
 
 @scriptTable:
-	.dw mainScripts.mamamuYanScript
+	.dw {SCRIPTS_1}.mamamuYanScript

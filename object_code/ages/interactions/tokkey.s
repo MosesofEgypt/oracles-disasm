@@ -15,7 +15,7 @@ m_InteractionCode $9d
 	call interactionInitGraphics
 	ld a,>TX_2c00
 	call interactionSetHighTextIndex
-	ld hl,mainScripts.tokkeyScript
+	ld hl,{SCRIPTS_1}.tokkeyScript
 	call interactionSetScript
 	call objectSetVisible82
 	jp interactionIncState
@@ -43,7 +43,7 @@ m_InteractionCode $9d
 	ld a,60
 	ld bc,$f810
 	call objectCreateExclamationMark
-	ld hl,mainScripts.tokkeyScript_justHeardTune
+	ld hl,{SCRIPTS_1}.tokkeyScript_justHeardTune
 	call interactionSetScript
 	jp interactionIncState
 

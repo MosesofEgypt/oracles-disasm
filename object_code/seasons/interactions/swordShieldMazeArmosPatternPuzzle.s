@@ -43,10 +43,10 @@ m_InteractionCode $67
 	ld (de),a
 	jp objectCreatePuff
 @table_571f:
-	.dw mainScripts.d8ArmosScript_pattern1
-	.dw mainScripts.d8ArmosScript_pattern2
-	.dw mainScripts.d8ArmosScript_pattern3
-	.dw mainScripts.d8ArmosScript_pattern4
+	.dw {SCRIPTS_1}.d8ArmosScript_pattern1
+	.dw {SCRIPTS_1}.d8ArmosScript_pattern2
+	.dw {SCRIPTS_1}.d8ArmosScript_pattern3
+	.dw {SCRIPTS_1}.d8ArmosScript_pattern4
 @table_5727:
 	.db $00 $01 $02 $03
 	.db $00 $01 $02 $03
@@ -105,7 +105,7 @@ m_InteractionCode $67
 	call interactionIncState
 	ld a,$4d
 	call playSound
-	ld hl,mainScripts.d8ArmosScript_giveKey
+	ld hl,{SCRIPTS_1}.d8ArmosScript_giveKey
 	jp interactionSetScript
 @func_5792:
 	ld a,$5a

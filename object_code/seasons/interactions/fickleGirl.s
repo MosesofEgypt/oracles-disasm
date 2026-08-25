@@ -139,8 +139,8 @@ func_5f70:
 	ret
 
 table_5f7e:
-	.dw mainScripts.sunkenCityFickleGirlScript_text1
-	.dw mainScripts.sunkenCityFickleGirlScript_text2
-	.dw mainScripts.sunkenCityFickleGirlScript_text2
-	.dw mainScripts.sunkenCityFickleGirlScript_text3
-	.dw mainScripts.sunkenCityFickleGirlScript_text2
+	.dw {SCRIPTS_1}.sunkenCityFickleGirlScript_text1
+	.dw {SCRIPTS_1}.sunkenCityFickleGirlScript_text2
+	.dw {SCRIPTS_1}.sunkenCityFickleGirlScript_text2
+	.dw {SCRIPTS_1}.sunkenCityFickleGirlScript_text3
+	.dw {SCRIPTS_1}.sunkenCityFickleGirlScript_text2

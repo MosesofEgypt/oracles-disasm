@@ -114,7 +114,6 @@ bipin_showText_subid1To9:
 	.db <TX_4308
 	.db <TX_4308
 
-.if defined(ROM_AGES) || defined(ROM_COMBO)
 ; Script for the "past" version of bipin
 bipinScript3:
 	initcollisions
@@ -132,7 +131,6 @@ bipinScript3:
 @alreadyGaveSeed:
 	showtext TX_4313
 	scriptjump @loop
-.endif
 
 
 ; ==================================================================================================
@@ -2744,7 +2742,7 @@ oldManScript_givesShieldUpgrade:
 	setglobalflag GLOBALFLAG_BEGAN_LIBRARY_SECRET
 	showtext TX_3312
 	wait 30
-	callscript mainScripts.scriptFunc_doEnergySwirlCutscene
+	callscript {SCRIPTS_1}.scriptFunc_doEnergySwirlCutscene
 	wait 30
 	asm15 oldManGiveShieldUpgradeToLink
 	wait 30
@@ -3053,7 +3051,7 @@ mamamuDog_decCounter:
 ; INTERAC_POSTMAN
 ; ==================================================================================================
 postmanScript:
-	jumpifroomflagset $20, mainScripts.stubScript
+	jumpifroomflagset $20, {SCRIPTS_1}.stubScript
 	initcollisions
 @npcLoop:
 	checkabutton
@@ -3346,89 +3344,89 @@ hardhatWorkerSubid03Script:
 	.dw @val04
 
 @val00:
-	asm15 scriptHelp.hardhatWorker_setPatrolDirection, $02
-	asm15 scriptHelp.hardhatWorker_setPatrolCounter,   $40
-	callscript mainScripts.hardhatWorkerFunc_patrol
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolDirection, $02
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolCounter,   $40
+	callscript {SCRIPTS_1}.hardhatWorkerFunc_patrol
 
-	asm15 scriptHelp.hardhatWorker_setPatrolDirection, $01
-	asm15 scriptHelp.hardhatWorker_setPatrolCounter,   $60
-	callscript mainScripts.hardhatWorkerFunc_patrol
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolDirection, $01
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolCounter,   $60
+	callscript {SCRIPTS_1}.hardhatWorkerFunc_patrol
 
-	asm15 scriptHelp.hardhatWorker_setPatrolDirection, $03
-	asm15 scriptHelp.hardhatWorker_setPatrolCounter,   $60
-	callscript mainScripts.hardhatWorkerFunc_patrol
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolDirection, $03
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolCounter,   $60
+	callscript {SCRIPTS_1}.hardhatWorkerFunc_patrol
 
-	asm15 scriptHelp.hardhatWorker_setPatrolDirection, $00
-	asm15 scriptHelp.hardhatWorker_setPatrolCounter,   $40
-	callscript mainScripts.hardhatWorkerFunc_patrol
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolDirection, $00
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolCounter,   $40
+	callscript {SCRIPTS_1}.hardhatWorkerFunc_patrol
 
 	scriptjump @val00
 
 @val01:
-	asm15 scriptHelp.hardhatWorker_setPatrolDirection, $02
-	asm15 scriptHelp.hardhatWorker_setPatrolCounter,   $40
-	callscript mainScripts.hardhatWorkerFunc_patrol
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolDirection, $02
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolCounter,   $40
+	callscript {SCRIPTS_1}.hardhatWorkerFunc_patrol
 
-	asm15 scriptHelp.hardhatWorker_setPatrolDirection, $01
-	asm15 scriptHelp.hardhatWorker_setPatrolCounter,   $80
-	callscript mainScripts.hardhatWorkerFunc_patrol
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolDirection, $01
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolCounter,   $80
+	callscript {SCRIPTS_1}.hardhatWorkerFunc_patrol
 
-	asm15 scriptHelp.hardhatWorker_setPatrolDirection, $00
-	asm15 scriptHelp.hardhatWorker_setPatrolCounter,   $20
-	callscript mainScripts.hardhatWorkerFunc_patrol
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolDirection, $00
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolCounter,   $20
+	callscript {SCRIPTS_1}.hardhatWorkerFunc_patrol
 
-	asm15 scriptHelp.hardhatWorker_setPatrolDirection, $02
-	asm15 scriptHelp.hardhatWorker_setPatrolCounter,   $20
-	callscript mainScripts.hardhatWorkerFunc_patrol
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolDirection, $02
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolCounter,   $20
+	callscript {SCRIPTS_1}.hardhatWorkerFunc_patrol
 
-	asm15 scriptHelp.hardhatWorker_setPatrolDirection, $03
-	asm15 scriptHelp.hardhatWorker_setPatrolCounter,   $80
-	callscript mainScripts.hardhatWorkerFunc_patrol
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolDirection, $03
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolCounter,   $80
+	callscript {SCRIPTS_1}.hardhatWorkerFunc_patrol
 
-	asm15 scriptHelp.hardhatWorker_setPatrolDirection, $00
-	asm15 scriptHelp.hardhatWorker_setPatrolCounter,   $40
-	callscript mainScripts.hardhatWorkerFunc_patrol
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolDirection, $00
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolCounter,   $40
+	callscript {SCRIPTS_1}.hardhatWorkerFunc_patrol
 
 	scriptjump @val01
 
 @val02:
-	asm15 scriptHelp.hardhatWorker_setPatrolDirection, $01
-	asm15 scriptHelp.hardhatWorker_setPatrolCounter,   $a0
-	callscript mainScripts.hardhatWorkerFunc_patrol
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolDirection, $01
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolCounter,   $a0
+	callscript {SCRIPTS_1}.hardhatWorkerFunc_patrol
 
-	asm15 scriptHelp.hardhatWorker_setPatrolDirection, $03
-	asm15 scriptHelp.hardhatWorker_setPatrolCounter,   $a0
-	callscript mainScripts.hardhatWorkerFunc_patrol
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolDirection, $03
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolCounter,   $a0
+	callscript {SCRIPTS_1}.hardhatWorkerFunc_patrol
 
 	scriptjump @val02
 
 @val03:
-	asm15 scriptHelp.hardhatWorker_setPatrolDirection, $02
-	asm15 scriptHelp.hardhatWorker_setPatrolCounter,   $40
-	callscript mainScripts.hardhatWorkerFunc_patrol
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolDirection, $02
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolCounter,   $40
+	callscript {SCRIPTS_1}.hardhatWorkerFunc_patrol
 
-	asm15 scriptHelp.hardhatWorker_setPatrolDirection, $01
-	asm15 scriptHelp.hardhatWorker_setPatrolCounter,   $a0
-	callscript mainScripts.hardhatWorkerFunc_patrol
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolDirection, $01
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolCounter,   $a0
+	callscript {SCRIPTS_1}.hardhatWorkerFunc_patrol
 
-	asm15 scriptHelp.hardhatWorker_setPatrolDirection, $03
-	asm15 scriptHelp.hardhatWorker_setPatrolCounter,   $a0
-	callscript mainScripts.hardhatWorkerFunc_patrol
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolDirection, $03
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolCounter,   $a0
+	callscript {SCRIPTS_1}.hardhatWorkerFunc_patrol
 
-	asm15 scriptHelp.hardhatWorker_setPatrolDirection, $00
-	asm15 scriptHelp.hardhatWorker_setPatrolCounter,   $40
-	callscript mainScripts.hardhatWorkerFunc_patrol
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolDirection, $00
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolCounter,   $40
+	callscript {SCRIPTS_1}.hardhatWorkerFunc_patrol
 
 	scriptjump @val03
 
 @val04:
-	asm15 scriptHelp.hardhatWorker_setPatrolDirection, $01
-	asm15 scriptHelp.hardhatWorker_setPatrolCounter,   $60
-	callscript mainScripts.hardhatWorkerFunc_patrol
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolDirection, $01
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolCounter,   $60
+	callscript {SCRIPTS_1}.hardhatWorkerFunc_patrol
 
-	asm15 scriptHelp.hardhatWorker_setPatrolDirection, $03
-	asm15 scriptHelp.hardhatWorker_setPatrolCounter,   $60
-	callscript mainScripts.hardhatWorkerFunc_patrol
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolDirection, $03
+	asm15 {SCRIPTS_HELP}.hardhatWorker_setPatrolCounter,   $60
+	callscript {SCRIPTS_1}.hardhatWorkerFunc_patrol
 
 	scriptjump @val04
 
@@ -5258,7 +5256,7 @@ goron_subid08_pressedAScript:
 	jumpifitemobtained TREASURE_BROTHER_EMBLEM, @moveAside
 
 	asm15 goron_showText_differentForPast, <TX_2491
-	scriptjump mainScripts.goron_enableInputAndResumeNappingLoop
+	scriptjump {SCRIPTS_1}.goron_enableInputAndResumeNappingLoop
 
 ; Link has the goron emblem, move aside
 @moveAside:
@@ -5282,11 +5280,11 @@ goron_subid08_pressedAScript:
 
 ; Check goron vase
 	jumpifitemobtained TREASURE_GORON_VASE, @haveVaseOrSirloin
-	scriptjump mainScripts.goron_enableInputAndResumeNappingLoop
+	scriptjump {SCRIPTS_1}.goron_enableInputAndResumeNappingLoop
 
 @checkSirloin_1:
 	jumpifitemobtained TREASURE_ROCK_BRISKET, @haveVaseOrSirloin
-	scriptjump mainScripts.goron_enableInputAndResumeNappingLoop
+	scriptjump {SCRIPTS_1}.goron_enableInputAndResumeNappingLoop
 
 
 @alreadyMovedAside:
@@ -5308,7 +5306,7 @@ goron_subid08_pressedAScript:
 
 @dontHaveVaseOrSirloin:
 	asm15 goron_showText_differentForPast, <TX_2495 ; "Yeah, a vase/sirloin would be great"
-	scriptjump mainScripts.goron_enableInputAndResumeNappingLoop
+	scriptjump {SCRIPTS_1}.goron_enableInputAndResumeNappingLoop
 
 
 @haveVaseOrSirloin:
@@ -5319,7 +5317,7 @@ goron_subid08_pressedAScript:
 @rejectedTrade:
 	asm15 goron_showText_differentForPast, <TX_2497
 	writememory wTmpcfc0.goronCutscenes.goronGuardMovedAside, $01
-	scriptjump mainScripts.goron_enableInputAndResumeNappingLoop
+	scriptjump {SCRIPTS_1}.goron_enableInputAndResumeNappingLoop
 
 ; This gets executed if you say no, then talk to him again.
 @promptForTradeAfterRejection:
@@ -5349,11 +5347,11 @@ goron_subid08_pressedAScript:
 	orroomflag $40
 	wait 30
 	asm15 goron_showText_differentForPast, <TX_249a
-	scriptjump mainScripts.goron_enableInputAndResumeNappingLoop
+	scriptjump {SCRIPTS_1}.goron_enableInputAndResumeNappingLoop
 
 @alreadyTraded:
 	asm15 goron_showText_differentForPast, <TX_249b
-	scriptjump mainScripts.goron_enableInputAndResumeNappingLoop
+	scriptjump {SCRIPTS_1}.goron_enableInputAndResumeNappingLoop
 
 
 ; ==================================================================================================
@@ -5938,7 +5936,7 @@ companionScript_subid07Script_body:
 	showtext TX_2100
 	writememory w1Companion.var3d, $00
 	enableinput
-	scriptjump mainScripts.companionScript_subid07Script
+	scriptjump {SCRIPTS_1}.companionScript_subid07Script
 
 @savedDimitri:
 	disableinput
@@ -6005,7 +6003,7 @@ companionScript_subid03Script_body:
 	showtext TX_2003
 	writememory w1Companion.var3d, $00
 	enableinput
-	scriptjump mainScripts.companionScript_subid03Script
+	scriptjump {SCRIPTS_1}.companionScript_subid03Script
 
 @retrievedGloves:
 	showtext TX_2004
@@ -6903,10 +6901,10 @@ goronElder_normalAnimation:
 
 ; Cutscene where goron elder is saved / NPC in that room after that
 goronElderScript_subid00_body:
-	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME, mainScripts.stubScript
+	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME, {SCRIPTS_1}.stubScript
 
 	asm15 checkEssenceObtained, $04
-	jumpifmemoryset wcddb, CPU_ZFLAG, mainScripts.stubScript
+	jumpifmemoryset wcddb, CPU_ZFLAG, {SCRIPTS_1}.stubScript
 
 	initcollisions
 	jumpifroomflagset $40, @npcLoop
@@ -6948,10 +6946,10 @@ goronElderScript_subid00_body:
 
 ; NPC hanging out in rolling ridge (after getting D5 essence)
 goronElderScript_subid01_body:
-	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME, mainScripts.stubScript
+	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME, {SCRIPTS_1}.stubScript
 
 	asm15 checkEssenceNotObtained, $04
-	jumpifmemoryset wcddb, CPU_ZFLAG, mainScripts.stubScript
+	jumpifmemoryset wcddb, CPU_ZFLAG, {SCRIPTS_1}.stubScript
 
 	initcollisions
 @npcLoop:
@@ -7491,8 +7489,8 @@ tokkayScript_justHeardTune_body:
 	moveleft $10
 	wait 15
 
-	callscript mainScripts.tokkeyScriptFunc_runAcrossDesk
-	callscript mainScripts.tokkeyScriptFunc_runAcrossDesk
+	callscript {SCRIPTS_1}.tokkeyScriptFunc_runAcrossDesk
+	callscript {SCRIPTS_1}.tokkeyScriptFunc_runAcrossDesk
 
 	setstate $04 ; Stop movement animation
 	wait 120
@@ -7510,8 +7508,8 @@ tokkayScript_justHeardTune_body:
 	setanimation $02
 	wait 15
 
-	callscript mainScripts.tokkeyScriptFunc_hopAcrossDesk
-	callscript mainScripts.tokkeyScriptFunc_hopAcrossDesk
+	callscript {SCRIPTS_1}.tokkeyScriptFunc_hopAcrossDesk
+	callscript {SCRIPTS_1}.tokkeyScriptFunc_hopAcrossDesk
 
 	moveleft $10
 
@@ -7545,7 +7543,7 @@ tokkayScript_justHeardTune_body:
 	resetmusic
 	setcollisionradii $06, $06
 	setstate $01
-	scriptjump mainScripts.tokkeyScript_alreadyTaughtTune
+	scriptjump {SCRIPTS_1}.tokkeyScript_alreadyTaughtTune
 
 
 ; ==================================================================================================
@@ -7857,7 +7855,7 @@ symmetryNpc_getUpgradeCapacityForText:
 symmetryNpcSubid8And9Script:
 	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME, @postgame
 	incstate ; [state] = 2
-	jumpifglobalflagset GLOBALFLAG_TUNI_NUT_PLACED, mainScripts.symmetryNpcSubid8And9Script_afterTuniNutRestored
+	jumpifglobalflagset GLOBALFLAG_TUNI_NUT_PLACED, {SCRIPTS_1}.symmetryNpcSubid8And9Script_afterTuniNutRestored
 
 @loop:
 	initcollisions
@@ -8215,7 +8213,7 @@ troySubid0Script:
 
 ; Troy in his house
 troySubid1Script:
-	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME, mainScripts.stubScript
+	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME, {SCRIPTS_1}.stubScript
 	initcollisions
 @loop:
 	checkabutton

@@ -54,101 +54,101 @@ m_InteractionCode $20
 	.dw @dungeonB
 
 @dungeon0:
-	.dw mainScripts.dungeonScript_end
-	.dw mainScripts.dungeonScript_checkActiveTriggersEq01
+	.dw {SCRIPTS_1}.dungeonScript_end
+	.dw {SCRIPTS_1}.dungeonScript_checkActiveTriggersEq01
 
 @dungeon1:
-	.dw mainScripts.dungeonScript_minibossDeath
-	.dw mainScripts.dungeonScript_checkActiveTriggersEq01
-	.dw mainScripts.dungeonScript_checkActiveTriggersEq01
-	.dw mainScripts.dungeonScript_bossDeath
+	.dw {SCRIPTS_1}.dungeonScript_minibossDeath
+	.dw {SCRIPTS_1}.dungeonScript_checkActiveTriggersEq01
+	.dw {SCRIPTS_1}.dungeonScript_checkActiveTriggersEq01
+	.dw {SCRIPTS_1}.dungeonScript_bossDeath
 
 @dungeon2:
-	.dw mainScripts.snakesRemainsScript_timerForChestDisappearing
-	.dw mainScripts.dungeonScript_minibossDeath
-	.dw mainScripts.snakesRemainsScript_bossDeath
+	.dw {SCRIPTS_1}.snakesRemainsScript_timerForChestDisappearing
+	.dw {SCRIPTS_1}.dungeonScript_minibossDeath
+	.dw {SCRIPTS_1}.snakesRemainsScript_bossDeath
 
 @dungeon3:
-	.dw mainScripts.poisonMothsLairScript_hallwayTrapRoom
-	.dw mainScripts.poisonMothsLairScript_checkStatuePuzzle
-	.dw mainScripts.poisonMothsLairScript_minibossDeath
-	.dw mainScripts.poisonMothsLairScript_bossDeath
-	.dw mainScripts.poisonMothsLairScript_openEssenceDoorIfBossBeat
+	.dw {SCRIPTS_1}.poisonMothsLairScript_hallwayTrapRoom
+	.dw {SCRIPTS_1}.poisonMothsLairScript_checkStatuePuzzle
+	.dw {SCRIPTS_1}.poisonMothsLairScript_minibossDeath
+	.dw {SCRIPTS_1}.poisonMothsLairScript_bossDeath
+	.dw {SCRIPTS_1}.poisonMothsLairScript_openEssenceDoorIfBossBeat
 
 @dungeon4:
-	.dw mainScripts.dancingDragonScript_spawnStairsToB1
-	.dw mainScripts.dancingDragonScript_torchesHallway
-	.dw mainScripts.dancingDragonScript_torchesHallway
-	.dw mainScripts.dancingDragonScript_spawnBossKey
-	.dw mainScripts.dungeonScript_bossDeath
-	.dw mainScripts.dungeonScript_minibossDeath
-	.dw mainScripts.dancingDragonScript_pushingPotsRoom
-	.dw mainScripts.dancingDragonScript_bridgeInB2
+	.dw {SCRIPTS_1}.dancingDragonScript_spawnStairsToB1
+	.dw {SCRIPTS_1}.dancingDragonScript_torchesHallway
+	.dw {SCRIPTS_1}.dancingDragonScript_torchesHallway
+	.dw {SCRIPTS_1}.dancingDragonScript_spawnBossKey
+	.dw {SCRIPTS_1}.dungeonScript_bossDeath
+	.dw {SCRIPTS_1}.dungeonScript_minibossDeath
+	.dw {SCRIPTS_1}.dancingDragonScript_pushingPotsRoom
+	.dw {SCRIPTS_1}.dancingDragonScript_bridgeInB2
 
 @dungeon5:
-	.dw mainScripts.unicornsCaveScript_spawnBossKey
-	.dw mainScripts.unicornsCaveScript_dropMagnetBallAfterDarknutKill
-	.dw mainScripts.dungeonScript_minibossDeath
-	.dw mainScripts.dungeonScript_bossDeath
+	.dw {SCRIPTS_1}.unicornsCaveScript_spawnBossKey
+	.dw {SCRIPTS_1}.unicornsCaveScript_dropMagnetBallAfterDarknutKill
+	.dw {SCRIPTS_1}.dungeonScript_minibossDeath
+	.dw {SCRIPTS_1}.dungeonScript_bossDeath
 
 @dungeon6:
-	.dw mainScripts.dungeonScript_spawnKeyOnMagnetBallToButton
-	.dw mainScripts.ancientRuinsScript_spawnStaircaseUp1FTopLeftRoom
-	.dw mainScripts.ancientRuinsScript_spawnStaircaseUp1FTopMiddleRoom
-	.dw mainScripts.ancientRuinsScript_4c50
-	.dw mainScripts.ancientRuinsScript_5TorchesMovingPlatformsRoom
-	.dw mainScripts.ancientRuinsScript_roomWithJustRopesSpawningButton
-	.dw mainScripts.ancientRuinsScript_UShapePitToMagicBoomerangOrb
-	.dw mainScripts.dungeonScript_minibossDeath
-	.dw mainScripts.ancientRuinsScript_randomButtonRoom
-	.dw mainScripts.ancientRuinsScript_4F3OrbsRoom
-	.dw mainScripts.ancientRuinsScript_spawnStairsLeadingToBoss
-	.dw mainScripts.ancientRuinsScript_spawnHeartContainerAndStairsUp
-	.dw mainScripts.ancientRuinsScript_1FTopRightTrapButtonRoom
-	.dw mainScripts.ancientRuinsScript_crystalTrapRoom
-	.dw mainScripts.ancientRuinsScript_spawnChestAfterCrystalTrapRoom
+	.dw {SCRIPTS_1}.dungeonScript_spawnKeyOnMagnetBallToButton
+	.dw {SCRIPTS_1}.ancientRuinsScript_spawnStaircaseUp1FTopLeftRoom
+	.dw {SCRIPTS_1}.ancientRuinsScript_spawnStaircaseUp1FTopMiddleRoom
+	.dw {SCRIPTS_1}.ancientRuinsScript_4c50
+	.dw {SCRIPTS_1}.ancientRuinsScript_5TorchesMovingPlatformsRoom
+	.dw {SCRIPTS_1}.ancientRuinsScript_roomWithJustRopesSpawningButton
+	.dw {SCRIPTS_1}.ancientRuinsScript_UShapePitToMagicBoomerangOrb
+	.dw {SCRIPTS_1}.dungeonScript_minibossDeath
+	.dw {SCRIPTS_1}.ancientRuinsScript_randomButtonRoom
+	.dw {SCRIPTS_1}.ancientRuinsScript_4F3OrbsRoom
+	.dw {SCRIPTS_1}.ancientRuinsScript_spawnStairsLeadingToBoss
+	.dw {SCRIPTS_1}.ancientRuinsScript_spawnHeartContainerAndStairsUp
+	.dw {SCRIPTS_1}.ancientRuinsScript_1FTopRightTrapButtonRoom
+	.dw {SCRIPTS_1}.ancientRuinsScript_crystalTrapRoom
+	.dw {SCRIPTS_1}.ancientRuinsScript_spawnChestAfterCrystalTrapRoom
 
 @dungeon7:
-	.dw mainScripts.explorersCryptScript_4OrbTrampoline
-	.dw mainScripts.explorersCryptScript_magunesuTrampoline
-	.dw mainScripts.dungeonScript_minibossDeath
-	.dw mainScripts.dungeonScript_bossDeath
-	.dw mainScripts.explorersCryptScript_4d05
-	.dw mainScripts.explorersCryptScript_randomlyPlaceNonEnemyArmos
-	.dw mainScripts.dungeonScript_checkIfMagnetBallOnButton
-	.dw mainScripts.explorersCryptScript_1stPoeSisterRoom
-	.dw mainScripts.explorersCryptScript_2ndPoeSisterRoom
-	.dw mainScripts.explorersCryptScript_4FiresRoom_1
-	.dw mainScripts.explorersCryptScript_4FiresRoom_2
-	.dw mainScripts.explorersCryptScript_darknutBridge
-	.dw mainScripts.explorersCryptScript_roomLeftOfRandomArmosRoom
-	.dw mainScripts.explorersCryptScript_dropKeyDownAFloor
-	.dw mainScripts.explorersCryptScript_keyDroppedFromAbove
+	.dw {SCRIPTS_1}.explorersCryptScript_4OrbTrampoline
+	.dw {SCRIPTS_1}.explorersCryptScript_magunesuTrampoline
+	.dw {SCRIPTS_1}.dungeonScript_minibossDeath
+	.dw {SCRIPTS_1}.dungeonScript_bossDeath
+	.dw {SCRIPTS_1}.explorersCryptScript_4d05
+	.dw {SCRIPTS_1}.explorersCryptScript_randomlyPlaceNonEnemyArmos
+	.dw {SCRIPTS_1}.dungeonScript_checkIfMagnetBallOnButton
+	.dw {SCRIPTS_1}.explorersCryptScript_1stPoeSisterRoom
+	.dw {SCRIPTS_1}.explorersCryptScript_2ndPoeSisterRoom
+	.dw {SCRIPTS_1}.explorersCryptScript_4FiresRoom_1
+	.dw {SCRIPTS_1}.explorersCryptScript_4FiresRoom_2
+	.dw {SCRIPTS_1}.explorersCryptScript_darknutBridge
+	.dw {SCRIPTS_1}.explorersCryptScript_roomLeftOfRandomArmosRoom
+	.dw {SCRIPTS_1}.explorersCryptScript_dropKeyDownAFloor
+	.dw {SCRIPTS_1}.explorersCryptScript_keyDroppedFromAbove
 
 @dungeon8:
-	.dw mainScripts.swordAndShieldMazeScript_verticalBridgeUnlockedByOrb
-	.dw mainScripts.swordAndShieldMazeScript_verticalBridgeInLava
-	.dw mainScripts.swordAndShieldMazeScript_armosBlockingStairs
-	.dw mainScripts.dungeonScript_spawnKeyOnMagnetBallToButton
-	.dw mainScripts.swordAndShieldMazeScript_7torchesAfterMiniboss
-	.dw mainScripts.swordAndShieldMazeScript_spawnFireKeeseAtLavaHoles
-	.dw mainScripts.swordAndShieldMazeScript_pushableIceBlocks
-	.dw mainScripts.dungeonScript_minibossDeath
-	.dw mainScripts.dungeonScript_bossDeath
-	.dw mainScripts.swordAndShieldMazeScript_horizontalBridgeByMoldorms
-	.dw mainScripts.swordAndShieldMazeScript_tripleEyesByMiniboss
-	.dw mainScripts.swordAndShieldMazeScript_tripleEyesNearStart
+	.dw {SCRIPTS_1}.swordAndShieldMazeScript_verticalBridgeUnlockedByOrb
+	.dw {SCRIPTS_1}.swordAndShieldMazeScript_verticalBridgeInLava
+	.dw {SCRIPTS_1}.swordAndShieldMazeScript_armosBlockingStairs
+	.dw {SCRIPTS_1}.dungeonScript_spawnKeyOnMagnetBallToButton
+	.dw {SCRIPTS_1}.swordAndShieldMazeScript_7torchesAfterMiniboss
+	.dw {SCRIPTS_1}.swordAndShieldMazeScript_spawnFireKeeseAtLavaHoles
+	.dw {SCRIPTS_1}.swordAndShieldMazeScript_pushableIceBlocks
+	.dw {SCRIPTS_1}.dungeonScript_minibossDeath
+	.dw {SCRIPTS_1}.dungeonScript_bossDeath
+	.dw {SCRIPTS_1}.swordAndShieldMazeScript_horizontalBridgeByMoldorms
+	.dw {SCRIPTS_1}.swordAndShieldMazeScript_tripleEyesByMiniboss
+	.dw {SCRIPTS_1}.swordAndShieldMazeScript_tripleEyesNearStart
 
 @dungeon9:
-	.dw mainScripts.onoxsCastleScript_setFlagOnAllEnemiesDefeated
-	.dw mainScripts.onoxsCastleScript_resetRoomFlagsOnDungeonStart
+	.dw {SCRIPTS_1}.onoxsCastleScript_setFlagOnAllEnemiesDefeated
+	.dw {SCRIPTS_1}.onoxsCastleScript_resetRoomFlagsOnDungeonStart
 
 @dungeonA:
 @dungeonB:
-	.dw mainScripts.dungeonScript_spawnKeyOnMagnetBallToButton
-	.dw mainScripts.dungeonScript_checkActiveTriggersEq01
-	.dw mainScripts.herosCaveScript_spawnChestOnTorchLit
-	.dw mainScripts.dungeonScript_checkIfMagnetBallOnButton
-	.dw mainScripts.herosCaveScript_check6OrbsHit
-	.dw mainScripts.herosCaveScript_allButtonsPressedAndEnemiesDefeated
-	.dw mainScripts.herosCaveScript_spawnChestOn2TorchesLit
+	.dw {SCRIPTS_1}.dungeonScript_spawnKeyOnMagnetBallToButton
+	.dw {SCRIPTS_1}.dungeonScript_checkActiveTriggersEq01
+	.dw {SCRIPTS_1}.herosCaveScript_spawnChestOnTorchLit
+	.dw {SCRIPTS_1}.dungeonScript_checkIfMagnetBallOnButton
+	.dw {SCRIPTS_1}.herosCaveScript_check6OrbsHit
+	.dw {SCRIPTS_1}.herosCaveScript_allButtonsPressedAndEnemiesDefeated
+	.dw {SCRIPTS_1}.herosCaveScript_spawnChestOn2TorchesLit

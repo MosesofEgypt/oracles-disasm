@@ -15,7 +15,7 @@ m_InteractionCode $cb
 	ld (hl),$02
 	ld l,Interaction.var3f
 	ld (hl),GRAVEYARD_SECRET & $0f
-	ld hl,mainScripts.linkedGameNpcScript
+	ld hl,{SCRIPTS_1}.linkedGameNpcScript
 	call interactionSetScript
 
 @state1:
@@ -43,4 +43,4 @@ m_InteractionCode $cb
 	jp interactionIncState
 
 @scriptTable:
-	.dw mainScripts.linkedGameNpcScript
+	.dw {SCRIPTS_1}.linkedGameNpcScript

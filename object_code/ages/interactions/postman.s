@@ -37,4 +37,4 @@ m_InteractionCode $55
 	jp interactionIncState
 
 @scriptTable:
-	.dw mainScripts.postmanScript
+	.dw {SCRIPTS_1}.postmanScript

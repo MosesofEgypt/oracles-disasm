@@ -212,18 +212,18 @@ m_InteractionCode $73
 	ret
 @table_71cd:
 	; Dimitri
-	.dw mainScripts.moblinBulliesScript_dimitriBully1BeforeSaving
-	.dw mainScripts.moblinBulliesScript_dimitriBully2BeforeSaving
-	.dw mainScripts.moblinBulliesScript_dimitriBully3BeforeSaving
+	.dw {SCRIPTS_1}.moblinBulliesScript_dimitriBully1BeforeSaving
+	.dw {SCRIPTS_1}.moblinBulliesScript_dimitriBully2BeforeSaving
+	.dw {SCRIPTS_1}.moblinBulliesScript_dimitriBully3BeforeSaving
 @table_71d3:
 	; Dimitri
-	.dw mainScripts.moblinBulliesScript_dimitriBully1AfterSaving
-	.dw mainScripts.moblinBulliesScript_dimitriBully2AfterSaving
-	.dw mainScripts.moblinBulliesScript_dimitriBully3AfterSaving
+	.dw {SCRIPTS_1}.moblinBulliesScript_dimitriBully1AfterSaving
+	.dw {SCRIPTS_1}.moblinBulliesScript_dimitriBully2AfterSaving
+	.dw {SCRIPTS_1}.moblinBulliesScript_dimitriBully3AfterSaving
 @table_71d9:
-	.dw mainScripts.moblinBulliesScript_mooshBully1
-	.dw mainScripts.moblinBulliesScript_mooshBully2
-	.dw mainScripts.moblinBulliesScript_mooshBully3
-	.dw mainScripts.moblinBulliesScript_maskedMoblin1MovingUp
-	.dw mainScripts.moblinBulliesScript_maskedMoblin2MovingUp
-	.dw mainScripts.moblinBulliesScript_maskedMoblinMovingLeft
+	.dw {SCRIPTS_1}.moblinBulliesScript_mooshBully1
+	.dw {SCRIPTS_1}.moblinBulliesScript_mooshBully2
+	.dw {SCRIPTS_1}.moblinBulliesScript_mooshBully3
+	.dw {SCRIPTS_1}.moblinBulliesScript_maskedMoblin1MovingUp
+	.dw {SCRIPTS_1}.moblinBulliesScript_maskedMoblin2MovingUp
+	.dw {SCRIPTS_1}.moblinBulliesScript_maskedMoblinMovingLeft

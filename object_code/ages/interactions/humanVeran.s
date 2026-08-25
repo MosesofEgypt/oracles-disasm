@@ -11,7 +11,7 @@ m_InteractionCode $bb
 @state0:
 	call interactionIncState
 	call interactionInitGraphics
-	ld hl,mainScripts.humanVeranScript
+	ld hl,{SCRIPTS_1}.humanVeranScript
 	call interactionSetScript
 	jp objectSetVisible82
 

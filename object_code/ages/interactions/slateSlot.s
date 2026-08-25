@@ -24,7 +24,7 @@ m_InteractionCode $db
 	and (hl)
 	jp nz,interactionDelete
 
-	ld hl,mainScripts.slateSlotScript
+	ld hl,{SCRIPTS_1}.slateSlotScript
 	call interactionSetScript
 	jp interactionIncState
 
@@ -62,7 +62,7 @@ m_InteractionCode $db
 	ld (wDisabledObjects),a
 	ld (wMenuDisabled),a
 
-	ld hl,mainScripts.slateSlotScript_placeSlate
+	ld hl,{SCRIPTS_1}.slateSlotScript_placeSlate
 	call interactionSetScript
 	call interactionIncState
 

@@ -12,7 +12,13 @@ m_InteractionCode $5b
 @state0:
 	call @loadScriptAndInitGraphics
 	call interactionSetAlwaysUpdateBit
+.if !defined(ROM_COMBO)
 	callab interactionCode1.clearFallDownHoleEventBuffer
+.elif defined(ROM_AGES)
+	callab interactionCodeAges7.clearFallDownHoleEventBuffer
+.else
+	callab interactionCodeSeasons7.clearFallDownHoleEventBuffer
+.endif
 
 
 ; Normal script is running; waiting for Link to talk or for something to fall into a hole.
@@ -28,7 +34,7 @@ m_InteractionCode $5b
 	jp interactionAnimateAsNpc
 
 @droppedSomethingIntoHole:
-	ld hl,mainScripts.toiletHandScript_reactToObjectInHole
+	ld hl,{SCRIPTS_1}.toiletHandScript_reactToObjectInHole
 	call interactionSetScript
 	jp interactionIncState
 
@@ -51,7 +57,13 @@ m_InteractionCode $5b
 
 @scriptEnded:
 	call @loadScript
+.if !defined(ROM_COMBO)
 	callab interactionCode1.clearFallDownHoleEventBuffer
+.elif defined(ROM_AGES)
+	callab interactionCodeAges7.clearFallDownHoleEventBuffer
+.else
+	callab interactionCodeSeasons7.clearFallDownHoleEventBuffer
+.endif
 	ld e,Interaction.state
 	ld a,$01
 	ld (de),a
@@ -133,4 +145,4 @@ m_InteractionCode $5b
 	.db $00
 
 @scriptTable:
-	.dw mainScripts.toiletHandScript
+	.dw {SCRIPTS_1}.toiletHandScript

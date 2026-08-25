@@ -32,7 +32,7 @@ interactionCodee6_state0:
 	jp nz,interactionDelete
 	xor a
 	ld (wccd4),a
-	ld hl,mainScripts.gettingRodOfSeasonsScript
+	ld hl,{SCRIPTS_1}.gettingRodOfSeasonsScript
 	jp interactionSetScript
 
 @sparkles:
@@ -261,7 +261,7 @@ interactionCodee6_state1:
 @@substate4:
 	call retIfTextIsActive
 	call interactionIncSubstate
-	ld hl,mainScripts.gettingRodOfSeasonsScript_setCounter1To32
+	ld hl,{SCRIPTS_1}.gettingRodOfSeasonsScript_setCounter1To32
 	jp interactionSetScript
 
 @@substate5:

@@ -19,7 +19,7 @@ m_InteractionCode $5b
 	ld (hl),$01
 	ld l,$49
 	ld (hl),$04
-	ld hl,mainScripts.lostWoodsDekuScrubScript
+	ld hl,{SCRIPTS_1}.lostWoodsDekuScrubScript
 	call interactionSetScript
 @state1:
 	call interactionRunScript

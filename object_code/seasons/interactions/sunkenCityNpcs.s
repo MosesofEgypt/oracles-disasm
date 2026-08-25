@@ -68,22 +68,22 @@ m_InteractionCode $8d
 	jp interactionAnimateAsNpc
 
 @floodedHouseGirlScripts:
-	.dw mainScripts.floodedHouseGirlScript_text1
-	.dw mainScripts.floodedHouseGirlScript_text2
-	.dw mainScripts.floodedHouseGirlScript_text3
-	.dw mainScripts.floodedHouseGirlScript_text4
-	.dw mainScripts.floodedHouseGirlScript_text5
+	.dw {SCRIPTS_1}.floodedHouseGirlScript_text1
+	.dw {SCRIPTS_1}.floodedHouseGirlScript_text2
+	.dw {SCRIPTS_1}.floodedHouseGirlScript_text3
+	.dw {SCRIPTS_1}.floodedHouseGirlScript_text4
+	.dw {SCRIPTS_1}.floodedHouseGirlScript_text5
 
 @masterDiversWifeScripts:
-	.dw mainScripts.masterDiversWifeScript_text1
-	.dw mainScripts.masterDiversWifeScript_text2
-	.dw mainScripts.masterDiversWifeScript_text3
-	.dw mainScripts.masterDiversWifeScript_text4
-	.dw mainScripts.masterDiversWifeScript_text5
+	.dw {SCRIPTS_1}.masterDiversWifeScript_text1
+	.dw {SCRIPTS_1}.masterDiversWifeScript_text2
+	.dw {SCRIPTS_1}.masterDiversWifeScript_text3
+	.dw {SCRIPTS_1}.masterDiversWifeScript_text4
+	.dw {SCRIPTS_1}.masterDiversWifeScript_text5
 
 @masterDiverScripts:
-	.dw mainScripts.masterDiverScript_text1
-	.dw mainScripts.masterDiverScript_text2
-	.dw mainScripts.masterDiverScript_text3
-	.dw mainScripts.masterDiverScript_text4
-	.dw mainScripts.masterDiverScript_text5
+	.dw {SCRIPTS_1}.masterDiverScript_text1
+	.dw {SCRIPTS_1}.masterDiverScript_text2
+	.dw {SCRIPTS_1}.masterDiverScript_text3
+	.dw {SCRIPTS_1}.masterDiverScript_text4
+	.dw {SCRIPTS_1}.masterDiverScript_text5

@@ -16,7 +16,7 @@ m_InteractionCode $5a
 	call interactionSetAlwaysUpdateBit
 	ld a,>TX_2300
 	call interactionSetHighTextIndex
-	ld hl,mainScripts.blainoScript
+	ld hl,{SCRIPTS_1}.blainoScript
 	call interactionSetScript
 
 @state1:
@@ -49,7 +49,7 @@ m_InteractionCode $5a
 	call resetLinkInvincibility
 	xor a
 	ld (wInBoxingMatch),a
-	ld hl,mainScripts.blainoFightDoneScript
+	ld hl,{SCRIPTS_1}.blainoFightDoneScript
 	call interactionSetScript
 	jp interactionRunScript
 

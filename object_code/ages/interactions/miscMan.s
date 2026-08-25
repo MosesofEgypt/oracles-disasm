@@ -75,10 +75,10 @@ m_InteractionCode $41
 	jp interactionIncState
 
 @scriptTable:
-	.dw mainScripts.manOutsideD2Script
-	.dw mainScripts.lynnaManScript_befored3
-	.dw mainScripts.lynnaManScript_afterd3
-	.dw mainScripts.lynnaManScript_afterNayruSaved
-	.dw mainScripts.lynnaManScript_afterd7
-	.dw mainScripts.lynnaManScript_afterGotMakuSeed
-	.dw mainScripts.lynnaManScript_postGame
+	.dw {SCRIPTS_1}.manOutsideD2Script
+	.dw {SCRIPTS_1}.lynnaManScript_befored3
+	.dw {SCRIPTS_1}.lynnaManScript_afterd3
+	.dw {SCRIPTS_1}.lynnaManScript_afterNayruSaved
+	.dw {SCRIPTS_1}.lynnaManScript_afterd7
+	.dw {SCRIPTS_1}.lynnaManScript_afterGotMakuSeed
+	.dw {SCRIPTS_1}.lynnaManScript_postGame

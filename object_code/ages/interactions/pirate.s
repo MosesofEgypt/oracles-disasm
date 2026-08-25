@@ -55,11 +55,11 @@ m_InteractionCode $c4
 	jp interactionSetScript
 
 @scriptTable:
-	.dw mainScripts.pirateSubid0Script
-	.dw mainScripts.pirateSubid1Script
-	.dw mainScripts.pirateSubid2Script
-	.dw mainScripts.pirateSubid3Script
-	.dw mainScripts.pirateSubid4Script
+	.dw {SCRIPTS_1}.pirateSubid0Script
+	.dw {SCRIPTS_1}.pirateSubid1Script
+	.dw {SCRIPTS_1}.pirateSubid2Script
+	.dw {SCRIPTS_1}.pirateSubid3Script
+	.dw {SCRIPTS_1}.pirateSubid4Script
 
 
 ; Subids 0-3: waiting for signal from piration captain to jump in excitement
@@ -133,7 +133,7 @@ m_InteractionCode $c4
 	ld (wMenuDisabled),a
 	ld a,SNDCTRL_STOPMUSIC
 	call playSound
-	ld hl,mainScripts.pirateSubid4Script_insertEyeball
+	ld hl,{SCRIPTS_1}.pirateSubid4Script_insertEyeball
 	call interactionSetScript
 
 @state4:

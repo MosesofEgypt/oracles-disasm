@@ -32,5 +32,5 @@ m_InteractionCode $2a
 
 	call objectSetVisiblec2
 
-	ld hl,mainScripts.librarianScript
+	ld hl,{SCRIPTS_1}.librarianScript
 	jp interactionSetScript

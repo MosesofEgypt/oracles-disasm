@@ -21,7 +21,13 @@ m_InteractionCode $a2
 	.dw movingPlatform_stateC
 
 @state0To7:
-	ld hl,movingSidescrollConveyorScriptTable
+	.if !defined(ROM_COMBO)
+		ld hl,movingSidescrollConveyorScriptTable
+	.elif defined(ROM_AGES)
+		ld hl,movingSidescrollConveyorScriptTable_ages
+	.else
+		ld hl,movingSidescrollConveyorScriptTable_seasons
+	.endif
 	call objectLoadMovementScript
 	call interactionInitGraphics
 	ld h,d

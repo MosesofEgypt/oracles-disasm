@@ -30,4 +30,4 @@ m_InteractionCode $5a
 	jp interactionIncState
 
 @scriptTable:
-	.dw mainScripts.oldZoraScript
+	.dw {SCRIPTS_1}.oldZoraScript

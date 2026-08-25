@@ -12,9 +12,9 @@ m_InteractionCode $70
 	ld (de),a
 	ld a,(wWarpDestPos)
 	cp $04
-	ld hl,mainScripts.hollyScript_enteredFromChimney
+	ld hl,{SCRIPTS_1}.hollyScript_enteredFromChimney
 	jr z,@setScript
-	ld hl,mainScripts.hollyScript_enteredNormally
+	ld hl,{SCRIPTS_1}.hollyScript_enteredNormally
 @setScript:
 	call interactionSetScript
 	call interactionInitGraphics

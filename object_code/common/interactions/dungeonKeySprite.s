@@ -20,7 +20,13 @@ m_InteractionCode $17
 	; subid which will determine the graphic to use.
 	ld l,Interaction.subid
 	ld a,(hl)
-	ld hl,keyDoorGraphicTable
+	.if !defined(ROM_COMBO)
+		ld hl,keyDoorGraphicTable
+	.elif defined(ROM_AGES)
+		ld hl,keyDoorGraphicTable_ages
+	.else
+		ld hl,keyDoorGraphicTable_seasons
+	.endif
 	call lookupCollisionTable
 	ld e,Interaction.subid
 	ld (de),a

@@ -55,5 +55,5 @@ m_InteractionCode $42
 	jp interactionIncState
 
 @scriptTable:
-	.dw mainScripts.mustacheManScript
-	.dw mainScripts.genericNpcScript
+	.dw {SCRIPTS_1}.mustacheManScript
+	.dw {SCRIPTS_1}.genericNpcScript

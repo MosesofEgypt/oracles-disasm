@@ -82,6 +82,6 @@ m_InteractionCode $73
 	jp interactionDelete
 
 @scriptTable:
-	.dw mainScripts.ghiniHarassingMoosh_subid00Script
-	.dw mainScripts.ghiniHarassingMoosh_subid01Script
-	.dw mainScripts.ghiniHarassingMoosh_subid02Script
+	.dw {SCRIPTS_1}.ghiniHarassingMoosh_subid00Script
+	.dw {SCRIPTS_1}.ghiniHarassingMoosh_subid01Script
+	.dw {SCRIPTS_1}.ghiniHarassingMoosh_subid02Script

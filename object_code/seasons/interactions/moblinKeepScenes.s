@@ -122,6 +122,6 @@ moblinKeepScene_spawn2MoblinsAfterKeepDestroyed:
 	.db $01 $56 $68 $00
 
 moblinKeepScene_scriptTable:
-	.dw mainScripts.moblinKeepSceneScript_linkSeenOnRightSide
-	.dw mainScripts.moblinKeepSceneScript_settingUpFight
-	.dw mainScripts.moblinKeepSceneScript_postKeepDestruction
+	.dw {SCRIPTS_1}.moblinKeepSceneScript_linkSeenOnRightSide
+	.dw {SCRIPTS_1}.moblinKeepSceneScript_settingUpFight
+	.dw {SCRIPTS_1}.moblinKeepSceneScript_postKeepDestruction

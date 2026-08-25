@@ -110,7 +110,7 @@ m_InteractionCode $aa
 	jp interactionSetScript
 
 @scriptTable:
-	.dw mainScripts.dinScript
+	.dw {SCRIPTS_1}.dinScript
 
 
 @updateSpeedZ:

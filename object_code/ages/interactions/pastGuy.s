@@ -209,20 +209,20 @@ m_InteractionCode $43
 	jp interactionIncState
 
 @scriptTable:
-	.dw mainScripts.pastGuySubid0Script
-	.dw mainScripts.stubScript
-	.dw mainScripts.stubScript
-	.dw mainScripts.pastGuySubid3Script
-	.dw mainScripts.stubScript
-	.dw mainScripts.stubScript
-	.dw mainScripts.pastGuySubid6Script
+	.dw {SCRIPTS_1}.pastGuySubid0Script
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.pastGuySubid3Script
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.stubScript
+	.dw {SCRIPTS_1}.pastGuySubid6Script
 
 @subid1And2ScriptTable:
-	.dw mainScripts.pastGuySubid1And2Script_befored4
-	.dw mainScripts.pastGuySubid1And2Script_befored4
-	.dw mainScripts.pastGuySubid1And2Script_afterd4
-	.dw mainScripts.pastGuySubid1And2Script_afterNayruSaved
-	.dw mainScripts.pastGuySubid1And2Script_afterd7
-	.dw mainScripts.pastGuySubid1And2Script_afterGotMakuSeed
-	.dw mainScripts.pastGuySubid1And2Script_afterGotMakuSeed
-	.dw mainScripts.pastGuySubid1And2Script_afterGotMakuSeed
+	.dw {SCRIPTS_1}.pastGuySubid1And2Script_befored4
+	.dw {SCRIPTS_1}.pastGuySubid1And2Script_befored4
+	.dw {SCRIPTS_1}.pastGuySubid1And2Script_afterd4
+	.dw {SCRIPTS_1}.pastGuySubid1And2Script_afterNayruSaved
+	.dw {SCRIPTS_1}.pastGuySubid1And2Script_afterd7
+	.dw {SCRIPTS_1}.pastGuySubid1And2Script_afterGotMakuSeed
+	.dw {SCRIPTS_1}.pastGuySubid1And2Script_afterGotMakuSeed
+	.dw {SCRIPTS_1}.pastGuySubid1And2Script_afterGotMakuSeed

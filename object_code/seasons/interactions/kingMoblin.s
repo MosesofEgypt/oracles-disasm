@@ -68,13 +68,13 @@ m_InteractionCode $95
 	ld (wTmpcfc0.genericCutscene.cfd1),a
 	jr @state1
 @@subid4:
-	ld hl,mainScripts.script73cd
+	ld hl,{SCRIPTS_1}.script73cd
 	call interactionSetScript
 @@subid3:
 	call interactionInitGraphics
 	jp interactionAnimateAsNpc
 @@subid5:
-	ld hl,mainScripts.script73d8
+	ld hl,{SCRIPTS_1}.script73d8
 	call interactionSetScript
 	ld a,$01
 	ld (wLoadedTreeGfxIndex),a
@@ -169,7 +169,7 @@ m_InteractionCode $95
 	ld c,a
 	ld a,$50
 	call @@@func_5547
-	ld hl,mainScripts.kingMoblinScript_trapLinkInBombedHouse
+	ld hl,{SCRIPTS_1}.kingMoblinScript_trapLinkInBombedHouse
 	jp interactionSetScript
 @@@func_5547:
 	ldh (<hFF8B),a
@@ -237,6 +237,6 @@ m_InteractionCode $95
 	jp interactionAnimate
 table_55bf:
 	; based on room flags
-	.dw mainScripts.script73ab ; bit 6 and 7 both not set
-	.dw mainScripts.script73b5 ; 1 of bit 6 and 7 set
-	.dw mainScripts.script73bf ; both of bits 6 and 7 set
+	.dw {SCRIPTS_1}.script73ab ; bit 6 and 7 both not set
+	.dw {SCRIPTS_1}.script73b5 ; 1 of bit 6 and 7 set
+	.dw {SCRIPTS_1}.script73bf ; both of bits 6 and 7 set

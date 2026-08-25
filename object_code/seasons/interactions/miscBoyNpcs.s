@@ -386,47 +386,47 @@ table_6ac9:
 	.dw @var03_03
 
 @var03_00:
-	.dw mainScripts.boyWithDogScript_text1
-	.dw mainScripts.boyWithDogScript_text2
-	.dw mainScripts.boyWithDogScript_text2
-	.dw mainScripts.boyWithDogScript_text3
-	.dw mainScripts.boyWithDogScript_text5
-	.dw mainScripts.boyWithDogScript_text5
-	.dw mainScripts.boyWithDogScript_text6
-	.dw mainScripts.boyWithDogScript_text6
-	.dw mainScripts.boyWithDogScript_text7
-	.dw mainScripts.boyWithDogScript_text4
-	.dw mainScripts.boyWithDogScript_text5
+	.dw {SCRIPTS_1}.boyWithDogScript_text1
+	.dw {SCRIPTS_1}.boyWithDogScript_text2
+	.dw {SCRIPTS_1}.boyWithDogScript_text2
+	.dw {SCRIPTS_1}.boyWithDogScript_text3
+	.dw {SCRIPTS_1}.boyWithDogScript_text5
+	.dw {SCRIPTS_1}.boyWithDogScript_text5
+	.dw {SCRIPTS_1}.boyWithDogScript_text6
+	.dw {SCRIPTS_1}.boyWithDogScript_text6
+	.dw {SCRIPTS_1}.boyWithDogScript_text7
+	.dw {SCRIPTS_1}.boyWithDogScript_text4
+	.dw {SCRIPTS_1}.boyWithDogScript_text5
 
 @var03_01:
-	.dw mainScripts.horonVillageBoyScript_text1
-	.dw mainScripts.horonVillageBoyScript_text1
-	.dw mainScripts.horonVillageBoyScript_text2
-	.dw mainScripts.horonVillageBoyScript_text2
-	.dw mainScripts.horonVillageBoyScript_text3
-	.dw mainScripts.horonVillageBoyScript_text4
-	.dw mainScripts.horonVillageBoyScript_text5
-	.dw mainScripts.horonVillageBoyScript_text6
-	.dw mainScripts.horonVillageBoyScript_text7
-	.dw mainScripts.horonVillageBoyScript_text2
-	.dw mainScripts.horonVillageBoyScript_text4
+	.dw {SCRIPTS_1}.horonVillageBoyScript_text1
+	.dw {SCRIPTS_1}.horonVillageBoyScript_text1
+	.dw {SCRIPTS_1}.horonVillageBoyScript_text2
+	.dw {SCRIPTS_1}.horonVillageBoyScript_text2
+	.dw {SCRIPTS_1}.horonVillageBoyScript_text3
+	.dw {SCRIPTS_1}.horonVillageBoyScript_text4
+	.dw {SCRIPTS_1}.horonVillageBoyScript_text5
+	.dw {SCRIPTS_1}.horonVillageBoyScript_text6
+	.dw {SCRIPTS_1}.horonVillageBoyScript_text7
+	.dw {SCRIPTS_1}.horonVillageBoyScript_text2
+	.dw {SCRIPTS_1}.horonVillageBoyScript_text4
 
 @var03_02:
-	.dw mainScripts.springBloomBoyScript_text1
-	.dw mainScripts.springBloomBoyScript_text1
-	.dw mainScripts.springBloomBoyScript_text1
-	.dw mainScripts.springBloomBoyScript_text1
-	.dw mainScripts.springBloomBoyScript_text2
-	.dw mainScripts.springBloomBoyScript_text2
-	.dw mainScripts.springBloomBoyScript_text2
-	.dw mainScripts.springBloomBoyScript_text2
-	.dw mainScripts.springBloomBoyScript_text2
-	.dw mainScripts.springBloomBoyScript_text1
-	.dw mainScripts.springBloomBoyScript_text3
+	.dw {SCRIPTS_1}.springBloomBoyScript_text1
+	.dw {SCRIPTS_1}.springBloomBoyScript_text1
+	.dw {SCRIPTS_1}.springBloomBoyScript_text1
+	.dw {SCRIPTS_1}.springBloomBoyScript_text1
+	.dw {SCRIPTS_1}.springBloomBoyScript_text2
+	.dw {SCRIPTS_1}.springBloomBoyScript_text2
+	.dw {SCRIPTS_1}.springBloomBoyScript_text2
+	.dw {SCRIPTS_1}.springBloomBoyScript_text2
+	.dw {SCRIPTS_1}.springBloomBoyScript_text2
+	.dw {SCRIPTS_1}.springBloomBoyScript_text1
+	.dw {SCRIPTS_1}.springBloomBoyScript_text3
 
 @var03_03:
-	.dw mainScripts.sunkenCityBoyScript_text1
-	.dw mainScripts.sunkenCityBoyScript_text2
-	.dw mainScripts.sunkenCityBoyScript_text3
-	.dw mainScripts.sunkenCityBoyScript_text4
-	.dw mainScripts.sunkenCityBoyScript_text3
+	.dw {SCRIPTS_1}.sunkenCityBoyScript_text1
+	.dw {SCRIPTS_1}.sunkenCityBoyScript_text2
+	.dw {SCRIPTS_1}.sunkenCityBoyScript_text3
+	.dw {SCRIPTS_1}.sunkenCityBoyScript_text4
+	.dw {SCRIPTS_1}.sunkenCityBoyScript_text3

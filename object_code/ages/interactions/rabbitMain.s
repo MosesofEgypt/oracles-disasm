@@ -34,7 +34,7 @@ interactionCode4b_body:
 	.dw @initSubid7
 
 @initSubid0:
-	ld hl,mainScripts.rabbitScript_listeningToNayruGameStart
+	ld hl,{SCRIPTS_1}.rabbitScript_listeningToNayruGameStart
 	jp interactionSetScript
 
 ; This is also called from outside this interaction's code
@@ -109,9 +109,9 @@ interactionCode4b_body:
 
 	ld a,GLOBALFLAG_SAVED_NAYRU
 	call checkGlobalFlag
-	ld hl,mainScripts.rabbitScript_waitingForNayru1
+	ld hl,{SCRIPTS_1}.rabbitScript_waitingForNayru1
 	jp z,+
-	ld hl,mainScripts.rabbitScript_waitingForNayru2
+	ld hl,{SCRIPTS_1}.rabbitScript_waitingForNayru2
 +
 	call interactionSetScript
 
@@ -377,7 +377,7 @@ rabbitSubid4:
 	ld h,d
 	ld l,Interaction.substate
 	ld (hl),$02
-	ld hl,mainScripts.rabbitSubid4Script
+	ld hl,{SCRIPTS_1}.rabbitSubid4Script
 	jp interactionSetScript
 ++
 	call interactionAnimate

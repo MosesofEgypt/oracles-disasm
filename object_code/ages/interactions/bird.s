@@ -34,7 +34,7 @@ m_InteractionCode $4c
 ; Listening to Nayru at the start of the game
 @initSubid00:
 	call bird_hop
-	ld hl,mainScripts.birdScript_listeningToNayruGameStart
+	ld hl,{SCRIPTS_1}.birdScript_listeningToNayruGameStart
 	jp interactionSetScript
 
 
@@ -51,7 +51,7 @@ m_InteractionCode $4c
 	call checkGlobalFlag
 	jp nz,interactionDelete
 
-	ld hl,mainScripts.birdScript_zeldaKidnapped
+	ld hl,{SCRIPTS_1}.birdScript_zeldaKidnapped
 	call interactionSetScript
 	call interactionSetAlwaysUpdateBit
 

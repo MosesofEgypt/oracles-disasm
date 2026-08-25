@@ -46,19 +46,19 @@ m_InteractionCode $bf
 	jp interactionSetScript
 
 @scriptTable:
-	.dw mainScripts.symmetryNpcSubid0And1Script
-	.dw mainScripts.symmetryNpcSubid0And1Script
-	.dw mainScripts.symmetryNpcSubid2And3Script
-	.dw mainScripts.symmetryNpcSubid2And3Script
-	.dw mainScripts.symmetryNpcSubid4And5Script
-	.dw mainScripts.symmetryNpcSubid4And5Script
-	.dw mainScripts.symmetryNpcSubid6And7Script
-	.dw mainScripts.symmetryNpcSubid6And7Script
-	.dw mainScripts.symmetryNpcSubid8And9Script
-	.dw mainScripts.symmetryNpcSubid8And9Script
-	.dw mainScripts.symmetryNpcSubidAScript
-	.dw mainScripts.symmetryNpcSubidBScript
-	.dw mainScripts.symmetryNpcSubidCScript
+	.dw {SCRIPTS_1}.symmetryNpcSubid0And1Script
+	.dw {SCRIPTS_1}.symmetryNpcSubid0And1Script
+	.dw {SCRIPTS_1}.symmetryNpcSubid2And3Script
+	.dw {SCRIPTS_1}.symmetryNpcSubid2And3Script
+	.dw {SCRIPTS_1}.symmetryNpcSubid4And5Script
+	.dw {SCRIPTS_1}.symmetryNpcSubid4And5Script
+	.dw {SCRIPTS_1}.symmetryNpcSubid6And7Script
+	.dw {SCRIPTS_1}.symmetryNpcSubid6And7Script
+	.dw {SCRIPTS_1}.symmetryNpcSubid8And9Script
+	.dw {SCRIPTS_1}.symmetryNpcSubid8And9Script
+	.dw {SCRIPTS_1}.symmetryNpcSubidAScript
+	.dw {SCRIPTS_1}.symmetryNpcSubidBScript
+	.dw {SCRIPTS_1}.symmetryNpcSubidCScript
 
 
 ; For subids 8/9 (sisters in the tuni nut building)...
@@ -68,7 +68,7 @@ m_InteractionCode $bf
 	bit 0,(hl)
 	jr z,@runScriptAndAnimate
 
-	ld hl,mainScripts.symmetryNpcSubid8And9Script_afterTuniNutRestored
+	ld hl,{SCRIPTS_1}.symmetryNpcSubid8And9Script_afterTuniNutRestored
 	call interactionSetScript
 	ld e,Interaction.state
 	ld a,$01

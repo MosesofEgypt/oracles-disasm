@@ -127,7 +127,7 @@ m_InteractionCode $3f
 	jp interactionIncState
 
 @scriptTable:
-	.dw mainScripts.boy2Subid0Script
-	.dw mainScripts.boy2Subid1Script
-	.dw mainScripts.boy2Subid2Script
-	.dw mainScripts.stubScript
+	.dw {SCRIPTS_1}.boy2Subid0Script
+	.dw {SCRIPTS_1}.boy2Subid1Script
+	.dw {SCRIPTS_1}.boy2Subid2Script
+	.dw {SCRIPTS_1}.stubScript

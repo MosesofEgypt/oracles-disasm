@@ -26,7 +26,7 @@ m_InteractionCode $5f
 	.dw @subid03
 	.dw @subid04
 	.dw @subid05
-.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_SEASONS)
 	.dw @subid06
 .endif
 
@@ -63,7 +63,13 @@ m_InteractionCode $5f
 
 	; If in the present, check if companion is callable in this room
 	ld a,(wActiveRoom)
-	ld hl,companionCallableRooms
+	.if !defined(ROM_COMBO)
+		ld hl,companionCallableRooms
+	.elif defined(ROM_AGES)
+		ld hl,companionCallableRooms_ages
+	.else
+		ld hl,companionCallableRooms_seasons
+	.endif
 	call checkFlag
 	jp z,@fluteSongFellFlat
 
@@ -178,7 +184,7 @@ m_InteractionCode $5f
 	push hl
 	pop de
 	ld hl,wLastAnimalMountPointY
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 	ld (hl),d
 	inc l
 	ld (hl),e
@@ -195,7 +201,7 @@ m_InteractionCode $5f
 	ld hl,w1Companion.direction
 	ldi (hl),a
 	swap a
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 	rrca
 .else
 	srl a

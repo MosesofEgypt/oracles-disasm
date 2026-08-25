@@ -105,7 +105,7 @@ interactiondc_subid01:
 	call getThisRoomFlags
 	and $80
 	jp nz,interactionDelete
-	ld hl,mainScripts.interactiondcSubid01Script
+	ld hl,{SCRIPTS_1}.interactiondcSubid01Script
 	call interactionSetScript
 	call interactionSetAlwaysUpdateBit
 	jp interactionIncState

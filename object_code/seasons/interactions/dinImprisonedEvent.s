@@ -22,12 +22,12 @@ interactionCode4f_state0:
 	.dw @subid5
 
 @subid0:
-	ld hl,mainScripts.dinImprisonedScript_setDinCoords
+	ld hl,{SCRIPTS_1}.dinImprisonedScript_setDinCoords
 	call interactionSetScript
 	jp objectSetVisiblec2
 
 @subid1:
-	ld hl,mainScripts.dinImprisonedScript_OnoxExplainsMotive
+	ld hl,{SCRIPTS_1}.dinImprisonedScript_OnoxExplainsMotive
 	call interactionSetScript
 	jp objectSetVisible82
 
@@ -59,7 +59,7 @@ interactionCode4f_state0:
 	jp objectSetVisible83
 
 @subid5:
-	ld hl,mainScripts.dinImprisonedScript_OnoxSaysComeIfYouDare
+	ld hl,{SCRIPTS_1}.dinImprisonedScript_OnoxSaysComeIfYouDare
 	call interactionSetScript
 	jp objectSetVisible82
 
@@ -496,7 +496,7 @@ interactionCode4f_state1:
 	cp $0e
 	ret nz
 	call objectSetInvisible
-	ld hl,mainScripts.dinImprisonedScript_OnoxSendsTempleDown
+	ld hl,{SCRIPTS_1}.dinImprisonedScript_OnoxSendsTempleDown
 	call interactionSetScript
 	jp interactionIncSubstate
 

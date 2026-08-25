@@ -48,8 +48,8 @@ table_56a5:
 	.dw table_56b3
 
 table_56af:
-	.dw mainScripts.seasonsSpiritsScript_winterTempleOrbBridge
-	.dw mainScripts.seasonsSpiritsScript_spiritStatue
+	.dw {SCRIPTS_1}.seasonsSpiritsScript_winterTempleOrbBridge
+	.dw {SCRIPTS_1}.seasonsSpiritsScript_spiritStatue
 
 table_56b3:
-	.dw mainScripts.seasonsSpiritsScript_enteringTempleArea
+	.dw {SCRIPTS_1}.seasonsSpiritsScript_enteringTempleArea

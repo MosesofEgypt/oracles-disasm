@@ -53,7 +53,7 @@ companionScript_subid00:
 	ld a,$01
 	ld (wDisableScreenTransitions),a
 	ld (wDiggingUpEnemiesForbidden),a
-	ld hl,mainScripts.companionScript_subid00Script
+	ld hl,{SCRIPTS_1}.companionScript_subid00Script
 	jp interactionSetScript
 
 
@@ -258,7 +258,7 @@ companionScript_subid03:
 	ld a,(hl)
 	and $20
 	jr nz,companionScript_deleteSelf
-	ld hl,mainScripts.companionScript_subid03Script
+	ld hl,{SCRIPTS_1}.companionScript_subid03Script
 	jp interactionSetScript
 
 
@@ -276,7 +276,7 @@ companionScript_subid07:
 	jr nz,companionScript_deleteSelf
 	ld a,$01
 	ld (de),a
-	ld hl,mainScripts.companionScript_subid07Script
+	ld hl,{SCRIPTS_1}.companionScript_subid07Script
 	jp interactionSetScript
 
 
@@ -319,7 +319,7 @@ companionScript_subid06:
 	inc l
 	ld (hl),$0a
 
-	ld hl,mainScripts.companionScript_subid06Script
+	ld hl,{SCRIPTS_1}.companionScript_subid06Script
 	jp interactionSetScript
 
 companionScript_deleteSelf:
@@ -383,7 +383,7 @@ companionScript_subid08:
 	call objectCreateInteraction
 	ld l,Interaction.var03
 	ld (hl),$0f
-	ld hl,mainScripts.companionScript_subid08Script
+	ld hl,{SCRIPTS_1}.companionScript_subid08Script
 	call interactionSetScript
 	jp interactionIncState
 
@@ -438,7 +438,7 @@ companionScript_subid09:
 +
 	ldi a,(hl)
 	ld (wTextSubstitutions+1),a
-	ld hl,mainScripts.companionScript_subid09Script
+	ld hl,{SCRIPTS_1}.companionScript_subid09Script
 	jp interactionSetScript
 
 
@@ -517,7 +517,7 @@ companionScript_subid0a:
 	dec c
 	jr nz,@nextFairy
 
-	ld hl,mainScripts.companionScript_subid0aScript
+	ld hl,{SCRIPTS_1}.companionScript_subid0aScript
 	jp interactionSetScript
 
 
@@ -562,7 +562,7 @@ companionScript_subid0b:
 	xor a
 	ld (wTmpcfc0.fairyHideAndSeek.cfd2),a
 
-	ld hl,mainScripts.companionScript_subid0bScript
+	ld hl,{SCRIPTS_1}.companionScript_subid0bScript
 	call interactionSetScript
 	jp interactionIncState
 

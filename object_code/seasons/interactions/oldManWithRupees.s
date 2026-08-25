@@ -24,11 +24,11 @@ m_InteractionCode $99
 	call interactionRunScript
 	jp npcFaceLinkAndAnimate
 table_587b:
-	.dw mainScripts.oldManScript_givesRupees
-	.dw mainScripts.oldManScript_givesRupees
-	.dw mainScripts.oldManScript_givesRupees
-	.dw mainScripts.oldManScript_givesRupees
-	.dw mainScripts.oldManScript_givesRupees
-	.dw mainScripts.oldManScript_takesRupees
-	.dw mainScripts.oldManScript_takesRupees
-	.dw mainScripts.oldManScript_takesRupees
+	.dw {SCRIPTS_1}.oldManScript_givesRupees
+	.dw {SCRIPTS_1}.oldManScript_givesRupees
+	.dw {SCRIPTS_1}.oldManScript_givesRupees
+	.dw {SCRIPTS_1}.oldManScript_givesRupees
+	.dw {SCRIPTS_1}.oldManScript_givesRupees
+	.dw {SCRIPTS_1}.oldManScript_takesRupees
+	.dw {SCRIPTS_1}.oldManScript_takesRupees
+	.dw {SCRIPTS_1}.oldManScript_takesRupees

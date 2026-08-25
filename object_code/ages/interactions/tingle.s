@@ -76,7 +76,7 @@ m_InteractionCode $c8
 
 	ld e,Interaction.pressedAButton
 	call objectAddToAButtonSensitiveObjectList
-	ld hl,mainScripts.tingleScript
+	ld hl,{SCRIPTS_1}.tingleScript
 	call interactionSetScript
 	ld a,$04
 	ld e,Interaction.state

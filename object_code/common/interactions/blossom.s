@@ -57,13 +57,13 @@ m_InteractionCode $2b
 	jp objectSetPriorityRelativeToLink_withTerrainEffects
 
 @scriptTable:
-	.dw mainScripts.blossomScript0
-	.dw mainScripts.blossomScript1
-	.dw mainScripts.blossomScript2
-	.dw mainScripts.blossomScript3
-	.dw mainScripts.blossomScript4
-	.dw mainScripts.blossomScript5
-	.dw mainScripts.blossomScript6
-	.dw mainScripts.blossomScript7
-	.dw mainScripts.blossomScript8
-	.dw mainScripts.blossomScript9
+	.dw {SCRIPTS_1}.blossomScript0
+	.dw {SCRIPTS_1}.blossomScript1
+	.dw {SCRIPTS_1}.blossomScript2
+	.dw {SCRIPTS_1}.blossomScript3
+	.dw {SCRIPTS_1}.blossomScript4
+	.dw {SCRIPTS_1}.blossomScript5
+	.dw {SCRIPTS_1}.blossomScript6
+	.dw {SCRIPTS_1}.blossomScript7
+	.dw {SCRIPTS_1}.blossomScript8
+	.dw {SCRIPTS_1}.blossomScript9

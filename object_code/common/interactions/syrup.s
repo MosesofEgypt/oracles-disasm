@@ -9,10 +9,18 @@
 ; ==================================================================================================
 .ifdef ROM_AGES
 m_InteractionCode $5f
-	callab interactionCode2.checkReloadShopItemTiles
+	.if defined(ROM_COMBO)
+		callab interactionCodeAges8.checkReloadShopItemTiles
+	.else
+		callab interactionCode2.checkReloadShopItemTiles
+	.endif
 .else
 m_InteractionCode $43
-	call interactionCode2.checkReloadShopItemTiles
+	.if defined(ROM_COMBO)
+		callab interactionCodeSeasons8.checkReloadShopItemTiles
+	.else
+		call interactionCode2.checkReloadShopItemTiles
+	.endif
 .endif
 	call @runState
 	jp interactionAnimateAsNpc
@@ -39,18 +47,13 @@ m_InteractionCode $43
 
 	ld e,Interaction.pressedAButton
 	call objectAddToAButtonSensitiveObjectList
-.if defined(ROM_SEASONS) || defined(ROM_COMBO)
-.if defined(ROM_COMBO)
-	call wIsSeasons
-	jr nc,++
-.endif
+.if defined(ROM_SEASONS)
 	call getThisRoomFlags
 	and $40
-	ld hl,mainScripts.syrupScript_notTradedMushroomYet
+	ld hl,{SCRIPTS_1}.syrupScript_notTradedMushroomYet
 	jr z,+
-++
 .endif
-	ld hl,mainScripts.syrupScript_spawnShopItems
+	ld hl,{SCRIPTS_1}.syrupScript_spawnShopItems
 +
 	jr @setScriptAndGotoState2
 
@@ -75,7 +78,7 @@ m_InteractionCode $43
 	; Get the object that Link is holding
 	ld a,(w1Link.relatedObj2+1)
 	ld h,a
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 	ld e,Interaction.var3b
 .else
 	ld e,Interaction.var3c
@@ -89,7 +92,7 @@ m_InteractionCode $43
 	ld b,a
 	sub $07
 
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 	ld e,Interaction.var37
 .else
 	ld e,Interaction.var38
@@ -98,11 +101,17 @@ m_InteractionCode $43
 
 	; Check if Link has the rupees for it
 	ld a,b
+.if !defined(ROM_COMBO)
 	ld hl,interactionCode2.shopItemPrices
+.elif defined(ROM_AGES)
+	ld hl,interactionCodeAges8.shopItemPrices
+.else
+	ld hl,interactionCodeSeasons8.shopItemPrices
+.endif
 	rst_addAToHl
 	ld a,(hl)
 	call cpRupeeValue
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 	ld (wShopHaveEnoughRupees),a
 .else
 	ld e,Interaction.var39
@@ -144,25 +153,31 @@ m_InteractionCode $43
 
 @setCanPurchase:
 	; Set var38 to 1 if Link can't purchase the item because he has too much of it
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 	ld e,Interaction.var38
 .else
 	ld e,Interaction.var3a
 .endif
 	ld (de),a
 
-	ld hl,mainScripts.syrupScript_purchaseItem
+	ld hl,{SCRIPTS_1}.syrupScript_purchaseItem
 	jr @setScriptAndGotoState2
 
 @talkToSyrupWithoutItem:
+.if !defined(ROM_COMBO)
 	call interactionCode2.shopkeeperCheckAllItemsBought
+.elif defined(ROM_AGES)
+	call interactionCodeAges8.shopkeeperCheckAllItemsBought
+.else
+	call interactionCodeSeasons8.shopkeeperCheckAllItemsBought
+.endif
 	jr z,@showWelcomeText
 
-	ld hl,mainScripts.syrupScript_showClosedText
+	ld hl,{SCRIPTS_1}.syrupScript_showClosedText
 	jr @setScriptAndGotoState2
 
 @showWelcomeText:
-	ld hl,mainScripts.syrupScript_showWelcomeText
+	ld hl,{SCRIPTS_1}.syrupScript_showWelcomeText
 
 @setScriptAndGotoState2:
 	ld e,Interaction.state
@@ -182,7 +197,7 @@ m_InteractionCode $43
 	ld (wDisabledObjects),a
 
 	; Check response from script (was purchase successful?)
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 	ld e,Interaction.var3a
 .else
 	ld e,Interaction.var3b
@@ -203,7 +218,7 @@ m_InteractionCode $43
 ++
 	xor a
 	ld (de),a
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 	ld e,Interaction.var3b
 .else
 	ld e,Interaction.var3c

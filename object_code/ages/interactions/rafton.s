@@ -100,5 +100,5 @@ m_InteractionCode $69
 	jp interactionSetScript
 
 @scriptTable:
-	.dw mainScripts.rafton_subid00Script
-	.dw mainScripts.rafton_subid01Script
+	.dw {SCRIPTS_1}.rafton_subid00Script
+	.dw {SCRIPTS_1}.rafton_subid01Script

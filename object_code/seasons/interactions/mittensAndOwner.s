@@ -53,7 +53,7 @@ m_InteractionCode $26
 	ld h,d
 	ld l,$44
 	ld (hl),$01
-	ld hl,mainScripts.mittensScript
+	ld hl,{SCRIPTS_1}.mittensScript
 	call interactionSetScript
 	ld a,$02
 	call interactionSetAnimation
@@ -62,7 +62,7 @@ m_InteractionCode $26
 	ld h,d
 	ld l,$44
 	ld (hl),$02
-	ld hl,mainScripts.mittensOwnerScript
+	ld hl,{SCRIPTS_1}.mittensOwnerScript
 	jp interactionSetScript
 @state1:
 	call interactionRunScript

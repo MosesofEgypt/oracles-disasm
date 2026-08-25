@@ -71,14 +71,14 @@ spawnHeartContainerHere:
 
 
 poisonMothsLairScript_hallwayTrapRoom:
-	asm15 scriptHelp.D3spawnPitSpreader
+	asm15 {SCRIPTS_HELP}.D3spawnPitSpreader
 	checkmemoryeq wActiveTriggers, $01
-	asm15 scriptHelp.D3hallToMiniboss_buttonStepped
+	asm15 {SCRIPTS_HELP}.D3hallToMiniboss_buttonStepped
 	scriptend
 
 
 poisonMothsLairScript_checkStatuePuzzle:
-	asm15 scriptHelp.D3StatuePuzzleCheck
+	asm15 {SCRIPTS_HELP}.D3StatuePuzzleCheck
 	wait 1
 	scriptjump poisonMothsLairScript_checkStatuePuzzle
 
@@ -108,7 +108,7 @@ poisonMothsLair_coordsForHeartContainer:
 
 
 poisonMothsLairScript_openEssenceDoorIfBossBeat:
-	asm15 scriptHelp.D3openEssenceDoorIfBossBeat_body
+	asm15 {SCRIPTS_HELP}.D3openEssenceDoorIfBossBeat_body
 	scriptend
 
 
@@ -149,7 +149,7 @@ dancingDragonScript_pushingPotsRoom:
 dancingDragonScript_bridgeInB2:
 	stopifroomflag80set
 	checkmemoryeq wNumTorchesLit, $02
-	asm15 scriptHelp.D4spawnBridgeB2
+	asm15 {SCRIPTS_HELP}.D4spawnBridgeB2
 	scriptend
 
 
@@ -181,7 +181,7 @@ ancientRuinsScript_spawnStaircaseUp1FTopLeftRoom:
 
 createWallUpStaircaseAndSetOtherRoomFlag:
 	; angle is the low index of the other room
-	asm15 scriptHelp.D6setFlagBit7InRoomWithLowIndexInAngle
+	asm15 {SCRIPTS_HELP}.D6setFlagBit7InRoomWithLowIndexInAngle
 	playsound SND_SOLVEPUZZLE
 	orroomflag $80
 	createpuff
@@ -202,7 +202,7 @@ ancientRuinsScript_4c50:
 	setangle $02
 
 loopCheckToggleBlocks:
-	asm15 scriptHelp.toggleBlocksInAngleBitsHit
+	asm15 {SCRIPTS_HELP}.toggleBlocksInAngleBitsHit
 	wait 8
 	scriptjump loopCheckToggleBlocks
 
@@ -217,7 +217,7 @@ ancientRuinsScript_5TorchesMovingPlatformsRoom:
 
 ancientRuinsScript_roomWithJustRopesSpawningButton:
 	checkmemoryeq wActiveTriggers, $01
-	asm15 scriptHelp.D6RandomButtonSpawnRopes
+	asm15 {SCRIPTS_HELP}.D6RandomButtonSpawnRopes
 	scriptend
 
 
@@ -227,7 +227,7 @@ ancientRuinsScript_UShapePitToMagicBoomerangOrb:
 
 
 ancientRuinsScript_randomButtonRoom:
-	asm15 scriptHelp.D6getRandomButtonResult
+	asm15 {SCRIPTS_HELP}.D6getRandomButtonResult
 	jumptable_memoryaddress wTmpcfc0.normal.doorControllerState
 	.dw ancientRuinsScript_randomButtonRoom
 	.dw @success
@@ -237,13 +237,13 @@ ancientRuinsScript_randomButtonRoom:
 	createpuff
 	wait 30
 	settilehere TILEINDEX_INDOOR_UPSTAIRCASE
-	asm15 scriptHelp.D6setFlagBit7InFirst4FRoom
+	asm15 {SCRIPTS_HELP}.D6setFlagBit7InFirst4FRoom
 	scriptend
 @failed:
 	wait 60
 	playsound SND_ERROR
 	wait 60
-	asm15 scriptHelp.D6RandomButtonSpawnRopes
+	asm15 {SCRIPTS_HELP}.D6RandomButtonSpawnRopes
 	wait 60
 	checknoenemies
 	scriptjump ancientRuinsScript_randomButtonRoom
@@ -257,7 +257,7 @@ ancientRuinsScript_4F3OrbsRoom:
 ancientRuinsScript_spawnStairsLeadingToBoss:
 	stopifroomflag80set
 	checkflagset $06, wToggleBlocksState
-	asm15 scriptHelp.D6setFlagBit7InLast4FRoom
+	asm15 {SCRIPTS_HELP}.D6setFlagBit7InLast4FRoom
 	orroomflag $80
 	playsound SND_SOLVEPUZZLE
 	createpuff
@@ -279,7 +279,7 @@ ancientRuinsScript_spawnHeartContainerAndStairsUp:
 
 ancientRuinsScript_1FTopRightTrapButtonRoom:
 	checkmemoryeq wActiveTriggers, $01
-	asm15 scriptHelp.D6spawnFloorDestroyerAndEscapeBridge
+	asm15 {SCRIPTS_HELP}.D6spawnFloorDestroyerAndEscapeBridge
 	stopifroomflag80set
 	orroomflag $80
 	scriptend
@@ -293,18 +293,18 @@ ancientRuinsScript_crystalTrapRoom:
 	wait 8
 	scriptjump @waitUntilRupeeGotten
 @rupeeGotten:
-	loadscript scripts2.startCrystalTrapRoomSequence
+	loadscript {SCRIPTS_2}.startCrystalTrapRoomSequence
 
 
 ancientRuinsScript_spawnChestAfterCrystalTrapRoom:
-	asm15 scriptHelp.D6spawnChestAfterCrystalTrapRoom_body
+	asm15 {SCRIPTS_HELP}.D6spawnChestAfterCrystalTrapRoom_body
 	scriptend
 
 
 explorersCryptScript_dropKeyDownAFloor:
 	stopifroomflag40set
 	checkmemoryeq wActiveTriggers, $01
-	asm15 scriptHelp.D7dropKeyDownAFloor
+	asm15 {SCRIPTS_HELP}.D7dropKeyDownAFloor
 	scriptend
 
 
@@ -338,7 +338,7 @@ D7createTrampoline:
 	wait 8
 	createpuff
 	wait 15
-	asm15 scriptHelp.createD7Trampoline
+	asm15 {SCRIPTS_HELP}.createD7Trampoline
 	scriptend
 
 
@@ -352,7 +352,7 @@ explorersCryptScript_4d05:
 
 
 explorersCryptScript_randomlyPlaceNonEnemyArmos:
-	asm15 scriptHelp.D7randomlyPlaceNonEnemyArmos_body
+	asm15 {SCRIPTS_HELP}.D7randomlyPlaceNonEnemyArmos_body
 	scriptend
 
 
@@ -362,30 +362,30 @@ dungeonScript_checkIfMagnetBallOnButton:
 	.dw @unpressed
 	.dw @pressed
 @unpressed:
-	asm15 scriptHelp.D7MagnetBallRoom_removeChest
+	asm15 {SCRIPTS_HELP}.D7MagnetBallRoom_removeChest
 	scriptjump dungeonScript_checkIfMagnetBallOnButton
 @pressed:
-	asm15 scriptHelp.D7MagnetBallRoom_addChest
+	asm15 {SCRIPTS_HELP}.D7MagnetBallRoom_addChest
 	scriptjump dungeonScript_checkIfMagnetBallOnButton
 
 
 explorersCryptScript_1stPoeSisterRoom:
-	loadscript scripts2.explorersCrypt_firstPoeSister
+	loadscript {SCRIPTS_2}.explorersCrypt_firstPoeSister
 
 
 explorersCryptScript_2ndPoeSisterRoom:
-	loadscript scripts2.explorersCrypt_secondPoeSister
+	loadscript {SCRIPTS_2}.explorersCrypt_secondPoeSister
 
 
 explorersCryptScript_4FiresRoom_1:
 	stopifroomflag40set
-	asm15 scriptHelp.checkFirstPoeBeaten
+	asm15 {SCRIPTS_HELP}.checkFirstPoeBeaten
 	jumptable_memoryaddress wTmpcfc0.normal.doorControllerState
 	.dw @notBeaten
 	.dw explorersCrypt_poeBeaten
 
 @notBeaten:
-	loadscript scripts2.explorersCrypt_firesGoingOut_1
+	loadscript {SCRIPTS_2}.explorersCrypt_firesGoingOut_1
 
 explorersCrypt_poeBeaten:
 	playsound SND_SOLVEPUZZLE
@@ -395,34 +395,34 @@ explorersCrypt_poeBeaten:
 
 explorersCryptScript_4FiresRoom_2:
 	stopifroomflag40set
-	asm15 scriptHelp.checkSecondPoeBeaten
+	asm15 {SCRIPTS_HELP}.checkSecondPoeBeaten
 	jumptable_memoryaddress wTmpcfc0.normal.doorControllerState
 	.dw @notBeaten
 	.dw explorersCrypt_poeBeaten
 
 @notBeaten:
-	loadscript scripts2.explorersCrypt_firesGoingOut_2
+	loadscript {SCRIPTS_2}.explorersCrypt_firesGoingOut_2
 
 
 explorersCryptScript_darknutBridge:
 	stopifroomflag80set
 	checknoenemies
 	orroomflag $80
-	asm15 scriptHelp.D7spawnDarknutBridge
+	asm15 {SCRIPTS_HELP}.D7spawnDarknutBridge
 	scriptend
 
 
 swordAndShieldMazeScript_verticalBridgeUnlockedByOrb:
 	stopifroomflag80set
 	checkmemoryeq wToggleBlocksState, $01
-	asm15 scriptHelp.D8VerticalBridgeUnlockedByOrb
+	asm15 {SCRIPTS_HELP}.D8VerticalBridgeUnlockedByOrb
 	scriptend
 
 
 swordAndShieldMazeScript_verticalBridgeInLava:
 	stopifroomflag80set
 	checkmemoryeq wActiveTriggers, $01
-	asm15 scriptHelp.D8VerticalBridgeInLava
+	asm15 {SCRIPTS_HELP}.D8VerticalBridgeInLava
 	scriptend
 
 
@@ -431,14 +431,14 @@ swordAndShieldMazeScript_armosBlockingStairs:
 	writeobjectbyte Interaction.direction, $96
 
 @checkIfWillMove:
-	asm15 scriptHelp.D8armosCheckIfWillMove
+	asm15 {SCRIPTS_HELP}.D8armosCheckIfWillMove
 	jumptable_objectbyte $49
 	.dw @checkIfWillMove
 	.dw stubScript
 
 
 swordAndShieldMazeScript_7torchesAfterMiniboss:
-	asm15 scriptHelp.D8createFiresGoingOut, $a0
+	asm15 {SCRIPTS_HELP}.D8createFiresGoingOut, $a0
 	stopifroomflag80set
 	checkmemoryeq wNumTorchesLit, $07
 
@@ -453,10 +453,10 @@ puzzelSolvedSpawnUpStaircase:
 
 swordAndShieldMazeScript_spawnFireKeeseAtLavaHoles:
 	stopifroomflag40set
-	asm15 scriptHelp.D8setSpawnAtLavaHole
+	asm15 {SCRIPTS_HELP}.D8setSpawnAtLavaHole
 @loop:
 	wait 240
-	asm15 scriptHelp.D8SpawnLimitedFireKeese
+	asm15 {SCRIPTS_HELP}.D8SpawnLimitedFireKeese
 	scriptjump @loop
 
 
@@ -464,7 +464,7 @@ swordAndShieldMazeScript_pushableIceBlocks:
 	stopifroomflag80set
 @waitUntilIceBlocksInPlace:
 	wait 8
-	asm15 scriptHelp.D8checkAllIceBlocksInPlace
+	asm15 {SCRIPTS_HELP}.D8checkAllIceBlocksInPlace
 	jumptable_memoryaddress wTmpcfc0.normal.doorControllerState
 	.dw @waitUntilIceBlocksInPlace
 	.dw @success
@@ -480,7 +480,7 @@ swordAndShieldMazeScript_pushableIceBlocks:
 swordAndShieldMazeScript_horizontalBridgeByMoldorms:
 	stopifroomflag80set
 	checkmemoryeq wActiveTriggers, $01
-	asm15 scriptHelp.D8HorizontalBridgeByMoldorms
+	asm15 {SCRIPTS_HELP}.D8HorizontalBridgeByMoldorms
 	scriptend
 
 
@@ -505,7 +505,7 @@ onoxsCastleScript_setFlagOnAllEnemiesDefeated:
 
 
 onoxsCastleScript_resetRoomFlagsOnDungeonStart:
-	asm15 scriptHelp.D9forceRoomClearsOnDungeonEntry
+	asm15 {SCRIPTS_HELP}.D9forceRoomClearsOnDungeonEntry
 	scriptend
 
 

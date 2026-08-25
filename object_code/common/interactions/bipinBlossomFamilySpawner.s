@@ -10,15 +10,7 @@ m_InteractionCode $ac
 	call @checkUpdateState
 	call spawnBipinBlossomFamilyObjects
 	ld hl,wSeedTreeRefilledBitset
-.if defined(ROM_COMBO)
-	call wIsSeasons
-	ld a,$fe
-	jr c,+
-		rlca
-	+
-	and (hl)
-	ld (hl),a
-.elif defined(ROM_AGES)
+.if defined(ROM_AGES)
 	res 1,(hl)
 .else
 	res 0,(hl)
@@ -32,13 +24,7 @@ m_InteractionCode $ac
 ; Also checks that Link has enough essences for certain stages of development.
 @checkUpdateState:
 	ld a,(wSeedTreeRefilledBitset)
-.if defined(ROM_COMBO)
-	call wIsSeasons
-	bit 0,a
-	jr c,+
-		bit 1,a
-	+
-.elif defined(ROM_AGES)
+.if defined(ROM_AGES)
 	bit 1,a
 .else
 	bit 0,a

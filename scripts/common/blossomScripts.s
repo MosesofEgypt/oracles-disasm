@@ -5,7 +5,7 @@
 ; Blossom asking you to name her child
 blossomScript0:
 	initcollisions
-	asm15 scriptHelp.checkc6e2BitSet, $00
+	asm15 {SCRIPTS_HELP}.checkc6e2BitSet, $00
 	jumpifobjectbyteeq Interaction.var3b, $01, @nameAlreadyGiven
 @loop:
 	checkabutton
@@ -13,7 +13,7 @@ blossomScript0:
 	showtextlowindex <TX_4400
 
 @askForName:
-	asm15 scriptHelp.blossom_openNameEntryMenu
+	asm15 {SCRIPTS_HELP}.blossom_openNameEntryMenu
 	wait 30
 	jumptable_memoryaddress wTextInputResult
 	.dw @validName
@@ -38,9 +38,9 @@ blossomScript0:
 	.dw @askForName
 
 @nameConfirmed:
-	asm15 scriptHelp.blossom_decideInitialChildStatus
-	asm15 scriptHelp.setc6e2Bit, $00
-	asm15 scriptHelp.setNextChildStage, $01
+	asm15 {SCRIPTS_HELP}.blossom_decideInitialChildStatus
+	asm15 {SCRIPTS_HELP}.setc6e2Bit, $00
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $01
 	wait 30
 	showtextlowindex <TX_4408
 .if defined(REGION_JP) && defined(ROM_AGES)
@@ -58,7 +58,7 @@ blossomScript0:
 ; Blossom asking for money to see a doctor
 blossomScript1:
 	initcollisions
-	asm15 scriptHelp.checkc6e2BitSet, $01
+	asm15 {SCRIPTS_HELP}.checkc6e2BitSet, $01
 	jumpifobjectbyteeq Interaction.var3b, $01, @alreadyGaveMoney
 @loop:
 	checkabutton
@@ -77,12 +77,12 @@ blossomScript1:
 	.dw @give1Rupee
 
 @give150Rupees:
-	asm15 scriptHelp.blossom_checkHasRupees, RUPEEVAL_150
+	asm15 {SCRIPTS_HELP}.blossom_checkHasRupees, RUPEEVAL_150
 	jumpifobjectbyteeq Interaction.var3c, $01, @notEnoughRupees
 	asm15 removeRupeeValue, RUPEEVAL_150
-	asm15 scriptHelp.blossom_addValueToChildStatus, $08
-	asm15 scriptHelp.setc6e2Bit, $01
-	asm15 scriptHelp.setNextChildStage, $02
+	asm15 {SCRIPTS_HELP}.blossom_addValueToChildStatus, $08
+	asm15 {SCRIPTS_HELP}.setc6e2Bit, $01
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $02
 	enableallobjects
 @gave150RupeesLoop:
 	showtextlowindex <TX_440d
@@ -90,12 +90,12 @@ blossomScript1:
 	scriptjump @gave150RupeesLoop
 
 @give50Rupees:
-	asm15 scriptHelp.blossom_checkHasRupees, RUPEEVAL_050
+	asm15 {SCRIPTS_HELP}.blossom_checkHasRupees, RUPEEVAL_050
 	jumpifobjectbyteeq Interaction.var3c, $01, @notEnoughRupees
 	asm15 removeRupeeValue, RUPEEVAL_050
-	asm15 scriptHelp.blossom_addValueToChildStatus, $05
-	asm15 scriptHelp.setc6e2Bit, $01
-	asm15 scriptHelp.setNextChildStage, $02
+	asm15 {SCRIPTS_HELP}.blossom_addValueToChildStatus, $05
+	asm15 {SCRIPTS_HELP}.setc6e2Bit, $01
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $02
 	enableallobjects
 @gave50RupeesLoop:
 	showtextlowindex <TX_440e
@@ -103,12 +103,12 @@ blossomScript1:
 	scriptjump @gave50RupeesLoop
 
 @give10Rupees:
-	asm15 scriptHelp.blossom_checkHasRupees, RUPEEVAL_010
+	asm15 {SCRIPTS_HELP}.blossom_checkHasRupees, RUPEEVAL_010
 	jumpifobjectbyteeq Interaction.var3c, $01, @notEnoughRupees
 	asm15 removeRupeeValue, RUPEEVAL_010
-	asm15 scriptHelp.blossom_addValueToChildStatus, $02
-	asm15 scriptHelp.setc6e2Bit, $01
-	asm15 scriptHelp.setNextChildStage, $02
+	asm15 {SCRIPTS_HELP}.blossom_addValueToChildStatus, $02
+	asm15 {SCRIPTS_HELP}.setc6e2Bit, $01
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $02
 	enableallobjects
 @gave10RupeesLoop:
 	showtextlowindex <TX_440f
@@ -116,11 +116,11 @@ blossomScript1:
 	scriptjump @gave10RupeesLoop
 
 @give1Rupee:
-	asm15 scriptHelp.blossom_checkHasRupees, RUPEEVAL_001
+	asm15 {SCRIPTS_HELP}.blossom_checkHasRupees, RUPEEVAL_001
 	jumpifobjectbyteeq Interaction.var3c, $01, @notEnoughRupees
 	asm15 removeRupeeValue, RUPEEVAL_001
-	asm15 scriptHelp.setc6e2Bit, $01
-	asm15 scriptHelp.setNextChildStage, $02
+	asm15 {SCRIPTS_HELP}.setc6e2Bit, $01
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $02
 	enableallobjects
 @gave1RupeeLoop:
 	showtextlowindex <TX_4410
@@ -152,7 +152,7 @@ script4e08:
 	checkabutton
 	setdisabledobjectsto91
 	showtextlowindex <TX_4412
-	asm15 scriptHelp.setNextChildStage, $03
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $03
 	enableallobjects
 	scriptjump script4e08
 
@@ -160,15 +160,15 @@ script4e08:
 ; Blossom asks you how to get the baby to sleep
 blossomScript3:
 	initcollisions
-	asm15 scriptHelp.checkc6e2BitSet, $02
+	asm15 {SCRIPTS_HELP}.checkc6e2BitSet, $02
 	jumpifobjectbyteeq Interaction.var3b, $01, @alreadyGaveAdvice
 	checkabutton
 
 	setdisabledobjectsto91
 	showtextlowindex <TX_4413
 
-	asm15 scriptHelp.setc6e2Bit, $02
-	asm15 scriptHelp.setNextChildStage, $04
+	asm15 {SCRIPTS_HELP}.setc6e2Bit, $02
+	asm15 {SCRIPTS_HELP}.setNextChildStage, $04
 
 	jumptable_memoryaddress wSelectedTextOption
 	.dw @sing
@@ -182,7 +182,7 @@ blossomScript3:
 @play:
 	wait 30
 	showtextlowindex <TX_4415
-	asm15 scriptHelp.blossom_addValueToChildStatus, $0a
+	asm15 {SCRIPTS_HELP}.blossom_addValueToChildStatus, $0a
 	enableallobjects
 
 @alreadyGaveAdvice:
@@ -205,7 +205,7 @@ blossomScript5:
 ; current personality.)
 blossomScript6:
 	initcollisions
-	asm15 scriptHelp.checkc6e2BitSet, $03
+	asm15 {SCRIPTS_HELP}.checkc6e2BitSet, $03
 	jumptable_objectbyte Interaction.var03
 	.dw @hyperactive
 	.dw @shy
@@ -273,9 +273,9 @@ blossomScript6:
 @selectedYes_1:
 	wait 30
 	showtextlowindex <TX_441c
-	asm15 scriptHelp.setc6e2Bit, $03
+	asm15 {SCRIPTS_HELP}.setc6e2Bit, $03
 	writeobjectbyte Interaction.var3a, $01
-	asm15 scriptHelp.blossom_addValueToChildStatus, $08
+	asm15 {SCRIPTS_HELP}.blossom_addValueToChildStatus, $08
 	retscript
 
 @selectedNo_1: ; Quiet, perhaps?
@@ -288,9 +288,9 @@ blossomScript6:
 @selectedYes_2:
 	wait 30
 	showtextlowindex <TX_441e
-	asm15 scriptHelp.setc6e2Bit, $03
+	asm15 {SCRIPTS_HELP}.setc6e2Bit, $03
 	writeobjectbyte Interaction.var3a, $01
-	asm15 scriptHelp.blossom_addValueToChildStatus, $05
+	asm15 {SCRIPTS_HELP}.blossom_addValueToChildStatus, $05
 	retscript
 
 @selectedNo_2: ; Were you weird?
@@ -303,9 +303,9 @@ blossomScript6:
 @selectedYes_3:
 	wait 30
 	showtextlowindex <TX_4420
-	asm15 scriptHelp.setc6e2Bit, $03
+	asm15 {SCRIPTS_HELP}.setc6e2Bit, $03
 	writeobjectbyte Interaction.var3a, $01
-	asm15 scriptHelp.blossom_addValueToChildStatus, $01
+	asm15 {SCRIPTS_HELP}.blossom_addValueToChildStatus, $01
 	retscript
 
 @selectedNo_3: ; She gives up asking (but she'll ask again next time you talk)

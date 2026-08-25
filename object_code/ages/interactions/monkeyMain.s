@@ -51,7 +51,7 @@ interactionCode39_body:
 	ld a,$02
 	call interactionSetAnimation
 
-	ld hl,mainScripts.monkeySubid0Script
+	ld hl,{SCRIPTS_1}.monkeySubid0Script
 	jp interactionSetScript
 
 
@@ -249,7 +249,7 @@ interactionCode39_body:
 	ld l,Interaction.counter1
 	ldi (hl),a
 	ld (hl),a
-	ld hl,mainScripts.monkeySubid5Script
+	ld hl,{SCRIPTS_1}.monkeySubid5Script
 
 	ld e,Interaction.var03
 	ld a,(de)
@@ -259,7 +259,7 @@ interactionCode39_body:
 	; Bowtie monkey has a different script
 	push af
 	call @initBowtieMonkey
-	ld hl,mainScripts.monkeySubid5Script_bowtieMonkey
+	ld hl,{SCRIPTS_1}.monkeySubid5Script_bowtieMonkey
 	pop af
 +
 	; Monkey $05 gets the red palette
@@ -293,7 +293,7 @@ interactionCode39_body:
 	call checkGlobalFlag
 	jp z,interactionDelete
 
-	ld hl,mainScripts.monkeySubid7Script_0
+	ld hl,{SCRIPTS_1}.monkeySubid7Script_0
 	call interactionSetScript
 	ld a,$06
 	jr @setVar3aAnimation
@@ -303,7 +303,7 @@ interactionCode39_body:
 	call checkGlobalFlag
 	jp z,interactionDelete
 
-	ld hl,mainScripts.monkeySubid7Script_1
+	ld hl,{SCRIPTS_1}.monkeySubid7Script_1
 	call interactionSetScript
 	ld a,$05
 	jr @setVar3aAnimation
@@ -319,9 +319,9 @@ interactionCode39_body:
 
 	ld a,GLOBALFLAG_SAVED_NAYRU
 	call checkGlobalFlag
-	ld hl,mainScripts.monkeySubid7Script_2
+	ld hl,{SCRIPTS_1}.monkeySubid7Script_2
 	jp z,@setScript
-	ld hl,mainScripts.monkeySubid7Script_3
+	ld hl,{SCRIPTS_1}.monkeySubid7Script_3
 @setScript:
 	call interactionSetScript
 	ld a,$05
@@ -918,5 +918,5 @@ monkeySubid5State1_monkey9:
 	.dw monkey9Disappearance@substate3
 
 introMonkeyScriptTable:
-	.dw mainScripts.monkeySubid2Script
-	.dw mainScripts.monkeySubid3Script
+	.dw {SCRIPTS_1}.monkeySubid2Script
+	.dw {SCRIPTS_1}.monkeySubid3Script

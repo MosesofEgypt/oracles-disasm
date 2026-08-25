@@ -41,7 +41,7 @@ m_InteractionCode $4d
 +
 	ld a,>TX_4d00
 	call interactionSetHighTextIndex
-	ld hl,mainScripts.pirateSkullScript_notYetCarried
+	ld hl,{SCRIPTS_1}.pirateSkullScript_notYetCarried
 	call interactionSetScript
 	call interactionInitGraphics
 	jp objectSetVisiblec2

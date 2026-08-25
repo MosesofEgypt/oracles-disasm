@@ -44,8 +44,8 @@ m_InteractionCode $79
 	ld a,(hl)
 	ld (de),a
 
-	callab scriptHelp.movingPlatform_loadScript
-	callab scriptHelp.movingPlatform_runScript
+	callab {SCRIPTS_HELP}.movingPlatform_loadScript
+	callab {SCRIPTS_HELP}.movingPlatform_runScript
 	jp objectSetVisible83
 
 @collisionRadii:
@@ -100,7 +100,7 @@ m_InteractionCode $79
 @substate0:
 	call interactionDecCounter1
 	ret nz
-	callab scriptHelp.movingPlatform_runScript
+	callab {SCRIPTS_HELP}.movingPlatform_runScript
 	ret
 
 ; Substate 1: moving

@@ -52,7 +52,7 @@ companionScript_subid00:
 	ld a,(hl)
 	ld l,$3f
 	ld (hl),a
-	ld hl,mainScripts.companionScript_RickyLeavingYouInSpoolSwamp
+	ld hl,{SCRIPTS_1}.companionScript_RickyLeavingYouInSpoolSwamp
 	jp interactionSetScript
 
 ; Moosh being bullied in Spool
@@ -86,7 +86,7 @@ companionScript_subid01:
 	ld a,$2c
 	ld e,$4d
 	ld (de),a
-	ld hl,mainScripts.companionScript_mooshInSpoolSwamp
+	ld hl,{SCRIPTS_1}.companionScript_mooshInSpoolSwamp
 	call interactionSetScript
 	ld a,(wMooshState)
 	bit 5,a
@@ -130,7 +130,7 @@ companionScript_subid02:
 	ld (hl),a
 	ld l,$3f
 	ld (hl),$14
-	ld hl,mainScripts.companionScript_mooshEnteringSunkenCity
+	ld hl,{SCRIPTS_1}.companionScript_mooshEnteringSunkenCity
 	jp interactionSetScript
 @func_6d72:
 	ld hl,$d104
@@ -171,7 +171,7 @@ companionScript_subid06:
 	rla
 	ld e,$78
 	ld (de),a
-	ld hl,mainScripts.companionScript_mooshInMtCucco
+	ld hl,{SCRIPTS_1}.companionScript_mooshInMtCucco
 	jp interactionSetScript
 @state1:
 	ld a,(w1Companion.var3d)
@@ -252,7 +252,7 @@ companionScript_subid03:
 	ld a,$0b
 	ld (de),a
 	call interactionSetAlwaysUpdateBit
-	ld hl,mainScripts.companionScript_RickyInNorthHoron
+	ld hl,{SCRIPTS_1}.companionScript_RickyInNorthHoron
 	jp interactionSetScript
 @state2:
 	ld a,TREASURE_RICKY_GLOVES
@@ -346,7 +346,7 @@ companionScript_subid04:
 	ld e,$79
 	ld a,$0c
 	ld (de),a
-	ld hl,mainScripts.companionScript_dimitriInSpoolSwamp
+	ld hl,{SCRIPTS_1}.companionScript_dimitriInSpoolSwamp
 	jp interactionSetScript
 
 ; Dimitri being bullied
@@ -365,7 +365,7 @@ companionScript_subid05:
 	jr z,companionScript_delete2
 	ld a,$01
 	ld (de),a
-	ld hl,mainScripts.companionScript_dimitriBeingBullied
+	ld hl,{SCRIPTS_1}.companionScript_dimitriBeingBullied
 	jp interactionSetScript
 
 ; Moblin rest house

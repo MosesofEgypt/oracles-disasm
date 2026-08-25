@@ -20,6 +20,6 @@ m_InteractionCode $c3
 	ld hl,wTilesetFlags
 	set TILESETFLAG_BIT_PAST,(hl)
 ++
-	ld hl,mainScripts.pirateCaptainScript
+	ld hl,{SCRIPTS_1}.pirateCaptainScript
 	call interactionSetScript
 	jp interactionIncState

@@ -192,17 +192,17 @@ func_745b:
 	ld a,>TX_2100
 	jp interactionSetHighTextIndex
 table_7477:
-	.dw mainScripts.sunkenCityBulliesScript1_bully1
-	.dw mainScripts.sunkenCityBulliesScript1_bully2
-	.dw mainScripts.sunkenCityBulliesScript1_bully3
+	.dw {SCRIPTS_1}.sunkenCityBulliesScript1_bully1
+	.dw {SCRIPTS_1}.sunkenCityBulliesScript1_bully2
+	.dw {SCRIPTS_1}.sunkenCityBulliesScript1_bully3
 table_747d:
-	.dw mainScripts.sunkenCityBulliesScript2_bully1
-	.dw mainScripts.sunkenCityBulliesScript2_bully2
-	.dw mainScripts.sunkenCityBulliesScript2_bully3
+	.dw {SCRIPTS_1}.sunkenCityBulliesScript2_bully1
+	.dw {SCRIPTS_1}.sunkenCityBulliesScript2_bully2
+	.dw {SCRIPTS_1}.sunkenCityBulliesScript2_bully3
 table_7483:
-	.dw mainScripts.sunkenCityBulliesScript3_bully1
-	.dw mainScripts.sunkenCityBulliesScript3_bully2
-	.dw mainScripts.sunkenCityBulliesScript3_bully3
+	.dw {SCRIPTS_1}.sunkenCityBulliesScript3_bully1
+	.dw {SCRIPTS_1}.sunkenCityBulliesScript3_bully2
+	.dw {SCRIPTS_1}.sunkenCityBulliesScript3_bully3
 table_7489:
 	.db $38 $58
 	.db $38 $68

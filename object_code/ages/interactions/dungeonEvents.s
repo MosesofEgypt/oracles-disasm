@@ -347,7 +347,7 @@ interaction21_subid0d:
 	ld (wDisableScreenTransitions),a
 	ld (wDisableWarpTiles),a
 
-	ld hl,mainScripts.moonlitGrottoScript_brokeCrystal
+	ld hl,{SCRIPTS_1}.moonlitGrottoScript_brokeCrystal
 	call interactionSetScript
 	call interactionRunScript
 	jp interactionIncState
@@ -361,7 +361,7 @@ interaction21_subid0d:
 	ld a,$02
 	ld (wScreenShakeMagnitude),a
 
-	ld hl,mainScripts.moonlitGrottoScript_brokeAllCrystals
+	ld hl,{SCRIPTS_1}.moonlitGrottoScript_brokeAllCrystals
 	call interactionSetScript
 
 	ld e,Interaction.state
@@ -373,7 +373,7 @@ interaction21_subid0d:
 	ret
 
 @enableControl:
-	jpab scriptHelp.moonlitGrotto_enableControlAfterBreakingCrystal
+	jpab {SCRIPTS_HELP}.moonlitGrotto_enableControlAfterBreakingCrystal
 
 
 ; d3: Small key falls when a block is pushed into place

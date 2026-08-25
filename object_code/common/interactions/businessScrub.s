@@ -97,14 +97,12 @@ m_InteractionCode $ce
 @mimicBush:
 	ld a,(wActiveGroup)
 	or a
-.if defined(ROM_COMBO)
-	ld a,TILEINDEX_OVERWORLD_BUSH_1_SEASONS
-	call wIsSeasons
-	jr c,+
-		ld a,TILEINDEX_OVERWORLD_BUSH_1_AGES
-	+
-.else
+.if !defined(ROM_COMBO)
 	ld a,TILEINDEX_OVERWORLD_BUSH_1
+.elif defined(ROM_AGES)
+	ld a,TILEINDEX_OVERWORLD_BUSH_1_AGES
+.else
+	ld a,TILEINDEX_OVERWORLD_BUSH_1_SEASONS
 .endif
 	jr z,+
 .if defined(ROM_COMBO)

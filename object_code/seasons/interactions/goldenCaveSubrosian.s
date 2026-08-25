@@ -27,16 +27,16 @@ m_InteractionCode $cc
 	ld a,GLOBALFLAG_DONE_SUBROSIAN_SECRET
 	call checkGlobalFlag
 	jr z,@notDoneSubrosianScript
-	ld hl,mainScripts.script7dac
+	ld hl,{SCRIPTS_1}.script7dac
 	jr @setScript
 @notDoneSubrosianScript:
 	call getThisRoomFlags
 	bit 7,a
 	jr z,@notGivenSecret
-	ld hl,mainScripts.goldenCaveSubrosianScript_givenSecret
+	ld hl,{SCRIPTS_1}.goldenCaveSubrosianScript_givenSecret
 	jr @setScript
 @notGivenSecret:
-	ld hl,mainScripts.goldenCaveSubrosianScript_beginningSecret
+	ld hl,{SCRIPTS_1}.goldenCaveSubrosianScript_beginningSecret
 @setScript:
 	call interactionSetScript
 	call interactionInitGraphics
@@ -100,7 +100,7 @@ seasonsFunc_0f_7dc1:
 	jp objectSetSpeedZ
 
 seasonsTable_0f_7dc7:
-	.dw mainScripts.goldenCaveSubrosianScript_beginningSecret
-	.dw mainScripts.goldenCaveSubrosianScript_7d00
-	.dw mainScripts.goldenCaveSubrosianScript_7d87
-	.dw mainScripts.goldenCaveSubrosianScript_7d00
+	.dw {SCRIPTS_1}.goldenCaveSubrosianScript_beginningSecret
+	.dw {SCRIPTS_1}.goldenCaveSubrosianScript_7d00
+	.dw {SCRIPTS_1}.goldenCaveSubrosianScript_7d87
+	.dw {SCRIPTS_1}.goldenCaveSubrosianScript_7d00

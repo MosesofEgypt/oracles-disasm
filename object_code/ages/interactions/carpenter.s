@@ -336,16 +336,16 @@ m_InteractionCode $9a
 	jp interactionSetScript
 
 @scriptTable:
-	.dw mainScripts.carpenter_subid00Script
-	.dw mainScripts.carpenter_subid00Script
-	.dw mainScripts.carpenter_subid02Script
-	.dw mainScripts.carpenter_subid03Script
-	.dw mainScripts.carpenter_subid04Script
-	.dw mainScripts.carpenter_subid05Script
-	.dw mainScripts.carpenter_subid06Script
-	.dw mainScripts.carpenter_subid07Script
-	.dw mainScripts.carpenter_subid08Script
-	.dw mainScripts.carpenter_subid09Script
+	.dw {SCRIPTS_1}.carpenter_subid00Script
+	.dw {SCRIPTS_1}.carpenter_subid00Script
+	.dw {SCRIPTS_1}.carpenter_subid02Script
+	.dw {SCRIPTS_1}.carpenter_subid03Script
+	.dw {SCRIPTS_1}.carpenter_subid04Script
+	.dw {SCRIPTS_1}.carpenter_subid05Script
+	.dw {SCRIPTS_1}.carpenter_subid06Script
+	.dw {SCRIPTS_1}.carpenter_subid07Script
+	.dw {SCRIPTS_1}.carpenter_subid08Script
+	.dw {SCRIPTS_1}.carpenter_subid09Script
 
 ; Animations for each subid
 @animationsForBridgeBuildCutsceneStart:

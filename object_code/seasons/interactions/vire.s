@@ -14,7 +14,7 @@ m_InteractionCode $e3
 	call interactionSetAlwaysUpdateBit
 	ld bc,$fe00
 	call objectSetSpeedZ
-	ld hl,mainScripts.vireScript
+	ld hl,{SCRIPTS_1}.vireScript
 	call interactionSetScript
 	ld a,$bb
 	call playSound

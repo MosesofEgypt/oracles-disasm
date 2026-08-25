@@ -233,14 +233,14 @@ m_InteractionCode $22
 	.db $28 $60
 
 @scriptTable:
-	.dw mainScripts.makuTreeScript_remoteCutscene
-	.dw mainScripts.makuTreeScript_remoteCutscene
-	.dw mainScripts.makuTreeScript_remoteCutscene
-	.dw mainScripts.makuTreeScript_remoteCutscene
-	.dw mainScripts.makuTreeScript_remoteCutscene
-	.dw mainScripts.makuTreeScript_remoteCutscene
-	.dw mainScripts.makuTreeScript_remoteCutscene
-	.dw mainScripts.makuTreeScript_remoteCutscene
-	.dw mainScripts.makuTreeScript_remoteCutscene
-	.dw mainScripts.makuTreeScript_remoteCutsceneDontSetRoomFlag
-	.dw mainScripts.makuTreeScript_gateHit
+	.dw {SCRIPTS_1}.makuTreeScript_remoteCutscene
+	.dw {SCRIPTS_1}.makuTreeScript_remoteCutscene
+	.dw {SCRIPTS_1}.makuTreeScript_remoteCutscene
+	.dw {SCRIPTS_1}.makuTreeScript_remoteCutscene
+	.dw {SCRIPTS_1}.makuTreeScript_remoteCutscene
+	.dw {SCRIPTS_1}.makuTreeScript_remoteCutscene
+	.dw {SCRIPTS_1}.makuTreeScript_remoteCutscene
+	.dw {SCRIPTS_1}.makuTreeScript_remoteCutscene
+	.dw {SCRIPTS_1}.makuTreeScript_remoteCutscene
+	.dw {SCRIPTS_1}.makuTreeScript_remoteCutsceneDontSetRoomFlag
+	.dw {SCRIPTS_1}.makuTreeScript_gateHit

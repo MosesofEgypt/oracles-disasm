@@ -472,4 +472,7 @@ getLinkWarpQuadrant:
 	inc a
 	ret
 
+.include {"{GAME_DATA_DIR}/warpDestinations.s"}
+.include {"{GAME_DATA_DIR}/warpSources.s"}
+
 .ends

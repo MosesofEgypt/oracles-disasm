@@ -12,7 +12,7 @@ m_InteractionCode $cd
 	call @initialize
 	ld l,Interaction.var3f
 	ld (hl),DIVER_SECRET & $0f
-	ld hl,mainScripts.linkedGameNpcScript
+	ld hl,{SCRIPTS_1}.linkedGameNpcScript
 	call interactionSetScript
 	call interactionRunScript
 

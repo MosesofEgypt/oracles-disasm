@@ -17,7 +17,7 @@ m_InteractionCode $57
 	ld (hl),$01
 	ld a,>TX_0b00
 	call interactionSetHighTextIndex
-	ld hl,mainScripts.ingoScript_tradingVase
+	ld hl,{SCRIPTS_1}.ingoScript_tradingVase
 	call interactionSetScript
 	ld a,$02
 	call interactionSetAnimation
@@ -43,7 +43,7 @@ m_InteractionCode $57
 	ld (wDisabledObjects),a
 	ld a,$01
 	ld (wMenuDisabled),a
-	ld hl,mainScripts.ingoScript_LinkApproachingVases
+	ld hl,{SCRIPTS_1}.ingoScript_LinkApproachingVases
 	call interactionSetScript
 	ld h,d
 	ld l,$44

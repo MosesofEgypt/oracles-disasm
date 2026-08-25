@@ -18,7 +18,7 @@ m_InteractionCode $65
 @state1:
 	call interactionRunScript
 	jp c,interactionDelete
-	callab scriptHelp.comedian_turnToFaceLink
+	callab {SCRIPTS_HELP}.comedian_turnToFaceLink
 	jp interactionAnimateAsNpc
 
 
@@ -42,4 +42,4 @@ m_InteractionCode $65
 	jp interactionIncState
 
 @scriptTable:
-	.dw mainScripts.comedianScript
+	.dw {SCRIPTS_1}.comedianScript

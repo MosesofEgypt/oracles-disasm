@@ -33,5 +33,5 @@ m_InteractionCode $42
 	jp npcFaceLinkAndAnimate
 
 table_6d14:
-	.dw mainScripts.pirateHouseSubrosianScript_piratesAround
-	.dw mainScripts.pirateHouseSubrosianScript_piratesLeft
+	.dw {SCRIPTS_1}.pirateHouseSubrosianScript_piratesAround
+	.dw {SCRIPTS_1}.pirateHouseSubrosianScript_piratesLeft

@@ -35,7 +35,7 @@ m_InteractionCode $96
 	call interactionSetAnimation
 	jp objectSetVisible80
 @@subid4:
-	ld hl,mainScripts.script7421
+	ld hl,{SCRIPTS_1}.script7421
 	call interactionSetScript
 	ld e,$43
 	ld a,(de)
@@ -300,15 +300,15 @@ func_57ba:
 	rst_derefHl
 	jp interactionSetScript
 table_57d0:
-	.dw mainScripts.script73f3
-	.dw mainScripts.script73f3
-	.dw mainScripts.script73f3
+	.dw {SCRIPTS_1}.script73f3
+	.dw {SCRIPTS_1}.script73f3
+	.dw {SCRIPTS_1}.script73f3
 table_57d6:
-	.dw mainScripts.script73f6
-	.dw mainScripts.script73f6
-	.dw mainScripts.script73f6
+	.dw {SCRIPTS_1}.script73f6
+	.dw {SCRIPTS_1}.script73f6
+	.dw {SCRIPTS_1}.script73f6
 table_57dc:
-	.dw mainScripts.script7443
-	.dw mainScripts.script7456
-	.dw mainScripts.script7469
-	.dw mainScripts.script7469
+	.dw {SCRIPTS_1}.script7443
+	.dw {SCRIPTS_1}.script7456
+	.dw {SCRIPTS_1}.script7469
+	.dw {SCRIPTS_1}.script7469

@@ -878,7 +878,7 @@ miscPuzzles_subid11:
 	push de
 	call reloadTileMap
 	pop de
-	ld hl,mainScripts.miscPuzzles_crownDungeonOpeningScript
+	ld hl,{SCRIPTS_1}.miscPuzzles_crownDungeonOpeningScript
 
 ;;
 miscPuzzles_setScriptAndIncState:
@@ -896,7 +896,7 @@ miscPuzzles_subid12:
 	call getThisRoomFlags
 	and ROOMFLAG_80
 	jp nz,interactionDelete
-	ld hl,mainScripts.miscPuzzles_mermaidsCaveDungeonOpeningScript
+	ld hl,{SCRIPTS_1}.miscPuzzles_mermaidsCaveDungeonOpeningScript
 	jr miscPuzzles_setScriptAndIncState
 
 
@@ -909,7 +909,7 @@ miscPuzzles_subid13:
 	call getThisRoomFlags
 	and ROOMFLAG_80
 	jp nz,interactionDelete
-	ld hl,mainScripts.miscPuzzles_eyeglassLibraryOpeningScript
+	ld hl,{SCRIPTS_1}.miscPuzzles_eyeglassLibraryOpeningScript
 	jr miscPuzzles_setScriptAndIncState
 
 

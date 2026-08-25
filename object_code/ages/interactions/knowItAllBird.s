@@ -13,7 +13,7 @@ m_InteractionCode $e3
 	ld a,$01
 	ld (de),a
 	call interactionInitGraphics
-	ld hl,mainScripts.knowItAllBirdScript
+	ld hl,{SCRIPTS_1}.knowItAllBirdScript
 	call interactionSetScript
 
 	call getRandomNumber_noPreserveVars
