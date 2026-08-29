@@ -991,25 +991,9 @@ m_GfxHeaderStart $a0, GFXH_FILE_MENU_GFX
 	m_GfxHeader gfx_fileselect, $9201
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $ba, GFXH_FILE_MENU_WITH_MESSAGE_SPEED_SEASONS
-	m_GfxHeader map_file_menu_message_speed, w4TileMap+$240
-	m_GfxHeader flg_file_menu_message_speed, w4AttributeMap+$240
-	; Fall through
-m_GfxHeaderStart $a1, GFXH_FILE_MENU_SEASONS
-	m_GfxHeader spr_din_1, $8001, $06
-	m_GfxHeader spr_nayru, $8061, $04
-	m_GfxHeader gfx_messagespeed, $9200
-	m_GfxHeader gfx_pickafile_2, $8801
-	m_GfxHeader gfx_copy, $8a01
-	m_GfxHeader gfx_erase, $8aa1
-	; Fall through
-m_GfxHeaderStart $a2, GFXH_FILE_MENU_LAYOUT_SEASONS
-	m_GfxHeader map_file_menu_top, w4TileMap
-	m_GfxHeader flg_file_menu_top, w4AttributeMap
-	m_GfxHeader map_file_menu_middle, w4TileMap+$0a0
-	m_GfxHeader flg_file_menu_middle, w4AttributeMap+$0a0
-	m_GfxHeader map_file_menu_bottom, w4TileMap+$1e0
-	m_GfxHeader flg_file_menu_bottom, w4AttributeMap+$1e0
+m_GfxHeaderStart $ba, PAD_BA
+m_GfxHeaderStart $a1, PAD_A1
+m_GfxHeaderStart $a2, PAD_A2
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $a3, GFXH_FILE_MENU_COPY
@@ -1513,11 +1497,11 @@ m_GfxHeaderStart $e7, GFXH_INTRO_TEMPLE_SCENE_AGES
 	m_GfxHeader ages_flg_intro_triforce_room, w3VramAttributes
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $e8, GFXH_FILE_MENU_WITH_MESSAGE_SPEED_AGES
+m_GfxHeaderStart $e8, GFXH_FILE_MENU_WITH_MESSAGE_SPEED
 	m_GfxHeader map_file_menu_message_speed, w4TileMap+$240
 	m_GfxHeader flg_file_menu_message_speed, w4AttributeMap+$240
 	; Fall through
-m_GfxHeaderStart $e9, GFXH_FILE_MENU_AGES
+m_GfxHeaderStart $e9, GFXH_FILE_MENU
 	m_GfxHeader spr_din_1, $8001, $06
 	m_GfxHeader spr_nayru_1, $8061, $04
 	m_GfxHeader gfx_messagespeed, $9200
@@ -1525,7 +1509,7 @@ m_GfxHeaderStart $e9, GFXH_FILE_MENU_AGES
 	m_GfxHeader gfx_copy, $8a01
 	m_GfxHeader gfx_erase, $8aa1
 	; Fall through
-m_GfxHeaderStart $ea, GFXH_FILE_MENU_LAYOUT_AGES
+m_GfxHeaderStart $ea, GFXH_FILE_MENU_LAYOUT
 	m_GfxHeader map_file_menu_top, w4TileMap
 	m_GfxHeader flg_file_menu_top, w4AttributeMap
 	m_GfxHeader map_file_menu_middle, w4TileMap+$0a0

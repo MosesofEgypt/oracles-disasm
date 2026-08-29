@@ -340,6 +340,9 @@ saveFile:
 ;;
 loadFile:
 .ifdef ROM_COMBO
+	call getLastGamePlayed
+	call setIsSeasons
+
 	call getFileAddress1
 	ld l,c
 	ld h,b
@@ -880,6 +883,29 @@ getFileAddress2:
 	.dw $baa0
 
 .if defined(ROM_COMBO)
+;;
+; @param[out] cflag Set if the last game played was seasons
+getLastGamePlayed:
+	push hl
+	push af
+
+	; enable SRAM chip
+	ld a,$0a
+	ld ($1111),a
+
+	call getComboSaveFileFlags
+	ld a,(hl)
+	rlca
+	pop hl
+
+	ld a,$00
+	; disable SRAM chip
+	ld ($1111),a
+
+	ld a,h
+	pop hl
+	ret
+
 ;;
 ; @param[out] zflag Unset if both games were started on this savefile
 getBothGamesStarted:

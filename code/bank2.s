@@ -258,15 +258,7 @@ fileSelectMode1:
 	xor a
 	call func_02_4149
 	call disableLcd
-.if defined(ROM_COMBO)
-	ld a,GFXH_FILE_MENU_WITH_MESSAGE_SPEED_SEASONS
-	call wIsSeasons
-	jr c,+
-		ld a,GFXH_FILE_MENU_WITH_MESSAGE_SPEED_AGES
-	+
-.else
 	ld a,GFXH_FILE_MENU_WITH_MESSAGE_SPEED
-.endif
 	call loadGfxHeader
 	ld a,PALH_05
 	call loadPaletteHeader
@@ -1960,6 +1952,7 @@ loadFileDisplayVariables:
 	call getFileDisplayVariableAddress
 	ld a,c
 	ldi (hl),a
+	ld a,(wWhichGame)
 	ldi (hl),a
 .ifdef FILE_MENU_SHOW_CURRENT_HEARTS
 	ld a,(wLinkHealth)
@@ -2048,15 +2041,7 @@ fileSelectDrawHeartsAndDeathCounter:
 	ret z
 .endif
 
-.if defined(ROM_COMBO)
-	ld a,GFXH_FILE_MENU_LAYOUT_SEASONS
-	call wIsSeasons
-	jr c,+
-		ld a,GFXH_FILE_MENU_LAYOUT_AGES
-	+
-.else
 	ld a,GFXH_FILE_MENU_LAYOUT
-.endif
 	call loadGfxHeader
 
 	; Jump if cursor isn't on a file
@@ -2069,6 +2054,14 @@ fileSelectDrawHeartsAndDeathCounter:
 	call getFileDisplayVariableAddress
 	bit 7,(hl)
 	jr nz,+++
+
+.if defined(ROM_COMBO)
+	inc hl
+	ld a,(hl)
+	xor $01
+	rrca
+	call setIsSeasons
+.endif
 
 	; Draw death count
 	ld d,$04
@@ -2359,15 +2352,7 @@ fileSelectMode7:
 	xor a
 	call func_02_4149
 	call disableLcd
-.if defined(ROM_COMBO)
-	ld a,GFXH_FILE_MENU_SEASONS
-	call wIsSeasons
-	jr c,+
-		ld a,GFXH_FILE_MENU_AGES
-	+
-.else
 	ld a,GFXH_FILE_MENU
-.endif
 	call loadGfxHeader
 	ld a,GFXH_QUIT_GFX
 	call loadGfxHeader
