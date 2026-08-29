@@ -764,7 +764,7 @@ m_GfxDataBothGames flg_inventory_screen_3
 m_GfxDataBothGames flg_link_with_oracle
 m_GfxDataBothGames flg_link_with_oracle_and_twinrova_1
 m_GfxDataBothGames flg_link_with_oracle_and_twinrova_2
-m_GfxDataBothGames flg_titlescreen
+;m_GfxDataBothGames flg_titlescreen
 m_GfxDataBothGames gfx_animations_1
 m_GfxDataBothGames gfx_animations_2
 m_GfxDataBothGames gfx_animations_3
@@ -800,7 +800,7 @@ m_GfxDataBothGames gfx_link_with_oracle_and_twinrova_2
 m_GfxDataBothGames gfx_link_with_oracle_and_twinrova_3
 m_GfxDataBothGames gfx_tileset_dungeon_standard_1
 m_GfxDataBothGames gfx_tileset_dungeon_standard_2
-m_GfxDataBothGames gfx_titlescreen_1
+;m_GfxDataBothGames gfx_titlescreen_1
 m_GfxDataBothGames gfx_tobecontinued
 m_GfxDataBothGames map_credits_gametitle
 m_GfxDataBothGames map_credits_image1
@@ -823,7 +823,7 @@ m_GfxDataBothGames map_inventory_screen_3
 m_GfxDataBothGames map_link_with_oracle
 m_GfxDataBothGames map_link_with_oracle_and_twinrova_1
 m_GfxDataBothGames map_link_with_oracle_and_twinrova_2
-m_GfxDataBothGames map_titlescreen
+;m_GfxDataBothGames map_titlescreen
 m_GfxDataBothGames spr_bipsom_1
 m_GfxDataBothGames spr_common_items
 m_GfxDataBothGames spr_credits_makutree
@@ -845,6 +845,10 @@ m_GfxDataBothGames spr_quest_items_4
 m_GfxDataBothGames spr_seasonfairy_ambi
 m_GfxDataBothGames spr_subrosian
 m_GfxDataBothGames spr_woodentunnel_seasonsymbols
+
+m_GfxData flg_titlescreen_combo
+m_GfxData gfx_titlescreen_combo
+m_GfxData map_titlescreen_combo
 
 .ifdef ENABLE_NEW_GAME_PLUS
 m_GfxData map_pick_a_file_menu_middle

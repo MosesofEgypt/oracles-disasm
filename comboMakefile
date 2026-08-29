@@ -50,6 +50,10 @@ CMP_GFX_FILES         = $(shell find $(GFX_CMP_DIR)/common  -name '*.bin' -or -n
 CMP_GFX_FILES_AGES    = $(shell find $(GFX_CMP_DIR)/ages    -name '*.bin' -or -name '*.png')
 CMP_GFX_FILES_SEASONS = $(shell find $(GFX_CMP_DIR)/seasons -name '*.bin' -or -name '*.png')
 
+BIN_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux/combo -name '*.bin')
+UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/combo -name '*.bin' -or -name '*.png')
+PNG_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux/combo -name '*.png')
+
 ifdef ENABLE_RING_REDUX
 # overriding ring gfx
 BIN_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux -name 'map_rings.bin')

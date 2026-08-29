@@ -553,10 +553,17 @@ intro_capcomScreen:
 .ifdef ENABLE_DX_TITLE_SCREEN
 titlescreenDXSprite:
 	.db $04
+.if defined(ROM_COMBO)
+	.db $72 $7e $48 $00
+	.db $72 $86 $4a $00
+	.db $72 $8e $4c $00
+	.db $72 $96 $4e $00
+.else
 	.db $66 $86 $48 $00
 	.db $66 $8e $4a $00
 	.db $66 $96 $4c $00
 	.db $66 $9e $4e $00
+.endif
 .endif
 
 ;;
@@ -623,15 +630,7 @@ intro_titlescreen_state0:
 	call stopTextThread
 
 	call disableLcd
-.ifdef ROM_COMBO
-	ld a,GFXH_TITLESCREEN_SEASONS
-	call wIsSeasons
-	jr c,+
-		ld a,GFXH_TITLESCREEN_AGES
-	+
-.else
 	ld a,GFXH_TITLESCREEN
-.endif
 	call loadGfxHeader
 	ld a,PALH_03
 	call loadPaletteHeader

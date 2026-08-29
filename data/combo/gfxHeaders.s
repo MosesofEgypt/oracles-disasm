@@ -1,6 +1,6 @@
 ; See data/ages/gfxHeaders.s for more info.
 
-.define NUM_GFX_HEADERS $f5
+.define NUM_GFX_HEADERS $f4
 
 gfxHeaderTable:
 	.repeat NUM_GFX_HEADERS index COUNT
@@ -20,16 +20,16 @@ m_GfxHeaderStart $01, GFXH_NINTENDO_CAPCOM_SCREEN
 	m_GfxHeader gfx_capcom_nintendo, $8800
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $02, GFXH_TITLESCREEN_SEASONS
+m_GfxHeaderStart $02, GFXH_TITLESCREEN
 	m_GfxHeader spr_titlescreen_sprites, $8380
-	m_GfxHeader seasons_gfx_titlescreen_1, $8800
+	m_GfxHeader gfx_titlescreen_combo, $8800
 	m_GfxHeader gfx_titlescreen_2, $8d00
 	m_GfxHeader gfx_titlescreen_3, $9300
 	m_GfxHeader gfx_titlescreen_4, $9400
 	m_GfxHeader gfx_titlescreen_5, $8801
 	m_GfxHeader gfx_titlescreen_6, $8cd1
-	m_GfxHeader seasons_map_titlescreen, $9800
-	m_GfxHeader seasons_flg_titlescreen, $9801
+	m_GfxHeader map_titlescreen_combo, $9800
+	m_GfxHeader flg_titlescreen_combo, $9801
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $03, GFXH_DONE
@@ -1598,31 +1598,19 @@ m_GfxHeaderStart $f0, GFXH_LINK_WITH_ORACLE_AND_TWINROVA_END_SCENE_AGES
 	m_GfxHeader ages_flg_link_with_oracle_and_twinrova_2, w4AttributeMap
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $f1, GFXH_TITLESCREEN_AGES
-	m_GfxHeader spr_titlescreen_sprites, $8380
-	m_GfxHeader ages_gfx_titlescreen_1, $8800
-	m_GfxHeader gfx_titlescreen_2, $8d00
-	m_GfxHeader gfx_titlescreen_3, $9300
-	m_GfxHeader gfx_titlescreen_4, $9400
-	m_GfxHeader gfx_titlescreen_5, $8801
-	m_GfxHeader gfx_titlescreen_6, $8cd1
-	m_GfxHeader ages_map_titlescreen, $9800
-	m_GfxHeader ages_flg_titlescreen, $9801
-	m_GfxHeaderEnd
-
-m_GfxHeaderStart $f2, GFXH_INVENTORY_SUBSCREEN_3_AGES
+m_GfxHeaderStart $f1, GFXH_INVENTORY_SUBSCREEN_3_AGES
 	m_GfxHeader ages_map_inventory_screen_3, w4TileMap+$040
 	m_GfxHeader ages_flg_inventory_screen_3, w4AttributeMap+$040
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $f3, GFXH_TILESET_INDOORS_AGES
+m_GfxHeaderStart $f2, GFXH_TILESET_INDOORS_AGES
 	m_GfxHeader ages_gfx_tileset_dungeon_standard_1, $8801, $20
 	m_GfxHeader gfx_tileset_indoors_1, $8a01
 	m_GfxHeader gfx_tileset_indoors_2, $9001
 	m_GfxHeader gfx_tileset_vases, $8861
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $f4, GFXH_TILESET_CAVE_AGES
+m_GfxHeaderStart $f3, GFXH_TILESET_CAVE_AGES
 	m_GfxHeader ages_gfx_tileset_dungeon_standard_1, $8801, $20
 	m_GfxHeader gfx_tileset_cave_1, $8a01
 	m_GfxHeader gfx_tileset_cave_2, $9001
