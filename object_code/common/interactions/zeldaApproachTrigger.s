@@ -54,7 +54,11 @@ m_InteractionCode $da
 	or a
 	jr z,++
 	ldi a,(hl)
-	cp INTERAC_TWINROVA_FLAME
+.if defined(ROM_COMBO) && defined(ROM_SEASONS)
+	ld (hl),INTERAC_TWINROVA_FLAME_SEASONS
+.else
+	ld (hl),INTERAC_TWINROVA_FLAME
+.endif
 	jr nz,++
 	ld l,Interaction.visible
 	res 7,(hl)

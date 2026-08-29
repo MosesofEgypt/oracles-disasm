@@ -133,7 +133,11 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 @state0Func0:
 	call getFreeInteractionSlot
 	jr nz,+
+.if defined(ROM_COMBO)
+	ld a,INTERAC_DIN_SEASONS
+.else
 	ld a,INTERAC_DIN
+.endif
 	ld (wInteractionIDToLoadExtraGfx),a
 	ldi (hl),a
 	ld (hl),c
@@ -377,7 +381,11 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 -
 	call getFreeInteractionSlot
 	jr nz,+
+.if defined(ROM_COMBO)
+	ld (hl),INTERAC_TWINROVA_FLAME_SEASONS
+.else
 	ld (hl),INTERAC_TWINROVA_FLAME
+.endif
 	inc l
 	dec b
 	ld (hl),b
@@ -622,7 +630,11 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 -
 	call getFreeInteractionSlot
 	jr nz,+
+.if defined(ROM_COMBO)
+	ld (hl),INTERAC_TWINROVA_FLAME_SEASONS
+.else
 	ld (hl),INTERAC_TWINROVA_FLAME
+.endif
 	inc l
 	ld a,$05
 	add b

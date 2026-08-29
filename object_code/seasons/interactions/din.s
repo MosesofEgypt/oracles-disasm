@@ -73,7 +73,11 @@ dinState0:
 	jp z,interactionDelete
 	ld a,$06
 	call interactionSetAnimation
+.if defined(ROM_COMBO)
+	ld a,INTERAC_DIN_SEASONS
+.else
 	ld a,INTERAC_DIN
+.endif
 	ld (wInteractionIDToLoadExtraGfx),a
 	ld (wLoadedTreeGfxIndex),a
 	ld hl,{SCRIPTS_1}.dinScript_subid8Init

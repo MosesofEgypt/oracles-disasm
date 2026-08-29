@@ -75,7 +75,11 @@ zeldaVillagersRoom_interactionsTableLookup:
 @villagersSeenInteractions:
 	.db $05
 	; interactioncode - subid - yh - xh
+.if defined(ROM_COMBO)
+	.db INTERAC_ZELDA_SEASONS $07 $28 $48
+.else
 	.db INTERAC_ZELDA $07 $28 $48
+.endif
 	.db INTERAC_IMPA $02 $30 $60
 	.db INTERAC_bc $01 $48 $60
 	.db INTERAC_be $01 $48 $30

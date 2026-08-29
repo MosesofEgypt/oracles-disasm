@@ -37,6 +37,9 @@ if "ENABLE_REDUX_EXTRAS" in defines:
 if "ENABLE_GASHA_REBALANCE" in defines:
     yaml_layers.append(os.path.join(gameYamlsDir, "gasha_price_text.yaml"))
 
+if "ROM_COMBO" in defines:
+    yaml_layers.append(os.path.join(gameYamlsDir, "combo_text.yaml"))
+
 if "RESIZE_RING_BOX" in defines:
     yaml_layers.append(os.path.join(yamlsDir, "ring_box_text.yaml"))
 

@@ -1136,7 +1136,11 @@ cutscene0dFunc0:
 	ld a,$01
 	ld (de),a
 	; Room of Rites
+.if defined(ROM_COMBO)
+	ld bc,ROOM_ZELDA_IN_FINAL_DUNGEON_SEASONS
+.else
 	ld bc,ROOM_ZELDA_IN_FINAL_DUNGEON
+.endif
 	call disableLcdAndLoadRoom_body
 	ld a,PALH_ac
 	call loadPaletteHeader
@@ -1144,7 +1148,11 @@ cutscene0dFunc0:
 -
 	call getFreeInteractionSlot
 	jr nz,+
+.if defined(ROM_COMBO)
+	ld (hl),INTERAC_TWINROVA_FLAME_SEASONS
+.else
 	ld (hl),INTERAC_TWINROVA_FLAME
+.endif
 	inc l
 	ld (hl),b
 	dec b
@@ -1296,7 +1304,11 @@ cutscene0eFunc2:
 	call disableLcd
 	call getFreeInteractionSlot
 	jr nz,+
+.if defined(ROM_COMBO)
+	ld a,INTERAC_DIN_SEASONS
+.else
 	ld a,INTERAC_DIN
+.endif
 	ld (wInteractionIDToLoadExtraGfx),a
 	ldi (hl),a
 	ld (hl),$06

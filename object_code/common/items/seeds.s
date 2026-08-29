@@ -842,6 +842,15 @@ galeSeedTryToWarpLink:
 	ld a,$02
 	ld (w1Link.substate),a
 
+	; cflag = TILESETFLAG_PAST
+	ld a,(wTilesetFlags)
+	rlca
+	ld a,$00
+	jr nc,+
+		inc a
+	+
+	ld (wMapMenu.mode),a
+
 	callabaf bank2.galeSeedMenu_anyWarpsAvailable
 	jr c,+
 		; no warps available, so just drop link

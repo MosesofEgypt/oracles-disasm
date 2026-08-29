@@ -12,7 +12,11 @@ m_InteractionCode $8d
 	ld (de),a
 	ld e,$41
 	ld a,(de)
+.if defined(ROM_COMBO)
+	cp INTERAC_MASTER_DIVER_SEASONS
+.else
 	cp INTERAC_MASTER_DIVER
+.endif
 	jr nz,+
 	ld a,TREASURE_ESSENCE
 	call checkTreasureObtained

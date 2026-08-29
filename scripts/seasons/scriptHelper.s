@@ -1185,7 +1185,11 @@ piratesDeparting_spawnPirateFromShip:
 linkedGame_spawnAmbi:
 	call getFreeInteractionSlot
 	ret nz
+.if defined(ROM_COMBO)
+	ld (hl),INTERAC_AMBI_SEASONS
+.else
 	ld (hl),INTERAC_AMBI
+.endif
 	inc l
 	ld (hl),$03
 	ld l,Interaction.yh
@@ -1968,7 +1972,11 @@ stealingFeather_spawnStrangeBrothers:
 func_5e82:
 	call getFreeInteractionSlot
 	ret nz
+.if defined(ROM_COMBO)
+	ld (hl),INTERAC_SUBROSIAN_SEASONS
+.else
 	ld (hl),INTERAC_SUBROSIAN
+.endif
 	inc l
 	ld (hl),e
 	ld l,Interaction.yh
@@ -2447,7 +2455,11 @@ makuTree_spawnBubble:
 	ret
 
 makuTree_dropMakuSeed:
+.if defined(ROM_COMBO)
+	ldbc INTERAC_MAKU_SEED_SEASONS $01
+.else
 	ldbc INTERAC_MAKU_SEED $01
+.endif
 	jp objectCreateInteraction
 
 makuTree_OnoxTauntingAfterMakuSeedGet:
@@ -2960,7 +2972,11 @@ zeldaKidnapped_kingMoblinData:
 	.db INTERAC_KING_MOBLIN, $05 $00 $14 $50
 
 zeldaKidnapped_zeldaData:
+.if defined(ROM_COMBO)
+	.db INTERAC_ZELDA_SEASONS,     $06 $00 $48 $50
+.else
 	.db INTERAC_ZELDA,     $06 $00 $48 $50
+.endif
 
 zeldaKidnapped_impaData:
 	.db INTERAC_ba,          $03 $00 $88 $40

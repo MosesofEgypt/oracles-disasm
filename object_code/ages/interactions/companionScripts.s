@@ -90,10 +90,7 @@ companionScript_subid05:
 ; companion.
 companionScript_genericState0:
 	ld a,(wFileIsCompleted)
-.ifdef ENABLE_NEW_GAME_PLUS
-	add $01
-.endif
-	or a
+	and $01
 	jp nz,companionScript_deleteSelf
 	ld a,(wLinkObjectIndex)
 	rrca

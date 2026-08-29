@@ -1,3 +1,25 @@
+.if defined(ROM_COMBO)
+; Parameters:
+; 1 - Offset to start copying to
+; 2 - Length of data to copy
+.macro m_LoadSavefileSection_len
+	push hl
+	ld bc,\1-wFileStart
+	add hl,bc
+	ld de,\1
+	ld bc,\2
+	call copyMemoryBc
+	pop hl
+.endm
+
+; Parameters:
+; 1 - Offset to start copying to
+; 2 - End of the data to copy to(offset + copy length)
+.macro m_LoadSavefileSection_end
+	m_LoadSavefileSection_len \1 (\2-\1)
+.endm
+.endif
+
 ;;
 ; @param c What operation to do on the file
 ; @param hActiveFileSlot File index
@@ -8,10 +30,29 @@ fileManagementFunction:
 	.dw saveFile
 	.dw loadFile
 	.dw eraseFile
+.if defined(ROM_COMBO)
+	.dw comboLoadOtherGame
+.else
+	.dw noFileManagementOp
+.endif
 .ifdef ENABLE_NEW_GAME_PLUS
 	.dw initializeNgpFile
+.else
+	.dw noFileManagementOp
+.endif
 
+.ifdef ENABLE_NEW_GAME_PLUS
 initializeNgpFile:
+.if defined(ROM_COMBO)
+	; mark save as not having both games started
+	ld a,$0a
+	ld ($1111),a
+	call getComboSaveFileFlags
+	res 0,(hl)
+	xor a
+	ld ($1111),a
+.endif
+
 	; Unequip all rings, but don't remove from box
 	ld hl,wRingReduxFlags
 	ld a,$1f
@@ -74,7 +115,7 @@ initializeNgpFile:
 	ld (wShooterSelectedSeeds),a
 	ld (wSlingshotSelectedSeeds),a
 
-	ld hl,initialNgpFileVariables_spawn
+	ld hl,initialFileVariables_ages
 	call initializeFileVariables
 .if defined(ROM_COMBO)
 	ld hl,initialFileVariables_seasons
@@ -130,8 +171,10 @@ initializeNgpFile:
 	+
 	ld (hl),a
 	ret
-
 .endif
+
+noFileManagementOp:
+	ret
 
 ;;
 initializeFile:
@@ -141,6 +184,14 @@ initializeFile:
 	ld hl,initialFileVariables_seasons
 	call wIsSeasons
 	call c,initializeFileVariables
+
+	; unset the flags indicating various things about the combo games
+	ld a,$0a
+	ld ($1111),a
+	call getComboSaveFileFlags
+	ld (hl),$00
+	xor a
+	ld ($1111),a
 .endif
 
 	; Load in a: wFileIsHeroGame (bit 1), wFileIsLinkedGame (bit 0)
@@ -213,6 +264,33 @@ saveFile:
 	jr c,+
 		inc (hl)
 	+
+
+	ld a,$0a
+	ld ($1111),a
+	call getComboSaveFileFlags
+	; set or unset the flag to indicate which game was last played
+	call wIsSeasons
+	jr c,+
+		; ages
+		bit 7,(hl)
+
+		; if the flag differs, that means both games were started
+		; on this savefile, so we need to indicate this via flags
+		jr z,++
+			res 7,(hl)
+			set 0,(hl)
+			jr ++
+	+
+		; seasons
+		bit 7,(hl)
+		jr nz,++
+			set 7,(hl)
+			set 0,(hl)
+			jr ++
+	++
+	xor a
+	ld ($1111),a
+
 .elif defined(ROM_AGES)
 	ld (hl),$01
 .else
@@ -292,6 +370,281 @@ loadFile:
 	pop af
 	ret
 
+.if defined(ROM_COMBO)
+;;
+; Working from the existing WRAM save data, this either loads portions of
+; the other game's save file, or clears and initializes them. The result
+; is that the other game can be switched to while carrying health, rupees,
+; upgrades, and various other things like rings over between games.
+; The current game is saved before any of this is done, however.
+; @param[out]	zflag	Set if a new game was initialized rather than loaded.
+comboLoadOtherGame:
+	call saveFile
+
+	push hl
+	push de
+	push bc
+	call toggleIsSeasons
+	call getBothGamesStarted
+
+	ld hl,wFileChecksum ; using checksum to tell if loaded or initialized
+	push hl
+	jr nz,+
+		call initializeComboGame
+		xor a
+		jr ++
+	+
+		call loadAcrossComboGame
+		ld a,$ff
+	++
+	pop hl
+	ldi (hl),a
+	ldi (hl),a
+
+	; stop music and sfx to prevent item acquisition sounds from playing
+	ld a,SNDCTRL_STOPMUSIC
+	call playSound
+	ld a,SNDCTRL_STOPSFX
+	call playSound
+
+	pop bc
+	pop de
+	pop hl
+	ret
+
+;;
+; Working from the existing WRAM save data, this loads select portions of
+; the other game's save file in preparation for switching to running it.
+loadAcrossComboGame:
+	push bc
+	; record bonus items the player has
+	ld b,$00
+	ld a,TREASURE_BIGGORON_SWORD
+	call checkTreasureObtained
+	jr nc,+
+		set 0,b
+	+
+	push bc
+
+	; get the savefile address to read from
+	call getFileAddress1
+	ld h,b
+	ld l,c
+
+	; enable SRAM chip
+	ld a,$0a
+	ld ($1111),a
+
+	m_LoadSavefileSection_len wChildStatus,			$06
+	m_LoadSavefileSection_len wSavefileString,		$08
+	m_LoadSavefileSection_len wFluteIcon,			$01
+	m_LoadSavefileSection_end wDeathRespawnBuffer,	wLinkHealth
+	m_LoadSavefileSection_end wEssencesObtained,	wTradeItem+1
+	m_LoadSavefileSection_end wKilledGoldenEnemies,	wSlingshotSelectedSeeds+1
+	m_LoadSavefileSection_end wBiggoronSwordOverflowItem, wSaveFileMainSectionEnd
+	m_LoadSavefileSection_end wGroup0RoomFlags,		wGroupRoomFlagsEnd
+
+	; disable SRAM chip
+	xor a
+	ld ($1111),a
+	pop bc
+
+	; give the player the bonus items
+	bit 0,b
+	jr z,+
+		ld a,TREASURE_BIGGORON_SWORD
+		call checkTreasureObtained
+		call nc,giveTreasure
+	+
+
+	pop bc
+	ret
+
+;;
+; Working from the existing WRAM save data, this clears and initializes
+; select portions of the save file so it can be used for the other game.
+initializeComboGame:
+	; track whether the user got the ring box from vasu to prevent a free upgrade
+	ld a,GLOBALFLAG_OBTAINED_RING_BOX
+	call checkGlobalFlag
+	push af
+
+	; unset all the treasure flags except the ones specified below
+	ld hl,wObtainedTreasureFlags
+
+	ld a,1<<TREASURE_ROD_OF_SEASONS			; $07
+	and (hl)
+	ldi (hl),a
+
+	ld a,1<<(TREASURE_BIGGORON_SWORD-$08)	; $0c
+	and (hl)
+	ldi (hl),a
+
+	ld a,1<<(TREASURE_HARP-$10)				; $11
+	and (hl)
+	ldi (hl),a
+
+	xor a
+	ldi (hl),a
+
+	ld a,1<<(TREASURE_TUNE_OF_ECHOES-$20)	; $25
+	or   1<<(TREASURE_TUNE_OF_CURRENTS-$20)	; $26
+	or   1<<(TREASURE_TUNE_OF_AGES-$20)		; $27
+	and (hl)
+	ldi (hl),a
+
+	ld a,1<<(TREASURE_POTION-$28)			; $2f
+	and (hl)
+	ldi (hl),a
+
+	; clear the rest of the flags
+	xor a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ld  (hl),a
+
+	; toggle the game type and set as linked game
+	ld hl,wWhichGame
+	ld a,(hl)
+	xor $01
+	ldi (hl),a
+	; set the linked-game bit
+	set 0,(hl)
+	ld hl,wFileIsCompleted
+	ld a,$f0
+	and (hl)
+	; set the bit indicating that warping to other game is allowed
+	or $08
+	ld (hl),a
+
+	.ifdef ENABLE_RING_REDUX
+		xor a
+		ld (wRingReduxFlagsExt),a
+	.endif
+
+	; clear all game tracker variables and such
+	ld hl,wDeathRespawnBuffer
+	ld b,wObtainedTreasureFlags-wDeathRespawnBuffer
+	call clearMemory
+
+	ld hl,wFluteIcon
+	ld b,wRingBoxLevel-wFluteIcon
+	call clearMemory
+
+	ld hl,wGlobalFlags
+	ld b,(wSlingshotSelectedSeeds+1)-wGlobalFlags
+	call clearMemory
+
+	ld hl,wBiggoronSwordOverflowItem
+	ld bc,wSaveFileMainSectionEnd-wBiggoronSwordOverflowItem
+	call clearMemoryBc
+
+	ld hl,wGroup0RoomFlags
+	ld bc,wGroupRoomFlagsEnd-wGroup0RoomFlags
+	call clearMemoryBc
+
+	ld a,(1<<TREASURE_PUNCH)
+	ld (wObtainedTreasureFlags),a
+
+	call wIsSeasons
+	jr c,+
+		ld hl,initialFileVariables_ages
+		call initializeFileVariables
+
+		ld hl,initialFileVariables_linkedGame_ages
+		call initializeFileVariables
+		jr ++
+	+
+		ld hl,initialFileVariables_seasons
+		call initializeFileVariables
+	++
+
+	.if defined(ENABLE_NEW_GAME_PLUS)
+		call getIsNewGamePlus
+		ld hl,initialNgpFileVariables_linkedGame
+		call nz,initializeFileVariables
+	.endif
+
+	; refill link's health
+	ld hl,wLinkMaxHealth
+	ldd a,(hl)
+	ldi (hl),a
+
+	ld a,$ff
+	; clear the ring box
+	ld hl,wRingBoxContents
+	ld b,$05
+	call fillMemory
+
+	.ifdef EXTENDED_RING_BOX
+		ld hl,wRingBoxContentsExt
+		ld b,$05
+		call fillMemory
+	.endif
+
+	; restore the ring box flag
+	pop af
+	ld a,GLOBALFLAG_OBTAINED_RING_BOX
+	call nz,setGlobalFlag
+
+	; put temporary items in the equipped slots so the items
+	; we give the player get put into the inventory instead
+	ld a,ITEM_SWORD
+	ld hl,wInventoryB
+	ldi (hl),a
+	ld  (hl),a
+
+	; give the player the bonus items they had
+	ld hl,@bonusItems
+	ld a,(hl)
+	-
+		call checkTreasureObtained
+		ldi a,(hl)
+		call c,giveTreasure
+		ld a,(hl)
+		or a
+		jr nz,-
+
+	; ensure the player has a way to get back to the other game if they want to
+	ld a,TREASURE_SEED_SATCHEL
+	call giveTreasure
+	ld a,TREASURE_GALE_SEEDS
+	call giveTreasure
+
+	; these are automatically given with the satchel. remove them
+	ld a,TREASURE_EMBER_SEEDS
+	call loseTreasure
+
+	ld a,$03
+	ld (wSatchelSelectedSeeds),a
+
+	ld a,$01
+	ld (wSelectedHarpSong),a
+
+	; remove the temporary items
+	xor a
+	ld hl,wInventoryB
+	ldi (hl),a
+	ld  (hl),a
+
+	; save the new file
+	jp saveFile
+
+@bonusItems:
+	.db TREASURE_ROD_OF_SEASONS
+	.db TREASURE_BIGGORON_SWORD
+	.db TREASURE_HARP
+	.db $00
+
+.endif
+
 ;;
 eraseFile:
 	call getFileAddress1
@@ -315,6 +668,15 @@ eraseFile:
 ;;
 ; Clear $0550 bytes at hl
 clearFileAtHl:
+.if defined(ROM_COMBO)
+	push hl
+	call getComboSaveFileFlags
+	; unset the flag indicating the other game in the file was started
+	res 0,(hl)
+	; unset the flag indicating which game was last loaded
+	res 7,(hl)
+	pop hl
+.endif
 	ld bc,$0550
 	jp clearMemoryBc
 
@@ -517,6 +879,42 @@ getFileAddress2:
 	.dw $b550
 	.dw $baa0
 
+.if defined(ROM_COMBO)
+;;
+; @param[out] zflag Unset if both games were started on this savefile
+getBothGamesStarted:
+	push hl
+	
+	; enable SRAM chip
+	ld a,$0a
+	ld ($1111),a
+	call getComboSaveFileFlags
+	xor a
+	bit 0,(hl)
+
+	; disable SRAM chip
+	ld ($1111),a
+
+	pop hl
+	ret
+
+;;
+; @param[out] hl Address of the flags for this savefile combo
+getComboSaveFileFlags:
+	push af
+	ldh a,(<hActiveFileSlot)
+	ld hl,@comboGameFlagAddresses
+	rst_addDoubleIndex
+	rst_derefHl
+	pop af
+	ret
+
+@comboGameFlagAddresses:
+	.dw $bff0 + $00
+	.dw $bff0 + $01
+	.dw $bff0 + $02
+.endif
+
 ;;
 ; @param hl Address of initial values (should point to initialFileVariables or some
 ; variant)
@@ -558,7 +956,7 @@ initialFileVariables:
 	.db <wLinkHealth,			$10 ; 4 hearts (gets overwritten in standard game)
 	.db <wLinkMaxHealth,			$10
 .ifdef ENABLE_NEW_GAME_PLUS
-initialNgpFileVariables_spawn:
+initialFileVariables_ages:
 .endif
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 	; Initial spawn location
@@ -588,6 +986,15 @@ initialFileVariables_seasons:
 	.db <wDeathRespawnBuffer.x,		$48
 	.db <wDeathRespawnBuffer.facingDir,	$02
 .endif
+.if defined(ROM_COMBO)
+	; these are in a union with seasons variables, so ensure they're cleared
+	.db <wJabuWaterLevel,			$00
+	.db <wPortalGroup,				$00
+	.db <wPirateShipRoom,			$00
+	.db <wPirateShipY,				$00
+	.db <wPirateShipX,				$00
+	.db <wPirateShipAngle,			$00
+.endif
 	.db $00
 
 ; Standard game (not linked or hero)
@@ -613,6 +1020,9 @@ initialFileVariables_linkedGame:
 	.db <wShieldLevel,			$01
 	.db <wInventoryStorage,			ITEM_SWORD
 	.db <wObtainedTreasureFlags,		(1<<TREASURE_PUNCH) | (1<<TREASURE_SWORD)
+.if defined(ROM_COMBO)
+initialFileVariables_linkedGame_ages:
+.endif
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 	.db <wPirateShipY,			$58
 	.db <wPirateShipX,			$78

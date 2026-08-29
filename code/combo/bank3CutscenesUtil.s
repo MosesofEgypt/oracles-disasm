@@ -52,6 +52,17 @@ disableLcdAndLoadRoom_body:
 	ld b,wcce9-wLinkInAir
 	call clearMemory
 
+seasonsFunc_03_63eb:
+	call initializeVramMaps
+	call loadScreenMusicAndSetRoomPack
+	call loadTilesetData
+	call loadTilesetGraphics
+	call func_131f
+	ld a,$01
+	ld (wScrollMode),a
+	call loadCommonGraphics
+	jp clearOam
+
 ;;
 cutscene_decCBB3IfNotFadingOut:
 	ld a,(wPaletteThread_mode)

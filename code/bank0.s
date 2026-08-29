@@ -2226,11 +2226,19 @@ loadFile:
 	ld c,$02
 	jr ++
 
-.ifdef ENABLE_NEW_GAME_PLUS
+.if defined(ROM_COMBO)
+;;
+; @param	hActiveFileSlot	File index
+comboLoadOtherGame:
+	ld c,$04
+	jr ++
+.endif
+
+.if defined(ENABLE_NEW_GAME_PLUS)
 ;;
 ; @param	hActiveFileSlot	File index
 initializeNgpFile:
-	ld c,$04
+	ld c,$05
 	jr ++
 .endif
 

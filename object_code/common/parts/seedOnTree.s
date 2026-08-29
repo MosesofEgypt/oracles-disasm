@@ -104,7 +104,11 @@ m_PartCode $10
 	jr @giveSeed
 
 @textIndices:
+.if defined(ROM_COMBO)
+	.db <TX_0090
+.else
 	.db <TX_0029
+.endif
 	.db <TX_0029
 	.db <TX_002b
 	.db <TX_002c

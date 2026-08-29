@@ -153,7 +153,11 @@ cutscene14:
 	call @incSubstate
 	call getFreeInteractionSlot
 	ret nz
+.if defined(ROM_COMBO)
+	ld (hl),INTERAC_MAKU_SEED_AND_ESSENCES_SEASONS
+.else
 	ld (hl),INTERAC_MAKU_SEED_AND_ESSENCES
+.endif
 	ret
 
 ; Unused?

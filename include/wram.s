@@ -984,9 +984,14 @@ wPirateBellState: ; -/$c6bd
 .endif
 .endif
 
+.if defined(ROM_COMBO)
+wNumOreChunks:
+	dw
+.else
 wUnusedc6c4:
 ; Used to have satchel/shooter selected seeds here
 	dsb 2
+.endif
 
 wRingBoxContents: ; $c6c6/$c6c0
 	dsb 5
@@ -1230,8 +1235,6 @@ wFeatherLevel:
 	; seasons variables
 	ws_c65d:
 		dsb 4
-	wNumOreChunks:
-		dw
 	wPirateBellState:
 		db
 	ws_c6e0:
@@ -1283,6 +1286,9 @@ wFeatherLevel:
 .endu
 .endif
 
+wSaveFileMainSectionEnd:
+	.db
+
 .ENDS
 
 .define wSeedsAndHarpSongsObtained	wObtainedTreasureFlags+TREASURE_EMBER_SEEDS/8
@@ -1300,6 +1306,9 @@ wGroup4RoomFlags: ; $c900
 	dsb $100
 wGroup5RoomFlags: ; $ca00
 	dsb $100
+
+wGroupRoomFlagsEnd:
+	.db
 
 .ENDS
 
@@ -1940,6 +1949,11 @@ wAItemSpriteAttribute3:
 
 .ifdef ENABLE_SETTINGS_MENU
 wInventorySubmenu3CursorPos:
+	db
+.endif
+
+.if defined(ROM_COMBO)
+wGaleSeedMenuGameToggled:
 	db
 .endif
 .ENDS

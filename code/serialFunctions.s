@@ -305,6 +305,7 @@ sendFileHeader:
 	add a
 	ld e,a
 	ld a,(wFileIsCompleted)
+	and $01
 	or e
 	ldi (hl),a		; w4PacketBuffer+8
 	add c

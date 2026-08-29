@@ -43,6 +43,12 @@ twinrovaCutscene_state1:
 	call incCutsceneState
 
 	ld a,<ROOM_ZELDA_IN_FINAL_DUNGEON ; Room with zelda and torches
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+		ld a,<ROOM_ZELDA_IN_FINAL_DUNGEON_SEASONS
+	+
+.endif
 	ld (wActiveRoom),a
 	call twinrovaCutscene_fadeinToRoom
 

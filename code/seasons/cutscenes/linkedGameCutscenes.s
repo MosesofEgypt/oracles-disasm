@@ -66,7 +66,11 @@ flameOfDestructionCutscene_state1:
 	call bank3CutsceneLoadRoomOfRites
 	call getFreeInteractionSlot
 	jr nz,+
+.if defined(ROM_COMBO)
+	ld (hl),INTERAC_TWINROVA_FLAME_SEASONS
+.else
 	ld (hl),INTERAC_TWINROVA_FLAME
+.endif
 	inc l
 	ld (hl),$03
 +
@@ -92,7 +96,11 @@ flameOfDestructionCutscene_state1:
 @changePalettes:
 	call getFreeInteractionSlot
 	jr nz,+
+.if defined(ROM_COMBO)
+	ld (hl),INTERAC_TWINROVA_FLAME_SEASONS
+.else
 	ld (hl),INTERAC_TWINROVA_FLAME
+.endif
 	inc l
 	ld (hl),$04
 +
@@ -489,7 +497,11 @@ zeldaKidnappedCutscene_state1Handler:
 	call loadInteracIdb4_subid6And7
 	call getFreeInteractionSlot
 	jr nz,+
+.if defined(ROM_COMBO)
+	ld (hl),INTERAC_TWINROVA_FLAME_SEASONS
+.else
 	ld (hl),INTERAC_TWINROVA_FLAME
+.endif
 +
 	ld a,$13
 	call loadGfxRegisterStateIndex
@@ -604,7 +616,11 @@ waitUntilFadeIsDone:
 bank3CutsceneLoadRoomOfRites:
 	xor a
 	; Room of Rites
+.if defined(ROM_COMBO)
+	ld bc,ROOM_ZELDA_IN_FINAL_DUNGEON_SEASONS
+.else
 	ld bc,ROOM_ZELDA_IN_FINAL_DUNGEON
+.endif
 	call disableLcdAndLoadRoom_body
 	ld a,PALH_ac
 	call loadPaletteHeader
@@ -623,7 +639,11 @@ loadInteracIdb0:
 -
 	call getFreeInteractionSlot
 	ret nz
+.if defined(ROM_COMBO)
+	ld (hl),INTERAC_TWINROVA_FLAME_SEASONS
+.else
 	ld (hl),INTERAC_TWINROVA_FLAME
+.endif
 	inc l
 	ld a,$02
 	add b
@@ -679,7 +699,11 @@ loadGroupOfInteractions:
 
 	; id - subid - var03 - yh - xh
 @interacGroup1:
+.if defined(ROM_COMBO)
+	.db INTERAC_ZELDA_SEASONS $02 $00 $18 $18
+.else
 	.db INTERAC_ZELDA $02 $00 $18 $18
+.endif
 	.db $00
 @interacGroup2:
 	.db INTERAC_bd $00 $01 $28 $38

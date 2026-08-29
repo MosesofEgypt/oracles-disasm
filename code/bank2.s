@@ -1990,6 +1990,7 @@ loadFileDisplayVariables:
 	add a
 	ld e,a
 	ld a,(wFileIsCompleted)
+	and $01
 	or e
 	ldi (hl),a
 	ldh a,(<hActiveFileSlot)
@@ -9014,13 +9015,24 @@ dungeonMap_calculateVisitedFloorsAndLinkPosition:
 	; be just below the other one
 	ld a,(wActiveGroup)
 	cp >ROOM_TWINROVA_FIGHT
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+		cp >ROOM_TWINROVA_FIGHT_SEASONS
+	+
+.endif
 	ret nz
 	ld a,(wActiveRoom)
 	cp <ROOM_TWINROVA_FIGHT
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+		cp <ROOM_TWINROVA_FIGHT_SEASONS
+	+
+.endif
 	ret nz
 	ld a,$13
 	ld (wMapMenu.dungeonCursorIndex),a
-
 	ret
 
 ;;
@@ -10488,8 +10500,10 @@ mapMenu_checkRoomVisited:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
+	push af
 	call wIsSeasons
-	jr nc,+
+	jr c,+
+	pop af
 .endif
 	ld hl,wPastRoomFlags
 	jr c,++
@@ -10498,6 +10512,7 @@ mapMenu_checkRoomVisited:
 .if defined(ROM_COMBO)
 	jr ++
 +
+	pop af
 .endif
 .endif
 

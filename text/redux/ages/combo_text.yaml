@@ -1,0 +1,22 @@
+groups:
+- group: 0x00
+  allow_undefined: [0x85, 0x86, 0x87, 0x88, 0x89, 0x8a, 0x8b, 0x8c, 0x8d, 0x8e, 0x8f]
+  data:
+  - name: TX_0090
+    index: 0x90
+    text: |-
+      You got \col(1)Ember
+      Seeds\col(0)! They can
+      be used to burn
+      small trees and
+      monsters. Open
+      your \col(1)Seed
+      Satchel\col(0) to use
+      them.
+- group: 0x03
+  data:
+  - name: TX_034b
+    index: 0x4b
+    text: |-
+      Go to Holodrum?
+       \opt()Warp \opt()Cancel

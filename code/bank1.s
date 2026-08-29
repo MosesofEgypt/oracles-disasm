@@ -2402,6 +2402,12 @@ cutscene17:
 	ret nz
 
 	ld hl,@warpDestVariables
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+		ld hl,@warpDestVariables_seasons
+	+
+.endif
 	call setWarpDestVariables
 	xor a
 	ld (wcc50),a
@@ -2420,6 +2426,11 @@ cutscene17:
 
 @warpDestVariables:
 	m_HardcodedWarpA ROOM_TWINROVA_FIGHT, $05, $77, $00
+
+.if defined(ROM_COMBO)
+@warpDestVariables_seasons:
+	m_HardcodedWarpA ROOM_TWINROVA_FIGHT_SEASONS, $05, $77, $00
+.endif
 
 ;;
 ; Calls initWaveScrollValues, then sets every other line to have a normal scroll value.
@@ -3613,7 +3624,7 @@ initializeGame:
 	jr nz,@summonLinkCutscene
 .endif
 
-	ld a,$02
+	ld a,$02 ; standard game state
 	ld (wGameState),a
 	ld a,CUTSCENE_PREGAME_INTRO
 	ld (wCutsceneIndex),a
@@ -3629,7 +3640,7 @@ initializeGame:
 
 ; The first time the game is opened, this cutscene plays
 @summonLinkCutscene:
-	ld a,$03
+	ld a,$03 ; link summoned game state
 	ld (wGameState),a
 	xor a
 	ld (w1Link.enabled),a
@@ -3668,7 +3679,7 @@ func_5a60:
 .endif
 	call loadDungeonLayout
 
-	ld a,$02
+	ld a,$02 ; standard game state
 	ld (wGameState),a
 	xor a
 	ld (wCutsceneIndex),a
@@ -3713,20 +3724,6 @@ processDmgPaletteUpdate:
 
 ;;
 standardGameState:
-.if defined(ROM_COMBO)	; NOTE: TEMPORARY UNTIL COMBO TESTING IS DONE
-	; allow toggling this being seasons or not by pressing select
-	ld a,(wKeysJustPressed)
-	cp BTN_SELECT
-	jr nz,+
-	ld a,(wKeysPressed)
-	cp BTN_SELECT
-	jr nz,+
-	ld a,(wOpenedMenuType)
-	or a
-	jr nz,+
-		call toggleIsSeasons
-	+
-.endif					; NOTE: TEMPORARY UNTIL COMBO TESTING IS DONE
 .ifdef ENABLE_MULTI_RING
 	call updateRingEquipStatuses
 .endif
@@ -4454,7 +4451,11 @@ updateAzuchu:
 updateQuickSwapItems:
 	ld a,(wOpenedMenuType)
 	or a
+	jr nz,++
+	ld a,(wMenuDisabled)
+	or a
 	jr z,+
+		++
 		; ensure flags 6 and 7 aren't set so we don't
 		; get put in an infinite menu open/close loop
 		ld a,(wRingReduxFlagsExt)

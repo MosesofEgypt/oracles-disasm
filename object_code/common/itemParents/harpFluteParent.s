@@ -108,6 +108,12 @@ parentItemCode_harp:
 
 	; Flute: try to spawn companion
 	ldbc INTERAC_COMPANION_SPAWNER, $80
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+		ldbc INTERAC_COMPANION_SPAWNER_SEASONS, $80
+	+
+.endif
 	call objectCreateInteraction
 
 @clearSelf:

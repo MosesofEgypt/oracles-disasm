@@ -11,6 +11,10 @@ runGaleSeedMenu:
 	.dw galeSeedMenu_state1
 	.dw galeSeedMenu_state2
 	.dw galeSeedMenu_state3
+.if defined(ROM_COMBO)
+	.dw galeSeedMenu_state4
+	.dw galeSeedMenu_state5
+.endif
 
 ;;
 galeSeedMenu_state0:
@@ -39,6 +43,12 @@ galeSeedMenu_state1:
 	and (BTN_START | BTN_A)
 	jr nz,@aPressed
 
+	.if defined(ROM_COMBO)
+		ld a,(wKeysJustPressed)
+		and BTN_SELECT
+		jr nz,@selectPressed
+	.endif
+
 	ld hl,@directionButtonOffsets
 	call getDirectionButtonOffsetFromHl
 	jr nc,@end
@@ -49,6 +59,25 @@ galeSeedMenu_state1:
 	call nz,playSound
 @end:
 	jp mapMenu_loadPopupData
+
+.if defined(ROM_COMBO)
+@selectPressed:
+	; only allow switching games if this game is completed
+	; or both games were started on this file
+	ld a,(wFileIsCompleted)
+	or a
+	ret z
+
+	ld a,$03
+	ld (wTextboxPosition),a
+
+	ld a,TEXTBOXFLAG_NOCOLORS | TEXTBOXFLAG_DONTCHECKPOSITION
+	ld (wTextboxFlags),a
+
+	ld a,$04
+	ld c,<TX_034b ; "Warp to other game" prompt
+	jr @setState
+.endif
 
 @bPressed:
 	call mapGetRoomTextOrReturn
@@ -121,15 +150,58 @@ galeSeedMenu_state3:
 	ld (wWarpTransition2),a
 	jp closeMenu
 
+.if defined(ROM_COMBO)
+galeSeedMenu_state4:
+	call retIfTextIsActive
+
+	; If chose "cancel", go to state 1
+	ld a,(wSelectedTextOption)
+	or a
+	jr nz,galeSeedMenu_gotoState1
+
+	; otherwise fade out and prepare to load other game
+	ld a,$05
+	ld (wMenuActiveState),a
+
+	jp fastFadeoutToWhite
+
+galeSeedMenu_state5:
+	; wait till fade is done to initialize game
+	ld a,(wPaletteThread_mode)
+	or a
+	ret nz
+
+	; close the menu
+	xor a
+	ld (wOpenedMenuType),a
+	ld (wTextIsActive),a
+
+	; load the other game file
+	call comboLoadOtherGame
+
+	xor a
+	ld (wCutsceneState),a
+	ld (wGameState),a
+	ret
+.endif
+
+;;
+; @param[out] cflag		Set if we have visisted at least one tree
 galeSeedMenu_anyWarpsAvailable:
-	; returns cflag set if we have visisted at least one tree
 	push de
 	push hl
-	push af
-	xor a
+	push bc
+	ld a,(wMapMenu.cursorIndex)
+	ld b,a
+	ld a,(wMapMenu.warpIndex)
+	ld c,a
+	ld a,$01
 	call galeSeedMenu_addOffsetToWarpIndex
-	pop hl
-	ld a,h
+	ld a,c
+	ld (wMapMenu.warpIndex),a
+	ld a,b
+	ld (wMapMenu.cursorIndex),a
+	pop bc
 	pop hl
 	pop de
 	ret

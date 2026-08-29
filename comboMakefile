@@ -377,11 +377,11 @@ $(BUILD_DIR)/rooms/seasons_room06%.cmp: rooms/seasons/large/room06%.bin | $(BUIL
 # create a temp text.yaml by layering the base with any redux yamls needed
 $(BUILD_DIR)/ages_textLayered.yaml: text/ages/text.yaml tools/build/layerText.py | $(BUILD_DIR)
 	@echo "Layering yamls..."
-	@$(PYTHON) tools/build/layerText.py $< text/redux text/redux/ages $@ "$(ORACLE_REDUX_DEFINES)"
+	@$(PYTHON) tools/build/layerText.py $< text/redux text/redux/ages $@ "-D ROM_COMBO $(ORACLE_REDUX_DEFINES)"
 
 $(BUILD_DIR)/seasons_textLayered.yaml: text/seasons/text.yaml tools/build/layerText.py | $(BUILD_DIR)
 	@echo "Layering yamls..."
-	@$(PYTHON) tools/build/layerText.py $< text/redux text/redux/seasons $@ "$(ORACLE_REDUX_DEFINES)"
+	@$(PYTHON) tools/build/layerText.py $< text/redux text/redux/seasons $@ "-D ROM_COMBO $(ORACLE_REDUX_DEFINES)"
 
 # Parse & compress text
 $(BUILD_DIR)/ages_textData.s: $(BUILD_DIR)/ages_textLayered.yaml text/ages/dict.yaml tools/build/parseText.py | $(BUILD_DIR)

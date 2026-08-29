@@ -457,7 +457,7 @@ uncmpGfxHeaderTable:
 	m_GfxHeaderEnd
 
 @uncmpGfxHeader_fluteNone:
-	m_GfxHeader spr_item_icons_wide, $8461, $02, $520
+	m_GfxHeader spr_item_icons_wide, $8461, $02, $460
 	m_GfxHeaderEnd
 
 @uncmpGfxHeader_fluteRicky:

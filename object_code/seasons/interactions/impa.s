@@ -116,7 +116,11 @@ m_InteractionCode $9d
 	ld (hl),$56
 	call getFreeInteractionSlot
 	jr nz,++
+.if defined(ROM_COMBO)
+	ld (hl),INTERAC_BIRD_SEASONS
+.else
 	ld (hl),INTERAC_BIRD
+.endif
 	inc l
 	ld (hl),$0a
 	ld l,$56
