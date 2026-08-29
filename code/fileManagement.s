@@ -460,6 +460,13 @@ loadAcrossComboGame:
 		call nc,giveTreasure
 	+
 
+	; set the bit indicating that warping to other game is allowed
+	ld hl,wFileIsCompleted
+	ld a,$f0
+	and (hl)
+	or $08
+	ld (hl),a
+
 	pop bc
 	ret
 
@@ -520,10 +527,11 @@ initializeComboGame:
 	ldi (hl),a
 	; set the linked-game bit
 	set 0,(hl)
+
+	; set the bit indicating that warping to other game is allowed
 	ld hl,wFileIsCompleted
 	ld a,$f0
 	and (hl)
-	; set the bit indicating that warping to other game is allowed
 	or $08
 	ld (hl),a
 
@@ -616,14 +624,9 @@ initializeComboGame:
 		jr nz,-
 
 	; ensure the player has a way to get back to the other game if they want to
-	ld a,TREASURE_SEED_SATCHEL
-	call giveTreasure
+	; they won't be able to use them until they get a seed satchel, but thats fine
 	ld a,TREASURE_GALE_SEEDS
 	call giveTreasure
-
-	; these are automatically given with the satchel. remove them
-	ld a,TREASURE_EMBER_SEEDS
-	call loseTreasure
 
 	ld a,$03
 	ld (wSatchelSelectedSeeds),a

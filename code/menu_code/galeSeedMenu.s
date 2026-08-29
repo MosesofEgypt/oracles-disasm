@@ -20,6 +20,24 @@ runGaleSeedMenu:
 galeSeedMenu_state0:
 	call mapMenu_state0
 
+.if defined(ROM_COMBO)
+	; give the player instructions if they've not travelled to the other game
+	ld a,(wFileIsCompleted)
+	or a
+	jr z,+
+		bit 3,a
+		jr nz,+
+			ld a,$02
+			ld (wTextboxPosition),a
+
+			ld a,TEXTBOXFLAG_NOCOLORS | TEXTBOXFLAG_DONTCHECKPOSITION
+			ld (wTextboxFlags),a
+
+			ld bc,TX_034d
+			call showText
+	+
+.endif
+
 	; This will be incremented, so set to 0, in the next function call
 	ld a,$ff
 	ld (wMapMenu.warpIndex),a
@@ -32,6 +50,8 @@ galeSeedMenu_state0:
 ;;
 ; State 1: waiting for input (direction buttons, A or B)
 galeSeedMenu_state1:
+	call retIfTextIsActive
+
 	ld a,(wPaletteThread_mode)
 	or a
 	jr nz,@end

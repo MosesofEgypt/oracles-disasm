@@ -26,3 +26,8 @@ groups:
       Play which game?
        \opt()Ages  \opt()Seasons
        \opt()Random \opt()Cancel
+  - name: TX_034d
+    index: 0x4d
+    text: |-
+      Press SELECT to
+      fly to Holodrum.
