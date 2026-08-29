@@ -20,3 +20,9 @@ groups:
     text: |-
       Go to Holodrum?
        \opt()Warp \opt()Cancel
+  - name: TX_034c
+    index: 0x4c
+    text: |-
+      Play which game?
+       \opt()Ages  \opt()Seasons
+       \opt()Random \opt()Cancel

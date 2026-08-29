@@ -4,10 +4,11 @@ m_section_free Bank_3 NAMESPACE bank3
 ; This is the first thing the game jumps to on startup.
 init:
 	di
-	xor a
 .if defined(ROM_COMBO)
+	scf
 	call setIsSeasons
 .endif
+	xor a
 	ld ($ff00+R_IF),a
 	ld ($ff00+R_IE),a
 	ld ($ff00+R_STAT),a

@@ -15,9 +15,13 @@
 ; This changes the palette the textbox uses.
 .define TEXTBOXFLAG_ALTPALETTE2			$10
 
+; Makes the textbox map render to the $9c00 address range instead of $9800
+.define TEXTBOXFLAG_USE_9C_MAP_ADDRESS	$20
+
 
 .define TEXTBOXFLAG_BIT_NOCOLORS		0
 .define TEXTBOXFLAG_BIT_NONEXITABLE		1
 .define TEXTBOXFLAG_BIT_ALTPALETTE1		2
 .define TEXTBOXFLAG_BIT_DONTCHECKPOSITION	3
 .define TEXTBOXFLAG_BIT_ALTPALETTE2		4
+.define TEXTBOXFLAG_BIT_USE_9C_MAP_ADDRESS		5

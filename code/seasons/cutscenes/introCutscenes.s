@@ -555,7 +555,7 @@ cutsceneDinImprisoned:
 	ld a,$fe
 	ldh (<hBgPaletteSources),a
 	ld a,$81
-	call seasonsFunc_03_7a6b
+	call fillTmpGfxBufferWithHFF8B
 	ld a,$81
 	ld (wOpenedMenuType),a
 	call seasonsFunc_03_7a88
@@ -1041,7 +1041,7 @@ incCutsceneState2:
 	inc (hl)
 	ret
 
-seasonsFunc_03_7a6b:
+fillTmpGfxBufferWithHFF8B:
 	ldh (<hFF8B),a
 	ld a,$01
 	ld ($ff00+R_VBK),a
@@ -1052,8 +1052,8 @@ seasonsFunc_03_7a6b:
 	xor a
 	ld ($ff00+R_VBK),a
 	ld hl,$9800
-	ld bc,$0400
-	jp clearMemoryBc
+	ld b,$40
+	jp clearMemory16ByteBlocks
 
 seasonsFunc_03_7a88:
 	ldh (<hFF8B),a
@@ -1062,12 +1062,12 @@ seasonsFunc_03_7a88:
 	ld a,$04
 	ld ($ff00+R_SVBK),a
 	ld hl,w4TileMap
-	ld bc,$0240
-	call clearMemoryBc
+	ld b,$24
+	call clearMemory16ByteBlocks
 	ld hl,w4AttributeMap
-	ld bc,$0024
+	ld b,$24
 	ldh a,(<hFF8B)
-	call fillMemoryBc16ByteBlocks
+	call fillMemory16ByteBlocks
 	pop af
 	ld ($ff00+R_SVBK),a
 	ret
@@ -1435,7 +1435,7 @@ cutscene0dFunca:
 	ld a,PALH_0f
 	call loadPaletteHeader
 	ld a,$02
-	call seasonsFunc_03_7a6b
+	call fillTmpGfxBufferWithHFF8B
 	call seasonsFunc_03_7db8
 	ld a,MUS_ESSENCE_ROOM
 	call playSound
@@ -1480,12 +1480,12 @@ seasonsFunc_03_7db8:
 	ld a,$03
 	ld ($ff00+R_SVBK),a
 	ld hl,w3VramTiles
-	ld bc,$0240
-	call clearMemoryBc
+	ld b,$024
+	call clearMemory16ByteBlocks
 	ld hl,w3TileMappingIndices
-	ld bc,$0024
+	ld b,$24
 	ld a,$02
-	call fillMemoryBc16ByteBlocks
+	call fillMemory16ByteBlocks
 	pop af
 	ld ($ff00+R_SVBK),a
 	ret

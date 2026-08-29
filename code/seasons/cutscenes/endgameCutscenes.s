@@ -17,7 +17,7 @@ seasonsFunc_03_79cd:
 	pop hl
 	ret
 
-seasonsFunc_03_7a6b:
+fillTmpGfxBufferWithHFF8B:
 	ldh (<hFF8B),a
 	ld a,$01
 	ld ($ff00+R_VBK),a
@@ -644,7 +644,7 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 +
 	ld a,$02
 	ld (wOpenedMenuType),a
-	call seasonsFunc_03_7a6b
+	call fillTmpGfxBufferWithHFF8B
 	ld a,$02
 	call seasonsFunc_03_7a88
 	ld hl,wGenericCutscene.cbb3

@@ -5495,7 +5495,12 @@ _label_00_204:
 	inc l
 
 	; wTextMapAddress
+	ld a,(wTextboxFlags)
+	and TEXTBOXFLAG_USE_9C_MAP_ADDRESS
 	ld (hl),$98
+	jr z,+
+		ld (hl),$9c
+	+
 
 	ld a,$01
 	ld (wTextIsActive),a

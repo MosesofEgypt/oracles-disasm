@@ -651,9 +651,13 @@ initializeComboGame:
 ;;
 eraseFile:
 	call getFileAddress1
-.ifndef ROM_COMBO
 	call @clearFile
 
+.if defined(ROM_COMBO)
+	; clear both files
+	call toggleIsSeasons
+	call getFileAddress1
+.else
 	call getFileAddress2
 .endif
 ;;

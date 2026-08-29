@@ -152,6 +152,13 @@ b2_fileSelectScreen:
 	.dw fileSelectMode7 ; Game link
 .ifdef ENABLE_NEW_GAME_PLUS
 	.dw fileSelectMode8 ; New Game Plus
+.else
+	.dw fileSelectMode0
+.endif
+.if defined(ROM_COMBO)
+	.dw fileSelectMode9 ; New Game Plus
+.else
+	.dw fileSelectMode0
 .endif
 
 ;;
@@ -432,8 +439,8 @@ fileSelectMode1:
 
 .if defined(ROM_COMBO)
 	ld a,(wWhichGame)
-	and $01
-	cp $01
+	xor $01
+	rrca
 	call setIsSeasons
 .endif
 
@@ -441,6 +448,51 @@ fileSelectMode1:
 	; select thread to the main game logic thread.
 	ld bc,mainThreadStart
 	jp restartThisThread
+
+.if defined(ROM_COMBO)
+;;
+; Choose between ages and seasons
+fileSelectMode9:
+	call @mode9States
+	ret
+
+;;
+@mode9States:
+	ld a,(wFileSelect.mode2)
+	rst_jumpTable
+	.dw @state0
+	.dw @state1
+
+@state0:
+	ld a,$01
+	ld (wFileSelect.mode2),a
+
+	ld a,TEXTBOXFLAG_NOCOLORS | TEXTBOXFLAG_DONTCHECKPOSITION | TEXTBOXFLAG_USE_9C_MAP_ADDRESS
+	ld (wTextboxFlags),a
+
+	ld a,$02
+	ld (wTextboxPosition),a
+	ld bc,TX_034c
+	jp showText
+
+@state1:
+	call retIfTextIsActive
+
+	ld a,(wSelectedTextOption)
+	; cancel and return to file select if option 3
+	cp $03
+	jp z,setFileSelectModeTo1
+
+	; select a random game if option 2
+	cp $02
+	call z,getRandomNumber
+	and $01
+	ld (wSelectedTextOption),a
+
+	ld a,$02 ; name entry
+	jp setFileSelectMode
+
+.endif
 
 ;;
 ; Choose between new game, secret, game link
@@ -501,7 +553,11 @@ fileSelectMode5:
 	jp playSound
 
 @selectionModes:
+.if defined(ROM_COMBO)
+	.db $09 ; Pick your starting game
+.else
 	.db $02 ; Name entry
+.endif
 .ifdef ENABLE_NEW_GAME_PLUS
 	.db $08 ; New Game Plus
 .endif
@@ -910,6 +966,13 @@ fileSelectMode2:
 	ld de,wLinkName
 	ld b,$06
 	call copyMemory
+.if defined(ROM_COMBO)
+	call initializeFile
+	; change the game to whichever one was selected
+	ld a,(wSelectedTextOption)
+	rrca
+	call setIsSeasons
+.endif
 	call initializeFile
 +
 	jp setFileSelectModeTo1
@@ -1953,6 +2016,8 @@ loadFileDisplayVariables:
 	ld a,c
 	ldi (hl),a
 	ld a,(wWhichGame)
+	and $01
+	xor $01
 	ldi (hl),a
 .ifdef FILE_MENU_SHOW_CURRENT_HEARTS
 	ld a,(wLinkHealth)
@@ -2058,7 +2123,6 @@ fileSelectDrawHeartsAndDeathCounter:
 .if defined(ROM_COMBO)
 	inc hl
 	ld a,(hl)
-	xor $01
 	rrca
 	call setIsSeasons
 .endif

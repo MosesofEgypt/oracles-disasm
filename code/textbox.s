@@ -313,7 +313,7 @@ updateTextbox:
 		ld a,<TX_0049
 	+
 	ld (wTextIndexL),a
-	ld a,$00
+	ld a,>TX_0000
 .elif defined(ROM_AGES)
 	ld a,<TX_0049
 	ld (wTextIndexL),a
@@ -977,9 +977,9 @@ initTextboxStuff:
 .if defined(ROM_COMBO)
 	call wIsSeasons
 	ld a,PALH_SEASONS_bd
-	jr c,+
+	jr c,++
 		ld a,PALH_bd
-	+
+	++
 .elif defined(ROM_AGES)
 	ld a,PALH_bd
 .else
@@ -1540,13 +1540,23 @@ saveTilesUnderTextbox:
 ;;
 ; Initialize the textbox map and attributes so it starts as a black box.
 initTextboxMapping:
+	ld a,(wTextboxFlags)
+	and TEXTBOXFLAG_USE_9C_MAP_ADDRESS
 	ld a,(w7d0cc)
-	inc a
+	jr nz,+
+		inc a
+	+
 	and $1f
 	ld l,a
 	ld e,$05
 --
-	ld b,$12
+	ld a,(wTextboxFlags)
+	and TEXTBOXFLAG_USE_9C_MAP_ADDRESS
+	ld a,$12
+	jr z,+
+		add $02
+	+
+	ld b,a
 	ld a,l
 	ld d,a
 	and $e0
