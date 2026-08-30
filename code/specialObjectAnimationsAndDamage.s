@@ -474,8 +474,11 @@ func_4553:
 		ld (wSatchelSelectedSeeds),a
 		ld a,ITEM_SEED_SATCHEL
 	+
-	cp a ; equip
-	call handleAutoEquipItem
+	or a
+	jr z,+
+		cp a ; equip
+		call handleAutoEquipItem
+	+
 .endif
 	ld a,(w1Link.direction)
 	ld (wLinkPushingDirection),a

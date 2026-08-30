@@ -27,10 +27,10 @@ m_EnemyCode $72
 	jp enemyBoss_dead
 
 @justHitOrKnockback:
-	ld e,$aa
+	ld e,Enemy.var2a
 	ld a,(de)
 	res 7,a
-	cp $04
+	cp ITEMCOLLISION_L1_SWORD
 	jr c,@normalStatus
 	ld e,$b5
 	ld a,$01

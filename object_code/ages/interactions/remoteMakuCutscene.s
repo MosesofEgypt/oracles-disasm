@@ -98,7 +98,11 @@ m_InteractionCode $8a
 	jp @setTextForScript
 
 @val06:
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_MOBLINS_KEEP_DESTROYED_AGES
+.else
 	ld a,GLOBALFLAG_MOBLINS_KEEP_DESTROYED
+.endif
 	call checkGlobalFlag
 	jp z,@deleteSelfAndReturn
 	ldbc $00, <TX_05b6

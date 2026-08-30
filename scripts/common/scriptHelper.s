@@ -494,7 +494,11 @@ redSnake_openSecretInputMenu:
 
 ;;
 redSnake_generateRingSecret:
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_RING_SECRET_GENERATED_AGES
+.else
 	ld a,GLOBALFLAG_RING_SECRET_GENERATED
+.endif
 	call setGlobalFlag
 	ldbc SECRETFUNC_GENERATE_SECRET, $02
 	jp secretFunctionCaller

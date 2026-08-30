@@ -355,11 +355,7 @@ kingMoblinBomb_checkCollisionWithKingMoblin:
 
 	ld l,Enemy.var2a
 .if defined(ROM_COMBO)
-	call wIsSeasons
 	ld (hl),$80|ITEMCOLLISION_BOMB_S
-	jr c,+
-		ld (hl),$80|ITEMCOLLISION_BOMB_A
-	+
 .else
 	ld (hl),$80|ITEMCOLLISION_BOMB
 .endif

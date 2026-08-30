@@ -20,10 +20,12 @@ parseStaticObjects:
 	ld a,c
 	add $08
 	ld e,a
-.if defined(ROM_AGES) ||defined(ROM_COMBO)
+.if defined(ROM_AGES) && !defined(ROM_COMBO)
 	cp <(wStaticObjects+_sizeof_wStaticObjects)
 	jr c,@next
 .else
+	; NOTE: combo rom needs this check instead of size
+	;       check since the size overflows and becomes 0
 	or a
 	jr nz,@next
 .endif

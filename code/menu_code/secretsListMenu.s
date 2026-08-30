@@ -316,11 +316,13 @@ secretListMenu_getSecretData:
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
 	@unlinked_ages:
+		.db $03, GLOBALFLAG_FINISHEDGAME,		$00
+		.db $85, GLOBALFLAG_RING_SECRET_GENERATED_AGES,	$02
 .else
 	@unlinked:
-.endif
 		.db $03, GLOBALFLAG_FINISHEDGAME,		$00
 		.db $85, GLOBALFLAG_RING_SECRET_GENERATED,	$02
+.endif
 		.db $d0, GLOBALFLAG_DONE_KING_ZORA_SECRET,	$10
 		.db $d4, GLOBALFLAG_DONE_LIBRARY_SECRET,	$14
 		.db $d5, GLOBALFLAG_DONE_TROY_SECRET,		$12
@@ -335,10 +337,11 @@ secretListMenu_getSecretData:
 
 .if defined(ROM_COMBO)
 	@linked_ages:
+		.db $85, GLOBALFLAG_RING_SECRET_GENERATED_AGES,	$02
 .else
 	@linked:
-.endif
 		.db $85, GLOBALFLAG_RING_SECRET_GENERATED,	$02
+.endif
 		.db $c6, GLOBALFLAG_BEGAN_CLOCK_SHOP_SECRET, 	$20
 		.db $ca, GLOBALFLAG_BEGAN_SMITH_SECRET, 	$24
 		.db $cb, GLOBALFLAG_BEGAN_PIRATE_SECRET, 	$25

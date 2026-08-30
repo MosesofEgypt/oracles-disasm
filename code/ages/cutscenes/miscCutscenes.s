@@ -1554,7 +1554,11 @@ twinrovaRevealCutsceneHandler:
 	ret nz
 	call cutscene_incCutsceneState
 	call showStatusBar
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_GOT_MAKU_SEED_AGES
+.else
 	ld a,GLOBALFLAG_GOT_MAKU_SEED
+.endif
 	call setGlobalFlag
 	ld a,$01
 	ld (wScrollMode),a
@@ -1775,6 +1779,12 @@ pregameIntroCutsceneHandler:
 	ld a,SNDCTRL_STOPMUSIC
 	call playSound
 	ld a,GLOBALFLAG_3d
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+
+		ld a,GLOBALFLAG_3d_AGES
+	+
+.endif
 	jp setGlobalFlag
 	
 func_6e9a:

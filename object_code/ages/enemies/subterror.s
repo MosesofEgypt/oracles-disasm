@@ -250,7 +250,7 @@ subterror_stateA:
 	sla a
 	jr nc,@noShovel
 .if defined(ROM_COMBO)
-	cp ITEMCOLLISION_SHOVEL_S<<1
+	cp ITEMCOLLISION_SHOVEL_A<<1
 .else
 	cp ITEMCOLLISION_SHOVEL<<1
 .endif

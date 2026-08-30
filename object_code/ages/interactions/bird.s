@@ -59,7 +59,11 @@ m_InteractionCode $4c
 	call checkGlobalFlag
 	jr z,@setAnimation0AndJump
 
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_ZELDA_SAVED_FROM_VIRE_AGES
+.else
 	ld a,GLOBALFLAG_ZELDA_SAVED_FROM_VIRE
+.endif
 	call checkGlobalFlag
 	jr z,@impaNotMoved
 
@@ -179,7 +183,11 @@ bird_runSubid4:
 	call checkGlobalFlag
 	ret z
 
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_ZELDA_SAVED_FROM_VIRE_AGES
+.else
 	ld a,GLOBALFLAG_ZELDA_SAVED_FROM_VIRE
+.endif
 	call checkGlobalFlag
 	ret nz
 

@@ -144,10 +144,11 @@ objectGfxHeaderTable:
 	/* $70 */ m_ObjectGfxHeader spr_present_past_symbols
 .ifdef ROM_COMBO
 	/* $71 */ m_ObjectGfxHeader ages_spr_woodentunnel_seasonsymbols
+	/* $72 */ m_ObjectGfxHeader ages_spr_dungeon_sprites
 .else
 	/* $71 */ m_ObjectGfxHeader spr_woodentunnel_seasonsymbols
-.endif
 	/* $72 */ m_ObjectGfxHeader spr_dungeon_sprites
+.endif
 	/* $73 */ m_ObjectGfxHeader spr_spinner_seedbouncer
 	/* $74 */ m_ObjectGfxHeader spr_roller_owl_barrier_orb
 	/* $75 */ m_ObjectGfxHeader spr_rollingplatform_d8stuff

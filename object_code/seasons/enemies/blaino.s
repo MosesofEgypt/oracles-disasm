@@ -8,10 +8,10 @@ m_EnemyCode $54
 	jp z,enemyDelete
 	dec a
 	jp nz,ecom_updateKnockback
-	ld e,$aa
+	ld e,Enemy.var2a
 	ld a,(de)
 	res 7,a
-	sub $0a
+	sub ITEMCOLLISION_FIST_PUNCH
 	cp $02
 	jr nc,@normalStatus
 	call seasonsFunc_0d_73df

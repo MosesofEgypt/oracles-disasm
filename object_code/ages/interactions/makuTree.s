@@ -109,7 +109,11 @@ m_InteractionCode $87
 
 	ld b,$00
 	ld hl,{SCRIPTS_1}.makuTree_subid06Script_part1
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_GOT_MAKU_SEED_AGES
+.else
 	ld a,GLOBALFLAG_GOT_MAKU_SEED
+.endif
 	push hl
 	call checkGlobalFlag
 	pop hl

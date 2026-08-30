@@ -7139,7 +7139,7 @@ goldenBeastOldManScript:
 	initcollisions
 -
 	checkabutton
-	asm15 interactionCodeSeasons5.checkGoldenBeastsKilled
+	asm interactionCodeSeasons5.checkGoldenBeastsKilled
 	jumptable_memoryaddress wTmpcfc0.normal.doorControllerState
 	.dw @notSlayed4Beasts
 	.dw @slayed4Beasts
@@ -7149,7 +7149,7 @@ goldenBeastOldManScript:
 @slayed4Beasts:
 	showtextlowindex <TX_1f05
 	disableinput
-	asm15 interactionCodeSeasons5.giveRedRing
+	asm interactionCodeSeasons5.giveRedRing
 	wait 20
 	showtextlowindex <TX_1f06
 	wait 20
@@ -7187,13 +7187,13 @@ linkedHerosCaveOldManScript:
 	showtextlowindex <TX_3306
 	scriptjump -
 @answeredYes:
-	asm15 interactionCodeSeasons5.linkedHerosCaveOldMan_takeRupees
+	asm interactionCodeSeasons5.linkedHerosCaveOldMan_takeRupees
 	jumptable_memoryaddress wTmpcfc0.genericCutscene.cfd0
 	.dw @notEnoughRupees
 	.dw @hasEnoughRupees
 @hasEnoughRupees:
 	disableinput
-	asm15 interactionCodeSeasons5.linkedHerosCaveOldMan_spawnChests
+	asm interactionCodeSeasons5.linkedHerosCaveOldMan_spawnChests
 	wait 60
 	showtextlowindex <TX_3304
 	enableinput

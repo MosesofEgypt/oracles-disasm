@@ -1573,7 +1573,7 @@ gettingRodOfSeasons_body:
 	setcollisionradii $02, $04
 	checkcollidedwithlink_onground
 	disableinput
-	asm15 interactionCodeSeasons5.spawnRodOfSeasonsSparkles
+	asm interactionCodeSeasons5.spawnRodOfSeasonsSparkles
 	setcounter1 $82
 
 	playsound SND_FADEOUT
@@ -1593,7 +1593,7 @@ gettingRodOfSeasons_body:
 	asm15 fadeinFromWhiteWithDelay, $04
 	checkpalettefadedone
 	checkflagset $00, wccd4
-	asm15 interactionCodeSeasons5.forceLinksDirection, DIR_DOWN
+	asm interactionCodeSeasons5.forceLinksDirection, DIR_DOWN
 	delay $07
 
 	showtext TX_0810

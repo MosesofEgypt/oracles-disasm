@@ -9679,8 +9679,9 @@ _scriptFunc_setupAsmCall:
 .if defined(ROM_COMBO)
 	call wIsSeasons
 	ld d,SCRIPT_HELP_SEASONS_BANK
-	jr c,+
+	jr c,++
 		ld d,SCRIPT_HELP_AGES_BANK
+	++
 .else
 	ld d,SCRIPT_HELP_BANK
 .endif
@@ -13111,7 +13112,7 @@ clearLinkObject:
 clearReservedInteraction0:
 	ld hl,w1ReservedInteraction0
 	ld b,$04
-	call clearMemory16ByteBlocks
+	jp clearMemory16ByteBlocks
 
 ;;
 ; Clear all interactions except wReservedInteraction0 and wReservedInteraction1.

@@ -437,7 +437,7 @@ itemDrop_spawnEnemy:
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
 	call wIsSeasons
-	jr nc,+
+	jr nc,++
 .endif
 	ld b,ENEMY_PODOBOO_TOWER
 	ld a,(wTilesetFlags)

@@ -45,7 +45,11 @@ m_InteractionCode $80
 
 ; Subid $01 (moblin's keep flag)
 @deleteIfMoblinsKeepDestroyed:
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_MOBLINS_KEEP_DESTROYED_AGES
+.else
 	ld a,GLOBALFLAG_MOBLINS_KEEP_DESTROYED
+.endif
 	call checkGlobalFlag
 	ret z
 	jp interactionDelete

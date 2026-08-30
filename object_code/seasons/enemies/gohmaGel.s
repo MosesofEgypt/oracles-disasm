@@ -19,9 +19,9 @@ m_EnemyCode $46
 	ld a,(de)
 	cp $02
 	jr nz,++
-	ld e,$aa
+	ld e,Enemy.var2a
 	ld a,(de)
-	cp $80
+	cp $80|ITEMCOLLISION_LINK
 	jr nz,++
 	ld e,Enemy.state
 	ld a,$0d

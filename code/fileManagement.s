@@ -482,7 +482,9 @@ initializeComboGame:
 	; unset all the treasure flags except the ones specified below
 	ld hl,wObtainedTreasureFlags
 
-	ld a,1<<TREASURE_ROD_OF_SEASONS			; $07
+	ld a,1<<TREASURE_PUNCH					; $02
+	or   1<<TREASURE_SWORD					; $05
+	or   1<<TREASURE_ROD_OF_SEASONS			; $07
 	and (hl)
 	ldi (hl),a
 
@@ -561,9 +563,6 @@ initializeComboGame:
 	ld bc,wGroupRoomFlagsEnd-wGroup0RoomFlags
 	call clearMemoryBc
 
-	ld a,(1<<TREASURE_PUNCH)
-	ld (wObtainedTreasureFlags),a
-
 	call wIsSeasons
 	jr c,+
 		ld hl,initialFileVariables_ages
@@ -607,7 +606,7 @@ initializeComboGame:
 
 	; put temporary items in the equipped slots so the items
 	; we give the player get put into the inventory instead
-	ld a,ITEM_SWORD
+	ld a,ITEM_PUNCH
 	ld hl,wInventoryB
 	ldi (hl),a
 	ld  (hl),a
@@ -644,6 +643,7 @@ initializeComboGame:
 	jp saveFile
 
 @bonusItems:
+	.db TREASURE_SWORD
 	.db TREASURE_ROD_OF_SEASONS
 	.db TREASURE_BIGGORON_SWORD
 	.db TREASURE_HARP
@@ -1051,6 +1051,7 @@ initialFileVariables_heroGame:
 initialFileVariables_linkedGame:
 	.db <wSwordLevel,			$01
 	.db <wShieldLevel,			$01
+initialFileVariables_linkedGameCombo:
 	.db <wInventoryStorage,			ITEM_SWORD
 	.db <wObtainedTreasureFlags,		(1<<TREASURE_PUNCH) | (1<<TREASURE_SWORD)
 .if defined(ROM_COMBO)

@@ -114,10 +114,11 @@ objectGfxHeaderTable:
 	/* $55 */ m_ObjectGfxHeader spr_season_symbols
 .ifdef ROM_COMBO
 	/* $56 */ m_ObjectGfxHeader seasons_spr_woodentunnel_seasonsymbols
+	/* $57 */ m_ObjectGfxHeader seasons_spr_dungeon_sprites
 .else
 	/* $56 */ m_ObjectGfxHeader spr_woodentunnel_seasonsymbols
-.endif
 	/* $57 */ m_ObjectGfxHeader spr_dungeon_sprites
+.endif
 	/* $58 */ m_ObjectGfxHeader spr_spinner_trampoline
 	/* $59 */ m_ObjectGfxHeader spr_roller_owl_magnetspinner
 	/* $5a */ m_ObjectGfxHeader spr_conveyorplatform

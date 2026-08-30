@@ -10,9 +10,13 @@ m_EnemyCode $07
 	; just hit
 	ret nz
 	; knockback
-	ld e,$aa
+	ld e,Enemy.var2a
 	ld a,(de)
-	cp $97
+.if defined(ROM_COMBO)
+	cp $80|ITEMCOLLISION_BOMB_S
+.else
+	cp $80|ITEMCOLLISION_BOMB
+.endif
 	jr nz,@normalStatus
 	ld e,$a9
 	ld a,(de)

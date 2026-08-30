@@ -12,11 +12,11 @@ m_EnemyCode $77
 	ld a,(de)
 	or a
 	jr nz,@normalStatus
-	ld e,$aa
+	ld e,Enemy.var2a
 	ld a,(de)
-	cp $9a
+	cp $80|ITEMCOLLISION_MYSTERY_SEED
 	jr z,+
-	cp $9b
+	cp $80|ITEMCOLLISION_EMBER_SEED
 	jr nz,@normalStatus
 	ld e,$82
 	ld a,(de)

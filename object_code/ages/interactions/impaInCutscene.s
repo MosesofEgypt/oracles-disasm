@@ -105,7 +105,11 @@ m_InteractionCode $31
 	ld a,$38
 	ld (de),a
 
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_ZELDA_SAVED_FROM_VIRE_AGES
+.else
 	ld a,GLOBALFLAG_ZELDA_SAVED_FROM_VIRE
+.endif
 	call checkGlobalFlag
 	ld a,$02
 	jr z,@setAnimationAndLoadScript
@@ -890,7 +894,11 @@ impaSubid7:
 	call checkGlobalFlag
 	jp z,interactionAnimateAsNpc
 
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_ZELDA_SAVED_FROM_VIRE_AGES
+.else
 	ld a,GLOBALFLAG_ZELDA_SAVED_FROM_VIRE
+.endif
 	call checkGlobalFlag
 	jp nz,interactionAnimate
 	jp npcFaceLinkAndAnimate

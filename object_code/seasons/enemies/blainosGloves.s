@@ -8,10 +8,10 @@ m_EnemyCode $5f
 	ld a,(de)
 	cp ENEMYCOLLISION_BLAINO_GLOVE
 	jr nz,++
-	ld e,$aa
+	ld e,Enemy.var2a
 	ld a,(de)
 	res 7,a
-	sub $0a
+	sub ITEMCOLLISION_FIST_PUNCH
 	cp $02
 	jr nc,++
 	ld h,d

@@ -919,12 +919,17 @@ decideItemDrop_body:
 	ld a,(de)
 +
 .if defined(ROM_COMBO)
-	ld hl,itemDropTableDiffsForSeasons
-	push de
-	ld e,a
-	call lookupKey
-	pop de
-	jr c,+
+	call wIsSeasons
+	jr nz,++
+		ld c,a
+		ld hl,itemDropTableDiffsForSeasons
+		push de
+		ld e,a
+		call lookupKey
+		pop de
+		jr c,+
+		ld a,c
+	++
 .endif
 	ld hl,itemDropTables
 	rst_addAToHl
@@ -1003,13 +1008,6 @@ checkItemDropAvailable_body:
 	ld hl,itemDropAvailabilityTable
 	rst_addDoubleIndex
 	ldi a,(hl)
-.if defined(ROM_COMBO)
-	call wIsSeasons
-	jr c,+
-		cp <wMinimapGroup
-		jr z,@done
-	+
-.endif
 	ld b,(hl)
 	ld l,a
 	ld h,>wc600Block

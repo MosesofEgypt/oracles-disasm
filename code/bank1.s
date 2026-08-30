@@ -3620,6 +3620,12 @@ initializeGame:
 	jr nz,func_5a60
 
 	ld a,GLOBALFLAG_3d
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+
+		ld a,GLOBALFLAG_3d_AGES
+	+
+.endif
 	call checkGlobalFlag
 	jr nz,@summonLinkCutscene
 .endif
@@ -4205,7 +4211,8 @@ updateRingEquipStatuses:
 	; if the flag indicates it, force FIST_RING equipped
 	bit 5,a
 	ld a,FIST_RING
-	call z,unsetFlag
+	ld hl,wEquippedRingFlags
+	call nz,unsetFlag
 
 	.if defined(ROM_SEASONS) || defined(ROM_COMBO)
 	; don't wanna cheat on blaino....

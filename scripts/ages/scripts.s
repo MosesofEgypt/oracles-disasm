@@ -3318,7 +3318,11 @@ birdScript_listeningToNayruGameStart:
 ; Subid 4: Bird with Impa when Zelda gets kidnapped
 birdScript_zeldaKidnapped:
 	initcollisions
+.if defined(ROM_COMBO)
+	jumpifglobalflagset GLOBALFLAG_ZELDA_SAVED_FROM_VIRE_AGES, @zeldaSaved
+.else
 	jumpifglobalflagset GLOBALFLAG_ZELDA_SAVED_FROM_VIRE, @zeldaSaved
+.endif
 
 @npcLoop:
 	checkabutton

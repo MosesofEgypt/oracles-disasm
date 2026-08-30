@@ -878,7 +878,11 @@ impaScript5:
 impaScript7:
 	initcollisions
 	setspeed SPEED_100
+.if defined(ROM_COMBO)
+	jumpifglobalflagset GLOBALFLAG_ZELDA_SAVED_FROM_VIRE_AGES, @zeldaSaved
+.else
 	jumpifglobalflagset GLOBALFLAG_ZELDA_SAVED_FROM_VIRE, @zeldaSaved
+.endif
 
 @npcLoop:
 	enableinput
@@ -4109,7 +4113,11 @@ goron_determineTextForGenericNpc:
 	call checkGlobalFlag
 	jr nz,@val03
 
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_MOBLINS_KEEP_DESTROYED_AGES
+.else
 	ld a,GLOBALFLAG_MOBLINS_KEEP_DESTROYED
+.endif
 	call checkGlobalFlag
 	jr nz,@val02
 
@@ -7640,7 +7648,11 @@ zelda_warpOutOfVireMinigame:
 	xor a
 	ld (wDisabledObjects),a
 	ld (wMenuDisabled),a
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_ZELDA_SAVED_FROM_VIRE_AGES
+.else
 	ld a,GLOBALFLAG_ZELDA_SAVED_FROM_VIRE
+.endif
 	call setGlobalFlag
 	ld hl,@warpDest
 	jp setWarpDestVariables

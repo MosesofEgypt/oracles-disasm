@@ -36,7 +36,11 @@ m_InteractionCode $72
 	bit 6,a
 	jp nz,interactionDelete
 
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_MOBLINS_KEEP_DESTROYED_AGES
+.else
 	ld a,GLOBALFLAG_MOBLINS_KEEP_DESTROYED
+.endif
 	call checkGlobalFlag
 	jp z,interactionDelete
 

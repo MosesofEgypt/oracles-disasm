@@ -19,11 +19,7 @@ m_EnemyCode $7f
 	ld e,Enemy.var2a
 	ld a,(de)
 .if defined(ROM_COMBO)
-	cp $80|ITEMCOLLISION_BOMB_S
-	call wIsSeasons
-	jr c,+
-		cp $80|ITEMCOLLISION_BOMB_A
-	+
+	cp $80|ITEMCOLLISION_BOMB_A
 .else
 	cp $80|ITEMCOLLISION_BOMB
 .endif
@@ -575,7 +571,11 @@ kingMoblin_state15:
 	ld hl,wPresentRoomFlags+$09
 	set 0,(hl)
 
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_MOBLINS_KEEP_DESTROYED_AGES
+.else
 	ld a,GLOBALFLAG_MOBLINS_KEEP_DESTROYED
+.endif
 	call setGlobalFlag
 	ld a,GLOBALFLAG_16
 	call setGlobalFlag

@@ -3112,7 +3112,7 @@ hideStatusBar_body:
 	call loadUncompressedGfxHeader
 
 	; Clear the items on the status bar
-	ld a,(<wEquippedItemOamTail)
+	ld a,(wEquippedItemOamTail)
 	or a
 	ld b,a
 	ret z
@@ -5168,7 +5168,7 @@ loadItemIconGfx:
 	cp c
 	jr nz,+
 		ld a,(wObtainedSeasons)
-		bit 0,a
+		bit 3,a
 		jr z,++
 			ld a,$20
 			rst_addAToHl
@@ -5179,8 +5179,18 @@ loadItemIconGfx:
 	ld a,$a5 ; middle
 	cp c
 	jr nz,+
-		ld a,(wObtainedSeasons)
-		and $06
+		push hl
+		ld hl,wObtainedSeasons
+		xor a
+		bit 1,(hl)
+		jr z,++
+			set 2,a
+		++
+		bit 0,(hl)
+		jr z,++
+			set 1,a
+		++
+		pop hl
 		swap a
 		add $40
 		rst_addAToHl
@@ -5191,7 +5201,7 @@ loadItemIconGfx:
 	cp c
 	jr nz,+
 		ld a,(wObtainedSeasons)
-		bit 3,a
+		bit 2,a
 		ld a,$c0
 		jr z,++
 			add $20
@@ -8774,11 +8784,16 @@ mapMenu_state0:
 .if defined(ROM_COMBO)
 	call wIsSeasons
 	jr c,+
-		; ages overworld
-		add GFXH_OVERWORLD_MAP_PRESENT
+		; ages overworlds or dungeon
+		cp $02
+		jr z,+++
+			add GFXH_OVERWORLD_MAP_PRESENT
+			jr ++
+		+++
+		ld a,GFXH_DUNGEON_MAP
 		jr ++
 	+
-		; seasons overworld
+		; seasons overworlds or dungeons
 		add GFXH_OVERWORLD_MAP
 	++
 .else
@@ -8890,11 +8905,13 @@ mapMenu_state0:
 
 	ld a,(wDungeonIndex)
 .if defined(ROM_COMBO)
-	add GFXH_DUNGEON_0_BLURB_SEASONS
 	call wIsSeasons
 	jr c,+
-		add GFXH_DUNGEON_0_BLURB_AGES-GFXH_DUNGEON_0_BLURB_SEASONS
+		add GFXH_DUNGEON_0_BLURB_AGES
+		jr ++
 	+
+		add GFXH_DUNGEON_0_BLURB_SEASONS
+	++
 .else
 	add GFXH_DUNGEON_0_BLURB
 .endif
@@ -10972,6 +10989,11 @@ checkPirateShipMoved:
 ; @param[out]	zflag	nz if moblin's keep is destroyed
 checkMoblinsKeepDestroyed:
 	ld a,GLOBALFLAG_MOBLINS_KEEP_DESTROYED
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jp c,checkGlobalFlag
+	ld a,GLOBALFLAG_MOBLINS_KEEP_DESTROYED_AGES
+.endif
 	jp checkGlobalFlag
 
 ;;
