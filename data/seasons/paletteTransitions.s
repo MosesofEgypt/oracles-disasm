@@ -10,74 +10,51 @@
 ; Note: Byte 0 is the direction Link MOVES INTO the room, not where he ENTERS FROM.
 
 
+.MACRO m_PaletteTransitionData_seasons
+	.assert NARGS == 1
+	.if defined(ROM_COMBO)
+		.dw \1_seasons
+	.else
+		.dw \1
+	.endif
+.ENDM
+
 paletteTransitionSeasonData:
-.if defined(ROM_COMBO)
-	.dw paletteData49b0_seasons
-	.dw paletteData49e0_seasons
-	.dw paletteData4a10_seasons
-	.dw paletteData4a40_seasons
-
-	.dw paletteData4a70_seasons
-	.dw paletteData4aa0_seasons
-	.dw paletteData4ad0_seasons
-	.dw paletteData4b00_seasons
-
-	.dw paletteData4da0_seasons
-	.dw paletteData4dd0_seasons
-	.dw paletteData4e00_seasons
-	.dw paletteData4e30_seasons
-
-	.dw paletteData4f20_seasons
-	.dw paletteData4f50_seasons
-	.dw paletteData4f80_seasons
-	.dw paletteData4fb0_seasons
-
-	.dw paletteData50a0_seasons
-	.dw paletteData50d0_seasons
-	.dw paletteData5100_seasons
-	.dw paletteData5130_seasons
-
-	.dw paletteData5160_seasons
-	.dw paletteData5190_seasons
-	.dw paletteData51c0_seasons
-	.dw paletteData51f0_seasons
-.else
 	; $00
-	.dw paletteData49b0 ; SEASON_SPRING
-	.dw paletteData49e0 ; SEASON_SUMMER
-	.dw paletteData4a10 ; SEASON_AUTUMN
-	.dw paletteData4a40 ; SEASON_WINTER
+	m_PaletteTransitionData_seasons paletteData49b0 ; SEASON_SPRING
+	m_PaletteTransitionData_seasons paletteData49e0 ; SEASON_SUMMER
+	m_PaletteTransitionData_seasons paletteData4a10 ; SEASON_AUTUMN
+	m_PaletteTransitionData_seasons paletteData4a40 ; SEASON_WINTER
 
 	; $01
-	.dw paletteData4a70
-	.dw paletteData4aa0
-	.dw paletteData4ad0
-	.dw paletteData4b00
+	m_PaletteTransitionData_seasons paletteData4a70
+	m_PaletteTransitionData_seasons paletteData4aa0
+	m_PaletteTransitionData_seasons paletteData4ad0
+	m_PaletteTransitionData_seasons paletteData4b00
 
 	; $02
-	.dw paletteData4da0
-	.dw paletteData4dd0
-	.dw paletteData4e00
-	.dw paletteData4e30
+	m_PaletteTransitionData_seasons paletteData4da0
+	m_PaletteTransitionData_seasons paletteData4dd0
+	m_PaletteTransitionData_seasons paletteData4e00
+	m_PaletteTransitionData_seasons paletteData4e30
 
 	; $03
-	.dw paletteData4f20
-	.dw paletteData4f50
-	.dw paletteData4f80
-	.dw paletteData4fb0
+	m_PaletteTransitionData_seasons paletteData4f20
+	m_PaletteTransitionData_seasons paletteData4f50
+	m_PaletteTransitionData_seasons paletteData4f80
+	m_PaletteTransitionData_seasons paletteData4fb0
 
 	; $04
-	.dw paletteData50a0
-	.dw paletteData50d0
-	.dw paletteData5100
-	.dw paletteData5130
+	m_PaletteTransitionData_seasons paletteData50a0
+	m_PaletteTransitionData_seasons paletteData50d0
+	m_PaletteTransitionData_seasons paletteData5100
+	m_PaletteTransitionData_seasons paletteData5130
 
 	; $05
-	.dw paletteData5160
-	.dw paletteData5190
-	.dw paletteData51c0
-	.dw paletteData51f0
-.endif
+	m_PaletteTransitionData_seasons paletteData5160
+	m_PaletteTransitionData_seasons paletteData5190
+	m_PaletteTransitionData_seasons paletteData51c0
+	m_PaletteTransitionData_seasons paletteData51f0
 
 
 

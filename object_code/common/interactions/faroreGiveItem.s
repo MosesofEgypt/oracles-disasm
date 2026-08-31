@@ -239,10 +239,14 @@ interactiond9_state2:
 @ringBoxUpgrade:
 .ifdef RESIZE_RING_BOX
 	call getRingBoxLevel
+	cp MAX_RING_BOX_LEVEL
+	jr c,+
+		ld a,MAX_RING_BOX_LEVEL
+	+
 .else
 	ld a,(wRingBoxLevel)
-.endif
 	and $03
+.endif
 	ld hl,@ringBoxSubids
 	rst_addAToHl
 	ld c,(hl)
@@ -251,6 +255,10 @@ interactiond9_state2:
 
 @ringBoxSubids:
 	.db $03 $03 $04 $04
+	; NOTE: padded up to 8 to allow up to 8 ring box levels
+.ifdef RESIZE_RING_BOX
+	.db $04 $04 $04 $04
+.endif
 
 .ifdef ENABLE_NEW_GAME_PLUS
 @swordShieldSubids:

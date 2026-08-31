@@ -88,7 +88,7 @@ tryBreakTileWithExpertsRing:
 	; destroy the ground and clear dirt if you've obtained the shovel
 	ld a,TREASURE_SHOVEL
 	call checkTreasureObtained
-	jr nz,+
+	jr nc,+
 	.if defined(ROM_AGES) || defined(ROM_COMBO)
 		; no destroying dirt while deep underwater
 		call isDeepUnderwater

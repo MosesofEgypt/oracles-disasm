@@ -4673,6 +4673,14 @@ drawTreasureExtraTiles:
 	; Fall
 	inc l
 	inc b
+
+	; NOTE: we need to change the tile's palette to red regardless
+	set 3,c
+	set 2,h
+	ld (hl),c
+	res 2,h
+	res 3,c
+
 	srl e
 	call c,@drawTile
 

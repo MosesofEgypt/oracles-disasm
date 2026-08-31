@@ -34,6 +34,12 @@
 	;.redefine I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
 .endif
 
+.ifdef RESIZE_RING_BOX
+	.ifndef MAX_RING_BOX_LEVEL
+		.define MAX_RING_BOX_LEVEL 3
+	.endif
+.endif
+
 .if defined(ROM_COMBO) || defined(ENABLE_NEW_GAME_PLUS) || defined(I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX)
 	.ifndef INCREASE_GFX_SPACE
 		.define INCREASE_GFX_SPACE			1

@@ -9234,6 +9234,9 @@ getRingComboFlag:
 getRingBoxLevel:
 	ld a,(wRingBoxLevel)
 	and $07
+	cp MAX_RING_BOX_LEVEL
+	ret c
+	ld a,MAX_RING_BOX_LEVEL
 	ret
 .endif
 
@@ -10750,8 +10753,13 @@ partAnimate:
 	setrombank
 	ld l,Part.animPointer
 	call _partNextAnimationFrame
+	ld l,a
 	pop af
 	setrombank
+	; do this to preserve the af register for code that
+	; cares about the animation state being non-zero
+	ld a,l
+	or a
 	ret
 
 ;;
@@ -10785,8 +10793,13 @@ partSetAnimation:
 	add hl,bc
 
 	call _partNextAnimationFrame
+	ld l,a
 	pop af
 	setrombank
+	; do this to preserve the af register for code that
+	; cares about the animation state being non-zero
+	ld a,l
+	or a
 	ret
 
 ;;
@@ -13374,17 +13387,6 @@ loadAnimationData:
 	inc hl
 	inc hl
 	ret
-
-.if defined(ROM_SEASONS) || defined(ROM_COMBO)
-roomTileChangesAfterLoad02_seasons:
-	ldh a,(<hRomBank)
-	push af
-	callfrombank0 interactionCodeSeasons2.roomTileChangesAfterLoad02_body
-	pop af
-	rst_setrombank
-	ret
-
-.endif
 
 ;;
 ; See the comments for roomGfxChanges.getIndexOfGashaSpotInRoom_body.

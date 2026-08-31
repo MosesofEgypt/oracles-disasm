@@ -124,14 +124,25 @@ specialObjectCode_transformedLink:
 	call linkUpdateKnockback
 	call updateLinkSpeed_standard
 
-	; Halve speed if he's in baby form
+	; Halve speed if he's in baby form, while
+	; ensuring it's still a multiple of 5
 	ld h,d
 	ld l,SpecialObject.id
 	ld a,(hl)
 	cp SPECIALOBJECT_LINK_AS_BABY
 	jr nz,+
 	ld l,SpecialObject.speed
-	srl (hl)
+	ld a,(hl)
+	srl a
+	srl a
+	dec a
+	srl a
+	ld l,a
+	add a
+	add a
+	add l
+	ld l,SpecialObject.speed
+	ld (hl),a
 +
 	ld l,SpecialObject.knockbackCounter
 	ld a,(hl)

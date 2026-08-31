@@ -91,7 +91,8 @@ common_kingMoblinBomb_state1:
 @animate:
 	jp partAnimate
 
-	; Unused code snippet?
+	; Unused snippit used to prevent link from dropping the
+	; bomb until it's exploding, regardless of the animation
 	or d
 	ret
 

@@ -409,7 +409,6 @@ m_GfxData spr_shroudedstalfos_tile_candle
 m_GfxData spr_smasher
 m_GfxData spr_smog_1
 m_GfxData spr_smog_2
-m_GfxData spr_smog_3
 m_GfxData spr_smog_projectiles
 m_GfxData spr_soldier
 m_GfxData spr_spiderbeeveran_1

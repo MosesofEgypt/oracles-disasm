@@ -13,6 +13,16 @@
 ; Note: Byte 0 is the direction Link MOVES INTO the room, not where he ENTERS FROM.
 
 
+.MACRO m_PaletteTransitionData_ages
+	.assert NARGS == 4
+	.if defined(ROM_COMBO)
+		dbbww \1  \2  \3_ages \4_ages
+	.else
+		dbbww \1  \2  \3 \4
+	.endif
+.ENDM
+
+
 paletteTransitionData:
 	dbrel paletteTransitionGroup0
 	dbrel paletteTransitionGroup1
@@ -32,61 +42,31 @@ paletteTransitionGroup7:
 	.db $ff
 
 paletteTransitionGroup0:
-.if defined(ROM_COMBO)
-	dbbww DIR_LEFT  $6a  paletteData4a90_ages paletteData4a30_ages
-	dbbww DIR_RIGHT $6b  paletteData4a30_ages paletteData4a90_ages
-	dbbww DIR_LEFT  $7a  paletteData4a90_ages paletteData4a30_ages
-	dbbww DIR_RIGHT $7b  paletteData4a30_ages paletteData4a90_ages
-	dbbww DIR_UP    $8b  paletteData4c10_ages paletteData4a90_ages
-	dbbww DIR_DOWN  $9b  paletteData4a90_ages paletteData4c10_ages
-	dbbww DIR_UP    $12  paletteData4cd0_ages paletteData4c70_ages
-	dbbww DIR_DOWN  $22  paletteData4c70_ages paletteData4cd0_ages
-	dbbww DIR_UP    $14  paletteData4cd0_ages paletteData4c70_ages
-	dbbww DIR_DOWN  $24  paletteData4c70_ages paletteData4cd0_ages
-	dbbww DIR_DOWN  $29  paletteData4d90_ages paletteData4a30_ages
-	dbbww DIR_DOWN  $2a  paletteData4d90_ages paletteData4a30_ages
-	dbbww DIR_DOWN  $3d  paletteData4d90_ages paletteData4bb0_ages
-.else
-	dbbww DIR_LEFT  $6a  paletteData4a90 paletteData4a30
-	dbbww DIR_RIGHT $6b  paletteData4a30 paletteData4a90
-	dbbww DIR_LEFT  $7a  paletteData4a90 paletteData4a30
-	dbbww DIR_RIGHT $7b  paletteData4a30 paletteData4a90
-	dbbww DIR_UP    $8b  paletteData4c10 paletteData4a90
-	dbbww DIR_DOWN  $9b  paletteData4a90 paletteData4c10
-	dbbww DIR_UP    $12  paletteData4cd0 paletteData4c70
-	dbbww DIR_DOWN  $22  paletteData4c70 paletteData4cd0
-	dbbww DIR_UP    $14  paletteData4cd0 paletteData4c70
-	dbbww DIR_DOWN  $24  paletteData4c70 paletteData4cd0
-	dbbww DIR_DOWN  $29  paletteData4d90 paletteData4a30
-	dbbww DIR_DOWN  $2a  paletteData4d90 paletteData4a30
-	dbbww DIR_DOWN  $3d  paletteData4d90 paletteData4bb0
-.endif
+	m_PaletteTransitionData_ages DIR_LEFT  $6a  paletteData4a90 paletteData4a30
+	m_PaletteTransitionData_ages DIR_RIGHT $6b  paletteData4a30 paletteData4a90
+	m_PaletteTransitionData_ages DIR_LEFT  $7a  paletteData4a90 paletteData4a30
+	m_PaletteTransitionData_ages DIR_RIGHT $7b  paletteData4a30 paletteData4a90
+	m_PaletteTransitionData_ages DIR_UP    $8b  paletteData4c10 paletteData4a90
+	m_PaletteTransitionData_ages DIR_DOWN  $9b  paletteData4a90 paletteData4c10
+	m_PaletteTransitionData_ages DIR_UP    $12  paletteData4cd0 paletteData4c70
+	m_PaletteTransitionData_ages DIR_DOWN  $22  paletteData4c70 paletteData4cd0
+	m_PaletteTransitionData_ages DIR_UP    $14  paletteData4cd0 paletteData4c70
+	m_PaletteTransitionData_ages DIR_DOWN  $24  paletteData4c70 paletteData4cd0
+	m_PaletteTransitionData_ages DIR_DOWN  $29  paletteData4d90 paletteData4a30
+	m_PaletteTransitionData_ages DIR_DOWN  $2a  paletteData4d90 paletteData4a30
+	m_PaletteTransitionData_ages DIR_DOWN  $3d  paletteData4d90 paletteData4bb0
 	.db $ff
 
 paletteTransitionGroup1:
-.if defined(ROM_COMBO)
-	dbbww DIR_UP    $12  paletteData4d00_ages paletteData4ca0_ages
-	dbbww DIR_DOWN  $22  paletteData4ca0_ages paletteData4d00_ages
-	dbbww DIR_UP    $14  paletteData4d00_ages paletteData4ca0_ages
-	dbbww DIR_DOWN  $24  paletteData4ca0_ages paletteData4d00_ages
-	dbbww DIR_UP    $36  paletteData4a60_ages paletteData4f40_ages
-	dbbww DIR_DOWN  $46  paletteData4f40_ages paletteData4a60_ages
-.else
-	dbbww DIR_UP    $12  paletteData4d00 paletteData4ca0
-	dbbww DIR_DOWN  $22  paletteData4ca0 paletteData4d00
-	dbbww DIR_UP    $14  paletteData4d00 paletteData4ca0
-	dbbww DIR_DOWN  $24  paletteData4ca0 paletteData4d00
-	dbbww DIR_UP    $36  paletteData4a60 paletteData4f40
-	dbbww DIR_DOWN  $46  paletteData4f40 paletteData4a60
+	m_PaletteTransitionData_ages DIR_UP    $12  paletteData4d00 paletteData4ca0
+	m_PaletteTransitionData_ages DIR_DOWN  $22  paletteData4ca0 paletteData4d00
+	m_PaletteTransitionData_ages DIR_UP    $14  paletteData4d00 paletteData4ca0
+	m_PaletteTransitionData_ages DIR_DOWN  $24  paletteData4ca0 paletteData4d00
+	m_PaletteTransitionData_ages DIR_UP    $36  paletteData4a60 paletteData4f40
+	m_PaletteTransitionData_ages DIR_DOWN  $46  paletteData4f40 paletteData4a60
 	.db $ff
-.endif
 
 paletteTransitionGroup2:
-.if defined(ROM_COMBO)
-	dbbww DIR_UP    $90  paletteData4eb0_ages paletteData4e80_ages
-	dbbww DIR_DOWN  $a0  paletteData4e80_ages paletteData4eb0_ages
-.else
-	dbbww DIR_UP    $90  paletteData4eb0 paletteData4e80
-	dbbww DIR_DOWN  $a0  paletteData4e80 paletteData4eb0
+	m_PaletteTransitionData_ages DIR_UP    $90  paletteData4eb0 paletteData4e80
+	m_PaletteTransitionData_ages DIR_DOWN  $a0  paletteData4e80 paletteData4eb0
 	.db $ff
-.endif

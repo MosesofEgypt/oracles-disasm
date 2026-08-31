@@ -344,6 +344,19 @@ uncmpGfxHeaderTable:
 	m_GfxHeaderRam w3VramTiles, $9800, $0c
 	m_GfxHeaderEnd
 
+.if defined(ROM_COMBO)
+@uncmpGfxHeader3d:
+	m_GfxHeader ages_gfx_animations_2, $8cc1, $04, $740
+	m_GfxHeaderEnd
+
+@uncmpGfxHeader3e:
+	m_GfxHeader ages_gfx_animations_2, $8cc1, $04, $780
+	m_GfxHeaderEnd
+
+@uncmpGfxHeader3f:
+	m_GfxHeader ages_gfx_animations_2, $8cc1, $04, $7c0
+	m_GfxHeaderEnd
+.else
 @uncmpGfxHeader3d:
 	m_GfxHeader gfx_animations_2, $8cc1, $04, $740
 	m_GfxHeaderEnd
@@ -355,6 +368,7 @@ uncmpGfxHeaderTable:
 @uncmpGfxHeader3f:
 	m_GfxHeader gfx_animations_2, $8cc1, $04, $7c0
 	m_GfxHeaderEnd
+.endif
 
 
 .ifdef WIDE_INVENTORY_SPRITES

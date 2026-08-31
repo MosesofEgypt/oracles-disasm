@@ -38,6 +38,13 @@ shopItemState0:
 
 .ifdef RESIZE_RING_BOX
 	call getRingBoxLevel
+	cp MAX_RING_BOX_LEVEL
+	; delete self if ring box maxed out
+	jr nz,+
+		ld hl,wBoughtShopItems1
+		set 0,(hl)
+		jp interactionDelete
+	+
 .else
 	ld a,(wRingBoxLevel)
 .endif

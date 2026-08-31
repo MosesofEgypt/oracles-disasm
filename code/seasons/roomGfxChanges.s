@@ -150,6 +150,9 @@ applyRoomSpecificTileChangesAfterGfxLoad:
 @group7:
 	.db $00
 
+roomTileChangesAfterLoad02_seasons:
+	jpab interactionCodeSeasons2.roomTileChangesAfterLoad02_body
+
 
 ;;
 ; $09: Load scent tree graphics (north horon)
@@ -540,7 +543,7 @@ roomTileChangesAfterLoad08_seasons:
 	ret z
 	; 'c' now contains the gasha spot index.
 
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	ld a,TILEINDEX_SOFT_SOIL_SEASONS
 .else
 	ld a,TILEINDEX_SOFT_SOIL
@@ -569,9 +572,8 @@ roomTileChangesAfterLoad08_seasons:
 	ld hl,@sproutLayout
 ++
 	call copyRectangleToRoomLayoutAndCollisions_paramDe
-
 	; Regenerate graphics after modifying wRoomLayout
-	jp tilesets.generateW3VramTilesAndAttributes
+	jpab tilesets.generateW3VramTilesAndAttributes
 
 @sproutLayout:
 	.db $01 $01

@@ -1853,7 +1853,7 @@ isValidTargetForPogo:
 		; this is a part
 		ld a,(hl)
 		ld hl,@pogoTargets
-		call isValidTargetForJudo@isValidTarget
+		call checkFlag
 		jr ++
 	+
 	xor a
