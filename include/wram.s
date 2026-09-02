@@ -62,7 +62,7 @@ wSoundDisabled: ; $c01b
 ; All sound processing is disabled when this is nonzero
 	db
 
-wChannel7TriggerOnNextSound: ; $c01c
+wTriggerSfxNoiseChannelOnNextSound: ; $c01c
 	; Audio command $f0 sets this to $80, which is then written to NR44 on the next standard command
 	db
 

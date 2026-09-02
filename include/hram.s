@@ -95,8 +95,9 @@
 	; 0-3; when bit 7 is set, volume needs updating.
 	hMusicVolume			db	; $ffb6/$ffb4
 
-	; ffb7: if bit 3 is set, playSound doesn't do anything.
-	;       if bit 0 is set, the game is currently running sound routines?
+	; ffb7: if bit 7 is set, the game is currently doing vBlank gfx updates
+	;       if bit 3 is set, playSound doesn't do anything.
+	;       if bit 0 is set, the audio update thread is locked(running or not)
 	hFFB7				db	; $ffb7/$ffb5
 
 	; Used in timer interrupt
