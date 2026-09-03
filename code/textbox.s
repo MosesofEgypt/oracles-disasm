@@ -1359,9 +1359,9 @@ drawLineOfText:
 ;;
 clearTextGfxBuffer:
 	ld hl,w7TextGfxBuffer
-	ld bc,$0020
+	ld b,$20
 	ld a,$ff
-	jp fillMemoryBc16ByteBlocks
+	jp fillMemory16ByteBlocks
 
 ;;
 clearLineTextBuffer:

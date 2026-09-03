@@ -2356,6 +2356,9 @@ vblankInterrupt:
 
 ;;
 runVBlankFunctions:
+	xor a
+	ldh (<hGdmaChunksCopiedThisFrame),a
+	ldh (<hGdmaDelayedCount),a
 	ld hl,wVBlankFunctionQueue
 --
 	ldi a,(hl)
@@ -2365,13 +2368,19 @@ runVBlankFunctions:
 	ld hl,vblankFunctionsStart
 	add hl,bc
 	jp hl
+
 ;;
 vblankFunctionRet:
+	xor a
 	ldh a,(<hVBlankFunctionQueueTail)
 	cp l
 	jr nz,--
 
-	xor a
+	ldh a,(<hGdmaDelayedCount)
+	add a
+	add a
+	add a
+	add <wVBlankFunctionQueue
 	ldh (<hVBlankFunctionQueueTail),a
 	ret
 
@@ -2509,6 +2518,59 @@ vblankFunction0ad9:
 ;;
 vblankDmaFunction:
 	pop hl
+
+	; ensure we only try to copy data during vblank
+	ld a,($ff00+R_STAT)
+	and $03
+	cp $02
+	jr nc,++
+		; ensure we don't try to copy too much data in one vBlank
+		push hl
+		ld a,$06
+		rst_addAToHl
+		ldh a,(<hGdmaChunksCopiedThisFrame)
+		add (hl)
+		inc a
+		pop hl
+		cp $61
+		jr c,+
+			++
+			; ensure we're process at least some GDMAs each frame
+			ldh a,(<hGdmaChunksCopiedThisFrame)
+			or a
+			jr z,+
+				; a lot of data has already been copied.
+				; save the rest for another vBlank period
+				ldh a,(<hGdmaDelayedCount)
+				inc a
+				ldh (<hGdmaDelayedCount),a
+				dec a
+
+				; setup de with the address to move the GDMA command into
+				dec hl
+				push de
+				push bc
+				add a
+				add a
+				add a
+				add <wVBlankFunctionQueue
+				ld e,a
+				ld d,>wVBlankFunctionQueue
+
+				; copy the GDMA command over
+				ld b,$08
+				-
+					ldi a,(hl)
+					ld (de),a
+					inc de
+					dec b
+					jr nz,-
+
+				pop bc
+				pop de
+				jp vblankFunctionRet
+	+
+
 	ldi a,(hl) 		; src bank
 	ld ($ff00+R_SVBK),a
 	ld ($2222),a
@@ -2530,7 +2592,11 @@ vblankDmaFunction:
 	ld ($ff00+R_HDMA3),a
 	ldi a,(hl) 		; dst end addr low
 	ld ($ff00+R_HDMA4),a
-	ldi a,(hl) 		; dst end addr high
+	ldh a,(<hGdmaChunksCopiedThisFrame)
+	add (hl)
+	inc a
+	ldh (<hGdmaChunksCopiedThisFrame),a
+	ldi a,(hl) 		; (copy length)/$10 - 1
 	ld ($ff00+R_HDMA5),a
 	jp vblankFunctionRet
 
@@ -6015,6 +6081,12 @@ copy20BytesFromBank:
 ; @param	de	Destination
 ; @param	hl	Source
 copyBytesFromBank:
+	; don't try to copy while the PPU is active
+	-
+		ld a,($ff00+R_STAT)
+		and $03
+		jr nz,-
+
 	ldh a,(<hRomBank)
 	push af
 	ld a,b
@@ -12683,15 +12755,27 @@ mainThreadStart:
 	inc (hl)
 	ldi a,(hl)
 	ld (wFrameCounter),a
-	jr nz,++
+	jr nz,@checkForDelayedGdma
 	inc (hl)
-	jr nz,++
+	jr nz,@checkForDelayedGdma
 	inc l
 	inc (hl)
-	jr nz,++
+	jr nz,@checkForDelayedGdma
 	inc l
 	inc (hl)
-++
+
+@checkForDelayedGdma:
+	ldh a,(<hGdmaDelayedCount)
+	or a
+
+	; if there's delayed GDMA to do, dont process game
+	; logic or anything that might modify gfx buffers
+	jr z,+
+		; wait for the next frame and retry vblank functions
+		call resumeThreadNextFrame
+		jr @checkForDelayedGdma
+	+
+
 	callfrombank0 bank1.runGameLogic
 	call          drawAllSprites
 	call          checkReloadStatusBarGraphics

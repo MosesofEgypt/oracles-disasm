@@ -62,6 +62,8 @@ init:
 	ld ($ff00+R_STAT),a
 
 	xor a
+	ldh (<hGdmaChunksCopiedThisFrame),a
+	ldh (<hGdmaDelayedCount),a
 	ld ($ff00+R_IF),a
 	ld a,$0f
 	ld ($ff00+R_IE),a

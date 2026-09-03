@@ -268,6 +268,8 @@ wBigBuffer: ; $c300
 	dsb $100
 
 wVBlankFunctionQueue: ; $c400
+	; NOTE: not every operation is 8 bytes.
+	;       below is for HDMA transfers only
 	; Byte 0: func offset
 	; Byte 1: src bank
 	; Byte 2: src start addr high
@@ -275,7 +277,7 @@ wVBlankFunctionQueue: ; $c400
 	; Byte 4: dst start addr low
 	; Byte 5: dst start addr high
 	; Byte 6: dst end addr low
-	; Byte 7: dst end addr high
+	; Byte 7: (copy length)/$10 - 1
 	dsb $80
 
 wKeysPressedLastFrame: ; $c480

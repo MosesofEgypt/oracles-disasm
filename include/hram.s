@@ -130,8 +130,11 @@
 		hGfxCompressionMode	db	; $ffc0/$ffbe
 	.endif
 
+	hGdmaChunksCopiedThisFrame	db ; $ffc1/$ffbf
+	hGdmaDelayedCount			db ; $ffc2/$ffc0
+
 	; Marker for end of "normal" hram (memory gets cleared up to here upon game initialization)
-	hramEnd			 	.db	; $ffc0/$ffbe
+	hramEnd			 	.db	; $ffc2/$ffc0
 .ende
 
 .enum $ffda export
