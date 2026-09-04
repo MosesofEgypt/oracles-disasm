@@ -438,8 +438,15 @@ updateSoundFrequencyAndPlay:
 	add hl,de
 	ld a,(wSoundChannel)
 	sla a
-	add <hSoundData3
-	m_WriteHlToFF00PlusA
+	;add <hSoundData3
+	;m_WriteHlToFF00PlusA
+	ld b,a
+	ld a,l
+	ld c,<hSoundData3
+	call writeIndexedHighRamAndIncrement
+	ld a,h
+	ld ($ff00+c),a
+	inc c
 
 @handleVibrato:
 	m_ReadChannelData wChannelVibratoActive
@@ -458,17 +465,20 @@ updateSoundFrequencyAndPlay:
 
 @endVibratoWait:
 	m_WriteChannelData wChannelVibratoActive, $10
+	m_WriteChannelData wChannelVibratoCounters, $00
 
 @useVibrato:
 	m_ReadChannelData wChannelVibratoCounters
-
-	; clip to size of table
-	and $07
+	cp $08
+	jr c,+
+		; clip to size of table
+		and $07
+		m_WriteChannelData wChannelVibratoCounters
+	+
 
 	; Get next raw offset (-2, -1, 0, 1 or 2)
 	ld hl,vibratoOffsetTable
-	rst_addDoubleIndex
-	rst_derefHl
+	call readWordFromTable
 
 	; Increment index
 	push hl
@@ -482,18 +492,19 @@ updateSoundFrequencyAndPlay:
 	pop hl
 
 	; Get final offset by multiplying raw offset with intensity
-	jr nz,+
-		ld h,a
-		ld l,a
-		jr @updateSoundFrequencyWithOffset
-	+
-	ld e,l
-	ld d,h
-	-
-		dec a
-		jr z,@updateSoundFrequencyWithOffset
-		add hl,de
-		jr -
+	;jr nz,+
+	;	ld h,a
+	;	ld l,a
+	;	jr @updateSoundFrequencyWithOffset
+	;+
+	;ld e,l
+	;ld d,h
+	;-
+	;	dec a
+	;	jr z,@updateSoundFrequencyWithOffset
+	;	add hl,de
+	;	jr -
+	call multiplyHlByA
 
 ;;
 @updateSoundFrequencyWithOffset:
@@ -539,11 +550,16 @@ updatePlayedFrequency:
 	add b
 	ld b,a
 
-	add R_SQ1_PERIOD_LOW
-	ld c,a
+	;add R_SQ1_PERIOD_LOW
+	;ld c,a
+	;ld a,(wSoundFrequencyL)
+	;ld ($ff00+c),a
+	;inc c
+
+	push bc
 	ld a,(wSoundFrequencyL)
-	ld ($ff00+c),a
-	inc c
+	ld c,R_SQ1_PERIOD_LOW
+	call writeIndexedHighRamAndIncrement
 
 	ld a,(wSoundCmdEnvelope)
 	ld e,a
@@ -552,11 +568,24 @@ updatePlayedFrequency:
 	ld ($ff00+c),a
 	inc c
 
-	ld a,R_SQ1_TIMER_AND_DUTY
-	add b
-	ld c,a
-	m_ReadChannelData wChannelDutyCycles
-	ld ($ff00+c),a
+	;ld a,R_SQ1_TIMER_AND_DUTY
+	;add b
+	;ld c,a
+	;m_ReadChannelData wChannelDutyCycles
+	;ld ($ff00+c),a
+	;ret
+
+	pop bc
+	push bc
+	ld hl,wChannelDutyCycles
+	ld a,(wSoundChannel)
+	ld e,a
+	ld d,$00
+	add hl,de
+	ld a,(hl)
+	pop bc
+	ld c,R_SQ1_TIMER_AND_DUTY
+	call writeIndexedHighRamAndIncrement
 	ret
 
 @wave:
@@ -597,31 +626,51 @@ isWaveChannelUnavailable:
 ;;
 getNextChannelByte:
 	push bc
+	push de
 	push hl
 	ld a,(wSoundChannel)
 	ld b,a
 
-	add a
-	ld hl,hSoundChannelAddresses
-	rst_addAToHl
-	rst_derefHl
+	sla a
+	add <hSoundChannelAddresses
+	ld c,a
+	ld a,($ff00+c)
+	inc c
+	ld l,a
+	ld a,($ff00+c)
+	ld h,a
+
+	;add a
+	;ld hl,hSoundChannelAddresses
+	;rst_addAToHl
+	;rst_derefHl
 
 	ld a,b
 	add <hSoundChannelBanks
 	ld c,a
 	ld a,($ff00+c)
+	inc c
 
 	call wMusicReadFunction
 	push af
 
 	; move to the next byte in the data
 	ld a,b
-	add a
-	add <hSoundChannelAddresses
-	m_WriteHlToFF00PlusA
+	;add a
+	;add <hSoundChannelAddresses
+	;m_WriteHlToFF00PlusA
+	sla a
+	ld b,a
+	ld a,l
+	ld c,<hSoundChannelAddresses
+	call writeIndexedHighRamAndIncrement
+	ld a,h
+	ld ($ff00+c),a
+	inc c
 
 	pop af
 	pop hl
+	pop de
 	pop bc
 	ret
 
@@ -883,8 +932,7 @@ standardCmdSfxSquareChannel2:
 	ld a,(wSoundCmd)
 	sub $0c
 	ld hl,soundFrequencyTable
-	rst_addDoubleIndex
-	rst_derefHl
+	call readWordFromTable
 @arbitraryFrequency:
 	call setSoundFrequency
 	m_WriteChannelData wChannelEnvelopeStates, $00
@@ -935,8 +983,15 @@ setSoundFrequency:
 
 	ld a,(wSoundChannel)
 	sla a
-	add <hSoundData3
-	m_WriteHlToFF00PlusA
+	;add <hSoundData3
+	;m_WriteHlToFF00PlusA
+	ld b,a
+	ld a,l
+	ld c,<hSoundData3
+	call writeIndexedHighRamAndIncrement
+	ld a,h
+	ld ($ff00+c),a
+	inc c
 
 setFrequencyToHl:
 	ld a,l
@@ -1144,8 +1199,7 @@ standardCmdSfxWaveChannel:
 	m_WriteChannelData wChannelIsPlayingRest,$00
 	ld a,(wSoundCmd)
 	ld hl,soundFrequencyTable
-	rst_addDoubleIndex
-	rst_derefHl
+	call readWordFromTable
 @arbitraryFrequency:
 	call setSoundFrequency
 	m_WriteChannelData wChannelVibratoActive,$00
@@ -1352,8 +1406,7 @@ setWaveform:
 	; Copy waveform to $ff30
 	ld a,(wWaveformIndex)
 	ld hl,waveformTable
-	rst_addDoubleIndex
-	rst_derefHl
+	call readWordFromTable
 	ld c,$10
 	ld de,$ff30
 -
@@ -1383,10 +1436,37 @@ channelCmdfe:
 	call getNextChannelByte
 	ld h,a
 	ld a,(wSoundChannel)
-	add a
-	add <hSoundChannelAddresses
-	m_WriteHlToFF00PlusA
+	;add a
+	;add <hSoundChannelAddresses
+	;m_WriteHlToFF00PlusA
+
+	sla a
+	ld b,a
+	ld a,l
+	ld c,<hSoundChannelAddresses
+	call writeIndexedHighRamAndIncrement
+	ld a,h
+	ld ($ff00+c),a
+	inc c
+
 	jp doNextChannelCommand
+
+multiplyHlByA:
+	or a
+	jr nz,+
+	ld hl,$0000
+	ret
++
+	ld e,l
+	ld d,h
+--
+	dec a
+	jr z,+
+
+	add hl,de
+	jp --
++
+	ret
 
 .include "audio/common/frequency.s"
 .include "audio/common/envelope.s"
@@ -1619,6 +1699,32 @@ playSound:
 	pop hl
 	pop de
 	pop bc
+	ret
+
+;;
+; Reads a word at hl+a*2 into de and hl. Index can't be higher than $7f.
+readWordFromTable:
+	sla a
+	ld d,$00
+	ld e,a
+	add hl,de
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	ld h,d
+	ld l,e
+	ret
+
+;;
+; Adds b to c, writes a to ($ff00+c), increments c.
+writeIndexedHighRamAndIncrement:
+	push af
+	ld a,b
+	add c
+	ld c,a
+	pop af
+	ld ($ff00+c),a
+	inc c
 	ret
 
 .include "audio/common/noise.s"

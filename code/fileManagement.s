@@ -959,7 +959,18 @@ initializeFileVariables:
 	jr z,+
 
 	ld e,a
+.if defined(ROM_COMBO)
+	cp <wAnimalCompanion
 	ldi a,(hl)
+	jr nz,++
+		call wIsSeasons
+		jr nc,++
+			; seasons needs to start with companion as ricky
+			ld a,SPECIALOBJECT_RICKY
+	++
+.else
+	ldi a,(hl)
+.endif
 	ld (de),a
 	jr --
 +

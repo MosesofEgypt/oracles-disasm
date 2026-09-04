@@ -132,6 +132,8 @@
 
 	hGdmaChunksCopiedThisFrame	db ; $ffc1/$ffbf
 	hGdmaDelayedCount			db ; $ffc2/$ffc0
+	; debug feature for tracking delayed frames
+	hGdmaDelayedCountTotal      dsb 4 ;
 
 	; Marker for end of "normal" hram (memory gets cleared up to here upon game initialization)
 	hramEnd			 	.db	; $ffc2/$ffc0

@@ -682,12 +682,16 @@ endgameCutsceneHandler_09_stage1_ages:
 
 ;;
 ; CUTSCENE_FLAME_OF_DESPAIR
+.if defined(ROM_COMBO)
+endgameCutsceneHandler_20_ages:
+.else
 endgameCutsceneHandler_20:
+.endif
 	call @runStates
 	jp updateAllObjects
 
 @runStates:
-	ld de,wMapMenu.drawWarpDestinations
+	ld de,wGenericCutscene.cbc1
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -1603,14 +1607,24 @@ endgameCutsceneHandler_0a:
 	dwbe ROOM_AGES_116
 
 @@table_5f24:
-	.db $2d $0f
-	.db $2d $0f
+	.db UNCMP_GFXH_2d
+	.db UNCMP_GFXH_0f
+	.db UNCMP_GFXH_2d
+	.db UNCMP_GFXH_0f
 
 @@table_5f28:
-	.db $30 $2d
-	.db $2d $27
-	.db $ca $ca
-	.db $ca $ae
+.if defined(ROM_COMBO)
+	.db PALH_TILESET_MAKU_TREE_AGES
+.else
+	.db PALH_TILESET_MAKU_TREE
+.endif
+	.db PALH_TILESET_FOREST_OF_TIME
+	.db PALH_TILESET_FOREST_OF_TIME
+	.db PALH_TILESET_AMBIS_PALACE_OUTSIDE
+	.db PALH_ca
+	.db PALH_ca
+	.db PALH_ca
+	.db PALH_ae
 
 @@substate1:
 	ld a,(wPaletteThread_mode)
@@ -1698,7 +1712,7 @@ endgameCutsceneHandler_0a:
 	call cutscene_clearTmpCBB3
 	call cutscene_clearCFC0ToCFDF
 	ld a,$02
-	ld (wMapMenu.drawWarpDestinations),a
+	ld (wGenericCutscene.cbc1),a
 ++
 	jp fadeoutToWhite
 

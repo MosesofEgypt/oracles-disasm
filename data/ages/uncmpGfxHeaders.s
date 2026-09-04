@@ -346,27 +346,27 @@ uncmpGfxHeaderTable:
 
 .if defined(ROM_COMBO)
 @uncmpGfxHeader3d:
-	m_GfxHeader ages_gfx_animations_17, $8cc1, $04, $740
+	m_GfxHeader ages_gfx_animations_17, $8cc1, $04, $000
 	m_GfxHeaderEnd
 
 @uncmpGfxHeader3e:
-	m_GfxHeader ages_gfx_animations_17, $8cc1, $04, $780
+	m_GfxHeader ages_gfx_animations_17, $8cc1, $04, $040
 	m_GfxHeaderEnd
 
 @uncmpGfxHeader3f:
-	m_GfxHeader ages_gfx_animations_17, $8cc1, $04, $7c0
+	m_GfxHeader ages_gfx_animations_17, $8cc1, $04, $080
 	m_GfxHeaderEnd
 .else
 @uncmpGfxHeader3d:
-	m_GfxHeader gfx_animations_17, $8cc1, $04, $740
+	m_GfxHeader gfx_animations_17, $8cc1, $04, $000
 	m_GfxHeaderEnd
 
 @uncmpGfxHeader3e:
-	m_GfxHeader gfx_animations_17, $8cc1, $04, $780
+	m_GfxHeader gfx_animations_17, $8cc1, $04, $040
 	m_GfxHeaderEnd
 
 @uncmpGfxHeader3f:
-	m_GfxHeader gfx_animations_17, $8cc1, $04, $7c0
+	m_GfxHeader gfx_animations_17, $8cc1, $04, $080
 	m_GfxHeaderEnd
 .endif
 

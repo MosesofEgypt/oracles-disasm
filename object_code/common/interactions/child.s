@@ -26,6 +26,12 @@ m_InteractionCode $35
 
 	ld e,Interaction.var03
 	ld a,(de)
+	cp $1d
+	jr c,+
+		; there's an OOB array access somewhere in this file.
+		; we're capping all array indices to try fixing it.
+		ld a,$1c
+	+
 	ld hl,childScriptTable
 	rst_addDoubleIndex
 	rst_derefHl
@@ -33,6 +39,12 @@ m_InteractionCode $35
 
 	ld e,Interaction.var03
 	ld a,(de)
+	cp $1d
+	jr c,+
+		; there's an OOB array access somewhere in this file.
+		; we're capping all array indices to try fixing it.
+		ld a,$1c
+	+
 	rst_jumpTable
 
 	/* $00 */ .dw @initAnimation
@@ -160,6 +172,12 @@ m_InteractionCode $35
 interac65_state1:
 	ld e,Interaction.var03
 	ld a,(de)
+	cp $1d
+	jr c,+
+		; there's an OOB array access somewhere in this file.
+		; we're capping all array indices to try fixing it.
+		ld a,$1c
+	+
 	rst_jumpTable
 
 	/* $00 */ .dw @updateAnimationAndSolidity

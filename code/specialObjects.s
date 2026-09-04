@@ -422,6 +422,9 @@ specialObjectCode_minecart:
 specialObjectCode_raft:
 	jpab bank6Ext.specialObjectCode_raft
 
+specialObjectCode_companionCutscene:
+	jpab bank6Ext.specialObjectCode_companionCutscene
+
 .else
 specialObjectCode_minecart:
 	; Jump to code in bank 6 to handle it

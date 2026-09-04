@@ -768,13 +768,13 @@ wBoughtSubrosianShopItems: ; $c645/$c642
 wCompanionStates: ; $c646
 	.db
 
-wRickyState: ; $c646/$c643
+wRickyState: ; $c646/$c643/$c643
 ; bit 0: set if you've talked to Ricky about getting his gloves
 ;     5: set if you've returned Ricky's gloves
 ;     6: set when Ricky leaves you after obtaining island chart
 ;     7: set if you have Ricky's flute
 	db
-wDimitriState: ; $c647/$c644
+wDimitriState: ; $c647/$c644/$c644
 ; ages:
 ; bit 0: set if you've seen the initial cutscene of the tokays discussing eating dimitri
 ;     1: set if you've driven off the tokays harassing Dimitri
@@ -793,7 +793,7 @@ wDimitriState: ; $c647/$c644
 ;        (signal for bullies to appear 2 screens left)
 ;     7: tutorial on Dimitri's usage given
 	db
-wMooshState: ; $c648/$c645
+wMooshState: ; $c648/$c645/$c645
 ; ages:
 ; bit 5:
 ;     6: set if he's left after you finished helping him
@@ -808,7 +808,7 @@ wMooshState: ; $c648/$c645
 ;     6: set if Moosh should disappear from mt. cucco
 ;     7: set after giving spring bananas to moosh
 	db
-wCompanionTutorialTextShown: ; $c649
+wCompanionTutorialTextShown: ; $c649/$c646/$c646
 ; Bits here are used by INTERAC_COMPANION_TUTORIAL to remember which pieces of
 ; "tutorial" text have been seen.
 ; Bit 0: Ricky hopping over holes
@@ -823,7 +823,7 @@ wc64a: ; $c64a/$c647
 wc64b: ; $c64b
 	db
 
-wGashaSpotFlags:	 ; $c64c/$c649
+wGashaSpotFlags:	 ; $c64c/$c649/$c649
 ; Bit 0 is set if you've harvested at least one gasha nut before. The first gasha nut
 ; always gives you a "class 1" ring (one of the weak, common ones).
 ; Bit 1 is set if you've obtained the heart piece from one of the gasha spots.
@@ -880,7 +880,7 @@ wInventoryStorage: ; $c68a/$c682
 ; $10 bytes
 	dsb INVENTORY_CAPACITY
 
-wObtainedTreasureFlags: ; $c69a/$c692
+wObtainedTreasureFlags: ; $c69a/$c692/$c696
 ; Enough memory reserved for $80 treasures (though only about $68 are used)
 	dsb $10
 
