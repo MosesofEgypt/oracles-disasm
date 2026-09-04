@@ -23,6 +23,23 @@ diggerangComboActive:
 	pop bc
 	ret nz
 	jr superBoomerangComboActive@zIfEither
+
+;;
+; @param[out]	zflag	Set if the parent is null
+checkBoomerangParentStillValid:
+	push hl
+	ld h,d
+	ld l,Item.relatedObj1
+	rst_derefHl
+	ld a,(hl)
+	cp $00
+	pop hl
+	ret
+
+lightningBoomerangComboActive:
+	push bc
+	ldbc RANG_RING_L1,RANG_RING_L2
+	jp eitherRingActiveAndPopBC
 .endif
 
 ;;
@@ -399,21 +416,3 @@ itemCheckWithinRangeOfLink:
 	add c
 	cp b
 	ret
-
-.ifdef ENABLE_RING_REDUX
-;;
-; @param[out]	zflag	Set if the parent is null
-checkBoomerangParentStillValid:
-	push hl
-	ld h,d
-	ld l,Item.relatedObj1
-	rst_derefHl
-	ld a,(hl)
-	cp $00
-	pop hl
-	ret
-
-lightningBoomerangComboActive:
-	ldbc RANG_RING_L1,RANG_RING_L2
-	jp bothRingsActive
-.endif

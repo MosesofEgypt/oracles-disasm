@@ -847,6 +847,8 @@ m_EnemyCodeSection Seasons
 	.include "object_code/seasons/enemies/sandPuff.s"
 	.include "object_code/seasons/enemies/wallFlameShooter.s"
 	.include "object_code/seasons/enemies/blainosGloves.s"
+	.include "object_code/seasons/enemies/rollingSpikeTrap.s"
+	.include "object_code/seasons/enemies/pokey.s"
 m_EndObjectCodeSection
 
 m_EnemyCodeSection Seasons

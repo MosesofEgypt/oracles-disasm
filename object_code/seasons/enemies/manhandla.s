@@ -9,7 +9,7 @@ m_EnemyCode $7d
 	jr z,+
 	dec a
 	jr z,@normalStatus
-	ld e,$82
+	ld e,Enemy.subid
 	ld a,(de)
 	dec a
 	jp z,enemyBoss_dead
@@ -17,7 +17,7 @@ m_EnemyCode $7d
 	call z,ecom_killRelatedObj1
 	jp enemyDie_uncounted
 +
-	call func_7a44
+	call manhandla_handleCollision
 @normalStatus:
 	call ecom_getSubidAndCpStateTo08
 	jr nc,+
@@ -53,12 +53,12 @@ m_EnemyCode $7d
 	dec a
 	ld hl,@table_7828
 	rst_addAToHl
-	ld e,$b0
+	ld e,Enemy.var30
 	ld a,(hl)
 	ld (de),a
 	call enemySetAnimation
 	call ecom_setSpeedAndState8
-	ld e,$82
+	ld e,Enemy.subid
 	ld a,(de)
 	cp $03
 	jr nc,+
@@ -67,10 +67,10 @@ m_EnemyCode $7d
 	jp objectSetInvisible
 +
 	call func_7a14
-	ld e,$b1
+	ld e,Enemy.var31
 	ld a,$03
 	ld (de),a
-	ld e,$82
+	ld e,Enemy.subid
 	ld a,(de)
 	sub $04
 	cp $02
@@ -88,7 +88,7 @@ m_EnemyCode $7d
 	ret nz
 	ld b,ENEMY_MANHANDLA
 	call ecom_spawnUncountedEnemyWithSubid01
-	ld l,$80
+	ld l,Enemy.enabled
 	ld e,l
 	ld a,(de)
 	ld (hl),a
@@ -116,7 +116,7 @@ m_EnemyCode $7d
 	jr nz,-
 	pop hl
 	ld bc,$ff8a
-	ld l,$b1
+	ld l,Enemy.var31
 	ld e,$05
 -
 	ld a,(bc)
@@ -130,8 +130,8 @@ m_EnemyCode $7d
 	ret
 
 @subid1:
-	call func_7ac8
-	ld e,$84
+	call manhandla_handleElectricShockInvulnerabilityTimer
+	ld e,Enemy.state
 	ld a,(de)
 	sub $08
 	rst_jumpTable
@@ -148,12 +148,13 @@ m_EnemyCode $7d
 	or a
 	ret nz
 	ld h,d
-	ld l,$90
-	ld (hl),$0a
+	ld l,Enemy.speed
+	ld (hl),SPEED_40
 	ld l,Enemy.enemyCollisionMode
 	ld (hl),ENEMYCOLLISION_MANHANDLA_BODY_INVULNERABLE
-	ld l,$b6
-	ld (hl),$04
+
+	ld l,Enemy.var36
+	ld (hl),$04	; initialize the number of heads that exist
 	inc l
 	ld (hl),$58
 	inc l
@@ -190,7 +191,7 @@ m_EnemyCode $7d
 	and $07
 	ld hl,@@table_78f6
 	rst_addAToHl
-	ld e,$86
+	ld e,Enemy.counter1
 	ld a,(hl)
 	ld (de),a
 	ld bc,$5078
@@ -203,38 +204,42 @@ m_EnemyCode $7d
 	sub $02
 	and $1f
 +
-	ld e,$89
+	ld e,Enemy.angle
 	ld (de),a
 	jr @@animate
 
 @@table_78f6:
 	.db $a0 $b0 $c0 $d0
 	.db $d0 $e0 $f0 $00
-	
+
+; this is the state where the body is vulnerable to the boomerang,
+; and is moving back to the center before running in a figure-eight
 @@stateB:
 	call func_7ab4
 	jr nc,+
 	ld l,e
 	inc (hl)
-	ld l,$89
+	ld l,Enemy.angle
 	ld (hl),$00
-	ld l,$86
+	ld l,Enemy.counter1
 	ld (hl),$04
-	ld l,$90
-	ld (hl),$55
+	ld l,Enemy.speed
+	ld (hl),SPEED_220
 	jr @@animate
 +
 	call objectGetRelativeAngleWithTempVars
-	ld e,$89
+	ld e,Enemy.angle
 	ld (de),a
 	jr @@bounceAndApplySpeed
-	
+
+; this is the state where the body is running in a figure-eight
+; and is vulnerable to the boomerang, but not the sword
 @@stateC:
 	call ecom_decCounter1
 	jr nz,@@bounceAndApplySpeed
 	ld (hl),$04
-	ld l,$b9
-	ld e,$89
+	ld l,Enemy.var39
+	ld e,Enemy.angle
 	ld a,(de)
 	add (hl)
 	and $1f
@@ -246,30 +251,43 @@ m_EnemyCode $7d
 	inc a
 	ld (hl),a
 	jr @@bounceAndApplySpeed
-	
+
+; this is the state where the body is standing in one spot and
+; is stunned and able to be hit with the boomerang or sword
 @@stateD:
+	; decrement the stunned counter
 	call ecom_decCounter1
+
+	; if still stunned, just animate
 	jr nz,@@animateAndUpdateMovingPlatform
+
+	; otherwise reset the counter and decrement the counter
+	; for how many times the boomerang has hit the body
 	ld (hl),$3c
-	ld l,$b0
+	ld l,Enemy.var30
 	ld a,(hl)
 	dec a
 	ld (hl),a
+
 	jr nz,+
-	ld l,$84
-	ld (hl),$0b
-+
+		; hit count went to zero, so move back
+		; to the running-in-figure-eight state
+		ld l,Enemy.state
+		ld (hl),$0b
+	+
 	jp enemySetAnimation
-	
+
+; this is the state where the body is split open with the
+; core exposed, waiting for a single sword swing to kill it
 @@stateE:
 	call ecom_decCounter1
 	jr nz,+
 	inc (hl)
-	ld l,$84
+	ld l,Enemy.state
 	dec (hl)
-	ld l,$a4
+	ld l,Enemy.collisionType
 	ld (hl),$fd
-	ld l,$b0
+	ld l,Enemy.var30
 	dec (hl)
 	ld a,(hl)
 	call enemySetAnimation
@@ -278,7 +296,7 @@ m_EnemyCode $7d
 	ld a,(hl)
 	cp $78
 	jr nz,@@animateAndUpdateMovingPlatform
-	ld l,$b0
+	ld l,Enemy.var30
 	inc (hl)
 	ld a,(hl)
 	jp enemySetAnimation
@@ -286,9 +304,10 @@ m_EnemyCode $7d
 	call enemyAnimate
 	jp ecom_updateMovingPlatform
 
+; this is the core
 @subid2:
 	call func_7ad6
-	ld e,$84
+	ld e,Enemy.state
 	ld a,(de)
 	sub $08
 	rst_jumpTable
@@ -300,26 +319,31 @@ m_EnemyCode $7d
 	ld h,d
 	ld l,e
 	inc (hl)
-	ld l,$a4
+	; make the core uncollidable
+	ld l,Enemy.collisionType
 	res 7,(hl)
+	; set the enemy collision mode
 	inc l
-	ld (hl),$63
+	ld (hl),ENEMYCOLLISION_MANHANDLA_CORE
 	ret
 
 @@state9:
+	; check if the body is in its exposed "core vulnerable" state
 	ld a,$04
 	call objectGetRelatedObject1Var
 	ld a,(hl)
 	cp $0e
 	ret nz
 	ld h,d
-	ld l,$84
+	ld l,Enemy.state
 	inc (hl)
-	ld l,$a4
+
+	; make the core collidable
+	ld l,Enemy.collisionType
 	set 7,(hl)
-	ld l,$8f
+	ld l,Enemy.zh
 	ld (hl),$f9
-	ld l,$94
+	ld l,Enemy.speedZ
 	xor a
 	ldi (hl),a
 	ld (hl),a
@@ -334,13 +358,14 @@ m_EnemyCode $7d
 	cp $0d
 	jr nz,+
 	ld h,d
-	ld l,$84
+	ld l,Enemy.state
 	dec (hl)
-	ld l,$a4
+	ld l,Enemy.collisionType
+	; make uncollidable
 	res 7,(hl)
 	jp objectSetInvisible
 +
-	ld l,$86
+	ld l,Enemy.counter1
 	ld a,(hl)
 	cp $78
 	ret nc
@@ -350,7 +375,7 @@ m_EnemyCode $7d
 	rrca
 	ld hl,@@table_79d9
 	rst_addAToHl
-	ld e,$8d
+	ld e,Enemy.xh
 	ld a,(de)
 	add (hl)
 	ld (de),a
@@ -372,13 +397,13 @@ m_EnemyCode $7d
 @@state8:
 	call ecom_decCounter1
 	jr nz,@@toFunc7ad6
-	call func_7b1c
+	call manhandlaHead_prepareToFireProjectile
 	jr c,@@toFunc7ad6
 --
 	call getRandomNumber_noPreserveVars
 	and $50
 	add $5a
-	ld e,$86
+	ld e,Enemy.counter1
 	ld (de),a
 @@toFunc7ad6:
 	jp func_7ad6
@@ -393,14 +418,14 @@ m_EnemyCode $7d
 	call ecom_spawnProjectile
 	jr @@toFunc7ad6
 +
-	ld l,$b0
+	ld l,Enemy.var30
 	dec (hl)
 	ld a,(hl)
 	call enemySetAnimation
 
 func_7a14:
 	ld h,d
-	ld l,$84
+	ld l,Enemy.state
 	ld (hl),$08
 	ld l,Enemy.enemyCollisionMode
 	ld (hl),ENEMYCOLLISION_TWINROVA
@@ -415,106 +440,135 @@ func_7a1f:
 	sub b
 	ld (hl),a
 	call func_7af2
-	ld e,$8b
+	ld e,Enemy.yh
 	ld a,(de)
 	add (hl)
 	ld b,a
 	inc hl
-	ld e,$8d
+	ld e,Enemy.xh
 	ld a,(de)
 	add (hl)
 	ld c,a
 	pop hl
 	ld l,e
 	ld (hl),c
-	ld l,$8b
+	ld l,Enemy.yh
 	ld (hl),b
 	pop bc
 
 func_7a3d:
-	ld l,$96
+	ld l,Enemy.relatedObj1
 	ld a,$80
 	ldi (hl),a
 	ld (hl),c
 	ret
 
-func_7a44:
+manhandla_handleCollision:
 	ld h,d
-	ld l,$aa
-	ld e,$82
+	ld l,Enemy.var2a
+	ld e,Enemy.subid
 	ld a,(de)
 	dec a
-	jr z,func_7a70
+
+	; jump if this is the body 
+	jr z,manhandla_handleBodyCollision
 	dec a
 	ret z
-	ld l,$a9
+
+	; if this is a head, check if it's dead
+	ld l,Enemy.health
 	ld a,(hl)
 	or a
 	ret nz
-	ld a,$36
+
+	; it's dead. decrement the head counter on the body
+	ld a,Object.var36
 	call objectGetRelatedObject1Var
 	dec (hl)
-	jr z,func_7a63
-	ld l,$90
+
+	; if the number of heads is now zero, make the body vulnerable
+	jr z,manhandla_enterBodyVulnerablePhase
+
+	; otherwise increase manhandla's speed a bit
+	ld l,Enemy.speed
 	ld a,(hl)
-	add $14
+	add SPEED_80
 	ld (hl),a
 	ret
 	
-func_7a63:
-	ld l,$84
+manhandla_enterBodyVulnerablePhase:
+	ld l,Enemy.state
 	ld (hl),$0b
-	ld l,$90
-	ld (hl),$50
+	ld l,Enemy.speed
+	ld (hl),SPEED_200
 	ld l,Enemy.enemyCollisionMode
 	ld (hl),ENEMYCOLLISION_MANHANDLA_BODY_VULNERABLE
 	ret
-	
-func_7a70:
-	ld l,$aa
+
+manhandla_handleBodyCollision:
+	ld l,Enemy.var2a
 	ld a,(hl)
-	cp $a0
+	cp $80|ITEMCOLLISION_ELECTRIC_SHOCK
 	jr nz,+
-	ld l,$ba
-	ld (hl),$3c
-+
-	ld l,$a9
+		; set the shock timer
+		ld l,Enemy.var3a
+		ld (hl),$3c
+	+
+
+	; continually reset manhandla's health to $40
+	ld l,Enemy.health
 	ld (hl),$40
-	ld l,$b6
+
+	; if there are any heads alive, don't run code below that
+	; handles making the body vulnerable to the boomerang/sword
+	ld l,Enemy.var36
 	ld a,(hl)
 	or a
 	ret nz
-	ld l,$aa
+
+	; check that the collision was with the L-2 boomerang
+	ld l,Enemy.var2a
 	ld a,(hl)
-	cp $96
+.if defined(ROM_COMBO)
+	cp $80|ITEMCOLLISION_L2_BOOMERANG_S
+.else
+	cp $80|ITEMCOLLISION_L2_BOOMERANG
+.endif
 	ret nz
-	ld l,$b0
+
+	; it was, so increment the counter for how many
+	; times it's been hit by the boomerang in a row
+	ld l,Enemy.var30
 	ld a,(hl)
 	inc a
 	cp $03
 	ld (hl),a
-	jr nc,func_7aa1
-	ld l,$86
+
+	; 3 consecutive hits will make it vulnerable to the sword
+	jr nc,manhandla_enterVulnerableToSwordPhase
+
+	; otherwise put it in a short stunned phase 
+	ld l,Enemy.counter1
 	ld (hl),$3c
-	ld l,$84
+	ld l,Enemy.state
 	ld (hl),$0d
 	call enemySetAnimation
 	jp objectSetVisible81
 	
-func_7aa1:
+manhandla_enterVulnerableToSwordPhase:
 	ld (hl),$03
-	ld l,$84
+	ld l,Enemy.state
 	ld (hl),$0e
-	ld l,$86
+	ld l,Enemy.counter1
 	ld (hl),$b4
-	ld l,$a4
+	ld l,Enemy.collisionType
 	ld (hl),$a9
 	ld a,$03
 	jp enemySetAnimation
 	
 func_7ab4:
 	ld h,d
-	ld l,$b7
+	ld l,Enemy.var37
 	call ecom_readPositionVars
 	sub c
 	add $04
@@ -526,16 +580,17 @@ func_7ab4:
 	cp $09
 	ret
 
-func_7ac8:
+manhandla_handleElectricShockInvulnerabilityTimer:
 	ld h,d
-	ld l,$ba
+	ld l,Enemy.var3a
 	ld a,(hl)
 	or a
 	ret z
 	pop bc
 	dec (hl)
 	ret nz
-	ld l,$a4
+	ld l,Enemy.collisionType
+	; make collidable again
 	set 7,(hl)
 	ret
 
@@ -543,17 +598,17 @@ func_7ad6:
 	ld a,$0b
 	call objectGetRelatedObject1Var
 	ld b,(hl)
-	ld l,$8d
+	ld l,Enemy.xh
 	ld c,(hl)
-	ld l,$a1
-	ld e,$82
+	ld l,Enemy.animParameter
+	ld e,Enemy.subid
 	ld a,(de)
 	call func_7af2
-	ld e,$8b
+	ld e,Enemy.yh
 	ldi a,(hl)
 	add b
 	ld (de),a
-	ld e,$8d
+	ld e,Enemy.xh
 	ld a,(hl)
 	add c
 	ld (de),a
@@ -577,10 +632,10 @@ table_7afe:
 	.db $00 $f5 $01 $f5 $02 $f5 ; subid5
 	.db $f0 $f6 $f1 $f6 $f2 $f6 ; subid6
 
-func_7b1c:
+manhandlaHead_prepareToFireProjectile:
 	call objectGetAngleTowardEnemyTarget ; $7b1c
 	ld b,a
-	ld e,$82
+	ld e,Enemy.subid
 	ld a,(de)
 	sub $03
 	swap a
@@ -589,13 +644,13 @@ func_7b1c:
 	cp $f8
 	ret nc
 	ld h,d
-	ld l,$84
+	ld l,Enemy.state
 	inc (hl)
 	ld l,Enemy.enemyCollisionMode
 	ld (hl),ENEMYCOLLISION_MANHANDLA_HEAD_VULNERABLE
-	ld l,$86
+	ld l,Enemy.counter1
 	ld (hl),$78
-	ld l,$b0
+	ld l,Enemy.var30
 	inc (hl)
 	ld a,(hl)
 	call enemySetAnimation

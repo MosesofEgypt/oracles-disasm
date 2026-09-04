@@ -390,7 +390,9 @@ linkApplyTileTypes:
 .if defined(ROM_COMBO)
 	call wIsSeasons
 	ret nc
-.elif defined(ROM_AGES)
+.endif
+
+.if defined(ROM_AGES) && !defined(ROM_COMBO)
 	ret
 .else
 	ld a,(wStandingOnTileCounter)
