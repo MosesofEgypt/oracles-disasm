@@ -928,12 +928,6 @@ introCinematic_ridingHorse_state4:
 	ld a,UNCMP_GFXH_AGES_36
 	call loadUncompressedGfxHeader
 
-	; After calling "loadUncompressedGfxHeader", hl points to rom. They almost
-	; certainly didn't intend to write there. They probably intended for hl to point
-	; to wTmpcbb3, and set the counter for the next state?
-	; It makes no difference, though, since the next state doesn't use wTmpcbb3.
-	ld (hl),90
-
 	ld a,PALH_9b
 	call loadPaletteHeader
 	call clearDynamicInteractions
@@ -2212,24 +2206,24 @@ endgameCutsceneHandler_body:
 .if defined(ROM_COMBO)
 	call wIsSeasons
 	jr c,+
-		add $06
+		add $03
 	+
 	rst_jumpTable
-	; TODO: add seasons cutscenes
-	.dw $0000
-	.dw $0000
-	.dw $0000
+	.dw endgameCutsceneHandler_09_seasons
+	.dw endgameCutsceneHandler_0a_seasons
+	.dw endgameCutsceneHandler_0f_seasons
 	.dw endgameCutsceneHandler_09_ages
 	.dw endgameCutsceneHandler_0a_ages
 	.dw endgameCutsceneHandler_0f_ages
+	.dw endgameCutsceneHandler_20_ages
 .else
 	rst_jumpTable
 	.dw endgameCutsceneHandler_09
 	.dw endgameCutsceneHandler_0a
 	.dw endgameCutsceneHandler_0f
-.endif
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+.if defined(ROM_AGES)
 	.dw endgameCutsceneHandler_20
+.endif
 .endif
 
 ;;

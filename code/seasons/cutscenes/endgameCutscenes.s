@@ -1459,12 +1459,9 @@ endgameCutsceneHandler_0a_stage1_seasons:
 ++
 	ld a,(wGenericCutscene.cbb4)
 	sub $04
-	add a
-.ifdef ROM_COMBO
-	add GFXH_CREDITS_SCENE1_SEASONS
-.else
-	add GFXH_CREDITS_SCENE1
-.endif
+	ld hl,@@creditsSceneGfxHeaders
+	rst_addAToHl
+	ld a,(hl)
 	call loadGfxHeader
 	ld a,PALH_0f
 	call loadPaletteHeader
@@ -1511,6 +1508,27 @@ endgameCutsceneHandler_0a_stage1_seasons:
 	call loadGfxRegisterStateIndex
 	jp fadeinFromWhite
 
+@@creditsSceneGfxHeaders:
+.if defined(ROM_COMBO)
+	.db GFXH_CREDITS_SCENE1_SEASONS
+	.db GFXH_CREDITS_SCENE2_SEASONS
+	.db GFXH_CREDITS_SCENE3_SEASONS
+	.db GFXH_CREDITS_SCENE4_SEASONS
+	.db GFXH_CREDITS_LINKED_SCENE1_SEASONS
+	.db GFXH_CREDITS_LINKED_SCENE2_SEASONS
+	.db GFXH_CREDITS_LINKED_SCENE3_SEASONS
+	.db GFXH_CREDITS_LINKED_SCENE4_SEASONS
+.else
+	.db GFXH_CREDITS_SCENE1
+	.db GFXH_CREDITS_SCENE2
+	.db GFXH_CREDITS_SCENE3
+	.db GFXH_CREDITS_SCENE4
+	.db GFXH_CREDITS_LINKED_SCENE1
+	.db GFXH_CREDITS_LINKED_SCENE2
+	.db GFXH_CREDITS_LINKED_SCENE3
+	.db GFXH_CREDITS_LINKED_SCENE4
+.endif
+
 @state0Table0:
 	dwbe ROOM_SEASONS_0c6
 	dwbe ROOM_SEASONS_12b
@@ -1542,12 +1560,9 @@ endgameCutsceneHandler_0a_stage1_seasons:
 	call clearWramBank1
 	ld a,(wGenericCutscene.cbb4)
 	sub $04
-	add a
-.ifdef ROM_COMBO
-	add GFXH_CREDITS_IMAGE1_SEASONS
-.else
-	add GFXH_CREDITS_IMAGE1
-.endif
+	ld hl,@@creditsImageGfxHeaders
+	rst_addAToHl
+	ld a,(hl)
 	call loadGfxHeader
 	ld hl,wGenericCutscene.cbb3
 	ld (hl),$5a
@@ -1566,6 +1581,24 @@ endgameCutsceneHandler_0a_stage1_seasons:
 	ld a,$10
 	ldh (<hCameraX),a
 	jp fadeinFromWhite
+
+@@creditsImageGfxHeaders:
+.if defined(ROM_COMBO)
+	.db GFXH_CREDITS_IMAGE1_SEASONS
+	.db GFXH_CREDITS_IMAGE2_SEASONS
+	.db GFXH_CREDITS_IMAGE3_SEASONS
+	.db GFXH_CREDITS_IMAGE4_SEASONS
+.else
+	.db GFXH_CREDITS_IMAGE1
+	.db GFXH_CREDITS_IMAGE2
+	.db GFXH_CREDITS_IMAGE3
+	.db GFXH_CREDITS_IMAGE4
+.endif
+	.db GFXH_CREDITS_LINKED_IMAGE1
+	.db GFXH_CREDITS_LINKED_IMAGE2
+	.db GFXH_CREDITS_LINKED_IMAGE3
+	.db GFXH_CREDITS_LINKED_IMAGE4
+
 @state2Table0:
 	.db $00 $d0
 	.db $00 $d0
@@ -2058,9 +2091,9 @@ endgameCutsceneHandler_0a_stage3_seasons:
 	call clearOam
 	call incCbc2
 .ifdef ROM_COMBO
-	add GFXH_TO_BE_CONTINUED_SEASONS
+	ld a,GFXH_TO_BE_CONTINUED_SEASONS
 .else
-	add GFXH_TO_BE_CONTINUED
+	ld a,GFXH_TO_BE_CONTINUED
 .endif
 	call loadGfxHeader
 	ld a,PALH_SEASONS_8f

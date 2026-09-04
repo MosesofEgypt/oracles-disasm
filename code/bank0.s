@@ -2526,13 +2526,23 @@ vblankDmaFunction:
 	jr nc,++
 		; ensure we don't try to copy too much data in one vBlank
 		push hl
+		push bc
 		ld a,$06
 		rst_addAToHl
+		ld a,(wOpenedMenuType)
+		or a
+		ld a,$41
+		jr nz,+
+			; if outside a menu, we can transfer more
+			add $20
+		+
+		ld c,a
 		ldh a,(<hGdmaChunksCopiedThisFrame)
 		add (hl)
 		inc a
+		cp c
+		pop bc
 		pop hl
-		cp $61
 		jr c,+
 			++
 			; ensure we're process at least some GDMAs each frame
@@ -12771,6 +12781,19 @@ mainThreadStart:
 	; if there's delayed GDMA to do, dont process game
 	; logic or anything that might modify gfx buffers
 	jr z,+
+		ld hl,hGdmaDelayedCountTotal
+		inc (hl)
+		jr nz,++
+			inc l
+			inc (hl)
+			jr nz,++
+				inc l
+				inc (hl)
+				jr nz,++
+					inc l
+					inc (hl)
+		++
+
 		; wait for the next frame and retry vblank functions
 		call resumeThreadNextFrame
 		jr @checkForDelayedGdma

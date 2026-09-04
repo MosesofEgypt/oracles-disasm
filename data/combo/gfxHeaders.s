@@ -821,10 +821,10 @@ m_GfxHeaderStart $8d, GFXH_CREDITS_LINKED_SCENE1_SEASONS
 m_GfxHeaderStart $8e, GFXH_CREDITS_LINKED_IMAGE1
 	m_GfxHeader spr_credits_font, $8000
 	m_GfxHeader spr_credits_font_planners, $8400
-	m_GfxHeader gfx_credits_linked_image2_1, $8800
-	m_GfxHeader gfx_credits_linked_image2_2, $9000
-	m_GfxHeader map_credits_linked_image2, $9800
-	m_GfxHeader flg_credits_linked_image2, $9801
+	m_GfxHeader gfx_credits_linked_image1_1, $8800
+	m_GfxHeader gfx_credits_linked_image1_2, $9000
+	m_GfxHeader map_credits_linked_image1, $9800
+	m_GfxHeader flg_credits_linked_image1, $9801
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $8f, GFXH_CREDITS_LINKED_SCENE2_SEASONS
@@ -844,10 +844,10 @@ m_GfxHeaderStart $90, GFXH_CREDITS_LINKED_IMAGE2
 	m_GfxHeader spr_credits_font_nakanowatari, w3VramAttributes
 	m_GfxHeader spr_credits_font_nakanowatari, $8400
 	m_GfxHeader spr_credits_font_programmers, $8600
-	m_GfxHeader gfx_credits_linked_image1_1, $8800
-	m_GfxHeader gfx_credits_linked_image1_2, $9000, $61
-	m_GfxHeader map_credits_linked_image1, $9800
-	m_GfxHeader flg_credits_linked_image1, $9801
+	m_GfxHeader gfx_credits_linked_image2_1, $8800
+	m_GfxHeader gfx_credits_linked_image2_2, $9000
+	m_GfxHeader map_credits_linked_image2, $9800
+	m_GfxHeader flg_credits_linked_image2, $9801
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $91, GFXH_CREDITS_LINKED_SCENE3_SEASONS

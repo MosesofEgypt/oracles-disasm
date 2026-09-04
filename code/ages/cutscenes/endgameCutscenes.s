@@ -682,12 +682,16 @@ endgameCutsceneHandler_09_stage1_ages:
 
 ;;
 ; CUTSCENE_FLAME_OF_DESPAIR
+.if defined(ROM_COMBO)
+endgameCutsceneHandler_20_ages:
+.else
 endgameCutsceneHandler_20:
+.endif
 	call @runStates
 	jp updateAllObjects
 
 @runStates:
-	ld de,wMapMenu.drawWarpDestinations
+	ld de,wGenericCutscene.cbc1
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -1558,12 +1562,9 @@ endgameCutsceneHandler_0a:
 	call loadUncompressedGfxHeader
 +
 	ld a,(wTmpcfc0.genericCutscene.cfde)
-	add a
-.ifdef ROM_COMBO
-	add GFXH_CREDITS_SCENE1_AGES
-.else
-	add GFXH_CREDITS_SCENE1
-.endif
+	ld hl,@@creditsSceneGfxHeaders
+	rst_addAToHl
+	ld a,(hl)
 	call loadGfxHeader
 	ld a,PALH_0f
 	call loadPaletteHeader
@@ -1603,14 +1604,45 @@ endgameCutsceneHandler_0a:
 	dwbe ROOM_AGES_116
 
 @@table_5f24:
-	.db $2d $0f
-	.db $2d $0f
+	.db UNCMP_GFXH_2d
+	.db UNCMP_GFXH_0f
+	.db UNCMP_GFXH_2d
+	.db UNCMP_GFXH_0f
 
 @@table_5f28:
-	.db $30 $2d
-	.db $2d $27
-	.db $ca $ca
-	.db $ca $ae
+.if defined(ROM_COMBO)
+	.db PALH_TILESET_MAKU_TREE_AGES
+.else
+	.db PALH_TILESET_MAKU_TREE
+.endif
+	.db PALH_TILESET_FOREST_OF_TIME
+	.db PALH_TILESET_FOREST_OF_TIME
+	.db PALH_TILESET_AMBIS_PALACE_OUTSIDE
+	.db PALH_ca
+	.db PALH_ca
+	.db PALH_ca
+	.db PALH_ae
+
+@@creditsSceneGfxHeaders:
+.if defined(ROM_COMBO)
+	.db GFXH_CREDITS_SCENE1_AGES
+	.db GFXH_CREDITS_SCENE2_AGES
+	.db GFXH_CREDITS_SCENE3_AGES
+	.db GFXH_CREDITS_SCENE4_AGES
+	.db GFXH_CREDITS_LINKED_SCENE1_AGES
+	.db GFXH_CREDITS_LINKED_SCENE2_AGES
+	.db GFXH_CREDITS_LINKED_SCENE3_AGES
+	.db GFXH_CREDITS_LINKED_SCENE4_AGES
+.else
+	.db GFXH_CREDITS_SCENE1
+	.db GFXH_CREDITS_SCENE2
+	.db GFXH_CREDITS_SCENE3
+	.db GFXH_CREDITS_SCENE4
+	.db GFXH_CREDITS_LINKED_SCENE1
+	.db GFXH_CREDITS_LINKED_SCENE2
+	.db GFXH_CREDITS_LINKED_SCENE3
+	.db GFXH_CREDITS_LINKED_SCENE4
+.endif
 
 @@substate1:
 	ld a,(wPaletteThread_mode)
@@ -1631,12 +1663,9 @@ endgameCutsceneHandler_0a:
 	call disableLcd
 	call clearWramBank1
 	ld a,(wTmpcfc0.genericCutscene.cfde)
-	add a
-.ifdef ROM_COMBO
-	add GFXH_CREDITS_IMAGE1_AGES
-.else
-	add GFXH_CREDITS_IMAGE1
-.endif
+	ld hl,@@creditsImageGfxHeaders
+	rst_addAToHl
+	ld a,(hl)
 	call loadGfxHeader
 	ld hl,wTmpcbb3
 	ld (hl),$5a
@@ -1654,6 +1683,24 @@ endgameCutsceneHandler_0a:
 	xor a
 	ld (wTmpcfc0.genericCutscene.cfdf),a
 	jp fadeinFromWhite
+
+@@creditsImageGfxHeaders:
+.if defined(ROM_COMBO)
+	.db GFXH_CREDITS_IMAGE1_AGES
+	.db GFXH_CREDITS_IMAGE2_AGES
+	.db GFXH_CREDITS_IMAGE3_AGES
+	.db GFXH_CREDITS_IMAGE4_AGES
+.else
+	.db GFXH_CREDITS_IMAGE1
+	.db GFXH_CREDITS_IMAGE2
+	.db GFXH_CREDITS_IMAGE3
+	.db GFXH_CREDITS_IMAGE4
+.endif
+	.db GFXH_CREDITS_LINKED_IMAGE1
+	.db GFXH_CREDITS_LINKED_IMAGE2
+	.db GFXH_CREDITS_LINKED_IMAGE3
+	.db GFXH_CREDITS_LINKED_IMAGE4
+
 @@table_5f81:
 	.db $00 $d0 $00 $d0
 	.db $00 $d0 $00 $d0
@@ -1698,7 +1745,7 @@ endgameCutsceneHandler_0a:
 	call cutscene_clearTmpCBB3
 	call cutscene_clearCFC0ToCFDF
 	ld a,$02
-	ld (wMapMenu.drawWarpDestinations),a
+	ld (wGenericCutscene.cbc1),a
 ++
 	jp fadeoutToWhite
 

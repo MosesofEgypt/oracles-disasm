@@ -509,11 +509,7 @@ agesFunc_10_7298:
 	call clearOam
 	call incCbc2
 .ifdef ROM_COMBO
-	ld a,GFXH_TO_BE_CONTINUED_SEASONS
-	call wIsSeasons
-	jr c,+
-		ld a,GFXH_TO_BE_CONTINUED_AGES
-	+
+	ld a,GFXH_TO_BE_CONTINUED_AGES
 .else
 	ld a,GFXH_TO_BE_CONTINUED
 .endif

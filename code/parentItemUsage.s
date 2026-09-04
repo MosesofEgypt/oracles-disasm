@@ -54,6 +54,12 @@ setupPassiveShield:
 	ld a,$00
 	jr z,+
 .endif
+	; no passive shield if holding something
+	ld a,(wLinkGrabState)
+	or a
+	ld a,$00
+	jr nz,+
+
 	ld a,TREASURE_SHIELD
 	call checkTreasureObtained
 	ld a,$00

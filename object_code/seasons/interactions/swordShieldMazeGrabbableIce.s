@@ -40,9 +40,9 @@ m_InteractionCode $68
 	bit 6,(hl)
 	jp nz,objectReplaceWithFallingDownHoleInteraction
 	call objectSetInvisible
-	ld l,$44
+	ld l,Interaction.state
 	ld (hl),$03
-	ld l,$46
+	ld l,Interaction.counter1
 	ld (hl),$1e
 	ld b,INTERAC_FALLDOWNHOLE
 	jp objectCreateInteractionWithSubid00
@@ -68,18 +68,26 @@ m_InteractionCode $68
 	jp nc,interactionDelete
 	call objectSetVisiblec1
 	ld h,d
-	ld l,$40
+	ld l,Interaction.enabled
 	res 1,(hl)
-	ld e,$4f
+	ld e,Interaction.zh
 	ld a,(de)
 	or a
 	jr z,@func_5833
+	; also check if the "thrown object" parent is deleted.
+	; if it is, move back to state 1
+	ld a,(w1ReservedItemC.enabled)
+	or a
+	ret nz
+	ld e,Interaction.state
+	ld a,$01
+	ld (de),a
 	ret
 @@substate3:
 	ld h,d
-	ld l,$40
+	ld l,Interaction.enabled
 	res 1,(hl)
-	ld l,$45
+	ld l,Interaction.substate
 	xor a
 	ldd (hl),a
 	inc a
