@@ -618,7 +618,13 @@
 	m_GfxData gfx_animations_1
 	m_GfxData gfx_animations_2
 	m_GfxData gfx_animations_3
-	m_GfxData gfx_063940
+	m_GfxData gfx_animations_4
+	m_GfxData gfx_animations_5
+	m_GfxData gfx_animations_6
+	m_GfxData gfx_animations_7
+	m_GfxData gfx_animations_8
+	m_GfxData gfx_animations_9
+	m_GfxData gfx_animations_10
 	m_GfxData gfx_key_orechunk
 	m_GfxData gfx_partial_hearts
 	m_GfxData map_rings

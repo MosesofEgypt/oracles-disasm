@@ -40,11 +40,20 @@ specialObjectCode_link:
 	rst_addAToHl
 	ld a,(hl)
 
-	; if both link's oam flags are equal, replace them both.
-	; if they're different(i.e. he's flashing), only replace the backup
 	ld hl,w1Link.oamFlags
 	push de
+
+	; merge the vram bank, flip, and priority bits
+	; from the existing oamFlags into the palette
+	and $07
 	ld e,a
+	ld a,(hl)
+	and $f8
+	or e
+	ld e,a
+
+	; if both link's oam flags are equal, replace them both.
+	; if they're different(i.e. he's flashing), only replace the backup
 	ldd a,(hl)
 	cp (hl)
 	ld a,e

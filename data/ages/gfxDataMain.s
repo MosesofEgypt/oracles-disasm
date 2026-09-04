@@ -183,8 +183,8 @@
 	m_GfxData spr_shadowhag_1 ; $0b253a
 	m_GfxData spr_shadowhag_2 ; $0b26ee
 	m_GfxData spr_eyesoar ; $0b2823
-	m_GfxData spr_smog_2 ; $0b2950
-	m_GfxData spr_smog_3 ; $0b2ad5
+	m_GfxData spr_smog_1 ; $0b2950
+	m_GfxData spr_smog_2 ; $0b2ad5
 	m_GfxData spr_smog_projectiles ; $0b2c32
 	m_GfxData spr_octogon_1 ; $0b2cfe
 	m_GfxData spr_octogon_2 ; $0b2ee4
@@ -526,6 +526,21 @@
 	m_GfxData gfx_animations_1
 	m_GfxData gfx_animations_2
 	m_GfxData gfx_animations_3
+	m_GfxData gfx_animations_4
+	m_GfxData gfx_animations_5
+	m_GfxData gfx_animations_6
+	m_GfxData gfx_animations_7
+	m_GfxData gfx_animations_8
+	m_GfxData gfx_animations_9
+	m_GfxData gfx_animations_10
+	m_GfxData gfx_animations_11
+	m_GfxData gfx_animations_12
+	m_GfxData gfx_animations_13
+	m_GfxData gfx_animations_14
+	m_GfxData gfx_animations_15
+	m_GfxData gfx_animations_16
+	m_GfxData gfx_animations_17
+	m_GfxData gfx_animations_18
 	m_GfxData spr_impa_fainted
 	m_GfxData gfx_key
 	m_GfxData gfx_partial_hearts

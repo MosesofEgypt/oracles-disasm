@@ -265,6 +265,14 @@ m_GfxData flg_mermaids_cave_wall_retraction
 m_GfxData flg_nayru_singing_cutscene
 m_GfxData flg_past_minimap
 m_GfxData flg_present_minimap
+m_GfxData gfx_animations_11
+m_GfxData gfx_animations_12
+m_GfxData gfx_animations_13
+m_GfxData gfx_animations_14
+m_GfxData gfx_animations_15
+m_GfxData gfx_animations_16
+m_GfxData gfx_animations_17
+m_GfxData gfx_animations_18
 m_GfxData gfx_black_tower_scene_1
 m_GfxData gfx_black_tower_scene_2
 m_GfxData gfx_black_tower_scene_3
@@ -455,7 +463,6 @@ m_GfxData flg_templefall_scene4
 m_GfxData flg_templefall_scene5
 m_GfxData flg_templefall_scene6
 m_GfxData flg_templefall_scene7
-m_GfxData gfx_063940
 m_GfxData gfx_blurb_onoxcastle
 m_GfxData gfx_din_dance_cutscene_1
 m_GfxData gfx_din_dance_cutscene_2
@@ -767,6 +774,13 @@ m_GfxDataBothGames flg_link_with_oracle_and_twinrova_2
 m_GfxDataBothGames gfx_animations_1
 m_GfxDataBothGames gfx_animations_2
 m_GfxDataBothGames gfx_animations_3
+m_GfxDataBothGames gfx_animations_4
+m_GfxDataBothGames gfx_animations_5
+m_GfxDataBothGames gfx_animations_6
+m_GfxDataBothGames gfx_animations_7
+m_GfxDataBothGames gfx_animations_8
+m_GfxDataBothGames gfx_animations_9
+m_GfxDataBothGames gfx_animations_10
 m_GfxDataBothGames gfx_blurb_d1
 m_GfxDataBothGames gfx_blurb_d2
 m_GfxDataBothGames gfx_blurb_d3

@@ -105,13 +105,7 @@ m_InteractionCode $ce
 	ld a,TILEINDEX_OVERWORLD_BUSH_1_SEASONS
 .endif
 	jr z,+
-.if defined(ROM_COMBO)
-	ld a,TILEINDEX_OVERWORLD_BUSH_1_AGES
-.elif defined(ROM_AGES)
-	ld a,TILEINDEX_OVERWORLD_BUSH_1
-.else
 	ld a,TILEINDEX_DUNGEON_BUSH
-.endif
 +
 	call objectMimicBgTile
 	ld a,$05
