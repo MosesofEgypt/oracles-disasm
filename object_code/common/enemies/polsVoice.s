@@ -19,30 +19,33 @@ m_EnemyCode $23
 	jr nc,@normalStatus
 
 	; ENEMYSTATUS_JUST_HIT or ENEMYSTATUS_KNOCKBACK
-	push af
-	ld e,Enemy.var2a
-	ld a,(de)
-	and $7f
-	cp ITEMCOLLISION_L3_SHIELD
-	; L-3/4 shield can block them
-	jr nc,+
-		ld e,Enemy.state
+	call getIsNewGamePlus
+	jr z,++
+		push af
+		ld e,Enemy.var2a
 		ld a,(de)
-		cp $09
-		jr nz,+
-			ld e,Enemy.speedZ+1
+		and $7f
+		cp ITEMCOLLISION_L3_SHIELD
+		; L-3/4 shield can block them
+		jr nc,+
+			ld e,Enemy.state
 			ld a,(de)
-			bit 7,a
+			cp $09
 			jr nz,+
-				; hit link(or his shield) while moving
-				; downward in a jump, so latch on
-				ld e,Enemy.state
-				pop af
-				ld a,$0c
-				ld (de),a
-				jr @normalStatus
-	+
-	pop af
+				ld e,Enemy.speedZ+1
+				ld a,(de)
+				bit 7,a
+				jr nz,+
+					; hit link(or his shield) while moving
+					; downward in a jump, so latch on
+					ld e,Enemy.state
+					pop af
+					ld a,$0c
+					ld (de),a
+					jr @normalStatus
+		+
+		pop af
+	++
 .endif
 
 	dec a
