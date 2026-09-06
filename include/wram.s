@@ -386,7 +386,16 @@ wPuddleAnimationPointer: ; $c4ba
 ; every 16 frames.
 	dw
 
-; $c4bb-$c4bf unused?
+.ifdef ENABLE_RUMBLE
+wRumbleSettings: ; $c4bc
+; Bits 0-4: Rumble timer in ticks(1 tick == 4 frames or 133ms)
+;           If timer == 31($1f) then rumble lasts indefinitely
+; Bits 5-6: Rumble intensity(25%/50%/75%/100%)
+; Bit 7:    Set if rumble disabled
+	db
+.endif
+
+; $c4bd-$c4bf unused?
 
 .ENDS
 

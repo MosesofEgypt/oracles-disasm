@@ -12760,6 +12760,9 @@ mainThreadStart:
 	call stopTextThread
 
 @mainThread:
+.ifdef ENABLE_RUMBLE
+	call applyRumble
+.endif
 	; Increment wPlaytimeCounter, the 4-byte counter
 	ld hl,wPlaytimeCounter
 	inc (hl)
@@ -12806,7 +12809,111 @@ mainThreadStart:
 
 	jr           @mainThread
 
+.ifdef ENABLE_RUMBLE
+applyRumble:
+	push bc
+	ld hl,wRumbleSettings
+	bit 7,(hl)
+	jr nz,+
+		; check that the rumble timer is not zero
+		ld a,(hl)
+		and $1f
+		jr z,+
+			; rumble strength works by being turned on for 1, 2, 3, or all
+			; frames out of every 4 frame cycle. if the current frame is less
+			; than or equal to the strength, the rumble is enabled this frame.
+			ld a,(hl)
+			swap a
+			srl a
+			and $03
+			inc a
+			ld c,a
 
+			ld a,(wFrameCounter)
+			and $03
+
+			; decrement the timer every 4 frames
+			push af
+			jr nz,+++
+				ld a,(hl)
+				and $1f
+				cp $1f
+				jr z,+++
+					; only decrement if timer isn't $1f
+					dec (hl)
+			+++
+			pop af
+
+			; check if rumble should be on this frame
+			cp c
+			jr nc,+
+				ld a,$08 ; enable rumble
+				jr ++
+	+
+		xor a
+	++
+	; update the rumble flag(and coincidentally the SRAM bank)
+	ld ($4444),a
+	pop bc
+	ret
+
+setRumbleStrength:
+	push bc
+	and $03
+	swap a
+	sla a
+	ld c,a
+	ld a,(wRumbleSettings)
+	and $9f
+	or c
+	ld (wRumbleSettings),a
+	pop bc
+	ret
+
+setRumbleDuration:
+	push bc
+	and $1f
+	cp $1f
+	jr nz,+
+		ld a,$1e
+	+
+	ld c,a
+	ld a,(wRumbleSettings)
+	and $e0
+	or c
+	ld (wRumbleSettings),a
+	pop bc
+	ret
+
+setRumbleDurationIndefinite:
+	push af
+	ld a,(wRumbleSettings)
+	or $1f
+	ld (wRumbleSettings),a
+	pop af
+	ret
+
+clearRumbleDuration:
+	push af
+	xor a
+	call setRumbleStrength
+	pop af
+	ret
+
+disableRumble:
+	push hl
+	ld hl,wRumbleSettings
+	set 7,(hl)
+	pop hl
+	ret
+
+enableRumble:
+	push hl
+	ld hl,wRumbleSettings
+	res 7,(hl)
+	pop hl
+	ret
+.endif
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 

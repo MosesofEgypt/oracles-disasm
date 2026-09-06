@@ -1180,6 +1180,37 @@ linkApplyDamage:
 	bit 7,a
 	jr z,++
 
+.ifdef ENABLE_RUMBLE
+	ld a,(de)
+	; make damage positive
+	ld e,a
+	xor a
+	sub e
+	ld e,$00
+	cp $03
+	jr c,+
+		; at least 1/4 heart damage
+		inc e
+		cp $08
+		jr c,+
+			; at least 1 heart damage
+			inc e
+			cp $10
+			jr c,+
+				; at least 2 hearts damage
+				inc e
+	+
+
+	ld a,e
+	call setRumbleStrength
+
+	; about 2/5 of a second
+	ld a,$03
+	call setRumbleDuration
+
+	ld e,SpecialObject.health
+.endif
+
 	; Apply the damage (finally update wLinkHealth)
 	ld a,(de)
 --
