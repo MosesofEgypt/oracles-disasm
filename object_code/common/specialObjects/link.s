@@ -33,6 +33,11 @@ specialObjectCode_link:
 
 .ifdef ENABLE_RING_REDUX
 @applyRingPalette:
+	; don't change palette if link stoned
+	ld a,(w1Link.state)
+	cp LINK_STATE_STONE
+	ret z
+
 	; determine which palette to use this frame
 	ld hl,wRingColorPaletteA
 	ld a,(wFrameCounter)

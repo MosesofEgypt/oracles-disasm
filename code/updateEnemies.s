@@ -135,21 +135,22 @@ updateEnemy:
 	ld a,(de)
 
 .ifdef ENABLE_RING_REDUX
-	call judoMasterComboActive
-	jr nz,+
-		call isValidTargetForJudo
-		call nz,objectAddToGrabbableObjectBuffer
-	+
-
-	ld a,c
-	or a
+	call isValidTargetForJudo
 	jr z,+
-		; if enemy is in held state, treat it like it's normal
-		ld e,Enemy.state
-		ld a,(de)
-		cp a,ENEMYSTATE_GRABBED
-		jr nz,+
-			ld c,ENEMYSTATUS_NORMAL
+		; NOTE: since we're doing some overriding of the ENEMYSTATUS, we
+		;       want to make sure to only do it on enemies we can throw.
+		call judoMasterComboActive
+		call z,objectAddToGrabbableObjectBuffer
+
+		ld a,c
+		or a
+		jr z,+
+			; if enemy is in held state, treat it like it's normal
+			ld e,Enemy.state
+			ld a,(de)
+			cp a,ENEMYSTATE_GRABBED
+			jr nz,+
+				ld c,ENEMYSTATUS_NORMAL
 	+
 .endif
 	ld e,Enemy.id

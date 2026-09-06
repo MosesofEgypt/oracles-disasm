@@ -11,7 +11,7 @@ m_InteractionCode $44
 zelda_state0:
 	ld a,$01
 	ld (de),a
-	ld e,$42
+	ld e,Interaction.subid
 	ld a,(de)
 	ld b,a
 	ld hl,table_6ea3
@@ -32,7 +32,11 @@ zelda_state0:
 	jr zelda_state1
 
 @subid0:
-	ld a,$b0
+	.if defined(ROM_COMBO)
+		ld a,INTERAC_ZELDA_SEASONS
+	.else
+		ld a,INTERAC_ZELDA
+	.endif
 	ld (wInteractionIDToLoadExtraGfx),a
 	ld (wLoadedTreeGfxIndex),a
 	

@@ -799,7 +799,7 @@ swordBeamHeartCutoff:
 	ld c,$00
 	jr nz,+
 		jr nc,++
-			ld c,$40
+			ld c,$7f
 			ret
 		++
 		ld c,LIGHT_RING_L2_CUTOFF

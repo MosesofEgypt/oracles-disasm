@@ -29,7 +29,11 @@ m_InteractionCode $b0
 .ifdef ROM_SEASONS
 	or a
 	jr nz,+
-	ld a,$b0
+	.if defined(ROM_COMBO)
+		ld a,INTERAC_TWINROVA_FLAME_SEASONS
+	.else
+		ld a,INTERAC_TWINROVA_FLAME
+	.endif
 	ld (wInteractionIDToLoadExtraGfx),a
 	ld (wLoadedTreeGfxIndex),a
 +
@@ -62,7 +66,8 @@ m_InteractionCode $b0
 	add a
 	add a
 	add a
-	ld l,Interaction.animCounter ; BUG(?): Won't point to the object after "getThisRoomFlags" call?
+	ld h,d
+	ld l,Interaction.animCounter
 	add (hl)
 	ld (hl),a
 	ld a,b

@@ -8400,29 +8400,33 @@ inventoryMenuDrawSprites:
 	ld c,a
 @drawSprite:
 	ld hl,@makuSeedSprite
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jp nc,addSpritesToOam_withOffset
+
+	ld hl,@makuSeedSprite_seasons
+.endif
 	jp addSpritesToOam_withOffset
 
 @makuSeedSprite:
-	.if defined(ROM_COMBO)
-		; TODO: customize for combo
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 		.db $04
 		.db $08 $00 $fe $0f
 		.db $08 $08 $fe $2f
 		.db $08 $00 $fa $0b
 		.db $08 $08 $fc $0b
-	.elif defined(ROM_AGES)
-		.db $04
-		.db $08 $00 $fe $0f
-		.db $08 $08 $fe $2f
-		.db $08 $00 $fa $0b
-		.db $08 $08 $fc $0b
-	.else
+.endif
+
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+@makuSeedSprite_seasons:
+.endif
 		.db $04
 		.db $08 $00 $fe $0c
 		.db $08 $08 $fe $2c
 		.db $08 $00 $fa $0f
 		.db $08 $08 $fc $0f
-	.endif
+.endif
 
 
 ;;

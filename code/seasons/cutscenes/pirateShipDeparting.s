@@ -276,7 +276,7 @@ cutsceneHandler_0c_stage3:
 	ld bc,ROOM_SEASONS_0fe
 	call @loadNewRoom
 	call @state0Func2
-	ld e,$0c
+	ld e,OBJ_GFXH_0d-1
 	call loadObjectGfxHeaderToSlot4
 	ld a,GFXH_PIRATE_SHIP_LEAVING_DESERT_LAYOUT
 	call loadGfxHeader
@@ -441,7 +441,7 @@ cutsceneHandler_0c_stage5:
 	call cutsceneHandler_0c_stage3@loadNewRoom
 	ld a,$ff
 	ld (wTilesetAnimation),a
-	ld e,$00
+	ld e,OBJ_GFXH_PIRATE_SHIP_TILES_1-1
 	call loadObjectGfxHeaderToSlot4
 	ld a,GFXH_PIRATE_SHIP_ARRIVING_LAYOUT
 	call loadGfxHeader

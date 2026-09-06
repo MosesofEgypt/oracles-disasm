@@ -24,7 +24,7 @@ m_InteractionCode $4e
 .endif
 	call parseGivenObjectData
 	ld hl,wInteractionIDToLoadExtraGfx
-	ld (hl),$4e
+	ld (hl),INTERAC_DIN_DANCING_EVENT
 	inc hl
 	ld (hl),$06
 	xor a

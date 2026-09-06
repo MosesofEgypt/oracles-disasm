@@ -708,7 +708,11 @@ loadGroupOfInteractions:
 @interacGroup2:
 	.db INTERAC_bd $00 $01 $28 $38
 	.db INTERAC_be $00 $01 $40 $38
+.if defined(ROM_COMBO)
+	.db INTERAC_ZELDA_SEASONS $03 $00 $20 $50
+.else
 	.db INTERAC_ZELDA $03 $00 $20 $50
+.endif
 	.db INTERAC_bc $00 $00 $48 $50
 	.db INTERAC_ba $00 $03 $28 $68
 	.db INTERAC_bb $00 $00 $40 $68
@@ -716,7 +720,11 @@ loadGroupOfInteractions:
 @interacGroup3:
 	.db INTERAC_bd $00 $01 $2c $38
 	.db INTERAC_be $00 $00 $44 $40
+.if defined(ROM_COMBO)
+	.db INTERAC_ZELDA_SEASONS $03 $00 $20 $50
+.else
 	.db INTERAC_ZELDA $03 $00 $20 $50
+.endif
 	.db INTERAC_bc $00 $00 $50 $58
 	.db INTERAC_ba $00 $02 $20 $64
 	.db INTERAC_bb $00 $03 $38 $68
@@ -725,7 +733,7 @@ loadGroupOfInteractions:
 cutscene_func_03_72af:
 	ld a,$01
 	ld (wLoadedTreeGfxIndex),a
-	ld a,$b4
+	ld a,INTERAC_b4
 	ld (wInteractionIDToLoadExtraGfx),a
 	ret
 

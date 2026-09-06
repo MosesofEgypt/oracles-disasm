@@ -35,15 +35,19 @@ clearAllParentItems_body:
 
 .ifdef ENABLE_PASSIVE_SHIELD
 setupPassiveShield:
+	; no passive shield if sidescrolling
+	ld a,(wTilesetFlags)
+	bit TILESETFLAG_BIT_SIDESCROLL,a
+	jr nz,+
+
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 	; no passive shield underwater
-	.ifdef ROM_COMBO
-		call wIsSeasons
-		jr c,++
-	.endif
+.ifdef ROM_COMBO
+	call wIsSeasons
+	jr c,++
+.endif
 	ld a,(wTilesetFlags)
 	and TILESETFLAG_UNDERWATER
-	ld a,$00
 	jr nz,+
 	++
 .endif
@@ -51,25 +55,25 @@ setupPassiveShield:
 	ld a,(wMiscSettings)
 	; no passive shield if flag disabled
 	bit 3,a
-	ld a,$00
 	jr z,+
 .endif
 	; no passive shield if holding something
 	ld a,(wLinkGrabState)
 	or a
-	ld a,$00
 	jr nz,+
 
 	ld a,TREASURE_SHIELD
 	call checkTreasureObtained
-	ld a,$00
 	jr nc,+
 		ld a,(wShieldLevel)
 		.ifdef ENABLE_RING_REDUX
 			call victoryRingIncLevel
 		.endif
 		set 7,a
+		jr ++
 	+
+		xor a
+	++
 	ld (wUsingShield),a
 	ret
 .endif

@@ -62,7 +62,7 @@ twinrovaCutscene_state1:
 
 	call resetCamera
 
-.ifdef ROM_COMBO
+.if defined(ROM_COMBO)
 	ld hl,objectData_seasons.objectData4022
 	call wIsSeasons
 	jr c,+
@@ -160,16 +160,12 @@ cutscene18_state5:
 	ret nz
 
 	; Load twinrova fight room, start a fadein, then exit cutscene
+	ld a,ROOM_TWINROVA_FIGHT&$ff
 .ifdef ROM_COMBO
 	call wIsSeasons
-	ld a,$9e
-	jr c,+
-		ld a,$f5
+	jr nc,+
+		ld a,ROOM_TWINROVA_FIGHT_SEASONS&$ff
 	+
-.elif defined(ROM_AGES)
-	ld a,$f5
-.else
-	ld a,$9e
 .endif
 	ld (wActiveRoom),a
 	call twinrovaCutscene_fadeinToRoom

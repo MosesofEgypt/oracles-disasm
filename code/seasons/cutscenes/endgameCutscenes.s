@@ -307,7 +307,7 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	call disableLcd
 	ld a,GFXH_LINK_WITH_ORACLE_END_SCENE
 	call loadGfxHeader
-	ld a,$9d
+	ld a,PALH_SEASONS_9d
 	call loadPaletteHeader
 	call cutscene_clearObjects
 	call endgameCutsceneHandler_09_stage1_body_seasons@seasonsFunc_03_5ab0
@@ -373,7 +373,11 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	xor a
 	ld bc,$059a
 	call disableLcdAndLoadRoom_body
-	ld a,$ac
+.if defined(ROM_COMBO)
+	ld a,PALH_ac_SEASONS
+.else
+	ld a,PALH_ac
+.endif
 	call loadPaletteHeader
 	call hideStatusBar
 	call clearFadingPalettes2
@@ -1469,20 +1473,24 @@ endgameCutsceneHandler_0a_stage1_seasons:
 	call checkIsLinkedGame
 	jr nz,+
 	ld a,(wGenericCutscene.cbb4)
-	ld b,$10
+	ld b,PALH_TILESET_OVERWORLD_SPRING_A
 	ld c,$00
 	cp $05
 	jr nz,++
-	ld b,$50
+.if defined(ROM_COMBO)
+	ld b,PALH_TILESET_MAKU_TREE_SEASONS
+.else
+	ld b,PALH_TILESET_MAKU_TREE
+.endif
 	ld c,$0e
 	jr ++
 +
 	ld a,(wGenericCutscene.cbb4)
-	ld b,$10
+	ld b,PALH_TILESET_OVERWORLD_SPRING_A
 	ld c,$00
 	cp $0b
 	jr nz,++
-	ld b,$ae
+	ld b,PALH_SEASONS_ae
 	ld c,$ff
 ++
 	ld a,b
@@ -1568,7 +1576,7 @@ endgameCutsceneHandler_0a_stage1_seasons:
 	ld (hl),$5a
 	inc l
 	ld a,(hl)
-	add $9d
+	add PALH_SEASONS_9d
 	call loadPaletteHeader
 	ld a,$04
 	call loadGfxRegisterStateIndex
@@ -1912,7 +1920,7 @@ endgameCutsceneHandler_0a_stage3_seasons:
 	jp z,@state0Func0
 	ld a,GFXH_CREDITS_LINKED_THE_END
 	call loadGfxHeader
-	ld a,$aa
+	ld a,PALH_SEASONS_aa
 	call loadPaletteHeader
 .ifdef ROM_COMBO
 	ld hl,objectData_seasons.objectData5887

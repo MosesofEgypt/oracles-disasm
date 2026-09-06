@@ -407,7 +407,7 @@ refreshObjectGfx_body:
 	ldi a,(hl)
 	or a
 	ret z
-	ld e,(hl)
+	ld e,(hl) ; points to wcc1f now
 	ld (hl),$00
 	call getDataForInteraction
 	ld a,(hl)

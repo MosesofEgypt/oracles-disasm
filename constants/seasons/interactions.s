@@ -710,9 +710,9 @@
 ; @subid_00{Hanging on Maku tree}
 ; @subid_01{Given by Maku tree}
 .ifdef ROM_COMBO
-.define INTERAC_MAKU_SEED_SEASONS $8d
+.define INTERAC_MAKU_SEED_SEASONS $93
 .else
-.define INTERAC_MAKU_SEED $8d
+.define INTERAC_MAKU_SEED $93
 .endif
 
 ;;

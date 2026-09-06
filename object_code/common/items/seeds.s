@@ -37,15 +37,9 @@ itemCode24:
 		; increase bounces to 6
 		ld (hl),$06
 
-		; double scent seed damage
-		ld l,Item.id
-		ld a,(hl)
-		cp ITEM_SCENT_SEED
-		jr nz,+
-			ld l,Item.damage
-			ld a,(hl)
-			add a
-			ld (hl),a
+		; double seed damage
+		ld l,Item.damage
+		sla (hl)
 	+
 .endif
 	; Determine whether the seed came from the satchel, slingshot, or seed shooter
@@ -120,16 +114,13 @@ itemCode24:
 	ld a,MYSTIC_SEED_RING
 	call cpActiveRing
 
-	; increase scent seed damage if wearing ring
+	; double seed damage if wearing ring
 	jr nz,+
-		ld e,Item.id
-		ld a,(de)
-		cp ITEM_SCENT_SEED
-		jr nz,+
-			ld e,Item.damage
-			ld a,(de)
-			add a
-			ld (de),a
+		push hl
+		ld l,Item.damage
+		ld h,d
+		sla (hl)
+		pop hl
 	+
 .endif
 	ld e,Item.angle

@@ -41,16 +41,20 @@ m_EnemyCode $04
 
 	call getThisRoomFlags
 	set 7,(hl)
-.if defined(ROM_COMBO) && defined(ROM_SEASONS)
-	ld l,<ROOM_ZELDA_IN_FINAL_DUNGEON_SEASONS
-.else
 	ld l,<ROOM_ZELDA_IN_FINAL_DUNGEON
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+		ld l,<ROOM_ZELDA_IN_FINAL_DUNGEON_SEASONS
+	+
 .endif
 	set 7,(hl)
-.if defined(ROM_COMBO) && defined(ROM_SEASONS)
-	ld l,<ROOM_TWINROVA_FIGHT_SEASONS
-.else
 	ld l,<ROOM_TWINROVA_FIGHT
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+		ld l,<ROOM_TWINROVA_FIGHT_SEASONS
+	+
 .endif
 	set 7,(hl)
 
@@ -140,10 +144,12 @@ ganon_state_uninitialized:
 	ld (de),a
 
 	call disableLcd
-.if defined(ROM_COMBO) && defined(ROM_SEASONS)
-	ld a,<ROOM_TWINROVA_FIGHT_SEASONS
-.else
 	ld a,<ROOM_TWINROVA_FIGHT
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+		ld a,<ROOM_TWINROVA_FIGHT_SEASONS
+	+
 .endif
 	ld (wActiveRoom),a
 	ld a,$03

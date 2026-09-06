@@ -10347,7 +10347,7 @@ interactionLoadExtraGraphics:
 	ld (wInteractionIDToLoadExtraGfx),a
 
 	; Why... what does this accomplish, other than possibly trashing tree graphics?
-	ld (wLoadedTreeGfxIndex),a
+	;ld (wLoadedTreeGfxIndex),a
 
 	ret
 

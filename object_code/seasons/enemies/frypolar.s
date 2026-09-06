@@ -5,10 +5,22 @@ m_EnemyCode $77
 	jr z,@normalStatus
 	sub $03
 	ret c
+.if defined(ENABLE_RING_REDUX)
+	; in the redux it's possible to get to frypolar in reverse.
+	; we need to unlock the key door to his room on death if so.
+	jr nz,+
+		push de
+		ld a,DIR_LEFT*4
+		call setRoomFlagsForUnlockedKeyDoor
+		pop de
+		jp enemyBoss_dead
+	+
+.else
 	jp z,enemyBoss_dead
+.endif
 	dec a
 	jp nz,ecom_updateKnockbackNoSolidity
-	ld e,$b2
+	ld e,Enemy.var32
 	ld a,(de)
 	or a
 	jr nz,@normalStatus
@@ -18,25 +30,38 @@ m_EnemyCode $77
 	jr z,+
 	cp $80|ITEMCOLLISION_EMBER_SEED
 	jr nz,@normalStatus
-	ld e,$82
+	ld e,Enemy.subid
 	ld a,(de)
 	or a
 	jr z,@normalStatus
-	ld a,$63
+	ld a,SND_BOSS_DAMAGE
 	call playSound
 	ld h,d
-	ld l,$ab
+	ld l,Enemy.invincibilityCounter
 	ld (hl),$3c
-	ld l,$a9
+	ld l,Enemy.health
+.if defined(ENABLE_RING_REDUX)
+	ld a,MYSTIC_SEED_RING
+	call cpActiveRing
+	jr nz,++
+		; double damage from seeds
+		dec (hl)
+		; if we hit zero don't decrement again
+		jr z,+++
+	++
+		dec (hl)
+	+++
+.else
 	dec (hl)
+.endif
 	jr nz,+
-	ld l,$a4
+	ld l,Enemy.collisionType
 	res 7,(hl)
 +
-	ld e,$b2
+	ld e,Enemy.var32
 	ld a,$1e
 	ld (de),a
-	ld a,$83
+	ld a,SND_MAGIC_POWDER
 	call playSound
 @normalStatus:
 	call func_6257
@@ -67,7 +92,7 @@ m_EnemyCode $77
 	call enemyBoss_spawnShadow
 	ret nz
 	call ecom_setSpeedAndState8
-	ld l,$bf
+	ld l,Enemy.var3f
 	set 5,(hl)
 	ld b,$00
 	ld a,$77
@@ -100,7 +125,7 @@ m_EnemyCode $77
 	ld b,$02
 	call checkBPartSlotsAvailable
 	ret nz
-	ld e,$86
+	ld e,Enemy.counter1
 	ld a,(de)
 	ld hl,@@table_6169
 	rst_addDoubleIndex
@@ -113,15 +138,15 @@ m_EnemyCode $77
 	ld (hl),$03
 	inc l
 	inc (hl)
-	ld l,$cb
+	ld l,Part.yh
 	ld (hl),b
-	ld l,$cd
+	ld l,Part.xh
 	ld (hl),c
 	call getFreePartSlot
 	ld (hl),PART_3e
-	ld l,$c3
+	ld l,Part.var03
 	inc (hl)
-	ld l,$cb
+	ld l,Part.yh
 	ld a,$58
 	sub b
 	add $58
@@ -131,12 +156,12 @@ m_EnemyCode $77
 	sub c
 	add $78
 	ld (hl),a
-	ld l,$d6
+	ld l,Part.relatedObj1
 	ld a,$80
 	ldi (hl),a
 	ld (hl),d
 	ld h,d
-	ld l,$87
+	ld l,Enemy.counter2
 	ld (hl),$0f
 	dec l
 	inc (hl)
@@ -172,33 +197,33 @@ m_EnemyCode $77
 	ret nz
 	ld a,h
 	ld h,d
-	ld l,$99
+	ld l,Enemy.relatedObj2+1
 	ldd (hl),a
-	ld (hl),$40
-	ld l,$85
+	ld (hl),Interaction.enabled
+	ld l,Enemy.substate
 	inc (hl)
 	ret
 
 @@substate3:
-	ld a,$21
+	ld a,Object.animParameter
 	call objectGetRelatedObject2Var
 	bit 7,(hl)
 	ret z
 	ld h,d
-	ld l,$84
+	ld l,Enemy.state
 	inc (hl)
-	ld l,$a4
+	ld l,Enemy.collisionType
 	set 7,(hl)
-	ld l,$86
+	ld l,Enemy.counter1
 	ld (hl),$3c
-	ld l,$8b
+	ld l,Enemy.yh
 	ld (hl),$56
-	ld l,$8f
-	ld (hl),$fe
+	ld l,Enemy.zh
+	ld (hl),-2
 	call objectSetVisible83
 	xor a
 	ld (wDisabledObjects),a
-	ld a,$2d
+	ld a,MUS_MINIBOSS
 	ld (wActiveMusic),a
 	jp playSound
 
@@ -222,9 +247,9 @@ m_EnemyCode $77
 	ld h,d
 	ld l,e
 	inc (hl)
-	ld l,$90
-	ld (hl),$55
-	ld l,$b4
+	ld l,Enemy.speed
+	ld (hl),SPEED_220
+	ld l,Enemy.var34
 	ldh a,(<hEnemyTargetY)
 	ldi (hl),a
 	ldh a,(<hEnemyTargetX)
@@ -234,7 +259,7 @@ m_EnemyCode $77
 @@stateB:
 	ld a,(wFrameCounter)
 	and $0f
-	ld a,$ae
+	ld a,SND_FRYPOLAR_MOVEMENT
 	call z,playSound
 	call func_62cc
 	call nc,ecom_moveTowardPosition
@@ -271,8 +296,8 @@ m_EnemyCode $77
 	ld h,d
 	ld l,e
 	inc (hl)
-	ld l,$90
-	ld (hl),$6e
+	ld l,Enemy.speed
+	ld (hl),SPEED_2c0
 	jp func_6326
 	
 @@stateC:
@@ -296,7 +321,7 @@ m_EnemyCode $77
 	jr @@animate
 
 func_6257:
-	ld e,$b0
+	ld e,Enemy.var30
 	ld a,(de)
 	cp $04
 	ret c
@@ -305,20 +330,20 @@ func_6257:
 	pop hl
 	jp enemyAnimate
 +
-	ld l,$b0
+	ld l,Enemy.var30
 	ld (hl),$00
-	ld l,$b2
+	ld l,Enemy.var32
 	ld (hl),$5a
-	ld a,$83
+	ld a,SND_MAGIC_POWDER
 	jp playSound
 
 func_6273:
 	ld h,d
-	ld l,$b2
+	ld l,Enemy.var32
 	ld a,(hl)
 	or a
 	ret z
-	ld e,$ab
+	ld e,Enemy.invincibilityCounter
 	ld a,(de)
 	or a
 
@@ -333,7 +358,7 @@ seasonsFunc_0e_627d:
 	ld a,(hl)
 	and $03
 	jr nz,+
-	ld l,$9b
+	ld l,Enemy.oamFlagsBackup
 	ld a,(hl)
 	and $01
 	inc a
@@ -342,7 +367,7 @@ seasonsFunc_0e_627d:
 +
 	jp enemyAnimate
 ++
-	ld l,$82
+	ld l,Enemy.subid
 	ld a,(hl)
 	inc a
 	and $01
@@ -350,20 +375,20 @@ seasonsFunc_0e_627d:
 	ld b,a
 	ld a,$02
 	sub b
-	ld l,$9b
+	ld l,Enemy.oamFlagsBackup
 	ldi (hl),a
 	ld (hl),a
-	ld l,$84
+	ld l,Enemy.state
 	ld (hl),$0a
-	ld l,$a4
+	ld l,Enemy.collisionType
 	set 7,(hl)
-	ld l,$b0
+	ld l,Enemy.var30
 	ld (hl),$00
 	ret
 
 func_62b1:
 	ld h,d
-	ld l,$b1
+	ld l,Enemy.var31
 	dec (hl)
 	ld a,(hl)
 	and $0f
@@ -375,19 +400,19 @@ func_62b1:
 	rst_addAToHl
 	ld a,(hl)
 	ld h,d
-	ld l,$8f
+	ld l,Enemy.zh
 	ld (hl),a
 	ret
 
 table_62c8:
-	.db $ff
-	.db $fe
-	.db $fd
-	.db $fe
+	.db -1
+	.db -2
+	.db -3
+	.db -2
 
 func_62cc:
-	.db $62
-	ld l,$b4
+	ld h,d
+	ld l,Enemy.var34
 	call ecom_readPositionVars
 	sub c
 	add $02
@@ -398,9 +423,9 @@ func_62cc:
 	add $02
 	cp $05
 	ret nc
-	ld l,$84
+	ld l,Enemy.state
 	inc (hl)
-	ld l,$86
+	ld l,Enemy.counter1
 	ld (hl),$28
 	ret
 
@@ -410,7 +435,7 @@ func_62a8:
 	ld (hl),$96
 	ld l,e
 	inc (hl)
-	ld l,$b0
+	ld l,Enemy.var30
 	inc (hl)
 	ret
 
@@ -419,17 +444,17 @@ func_62f3:
 	and $03
 	ld hl,table_6300
 	rst_addAToHl
-	ld e,$8d
+	ld e,Enemy.xh
 	ld a,(de)
 	add (hl)
 	ld (de),a
 	ret
 
 table_6300:
-	.db $ff
-	.db $01
-	.db $01
-	.db $ff
+	.db -1
+	.db  1
+	.db  1
+	.db -1
 
 func_6304:
 	call objectGetAngleTowardEnemyTarget
@@ -449,7 +474,7 @@ func_631a:
 	call ecom_spawnProjectile
 	pop bc
 	ret nz
-	ld l,$c9
+	ld l,Part.angle
 	ld (hl),b
 	ret
 	
@@ -457,13 +482,13 @@ func_6326:
 	call getRandomNumber_noPreserveVars
 	and $0e
 	ld h,d
-	ld l,$b3
+	ld l,Enemy.var33
 	cp (hl)
 	jr z,func_6326
 	ld (hl),a
 	ld hl,table_633e
 	rst_addAToHl
-	ld e,$b4
+	ld e,Enemy.var34
 	ldi a,(hl)
 	ld (de),a
 	inc e

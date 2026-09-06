@@ -78,7 +78,7 @@ m_InteractionCode $95
 	call interactionSetScript
 	ld a,$01
 	ld (wLoadedTreeGfxIndex),a
-	ld a,$95
+	ld a,INTERAC_KING_MOBLIN
 	ld (wInteractionIDToLoadExtraGfx),a
 	ld a,$05
 	ld (wcc1e),a

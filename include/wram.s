@@ -2117,7 +2117,7 @@ wLinkAngle: ; $cc2b/$cc47
 ; particular.
 	db
 
-wLinkObjectIndex: ; $cc2c/$cc48
+wLinkObjectIndex: ; $cc2c/$cc48/$cc51
 ; Usually $d0; set to $d1 while riding an animal, minecart
 	db
 

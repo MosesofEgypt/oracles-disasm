@@ -2068,7 +2068,11 @@ zeldaScript_ganonBeat:
 	makeabuttonsensitive
 	checkabutton
 	setdisabledobjectsto11
-	writememory wInteractionIDToLoadExtraGfx, $b0
+	.if defined(ROM_COMBO)
+		writememory wInteractionIDToLoadExtraGfx, INTERAC_TWINROVA_FLAME_SEASONS
+	.else
+		writememory wInteractionIDToLoadExtraGfx, INTERAC_TWINROVA_FLAME
+	.endif
 	writememory wLoadedTreeGfxIndex, $01
 	setanimation $06
 	setcounter1 $dc

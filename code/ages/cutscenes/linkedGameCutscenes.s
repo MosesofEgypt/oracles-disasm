@@ -560,7 +560,7 @@ table_7c1c:
 func_7c1f:
 	ld a,$01
 	ld (wLoadedTreeGfxIndex),a
-	ld a,$bc
+	ld a,INTERAC_TWINROVA_3
 	ld (wInteractionIDToLoadExtraGfx),a
 	ret
 
