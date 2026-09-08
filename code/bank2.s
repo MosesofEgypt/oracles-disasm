@@ -156,8 +156,14 @@ b2_fileSelectScreen:
 	.dw fileSelectMode0
 .endif
 .if defined(ROM_COMBO)
-	.dw fileSelectMode9 ; New Game Plus
+	.dw fileSelectMode9 ; New Game Combo
+	.ifdef ENABLE_NEW_GAME_PLUS
+		.dw fileSelectMode9 ; New Game Plus combo
+	.else
+		.dw fileSelectMode0
+	.endif
 .else
+	.dw fileSelectMode0
 	.dw fileSelectMode0
 .endif
 
@@ -282,7 +288,11 @@ fileSelectMode1:
 	bit BTN_BIT_SELECT,a
 	jr z,+
 		; press select for fast way into new game plus menu
-		ld a,$08
+		.if defined(ROM_COMBO)
+			ld a,$0a
+		.else
+			ld a,$08
+		.endif
 		call setFileSelectMode
 		ld a,SND_SELECTITEM
 		jp playSound
@@ -453,8 +463,7 @@ fileSelectMode1:
 ;;
 ; Choose between ages and seasons
 fileSelectMode9:
-	call @mode9States
-	ret
+	jr @mode9States
 
 ;;
 @mode9States:
@@ -488,6 +497,13 @@ fileSelectMode9:
 	call z,getRandomNumber
 	and $01
 	ld (wSelectedTextOption),a
+
+	; move to name entry if New Game
+	ld a,(wFileSelect.mode)
+	cp $0a
+
+	ld a,$08 ; new game plus
+	jp z,setFileSelectMode
 
 	ld a,$02 ; name entry
 	jp setFileSelectMode
@@ -559,7 +575,12 @@ fileSelectMode5:
 	.db $02 ; Name entry
 .endif
 .ifdef ENABLE_NEW_GAME_PLUS
-	.db $08 ; New Game Plus
+	; New Game Plus
+	.if defined(ROM_COMBO)
+		.db $0a ; Pick your NG+ starting game
+	.else
+		.db $08 ; New Game Plus
+	.endif
 .endif
 	.db $06 ; Secret entry
 	.db $07 ; Game link
@@ -625,11 +646,11 @@ fileSelectMode8:
 	ld a,(hl)
 	and $01
 	jr nz,+
-		; just for the fuck of it, you'll be able to enter
-		; new game plus if you're really damn persistent
+		; just for the fuck of it, you'll be able
+		; to enter new game plus if you're persistent
 		ld hl,wRingColorPaletteB
 		ld a,(hl)
-		cp 100
+		cp 10
 		jr nc,++
 			inc (hl)
 			ld a,SND_ERROR
@@ -646,6 +667,14 @@ fileSelectMode8:
 	jp z,setFileSelectModeTo1
 
 	call loadFile
+
+	.if defined(ROM_COMBO)
+		; change the game to whichever one was selected
+		ld a,(wSelectedTextOption)
+		rrca
+		call setIsSeasons
+	.endif
+
 	ld a,(wFileSelect.cursorPos)
 	ldh (<hActiveFileSlot),a
 	call initializeNgpFile
@@ -2686,118 +2715,41 @@ fileSelectDrawLink:
 @draw:
 	add b
 	ld hl,@spriteTable
-	rst_addAToHl
-	ld a,(hl)
-	rst_addAToHl
+	rst_addDoubleIndex
+	rst_derefHl
 .ifdef ENABLE_NEW_GAME_PLUS
 	call updateFileLinkPaletteForNewGamePlus
 .endif
-	jp addSpritesToOam
+	ld e,:fileSelectSprites0
+	jp addSpritesFromBankToOam
 
 @spriteTable:
 	; Seasons (frame 0)
-	dbrel @sprites0 ; $00 - link standing still (blank file)
-	dbrel @sprites3 ; $01 - linked file (rod of seasons)
-	dbrel @sprites7 ; $02 - completed file (with din)
-	dbrel @sprites1 ; $03 - unlinked file
+	.dw fileSelectSprites0 ; $00 - link standing still (blank file)
+	.dw fileSelectSprites3 ; $01 - linked file (rod of seasons)
+	.dw fileSelectSprites7 ; $02 - completed file (with din)
+	.dw fileSelectSprites1 ; $03 - unlinked file
 
 	; Ages (frame 0)
-	dbrel @sprites0 ; $04 - link standing still (blank file)
-	dbrel @sprites5 ; $05 - linked file (harp of ages)
-	dbrel @sprites9 ; $06 - completed file (with nayru)
-	dbrel @sprites1 ; $07 - unlinked file
+	.dw fileSelectSprites0 ; $04 - link standing still (blank file)
+	.dw fileSelectSprites5 ; $05 - linked file (harp of ages)
+	.dw fileSelectSprites9 ; $06 - completed file (with nayru)
+	.dw fileSelectSprites1 ; $07 - unlinked file
 
 	; Seasons (frame 1)
-	dbrel @sprites0
-	dbrel @sprites4
-	dbrel @sprites8
-	dbrel @sprites2
+	.dw fileSelectSprites0
+	.dw fileSelectSprites4
+	.dw fileSelectSprites8
+	.dw fileSelectSprites2
 
 	; Ages (frame 1)
-	dbrel @sprites0
-	dbrel @sprites6
-	dbrel @spritesa
-	dbrel @sprites2
+	.dw fileSelectSprites0
+	.dw fileSelectSprites6
+	.dw fileSelectSpritesa
+	.dw fileSelectSprites2
 
 	; $10 - Triforce symbol for hero's file
-	dbrel @spritesb
-
-;;
-@sprites0:
-	.db $02
-	.db $4e $58 $04 $00
-	.db $4e $60 $06 $00
-
-@sprites1:
-	.db $02
-	.db $4e $58 $00 $00
-	.db $4e $60 $02 $00
-
-@sprites2:
-	.db $02
-	.db $4e $58 $02 $20
-	.db $4e $60 $00 $20
-
-@sprites3:
-	.db $04
-	.db $4e $58 $0a $20
-	.db $4e $60 $08 $20
-	.db $4e $63 $1c $22
-	.db $4e $6b $1a $22
-
-@sprites4:
-	.db $04
-	.db $4e $58 $0e $20
-	.db $4e $60 $0c $20
-	.db $4e $68 $1c $22
-	.db $4e $70 $1a $22
-
-@sprites5:
-	.db $03
-	.db $4e $58 $12 $20
-	.db $4e $60 $10 $20
-	.db $4e $64 $14 $22
-
-@sprites6:
-	.db $03
-	.db $4e $58 $18 $20
-	.db $4e $60 $16 $20
-	.db $4e $64 $14 $22
-
-@sprites7:
-	.db $05
-	.db $4e $58 $00 $00
-	.db $4e $60 $02 $00
-	.db $4e $68 $00 $0a
-	.db $4e $70 $02 $0a
-	.db $3e $6d $04 $0a
-
-@sprites8:
-	.db $05
-	.db $4e $58 $02 $20
-	.db $4e $60 $00 $20
-	.db $4e $68 $02 $2a
-	.db $4e $70 $00 $2a
-	.db $3e $6b $04 $2a
-
-@sprites9:
-	.db $04
-	.db $4e $58 $00 $00
-	.db $4e $60 $02 $00
-	.db $4e $68 $06 $09
-	.db $4e $70 $08 $09
-
-@spritesa:
-	.db $04
-	.db $4e $58 $02 $20
-	.db $4e $60 $00 $20
-	.db $4e $68 $08 $29
-	.db $4e $70 $06 $29
-
-@spritesb:
-	.db $02
-	.db $4a $8c $30 $06
-	.db $4a $94 $32 $06
+	.dw fileSelectSpritesb
 
 .ifdef ENABLE_NEW_GAME_PLUS
 updateFileLinkPaletteForNewGamePlus:

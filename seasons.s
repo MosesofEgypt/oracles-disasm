@@ -847,6 +847,10 @@ m_section_superfree Menu_Code_2 NAMESPACE menuCode2
 	.endif
 .ends
 
+m_section_superfree File_Select_Sprites
+	.include "data/fileSelectSprites.s"
+.ends
+
 .BANK $3e SLOT 1
 .ORG 0
 

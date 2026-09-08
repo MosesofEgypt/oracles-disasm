@@ -125,9 +125,6 @@ addSpritesFromBankToOam_withOffset:
 	rst_setrombank
 	ret
 
-
-.if defined(ROM_AGES) || defined(ROM_COMBO)
-
 ;;
 ; Same as "addSpritesToOam", except this changes the bank first.
 ;
@@ -142,5 +139,3 @@ addSpritesFromBankToOam:
 	pop af
 	rst_setrombank
 	ret
-
-.endif

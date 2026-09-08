@@ -1016,6 +1016,10 @@ m_section_superfree Room_Code namespace roomSpecificCode
 	.include "code/ages/roomSpecificCode.s"
 .ends
 
+m_section_superfree File_Select_Sprites
+	.include "data/fileSelectSprites.s"
+.ends
+
 m_section_superfree bank19Code NAMESPACE bank19
 	.include {"{GAME_DATA_DIR}/treasureCollectionBehaviours.s"}
 	.include {"{GAME_DATA_DIR}/treasureDisplayData.s"}
