@@ -470,12 +470,12 @@ updateSoundFrequencyAndPlay:
 @useVibrato:
 	m_ReadChannelData wChannelVibratoCounters
 	cp $08
-	jr c,+
-		; clip to size of table
-		and $07
+	jr nz,@determineFrequencyOffset
+		; wrap back to start of table
+		xor a
 		m_WriteChannelData wChannelVibratoCounters
-	+
 
+@determineFrequencyOffset:
 	; Get next raw offset (-2, -1, 0, 1 or 2)
 	ld hl,vibratoOffsetTable
 	call readWordFromTable
@@ -691,7 +691,12 @@ doNextChannelCommand:
 
 @cmdf0Toff:
 	add $10
-	rst_jumpTable
+	ld hl,@table
+	call readWordFromTable
+	jp hl
+
+@table:
+	;rst_jumpTable
 	.dw channelCmdf0
 	.dw channelCmdf1
 	.dw channelCmdf2
@@ -876,7 +881,12 @@ channelCmdf6:
 ;;
 standardSoundCmd:
 	ld a,(wSoundChannel)
-	rst_jumpTable
+	ld hl,@table
+	call readWordFromTable
+	jp hl
+
+@table:
+	;rst_jumpTable
 	.dw standardCmdMusicSquareChannel1
 	.dw standardCmdMusicSquareChannel2
 	.dw standardCmdSfxSquareChannel1
@@ -1234,15 +1244,17 @@ getWaveChannelVolume:
 
 	ld a,(wMusicVolume)
 	and $03
-	rst_jumpTable
-	.dw @mute
-	.dw @quarterVolume
-	.dw @halfVolume
-	.dw @fullVolume
+	jr z,@mute
+	dec a
+	jr z,@quarterVolume
+	dec a
+	jr z,@halfVolume
+	;rst_jumpTable
+	;.dw @mute
+	;.dw @quarterVolume
+	;.dw @halfVolume
+	;.dw @fullVolume
 
-@mute:
-	xor a
-	ret
 @fullVolume:
 	ld a,$20
 	ret
@@ -1251,6 +1263,9 @@ getWaveChannelVolume:
 	ret
 @quarterVolume:
 	ld a,$60
+	ret
+@mute:
+	xor a
 	ret
 
 ;;
@@ -1319,7 +1334,12 @@ channelCmdff:
 ; Ensures no sound is audible on the current channel by setting the volume to $0 or turning off the wave channel DAC
 silencePlayedSound:
 	ld a,(wSoundChannel)
-	rst_jumpTable
+	ld hl,@table
+	call readWordFromTable
+	jp hl
+
+@table:
+	;rst_jumpTable
 	.dw @musicSquareChannel
 	.dw @musicSquareChannel
 	.dw @sfxSquareChannel
