@@ -896,30 +896,6 @@ m_section_free Bank16_2 NAMESPACE bank16
 
 	.include {"{GAME_DATA_DIR}/paletteData.s"}
 
-	; HACK-BASE: Removed for expanded tilesets patch
-	;.include {"{GAME_DATA_DIR}/tilesetCollisions.s"}
-
-	.include {"{GAME_DATA_DIR}/smallRoomLayoutTables.s"}
-	.include {"{GAME_DATA_DIR}/largeRoomLayoutTables.s"}
-
-; HACK-BASE: Bank $18 is repurposed for the expanded tilesets patch.
-
-.BANK $19 SLOT 1
-.ORG 0
-	; "${BUILD_DIR}/textData.s" will determine where this data starts.
-	; The .BANK and .ORG above are just reminders
-	;   Both games:   19:4000
-
-	.include {"{BUILD_DIR}/textData.s"}
-
-	.REDEFINE DATA_ADDR TEXT_END_ADDR
-	.REDEFINE DATA_BANK TEXT_END_BANK
-
-	.include {"{GAME_DATA_DIR}/roomLayoutData.s"}
-.ifndef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
-	.include {"{GAME_DATA_DIR}/gfxDataMain.s"}
-.endif
-
 .BANK $3c SLOT 1
 .ORG 0
 
@@ -1039,23 +1015,3 @@ m_section_superfree Object_Updating_Enemies NAMESPACE objectUpdating
 	.include "code/updateEnemies.s"
 	.include "data/enemyCodeTable.s"
 .ends
-
-
-; HACK-BASE: Expanded tileset data
-.include {"{GAME_DATA_DIR}/expandedTilesets.s"}
-
-
-.REDEFINE DATA_ADDR $4000
-.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
-	.REDEFINE DATA_BANK MIN_RAWDATA_BANK_NUM
-.else
-	.REDEFINE DATA_BANK $40
-.endif
-
-
-.BANK DATA_BANK SLOT 1
-.ORG 0
-.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
-	.include {"{GAME_DATA_DIR}/gfxDataMain.s"}
-.endif
-	.include {"{GAME_DATA_DIR}/expandedTilesetsGfxData.s"}

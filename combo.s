@@ -83,35 +83,6 @@ m_EndScriptSection
 	.include "code/bank4.s"
 
 
-; NOTE: These includes define their own .bank and .orga
-.include {"{BUILD_DIR}/ages_textData.s"}
-.include {"{BUILD_DIR}/seasons_textData.s"}
-
-
-.BANK $2b SLOT 1
-.ORG 0
-	.REDEFINE DATA_ADDR $4000
-	.REDEFINE DATA_BANK $2b
-	.include {"{GAME_DATA_DIR}/roomLayoutData.s"}
-
-
-; HACK-BASE: Expanded tileset data
-.include {"{GAME_DATA_DIR}/expandedTilesets.s"}
-
-
-.REDEFINE DATA_ADDR $4000
-.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
-	.REDEFINE DATA_BANK MIN_RAWDATA_BANK_NUM
-.else
-	.REDEFINE DATA_BANK $70
-.endif
-
-.BANK DATA_BANK SLOT 1
-.ORG 0
-	.include {"{GAME_DATA_DIR}/gfxDataMain.s"}
-	.include {"{GAME_DATA_DIR}/expandedTilesetsGfxData.s"}
-
-
 ; #################################################################################
 ; NOTE: All sections and includes below here are superfree
 ; #################################################################################
@@ -1292,11 +1263,6 @@ m_section_superfree Object_Pointers namespace objectData
 m_section_superfree Object_Pointers_seasons namespace objectData_seasons
 	.include "code/ages/objectData.s"
 	.include "objects/seasons/pointers.s"
-.ends
-
-m_section_superfree Room_Layout_Tables
-	.include {"{GAME_DATA_DIR}/smallRoomLayoutTables.s"}
-	.include {"{GAME_DATA_DIR}/largeRoomLayoutTables.s"}
 .ends
 
 m_section_superfree Data_4556

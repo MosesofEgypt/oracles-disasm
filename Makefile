@@ -173,7 +173,7 @@ GFX_CMP_DIR = 'gfx_compressible'
 GFX_PRECMP_DIR = 'precompressed/gfx_compressible'
 
 
-OBJS = $(BUILD_DIR)/$(GAME).o $(BUILD_DIR)/audio.o
+OBJS = $(BUILD_DIR)/$(GAME).o $(BUILD_DIR)/audio.o $(BUILD_DIR)/gfxdata.o $(BUILD_DIR)/textAndRoomData.o
 
 
 # All .bin gfx files
@@ -285,9 +285,10 @@ $(BUILD_DIR)/linkfile: linkfile_$(GAME)
 	sed 's/BUILD_DIR/${BUILD_DIR}/' $< > $@
 
 $(BUILD_DIR)/$(GAME).o: $(MAIN_ASM_FILES) $(COMMONDATAFILES) $(GAMEDATAFILES)
-$(BUILD_DIR)/$(GAME).o: $(GFXFILES) $(ROOMLAYOUTFILES)
-$(BUILD_DIR)/$(GAME).o: rooms/$(GAME)/*.bin
-$(BUILD_DIR)/$(GAME).o: $(HASHFILES)
+$(BUILD_DIR)/textAndRoomData.o: $(ROOMLAYOUTFILES)
+$(BUILD_DIR)/textAndRoomData.o: rooms/$(GAME)/*.bin
+$(BUILD_DIR)/gfxdata.o: $(GFXFILES)
+$(BUILD_DIR)/gfxdata.o: $(HASHFILES)
 
 $(BUILD_DIR)/audio.o: $(AUDIO_FILES)
 $(BUILD_DIR)/*.o: $(COMMON_INCLUDE_FILES) Makefile
@@ -295,7 +296,13 @@ $(BUILD_DIR)/*.o: $(COMMON_INCLUDE_FILES) Makefile
 # HACK-BASE: $(GAME).o depends on new expanded tileset layout files.
 $(BUILD_DIR)/$(GAME).o: tileset_layouts_expanded/$(GAME)/*.bin
 
-$(BUILD_DIR)/$(GAME).o: $(GAME).s $(BUILD_DIR)/textData.s $(BUILD_DIR)/textDefines.s Makefile | $(BUILD_DIR)
+$(BUILD_DIR)/$(GAME).o: $(GAME).s Makefile | $(BUILD_DIR)
+	$(CC) -o $@ $(CFLAGS) $<
+
+$(BUILD_DIR)/gfxdata.o: gfxdata.s | $(BUILD_DIR)
+	$(CC) -o $@ $(CFLAGS) $<
+
+$(BUILD_DIR)/textAndRoomData.o: textAndRoomData.s $(BUILD_DIR)/textData.s $(BUILD_DIR)/textDefines.s | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
 
 $(BUILD_DIR)/%.o: code/%.s | $(BUILD_DIR)

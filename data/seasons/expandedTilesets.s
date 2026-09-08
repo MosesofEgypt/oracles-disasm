@@ -84,14 +84,3 @@ tilesetMappings{%.2x{tmpi}}_winter:
 .REPT $80-$1b START $1b index tmpi
 	m_TilesetMappingSection {"{%.2x{tmpi}}"}
 .ENDR
-
-
-.ifndef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
-.redefine DATA_ADDR $4000
-.redefine DATA_BANK $40
-
-.BANK DATA_BANK SLOT 1
-.ORGA DATA_ADDR
-
-	.include {"{GAME_DATA_DIR}/expandedTilesetsGfxData.s"}
-.endif

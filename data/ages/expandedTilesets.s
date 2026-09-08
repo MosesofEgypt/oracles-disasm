@@ -23,6 +23,7 @@ tilesetMappings\1:
 .ends
 .endm
 
+.SLOT 1
 .section ExpandedTilesetPointers SUPERFREE
 
 expandedTilesetGfxTable:
