@@ -3233,8 +3233,15 @@ updateHeartRingCounter:
 	; if the health increase is capped, cap it
 	bit 0,l
 	jr z,+
-		ld a,h
-		ld (wLinkHealth),a
+		ld a,(wLinkHealth)
+		bit 7,a
+		; don't modify if health is at max
+		jr nz,+
+			cp h
+			; don't change if health is higher
+			jr nc,+
+				ld a,h
+				ld (wLinkHealth),a
 	+
 .else
 	cp (hl)

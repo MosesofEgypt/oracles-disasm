@@ -58,6 +58,11 @@ m_EnemyCode $04
 .endif
 	set 7,(hl)
 
+.if defined(ROM_COMBO)
+	call setComboCompleted
+	call saveFile
+.endif
+
 	ld a,SNDCTRL_STOPMUSIC
 	call playSound
 	ld bc,TX_2f0e

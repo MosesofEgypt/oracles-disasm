@@ -2232,13 +2232,19 @@ loadFile:
 comboLoadOtherGame:
 	ld c,$04
 	jr ++
+
+;;
+; @param	hActiveFileSlot	File index
+setComboCompleted:
+	ld c,$05
+	jr ++
 .endif
 
 .if defined(ENABLE_NEW_GAME_PLUS)
 ;;
 ; @param	hActiveFileSlot	File index
 initializeNgpFile:
-	ld c,$05
+	ld c,$06
 	jr ++
 .endif
 
@@ -5684,8 +5690,8 @@ retrieveTextCharacter:
 	.db :{filename}
 	.dw {filename}
 .else
-	.dw {filename}
 	m_ReadGfxDataHashedFilename gfx_font_tradeitems
+	.db :{filename}
 	.dw {filename}
 .endif
 

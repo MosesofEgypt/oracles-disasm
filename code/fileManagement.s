@@ -1,4 +1,15 @@
 .if defined(ROM_COMBO)
+.enum 0
+	COMBO_FLAG_BIT_LINKED_STARTED	db
+	COMBO_FLAG_BIT_LINKED_BEATEN	db
+	COMBO_FLAG_BIT_2				db
+	COMBO_FLAG_BIT_3				db
+	COMBO_FLAG_BIT_4				db
+	COMBO_FLAG_BIT_5				db
+	COMBO_FLAG_BIT_6				db
+	COMBO_FLAG_BIT_PREVIOUS_GAME	db
+.ende
+
 ; Parameters:
 ; 1 - Offset to start copying to
 ; 2 - Length of data to copy
@@ -32,7 +43,9 @@ fileManagementFunction:
 	.dw eraseFile
 .if defined(ROM_COMBO)
 	.dw comboLoadOtherGame
+	.dw setComboCompleted
 .else
+	.dw noFileManagementOp
 	.dw noFileManagementOp
 .endif
 .ifdef ENABLE_NEW_GAME_PLUS
@@ -48,12 +61,15 @@ initializeNgpFile:
 	ld a,$0a
 	ld ($1111),a
 	call getComboSaveFileFlags
-	res 0,(hl)
+	res COMBO_FLAG_BIT_LINKED_STARTED,(hl)
 	xor a
 	ld ($1111),a
+
+	; reset the "linked game" flag
+	ld (wFileIsLinkedGame),a
 .endif
 
-	; Unequip all rings, but don't remove from box
+	; Unequip all rings and remove from box
 	ld hl,wRingReduxFlags
 	ld a,$1f
 	ld (hl),a
@@ -61,7 +77,17 @@ initializeNgpFile:
 .ifdef EXTENDED_RING_BOX
 	ld hl,wRingReduxFlagsExt
 	ld (hl),a
+
+	ld hl,wRingBoxContentsExt
+	ld a,$ff
+	ld b,$05
+	call fillMemory
 .endif
+
+	ld hl,wRingBoxContents
+	ld a,$ff
+	ld b,$05
+	call fillMemory
 
 	; record whether or not the player has the biggorons sword
 	ld a,(wObtainedTreasureFlags+(TREASURE_BIGGORON_SWORD>>3))
@@ -272,24 +298,30 @@ saveFile:
 	call wIsSeasons
 	jr c,+
 		; ages
-		bit 7,(hl)
+		bit COMBO_FLAG_BIT_PREVIOUS_GAME,(hl)
 
 		; if the flag differs, that means both games were started
 		; on this savefile, so we need to indicate this via flags
 		jr z,++
-			res 7,(hl)
-			set 0,(hl)
+			res COMBO_FLAG_BIT_PREVIOUS_GAME,(hl)
+			set COMBO_FLAG_BIT_LINKED_STARTED,(hl)
 			jr ++
 	+
 		; seasons
-		bit 7,(hl)
+		bit COMBO_FLAG_BIT_PREVIOUS_GAME,(hl)
 		jr nz,++
-			set 7,(hl)
-			set 0,(hl)
+			set COMBO_FLAG_BIT_PREVIOUS_GAME,(hl)
+			set COMBO_FLAG_BIT_LINKED_STARTED,(hl)
 			jr ++
 	++
 	xor a
 	ld ($1111),a
+
+	call getComboCompleted
+	ld hl,wFileIsCompleted
+	jr z,+
+		set COMBO_FLAG_BIT_LINKED_BEATEN,(hl)
+	+
 
 .elif defined(ROM_AGES)
 	ld (hl),$01
@@ -388,7 +420,7 @@ comboLoadOtherGame:
 	push de
 	push bc
 	call toggleIsSeasons
-	call getBothGamesStarted
+	call getComboStarted
 
 	ld hl,wFileChecksum ; using checksum to tell if loaded or initialized
 	push hl
@@ -462,10 +494,18 @@ loadAcrossComboGame:
 
 	; set the bit indicating that warping to other game is allowed
 	ld hl,wFileIsCompleted
-	ld a,$f0
+	ld a,$f7
 	and (hl)
 	or $08
 	ld (hl),a
+
+	; NOTE: this bit will make its way into the file select to cause
+	;       the triforce to be drawn. instead of indicating this as a
+	;       "Hero Mode" file, it indicates the full game was beaten.
+	call getComboCompleted
+	jr z,+
+		set COMBO_FLAG_BIT_LINKED_BEATEN,(hl)
+	+
 
 	pop bc
 	ret
@@ -648,7 +688,6 @@ initializeComboGame:
 	.db TREASURE_BIGGORON_SWORD
 	.db TREASURE_HARP
 	.db $00
-
 .endif
 
 ;;
@@ -682,9 +721,9 @@ clearFileAtHl:
 	push hl
 	call getComboSaveFileFlags
 	; unset the flag indicating the other game in the file was started
-	res 0,(hl)
+	res COMBO_FLAG_BIT_LINKED_STARTED,(hl)
 	; unset the flag indicating which game was last loaded
-	res 7,(hl)
+	res COMBO_FLAG_BIT_PREVIOUS_GAME,(hl)
 	pop hl
 .endif
 	ld bc,$0550
@@ -894,41 +933,42 @@ getFileAddress2:
 ; @param[out] cflag Set if the last game played was seasons
 getLastGamePlayed:
 	push hl
-	push af
-
-	; enable SRAM chip
-	ld a,$0a
-	ld ($1111),a
-
-	call getComboSaveFileFlags
+	call _comboFlagHelper
 	ld a,(hl)
 	rlca
-	pop hl
-
-	ld a,$00
-	; disable SRAM chip
-	ld ($1111),a
-
-	ld a,h
-	pop hl
-	ret
+	jr _comboFlagReturn
 
 ;;
 ; @param[out] zflag Unset if both games were started on this savefile
-getBothGamesStarted:
+getComboStarted:
 	push hl
-	
+	call _comboFlagHelper
+	bit COMBO_FLAG_BIT_LINKED_STARTED,(hl)
+	jr _comboFlagReturn
+
+setComboCompleted:
+	push hl
+	call _comboFlagHelper
+	set COMBO_FLAG_BIT_LINKED_BEATEN,(hl)
+	jr _comboFlagReturn
+
+getComboCompleted:
+	push hl
+	call _comboFlagHelper
+	bit COMBO_FLAG_BIT_LINKED_BEATEN,(hl)
+
+_comboFlagReturn:
+	; disable SRAM chip
+	ld a,$00
+	ld ($1111),a
+	pop hl
+	ret
+
+_comboFlagHelper:
 	; enable SRAM chip
 	ld a,$0a
 	ld ($1111),a
 	call getComboSaveFileFlags
-	xor a
-	bit 0,(hl)
-
-	; disable SRAM chip
-	ld ($1111),a
-
-	pop hl
 	ret
 
 ;;

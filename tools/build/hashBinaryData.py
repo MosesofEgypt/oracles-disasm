@@ -15,6 +15,9 @@ with open(inp_fp, 'rb') as f:
     # prepending "aa" to ensure hash value doesnt begin with an integer
     hash_digest = "aa"+(hashlib.sha3_224(f.read()).hexdigest()[:20])
 
+with open(os.path.dirname(out_fp) + "/hash_manifest.txt", "a") as f:
+    f.write(f"{hash_digest}\t{os.path.basename(inp_fp)}\n")
+
 hash_file_output_path   = out_fp
 hashed_file_output_path = os.path.join(
     os.path.dirname(out_fp),

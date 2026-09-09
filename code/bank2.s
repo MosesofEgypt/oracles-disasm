@@ -639,24 +639,27 @@ fileSelectMode8:
 	ret z
 
 .ifdef NEW_GAME_PLUS_NEEDS_COMPLETION
-	; determine if file is completed
-	ldh a,(<hActiveFileSlot)
-	ld d,FileDisplayStruct.b7
-	call getFileDisplayVariableAddress
-	ld a,(hl)
-	and $01
-	jr nz,+
-		; just for the fuck of it, you'll be able
-		; to enter new game plus if you're persistent
-		ld hl,wRingColorPaletteB
+	ld a,(wFileSelect.cursorPos2)
+	or a
+	jr z,+
+		; determine if file is completed
+		ldh a,(<hActiveFileSlot)
+		ld d,FileDisplayStruct.b7
+		call getFileDisplayVariableAddress
 		ld a,(hl)
-		cp 10
-		jr nc,++
-			inc (hl)
-			ld a,SND_ERROR
-			jp playSound
-		++
-		ld (hl),$00
+		and $03 ; NOTE: doing $03 here to account for "Combo beaten" bit
+		jr nz,+
+			; just for the fuck of it, you'll be able
+			; to enter new game plus if you're persistent
+			ld hl,wRingColorPaletteB ; using this as a temp counter
+			ld a,(hl)
+			cp 10
+			jr nc,++
+				inc (hl)
+				ld a,SND_ERROR
+				jp playSound
+			++
+			ld (hl),$00
 	+
 .endif
 
@@ -2073,12 +2076,18 @@ loadFileDisplayVariables:
 	ldi (hl),a
 	ld a,(wFileIsLinkedGame)
 	ldi (hl),a
+.if defined(ROM_COMBO)
+	ld a,(wFileIsCompleted)
+	and $f3
+.else
 	ld a,(wFileIsHeroGame)
 	add a
+	and $02
 	ld e,a
 	ld a,(wFileIsCompleted)
-	and $01
+	and $f1
 	or e
+.endif
 	ldi (hl),a
 	ldh a,(<hActiveFileSlot)
 	add a

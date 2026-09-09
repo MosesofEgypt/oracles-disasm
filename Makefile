@@ -248,6 +248,7 @@ ORPHANED_GFXFILES := $(filter-out '', $(foreach oldfile, $(OLD_GFXFILES), \
 # Delete the orphaned files
 ifneq ($(ORPHANED_GFXFILES),)
 $(shell rm $(ORPHANED_GFXFILES))
+$(shell rm -f $(BUILD_DIR)/gfx/hash_manifest.txt)
 endif
 
 ROOMLAYOUTFILES = $(wildcard rooms/$(GAME)/small/*.bin)
@@ -296,7 +297,7 @@ $(BUILD_DIR)/*.o: $(COMMON_INCLUDE_FILES) Makefile
 # HACK-BASE: $(GAME).o depends on new expanded tileset layout files.
 $(BUILD_DIR)/$(GAME).o: tileset_layouts_expanded/$(GAME)/*.bin
 
-$(BUILD_DIR)/$(GAME).o: $(GAME).s Makefile | $(BUILD_DIR)
+$(BUILD_DIR)/$(GAME).o: $(GAME).s $(HASHFILES) Makefile | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
 
 $(BUILD_DIR)/gfxdata.o: gfxdata.s | $(BUILD_DIR)

@@ -121,6 +121,7 @@ ORPHANED_GFXFILES := $(filter-out '', $(foreach oldfile, $(OLD_GFXFILES), \
 # Delete the orphaned files
 ifneq ($(ORPHANED_GFXFILES),)
 $(shell rm $(ORPHANED_GFXFILES))
+$(shell rm -f $(BUILD_DIR)/gfx/hash_manifest.txt)
 endif
 
 ROOMLAYOUTFILES_AGES     = $(wildcard rooms/ages/small/*.bin)
@@ -202,7 +203,7 @@ $(BUILD_DIR)/gfxdata.o: gfxdata.s | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
 $(BUILD_DIR)/textAndRoomData.o: textAndRoomData.s $(BUILD_DIR)/ages_textData.s $(BUILD_DIR)/ages_textDefines.s $(BUILD_DIR)/seasons_textData.s $(BUILD_DIR)/seasons_textDefines.s | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
-$(BUILD_DIR)/$(GAME).o: $(GAME).s Makefile | $(BUILD_DIR)
+$(BUILD_DIR)/$(GAME).o: $(GAME).s $(HASHFILES) Makefile | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
 
 GEN_FILES := data/ages/objectCollisionTable.s  data/seasons/objectCollisionTable.s
