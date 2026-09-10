@@ -18,6 +18,6 @@
 ; For simplicity I'm using the "m_GfxData" macro, which can handle data crossing banks.
 ; But since each tileset is exactly 0x1000 bytes (and is uncompressed) it doesn't actually
 ; cross over any banks.
-.REPT $80-$1b START $1b index tmpi
-    m_GfxData seasons_gfx_tileset{%.2x{tmpi}}
+.REPT $80-$1b index tmpi
+    m_GfxData seasons_gfx_tileset{%.2x{tmpi+$1b}}
 .ENDR

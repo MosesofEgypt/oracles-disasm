@@ -11855,7 +11855,11 @@ flashScreen:
 specialObjectCode_companionCutscene:
 	ldh a,(<hRomBank)
 	push af
+.if defined(ROM_COMBO)
+	callfrombank0 bank6Ext.specialObjectCode_companionCutscene
+.else
 	callfrombank0 bank6.specialObjectCode_companionCutscene
+.endif
 	pop af
 	rst_setrombank
 	ret

@@ -95,18 +95,24 @@ m_InteractionCode $ce
 
 ; Subid $80 initialization (the bush above the scrub)
 @mimicBush:
+.if defined(ROM_AGES)
+	.if defined(ROM_COMBO)
+		ld a,TILEINDEX_OVERWORLD_BUSH_1_AGES
+	.else
+		ld a,TILEINDEX_OVERWORLD_BUSH_1
+	.endif
+.else
 	ld a,(wActiveGroup)
 	or a
-.if !defined(ROM_COMBO)
-	ld a,TILEINDEX_OVERWORLD_BUSH_1
-.elif defined(ROM_AGES)
-	ld a,TILEINDEX_OVERWORLD_BUSH_1_AGES
-.else
-	ld a,TILEINDEX_OVERWORLD_BUSH_1_SEASONS
-.endif
+	.if defined(ROM_COMBO)
+		ld a,TILEINDEX_OVERWORLD_BUSH_1_SEASONS
+	.else
+		ld a,TILEINDEX_OVERWORLD_BUSH_1
+	.endif
 	jr z,+
-	ld a,TILEINDEX_DUNGEON_BUSH
-+
+		ld a,TILEINDEX_DUNGEON_BUSH
+	+
+.endif
 	call objectMimicBgTile
 	ld a,$05
 	call interactionSetAnimation

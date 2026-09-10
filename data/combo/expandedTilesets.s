@@ -56,8 +56,8 @@
         m_SeasonalTilesetGfxPointer gfx_tileset{%.2x{tmpi}}
     .ENDR
 
-    .REPT $80-$1b START $1b index tmpi
-        m_TilesetGfxPointer seasons_gfx_tileset{%.2x{tmpi}}
+    .REPT $80-$1b index tmpi
+        m_TilesetGfxPointer seasons_gfx_tileset{%.2x{tmpi+$1b}}
     .ENDR
 
     .REPT $1b index tmpi
@@ -72,8 +72,8 @@
     .REPT $1b index tmpi
         m_SeasonalTilesetGfxPointer tilesetMappings{%.2x{tmpi}}
     .ENDR
-    .REPT $80-$1b START $1b index tmpi
-        m_TilesetMappingPointer seasons_tilesetMappings{%.2x{tmpi}}
+    .REPT $80-$1b index tmpi
+        m_TilesetMappingPointer seasons_tilesetMappings{%.2x{tmpi+$1b}}
     .ENDR
 
     .REPT $1b index tmpi
@@ -103,8 +103,8 @@ tilesetMappings{%.2x{tmpi}}_winter:
 .ends
 .ENDR
 
-.REPT $80-$1b START $1b index tmpi
-	m_TilesetMappingSection {"{%.2x{tmpi}}"}
+.REPT $80-$1b index tmpi
+	m_TilesetMappingSection {"{%.2x{tmpi+$1b}}"}
 .ENDR
 
 

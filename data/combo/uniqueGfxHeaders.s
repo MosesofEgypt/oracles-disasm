@@ -3,8 +3,8 @@
 ; NOTE: due to data/seasons/uniqueGfxHeaders.s having uniqueGfxHeaderTable
 ;       defined at the end, we can append the ages headers to it like this
 .define NUM_AGES_UNIQUE_GFX_HEADERS $14
-.repeat NUM_AGES_UNIQUE_GFX_HEADERS START NUM_UNIQUE_GFX_HEADERS index COUNT
-	.dw uniqueGfxHeader{%.2x{COUNT}}
+.repeat NUM_AGES_UNIQUE_GFX_HEADERS index COUNT
+	.dw uniqueGfxHeader{%.2x{COUNT+NUM_UNIQUE_GFX_HEADERS}}
 .endr
 
 .redefine NUM_UNIQUE_GFX_HEADERS NUM_UNIQUE_GFX_HEADERS + NUM_AGES_UNIQUE_GFX_HEADERS

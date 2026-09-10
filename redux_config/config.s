@@ -28,30 +28,6 @@
 	.endif
 .endif
 
-.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE
-	.redefine I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND	1
-	; WLA refuses to work with me on banks 256 and higher
-	;.redefine I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
-.endif
-
-.ifdef RESIZE_RING_BOX
-	.ifndef MAX_RING_BOX_LEVEL
-		.define MAX_RING_BOX_LEVEL 3
-	.endif
-.endif
-
-.if defined(ROM_COMBO) || defined(ENABLE_NEW_GAME_PLUS) || defined(I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX)
-	.ifndef INCREASE_GFX_SPACE
-		.define INCREASE_GFX_SPACE			1
-	.endif
-.endif
-
-.if defined(ROM_COMBO)
-	.ifndef SUPERFREE_OAM_DATA_BANKS
-		.define SUPERFREE_OAM_DATA_BANKS	1
-	.endif
-.endif
-
 .ifdef ENABLE_REDUX_EXTRAS
 	; if ENABLE_REDUX_EXTRAS is enabled, the options below will
 	; be enabled(except the commented-out ones starting with ';')
@@ -192,4 +168,28 @@
 .ifndef MORE_MESSAGE_SPEEDS
 	.define MORE_MESSAGE_SPEEDS			1
 .endif
+.endif
+
+.ifdef RESIZE_RING_BOX
+.ifndef MAX_RING_BOX_LEVEL
+	.define MAX_RING_BOX_LEVEL 3
+.endif
+.endif
+
+.if defined(ROM_COMBO) || defined(ENABLE_NEW_GAME_PLUS) || defined(I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX)
+.ifndef INCREASE_GFX_SPACE
+	.define INCREASE_GFX_SPACE			1
+.endif
+.endif
+
+.if defined(ROM_COMBO)
+.ifndef SUPERFREE_OAM_DATA_BANKS
+	.define SUPERFREE_OAM_DATA_BANKS	1
+.endif
+.endif
+
+.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE
+	.redefine I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND	1
+	; WLA refuses to work with me on banks 256 and higher
+	;.redefine I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
 .endif

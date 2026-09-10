@@ -398,7 +398,7 @@
 .ende
 
 .if defined(ROM_COMBO)
-.REPT $c8-$24 START $24 index tmpi
-	.define SEASONS_OBJ_GFXH_{%.2x{tmpi}}	AGES_OBJ_GFXH_{%.2x{tmpi}}
+.REPT $c8-$24 index tmpi
+	.define SEASONS_OBJ_GFXH_{%.2x{tmpi+$24}}	AGES_OBJ_GFXH_{%.2x{tmpi+$24}}
 .ENDR
 .endif
