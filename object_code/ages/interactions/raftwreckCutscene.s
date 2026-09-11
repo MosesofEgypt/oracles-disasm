@@ -99,7 +99,7 @@ m_InteractionCode $9b
 	ret nz
 
 @initScreenFlashing:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$00
 	ld hl,wGenericCutscene.cbba
 	ld (hl),$ff
@@ -107,7 +107,7 @@ m_InteractionCode $9b
 
 @substate3:
 @substate5:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld b,$01
 	call flashScreen
 	ret z

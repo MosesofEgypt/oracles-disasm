@@ -262,7 +262,7 @@ m_InteractionCode $89
 	ld ($ff00+R_SVBK),a
 	ldh a,(<hFFBD)
 	ld b,a
-	ld a,(wGenericCutscene.cbc2)
+	ld a,(wGenericCutscene.endingCutsceneSubstate)
 	ld e,a
 	ld a,(w4RingFortuneStuff)
 	ld c,a
@@ -316,7 +316,7 @@ m_InteractionCode $89
 
 	ldh a,(<hFFBD)
 	ld b,a
-	ld a,(wGenericCutscene.cbc2)
+	ld a,(wGenericCutscene.endingCutsceneSubstate)
 	ld e,a
 
 	pop af

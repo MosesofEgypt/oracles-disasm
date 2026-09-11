@@ -488,7 +488,7 @@ nayruSingingCutsceneHandler:
 	ld (hl),$78
 	jp cutscene_incCutsceneState
 @stateB:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	ld (hl),$5a
 	call cutscene_incCutsceneState
@@ -721,7 +721,7 @@ blackTowerExplanationCutsceneHandler:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	call cutscene_incCutsceneState
 	ld bc,TX_1005
@@ -760,7 +760,7 @@ blackTowerExplanationCutsceneHandler:
 @@state5:
 	call func_6ef7
 	call func_6f44
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	call cutscene_incCutsceneState
 	jp fadeoutToWhite
@@ -828,7 +828,7 @@ blackTowerExplanationCutsceneHandler:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	ld a,$04
 	ld (wTmpcbbb),a
@@ -851,7 +851,7 @@ blackTowerExplanationCutsceneHandler:
 func_6733:
 	call func_6ef7
 	call func_6f44
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	ld a,(wGenericCutscene.cbb8)
 	rst_jumpTable
@@ -953,7 +953,7 @@ nayruWarpToMakuTreeCutsceneHandler:
 	ld bc,$5050
 	jp createEnergySwirlGoingIn
 @state2:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	xor a
 	ld (hl),a
@@ -1088,7 +1088,7 @@ nayruWarpToMakuTreeCutsceneHandler:
 	ld (wGenericCutscene.cbb7),a
 	jr @func_6955
 @stateB:
-	call decCbb3
+	call decCutsceneTimer
 	jr nz,@func_6948
 	call checkIsLinkedGame
 	jr z,@func_692b
@@ -1190,7 +1190,7 @@ blackTowerCompleteCutsceneHandler:
 	ld (wTmpcbb3),a
 	jp cutscene_incCutsceneState
 @state1:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	call cutscene_incCutsceneState
 	ld a,SNDCTRL_FAST_FADEOUT
@@ -1233,7 +1233,7 @@ blackTowerCompleteCutsceneHandler:
 	ldbc INTERAC_CLOAKED_TWINROVA $01
 	jp createInteraction
 @state3:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	ld a,SND_LIGHTNING
 	call playSound
@@ -1645,7 +1645,7 @@ pregameIntroCutsceneHandler:
 @state1:
 	ld e,$96
 --
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	call cutscene_incCutsceneState
 	ld hl,wTmpcbb3
@@ -1655,7 +1655,7 @@ pregameIntroCutsceneHandler:
 	ld e,$3c
 	jr --
 @state3:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	call cutscene_incCutsceneState
 	call fastFadeinFromBlack
@@ -1683,7 +1683,7 @@ pregameIntroCutsceneHandler:
 	ld (wFadeBgPaletteSources),a
 	ret
 @state5:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	xor a
 	ld (wPaletteThread_mode),a
@@ -1691,7 +1691,7 @@ pregameIntroCutsceneHandler:
 	ld (wTmpcbb3),a
 	jp cutscene_incCutsceneState
 @state6:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	call cutscene_incCutsceneState
 	ld a,TEXTBOXFLAG_DONTCHECKPOSITION
@@ -1723,7 +1723,7 @@ pregameIntroCutsceneHandler:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	jp cutscene_incCutsceneState
 @stateA:
@@ -1770,7 +1770,7 @@ pregameIntroCutsceneHandler:
 	ld (hl),$3c
 	jp cutscene_incCutsceneState
 @stateC:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	ld hl,wGameState
 	xor a
@@ -1871,7 +1871,7 @@ func_6f26:
 	ld hl,wTmpcbb6
 	dec (hl)
 	ret nz
-	call decCbb3
+	call decCutsceneTimer
 	ret z
 	ld a,(wTmpcbbb)
 	ld (wTmpcbb6),a
@@ -1961,7 +1961,7 @@ cutscene_decCBB3whenFadeDone:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	jp decCbb3
+	jp decCutsceneTimer
 
 func_6f9e:
 	ld a,($ff00+R_SVBK)

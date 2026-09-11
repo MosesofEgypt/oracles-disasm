@@ -1682,11 +1682,12 @@ wMenuUnionStart:
 
 .nextu wGenericCutscene
 
-	cbb3: ; $cbb3
+	cutsceneTimer: ; $cbb3
 	; A counter, often used with "flashScreen" function?
 		db
 
 	cbb4: ; $cbb4
+	; often used as the high byte in a long DWORD cutscene timer
 		db
 
 	cbb5: ; $cbb5
@@ -1725,10 +1726,10 @@ wMenuUnionStart:
 	cbc0: ; $cbc0
 		db
 
-	cbc1: ; $cbc1
+	endingCutsceneState: ; $cbc1
 		db
 
-	cbc2: ; $cbc2
+	endingCutsceneSubstate: ; $cbc2
 		db
 
 .nextu

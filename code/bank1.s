@@ -2344,7 +2344,7 @@ cutscene17:
 	ld a,$02
 	ld (wCutsceneState),a
 	ld a,$1e
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	ret
 
 @state2:
@@ -2363,16 +2363,16 @@ cutscene17:
 	ld a,(hl)
 	xor $80
 	ld (hl),a
-	ld a,(wGenericCutscene.cbb3)
+	ld a,(wGenericCutscene.cutsceneTimer)
 	dec a
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	ret nz
 
 	res 7,(hl)
 	ld a,$14
 	ld (wGenericCutscene.cbb4),a
 	ld a,$05
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	ld a,$03
 	ld (wCutsceneState),a
 
@@ -2386,7 +2386,7 @@ cutscene17:
 
 	ld (hl),$14
 	call fadeoutToWhite
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	dec (hl)
 	ret nz
 
@@ -2469,7 +2469,7 @@ cutscene15:
 
 ;;
 @incTmpcbb3:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	inc (hl)
 	ret
 
@@ -2479,7 +2479,7 @@ cutscene15:
 	ld a,CUTSCENE_INGAME
 	ld (wCutsceneState),a
 	xor a
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	ld (wGenericCutscene.cbb4),a
 	ld (wGenericCutscene.cbb5),a
 	ld (wGenericCutscene.cbb6),a
@@ -2487,7 +2487,7 @@ cutscene15:
 
 
 @state1:
-	ld a,(wGenericCutscene.cbb3)
+	ld a,(wGenericCutscene.cutsceneTimer)
 	rst_jumpTable
 	.dw @@substate0
 	.dw @@substate1
@@ -2590,7 +2590,7 @@ cutscene15:
 	ld hl,wCutsceneState
 	inc (hl)
 	xor a
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	ld (wLinkForceState),a
 	ld a,$08
 	ld (wWarpTransition),a
@@ -2600,7 +2600,7 @@ cutscene15:
 
 
 @state2:
-	ld a,(wGenericCutscene.cbb3)
+	ld a,(wGenericCutscene.cutsceneTimer)
 	rst_jumpTable
 	.dw @state1@substate1
 	.dw @@substate1
@@ -6329,11 +6329,11 @@ func_7b93:
 	ld a,$ff
 	ld (wGenericCutscene.cbb4),a
 	xor a
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	ret
 
 @state2:
-	ld a,(wGenericCutscene.cbb3)
+	ld a,(wGenericCutscene.cutsceneTimer)
 	rst_jumpTable
 	.dw @substate0
 	.dw @substate1
@@ -6351,7 +6351,7 @@ func_7b93:
 	cp $80
 	ret nc
 
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	inc (hl)
 	ld a,$03
 	ld (w1Link.enabled),a
@@ -6375,7 +6375,7 @@ func_7b93:
 	or a
 	ret nz
 
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	inc (hl)
 	ld a,$03
 	ldh (<hNextLcdInterruptBehaviour),a

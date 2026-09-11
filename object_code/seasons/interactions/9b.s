@@ -46,7 +46,7 @@ func_5b49:
 	or a
 	ret z
 	xor a
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	dec a
 	ld (wGenericCutscene.cbba),a
 	jp interactionIncSubstate
@@ -58,7 +58,7 @@ func_5b49:
 	set 7,(hl)
 	ret
 @substate1:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld b,$02
 	call flashScreen
 	ret z

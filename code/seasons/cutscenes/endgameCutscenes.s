@@ -57,7 +57,7 @@ endgameCutsceneHandler_09_seasons:
 .else
 endgameCutsceneHandler_09:
 .endif
-	ld de,wGenericCutscene.cbc1
+	ld de,wGenericCutscene.endingCutsceneState
 	ld a,(de)
 	rst_jumpTable
 	.dw endgameCutsceneHandler_09_stage0_seasons
@@ -70,7 +70,7 @@ endgameCutsceneHandler_09_stage0_seasons:
 	jp checkEnemyAndPartCollisionsIfTextInactive
 
 endgameCutsceneHandler_09_stage0_body_seasons:
-	ld de,wGenericCutscene.cbc2
+	ld de,wGenericCutscene.endingCutsceneSubstate
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -121,7 +121,7 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	ld b,$20
 	ld hl,wTmpcfc0.normal.cfc0
 	call clearMemory
-	call incCbc2
+	call incEndingCutsceneSubstate
 	xor a
 	ld bc,$0790
 	call disableLcdAndLoadRoom_body
@@ -185,21 +185,21 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	ld a,(wTmpcfc0.genericCutscene.cfdf)
 	or a
 	ret z
-	call incCbc2
+	call incEndingCutsceneSubstate
 	ld bc,TX_3d00
 	jp showText
 
 @state2:
 	call retIfTextIsActive
-	call incCbc2
+	call incEndingCutsceneSubstate
 	jp fastFadeoutToWhite
 
 @state3:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	inc l
 	ld (hl),$00
@@ -208,7 +208,7 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 @state4:
 	call seasonsFunc_03_6462
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	ld a,SND_RESTORE
 	call playSound
 	jp fadeoutToWhite
@@ -217,17 +217,17 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	ld a,$00
 	call seasonsFunc_03_644c
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	jp fadeinFromWhite
 
 @state6:
 	call seasonsFunc_03_6462
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	jp fastFadeoutToWhite
 
 @state7:
@@ -236,7 +236,7 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	ret nz
 @state7Func0:
 	call clearDynamicInteractions
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	inc l
 	ld a,(hl)
@@ -262,7 +262,7 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	pop bc
 	jr ++
 +
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	push bc
 	ld c,$01
@@ -274,7 +274,7 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	jr z,++
 	ld c,$0d
 ++
-	ld hl,wGenericCutscene.cbc2
+	ld hl,wGenericCutscene.endingCutsceneSubstate
 	ld (hl),c
 	jp seasonsFunc_03_6405
 @state7Table0:
@@ -292,15 +292,15 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 @state9:
 	call seasonsFunc_03_645a
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	jp fadeoutToWhite
 
 @stateA:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	ld a,$ff
 	ld (wTilesetAnimation),a
@@ -319,10 +319,10 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	call endgameCutsceneHandler_09_stage1_body_seasons@seasonsFunc_03_5ab0
 	call seasonsFunc_03_6462
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	ld hl,wMenuDisabled
 	ld (hl),$01
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	ld bc,TX_3d02
 @stateBFunc0:
@@ -336,7 +336,7 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	ret nz
 	call seasonsFunc_03_646a
 	ld a,$01
-	ld (wGenericCutscene.cbc1),a
+	ld (wGenericCutscene.endingCutsceneState),a
 	call disableActiveRing
 	jp fadeoutToWhite
 
@@ -346,30 +346,30 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 @stateDFunc0:
 	call seasonsFunc_03_6462
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	ld a,e
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	jp showText
 
 @stateE:
 	call seasonsFunc_03_645a
 	ret nz
 	xor a
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	dec a
 	ld (wGenericCutscene.cbba),a
 	ld a,SND_LIGHTNING
 	call playSound
 	ld a,SNDCTRL_STOPMUSIC
 	call playSound
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 
 @stateF:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld b,$02
 	call flashScreen
 	ret z
-	call incCbc2
+	call incEndingCutsceneSubstate
 	xor a
 	ld bc,$059a
 	call disableLcdAndLoadRoom_body
@@ -395,7 +395,7 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	ld (hl),b
 	jr nz,-
 +
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$1e
 	ld a,$13
 	call loadGfxRegisterStateIndex
@@ -409,10 +409,10 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	ret
 
 @state10:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$28
 	ld a,$04
 	ld (wTextboxFlags),a
@@ -422,9 +422,9 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 @state11:
 	call seasonsFunc_03_645a
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	ld a,$20
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ldi (hl),a
 	xor a
 	ld (hl),a
@@ -433,7 +433,7 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 @state12:
 	call seasonsFunc_03_6462
 	ret nz
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$20
 	inc hl
 	ld a,(hl)
@@ -457,11 +457,11 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	ld a,$01
 	ld (wDirtyFadeSprPalettes),a
 	ld (wFadeSprPaletteSources),a
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	ld a,MUS_DISASTER
 	call playSound
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 +
 	call fastFadeinFromBlack
 	ld a,b
@@ -494,8 +494,8 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 -
 	call seasonsFunc_03_645a
 	ret nz
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),e
 	call @state13Func0
 	jp showText
@@ -510,8 +510,8 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 @state16Func0:
 	call seasonsFunc_03_645a
 	ret nz
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),e
 	ret
 
@@ -527,7 +527,7 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	inc de
 	call seasonsFunc_03_79cd
 	call seasonsFunc_03_5d00
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	dec a
 	ld (wGenericCutscene.cbba),a
@@ -535,7 +535,7 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	call playSound
 	ld a,SNDCTRL_STOPMUSIC
 	call playSound
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 @state17Table0:
 	.db $ff $01
 	.db $00 $01
@@ -543,12 +543,12 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	.db $ff $00
 
 @state18:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld b,$01
 	call flashScreen
 	ret z
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	call clearDynamicInteractions
 	call clearOam
@@ -560,10 +560,10 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	jp @state0Func0
 
 @state19:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$1e
 	ld bc,TX_3d17
 	jp showText
@@ -571,8 +571,8 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 @state1A:
 	call seasonsFunc_03_645a
 	ret nz
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$1e
 	ld bc,TX_4f09
 	jp showText
@@ -580,7 +580,7 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 @state1B:
 	call seasonsFunc_03_645a
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	ld c,$40
 	ld a,TREASURE_HEART_REFILL
 	call giveTreasure
@@ -588,33 +588,33 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	call setLinkIDOverride
 	ld l,<w1Link.subid
 	ld (hl),$07
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$5a
 	ld a,MUS_PRECREDITS
 	jp playSound
 
 @state1C:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$b4
 	ld bc,$90bd
 	ld a,$ff
 	jp createEnergySwirlGoingOut
 
 @state1D:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	jp fadeoutToWhite
 
 @state1E:
 	call seasonsFunc_03_6462
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	call disableLcd
 	call clearOam
 	call clearDynamicInteractions
@@ -651,7 +651,7 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	call fillTmpGfxBufferWithHFF8B
 	ld a,$02
 	call seasonsFunc_03_7a88
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$1e
 	ld a,$04
 	call loadGfxRegisterStateIndex
@@ -668,7 +668,7 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 @state1F:
 	call seasonsFunc_03_645a
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	ld b,$02
 @state1FFunc0:
 	call fadeinFromWhite
@@ -678,7 +678,7 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	xor a
 	ld (wDirtyFadeBgPalettes),a
 	ld (wFadeBgPaletteSources),a
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	ret
 
@@ -690,7 +690,7 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 @state21:
 	call seasonsFunc_03_645a
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	ld b,$14
 	jp @state1FFunc0
 
@@ -704,34 +704,34 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	jp @state16Func0
 
 @state24:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$f0
 	ld a,$ff
 	ld bc,$4850
 	jp createEnergySwirlGoingOut
 
 @state25:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$5a
 	call fadeoutToWhite
 	ld a,$fc
 	ld (wDirtyFadeBgPalettes),a
 	ld (wFadeBgPaletteSources),a
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 
 @state26:
 	call seasonsFunc_03_6462
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	call clearDynamicInteractions
 	call clearParts
 	call clearOam
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	ld bc,TX_4f08
 	jp showTextNonExitable
@@ -740,7 +740,7 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	ld a,(wTextIsActive)
 	rlca
 	ret nc
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	call showStatusBar
 	xor a
@@ -766,7 +766,7 @@ endgameCutsceneHandler_09_stage1_seasons:
 	jp updateAllObjects
 
 endgameCutsceneHandler_09_stage1_body_seasons:
-	ld de,wGenericCutscene.cbc2
+	ld de,wGenericCutscene.endingCutsceneSubstate
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -785,8 +785,8 @@ endgameCutsceneHandler_09_stage1_body_seasons:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	call disableLcd
 	call clearOam
@@ -810,7 +810,7 @@ endgameCutsceneHandler_09_stage1_body_seasons:
 @state2:
 	call seasonsFunc_03_645a
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	ld hl,wGenericCutscene.cbb5
 	ld (hl),$d0
 --
@@ -845,14 +845,14 @@ endgameCutsceneHandler_09_stage1_body_seasons:
 	call clearOam
 	ld a,UNCMP_GFXH_0a
 	call loadUncompressedGfxHeader
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$1e
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 
 @state4:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	ld hl,wGenericCutscene.cbb5
 	ld (hl),$d0
 @state4Func0:
@@ -869,19 +869,19 @@ endgameCutsceneHandler_09_stage1_body_seasons:
 	ld (wScreenOffsetY),a
 	ld (wScreenOffsetX),a
 	ld a,$1e
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	ld (wOpenedMenuType),a
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 
 @state6:
 	call @state4Func0
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$14
 	ld bc,TX_3d04
 	call endgameCutsceneHandler_09_stage0_body_seasons@stateBFunc0
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 
 @state7:
 	call @state4Func0
@@ -893,16 +893,16 @@ endgameCutsceneHandler_09_stage1_body_seasons:
 	ld (wGenericCutscene.cbba),a
 	ld a,SND_LIGHTNING
 	call playSound
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 
 @state8:
 	call @state4Func0
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld b,$02
 	call flashScreen
 	ret z
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$1e
 	call disableLcd
 	call clearOam
@@ -936,7 +936,7 @@ endgameCutsceneHandler_09_stage1_body_seasons:
 	jp clearPaletteFadeVariablesAndRefreshPalettes
 
 @state9:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	ld a,CUTSCENE_S_CREDITS
 	ld (wCutsceneIndex),a
@@ -949,7 +949,7 @@ endgameCutsceneHandler_09_stage1_body_seasons:
 	call clearMemoryBc
 	ldh (<hCameraY),a
 	ldh (<hCameraX),a
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	ld a,$03
 	jp fadeoutToBlackWithDelay
@@ -961,7 +961,7 @@ endgameCutsceneHandler_0f_seasons:
 .else
 endgameCutsceneHandler_0f:
 .endif
-	ld de,wGenericCutscene.cbc1
+	ld de,wGenericCutscene.endingCutsceneState
 	ld a,(de)
 	rst_jumpTable
 	.dw endgameCutsceneHandler_0f_stage0_seasons
@@ -973,7 +973,7 @@ endgameCutsceneHandler_0f_stage0_seasons:
 	jp updateAllObjects
 
 endgameCutsceneHandler_0f_stage0_body_seasons:
-	ld de,wGenericCutscene.cbc2
+	ld de,wGenericCutscene.endingCutsceneSubstate
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -1013,36 +1013,36 @@ endgameCutsceneHandler_0f_stage0_body_seasons:
 	inc l
 	inc l
 	ld (hl),$78
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$0a
 	ret
 
 @state1:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$1e
 	ld a,SNDCTRL_STOPMUSIC
 	call playSound
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 
 @state2:
 	call seasonsFunc_03_5cfb
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$96
 	jp seasonsFunc_03_5d0b
 
 @state3:
 	call seasonsFunc_03_5cfb
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	ld a,SNDCTRL_STOPSFX
 	call playSound
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	ld bc,TX_3d0e
 	jp showText
@@ -1050,36 +1050,36 @@ endgameCutsceneHandler_0f_stage0_body_seasons:
 @state4:
 	call seasonsFunc_03_645a
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	ld a,MUS_DISASTER
 	call playSound
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	jp seasonsFunc_03_5d0b
 
 @state5:
 	call seasonsFunc_03_5cfb
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$5a
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 
 @state6:
 	call seasonsFunc_03_5cfb
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	ld a,SNDCTRL_STOPSFX
 	jp playSound
 
 @state7:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	ld bc,TX_3d0f
 	jp showText
@@ -1087,8 +1087,8 @@ endgameCutsceneHandler_0f_stage0_body_seasons:
 @state8:
 	call seasonsFunc_03_645a
 	ret nz
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$2c
 	inc hl
 	ld (hl),$01
@@ -1096,11 +1096,11 @@ endgameCutsceneHandler_0f_stage0_body_seasons:
 	jp seasonsFunc_03_5d12
 
 @state9:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	call decHlRef16WithCap
 	ret nz
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	ld bc,TX_3d10
 	jp showText
@@ -1111,30 +1111,30 @@ endgameCutsceneHandler_0f_stage0_body_seasons:
 
 @stateB:
 	call seasonsFunc_03_5cfb
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	call seasonsFunc_03_5d0b
 	ld a,$8c
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	ld a,$ff
 	ld bc,$4478
 	jp createEnergySwirlGoingOut
 
 @stateC:
 	call seasonsFunc_03_5cfb
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	jp seasonsFunc_03_5d0b
 
 @stateD:
 	call seasonsFunc_03_5cfb
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
-	call incCbc1
+	call incEndingCutsceneState
 	inc l
 	xor a
 	ld (hl),a
@@ -1174,7 +1174,7 @@ endgameCutsceneHandler_0f_stage1_seasons:
 	jp updateAllObjects
 
 endgameCutsceneHandler_0f_stage1_body_seasons:
-	ld de,wGenericCutscene.cbc2
+	ld de,wGenericCutscene.endingCutsceneSubstate
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -1194,7 +1194,7 @@ endgameCutsceneHandler_0f_stage1_body_seasons:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	xor a
 	ld bc,ROOM_SEASONS_22b
 	call disableLcdAndLoadRoom_body
@@ -1213,36 +1213,36 @@ endgameCutsceneHandler_0f_stage1_body_seasons:
 	call playSound
 	ld a,$02
 	call loadGfxRegisterStateIndex
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	jp fadeinFromWhiteToRoom
 
 @state1:
 	call seasonsFunc_03_6462
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	ld a,$3c
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	ld a,$64
 	ld bc,$5850
 	jp createEnergySwirlGoingIn
 
 @state2:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	xor a
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	dec a
 	ld (wGenericCutscene.cbba),a
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 
 @state3:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld b,$01
 	call flashScreen
 	ret z
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	ld a,$01
 	ld (wTmpcfc0.normal.cfc0),a
@@ -1256,15 +1256,15 @@ endgameCutsceneHandler_0f_stage1_body_seasons:
 	ld (wLoadedTreeGfxIndex),a
 	ld a,MUS_CREDITS_1
 	call playSound
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 
 @state5:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$2c
 	inc hl
 	ld (hl),$01
@@ -1272,22 +1272,22 @@ endgameCutsceneHandler_0f_stage1_body_seasons:
 	jp seasonsFunc_03_5d12
 
 @state6:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	call decHlRef16WithCap
 	ret nz
 	ld a,$01
 	ld (wLoadedTreeGfxIndex),a
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	ld hl,wTmpcfc0.normal.cfc0
 	ld (hl),$02
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 
 @state7:
 	ld a,(wTmpcfc0.normal.cfc0)
 	cp $09
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	ld a,$03
 	jp fadeoutToWhiteWithDelay
 
@@ -1295,7 +1295,7 @@ endgameCutsceneHandler_0f_stage1_body_seasons:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	call disableLcd
 	call clearScreenVariablesAndWramBank1
 	call hideStatusBar
@@ -1307,7 +1307,7 @@ endgameCutsceneHandler_0f_stage1_body_seasons:
 	call loadGfxHeader
 	ld a,PALH_SEASONS_ad
 	call loadPaletteHeader
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$f0
 	ld a,$04
 	call loadGfxRegisterStateIndex
@@ -1319,8 +1319,8 @@ endgameCutsceneHandler_0f_stage1_body_seasons:
 	call endgameCutsceneHandler_09_stage1_body_seasons@seasonsFunc_03_5aa2
 	call seasonsFunc_03_6462
 	ret nz
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$10
 	ld a,$03
 	jp fadeoutToBlackWithDelay
@@ -1341,7 +1341,7 @@ endgameCutsceneHandler_0f_stage1_body_seasons:
 	xor a
 	ldh (<hCameraY),a
 	ldh (<hCameraX),a
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	ld a,SNDCTRL_MEDIUM_FADEOUT
 	jp playSound
@@ -1357,7 +1357,7 @@ endgameCutsceneHandler_0a:
 	jp func_3539
 
 endgameCutsceneHandler_0a_body:
-	ld de,wGenericCutscene.cbc1
+	ld de,wGenericCutscene.endingCutsceneState
 	ld a,(de)
 	rst_jumpTable
 	.dw endgameCutsceneHandler_0a_stage0_seasons
@@ -1366,7 +1366,7 @@ endgameCutsceneHandler_0a_body:
 	.dw endgameCutsceneHandler_0a_stage3_seasons
 
 endgameCutsceneHandler_0a_stage0_seasons:
-	ld de,wGenericCutscene.cbc2
+	ld de,wGenericCutscene.endingCutsceneSubstate
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -1377,9 +1377,9 @@ endgameCutsceneHandler_0a_stage0_seasons:
 	call seasonsFunc_03_6462
 	ret nz
 	call seasonsFunc_03_66dc
-	call incCbc2
+	call incEndingCutsceneSubstate
 	call clearOam
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$b4
 	inc hl
 	ld (hl),$00
@@ -1389,11 +1389,11 @@ endgameCutsceneHandler_0a_stage0_seasons:
 	jp playSound
 
 @state1:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	call decHlRef16WithCap
 	ret nz
-	call incCbc2
-	ld hl,wGenericCutscene.cbb3
+	call incEndingCutsceneSubstate
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$48
 	inc hl
 	ld (hl),$03
@@ -1403,10 +1403,10 @@ endgameCutsceneHandler_0a_stage0_seasons:
 	jp fadeinFromBlackWithDelay
 
 @state2:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	call decHlRef16WithCap
 	ret nz
-	call incCbc1
+	call incEndingCutsceneState
 	inc l
 	ld (hl),a
 	ld b,$04
@@ -1419,7 +1419,7 @@ endgameCutsceneHandler_0a_stage0_seasons:
 	jp fadeoutToWhite
 
 endgameCutsceneHandler_0a_stage1_seasons:
-	ld de,wGenericCutscene.cbc2
+	ld de,wGenericCutscene.endingCutsceneSubstate
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -1435,7 +1435,7 @@ endgameCutsceneHandler_0a_stage1_seasons:
 	or a
 	ret nz
 	call disableLcd
-	call incCbc2
+	call incEndingCutsceneSubstate
 	call clearDynamicInteractions
 	call clearOam
 	ld a,$10
@@ -1507,7 +1507,7 @@ endgameCutsceneHandler_0a_stage1_seasons:
 	ld b,$20
 	ld hl,wTmpcfc0.normal.cfc0
 	call clearMemory
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$f0
 	inc l
 	ld b,(hl)
@@ -1554,7 +1554,7 @@ endgameCutsceneHandler_0a_stage1_seasons:
 	ld a,(wTmpcfc0.genericCutscene.cfdf)
 	or a
 	ret z
-	call incCbc2
+	call incEndingCutsceneSubstate
 	ld a,$ff
 	ld (wTilesetAnimation),a
 	jp fadeoutToWhite
@@ -1563,7 +1563,7 @@ endgameCutsceneHandler_0a_stage1_seasons:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	call disableLcd
 	call clearWramBank1
 	ld a,(wGenericCutscene.cbb4)
@@ -1572,7 +1572,7 @@ endgameCutsceneHandler_0a_stage1_seasons:
 	rst_addAToHl
 	ld a,(hl)
 	call loadGfxHeader
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$5a
 	inc l
 	ld a,(hl)
@@ -1617,9 +1617,9 @@ endgameCutsceneHandler_0a_stage1_seasons:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	call getFreeInteractionSlot
 	ret nz
 	ld (hl),INTERAC_CREDITS_TEXT_HORIZONTAL
@@ -1650,13 +1650,13 @@ endgameCutsceneHandler_0a_stage1_seasons:
 	jr nc,+
 	inc (hl)
 	xor a
-	ld (wGenericCutscene.cbc2),a
+	ld (wGenericCutscene.endingCutsceneSubstate),a
 	jr ++
 +
 	call seasonsFunc_03_646a
 	call enableActiveRing
 	ld a,$02
-	ld (wGenericCutscene.cbc1),a
+	ld (wGenericCutscene.endingCutsceneState),a
 	ld hl,wLinkMaxHealth
 	ldd a,(hl)
 	ld (hl),a ; [wLinkHealth]
@@ -1676,7 +1676,7 @@ endgameCutsceneHandler_0a_stage1_seasons:
 endgameCutsceneHandler_0a_stage2_seasons:
 	xor a
 	ldh (<hOamTail),a
-	ld de,wGenericCutscene.cbc2
+	ld de,wGenericCutscene.endingCutsceneSubstate
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -1693,7 +1693,7 @@ endgameCutsceneHandler_0a_stage2_seasons:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	call disableLcd
 	call clearDynamicInteractions
 	call clearOam
@@ -1720,26 +1720,26 @@ endgameCutsceneHandler_0a_stage2_seasons:
 	ld a,(wTmpcfc0.genericCutscene.cfde)
 	or a
 	ret z
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$e0
 	inc hl
 	ld (hl),$01
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 
 @state2:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	call decHlRef16WithCap
 	ret nz
 	call checkIsLinkedGame
 	jr nz,+
 	call seasonsFunc_03_646a
 	ld a,$03
-	ld (wGenericCutscene.cbc1),a
+	ld (wGenericCutscene.endingCutsceneState),a
 	ld a,$04
 	jp fadeoutToWhiteWithDelay
 +
 	ld a,$04
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	ld a,(wGfxRegs1.SCY)
 	ldh (<hCameraY),a
 	ld a,UNCMP_GFXH_01
@@ -1758,17 +1758,17 @@ endgameCutsceneHandler_0a_stage2_seasons:
 	ld (hl),b
 	jr nz,-
 +
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 
 @state3:
 	ld a,(wGfxRegs1.SCY)
 	or a
 	jr nz,+
 	ld a,$78
-	ld (wGenericCutscene.cbb3),a
-	jp incCbc2
+	ld (wGenericCutscene.cutsceneTimer),a
+	jp incEndingCutsceneSubstate
 +
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	ld (hl),$04
 	ld hl,wGfxRegs1.SCY
@@ -1778,14 +1778,14 @@ endgameCutsceneHandler_0a_stage2_seasons:
 	ret
 
 @state4:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	ld a,$ff
 	ld (wGenericCutscene.cbba),a
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 
 @state5:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld b,$01
 	call flashScreen
 	ret z
@@ -1809,9 +1809,9 @@ endgameCutsceneHandler_0a_stage2_seasons:
 	call loadGfxRegisterStateIndex
 	ld a,$04
 	call fadeinFromWhiteWithDelay
-	call incCbc2
+	call incEndingCutsceneSubstate
 	ld a,$f0
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 
 @seasonsFunc_03_616f:
 	xor a
@@ -1851,19 +1851,19 @@ endgameCutsceneHandler_0a_stage2_seasons:
 	call seasonsFunc_03_6462
 	ret nz
 	ld a,$04
-	ld (wGenericCutscene.cbb3),a
-	jp incCbc2
+	ld (wGenericCutscene.cutsceneTimer),a
+	jp incEndingCutsceneSubstate
 
 @state7:
 	ld a,(wGfxRegs1.SCY)
 	cp $98
 	jr nz,+
 	ld a,$f0
-	ld (wGenericCutscene.cbb3),a
-	call incCbc2
+	ld (wGenericCutscene.cutsceneTimer),a
+	call incEndingCutsceneSubstate
 	jr ++
 +
-	call decCbb3
+	call decCutsceneTimer
 	jr nz,++
 	ld (hl),$04
 	ld hl,wGfxRegs1.SCY
@@ -1880,16 +1880,16 @@ endgameCutsceneHandler_0a_stage2_seasons:
 
 @state8:
 	call @seasonsFunc_03_616f
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	call seasonsFunc_03_646a
 	ld a,$03
-	ld (wGenericCutscene.cbc1),a
+	ld (wGenericCutscene.endingCutsceneState),a
 	ld a,$04
 	jp fadeoutToWhiteWithDelay
 
 endgameCutsceneHandler_0a_stage3_seasons:
-	ld de,wGenericCutscene.cbc2
+	ld de,wGenericCutscene.endingCutsceneSubstate
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -1912,7 +1912,7 @@ endgameCutsceneHandler_0a_stage3_seasons:
 	or a
 	ret nz
 	call disableLcd
-	call incCbc2
+	call incEndingCutsceneSubstate
 	call seasonsFunc_03_66ed
 	call clearDynamicInteractions
 	call clearOam
@@ -1943,7 +1943,7 @@ endgameCutsceneHandler_0a_stage3_seasons:
 	ldi (hl),a
 	ldi (hl),a
 	ld (hl),a
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$f0
 	ld (hl),a
 	ld a,SNDCTRL_MEDIUM_FADEOUT
@@ -1955,7 +1955,7 @@ endgameCutsceneHandler_0a_stage3_seasons:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 @state1Func0:
 	call checkIsLinkedGame
 	ret z
@@ -1981,9 +1981,9 @@ endgameCutsceneHandler_0a_stage3_seasons:
 
 @state2:
 	call @state1Func0
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 
 @state3:
 	call @state1Func0
@@ -1995,14 +1995,14 @@ endgameCutsceneHandler_0a_stage3_seasons:
 	ld a,(wKeysJustPressed)
 	and (BTN_START|BTN_A|BTN_B)
 	ret z
-	call incCbc2
+	call incEndingCutsceneSubstate
 	jp fadeoutToWhite
 
 @state4:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	call disableLcd
 .ifdef ROM_COMBO
 	callab bank3.generateGameTransferSecret
@@ -2038,7 +2038,7 @@ endgameCutsceneHandler_0a_stage3_seasons:
 	call clearOam
 	ld a,$04
 	call loadGfxRegisterStateIndex
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	call fileSelect_redrawDecorations
 	jp fadeinFromWhite
@@ -2047,18 +2047,18 @@ endgameCutsceneHandler_0a_stage3_seasons:
 	call fileSelect_redrawDecorations
 	call seasonsFunc_03_6462
 	ret nz
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld b,$3c
 	call checkIsLinkedGame
 	jr z,+
 	ld b,$b4
 +
 	ld (hl),b
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 
 @state6:
 	call fileSelect_redrawDecorations
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	call checkIsLinkedGame
 	jr nz,+
@@ -2068,7 +2068,7 @@ endgameCutsceneHandler_0a_stage3_seasons:
 	xor a
 	ld (wTmpcfc0.genericCutscene.cfde),a
 +
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 
 @state7:
 	call fileSelect_redrawDecorations
@@ -2083,7 +2083,7 @@ endgameCutsceneHandler_0a_stage3_seasons:
 	or a
 	ret z
 ++
-	call incCbc2
+	call incEndingCutsceneSubstate
 	ld a,SNDCTRL_FAST_FADEOUT
 	call playSound
 	jp fadeoutToWhite
@@ -2097,7 +2097,7 @@ endgameCutsceneHandler_0a_stage3_seasons:
 	jp nz,resetGame
 	call disableLcd
 	call clearOam
-	call incCbc2
+	call incEndingCutsceneSubstate
 .ifdef ROM_COMBO
 	ld a,GFXH_TO_BE_CONTINUED_SEASONS
 .else
@@ -2115,9 +2115,9 @@ endgameCutsceneHandler_0a_stage3_seasons:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$b4
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 @state9Func0:
 	ld hl,oamData_15_4e0c
 	ld e,:oamData_15_4e0c
@@ -2128,7 +2128,7 @@ endgameCutsceneHandler_0a_stage3_seasons:
 
 @stateA:
 	call @state9Func0
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld a,(hl)
 	or a
 	jr z,+
@@ -2138,7 +2138,7 @@ endgameCutsceneHandler_0a_stage3_seasons:
 	ld a,(wKeysJustPressed)
 	and BTN_A
 	ret z
-	call incCbc2
+	call incEndingCutsceneSubstate
 	jp fadeoutToWhite
 
 @stateB:
@@ -2233,16 +2233,16 @@ seasonsFunc_03_645a:
 	ld a,(wTextIsActive)
 	or a
 	ret nz
-	jp decCbb3
+	jp decCutsceneTimer
 
 seasonsFunc_03_6462:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	jp decCbb3
+	jp decCutsceneTimer
 
 seasonsFunc_03_646a:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld b,$10
 	jp clearMemory
 

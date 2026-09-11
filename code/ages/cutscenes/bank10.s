@@ -56,7 +56,7 @@ blackTowerEscape_simulatedInput4:
 agesFunc_10_70f6:
 	xor a
 	ldh (<hOamTail),a
-	ld de,wGenericCutscene.cbc2
+	ld de,wGenericCutscene.endingCutsceneSubstate
 	ld a,(de)
 	rst_jumpTable
 	.dw @substate0
@@ -72,7 +72,7 @@ agesFunc_10_70f6:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	call disableLcd
 	call clearDynamicInteractions
 	call clearOam
@@ -102,7 +102,7 @@ agesFunc_10_70f6:
 	ld (hl),$e0
 	inc hl
 	ld (hl),$01
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 @substate2:
 	ld hl,wTmpcbb3
 	call decHlRef16WithCap
@@ -139,16 +139,16 @@ agesFunc_10_70f6:
 	ld (hl),b
 	jr nz,-
 +
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 @substate3:
 	ld a,(wGfxRegs1.SCY)
 	or a
 	jr nz,@func_71aa
 	ld a,$78
 	ld (wTmpcbb3),a
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 @func_71aa:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	ld (hl),$04
 	ld hl,wGfxRegs1.SCY
@@ -157,11 +157,11 @@ agesFunc_10_70f6:
 	ldh (<hCameraY),a
 	ret
 @substate4:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	ld a,$ff
 	ld (wTmpcbba),a
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 @substate5:
 	ld hl,wTmpcbb3
 	ld b,$01
@@ -187,7 +187,7 @@ agesFunc_10_70f6:
 	call loadGfxRegisterStateIndex
 	ld a,$04
 	call fadeinFromWhiteWithDelay
-	call incCbc2
+	call incEndingCutsceneSubstate
 	ld a,$f0
 	ld (wTmpcbb3),a
 @func_71fd:
@@ -245,21 +245,21 @@ agesFunc_10_70f6:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	ld a,$04
 	ld (wTmpcbb3),a
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 @substate7:
 	ld a,(wGfxRegs1.SCY)
 	cp $98
 	jr nz,@func_7262
 	ld a,$f0
 	ld (wTmpcbb3),a
-	call incCbc2
+	call incEndingCutsceneSubstate
 	jr ++
 @func_7262:
-	call decCbb3
+	call decCutsceneTimer
 	jr nz,++
 	ld (hl),$04
 	ld hl,wGfxRegs1.SCY
@@ -275,7 +275,7 @@ agesFunc_10_70f6:
 	jp @func_71fd
 @substate8:
 	call @func_71fd
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 .ifdef ROM_COMBO
 	call cutscene_clearTmpCBB3
@@ -289,7 +289,7 @@ agesFunc_10_70f6:
 
 
 agesFunc_10_7298:
-	ld de,wGenericCutscene.cbc2
+	ld de,wGenericCutscene.endingCutsceneSubstate
 	ld a,(de)
 	rst_jumpTable
 	.dw @substate0
@@ -313,7 +313,7 @@ agesFunc_10_7298:
 	or a
 	ret nz
 	call disableLcd
-	call incCbc2
+	call incEndingCutsceneSubstate
 .ifdef ROM_COMBO
 	call func_60f1
 .else
@@ -355,7 +355,7 @@ agesFunc_10_7298:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 @func_731b:
 	call checkIsLinkedGame
 	ret z
@@ -392,9 +392,9 @@ agesFunc_10_7298:
 
 @substate2:
 	call @func_731b
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 @substate3:
 	call @func_731b
 	ld hl,wFileIsLinkedGame
@@ -405,13 +405,13 @@ agesFunc_10_7298:
 	ld a,(wKeysJustPressed)
 	and (BTN_A|BTN_B|BTN_START)
 	ret z
-	call incCbc2
+	call incEndingCutsceneSubstate
 	jp fadeoutToWhite
 @substate4:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call incCbc2
+	call incEndingCutsceneSubstate
 	call disableLcd
 	callab bank3.generateGameTransferSecret
 	ld a,$ff
@@ -454,7 +454,7 @@ agesFunc_10_7298:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	ld hl,wTmpcbb3
 	ld b,$3c
@@ -463,10 +463,10 @@ agesFunc_10_7298:
 	ld b,$b4
 +
 	ld (hl),b
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 @substate6:
 	call fileSelect_redrawDecorations
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	call checkIsLinkedGame
 	jr nz,+
@@ -476,7 +476,7 @@ agesFunc_10_7298:
 	xor a
 	ld (wTmpcfc0.genericCutscene.cfde),a
 +
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 @substate7:
 	call fileSelect_redrawDecorations
 	call checkIsLinkedGame
@@ -490,7 +490,7 @@ agesFunc_10_7298:
 	or a
 	ret z
 ++
-	call incCbc2
+	call incEndingCutsceneSubstate
 	ld a,SNDCTRL_FAST_FADEOUT
 	call playSound
 	jp fadeoutToWhite
@@ -507,7 +507,7 @@ agesFunc_10_7298:
 	jp nz,resetGame
 	call disableLcd
 	call clearOam
-	call incCbc2
+	call incEndingCutsceneSubstate
 .ifdef ROM_COMBO
 	ld a,GFXH_TO_BE_CONTINUED_AGES
 .else
@@ -526,7 +526,7 @@ agesFunc_10_7298:
 	ret nz
 	ld hl,wTmpcbb3
 	ld (hl),$b4
-	jp incCbc2
+	jp incEndingCutsceneSubstate
 @func_7450:
 .ifdef ROM_COMBO
 	ld hl,oamData_4fec
@@ -551,7 +551,7 @@ agesFunc_10_7298:
 	ld a,(wKeysJustPressed)
 	and BTN_A
 	ret z
-	call incCbc2
+	call incEndingCutsceneSubstate
 	jp fadeoutToWhite
 @substateB:
 	call @func_7450

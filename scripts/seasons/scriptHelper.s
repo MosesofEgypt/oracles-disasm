@@ -2772,7 +2772,7 @@ moblinKeepScene_putLinkOnGround:
 ; INTERAC_SHIP_PIRATIAN_CAPTAIN
 ; ==================================================================================================
 shipPiratian_incCbb3:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	inc (hl)
 	ret
 

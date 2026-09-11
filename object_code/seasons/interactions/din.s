@@ -170,7 +170,7 @@ dinState1_subid0:
 	call interactionDecCounter1
 	jr nz,@func_6576
 	call interactionIncSubstate
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$00
 	ld hl,wGenericCutscene.cbba
 	ld (hl),$ff
@@ -186,7 +186,7 @@ dinState1_subid0:
 	ld (hl),a
 	jp interactionAnimate
 @substate3:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld b,$01
 	call flashScreen
 	ret z

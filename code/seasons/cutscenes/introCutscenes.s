@@ -60,7 +60,7 @@ cutscene06Func1:
 	call loadPaletteHeader
 	ld a,$04
 	call loadGfxRegisterStateIndex
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$58
 	inc hl
 	ld (hl),$02
@@ -126,7 +126,7 @@ cutscene06Func2:
 	jp nz,seasonsFunc_03_7386
 	call seasonsFunc_03_7458
 	call seasonsFunc_03_7386
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	call decHlRef16WithCap
 	jr z,+
 	rst_derefHl
@@ -187,7 +187,7 @@ cutscene06Func4:
 	jp incCutsceneState2
 
 seasonsFunc_03_74a3:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	inc l
 	inc (hl)
@@ -253,7 +253,7 @@ cutscene06Func5:
 	call seasonsFunc_03_7516
 	call seasonsFunc_03_74a3
 	ret nz
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	jp incCutsceneState2
 
@@ -320,7 +320,7 @@ cutsceneDinDancing_loadListOfTiles:
 	.db $04 $66 $67 $76 $77
 	
 cutscene06Func6:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	call incCutsceneState2
 	ld bc,$0c08
@@ -380,12 +380,12 @@ cutscene06Funcb:
 	
 cutscene06Funcc:
 	call retIfTextIsActive
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$1e
 	jp incCutsceneState2
 	
 cutscene06Funcd:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld (hl),$09
@@ -396,12 +396,12 @@ cutscene06Funce:
 	ld a,(hl)
 	cp $0b
 	ret nz
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	jp incCutsceneState2
 	
 cutscene06Funcf:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	call clearOam
 	call cutscene_clearObjects
@@ -438,7 +438,7 @@ cutsceneDinImprisoned:
 	ld (de),a
 	ld a,$09
 	ld (wTmpcfc0.genericCutscene.cfd0),a
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$58
 	inc l
 	ld (hl),$01
@@ -453,7 +453,7 @@ cutsceneDinImprisoned:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	call decHlRef16WithCap
 	jr nz,+
 	xor a
@@ -461,7 +461,7 @@ cutsceneDinImprisoned:
 	call incCutsceneState2
 	jp fadeoutToWhite
 +
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld a,(hl)
 	and $01
 	ret nz
@@ -539,13 +539,13 @@ cutsceneDinImprisoned:
 	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	sub $0c
 	ret nz
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	dec a
 	ld (wGenericCutscene.cbba),a
 	jp incCutsceneState2
 
 @state5:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld b,$01
 	call flashScreen
 	ret z
@@ -582,7 +582,7 @@ cutsceneDinImprisoned:
 	ld a,$0d
 	call loadGfxRegisterStateIndex
 	call fadeinFromWhite
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$f0
 	xor a
 	ld (wOpenedMenuType),a
@@ -592,7 +592,7 @@ cutsceneDinImprisoned:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	call incCutsceneState2
 	jp fadeoutToWhite
@@ -675,7 +675,7 @@ cutscene08Func0:
 	inc de
 	ld a,(hl)
 	ld (de),a
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	xor a
 	ld hl,wTmpcfc0.genericCutscene.cfd3
@@ -688,7 +688,7 @@ cutscene08Func1:
 	ld a,(wPaletteThread_mode)
 	or a
 	jp nz,seasonsFunc_03_7827
-	call decCbb3
+	call decCutsceneTimer
 	jr nz,seasonsFunc_03_7827
 	ld b,$05
 -
@@ -701,7 +701,7 @@ cutscene08Func1:
 	ld (hl),a
 	jr nz,-
 +
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$b4
 	inc hl
 	ld (hl),$00
@@ -710,7 +710,7 @@ cutscene08Func1:
 seasonsFunc_03_7827:
 	jp seasonsFunc_03_7981
 cutscene08Func2:
-	call decCbb3
+	call decCutsceneTimer
 	jr nz,+
 	call seasonsFunc_03_7a01
 	xor a
@@ -726,7 +726,7 @@ cutscene08Func2:
 	jp seasonsFunc_03_7981
 cutscene08Func3:
 	call seasonsFunc_03_7981
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	inc l
 	inc (hl)
@@ -743,7 +743,7 @@ cutscene08Func3:
 	ld a,PALH_SEASONS_98
 	call loadPaletteHeader
 	call seasonsFunc_03_7a17
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$78
 	inc l
 	ld (hl),$00
@@ -752,7 +752,7 @@ cutscene08Func3:
 	res 7,(hl)
 	jp incCutsceneState2
 cutscene08Func4:
-	call decCbb3
+	call decCutsceneTimer
 	jr nz,+
 	call disableLcd
 	ld a,$03
@@ -772,7 +772,7 @@ cutscene08Func4:
 cutscene08Func5:
 	call seasonsFunc_03_7981
 	call seasonsFunc_03_7a2e
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	inc l
 	inc (hl)
@@ -781,7 +781,7 @@ cutscene08Func5:
 	jr z,+
 	jp seasonsFunc_03_7917
 +
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	call reloadObjectGfx
 	ld a,$07
@@ -790,7 +790,7 @@ cutscene08Func5:
 	call clearPaletteFadeVariablesAndRefreshPalettes
 	jp incCutsceneState2
 cutscene08Func6:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	ld a,$01
 	ld (wMenuDisabled),a
@@ -800,14 +800,14 @@ cutscene08Func6:
 cutscene08Func7:
 	call retIfTextIsActive
 	call incCutsceneState2
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$5a
 	jp fadeoutToBlack
 cutscene08Func8:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	xor a
 	ld (wGameState),a
@@ -828,7 +828,7 @@ seasonsFunc_03_7909:
 
 seasonsFunc_03_7917:
 	ld (wGenericCutscene.cbbb),a
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$5a
 	call disableLcd
 	ld a,(wGenericCutscene.cbbb)
@@ -1165,7 +1165,7 @@ cutscene0dFunc0:
 +
 	ld a,MUS_FINAL_DUNGEON
 	call playSound
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	ld a,$13
 	call loadGfxRegisterStateIndex
@@ -1179,10 +1179,10 @@ cutscene0dFunc0:
 cutscene0dFunc1:
 	ld e,$96
 -
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	call incCutsceneState2
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),e
 	ld a,SND_CREEPY_LAUGH
 	jp playSound
@@ -1190,7 +1190,7 @@ cutscene0dFunc2:
 	ld e,$3c
 	jr -
 cutscene0dFunc3:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	call incCutsceneState2
 	call fastFadeinFromBlack
@@ -1208,7 +1208,7 @@ cutscene0dFunc4:
 	ret nz
 	call incCutsceneState2
 	ld a,$0e
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	call fadeinFromBlack
 	ld a,$ef
 	ld (wDirtyFadeSprPalettes),a
@@ -1218,15 +1218,15 @@ cutscene0dFunc4:
 	ld (wFadeBgPaletteSources),a
 	ret
 cutscene0dFunc5:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	xor a
 	ld (wPaletteThread_mode),a
 	ld a,$78
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	jp incCutsceneState2
 cutscene0dFunc6:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	call incCutsceneState2
 	ld a,$08
@@ -1238,27 +1238,27 @@ cutscene0dFunc6:
 cutscene0dFunc7:
 	call retIfTextIsActive
 	call incCutsceneState2
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	dec a
 	ld (wGenericCutscene.cbba),a
 	call restartSound
 	ld a,SND_BIG_EXPLOSION_2
 	jp playSound
 cutscene0dFunc8:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld b,$03
 	call flashScreen
 	ret z
 	call incCutsceneState2
 	ld a,$3c
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	ld a,$02
 	jp fadeoutToWhiteWithDelay
 cutscene0dFunc9:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	jp incCutsceneState2
 
@@ -1286,7 +1286,7 @@ cutscene0eFunc0:
 	call clearDynamicInteractions
 	ld a,SNDCTRL_FAST_FADEOUT
 	call playSound
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	ld hl,$d01a
 	res 7,(hl)
@@ -1294,7 +1294,7 @@ cutscene0eFunc0:
 	ld (wTmpcfc0.normal.cfc0),a
 	jp incCutsceneState2
 cutscene0eFunc1:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	ld (hl),$14
 	call incCutsceneState2
@@ -1304,7 +1304,7 @@ cutscene0eFunc1:
 	jp showText
 cutscene0eFunc2:
 	call retIfTextIsActive
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	call disableLcd
 	call getFreeInteractionSlot
@@ -1342,14 +1342,14 @@ cutscene0eFunc2:
 	ld (wTilesetAnimation),a
 	call loadAnimationData
 	xor a
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	dec a
 	ld (wGenericCutscene.cbba),a
 	ld a,SND_LIGHTNING
 	call playSound
 	jp incCutsceneState2
 cutscene0eFunc3:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld b,$01
 	call flashScreen
 	ret z
@@ -1364,13 +1364,13 @@ cutscene0eFunc3:
 	ldh (<hDirtySprPalettes),a
 	ldh (<hBgPaletteSources),a
 	ldh (<hSprPaletteSources),a
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	ld a,MUS_DISASTER
 	call playSound
 	jp incCutsceneState2
 cutscene0eFunc4:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	ld (hl),$3c
 	call brightenRoom
@@ -1385,7 +1385,7 @@ cutscene0eFunc5:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	ld (hl),$5a
 	ld a,$f0
@@ -1396,7 +1396,7 @@ cutscene0eFunc5:
 	ld (wFadeBgPaletteSources),a
 	jp incCutsceneState2
 cutscene0eFunc6:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	call getFreeInteractionSlot
 	jr nz,+
@@ -1464,11 +1464,11 @@ cutscene0dFuncb:
 	cp $07
 	ret nz
 	call clearLinkObject
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	jp incCutsceneState2
 cutscene0dFuncc:
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 	ld hl,wGameState
 	xor a

@@ -12,7 +12,7 @@ cutsceneHandler_0c:
 
 cutsceneHandler_0c_stage0:
 	ld b,$10
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	call clearMemory
 	call clearWramBank1
 	xor a
@@ -31,7 +31,7 @@ cutsceneHandler_0c_stage1:
 	ld a,(wFrameCounter)
 	and $07
 	ret nz
-	ld a,(wGenericCutscene.cbb3)
+	ld a,(wGenericCutscene.cutsceneTimer)
 	rst_jumpTable
 	.dw @state0
 	.dw @state1
@@ -129,7 +129,7 @@ seasonsFunc_03_67e9:
 	xor a
 	ld (wTmpcfc0.normal.cfc0),a
 	ld b,$10
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	jp clearMemory
 
 seasonsFunc_03_67f8:
@@ -146,7 +146,7 @@ seasonsFunc_03_67f8:
 	jr seasonsFunc_03_684c
 
 incCbb3:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	inc (hl)
 	ret
 
@@ -202,7 +202,7 @@ seasonsFunc_03_684c:
 	jp queueDmaTransfer
 
 cutsceneHandler_0c_stage2:
-	ld a,(wGenericCutscene.cbb3)
+	ld a,(wGenericCutscene.cutsceneTimer)
 	rst_jumpTable
 	.dw @state0
 	.dw @state1
@@ -251,7 +251,7 @@ cutsceneHandler_0c_stage2:
 	jp fadeoutToWhite
 
 cutsceneHandler_0c_stage3:
-	ld a,(wGenericCutscene.cbb3)
+	ld a,(wGenericCutscene.cutsceneTimer)
 	rst_jumpTable
 	.dw @state0
 	.dw @state1
@@ -374,7 +374,7 @@ cutsceneHandler_0c_stage3:
 	ld a,$04
 	ld (wCutsceneState),a
 	ld b,$10
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	jp clearMemory
 
 seasonsFunc_03_69d1:
@@ -387,7 +387,7 @@ seasonsFunc_03_69d1:
 	ret
 
 cutsceneHandler_0c_stage4:
-	ld a,(wGenericCutscene.cbb3)
+	ld a,(wGenericCutscene.cutsceneTimer)
 	rst_jumpTable
 	.dw @state0
 	.dw @state1
@@ -417,7 +417,7 @@ cutsceneHandler_0c_stage4:
 
 cutsceneHandler_0c_stage5:
 	call seasonsFunc_03_6b6c
-	ld a,(wGenericCutscene.cbb3)
+	ld a,(wGenericCutscene.cutsceneTimer)
 	rst_jumpTable
 	.dw @state0
 	.dw @state1

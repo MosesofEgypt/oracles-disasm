@@ -268,7 +268,7 @@ interaction6b_subid06:
 	ret nz
 
 	xor a
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),a
 	dec a
 	ld hl,wGenericCutscene.cbba
@@ -278,7 +278,7 @@ interaction6b_subid06:
 	jp interactionIncSubstate
 
 @substate1:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld b,$01
 	call flashScreen
 	ret z

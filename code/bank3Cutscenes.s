@@ -632,7 +632,7 @@ intro_titlescreen_state0:
 	call loadPaletteHeader
 
 	; cbb3-cbb4 used as a 2-byte counter until automatically exiting
-	ld hl,wTmpcbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld a,$60
 	ldi (hl),a
 	ld a,$09
@@ -773,7 +773,7 @@ introCinematic_ridingHorse_state0:
 	call loadPaletteHeader
 
 	; Use cbb3-cbb4 as a 2-byte counter; wait for 0x15e=350 frames
-	ld hl,wTmpcbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$5e
 	inc hl
 	ld (hl),$01
@@ -836,7 +836,7 @@ introCinematic_ridingHorse_state2_ages:
 introCinematic_ridingHorse_state2:
 .endif
 	call introCinematic_ridingHorse_updateScrollingGround
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 
 	; Set counter to 6 frames (so screen scrolls down once every 6 frames)
@@ -880,7 +880,7 @@ introCinematic_ridingHorse_updateScrollingGround:
 ; State 3: camera has scrolled all the way down; not doing anything for a bit
 introCinematic_ridingHorse_state3:
 	call introCinematic_ridingHorse_updateScrollingGround
-	call decCbb3
+	call decCutsceneTimer
 	ret nz
 
 	; Initialize stuff for state 4
@@ -1073,7 +1073,7 @@ introCinematic_ridingHorse_state0:
 	call loadPaletteHeader
 
 	; Use cbb3-cbb4 as a 2-byte counter; wait for 0x37e=894 frames
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$7e
 	inc hl
 	ld (hl),$03

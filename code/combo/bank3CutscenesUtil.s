@@ -68,14 +68,14 @@ cutscene_decCBB3IfNotFadingOut:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	jp decCbb3
+	jp decCutsceneTimer
 
 ;;
 cutscene_decCBB3IfTextNotActive:
 	ld a,(wTextIsActive)
 	or a
 	ret nz
-	jp decCbb3
+	jp decCutsceneTimer
 
 cutscene_loadAObjectGfxBTimes:
 	ld hl,wLoadedObjectGfx

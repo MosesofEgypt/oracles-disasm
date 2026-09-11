@@ -75,13 +75,13 @@ twinrovaInCutscene_state1:
 	ld a,SND_LIGHTNING
 	call playSound
 	xor a
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	dec a
 	ld (wGenericCutscene.cbba),a
 	jp interactionIncSubstate
 
 @substate1:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld b,$02
 	call flashScreen
 	ret z

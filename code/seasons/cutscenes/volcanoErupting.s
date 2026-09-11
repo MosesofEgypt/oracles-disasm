@@ -25,7 +25,7 @@ cutsceneHandler_0b_stage0:
 	ld a,$01
 	ld (wCutsceneState),a
 	xor a
-	ld (wGenericCutscene.cbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	ld a,MUS_DISASTER
 	ld (wActiveMusic),a
 	call playSound
@@ -40,7 +40,7 @@ cutsceneHandler_0b_stage0:
 
 cutsceneHandler_0b_stage1:
 	call seasonsFunc_03_6df8
-	ld a,(wGenericCutscene.cbb3)
+	ld a,(wGenericCutscene.cutsceneTimer)
 	rst_jumpTable
 	.dw @state0
 	.dw @state1
@@ -59,7 +59,7 @@ cutsceneHandler_0b_stage1:
 	ld (hl),$96
 	inc hl
 	ld (hl),$01
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	inc (hl)
 
 @state1:
@@ -70,7 +70,7 @@ cutsceneHandler_0b_stage1:
 	ret nz
 	ld a,$81
 	ld (wScreenTransitionDirection),a
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	inc (hl)
 
 @state2:
@@ -86,7 +86,7 @@ cutsceneHandler_0b_stage1:
 	call generateVramTilesWithRoomChanges
 	ld a,$08
 	ld (wScrollMode),a
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	inc (hl)
 
 @state3:
@@ -106,7 +106,7 @@ cutsceneHandler_0b_stage1:
 seasonsFunc_03_6c5f:
 	ld hl,wCutsceneState
 	inc (hl)
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$00
 	ret
 
@@ -125,7 +125,7 @@ cutsceneHandler_0b_stage2:
 	jp fastFadeoutToWhite
 
 cutsceneHandler_0b_stage3:
-	ld a,(wGenericCutscene.cbb3)
+	ld a,(wGenericCutscene.cutsceneTimer)
 	rst_jumpTable
 	.dw @state0
 	.dw @state1
@@ -144,7 +144,7 @@ cutsceneHandler_0b_stage3:
 	call seasonsFunc_03_6de4
 	ld a,$1e
 	ld (wGenericCutscene.cbb4),a
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	inc (hl)
 	jp seasonsFunc_03_6d9f
 
@@ -156,7 +156,7 @@ cutsceneHandler_0b_stage3:
 	ld (hl),$78
 	inc hl
 	ld (hl),$01
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	inc (hl)
 
 @state2:
@@ -165,7 +165,7 @@ cutsceneHandler_0b_stage3:
 	call seasonsFunc_03_6ddf
 	ret nz
 	call seasonsFunc_03_6df8
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	inc (hl)
 	ld a,$02
 	call fadeoutToWhiteWithDelay
@@ -181,7 +181,7 @@ cutsceneHandler_0b_stage3:
 	inc l
 	ld (hl),$0e
 +
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	inc (hl)
 	ld hl,wGenericCutscene.cbb4
 	ld (hl),$78
@@ -197,7 +197,7 @@ cutsceneHandler_0b_stage3:
 	jp fadeoutToWhiteWithDelay
 
 cutsceneHandler_0b_stage4:
-	ld a,(wGenericCutscene.cbb3)
+	ld a,(wGenericCutscene.cutsceneTimer)
 	rst_jumpTable
 	.dw @state0
 	.dw cutsceneHandler_0b_stage3@state1
@@ -218,12 +218,12 @@ cutsceneHandler_0b_stage4:
 	call seasonsFunc_03_6de4
 	ld a,$1e
 	ld (wGenericCutscene.cbb4),a
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	inc (hl)
 	jp seasonsFunc_03_6d9f
 
 cutsceneHandler_0b_stage5:
-	ld a,(wGenericCutscene.cbb3)
+	ld a,(wGenericCutscene.cutsceneTimer)
 	rst_jumpTable
 	.dw @state0
 	.dw cutsceneHandler_0b_stage3@state1
@@ -244,7 +244,7 @@ cutsceneHandler_0b_stage5:
 	call seasonsFunc_03_6de4
 	ld a,$1e
 	ld (wGenericCutscene.cbb4),a
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	inc (hl)
 	jp seasonsFunc_03_6d9f
 

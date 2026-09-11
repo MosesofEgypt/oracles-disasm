@@ -53,7 +53,7 @@ zelda_state0:
 	ld a,$38
 	call playSound
 +
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld b,$10
 	call clearMemory
 	jr @setVisibleInitGraphicsIncState

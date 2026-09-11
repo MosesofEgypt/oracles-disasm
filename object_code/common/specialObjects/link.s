@@ -2717,7 +2717,7 @@ linkState10:
 	jr z,+
 	ld (hl),a
 +
-	ld a,(wGenericCutscene.cbb3)
+	ld a,(wGenericCutscene.cutsceneTimer)
 	cp $02
 	jp nz,specialObjectUpdatePosition
 	ld a,(wCutsceneState)
@@ -2737,7 +2737,7 @@ linkState10:
 	call specialObjectAnimate
 	call itemDecCounter1
 	jp nz,specialObjectUpdatePosition
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	inc (hl)
 	ld a,$02
 	call fadeoutToWhiteWithDelay

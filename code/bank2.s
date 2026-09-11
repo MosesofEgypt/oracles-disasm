@@ -2374,7 +2374,7 @@ fileSelectMode7:
 	ldh (<hFFBE),a
 	xor a
 	ldh (<hSerialLinkState),a
-	ld (wGenericCutscene.cbc2),a
+	ld (wGenericCutscene.endingCutsceneSubstate),a
 
 	ld hl,wFileSelect.linkTimer
 	ld a,$f0
@@ -2438,7 +2438,7 @@ fileSelectMode7:
 	jr nz,-
 
 	ld a,$85
-	ld (wGenericCutscene.cbc2),a
+	ld (wGenericCutscene.endingCutsceneSubstate),a
 	ld a,$ff
 	ld (wFileSelect.cursorPos),a
 	jp @func_02_4c4b
@@ -2479,7 +2479,7 @@ fileSelectMode7:
 	ld a,$03
 	ld (wFileSelect.cursorPos),a
 	ld a,$8f
-	ld (wGenericCutscene.cbc2),a
+	ld (wGenericCutscene.endingCutsceneSubstate),a
 
 @selectedSomething:
 	ld a,(wFileSelect.cursorPos)
@@ -2492,7 +2492,7 @@ fileSelectMode7:
 	ld a,$03
 	ld (wFileSelect.cursorPos),a
 	ld a,$8f
-	ld (wGenericCutscene.cbc2),a
+	ld (wGenericCutscene.endingCutsceneSubstate),a
 	jr @func_02_4c4b
 
 @selectedSomething:

@@ -51,7 +51,7 @@ m_InteractionCode $b5
 	ld l,Interaction.counter1
 	ld (hl),$08
 
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$00
 	ld hl,wGenericCutscene.cbba
 	ld (hl),$ff
@@ -67,7 +67,7 @@ m_InteractionCode $b5
 	set 7,(hl)
 ++
 	call interactionDecCounter1
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld b,$01
 	call flashScreen
 	ret z

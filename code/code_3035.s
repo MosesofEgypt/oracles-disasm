@@ -3,20 +3,20 @@
 .include "code/objectMovementScript.s"
 
 ;;
-decCbb3:
-	ld hl,wTmpcbb3
+decCutsceneTimer:
+	ld hl,wGenericCutscene.cutsceneTimer
 	dec (hl)
 	ret
 
 ;;
-incCbc1:
-	ld hl,wMapMenu.drawWarpDestinations
+incEndingCutsceneState:
+	ld hl,wGenericCutscene.endingCutsceneState
 	inc (hl)
 	ret
 
 ;;
-incCbc2:
-	ld hl,wGenericCutscene.cbc2
+incEndingCutsceneSubstate:
+	ld hl,wGenericCutscene.endingCutsceneSubstate
 	inc (hl)
 	ret
 

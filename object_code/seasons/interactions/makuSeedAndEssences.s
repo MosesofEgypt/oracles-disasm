@@ -183,7 +183,7 @@ m_InteractionCode $de
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	inc (hl)
 	ld a,$08
 	call fadeinFromWhiteWithDelay

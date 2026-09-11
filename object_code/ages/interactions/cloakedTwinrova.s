@@ -107,14 +107,14 @@ m_InteractionCode $8d
 	ret nz
 	ld a,SND_LIGHTNING
 	call playSound
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$00
 	ld hl,wGenericCutscene.cbba
 	ld (hl),$ff
 	jp interactionIncSubstate
 
 @subid1Substate3:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld b,$02
 	call flashScreen
 	ret z

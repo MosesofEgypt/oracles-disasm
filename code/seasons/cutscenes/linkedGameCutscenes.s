@@ -27,7 +27,7 @@ zeldaKidnappedCutsceneBody:
 
 bank3Cutscene_state0:
 	ld b,$10
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	call clearMemory
 	call clearWramBank1
 	xor a
@@ -39,7 +39,7 @@ bank3Cutscene_state0:
 	ret
 
 flameOfDestructionCutscene_state1:
-	ld a,(wGenericCutscene.cbb3)
+	ld a,(wGenericCutscene.cutsceneTimer)
 	rst_jumpTable
 	.dw @fadeToBlack
 	.dw @roomOfRitesStart
@@ -208,7 +208,7 @@ flameOfDestructionCutscene_state1:
 
 
 zeldaAndVillagersCutscene_state1:
-	ld a,(wGenericCutscene.cbb3)
+	ld a,(wGenericCutscene.cutsceneTimer)
 	rst_jumpTable
 	.dw @start
 	.dw @loadImpaRoomAndMusic
@@ -296,14 +296,14 @@ zeldaAndVillagersCutscene_state1:
 
 zeldaKidnappedCutscene_state1:
 	call zeldaKidnappedCutscene_state1Handler
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld a,(hl)
 	cp $10
 	jp c,updateStatusBar
 	ret
 
 zeldaKidnappedCutscene_state1Handler:
-	ld a,(wGenericCutscene.cbb3)
+	ld a,(wGenericCutscene.cutsceneTimer)
 	rst_jumpTable
 	.dw @startByFadingOut
 	.dw @loadSokraRoomAndInteractions
@@ -588,7 +588,7 @@ showCutscene50xxText:
 	ld (wGenericCutscene.cbb5),a
 
 incTmpcbb3:
-	ld hl,wGenericCutscene.cbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	inc (hl)
 	ret
 
