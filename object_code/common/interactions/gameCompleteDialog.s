@@ -14,4 +14,11 @@ m_InteractionCode $d1
 	ld c,a
 	callab bank1.loadDeathRespawnBufferPreset
 	ld hl,{SCRIPTS_1}.gameCompleteDialogScript
+.if defined(ROM_COMBO) && defined(ENABLE_NEW_GAME_PLUS)
+	call checkIsLinkedGame
+	jr z,+
+		; completed linked game
+		ld hl,{SCRIPTS_1}.linkedGameCompleteDialogScript
+	+
+.endif
 	jp interactionSetScript

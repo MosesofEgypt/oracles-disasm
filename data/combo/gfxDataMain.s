@@ -42,6 +42,7 @@ m_GfxData flg_unappraised_ring_list
 m_GfxData gfx_blank
 m_GfxData gfx_blurb_roomofrites
 m_GfxData gfx_capcom_nintendo
+m_GfxData gfx_continuingthequest
 m_GfxData gfx_copy
 m_GfxData gfx_copywhatwhere
 m_GfxData gfx_credits_bg_1
@@ -72,7 +73,6 @@ m_GfxData gfx_fileselect
 m_GfxData gfx_gale_tree
 m_GfxData gfx_gameover
 m_GfxData gfx_gasha_tree
-m_GfxData gfx_herossecret
 m_GfxData gfx_hud
 m_GfxData gfx_intro_outside_castle_1
 m_GfxData gfx_intro_outside_castle_2
@@ -296,7 +296,6 @@ m_GfxData gfx_nayru_singing_cutscene_2
 m_GfxData gfx_nayru_singing_cutscene_3
 m_GfxData gfx_past_chest
 m_GfxData gfx_past_sign
-m_GfxData gfx_secrettoholodrum
 m_GfxData gfx_tileset_black_tower
 m_GfxData gfx_tileset_credits
 m_GfxData gfx_tileset_maku_path
@@ -483,7 +482,6 @@ m_GfxData gfx_minimap_tiles_subrosia
 m_GfxData gfx_pirate_ship_tiles_1
 m_GfxData gfx_pirate_ship_tiles_2
 m_GfxData gfx_pirate_ship_tiles_3
-m_GfxData gfx_secrettolabrynna
 m_GfxData gfx_templefall_background_1
 m_GfxData gfx_templefall_background_2
 m_GfxData gfx_temple_of_seasons

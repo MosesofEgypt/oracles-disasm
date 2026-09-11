@@ -1185,6 +1185,11 @@ blueSnakeScript_successfulRingTransfer:
 ; INTERAC_GAME_COMPLETE_DIALOG
 ; ==================================================================================================
 gameCompleteDialogScript:
+.if defined(ROM_COMBO)
+	wait 30
+	showtext TX_034e
+.endif
+-
 	wait 30
 	showtext TX_550d
 	jumpiftextoptioneq $00, @dontSave
@@ -1198,11 +1203,22 @@ gameCompleteDialogScript:
 @dontSave:
 	wait 30
 	showtext TX_550e
-	jumpiftextoptioneq $00, gameCompleteDialogScript
+	jumpiftextoptioneq $00, -
 ++
 	writememory wTmpcfc0.genericCutscene.cfde, $01
 	scriptend
 
+.if defined(ROM_COMBO) && defined(ENABLE_NEW_GAME_PLUS)
+linkedGameCompleteDialogScript:
+	wait 30
+	showtext TX_034f
+	-
+		showtext TX_0350
+		jumpiftextoptioneq $00, -
+
+	writememory wTmpcfc0.genericCutscene.cfde, $01
+	scriptend
+.endif
 
 ; ==================================================================================================
 ; INTERAC_RING_HELP_BOOK

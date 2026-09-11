@@ -1115,13 +1115,12 @@ initialFileVariables_heroGame:
 initialFileVariables_linkedGame:
 	.db <wSwordLevel,			$01
 	.db <wShieldLevel,			$01
-initialFileVariables_linkedGameCombo:
 	.db <wInventoryStorage,			ITEM_SWORD
-	.db <wObtainedTreasureFlags,		(1<<TREASURE_PUNCH) | (1<<TREASURE_SWORD)
+	.db <wObtainedTreasureFlags,	(1<<TREASURE_PUNCH) | (1<<TREASURE_SWORD)
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
 initialFileVariables_linkedGame_ages:
 .endif
-.if defined(ROM_AGES) || defined(ROM_COMBO)
 	.db <wPirateShipY,			$58
 	.db <wPirateShipX,			$78
 .endif
@@ -1136,7 +1135,11 @@ initialNgpFileVariablesTable:
 
 initialNgpFileVariables_linkedGame:
 	.db <wInventoryStorage,			ITEM_SWORD
+	.db <wInventoryStorage+1,		ITEM_LIFE_VIAL
 	.db <wObtainedTreasureFlags,	(1<<TREASURE_PUNCH) | (1<<TREASURE_SWORD)
+	.db <wObtainedTreasureFlags+2,	(1<<(TREASURE_LIFE_VIAL-16))
+	.db $00
+
 initialNgpFileVariables_standardGame:
 initialNgpFileVariables_heroGame:
 	.db <wInventoryStorage+1,		ITEM_LIFE_VIAL

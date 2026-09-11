@@ -201,9 +201,9 @@ $(BUILD_DIR)/audio.o: code/audio.s | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
 $(BUILD_DIR)/gfxdata.o: gfxdata.s | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
-$(BUILD_DIR)/textAndRoomData.o: textAndRoomData.s $(BUILD_DIR)/ages_textData.s $(BUILD_DIR)/ages_textDefines.s $(BUILD_DIR)/seasons_textData.s $(BUILD_DIR)/seasons_textDefines.s | $(BUILD_DIR)
+$(BUILD_DIR)/textAndRoomData.o: textAndRoomData.s $(BUILD_DIR)/ages_textData.s $(BUILD_DIR)/seasons_textData.s | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
-$(BUILD_DIR)/$(GAME).o: $(GAME).s $(HASHFILES) Makefile | $(BUILD_DIR)
+$(BUILD_DIR)/$(GAME).o: $(GAME).s $(HASHFILES) $(BUILD_DIR)/ages_textDefines.s $(BUILD_DIR)/seasons_textDefines.s Makefile | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
 
 GEN_FILES := data/ages/objectCollisionTable.s  data/seasons/objectCollisionTable.s

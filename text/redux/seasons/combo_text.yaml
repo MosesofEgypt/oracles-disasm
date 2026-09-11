@@ -32,3 +32,79 @@ groups:
     text: |-
       Press SELECT to
       fly to Labrynna.
+  - name: TX_034e
+    index: 0x4e
+    text: |-
+      \pos(2)The dark general
+      \col(3)Onox\col(0) is no more,\stop
+      but a greater
+      evil yet looms.\stop
+      We beseech you
+      hero, find the
+      oracle, \col(3)Nayru.\col(0)\stop
+      She resides in
+      the far off land
+      of \col(3)Labrynna\col(0).\stop
+      When you are
+      ready to depart,
+      a \col(3)Gale Seed\col(0) will
+      guide you there.
+  - name: TX_034f
+    index: 0x4f
+    text: |-
+      \pos(2)Your quest has
+      come to a close.\stop
+      Should you wish
+      to test yourself
+      further, a new
+      challenge awaits
+      in \col(3)New Game+\col(0).
+  - name: TX_0350
+    index: 0x50
+    text: |-
+      \pos(2)If you accept,
+      your quest will
+      begin anew with
+      all your hearts,
+      rupees, rings,
+      and upgrades
+      being retained.\stop
+      Heart refills
+      no longer drop,
+      and \col(3)saving\col(0) is
+      \col(3)disabled\col(0) inside
+      dungeons.\stop
+      Enemies will be
+      stronger, and
+      may act in new,
+      dangerous ways.\stop
+      If you find the
+      quest lacking
+      challenge, you
+      may ascend to a
+      more challenging
+      \col(3)New Game+\col(0) quest
+      at any time.\stop
+      Be wary though,
+      as this decision
+      cannot be undone
+      once made.\stop
+      Do you need that
+      to be repeated?
+       \opt()Yes \opt()No
+- group: 0x55
+  data:
+  - name: TX_550d
+    index: 0x0d
+    text: |-
+      \pos(2)Save and quit?
+        \opt()No \opt()Yes
+  - name: TX_550e
+    index: 0x0e
+    text: |-
+      \pos(2)If you don't
+      save, you cannot
+      continue on
+      your quest.
+      Is this OK?
+        \opt()No \opt()Yes

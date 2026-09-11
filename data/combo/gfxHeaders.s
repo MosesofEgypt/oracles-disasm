@@ -722,8 +722,8 @@ m_GfxHeaderStart $83, GFXH_COMMON_SPRITES
 	m_GfxHeader spr_common_sprites, $8001
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $84, GFXH_HEROS_SECRET_TEXT
-	m_GfxHeader gfx_herossecret, $8801
+m_GfxHeaderStart $84, GFXH_NEW_GAME_PLUS_BANNER
+	m_GfxHeader gfx_startnewgameplus, $8801
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $85, GFXH_CREDITS_SCENE1_SEASONS
@@ -919,7 +919,7 @@ m_GfxHeaderStart $97, GFXH_SECRET_FOR_LINKED_GAME
 	m_GfxHeader gfx_hud, $9000, $08
 	m_GfxHeader gfx_hud, $9001
 	m_GfxHeader gfx_fileselect, $9201
-	m_GfxHeader gfx_secrettolabrynna, $8801
+	m_GfxHeader gfx_continuingthequest, $8801
 	m_GfxHeader map_file_menu_top, w3VramTiles
 	m_GfxHeader flg_file_menu_top, w3VramAttributes
 	m_GfxHeader map_secret_for_linked_game, w3VramTiles+$0a0

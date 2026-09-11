@@ -98,13 +98,13 @@ agesFunc_10_70f6:
 	ld a,(wTmpcfc0.genericCutscene.cfdf)
 	or a
 	ret z
-	ld hl,wTmpcbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$e0
 	inc hl
 	ld (hl),$01
 	jp incEndingCutsceneSubstate
 @substate2:
-	ld hl,wTmpcbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	call decHlRef16WithCap
 	ret nz
 	call checkIsLinkedGame
@@ -120,7 +120,7 @@ agesFunc_10_70f6:
 	jp fadeoutToWhiteWithDelay
 @func_7174:
 	ld a,$04
-	ld (wTmpcbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	ld a,(wGfxRegs1.SCY)
 	ldh (<hCameraY),a
 	ld a,UNCMP_GFXH_01
@@ -145,7 +145,7 @@ agesFunc_10_70f6:
 	or a
 	jr nz,@func_71aa
 	ld a,$78
-	ld (wTmpcbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	jp incEndingCutsceneSubstate
 @func_71aa:
 	call decCutsceneTimer
@@ -163,7 +163,7 @@ agesFunc_10_70f6:
 	ld (wTmpcbba),a
 	jp incEndingCutsceneSubstate
 @substate5:
-	ld hl,wTmpcbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld b,$01
 	call flashScreen
 	ret z
@@ -189,7 +189,7 @@ agesFunc_10_70f6:
 	call fadeinFromWhiteWithDelay
 	call incEndingCutsceneSubstate
 	ld a,$f0
-	ld (wTmpcbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 @func_71fd:
 	xor a
 	ldh (<hOamTail),a
@@ -248,14 +248,14 @@ agesFunc_10_70f6:
 	call decCutsceneTimer
 	ret nz
 	ld a,$04
-	ld (wTmpcbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	jp incEndingCutsceneSubstate
 @substate7:
 	ld a,(wGfxRegs1.SCY)
 	cp $98
 	jr nz,@func_7262
 	ld a,$f0
-	ld (wTmpcbb3),a
+	ld (wGenericCutscene.cutsceneTimer),a
 	call incEndingCutsceneSubstate
 	jr ++
 @func_7262:
@@ -344,7 +344,7 @@ agesFunc_10_7298:
 	ldi (hl),a
 	ldi (hl),a
 	ld (hl),a
-	ld hl,wTmpcbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$f0
 	ld (hl),a
 	ld a,SNDCTRL_MEDIUM_FADEOUT
@@ -411,12 +411,12 @@ agesFunc_10_7298:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
+	ld a,$ff
+	ld (wGenericCutscene.cbba),a
 	call incEndingCutsceneSubstate
 	call disableLcd
+.if !defined(ROM_COMBO)
 	callab bank3.generateGameTransferSecret
-	ld a,$ff
-	ld (wTmpcbba),a
-	
 	ld a,($ff00+R_SVBK)
 	push af
 	ld a,TEXT_BANK
@@ -431,23 +431,35 @@ agesFunc_10_7298:
 	jr nz,-
 	pop af
 	ld ($ff00+R_SVBK),a
+.endif
 	
 	ld a,GFXH_SECRET_FOR_LINKED_GAME
 	call loadGfxHeader
-	ld a,PALH_05
-	call loadPaletteHeader
 	ld a,UNCMP_GFXH_2b
 	call loadUncompressedGfxHeader
+	ld a,PALH_05
+	call loadPaletteHeader
 	call checkIsLinkedGame
+.if defined(ROM_COMBO)
+	ld a,GFXH_NEW_GAME_PLUS_BANNER
+.else
 	ld a,GFXH_HEROS_SECRET_TEXT
+.endif
 	call nz,loadGfxHeader
 	call clearDynamicInteractions
 	call clearOam
 	ld a,$04
 	call loadGfxRegisterStateIndex
-	ld hl,wTmpcbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	call fileSelect_redrawDecorations
+.if defined(ROM_COMBO)
+	call checkIsLinkedGame
+	jr nz,+
+		ld a,MUS_ESSENCE_ROOM
+		call playSound
+	+
+.endif
 	jp fadeinFromWhite
 @substate5:
 	call fileSelect_redrawDecorations
@@ -456,20 +468,26 @@ agesFunc_10_7298:
 	ret nz
 	call decCutsceneTimer
 	ret nz
-	ld hl,wTmpcbb3
+	ld hl,wGenericCutscene.cutsceneTimer
+.if defined(ROM_COMBO)
+	ld b,$01
+.else
 	ld b,$3c
 	call checkIsLinkedGame
 	jr z,+
 	ld b,$b4
 +
+.endif
 	ld (hl),b
 	jp incEndingCutsceneSubstate
 @substate6:
 	call fileSelect_redrawDecorations
 	call decCutsceneTimer
 	ret nz
+.if !defined(ROM_COMBO)
 	call checkIsLinkedGame
 	jr nz,+
+.endif
 	call getFreeInteractionSlot
 	jr nz,+
 	ld (hl),$d1
@@ -479,17 +497,27 @@ agesFunc_10_7298:
 	jp incEndingCutsceneSubstate
 @substate7:
 	call fileSelect_redrawDecorations
+.if defined(ROM_COMBO)
+	ld a,(wTextIsActive)
+	or a
+	ret nz
+
+	ld a,(wTmpcfc0.genericCutscene.cfde)
+	or a
+	ret z
+.else
 	call checkIsLinkedGame
-	jr z,@func_7407
+	jr z,+
 	ld a,(wKeysJustPressed)
-	and $01
+	and BTN_A
 	jr nz,++
 	ret
-@func_7407:
++
 	ld a,(wTmpcfc0.genericCutscene.cfde)
 	or a
 	ret z
 ++
+.endif
 	call incEndingCutsceneSubstate
 	ld a,SNDCTRL_FAST_FADEOUT
 	call playSound
@@ -524,7 +552,7 @@ agesFunc_10_7298:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
-	ld hl,wTmpcbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$b4
 	jp incEndingCutsceneSubstate
 @func_7450:
@@ -541,7 +569,7 @@ agesFunc_10_7298:
 	jp addSpritesFromBankToOam_withOffset
 @substateA:
 	call @func_7450
-	ld hl,wTmpcbb3
+	ld hl,wGenericCutscene.cutsceneTimer
 	ld a,(hl)
 	or a
 	jr z,@func_746a

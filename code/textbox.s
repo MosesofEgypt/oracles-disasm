@@ -2180,6 +2180,11 @@ func_53eb:
 ;			than you actually have
 @func:
 	ld a,(wNumHeartPieces)
+	cp $05
+	jr c,+
+		; cap piece of heart count to 4
+		ld a,$04
+	+
 	add b
 	add a
 	push af
