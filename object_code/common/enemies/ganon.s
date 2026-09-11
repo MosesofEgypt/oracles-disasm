@@ -39,6 +39,13 @@ m_EnemyCode $04
 	ld a,$0e
 	call enemySetAnimation
 
+.if defined(ROM_COMBO)
+	; NOTE: doing this BEFORE the room flags are updated to
+	;       allow refighting twinrova and ganon if desired.
+	call setComboCompleted
+	call saveFile
+.endif
+
 	call getThisRoomFlags
 	set 7,(hl)
 	ld l,<ROOM_ZELDA_IN_FINAL_DUNGEON
@@ -57,11 +64,6 @@ m_EnemyCode $04
 	+
 .endif
 	set 7,(hl)
-
-.if defined(ROM_COMBO)
-	call setComboCompleted
-	call saveFile
-.endif
 
 	ld a,SNDCTRL_STOPMUSIC
 	call playSound

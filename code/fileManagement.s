@@ -459,6 +459,11 @@ loadAcrossComboGame:
 	jr nc,+
 		set 0,b
 	+
+	ld a,TREASURE_RING_BOX
+	call checkTreasureObtained
+	jr nc,+
+		set 1,b
+	+
 	push bc
 
 	; get the savefile address to read from
@@ -491,6 +496,13 @@ loadAcrossComboGame:
 		call checkTreasureObtained
 		call nc,giveTreasure
 	+
+	bit 1,b
+	jr z,+
+		ld a,TREASURE_RING_BOX
+		call checkTreasureObtained
+		ld c,$01 ; level 1
+		call nc,giveTreasure
+	+
 
 	; set the bit indicating that warping to other game is allowed
 	ld hl,wFileIsCompleted
@@ -514,7 +526,7 @@ loadAcrossComboGame:
 ; Working from the existing WRAM save data, this clears and initializes
 ; select portions of the save file so it can be used for the other game.
 initializeComboGame:
-	; track whether the user got the ring box from vasu to prevent a free upgrade
+	; track whether the user got the ring box from vasu
 	ld a,GLOBALFLAG_OBTAINED_RING_BOX
 	call checkGlobalFlag
 	push af
@@ -545,7 +557,8 @@ initializeComboGame:
 	and (hl)
 	ldi (hl),a
 
-	ld a,1<<(TREASURE_POTION-$28)			; $2f
+	ld a,1<<(TREASURE_RING_BOX-$28)			; $2c
+	or   1<<(TREASURE_POTION-$28)			; $2f
 	and (hl)
 	ldi (hl),a
 
