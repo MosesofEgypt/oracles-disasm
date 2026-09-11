@@ -57,11 +57,12 @@ fileManagementFunction:
 .ifdef ENABLE_NEW_GAME_PLUS
 initializeNgpFile:
 .if defined(ROM_COMBO)
-	; mark save as not having both games started
+	; mark save as not having both games started/beaten
 	ld a,$0a
 	ld ($1111),a
 	call getComboSaveFileFlags
 	res COMBO_FLAG_BIT_LINKED_STARTED,(hl)
+	res COMBO_FLAG_BIT_LINKED_BEATEN,(hl)
 	xor a
 	ld ($1111),a
 
@@ -111,26 +112,10 @@ initializeNgpFile:
 	ld b,(wSecretType+1)-wKilledGoldenEnemies
 	call fillMemory
 
-	; we want to clear all the room flags EXCEPT the one
-	; indicating if the screen was seen or not. this way
-	; the minimap discovery carries over between games
+	; clear all the room flags
 	ld hl,wGroup0RoomFlags
-	ld bc,$200
-	-
-		ld a,(hl)
-		and $10
-		ldi (hl),a
-		dec bc
-		xor a
-		or c
-		jr nz,-
-		or b
-		jr nz,-
-
-	xor a
-	ld hl,wGroup4RoomFlags
-	ld bc,$200
-	call fillMemoryBc
+	ld b,$40
+	call clearMemory16ByteBlocks
 
 	ld (wFluteIcon),a
 	ld (wObtainedSeasons),a
@@ -197,6 +182,7 @@ initializeNgpFile:
 	+
 	ld (hl),a
 	ret
+
 .endif
 
 noFileManagementOp:
