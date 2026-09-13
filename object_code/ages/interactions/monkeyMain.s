@@ -285,7 +285,11 @@ interactionCode39_body:
 	.dw @subid7Init_2
 
 @subid7Init_0:
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jp nz,interactionDelete
 
@@ -299,7 +303,11 @@ interactionCode39_body:
 	jr @setVar3aAnimation
 
 @subid7Init_1:
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jp z,interactionDelete
 
@@ -309,7 +317,11 @@ interactionCode39_body:
 	jr @setVar3aAnimation
 
 @subid7Init_2:
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jp nz,interactionDelete
 

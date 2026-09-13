@@ -99,7 +99,11 @@ interactionCode4b_body:
 	jp rabbitJump
 
 @initSubid7:
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jp nz,interactionDelete
 

@@ -1,4 +1,6 @@
+.if !defined(ROM_COMBO)
 m_section_free chestData NAMESPACE chestData
+.endif
 
 ; m_ChestData macro takes 3 parameters:
 ;   1: Y/X position of chest (byte); an opened chest tile will be placed here when the room is
@@ -6,17 +8,21 @@ m_section_free chestData NAMESPACE chestData
 ;   2: Low byte of room index
 ;   3: Treasure object to get from the chest (see "data/{game}/treasureObjectData.s")
 
+.if defined(ROM_COMBO)
+chestDataGroupTable_ages:
+.else
 chestDataGroupTable:
-	.dw chestGroup0Data
-	.dw chestGroup1Data
-	.dw chestGroup2Data
-	.dw chestGroup3Data
-	.dw chestGroup4Data
-	.dw chestGroup5Data
-	.dw chestGroup6Data
-	.dw chestGroup7Data
+.endif
+	.dw @chestGroup0Data
+	.dw @chestGroup1Data
+	.dw @chestGroup2Data
+	.dw @chestGroup3Data
+	.dw @chestGroup4Data
+	.dw @chestGroup5Data
+	.dw @chestGroup6Data
+	.dw @chestGroup7Data
 
-chestGroup0Data:
+@chestGroup0Data:
 	m_ChestData $49, $51, TREASURE_OBJECT_RUPEES_04
 	m_ChestData $51, $49, TREASURE_OBJECT_RUPEES_04
 	m_ChestData $36, $84, TREASURE_OBJECT_RUPEES_05
@@ -26,11 +32,11 @@ chestGroup0Data:
 	m_ChestData $12, $63, TREASURE_OBJECT_GASHA_SEED_01
 	.db $ff
 
-chestGroup1Data:
+@chestGroup1Data:
 	m_ChestData $43, $6d, TREASURE_OBJECT_RING_27
 	.db $ff
 
-chestGroup2Data:
+@chestGroup2Data:
 	m_ChestData $14, $f7, TREASURE_OBJECT_RING_11
 	m_ChestData $16, $f7, TREASURE_OBJECT_GASHA_SEED_01
 	m_ChestData $45, $be, TREASURE_OBJECT_RING_17
@@ -42,7 +48,7 @@ chestGroup2Data:
 	m_ChestData $14, $c0, TREASURE_OBJECT_GASHA_SEED_01
 	.db $ff
 
-chestGroup3Data:
+@chestGroup3Data:
 	m_ChestData $24, $0e, TREASURE_OBJECT_RING_26
 	m_ChestData $18, $1f, TREASURE_OBJECT_RUPEES_06
 	m_ChestData $35, $e8, TREASURE_OBJECT_NONE_00
@@ -51,7 +57,7 @@ chestGroup3Data:
 	m_ChestData $34, $fd, TREASURE_OBJECT_HEART_PIECE_01
 	.db $ff
 
-chestGroup4Data:
+@chestGroup4Data:
 	m_ChestData $57, $08, TREASURE_OBJECT_SMALL_KEY_03
 	m_ChestData $5a, $15, TREASURE_OBJECT_GASHA_SEED_01
 	m_ChestData $17, $16, TREASURE_OBJECT_SMALL_KEY_03
@@ -107,7 +113,7 @@ chestGroup4Data:
 	m_ChestData $57, $cf, TREASURE_OBJECT_SMALL_KEY_03
 	.db $ff
 
-chestGroup5Data:
+@chestGroup5Data:
 	m_ChestData $17, $13, TREASURE_OBJECT_MERMAID_SUIT_00
 	m_ChestData $25, $14, TREASURE_OBJECT_SMALL_KEY_03
 	m_ChestData $53, $1b, TREASURE_OBJECT_SMALL_KEY_03
@@ -167,10 +173,12 @@ chestGroup5Data:
 	m_ChestData $12, $f7, TREASURE_OBJECT_RING_1b
 	.db $ff
 
-chestGroup6Data:
+@chestGroup6Data:
 	.db $ff
 
-chestGroup7Data:
+@chestGroup7Data:
 	.db $ff
 
+.if !defined(ROM_COMBO)
 .ends
+.endif

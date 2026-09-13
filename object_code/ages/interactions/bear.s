@@ -62,7 +62,11 @@ bear_state0:
 	ld hl,objectData.animalsWaitingForNayru
 	call parseGivenObjectData
 
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jp nz,interactionDelete
 	ld a,GLOBALFLAG_MAKU_TREE_SAVED
@@ -79,7 +83,11 @@ bear_state0:
 	jr ++
 
 @var03IsNonzero:
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jp z,interactionDelete
 	ld a,$02

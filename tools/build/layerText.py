@@ -37,9 +37,6 @@ if "ENABLE_REDUX_EXTRAS" in defines:
 if "ENABLE_GASHA_REBALANCE" in defines:
     yaml_layers.append(os.path.join(gameYamlsDir, "gasha_price_text.yaml"))
 
-if "ROM_COMBO" in defines:
-    yaml_layers.append(os.path.join(gameYamlsDir, "combo_text.yaml"))
-
 if "RESIZE_RING_BOX" in defines:
     yaml_layers.append(os.path.join(yamlsDir, "ring_box_text.yaml"))
 
@@ -52,6 +49,14 @@ if "ENABLE_RING_REDUX" in defines:
 if "ENABLE_NEW_GAME_PLUS" in defines:
     yaml_layers.append(os.path.join(yamlsDir, "ngp_text.yaml"))
     yaml_layers.append(os.path.join(gameYamlsDir, "ngp_text.yaml"))
+
+if "ENABLE_NEW_GAME_PLUS" in defines or "ENABLE_RING_REDUX" in defines:
+    yaml_layers.append(os.path.join(yamlsDir, "l4_sword_shield_text.yaml"))
+
+if "ROM_COMBO" in defines:
+    # NOTE: doing this AFTER ring text to overwrite some entries
+    yaml_layers.append(os.path.join(yamlsDir, "combo_text.yaml"))
+    yaml_layers.append(os.path.join(gameYamlsDir, "combo_text.yaml"))
 
 layered_data = None
 for filename in yaml_layers:

@@ -233,7 +233,11 @@ m_InteractionCode $3c
 	jp boyLoadScript
 
 @initSubid10:
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jp z,interactionDelete
 

@@ -119,7 +119,7 @@ m_InteractionCode $48
 	cp $02
 	jr c,+
 	ld b,$15
-.ifdef ENABLE_NEW_GAME_PLUS
+.if defined(ENABLE_NEW_GAME_PLUS) || defined(ROM_COMBO)
 	cp $03
 	jr c,+
 	ld b,$43

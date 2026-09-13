@@ -117,7 +117,11 @@ m_InteractionCode $89
 	or a
 	jr z,@loadPrelinkedScript
 
+.if defined(ROM_AGES) && defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jr nz,@loadLinkedScript
 

@@ -1655,7 +1655,11 @@ ralphSubid0cScript:
 ;;
 monkey_decideTextIndex:
 	ld b,<TX_5708-8
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jr z,+
 	ld b,<TX_570d-8
@@ -2266,18 +2270,17 @@ tokayMakeLinkJump:
 
 ;;
 tokayGiveShieldUpgradeToLink:
-	ld b,$01
-	ld c,$01
+	ld b,TREASURE_SHIELD
+	; use shield level as index of treasure object data
 	ld a,(wShieldLevel)
-	cp $02
-	jr c,+
-	inc c
-.ifdef ENABLE_NEW_GAME_PLUS
+	ld c,a
+.if defined(ENABLE_NEW_GAME_PLUS) || defined(ROM_COMBO)
+	; except for l4 shield, which is off by 1
 	cp $03
 	jr c,+
-	inc c
+		inc c
+	+
 .endif
-+
 	call createTreasure
 	ret nz
 	ld de,w1Link.yh
@@ -2446,6 +2449,12 @@ tokayGiveBombUpgrade:
 	ld hl,wMaxBombs
 	ld a,(hl)
 	add $20
+	;cp $a0 ; cap to 99
+	cp $70
+	jr c,+
+		; last bomb upgrade level goes to 99 instead of 70
+		ld a,$99
+	+
 	ldd (hl),a
 	ld (hl),a
 	jp setStatusBarNeedsRefreshBit1
@@ -2669,19 +2678,20 @@ dumbbellManScript:
 oldManGiveShieldUpgradeToLink:
 	ld a,TREASURE_SHIELD
 	call checkTreasureObtained
-	jr c,+
-	ld a,(wShieldLevel)
-+
-	cp $03
-	jr c,+
-.ifdef ENABLE_NEW_GAME_PLUS
-	jr nz,+
-	ld a,$04
-	jr +
+	jr c,@haveShield
+	xor a
+@haveShield:
+	inc a
+.if defined(ROM_COMBO)
+	ld c,$04
+.else
+	ld c,$03
 .endif
-	ld a,$02
-+
-	ld c,a
+	cp c
+	jr nc,+
+		; upgrade is not at/above max level, so use it
+		ld c,a
+	+
 	call getFreeInteractionSlot
 	ret nz
 	ld (hl),$60
@@ -2715,7 +2725,11 @@ label_15_097:
 
 ; Subid $00: Old man who takes a secret to give you the shield (same spot as subid $02)
 oldManScript_givesShieldUpgrade:
+.if defined(ROM_COMBO)
+	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME_AGES, ++
+.else
 	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME, ++
+.endif
 	scriptend
 ++
 	initcollisions
@@ -2846,7 +2860,11 @@ mamamuYanRandomizeDogLocation:
 	ret
 
 mamamuYanScript:
+.if defined(ROM_COMBO)
+	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME_AGES, +
+.else
 	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME, +
+.endif
 	scriptjump @tradeScript
 +
 	jumpifroomflagset $20, @postgameScript
@@ -4099,7 +4117,11 @@ goron_determineTextForGenericNpc:
 	jr z,@inPresent
 
 @inPast:
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jr nz,@val02
 
@@ -4109,7 +4131,11 @@ goron_determineTextForGenericNpc:
 	jr @val00
 
 @inPresent:
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jr nz,@val03
 
@@ -6909,7 +6935,11 @@ goronElder_normalAnimation:
 
 ; Cutscene where goron elder is saved / NPC in that room after that
 goronElderScript_subid00_body:
+.if defined(ROM_COMBO)
+	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME_AGES, {SCRIPTS_1}.stubScript
+.else
 	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME, {SCRIPTS_1}.stubScript
+.endif
 
 	asm15 checkEssenceObtained, $04
 	jumpifmemoryset wcddb, CPU_ZFLAG, {SCRIPTS_1}.stubScript
@@ -6954,7 +6984,11 @@ goronElderScript_subid00_body:
 
 ; NPC hanging out in rolling ridge (after getting D5 essence)
 goronElderScript_subid01_body:
+.if defined(ROM_COMBO)
+	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME_AGES, {SCRIPTS_1}.stubScript
+.else
 	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME, {SCRIPTS_1}.stubScript
+.endif
 
 	asm15 checkEssenceNotObtained, $04
 	jumpifmemoryset wcddb, CPU_ZFLAG, {SCRIPTS_1}.stubScript
@@ -7849,17 +7883,13 @@ symmetryNpc_getUpgradeCapacityForText:
 @haveRingBox:
 .ifdef RESIZE_RING_BOX
 	call getRingBoxLevel
-	cp MAX_RING_BOX_LEVEL
-	jr c,+
-		ld a,MAX_RING_BOX_LEVEL
-	+
 .else
 	ld a,(wRingBoxLevel)
 .endif
 	dec a
-	ld c,$03
-	jr z,++
-	ld c,$05
+	ld hl,@ringBoxCapacities
+	rst_addAToHl
+	ld c,(hl)
 ++
 	ld hl,wTextNumberSubstitution
 	ld (hl),c
@@ -7867,9 +7897,18 @@ symmetryNpc_getUpgradeCapacityForText:
 	ld (hl),$00
 	ret
 
+@ringBoxCapacities:
+	.db RING_BOX_L2_SIZE
+	.db RING_BOX_L3_SIZE
+	.db RING_BOX_L4_SIZE
+
 ; Sisters in the tuni nut building
 symmetryNpcSubid8And9Script:
+.if defined(ROM_COMBO)
+	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME_AGES, @postgame
+.else
 	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME, @postgame
+.endif
 	incstate ; [state] = 2
 	jumpifglobalflagset GLOBALFLAG_TUNI_NUT_PLACED, {SCRIPTS_1}.symmetryNpcSubid8And9Script_afterTuniNutRestored
 
@@ -8229,7 +8268,11 @@ troySubid0Script:
 
 ; Troy in his house
 troySubid1Script:
+.if defined(ROM_COMBO)
+	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME_AGES, {SCRIPTS_1}.stubScript
+.else
 	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME, {SCRIPTS_1}.stubScript
+.endif
 	initcollisions
 @loop:
 	checkabutton
@@ -8343,7 +8386,11 @@ linkedNpc_calcLowTextIndex:
 ; INTERAC_PLEN
 ; ==================================================================================================
 plenSubid0Script:
+.if defined(ROM_COMBO)
+	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME_AGES, @finishedGame
+.else
 	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME, @finishedGame
+.endif
 	jumpifglobalflagset GLOBALFLAG_SAVED_NAYRU, @savedNayru
 	rungenericnpc TX_3714
 

@@ -16,7 +16,11 @@ m_InteractionCode $43
 
 ; Guy who wants to find something Ambi desires
 @subid0:
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jp nz,interactionDelete
 

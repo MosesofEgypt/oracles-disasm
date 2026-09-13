@@ -79,7 +79,7 @@ treasureObjectData:
 	/* $34 */ m_TreasurePointer treasureObjectData34
 	/* $35 */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_35_00
 	/* $36 */ m_TreasureSubid   $02, $00, $33, $47, TREASURE_OBJECT_MAKU_SEED_00
-	/* $37 */ m_TreasureSubid   $02, $0b, $6b, $2f, TREASURE_OBJECT_ORE_CHUNKS_00
+	/* $37 */ m_TreasurePointer treasureObjectData37
 	/* $38 */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_38_00
 	/* $39 */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_39_00
 	/* $3a */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_3a_00
@@ -104,14 +104,25 @@ treasureObjectData:
 	/* $4d */ m_TreasurePointer treasureObjectData4d
 	/* $4e */ m_TreasureSubid   $38, $00, $48, $38, TREASURE_OBJECT_SQUARE_JEWEL_00
 	/* $4f */ m_TreasureSubid   $38, $00, $49, $39, TREASURE_OBJECT_X_SHAPED_JEWEL_00
+.if defined(ROM_COMBO)
+	/* $50 */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_50_00
+	/* $51 */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_51_00
+	/* $52 */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_52_00
+.else
 	/* $50 */ m_TreasureSubid   $38, $00, $3f, $59, TREASURE_OBJECT_RED_ORE_00
 	/* $51 */ m_TreasureSubid   $38, $00, $3e, $58, TREASURE_OBJECT_BLUE_ORE_00
 	/* $52 */ m_TreasureSubid   $0a, $00, $3d, $5a, TREASURE_OBJECT_HARD_ORE_00
+.endif
 	/* $53 */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_MEMBERS_CARD_00
 	/* $54 */ m_TreasureSubid   $38, $00, $70, $26, TREASURE_OBJECT_MASTERS_PLAQUE_00
 	/* $55 */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_55_00
+.if defined(ROM_COMBO)
+	/* $56 */ m_TreasureSubid   $38, $00, $3f, $59, TREASURE_OBJECT_RED_ORE_00
+	/* $57 */ m_TreasureSubid   $38, $00, $3e, $58, TREASURE_OBJECT_BLUE_ORE_00
+.else
 	/* $56 */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_56_00
 	/* $57 */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_57_00
+.endif
 	/* $58 */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_BOMB_FLOWER_LOWER_HALF_00
 	/* $59 */ m_TreasureSubid   $38, $00, <TX_00_GET_MERMAIDSUIT, $7c, TREASURE_OBJECT_MERMAID_SUIT_00
 	/* $5a */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_5a_00
@@ -120,6 +131,11 @@ treasureObjectData:
 	/* $5d */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_5d_00
 	/* $5e */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_5e_00
 	/* $5f */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_5f_00
+.if defined(ROM_COMBO)
+	/* $5f */ m_TreasureSubid   $0a, $00, $3d, $5a, TREASURE_OBJECT_HARD_ORE_00
+.else
+	/* $5f */ m_TreasureSubid   $00, $00, $ff, $00, TREASURE_OBJECT_5f_00
+.endif
 	/* $60 */ m_TreasureSubid   $0c, $00, $72, $57, TREASURE_OBJECT_60_00
 	/* $61 */ m_TreasureSubid   $02, $00, $6e, $05, TREASURE_OBJECT_BOMB_UPGRADE_00
 	/* $62 */ m_TreasureSubid   $02, $00, $46, $20, TREASURE_OBJECT_SATCHEL_UPGRADE_00
@@ -221,20 +237,20 @@ treasureObjectData34:
 
 treasureObjectData28:
 	m_BeginTreasureSubids TREASURE_RUPEES
-	m_TreasureSubid $38, $01, $01, $28, TREASURE_OBJECT_RUPEES_00
-	m_TreasureSubid $38, $03, $02, $29, TREASURE_OBJECT_RUPEES_01
-	m_TreasureSubid $38, $04, $03, $2a, TREASURE_OBJECT_RUPEES_02
-	m_TreasureSubid $38, $05, $04, $2b, TREASURE_OBJECT_RUPEES_03
-	m_TreasureSubid $38, $07, $05, $2b, TREASURE_OBJECT_RUPEES_04
-	m_TreasureSubid $38, $0b, $06, $2c, TREASURE_OBJECT_RUPEES_05
-	m_TreasureSubid $38, $0c, $07, $2d, TREASURE_OBJECT_RUPEES_06
-	m_TreasureSubid $38, $0f, $08, $2d, TREASURE_OBJECT_RUPEES_07
-	m_TreasureSubid $38, $0d, $09, $2e, TREASURE_OBJECT_RUPEES_08
-	m_TreasureSubid $30, $01, $01, $28, TREASURE_OBJECT_RUPEES_09
-	m_TreasureSubid $18, $01, $ff, $2e, TREASURE_OBJECT_RUPEES_0a
-	m_TreasureSubid $08, $05, $ff, $2b, TREASURE_OBJECT_RUPEES_0b
-	m_TreasureSubid $08, $07, $05, $2b, TREASURE_OBJECT_RUPEES_0c
-	m_TreasureSubid $30, $04, $03, $2a, TREASURE_OBJECT_RUPEES_0d
+	m_TreasureSubid $38, RUPEEVAL_001, $01, $28, TREASURE_OBJECT_RUPEES_00
+	m_TreasureSubid $38, RUPEEVAL_005, $02, $29, TREASURE_OBJECT_RUPEES_01
+	m_TreasureSubid $38, RUPEEVAL_010, $03, $2a, TREASURE_OBJECT_RUPEES_02
+	m_TreasureSubid $38, RUPEEVAL_020, $04, $2b, TREASURE_OBJECT_RUPEES_03
+	m_TreasureSubid $38, RUPEEVAL_030, $05, $2b, TREASURE_OBJECT_RUPEES_04
+	m_TreasureSubid $38, RUPEEVAL_050, $06, $2c, TREASURE_OBJECT_RUPEES_05
+	m_TreasureSubid $38, RUPEEVAL_100, $07, $2d, TREASURE_OBJECT_RUPEES_06
+	m_TreasureSubid $38, RUPEEVAL_150, $08, $2d, TREASURE_OBJECT_RUPEES_07
+	m_TreasureSubid $38, RUPEEVAL_200, $09, $2e, TREASURE_OBJECT_RUPEES_08
+	m_TreasureSubid $30, RUPEEVAL_001, $01, $28, TREASURE_OBJECT_RUPEES_09
+	m_TreasureSubid $18, RUPEEVAL_001, $ff, $2e, TREASURE_OBJECT_RUPEES_0a
+	m_TreasureSubid $08, RUPEEVAL_020, $ff, $2b, TREASURE_OBJECT_RUPEES_0b
+	m_TreasureSubid $08, RUPEEVAL_030, $05, $2b, TREASURE_OBJECT_RUPEES_0c
+	m_TreasureSubid $30, RUPEEVAL_010, $03, $2a, TREASURE_OBJECT_RUPEES_0d
 
 treasureObjectData2b:
 	m_BeginTreasureSubids TREASURE_HEART_PIECE
@@ -301,6 +317,11 @@ treasureObjectData33:
 	m_TreasureSubid $1a, $00, $18, $40, TREASURE_OBJECT_MAP_00
 	m_TreasureSubid $2a, $00, $18, $40, TREASURE_OBJECT_MAP_01
 	m_TreasureSubid $68, $00, $18, $40, TREASURE_OBJECT_MAP_02
+
+treasureObjectData37:
+	m_BeginTreasureSubids TREASURE_ORE_CHUNKS
+	m_TreasureSubid $02, RUPEEVAL_050, $6b, $2f, TREASURE_OBJECT_ORE_CHUNKS_00
+	m_TreasureSubid $38, RUPEEVAL_010, $4e, $2f, TREASURE_OBJECT_ORE_CHUNKS_01
 
 treasureObjectData41:
 	m_BeginTreasureSubids TREASURE_TRADEITEM

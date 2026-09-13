@@ -1,22 +1,27 @@
+.if !defined(ROM_COMBO)
 m_section_free chestData NAMESPACE chestData
-
+.endif
 ; m_ChestData macro takes 3 parameters:
 ;   1: Y/X position of chest (byte); an opened chest tile will be placed here when the room is
 ;      loaded, if ROOMFLAG_ITEM has been set in that room.
 ;   2: Low byte of room index
 ;   3: Treasure object to get from the chest (see "data/{game}/treasureObjectData.s")
 
+.if defined(ROM_COMBO)
+chestDataGroupTable_seasons:
+.else
 chestDataGroupTable:
-	.dw chestGroup0Data
-	.dw chestGroup1Data
-	.dw chestGroup2Data
-	.dw chestGroup3Data
-	.dw chestGroup4Data
-	.dw chestGroup5Data
-	.dw chestGroup6Data
-	.dw chestGroup7Data
+.endif
+	.dw @chestGroup0Data
+	.dw @chestGroup1Data
+	.dw @chestGroup2Data
+	.dw @chestGroup3Data
+	.dw @chestGroup4Data
+	.dw @chestGroup5Data
+	.dw @chestGroup6Data
+	.dw @chestGroup7Data
 
-chestGroup0Data:
+@chestGroup0Data:
 	m_ChestData $11, $f5, TREASURE_OBJECT_RUPEES_03
 	m_ChestData $58, $f9, TREASURE_OBJECT_RUPEES_03
 	m_ChestData $11, $8e, TREASURE_OBJECT_GASHA_SEED_01
@@ -27,18 +32,18 @@ chestGroup0Data:
 	m_ChestData $18, $ff, TREASURE_OBJECT_RING_08
 	.db $ff
 
-chestGroup1Data:
+@chestGroup1Data:
 	m_ChestData $11, $41, TREASURE_OBJECT_BLUE_ORE_00
 	m_ChestData $22, $58, TREASURE_OBJECT_RED_ORE_00
 	.db $ff
 
-chestGroup2Data:
-chestGroup3Data:
+@chestGroup2Data:
+@chestGroup3Data:
 	m_ChestData $34, $9b, TREASURE_OBJECT_GASHA_SEED_01
 	m_ChestData $13, $88, TREASURE_OBJECT_BOMBS_00
 	.db $ff
 
-chestGroup4Data:
+@chestGroup4Data:
 	m_ChestData $5b, $03, TREASURE_OBJECT_SMALL_KEY_03
 	m_ChestData $5d, $05, TREASURE_OBJECT_RUPEES_04
 	m_ChestData $27, $06, TREASURE_OBJECT_SWORD_00
@@ -99,7 +104,7 @@ chestGroup4Data:
 	m_ChestData $57, $f1, TREASURE_OBJECT_GASHA_SEED_01
 	.db $ff
 
-chestGroup5Data:
+@chestGroup5Data:
 	m_ChestData $87, $43, TREASURE_OBJECT_RUPEES_00
 	m_ChestData $47, $44, TREASURE_OBJECT_FEATHER_01
 	m_ChestData $61, $47, TREASURE_OBJECT_SMALL_KEY_03
@@ -138,10 +143,12 @@ chestGroup5Data:
 	m_ChestData $32, $12, TREASURE_OBJECT_NONE_00
 	.db $ff
 
-chestGroup6Data:
+@chestGroup6Data:
 	.db $ff
 
-chestGroup7Data:
+@chestGroup7Data:
 	.db $ff
 
+.if !defined(ROM_COMBO)
 .ends
+.endif

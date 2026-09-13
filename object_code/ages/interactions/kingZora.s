@@ -78,14 +78,23 @@ m_InteractionCode $9c
 	bit 6,a
 	jr z,@@justCleanedWater
 
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	ld hl,{SCRIPTS_1}.kingZoraScript_present_afterD7
 	ret z
 
 	ld a,TREASURE_SWORD
 	call checkTreasureObtained
+	dec a
+.if defined(ROM_COMBO)
+	and $03
+.else
 	and $01
+.endif
 	ld e,Interaction.var03
 	ld (de),a
 	ld hl,{SCRIPTS_1}.kingZoraScript_present_postGame

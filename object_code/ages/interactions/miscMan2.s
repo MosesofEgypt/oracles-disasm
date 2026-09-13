@@ -16,7 +16,11 @@ m_InteractionCode $44
 	call checkInteractionState
 	jr nz,@@initialized
 
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jp nz,interactionDelete
 	call @initGraphicsIncStateAndLoadScript
@@ -114,7 +118,11 @@ m_InteractionCode $44
 ;			$05 if game finished (unlinked only)
 getGameProgress_1:
 	ld b,$05
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	ret nz
 
@@ -158,7 +166,11 @@ getGameProgress_1:
 ;			$07 if game finished (unlinked only)
 getGameProgress_2:
 	ld b,$07
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	ret nz
 

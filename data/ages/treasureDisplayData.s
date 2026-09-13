@@ -269,14 +269,14 @@ treasureDisplayData2:
 	.db TREASURE_SWORD, $80, $00, $81, $00, $06, <TX_0923 ; L1
 	.db TREASURE_SWORD, $80, $05, $81, $02, $06, <TX_0924 ; L2
 	.db TREASURE_SWORD, $80, $04, $81, $01, $06, <TX_0925 ; L3
-	.ifdef ENABLE_NEW_GAME_PLUS
+	.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 		.db TREASURE_SWORD, $80, $14, $81, $13, $06, <TX_09_BUTTER_SWORD
 	.endif
 .else
 	.db TREASURE_SWORD, $90, $00, $00, $00, $00, <TX_0923 ; L1
 	.db TREASURE_SWORD, $91, $05, $00, $00, $00, <TX_0924 ; L2
 	.db TREASURE_SWORD, $92, $04, $00, $00, $00, <TX_0925 ; L3
-	.ifdef ENABLE_NEW_GAME_PLUS
+	.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 		.db TREASURE_SWORD, $48, $03, $00, $00, $00, <TX_09_BUTTER_SWORD
 	.endif
 .endif
@@ -286,14 +286,14 @@ treasureDisplayData2:
 	.db TREASURE_SHIELD, $82, $00, $83, $00, $06, <TX_0920 ; L1
 	.db TREASURE_SHIELD, $82, $05, $83, $05, $06, <TX_0921 ; L2
 	.db TREASURE_SHIELD, $82, $04, $83, $04, $06, <TX_0922 ; L3
-	.ifdef ENABLE_NEW_GAME_PLUS
+	.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 		.db TREASURE_SHIELD, $82, $13, $83, $15, $06, <TX_09_BUTTER_SHIELD
 	.endif
 .else
 	.db TREASURE_SHIELD, $93, $00, $00, $00, $00, <TX_0920 ; L1
 	.db TREASURE_SHIELD, $94, $05, $00, $00, $00, <TX_0921 ; L2
 	.db TREASURE_SHIELD, $95, $04, $00, $00, $00, <TX_0922 ; L3
-	.ifdef ENABLE_NEW_GAME_PLUS
+	.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 		.db TREASURE_SHIELD, $49, $03, $00, $00, $00, <TX_09_BUTTER_SHIELD
 	.endif
 .endif

@@ -54,13 +54,13 @@ uncmpGfxHeaderTable:
 	.dw @uncmpGfxHeader_swordL1
 	.dw @uncmpGfxHeader_swordL2
 	.dw @uncmpGfxHeader_swordL3
-.ifdef ENABLE_NEW_GAME_PLUS
+.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 	.dw @uncmpGfxHeader_swordL4
 .endif
 	.dw @uncmpGfxHeader_shieldL1
 	.dw @uncmpGfxHeader_shieldL2
 	.dw @uncmpGfxHeader_shieldL3
-.ifdef ENABLE_NEW_GAME_PLUS
+.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 	.dw @uncmpGfxHeader_shieldL4
 .endif
 	.dw @uncmpGfxHeader_noTune
@@ -74,6 +74,8 @@ uncmpGfxHeaderTable:
 .endif
 .ifdef ENABLE_NEW_GAME_PLUS
 	.dw @uncmpGfxHeader_lifeVialInv
+.endif
+.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 	.dw @uncmpGfxHeader_swordShieldInv
 .endif
 .ifdef ENABLE_SETTINGS_MENU
@@ -471,12 +473,14 @@ uncmpGfxHeaderTable:
 	m_GfxHeader spr_item_icons_life_vial_slim, $8721
 .endif
 	m_GfxHeaderEnd
+.endif
 
+.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 @uncmpGfxHeader_swordShieldInv:
 	m_GfxHeader spr_item_icons_sword_shield_l4, $8900
 	m_GfxHeaderEnd
 
-.ifdef WIDE_INVENTORY_SPRITES
+.if defined(WIDE_INVENTORY_SPRITES)
 @uncmpGfxHeader_swordL4:
 	m_GfxHeader spr_item_icons_wide_sword_l4, $8001
 	m_GfxHeaderEnd

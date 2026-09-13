@@ -11,19 +11,6 @@ groups:
       can now be used
       more times!
 
-  - name: TX_00_BUTTER_SWORD
-    index: 0x89
-    text: |-
-      The Master Sword
-      awakened as the
-      \col(1)Golden Sword\col(0)!
-
-  - name: TX_00_BUTTER_SHIELD
-    index: 0x8a
-    text: |-
-      You got the
-      \col(1)Golden Shield\col(0)!
-
 - group: 0x51
   allow_undefined: [0x10, 0x11, 0x12]
   data:
@@ -49,19 +36,3 @@ groups:
       Fairy Flask
       Elixir of life.
       Refill at a Great Fairy.
-
-  - name: TX_09_BUTTER_SWORD
-    index: 0x77
-    text: |-
-      Golden Sword
-      The Master Sword
-      in its awakened form.
-
-  - name: TX_09_BUTTER_SHIELD
-    index: 0x78
-    text: |-
-      Golden Shield
-      Its luster wards
-      even the most
-      deadly attacks.
-      Indestructable.

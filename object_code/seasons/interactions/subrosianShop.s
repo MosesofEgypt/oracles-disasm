@@ -304,6 +304,12 @@ m_InteractionCode $81
 	ld hl,wMaxBombs
 	ld a,(hl)
 	add $20
+	;cp $a0 ; cap to 99
+	cp $70
+	jr c,+
+		; last bomb upgrade level goes to 99 instead of 70
+		ld a,$99
+	+
 	ldd (hl),a
 	ld (hl),a
 	call setStatusBarNeedsRefreshBit1

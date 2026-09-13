@@ -449,15 +449,23 @@ treasureCollectionBehaviourTable:
 	.db $00
 	.db SND_NONE
 
-	; TREASURE_56 (0x56)
+	; TREASURE_56 (0x56) (TREASURE_RED_ORE in combo rom)
 	.db $00
 	.db $00
+.if defined(ROM_COMBO)
+	.db SND_GETITEM
+.else
 	.db SND_NONE
+.endif
 
-	; TREASURE_57 (0x57)
+	; TREASURE_57 (0x57) (TREASURE_BLUE_ORE in combo rom)
 	.db $00
 	.db $00
+.if defined(ROM_COMBO)
+	.db SND_GETITEM
+.else
 	.db SND_NONE
+.endif
 
 	; TREASURE_BOMB_FLOWER_LOWER_HALF (0x58)
 	.db $00
@@ -494,10 +502,14 @@ treasureCollectionBehaviourTable:
 	.db $00
 	.db SND_NONE
 
-	; TREASURE_5f (0x5f)
+	; TREASURE_5f (0x5f) (TREASURE_HARD_ORE in combo rom)
 	.db $00
 	.db $00
+.if defined(ROM_COMBO)
+	.db SND_GETITEM
+.else
 	.db SND_NONE
+.endif
 
 	; TREASURE_60 (0x60)
 	.db $00

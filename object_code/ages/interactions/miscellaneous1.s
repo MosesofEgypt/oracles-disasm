@@ -753,7 +753,11 @@ interaction6b_subid15:
 	jp nz,interaction6b_subid0e@state1
 
 @state0:
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jp z,interactionDelete
 	call objectGetShortPosition

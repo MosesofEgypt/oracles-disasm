@@ -21,7 +21,11 @@ dog_subid00:
 	jr nz,@state1
 
 @state0:
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jr z,@dontDelete
 

@@ -597,9 +597,16 @@
 	m_GfxData flg_save_menu_middle_dungeon_ngp_gameover ; ????
 	m_GfxData map_save_menu_middle_dungeon_ngp_gameover ; ????
 	m_GfxData gfx_make ; ????
-	m_GfxData spr_item_icons_sword_shield_l4
 	.ifndef WIDE_INVENTORY_SPRITES
 		m_GfxData spr_item_icons_life_vial_slim
+	.endif
+.endif
+
+.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
+	m_GfxData spr_item_icons_sword_shield_l4
+	.if defined(WIDE_INVENTORY_SPRITES)
+		m_GfxData spr_item_icons_wide_sword_l4
+		m_GfxData spr_item_icons_wide_shield_l4
 	.endif
 .endif
 
@@ -639,7 +646,5 @@
 	m_GfxData spr_item_icons_wide_slingshot_l2_hud
 	.ifdef ENABLE_NEW_GAME_PLUS
 		m_GfxData spr_item_icons_life_vial
-		m_GfxData spr_item_icons_wide_sword_l4
-		m_GfxData spr_item_icons_wide_shield_l4
 	.endif
 .endif

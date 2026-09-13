@@ -178,10 +178,25 @@ treasureDisplayData2:
 	.db TREASURE_MEMBERS_CARD,       $26, $01, $27, $01, $ff, <TX_091c ; TREASURE_MEMBERS_CARD
 	.db TREASURE_MASTERS_PLAQUE,     $26, $03, $27, $03, $ff, <TX_0943 ; TREASURE_MASTERS_PLAQUE
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_55
+.if defined(ROM_COMBO)
+	; moved for combo rom for reasons related to limiting upgrades across NG+ and combo cycles
+	.db TREASURE_RED_ORE,            $f2, $02, $00, $00, $ff, <TX_094e ; TREASURE_RED_ORE
+	.db TREASURE_BLUE_ORE,           $f2, $01, $00, $00, $ff, <TX_094f ; TREASURE_BLUE_ORE
+.else
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_56
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_57
+.endif
 	.db TREASURE_BOMB_FLOWER,        $f7, $04, $f8, $04, $ff, <TX_091a ; TREASURE_BOMB_FLOWER_LOWER_HALF
 	.db TREASURE_MERMAID_SUIT,       $2b, $04, $2c, $04, $ff, <TX_09_MERMAIDSUIT ; TREASURE_MERMAID_SUIT
+.if defined(ROM_COMBO)
+	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_5a
+	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_5b
+	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_5c
+	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_5d
+	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_5e
+	; moved for combo rom for reasons related to limiting upgrades across NG+ and combo cycles
+	.db TREASURE_HARD_ORE,           $f3, $00, $f4, $00, $ff, <TX_0950 ; TREASURE_HARD_ORE
+.endif
 
 @treasureDisplayData_satchel:
 .ifdef WIDE_INVENTORY_SPRITES
@@ -233,14 +248,14 @@ treasureDisplayData2:
 	.db TREASURE_SWORD,              $80, $00, $81, $00, $06, <TX_0923 ; L1
 	.db TREASURE_SWORD,              $80, $05, $81, $02, $06, <TX_0924 ; L2
 	.db TREASURE_SWORD,              $80, $04, $81, $01, $06, <TX_0925 ; L3
-	.ifdef ENABLE_NEW_GAME_PLUS
+	.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 		.db TREASURE_SWORD, $80, $14, $81, $13, $06, <TX_09_BUTTER_SWORD
 	.endif
 .else
 	.db TREASURE_SWORD,              $90, $00, $00, $00, $00, <TX_0923
 	.db TREASURE_SWORD,              $91, $05, $00, $00, $00, <TX_0924
 	.db TREASURE_SWORD,              $92, $04, $00, $00, $00, <TX_0925
-	.ifdef ENABLE_NEW_GAME_PLUS
+	.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 		.db TREASURE_SWORD, $48, $03, $00, $00, $00, <TX_09_BUTTER_SWORD
 	.endif
 .endif
@@ -250,14 +265,14 @@ treasureDisplayData2:
 	.db TREASURE_SHIELD,             $82, $00, $83, $00, $06, <TX_0920 ; L1
 	.db TREASURE_SHIELD,             $82, $05, $83, $05, $06, <TX_0921 ; L2
 	.db TREASURE_SHIELD,             $82, $04, $83, $04, $06, <TX_0922 ; L3
-	.ifdef ENABLE_NEW_GAME_PLUS
+	.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 		.db TREASURE_SHIELD, $82, $13, $83, $15, $06, <TX_09_BUTTER_SHIELD
 	.endif
 .else
 	.db TREASURE_SHIELD,             $93, $00, $00, $00, $00, <TX_0920
 	.db TREASURE_SHIELD,             $94, $05, $00, $00, $00, <TX_0921
 	.db TREASURE_SHIELD,             $95, $04, $00, $00, $00, <TX_0922
-	.ifdef ENABLE_NEW_GAME_PLUS
+	.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 		.db TREASURE_SHIELD, $49, $03, $00, $00, $00, <TX_09_BUTTER_SHIELD
 	.endif
 .endif

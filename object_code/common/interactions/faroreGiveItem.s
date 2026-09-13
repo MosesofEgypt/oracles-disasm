@@ -254,51 +254,14 @@ interactiond9_state2:
 	jr @createTreasureAndIncSubstate
 
 @ringBoxSubids:
-	.db $03 $03 $04 $04
-	; NOTE: padded up to 8 to allow up to 8 ring box levels
-.ifdef RESIZE_RING_BOX
-	.db $04 $04 $04 $04
-.endif
-
-.ifdef ENABLE_NEW_GAME_PLUS
-@swordShieldSubids:
-	.db $01 $01
-	.db $01 $01
-	.db $02 $02
-	.db $07 $04
-	.db $07 $04
-
-@swordUpgrade:
-	ld a,(wSwordLevel)
-	ld hl,@swordShieldSubids
-	jr ++
-
-@shieldUpgrade:
-	ld a,(wShieldLevel)
-	ld hl,@swordShieldSubids+1
-++
-	rst_addDoubleIndex
-	ld a,(hl)
-	jr @label_0b_135
+.if defined(ROM_COMBO)
+	.db $03 $03 $04 $05
 .else
-@swordShieldSubids:
-	.db $03 $01
-	.db $03 $01
-	.db $05 $02
-	.db $05 $02
-
-@swordUpgrade:
-	ld a,(wSwordLevel)
-	jr ++
-
-@shieldUpgrade:
-	ld a,(wShieldLevel)
-++
-	ld hl,@swordShieldSubids
-	rst_addDoubleIndex
-	inc hl
-	ld a,(hl)
-	jr @label_0b_135
+	.db $03 $03 $04 $04
+.endif
+.ifdef RESIZE_RING_BOX
+	; NOTE: padding up to 8 to allow up to 8 ring box levels
+	.db $04 $04 $04 $04
 .endif
 
 @bombUpgrade:
@@ -307,6 +270,12 @@ interactiond9_state2:
 	ld hl,wMaxBombs
 	ld a,(hl)
 	add $20
+	;cp $a0 ; cap to 99
+	cp $70
+	jr c,+
+		; last bomb upgrade level goes to 99 instead of 70
+		ld a,$99
+	+
 	ldd (hl),a
 	ld (hl),a
 	jp setStatusBarNeedsRefreshBit1
@@ -318,15 +287,39 @@ interactiond9_state2:
 	ld bc,TREASURE_OBJECT_SEED_SATCHEL_UPGRADE
 	jr @createTreasureAndIncSubstate
 
-@label_0b_135:
-.ifdef ENABLE_NEW_GAME_PLUS
-	or $80
-	dec a
-	and $03
-	inc a
-.else
-	and $03
+@swordShieldSubids:
+	.db $01 $01
+	.db $01 $01
+	.db $02 $02
+.if defined(ROM_COMBO)
+	.db $07 $04
+	.db $07 $04
 .endif
+
+@swordUpgrade:
+	ld a,(wSwordLevel)
+	ld hl,@swordShieldSubids
+	rst_addDoubleIndex
+	ld a,(hl)
+	jr @capSwordShieldLevel
+
+@shieldUpgrade:
+	ld a,(wShieldLevel)
+	ld hl,@swordShieldSubids
+	rst_addDoubleIndex
+	inc hl
+	ld a,(hl)
+
+@capSwordShieldLevel:
+.if defined(ENABLE_NEW_GAME_PLUS) || defined(ROM_COMBO)
+	ld c,$04
+.else
+	ld c,$03
+.endif
+	cp a
+	jr nc,@createTreasureAndIncSubstate
+
+	; upgrade level is below max. use it
 	ld c,a
 
 @createTreasureAndIncSubstate:

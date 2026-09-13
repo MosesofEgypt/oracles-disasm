@@ -38,11 +38,13 @@ bombUpgradeFairy_subid00:
 
 	ld hl,wTextNumberSubstitution
 	ld a,(wMaxBombs)
-	cp $10
-	ld a,$30
-	jr z,+
-	ld a,$50
-+
+	add $20
+	;cp $a0 ; cap to 99
+	cp $70
+	jr c,+
+		; last bomb upgrade level goes to 99 instead of 70
+		ld a,$99
+	+
 	ldi (hl),a
 	xor a
 	ld (hl),a

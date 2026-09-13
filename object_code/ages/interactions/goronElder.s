@@ -27,7 +27,11 @@ m_InteractionCode $8b
 	jp interactionAnimateAsNpc
 
 @subid2:
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jp z,interactionDelete
 	jpab interactionCodeAges1.shootingGalleryNpc

@@ -15,7 +15,11 @@ m_InteractionCode $3f
 	jr nz,@@state1
 
 @@state0:
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jp nz,interactionDelete
 	ld a,GLOBALFLAG_0b

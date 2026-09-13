@@ -201,6 +201,28 @@ giveTreasure_body:
 	ldh a,(<hFF8B)
 	call setFlag
 
+.if !defined(ROM_AGES) && defined(ENABLE_NEW_GAME_PLUS)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+.endif
+	; if this is the red or blue ore, set the global flag
+	; indicating both were found when we get them both
+	ldh a,(<hFF8B)
+	cp TREASURE_RED_ORE
+	jr z,++
+		cp TREASURE_BLUE_ORE
+		jr nz,+
+	++
+	xor $01 ; convert to other ore to check we have both
+	ld hl,wObtainedTreasureFlags
+	call checkFlag
+	jr z,+
+		ld a,GLOBALFLAG_GOT_RED_AND_BLUE_ORE
+		call setGlobalFlag
+	+
+.endif
+
 	push bc
 	ldh a,(<hFF8B)
 	ld c,a
@@ -339,7 +361,23 @@ giveTreasure_body:
 ; Add c to [de] as a bcd value.
 ; Mode 4 is also called by mode d, mode f.
 @mode4:
+	ld a,e
+	cp <wSeedSatchelLevel
 	ld a,(de)
+	jr nz,+
+		; this is the seed satchel.
+		; make sure we don't go over L3, or L4 in combo
+		.if defined(ROM_COMBO)
+			cp $04
+			jr c,+
+				ld a,$04
+		.else
+			cp $03
+			jr c,+
+				ld a,$03
+		.endif
+	+
+
 	add c
 	daa
 	jr nc,+
@@ -529,7 +567,11 @@ giveTreasure_body:
 	ret
 
 @seedSatchelCapacities:
+.if defined(ROM_COMBO)
+	.db $20 $40 $70 $99
+.else
 	.db $20 $50 $99
+.endif
 
 ; Add a ring to the unappraised ring list.
 @mode9:

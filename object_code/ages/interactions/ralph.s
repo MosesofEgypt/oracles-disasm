@@ -264,7 +264,11 @@ ralphState0:
 	jr @setScriptAndDisableObjects
 
 @initSubid11:
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jp z,interactionDelete
 

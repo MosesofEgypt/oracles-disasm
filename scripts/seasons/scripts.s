@@ -2755,43 +2755,6 @@ guruGuruScript:
 	enableinput
 	scriptjump @alreadyTradedGrease
 
-
-; ==================================================================================================
-; INTERAC_LOST_WOODS_SWORD
-; ==================================================================================================
-lostWoodsSwordScript:
-	setcollisionradii $0c, $06
-	makeabuttonsensitive
-	checkabutton
-	disableinput
-	asm15 objectSetInvisible
-	xorcfc0bit 0
-	callscript @giveSword
-	orroomflag $40
-	wait 90
-	enableinput
-	scriptend
-@giveSword:
-	jumptable_objectbyte $42
-	.dw @giveNobleSword
-	.dw @giveMasterSword
-.ifndef ENABLE_NEW_GAME_PLUS
-	.dw @giveButterSword
-@giveButterSword:
-	giveitem TREASURE_SWORD, $07
-	giveitem TREASURE_SWORD, $08
-	retscript
-.endif
-@giveNobleSword:
-	giveitem TREASURE_SWORD, $01
-	giveitem TREASURE_SWORD, $04
-	retscript
-@giveMasterSword:
-	giveitem TREASURE_SWORD, $02
-	giveitem TREASURE_SWORD, $05
-	retscript
-
-
 ; ==================================================================================================
 ; INTERAC_BLAINO_SCRIPT
 ; ==================================================================================================
@@ -6516,27 +6479,6 @@ troyScript_doneBiggoronSecret:
 	checkabutton
 	disableinput
 	scriptjump troyScript_generateReturnSecret
-
-
-troyScript_giveReward:
-	jumptable_objectbyte Interaction.var03
-	.dw @nobleSword
-	.dw @masterSword
-.ifdef ENABLE_NEW_GAME_PLUS
-	.dw @butterSword
-@butterSword:
-	giveitem TREASURE_SWORD, $06
-	giveitem TREASURE_SWORD, $07
-	retscript
-.endif
-@nobleSword:
-	giveitem TREASURE_SWORD, $01
-	giveitem TREASURE_SWORD, $04
-	retscript
-@masterSword:
-	giveitem TREASURE_SWORD, $02
-	giveitem TREASURE_SWORD, $05
-	retscript
 	
 	
 troyScript_postGameEffects:
@@ -6576,6 +6518,54 @@ troyScript_tookTooLong:
 troyScript_doneSecret:
 	initcollisions
 	scriptjump troyScript_doneBiggoronSecret
+
+troyScript_giveReward:
+	jumptable_objectbyte Interaction.var03
+	.dw shared_giveNobleSword
+	.dw shared_giveMasterSword
+.if defined(ROM_COMBO)
+	.dw shared_giveButterSword
+	.dw shared_giveButterSword
+.endif
+
+; ==================================================================================================
+; INTERAC_LOST_WOODS_SWORD
+; ==================================================================================================
+lostWoodsSwordScript:
+	setcollisionradii $0c, $06
+	makeabuttonsensitive
+	checkabutton
+	disableinput
+	asm15 objectSetInvisible
+	xorcfc0bit 0
+	callscript @giveSword
+	orroomflag $40
+	wait 90
+	enableinput
+	scriptend
+@giveSword:
+	jumptable_objectbyte Interaction.subid
+	.dw shared_giveNobleSword
+	.dw shared_giveMasterSword
+.if defined(ROM_COMBO)
+	.dw shared_giveButterSword
+	.dw shared_giveButterSword
+.endif
+
+shared_giveNobleSword:
+	giveitem TREASURE_SWORD, $01
+	giveitem TREASURE_SWORD, $04
+	retscript
+shared_giveMasterSword:
+	giveitem TREASURE_SWORD, $02
+	giveitem TREASURE_SWORD, $05
+	retscript
+.if defined(ROM_COMBO)
+shared_giveButterSword:
+	giveitem TREASURE_SWORD, $07
+	giveitem TREASURE_SWORD, $08
+	retscript
+.endif
 
 
 ; ==================================================================================================

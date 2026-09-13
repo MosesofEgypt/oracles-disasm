@@ -124,7 +124,7 @@ itemCode05:
 	.db ($80|ITEMCOLLISION_L3_SWORD)
 	.db (-5)
 
-.ifdef ENABLE_NEW_GAME_PLUS
+.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 	; L-4
 	.db ($80|ITEMCOLLISION_L3_SWORD)
 	.db (-6)

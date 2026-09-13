@@ -102,8 +102,12 @@
 		; determines what ring box level will allow you to open the ring
 		; list without needing Vasu's Ring to be equipped. If you want
 		; to stick with a 5-ring box, you could have level 3 be a portal box
-		; NOTE: Setting to a value other than 0, 1, 2, or 3 is unsupported.
-		.define PORTAL_RING_BOX_LEVEL			3
+		; NOTE: Setting to a value other than 0, 1, 2, 3, or 4 is unsupported.
+		.if defined(ROM_COMBO)
+			.define PORTAL_RING_BOX_LEVEL			4
+		.else
+			.define PORTAL_RING_BOX_LEVEL			3
+		.endif
 	.endif
 	.ifndef UNRESTRICTED_TRANSFORMS
 		; normally the transforms swap link with a different SpecialObject
@@ -138,11 +142,17 @@
 		.define RING_BOX_L1_SIZE		3
 		.define RING_BOX_L2_SIZE		5
 		.define RING_BOX_L3_SIZE		10
+		.define RING_BOX_L4_SIZE		10 ; for combo rom
 	.else
 		.define RING_BOX_L1_SIZE		2
 		.define RING_BOX_L2_SIZE		4
 		.define RING_BOX_L3_SIZE		5
+		.define RING_BOX_L4_SIZE		5 ; for combo rom
 	.endif
+.else
+	.define RING_BOX_L1_SIZE		1
+	.define RING_BOX_L2_SIZE		3
+	.define RING_BOX_L3_SIZE		5
 .endif
 
 .ifdef INCREASE_WALLET_SIZE
@@ -172,7 +182,11 @@
 
 .ifdef RESIZE_RING_BOX
 .ifndef MAX_RING_BOX_LEVEL
-	.define MAX_RING_BOX_LEVEL 3
+	.if defined(ROM_COMBO)
+		.define MAX_RING_BOX_LEVEL 4
+	.else
+		.define MAX_RING_BOX_LEVEL 3
+	.endif
 .endif
 .endif
 

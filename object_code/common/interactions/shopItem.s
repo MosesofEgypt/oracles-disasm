@@ -50,9 +50,16 @@ shopItemState0:
 .endif
 	dec a
 	jr z,++
-	ld a,$14
-	ld (de),a
-++
+		dec a
+		ld a,$14
+		.if defined(ROM_COMBO)
+			; handle 4th level ring box
+			jr z,+
+				ld a,$16
+			+
+		.endif
+		ld (de),a
+	++
 	; If this is 10 bombs, delete self if Link doesn't have bombs
 	ld a,(de)
 	cp $04
@@ -481,6 +488,9 @@ shopItemGetTilesForRupeeDisplay:
 .ifdef ROM_AGES
 	.dw w3VramTiles+$66
 	.dw w3VramTiles+$6e
+.if defined(ROM_COMBO)
+	.dw w3VramTiles+$66
+.endif
 .endif
 
 shopItemPrices:
@@ -536,6 +546,9 @@ shopItemPrices:
 .ifdef ROM_AGES
 	/* $14 */ .db RUPEEVAL_300
 	/* $15 */ .db RUPEEVAL_500
+.if defined(ROM_COMBO)
+	/* $16 */ .db RUPEEVAL_999
+.endif
 .endif
 
 ;;
@@ -621,6 +634,9 @@ shopItemTreasureToGive:
 .ifdef ROM_AGES
 	/* $14 */ .db  TREASURE_RING_BOX      $03
 	/* $15 */ .db  TREASURE_HEART_PIECE   $01
+.if defined(ROM_COMBO)
+	/* $16 */ .db  TREASURE_RING_BOX      $04
+.endif
 .endif
 
 
@@ -654,6 +670,9 @@ shopItemReplacementTable:
 .ifdef ROM_AGES
 	/* $14 */ .db <wBoughtShopItems1  $01 $ff $00
 	/* $15 */ .db <wBoughtShopItems2  $40 $05 $00
+.if defined(ROM_COMBO)
+	/* $16 */ .db <wBoughtShopItems1  $01 $ff $00
+.endif
 .endif
 
 
@@ -694,4 +713,7 @@ shopItemTextTable:
 .ifdef ROM_AGES
 	/* $14 */ .db <TX_0059
 	/* $15 */ .db <TX_0017
+.if defined(ROM_COMBO)
+	/* $16 */ .db <TX_00_L4_RING_BOX
+.endif
 .endif

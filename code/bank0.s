@@ -3869,10 +3869,10 @@ objectQueueDraw:
 
 ;;
 ; Gets the data for a chest in the current room.
-; Defaults to position $00, contents $2800 if a chest is not found.
+; Defaults to position $00, contents TREASURE_OBJECT_RUPEES_00 if a chest is not found.
 ;
-; @param	bc	Chest contents
-; @param	e	Chest position
+; @param[out]	bc	Chest contents
+; @param[out]	e	Chest position
 getChestData:
 	ldh a,(<hRomBank)
 	push af
@@ -3913,10 +3913,32 @@ getChestData:
 	ld b,(hl)
 	inc hl
 	ld c,(hl)
+	; if this is the red or blue ore in seasons, replace
+	; it with a gold ore chunk if they've been obtained
+.if defined(ROM_AGES) || !defined(ENABLE_NEW_GAME_PLUS)
 	jr @end
+.else
+	.if defined(ROM_COMBO)
+		call wIsSeasons
+		jr nc,@end
+	.endif
+
+	ld a,b
+	cp TREASURE_RED_ORE
+	jr z,+
+		cp TREASURE_BLUE_ORE
+		jr nz,@end
+	+
+	ld a,GLOBALFLAG_GOT_RED_AND_BLUE_ORE
+	call checkGlobalFlag
+	jr z,@end
+	; already have both, so replace
+	ld bc,TREASURE_OBJECT_ORE_CHUNKS_01
+	jr @end
+.endif
 
 @chestNotFound:
-	ld bc,$2800
+	ld bc,TREASURE_OBJECT_RUPEES_00
 
 @end:
 	pop af
@@ -9210,9 +9232,14 @@ victoryRingIncLevel:
 	ld a,d
 	pop de
 	ret nz
-	; increment level by 1
+	; allow bumping sword to L4 in non-combo game using ring
+.if !defined(ROM_COMBO)
+	cp $04
+.else
 	cp $03
+.endif
 	ret nc
+	; increment level by 1
 	inc a
 	ret
 
@@ -10515,8 +10542,6 @@ objectCreateFloatingMusicNote:
 	ldh a,(<hRomBank)
 	push af
 	.if defined(ROM_COMBO)
-		; the code for creating the exclamation mark is the same
-		; for both games, so we're just using ages for both
 		callfrombank0 interactionCodeAges11.objectCreateFloatingImage
 	.else
 		callfrombank0 interactionCode5.objectCreateFloatingImage
@@ -15168,6 +15193,39 @@ partDelete:
 	ldi (hl),a
 	dec b
 	jr nz,-
+	ret
+
+;;
+; @param hl Pointer to flag mask data(first byte is byte count)
+; @param de Pointer to flag data to be masked
+applyFlagMask:
+	push bc
+	ld b,(hl)
+	inc hl
+	-
+		ld a,(de)
+		and (hl)
+		ld (de),a
+		inc de
+		inc hl
+		dec b
+		jr nz,-
+	pop bc
+	ret
+
+;;
+; @param b	Number of bytes to merge
+; @param hl Pointer to flag data to merge
+; @param de Pointer to flag data to be merged into
+mergeFlags:
+	-
+		ld a,(de)
+		or (hl)
+		ld (de),a
+		inc de
+		inc hl
+		dec b
+		jr nz,-
 	ret
 
 

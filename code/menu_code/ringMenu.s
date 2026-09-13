@@ -120,6 +120,7 @@ getRingBoxCapacity:
 	.db RING_BOX_L1_SIZE
 	.db RING_BOX_L2_SIZE
 	.db RING_BOX_L3_SIZE
+	.db RING_BOX_L4_SIZE
 .else
 	push hl
 	ld a,(wRingBoxLevel)
@@ -1653,22 +1654,19 @@ getRingTiles:
 	cp $ff
 	ret z
 
-	; Unappraised ring?
+	; jump if appraised ring
 	bit 6,a
 	jr z,+
-
-	; Ring box?
-	cp $fe
-	ld a,$40
-	jr nz,+
-.ifdef RESIZE_RING_BOX
-	call getRingBoxLevel
-.else
-	ld a,(wRingBoxLevel)
-.endif
-	add $40
-	jr +
-+
+		cp $fe   ; ring box
+		ld a,$40 ; unappraised ring
+		jr nz,+
+		.ifdef RESIZE_RING_BOX
+			call getRingBoxLevel
+		.else
+			ld a,(wRingBoxLevel)
+		.endif
+		add $40 ; skip past all rings to ring boxes
+	+
 	call multiplyABy8
 	m_ReadGfxDataHashedFilename map_rings
 	ld hl,{filename}

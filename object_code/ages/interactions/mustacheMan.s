@@ -12,7 +12,11 @@ m_InteractionCode $42
 	call checkInteractionState
 	jr nz,@@initialized
 
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jp nz,interactionDelete
 	call @initGraphicsAndScript

@@ -2,7 +2,7 @@
 ; INTERAC_LOST_WOODS_SWORD
 ; ==================================================================================================
 m_InteractionCode $59
-	ld e,$44
+	ld e,Interaction.state
 	ld a,(de)
 	rst_jumpTable
 	.dw @state0
@@ -13,17 +13,21 @@ m_InteractionCode $59
 	jp nz,interactionDelete
 	ld a,TREASURE_SWORD
 	call checkTreasureObtained
-	jr nc,+
-.ifdef ENABLE_NEW_GAME_PLUS
-	cp $04
-.else
-	cp $03
-.endif
-	jp nc,interactionDelete
-	sub $01
-	ld e,$42
-	ld (de),a
-+
+	jr nc,++
+		or a
+		jr z,+
+			dec a
+		+
+		.if defined(ROM_COMBO)
+			and $03
+		.else
+			and $01
+		.endif
+		jp nc,interactionDelete
+		dec a
+		ld e,$42
+		ld (de),a
+	++
 	call interactionInitGraphics
 	call interactionIncState
 	call objectSetVisible

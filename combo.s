@@ -89,6 +89,7 @@ m_EndScriptSection
 
 .include "code/roomInitialization.s"
 .include "code/staticObjects.s"
+.include {"{GAME_DATA_DIR}/chestData.s"}
 
 m_section_superfree Bank_5 NAMESPACE bank5
 	.define SKIP_COMPANION_COMMON_CODE
@@ -1244,10 +1245,6 @@ m_section_superfree Tileset_Loading NAMESPACE tilesets
 m_section_superfree Treasure_Data NAMESPACE treasureData
 	.include "code/loadTreasureData.s"
 	.include {"{GAME_DATA_DIR}/treasureObjectData.s"}
-.ends
-
-m_section_superfree chestData NAMESPACE chestData
-	.include {"{GAME_DATA_DIR}/chestData.s"}
 .ends
 
 m_section_superfree serialCode NAMESPACE serialCode

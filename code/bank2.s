@@ -5448,7 +5448,7 @@ loadItemIconGfx:
 	m_ReadGfxDataHashedFilename spr_item_icons_wide_sword_l3
 	.db :{filename}
 	.dw {filename}
-.ifdef ENABLE_NEW_GAME_PLUS
+.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 	.db $04
 	m_ReadGfxDataHashedFilename spr_item_icons_wide_sword_l4
 	.db :{filename}
@@ -5465,7 +5465,7 @@ loadItemIconGfx:
 	m_ReadGfxDataHashedFilename spr_item_icons_wide_shield_l3
 	.db :{filename}
 	.dw {filename}
-.ifdef ENABLE_NEW_GAME_PLUS
+.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 	.db $04
 	m_ReadGfxDataHashedFilename spr_item_icons_wide_shield_l4
 	.db :{filename}
@@ -5524,7 +5524,9 @@ loadItemIconGfx:
 			ld b,:{filename}
 			jp copy20BytesFromBank
 		+
+	.endif
 
+	.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 		cp $48
 		; insert the L-4 sword and shield sprites
 		m_ReadGfxDataHashedFilename spr_item_icons_sword_shield_l4
@@ -5941,7 +5943,7 @@ itemGfxIconFixupInfo:
 	.db UNCMP_GFXH_ITEM_ICONS_SWORD_L1
 	.db UNCMP_GFXH_ITEM_ICONS_SWORD_L2
 	.db UNCMP_GFXH_ITEM_ICONS_SWORD_L3
-.ifdef ENABLE_NEW_GAME_PLUS
+.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 	.db UNCMP_GFXH_ITEM_ICONS_SWORD_L4
 .endif
 
@@ -5955,7 +5957,7 @@ itemGfxIconFixupInfo:
 	.db UNCMP_GFXH_ITEM_ICONS_SHIELD_L1
 	.db UNCMP_GFXH_ITEM_ICONS_SHIELD_L2
 	.db UNCMP_GFXH_ITEM_ICONS_SHIELD_L3
-.ifdef ENABLE_NEW_GAME_PLUS
+.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 	.db UNCMP_GFXH_ITEM_ICONS_SHIELD_L4
 .endif
 
@@ -7809,11 +7811,24 @@ inventorySubscreen1_drawTreasures:
 .else
 	ld a,(wRingBoxLevel)
 .endif
-	add <TX_091d-1
+	push hl
+	ld hl,@ringBoxTextIndices
+	rst_addAToHl
+	ld a,(hl)
+	pop hl
 	ld (w4SubscreenTextIndices+$f),a
 	ld de,w4TileMap+$182
 	ld a,$fe
 	jp getRingTiles
+
+@ringBoxTextIndices:
+	.db $00 ; no ring box
+	.db <TX_091d
+	.db <TX_091e
+	.db <TX_091f
+.if defined(ROM_COMBO)
+	.db <TX_09_L4_RING_BOX
+.endif
 
 ;;
 ; @param	a	"Position" byte to convert
@@ -8091,6 +8106,7 @@ getRingBoxCapacity:
 	.db RING_BOX_L1_SIZE
 	.db RING_BOX_L2_SIZE
 	.db RING_BOX_L3_SIZE
+	.db RING_BOX_L4_SIZE
 .else
 	push hl
 	ld a,(wRingBoxLevel)
@@ -8616,7 +8632,11 @@ subscreen1TreasureData_seasons:
 		; Row 1
 		.db TREASURE_MASTERS_PLAQUE		$01 $00
 		.db TREASURE_FLIPPERS			$01 $00
+	.if defined(ROM_COMBO)
+		.db TREASURE_MERMAID_SUIT_SEASONS		$01 $00
+	.else
 		.db TREASURE_MERMAID_SUIT		$01 $00
+	.endif
 		.db TREASURE_POTION			$04 $01
 		.db TREASURE_TRADEITEM			$07 $02
 		.db TREASURE_MAKU_SEED			$0a $03
@@ -11928,22 +11948,19 @@ getRingTiles:
 	cp $ff
 	ret z
 
-	; Unappraised ring?
+	; jump if appraised ring
 	bit 6,a
 	jr z,+
-
-	; Ring box?
-	cp $fe
-	ld a,$40
-	jr nz,+
-.ifdef RESIZE_RING_BOX
-	call getRingBoxLevel
-.else
-	ld a,(wRingBoxLevel)
-.endif
-	add $40
-	jr +
-+
+		cp $fe   ; ring box
+		ld a,$40 ; unappraised ring
+		jr nz,+
+		.ifdef RESIZE_RING_BOX
+			call getRingBoxLevel
+		.else
+			ld a,(wRingBoxLevel)
+		.endif
+		add $40 ; skip past all rings to ring boxes
+	+
 	call multiplyABy8
 	m_ReadGfxDataHashedFilename map_rings
 	ld hl,{filename}

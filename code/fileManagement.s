@@ -7,15 +7,17 @@
 	COMBO_FLAG_BIT_4				db
 	COMBO_FLAG_BIT_5				db
 	COMBO_FLAG_BIT_6				db
-	COMBO_FLAG_BIT_PREVIOUS_GAME	db
+	COMBO_FLAG_BIT_PREVIOUS_GAME	db ; set for seasons, unset for ages
 .ende
+.endif
 
 ; Parameters:
 ; 1 - Offset to start copying to
 ; 2 - Length of data to copy
 .macro m_LoadSavefileSection_len
+	.assert NARGS == 2
 	push hl
-	ld bc,\1-wFileStart
+	ld bc,(\1)-wFileStart
 	add hl,bc
 	ld de,\1
 	ld bc,\2
@@ -27,8 +29,70 @@
 ; 1 - Offset to start copying to
 ; 2 - End of the data to copy to(offset + copy length)
 .macro m_LoadSavefileSection_end
-	m_LoadSavefileSection_len \1 (\2-\1)
+	.assert NARGS == 2
+	m_LoadSavefileSection_len \1, (\2)-(\1)
 .endm
+
+; Parameters:
+; 1 - Offset to start clearing
+; 2 - Length of data to clear
+; 3 - Byte to fill with(defaults to $00)
+.macro m_ClearSavefileSection_len
+	.if NARGS == 3
+		.if \3 == $00
+			xor a
+		.else
+			ld a,\3
+		.endif
+	.else
+		.assert NARGS == 2
+		xor a
+	.endif
+	ld hl,\1
+	ld bc,\2
+	call fillMemoryBc
+.endm
+
+; Parameters:
+; 1 - Offset to start clearing
+; 2 - End of the data to clear(offset + copy length)
+.macro m_ClearSavefileSection_end
+	.if NARGS == 2
+		m_ClearSavefileSection_len \1, (\2)-(\1), $00
+	.else
+		.assert NARGS == 2
+		m_ClearSavefileSection_len \1, (\2)-(\1), (\3)
+	.endif
+.endm
+
+.if defined(ROM_COMBO) || defined(ENABLE_NEW_GAME_PLUS)
+; NOTE: we're intentionally preserving the ore flags between games and NG+ cycles
+ngpAndComboTreasureFlagMask:
+	.db $10	; count
+	.db $00
+	.db $30	; TREASURE_BIGGORON_SWORD, TREASURE_BOMBCHUS
+	.db $00
+	.db $00
+	.db $00
+	.db $90	; TREASURE_RING_BOX, TREASURE_POTION
+	.db $00
+	.db $00
+	.db $00
+	.db $00
+.if defined(ROM_COMBO)
+	; for the combo, the ore flags were moved to allow them to
+	; exist in both an ages and seasons save, allowing them to
+	; persist across both NG+ cycle and game world switches.
+	.db $c0	; TREASURE_RED_ORE, TREASURE_BLUE_ORE
+	.db $80	; TREASURE_HARD_ORE
+.else
+	.db $07 ; TREASURE_RED_ORE, TREASURE_BLUE_ORE, TREASURE_HARD_ORE
+	.db $00
+.endif
+	.db $00
+	.db $00
+	.db $00
+	.db $00
 .endif
 
 ;;
@@ -79,38 +143,35 @@ initializeNgpFile:
 	ld hl,wRingReduxFlagsExt
 	ld (hl),a
 
-	ld hl,wRingBoxContentsExt
-	ld a,$ff
-	ld b,$05
-	call fillMemory
+	m_ClearSavefileSection_len wRingBoxContentsExt, $05, $ff
 .endif
 
-	ld hl,wRingBoxContents
-	ld a,$ff
-	ld b,$05
-	call fillMemory
-
-	; record whether or not the player has the biggorons sword
-	ld a,(wObtainedTreasureFlags+(TREASURE_BIGGORON_SWORD>>3))
-	and 1<<(TREASURE_BIGGORON_SWORD&$07)
-	push af
+	m_ClearSavefileSection_len wRingBoxContents, $05, $ff
 
 	xor a
-	ld hl,wDeathRespawnBuffer
-	ld b,wGashaSpotFlags-wDeathRespawnBuffer
-	call fillMemory
+	ld (wEssencesObtained),a
+	.ifndef ENABLE_MULTI_RING
+		ld (wActiveRing),a
+	.endif
 
-	ld hl,(wGashaMaturity+2)
-	ld b,wLinkMaxHealth-(wGashaMaturity+2)
-	call fillMemory
+	m_ClearSavefileSection_end wDeathRespawnBuffer, wGashaSpotFlags
+	m_ClearSavefileSection_end (wGashaMaturity+2), wObtainedTreasureFlags
 
-	ld hl,wNumEmberSeeds
-	ld b,wRingBoxContents-wNumEmberSeeds
-	call fillMemory
+	; reset global flags while avoiding ones we want to
+	; persist across NG cycles, such as vasu rewards,
+	; linked secret flags, and upgrades received.
+	push de
+	ld de,wGlobalFlags
+	ld hl,@ngpGlobalFlagMask
+	call applyFlagMask
+	pop de
 
-	ld hl,wKilledGoldenEnemies
-	ld b,(wSecretType+1)-wKilledGoldenEnemies
-	call fillMemory
+	push hl
+	; mask out treasure flags to keep from previous game cycle
+	ld hl,ngpAndComboTreasureFlagMask
+	ld de,wObtainedTreasureFlags
+	call applyFlagMask
+	pop hl
 
 	; clear all the room flags
 	ld hl,wGroup0RoomFlags
@@ -134,18 +195,42 @@ initializeNgpFile:
 	call c,initializeFileVariables
 .endif
 
-	pop af
-	or a
-	jr z,+
-		; add biggoron sword to inventory
-		ld hl,initialNgpFileVariables_biggoronsword
-		call initializeFileVariables
-	+
-
 	; set wLinkHealth to wLinkMaxHealth
 	ld hl,wLinkMaxHealth
 	ldd a,(hl)
 	ld (hl),a
+
+	; put temporary items in the equipped slots so the items
+	; we give the player get put into the inventory instead
+	ld a,ITEM_PUNCH
+	ld hl,wInventoryB
+	ldi (hl),a
+	ld  (hl),a
+
+	ld a,ITEM_LIFE_VIAL
+	ld c,$00
+	call giveTreasure
+
+	; give the player the bonus items
+	ld hl,@bonusInventoryItems
+	-
+		ld a,(hl)
+		call checkTreasureObtained
+		ldi a,(hl)
+		ld c,(hl)
+		inc hl
+		push hl
+		call c,giveTreasure
+		pop hl
+		ld a,(hl)
+		or a
+		jr nz,-
+
+	; remove the temporary items
+	xor a
+	ld hl,wInventoryB
+	ldi (hl),a
+	ld  (hl),a
 
 	; refill(or initialize) the life vial
 	ld hl,wLifeVialMaxCharges
@@ -182,6 +267,45 @@ initializeNgpFile:
 	+
 	ld (hl),a
 	ret
+
+@bonusInventoryItems:
+	.db TREASURE_BIGGORON_SWORD,	$00
+	.db TREASURE_BOMBCHUS,			$00
+	.db TREASURE_RING_BOX,			$01
+	.db $00
+
+; masks for each GLOBALFLAG that should persist between NG+ cycles
+@ngpGlobalFlagMask:
+
+.if defined(ROM_COMBO) || defined(ROM_AGES)
+	.db $0f; number of bytes to mask
+
+	.db $ff ; keep all first $0a flags
+	.db $03
+	.db $00
+	.db $00
+	.db $00
+	.db $00
+	.db $00
+	.db $00
+	.db $00
+.if defined(ROM_COMBO)
+	.db $e0 ; GLOBALFLAG_GOT_BOMB_UPGRADE_FROM_FAIRY
+	;         GLOBALFLAG_GOT_SATCHEL_UPGRADE
+	;         GLOBALFLAG_GOT_RED_AND_BLUE_ORE
+.elif defined(ROM_AGES)
+	.db $60 ; GLOBALFLAG_GOT_BOMB_UPGRADE_FROM_FAIRY
+	;         GLOBALFLAG_GOT_SATCHEL_UPGRADE
+.else
+	.db $80 ; GLOBALFLAG_GOT_RED_AND_BLUE_ORE
+.endif
+
+	.db $ff ; keep all flags from $50 to $78(linked secrets)
+	.db $ff
+	.db $ff
+	.db $ff
+	.db $ff
+.endif
 
 .endif
 
@@ -250,8 +374,6 @@ initializeFile:
 	ld (wUnappraisedRings),a
 ++
 	.if defined(ROM_COMBO)
-		; the code for creating the exclamation mark is the same
-		; for both games, so we're just using ages for both
 		callab interactionCodeAges11.initializeChildOnGameStart
 	.else
 		callab interactionCode5.initializeChildOnGameStart
@@ -407,9 +529,18 @@ comboLoadOtherGame:
 	push bc
 	call toggleIsSeasons
 	call getComboStarted
+	
+	; preserve global flags for vasu
+	ld de,wGlobalFlags
+	push de
+	ld a,(de)
+	ld b,a
+	inc de
+	ld a,(de)
+	and $03
+	ld c,a
+	push bc
 
-	ld hl,wFileChecksum ; using checksum to tell if loaded or initialized
-	push hl
 	jr nz,+
 		call initializeComboGame
 		xor a
@@ -418,9 +549,19 @@ comboLoadOtherGame:
 		call loadAcrossComboGame
 		ld a,$ff
 	++
-	pop hl
+	ld hl,wFileChecksum ; using checksum to tell if loaded or initialized
 	ldi (hl),a
 	ldi (hl),a
+
+	; restore vasu flags
+	pop bc
+	pop hl	; wGlobalFlags
+	ld a,b
+	or (hl)
+	ldi (hl),a
+	ld a,c
+	or (hl)
+	ld (hl),a
 
 	; stop music and sfx to prevent item acquisition sounds from playing
 	ld a,SNDCTRL_STOPMUSIC
@@ -437,21 +578,6 @@ comboLoadOtherGame:
 ; Working from the existing WRAM save data, this loads select portions of
 ; the other game's save file in preparation for switching to running it.
 loadAcrossComboGame:
-	push bc
-	; record bonus items the player has
-	ld b,$00
-	ld a,TREASURE_BIGGORON_SWORD
-	call checkTreasureObtained
-	jr nc,+
-		set 0,b
-	+
-	ld a,TREASURE_RING_BOX
-	call checkTreasureObtained
-	jr nc,+
-		set 1,b
-	+
-	push bc
-
 	; get the savefile address to read from
 	call getFileAddress1
 	ld h,b
@@ -464,31 +590,44 @@ loadAcrossComboGame:
 	m_LoadSavefileSection_len wChildStatus,			$06
 	m_LoadSavefileSection_len wSavefileString,		$08
 	m_LoadSavefileSection_len wFluteIcon,			$01
-	m_LoadSavefileSection_end wDeathRespawnBuffer,	wLinkHealth
+	m_LoadSavefileSection_end wDeathRespawnBuffer,	wObtainedTreasureFlags
 	m_LoadSavefileSection_end wEssencesObtained,	wTradeItem+1
 	m_LoadSavefileSection_end wKilledGoldenEnemies,	wSlingshotSelectedSeeds+1
 	m_LoadSavefileSection_end wBiggoronSwordOverflowItem, wSaveFileMainSectionEnd
 	m_LoadSavefileSection_end wGroup0RoomFlags,		wGroupRoomFlagsEnd
 
+	push hl
+	; mask out treasure flags to keep from previous game
+	ld hl,ngpAndComboTreasureFlagMask
+	ld de,wObtainedTreasureFlags
+	call applyFlagMask
+	pop hl
+
+	; merge the current game's flags in from the savefile
+	ld de,wObtainedTreasureFlags
+	ld bc,wObtainedTreasureFlags-wFileStart
+	add hl,bc
+	ld b,$10 ; byte count
+	call mergeFlags
+
 	; disable SRAM chip
 	xor a
 	ld ($1111),a
-	pop bc
 
 	; give the player the bonus items
-	bit 0,b
-	jr z,+
-		ld a,TREASURE_BIGGORON_SWORD
+	ld hl,@bonusInventoryItems
+	-
+		ld a,(hl)
 		call checkTreasureObtained
-		call nc,giveTreasure
-	+
-	bit 1,b
-	jr z,+
-		ld a,TREASURE_RING_BOX
-		call checkTreasureObtained
-		ld c,$01 ; level 1
-		call nc,giveTreasure
-	+
+		ldi a,(hl)
+		ld c,(hl)
+		inc hl
+		push hl
+		call c,giveTreasure
+		pop hl
+		ld a,(hl)
+		or a
+		jr nz,-
 
 	; set the bit indicating that warping to other game is allowed
 	ld hl,wFileIsCompleted
@@ -504,63 +643,18 @@ loadAcrossComboGame:
 	jr z,+
 		set COMBO_FLAG_BIT_LINKED_BEATEN,(hl)
 	+
-
-	pop bc
 	ret
+
+@bonusInventoryItems:
+	.db TREASURE_BIGGORON_SWORD,	$00
+	.db TREASURE_BOMBCHUS,			$00
+	.db TREASURE_RING_BOX,			$01
+	.db $00
 
 ;;
 ; Working from the existing WRAM save data, this clears and initializes
 ; select portions of the save file so it can be used for the other game.
 initializeComboGame:
-	; track whether the user got the ring box from vasu
-	ld a,GLOBALFLAG_OBTAINED_RING_BOX
-	call checkGlobalFlag
-	push af
-
-	; unset all the treasure flags except the ones specified below
-	ld hl,wObtainedTreasureFlags
-
-	ld a,1<<TREASURE_PUNCH					; $02
-	or   1<<TREASURE_SWORD					; $05
-	or   1<<TREASURE_ROD_OF_SEASONS			; $07
-	and (hl)
-	ldi (hl),a
-
-	ld a,1<<(TREASURE_BIGGORON_SWORD-$08)	; $0c
-	and (hl)
-	ldi (hl),a
-
-	ld a,1<<(TREASURE_HARP-$10)				; $11
-	and (hl)
-	ldi (hl),a
-
-	xor a
-	ldi (hl),a
-
-	ld a,1<<(TREASURE_TUNE_OF_ECHOES-$20)	; $25
-	or   1<<(TREASURE_TUNE_OF_CURRENTS-$20)	; $26
-	or   1<<(TREASURE_TUNE_OF_AGES-$20)		; $27
-	and (hl)
-	ldi (hl),a
-
-	ld a,1<<(TREASURE_RING_BOX-$28)			; $2c
-	or   1<<(TREASURE_POTION-$28)			; $2f
-	and (hl)
-	ldi (hl),a
-
-	; clear the rest of the flags
-	xor a
-	ldi (hl),a
-	ldi (hl),a
-	ldi (hl),a
-	ldi (hl),a
-	ldi (hl),a
-	ldi (hl),a
-	ldi (hl),a
-	ldi (hl),a
-	ldi (hl),a
-	ld  (hl),a
-
 	; toggle the game type and set as linked game
 	ld hl,wWhichGame
 	ld a,(hl)
@@ -568,6 +662,17 @@ initializeComboGame:
 	ldi (hl),a
 	; set the linked-game bit
 	set 0,(hl)
+
+	; unset all treasure flags that cannot be carried over
+	push de
+	ld de,wObtainedTreasureFlags
+	call wIsSeasons
+	ld hl,@comboTreasureFlagMask_seasons
+	jr c,+
+		ld hl,@comboTreasureFlagMask_ages
+	+
+	call applyFlagMask
+	pop de
 
 	; set the bit indicating that warping to other game is allowed
 	ld hl,wFileIsCompleted
@@ -582,25 +687,11 @@ initializeComboGame:
 	.endif
 
 	; clear all game tracker variables and such
-	ld hl,wDeathRespawnBuffer
-	ld b,wObtainedTreasureFlags-wDeathRespawnBuffer
-	call clearMemory
-
-	ld hl,wFluteIcon
-	ld b,wRingBoxLevel-wFluteIcon
-	call clearMemory
-
-	ld hl,wGlobalFlags
-	ld b,(wSlingshotSelectedSeeds+1)-wGlobalFlags
-	call clearMemory
-
-	ld hl,wBiggoronSwordOverflowItem
-	ld bc,wSaveFileMainSectionEnd-wBiggoronSwordOverflowItem
-	call clearMemoryBc
-
-	ld hl,wGroup0RoomFlags
-	ld bc,wGroupRoomFlagsEnd-wGroup0RoomFlags
-	call clearMemoryBc
+	m_ClearSavefileSection_end        wDeathRespawnBuffer, wObtainedTreasureFlags
+	m_ClearSavefileSection_end                 wFluteIcon, wRingBoxLevel
+	m_ClearSavefileSection_end               wGlobalFlags, wSlingshotSelectedSeeds+1
+	m_ClearSavefileSection_end wBiggoronSwordOverflowItem, wSaveFileMainSectionEnd
+	m_ClearSavefileSection_end           wGroup0RoomFlags, wGroupRoomFlagsEnd
 
 	call wIsSeasons
 	jr c,+
@@ -626,22 +717,11 @@ initializeComboGame:
 	ldd a,(hl)
 	ldi (hl),a
 
-	ld a,$ff
 	; clear the ring box
-	ld hl,wRingBoxContents
-	ld b,$05
-	call fillMemory
-
+	m_ClearSavefileSection_len wRingBoxContents, $05, $ff
 	.ifdef EXTENDED_RING_BOX
-		ld hl,wRingBoxContentsExt
-		ld b,$05
-		call fillMemory
+		m_ClearSavefileSection_len wRingBoxContentsExt, $05, $ff
 	.endif
-
-	; restore the ring box flag
-	pop af
-	ld a,GLOBALFLAG_OBTAINED_RING_BOX
-	call nz,setGlobalFlag
 
 	; put temporary items in the equipped slots so the items
 	; we give the player get put into the inventory instead
@@ -651,11 +731,12 @@ initializeComboGame:
 	ld  (hl),a
 
 	; give the player the bonus items they had
-	ld hl,@bonusItems
+	ld hl,@bonusInventoryItems
 	ld a,(hl)
 	-
 		call checkTreasureObtained
 		ldi a,(hl)
+		ld c,$00 ; give 0 of whatever the consumable item is
 		call c,giveTreasure
 		ld a,(hl)
 		or a
@@ -666,12 +747,6 @@ initializeComboGame:
 	ld a,TREASURE_GALE_SEEDS
 	call giveTreasure
 
-	ld a,$03
-	ld (wSatchelSelectedSeeds),a
-
-	ld a,$01
-	ld (wSelectedHarpSong),a
-
 	; remove the temporary items
 	xor a
 	ld hl,wInventoryB
@@ -681,11 +756,51 @@ initializeComboGame:
 	; save the new file
 	jp saveFile
 
-@bonusItems:
+@bonusInventoryItems:
 	.db TREASURE_SWORD
 	.db TREASURE_ROD_OF_SEASONS
 	.db TREASURE_BIGGORON_SWORD
+	.db TREASURE_BOMBCHUS
 	.db TREASURE_HARP
+	.db $00
+
+; NOTE: we're intentionally preserving the ore flags between games
+@comboTreasureFlagMask_ages:
+	.db $10
+	.db $a4	; TREASURE_PUNCH, TREASURE_SWORD, TREASURE_ROD_OF_SEASONS
+	.db $30	; TREASURE_BIGGORON_SWORD, TREASURE_BOMBCHUS
+	.db $00
+	.db $00
+	.db $00
+	.db $90	; TREASURE_RING_BOX, TREASURE_POTION
+	.db $00
+	.db $00
+	.db $00
+	.db $00
+	.db $c0	; TREASURE_RED_ORE, TREASURE_BLUE_ORE
+	.db $80	; TREASURE_HARD_ORE
+	.db $00
+	.db $00
+	.db $00
+	.db $00
+
+@comboTreasureFlagMask_seasons:
+	.db $10
+	.db $24	; TREASURE_PUNCH, TREASURE_SWORD
+	.db $30	; TREASURE_BIGGORON_SWORD, TREASURE_BOMBCHUS
+	.db $02	; TREASURE_HARP
+	.db $00
+	.db $e0	; TREASURE_TUNE_OF_ECHOES, TREASURE_TUNE_OF_CURRENTS, TREASURE_TUNE_OF_AGES
+	.db $90	; TREASURE_RING_BOX, TREASURE_POTION
+	.db $00
+	.db $00
+	.db $00
+	.db $00
+	.db $c0	; TREASURE_RED_ORE, TREASURE_BLUE_ORE
+	.db $80	; TREASURE_HARD_ORE
+	.db $00
+	.db $00
+	.db $00
 	.db $00
 .endif
 
@@ -1121,31 +1236,23 @@ initialNgpFileVariablesTable:
 
 initialNgpFileVariables_linkedGame:
 	.db <wInventoryStorage,			ITEM_SWORD
-	.db <wInventoryStorage+1,		ITEM_LIFE_VIAL
 	.db <wObtainedTreasureFlags,	(1<<TREASURE_PUNCH) | (1<<TREASURE_SWORD)
-	.db <wObtainedTreasureFlags+2,	(1<<(TREASURE_LIFE_VIAL-16))
 	.db $00
 
 initialNgpFileVariables_standardGame:
 initialNgpFileVariables_heroGame:
-	.db <wInventoryStorage+1,		ITEM_LIFE_VIAL
-	.db <wObtainedTreasureFlags+2,	(1<<(TREASURE_LIFE_VIAL-16))
 	.db <wChildStatus,				$00
 	.db <wAnimalCompanion,			$00
 	.db $00
 
-initialNgpFileVariables_biggoronsword:
-	.db <wInventoryStorage+$0f,									ITEM_BIGGORON_SWORD
-	.db <wObtainedTreasureFlags+(TREASURE_BIGGORON_SWORD>>3),	(1<<(TREASURE_BIGGORON_SWORD&$07))
-	.db $00
 .endif
 
 ; This string is different in ages and seasons.
 .ifdef ROM_COMBO
 saveVerificationString_ages:
-	.ASC "Z21216-0"
+	.ASC "Z-AGES-0"
 saveVerificationString_seasons:
-	.ASC "Z11216-0"
+	.ASC "Z-SEAS-0"
 .else
 saveVerificationString:
 .if defined(ROM_AGES)

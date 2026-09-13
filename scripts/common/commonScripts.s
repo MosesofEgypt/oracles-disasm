@@ -24,7 +24,11 @@ faroreScript:
 ; When talking to farore in a completed unlinked game, you can tell her secrets, but all
 ; she'll do is direct you to the person you're supposed to tell them to.
 faroreUnlinked:
+.if defined(ROM_COMBO)
+	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME_AGES, @finishedGame
+.else
 	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME, @finishedGame
+.endif
 	rungenericnpclowindex <TX_5501
 
 @finishedGame:

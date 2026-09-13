@@ -529,7 +529,11 @@ forestFairy_subid0a:
 	bit 6,a
 	jp z,interactionDelete
 
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jp nz,interactionDelete
 
@@ -554,7 +558,11 @@ forestFairy_subid0b:
 	call checkInteractionState
 	jr nz,forestFairy_standardUpdate
 
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jp z,interactionDelete
 
@@ -580,7 +588,11 @@ forestFairy_subid0d:
 forestFairy_standardUpdate_2:
 	jr nz,forestFairy_standardUpdate
 
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jp z,interactionDelete
 

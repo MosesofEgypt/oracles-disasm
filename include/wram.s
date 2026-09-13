@@ -922,9 +922,17 @@ wNumBombchus: ; $c6b3/$c6ad
 	db
 wSeedSatchelLevel: ; $c6b4/$c6ae
 ; Determines satchel capacity
+	; 0 ==  0 capacity
+	; 1 == 30 capacity
+	; 2 == 50 capacity
+	; 3 == 99 capacity
 	db
 wFluteIcon: ; $c6b5/$c6af
-; Determines icon + song, but not companion
+	; Determines icon + song, but not companion
+	; 0 == default green
+	; 1 == ricky
+	; 2 == dimitri
+	; 3 == moosh
 	db
 
 .ifndef ROM_COMBO
@@ -2528,7 +2536,7 @@ wTextInputResult: ; $cc89/$cca3
 
 ; Everything from $cc8a-$cce0 is cleared on screen transitions?
 
-wDisabledObjects: ; $cc8a/$cca4/$cc9c
+wDisabledObjects: ; $cc8a/$cca4/$cc9f
 ; Bit 0 disables link.
 ; Bit 1 disables interactions.
 ; Bit 2 disables enemies.
@@ -2658,7 +2666,7 @@ wcca2: ; $cca2/$ccbc
 ; When a nonzero value is written here, dormant armos statues with subid 0 begin moving?
 	db
 
-wChestContentsOverride: ; $cca3/$ccbd
+wChestContentsOverride: ; $cca3/$ccbd/$ccb8
 ; 2 bytes. When set, this overrides the contents of a chest.
 ; Used for farore's secrets, maybe also the chest minigame?
 	dw

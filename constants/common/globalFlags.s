@@ -41,7 +41,11 @@
 	GLOBALFLAG_BEAT_POSSESSED_NAYRU		db ; $19
 	GLOBALFLAG_MOBLINS_KEEP_DESTROYED	db ; $1a: Moblin's keep destroyed?
 	GLOBALFLAG_MET_TINGLE			db ; $1b: Talked to tingle, don't necessarily have chart yet
-	GLOBALFLAG_GOT_BOMB_UPGRADE_FROM_FAIRY	db ; $1c
+.if defined(ENABLE_NEW_GAME_PLUS)
+	GLOBALFLAG_1c		db ; $1c
+.else
+	GLOBALFLAG_GOT_BOMB_UPGRADE_FROM_FAIRY		db ; $1c
+.endif
 	GLOBALFLAG_CAN_BUY_FLUTE		db ; $1d
 	GLOBALFLAG_1e				db ; $1e
 	GLOBALFLAG_PATCH_REPAIRED_EVERYTHING	db ; $1f
@@ -90,7 +94,11 @@
 	GLOBALFLAG_TALKED_TO_CHEVAL		db ; $43
 	GLOBALFLAG_44				db ; $44: Maple's been met in the past
 	GLOBALFLAG_RALPH_ENTERED_BLACK_TOWER	db ; $45
+.if defined(ENABLE_NEW_GAME_PLUS)
+	GLOBALFLAG_46		db ; $46
+.else
 	GLOBALFLAG_GOT_SATCHEL_UPGRADE		db ; $46
+.endif
 
 	; Unused?
 	GLOBALFLAG_47				db ; $47
@@ -99,8 +107,13 @@
 	GLOBALFLAG_4a				db ; $4a
 	GLOBALFLAG_4b				db ; $4b
 	GLOBALFLAG_4c				db ; $4c
+.if defined(ENABLE_NEW_GAME_PLUS)
+	GLOBALFLAG_GOT_BOMB_UPGRADE_FROM_FAIRY	db ; $4d
+	GLOBALFLAG_GOT_SATCHEL_UPGRADE		db ; $4e
+.else
 	GLOBALFLAG_4d				db ; $4d
 	GLOBALFLAG_4e				db ; $4e
+.endif
 	GLOBALFLAG_4f				db ; $4f
 
 .else
@@ -173,7 +186,12 @@
 	GLOBALFLAG_S_4c				db ; $4c
 	GLOBALFLAG_S_4d				db ; $4d
 	GLOBALFLAG_S_4e				db ; $4e
+.if defined(ENABLE_NEW_GAME_PLUS)
+	; replaces ore in later game cycles with gold ore if acquired
+	GLOBALFLAG_GOT_RED_AND_BLUE_ORE		db ; $4f
+.else
 	GLOBALFLAG_S_4f				db ; $4f
+.endif
 .endif
 
 	; Both games
@@ -279,7 +297,8 @@
 	GLOBALFLAG_SAW_TWINROVA_BEFORE_ENDGAME	db ; $13
 .ENDE
 
-.ENUM $15
+.ENUM $14
+	GLOBALFLAG_FINISHEDGAME_AGES		db ; $14
 	GLOBALFLAG_GAVE_ROPE_TO_RAFTON		db ; $15
 	GLOBALFLAG_16				db ; $16: Prevents era info from displaying once
 	GLOBALFLAG_17				db ; $17
@@ -287,7 +306,11 @@
 	GLOBALFLAG_BEAT_POSSESSED_NAYRU		db ; $19
 	GLOBALFLAG_MOBLINS_KEEP_DESTROYED_AGES	db ; $1a: Moblin's keep destroyed?
 	GLOBALFLAG_MET_TINGLE			db ; $1b: Talked to tingle, don't necessarily have chart yet
-	GLOBALFLAG_GOT_BOMB_UPGRADE_FROM_FAIRY	db ; $1c
+.if defined(ENABLE_NEW_GAME_PLUS)
+	GLOBALFLAG_1c		db ; $1c
+.else
+	GLOBALFLAG_GOT_BOMB_UPGRADE_FROM_FAIRY		db ; $1c
+.endif
 	GLOBALFLAG_CAN_BUY_FLUTE		db ; $1d
 	GLOBALFLAG_1e				db ; $1e
 	GLOBALFLAG_PATCH_REPAIRED_EVERYTHING	db ; $1f
@@ -336,7 +359,11 @@
 	GLOBALFLAG_TALKED_TO_CHEVAL		db ; $43
 	GLOBALFLAG_44				db ; $44: Maple's been met in the past
 	GLOBALFLAG_RALPH_ENTERED_BLACK_TOWER	db ; $45
+.if defined(ENABLE_NEW_GAME_PLUS)
+	GLOBALFLAG_46		db ; $46
+.else
 	GLOBALFLAG_GOT_SATCHEL_UPGRADE		db ; $46
+.endif
 
 	; Unused?
 	GLOBALFLAG_47				db ; $47
@@ -345,8 +372,13 @@
 	GLOBALFLAG_4a				db ; $4a
 	GLOBALFLAG_4b				db ; $4b
 	GLOBALFLAG_4c				db ; $4c
+.if defined(ENABLE_NEW_GAME_PLUS)
+	GLOBALFLAG_GOT_BOMB_UPGRADE_FROM_FAIRY	db ; $4d
+	GLOBALFLAG_GOT_SATCHEL_UPGRADE		db ; $4e
+.else
 	GLOBALFLAG_4d				db ; $4d
 	GLOBALFLAG_4e				db ; $4e
+.endif
 	GLOBALFLAG_4f				db ; $4f
 .ende
 .endif

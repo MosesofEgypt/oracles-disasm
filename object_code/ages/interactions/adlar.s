@@ -15,7 +15,11 @@ m_InteractionCode $29
 
 	; Decide on a value to write to var38; this will affect the script.
 
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	ld a,$04
 	jr nz,@setVar38

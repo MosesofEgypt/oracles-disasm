@@ -7,7 +7,11 @@ m_InteractionCode $1c
 
 ; Initialization
 
+.if defined(ROM_AGES) && defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jr nz,+
 	call checkIsLinkedGame

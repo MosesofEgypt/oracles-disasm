@@ -56,6 +56,11 @@ m_InteractionCode $ce
 @sellingShield:
 	ld c,a
 	ld a,(wShieldLevel)
+	cp $04
+	jr c,+
+		; cap shield level
+		ld a,$03
+	+
 	or a
 	jr z,+
 	dec a
@@ -292,7 +297,11 @@ m_InteractionCode $ce
 	jp showText
 
 @maxSatchelCapacities:
+.if defined(ROM_COMBO)
+	.db $20 $40 $70 $99
+.else
 	.db $20 $50 $99
+.endif
 
 @offerItemTextIndices:
 .ifdef ROM_AGES

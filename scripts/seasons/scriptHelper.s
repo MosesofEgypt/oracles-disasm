@@ -1099,25 +1099,23 @@ child_giveRupees:
 getNextRingboxLevel:
 .ifdef RESIZE_RING_BOX
 	call getRingBoxLevel
-	cp MAX_RING_BOX_LEVEL
-	jr c,+
-		ld a,MAX_RING_BOX_LEVEL
-	+
 .else
 	ld a,(wRingBoxLevel)
 .endif
 	dec a
-	ld c,$03
-	jr z,+
-	ld c,$05
-+
-	ld b,$00
+	ld hl,@ringBoxCapacities
+	rst_addAToHl
+	ld c,(hl)
 	ld hl,wTextNumberSubstitution
 	ld (hl),c
 	inc hl
-	ld (hl),b
+	ld (hl),$00
 	ret
 
+@ringBoxCapacities:
+	.db RING_BOX_L2_SIZE
+	.db RING_BOX_L3_SIZE
+	.db RING_BOX_L4_SIZE
 
 ; ==================================================================================================
 ; INTERAC_PIRATIAN
@@ -1272,6 +1270,10 @@ unluckySailor_increaseBombCapacityAndCount:
 	ld hl,wMaxBombs
 	ld a,(hl)
 	add $20
+	cp $a0
+	jr c,+
+		ld a,$99
+	+
 	ldd (hl),a
 	ld (hl),a
 	jp setStatusBarNeedsRefreshBit1
@@ -2696,17 +2698,17 @@ subrosianSmith_giveUpgradedShield:
 	jr c,@haveShield
 	xor a
 @haveShield:
-	cp $03
-.ifdef ENABLE_NEW_GAME_PLUS
-	jr nz,++
-		ld a,$04
-		jr +
-	++
+	inc a
+.if defined(ROM_COMBO)
+	ld c,$04
+.else
+	ld c,$03
 .endif
-	jr c,+
-	ld a,$02
-+
-	ld c,a
+	cp c
+	jr nc,+
+		; upgrade is not above max level, so use it
+		ld c,a
+	+
 	call getFreeInteractionSlot
 	ret nz
 	ld (hl),INTERAC_TREASURE
@@ -3285,4 +3287,8 @@ dekuScrub_upgradeSatchel:
 	ld (hl),$01
 	ret
 table_65cf:
+.if defined(ROM_COMBO)
+	.db $20 $40 $70 $99
+.else
 	.db $20 $50 $99
+.endif

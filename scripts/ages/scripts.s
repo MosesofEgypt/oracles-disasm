@@ -1573,7 +1573,11 @@ monkeySubid5Script:
 
 
 monkeySubid5Script_bowtieMonkey:
+.if defined(ROM_COMBO)
+	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME_AGES, @finishedGame
+.else
 	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME, @finishedGame
+.endif
 	rungenericnpclowindex <TX_5707
 @finishedGame:
 	rungenericnpclowindex <TX_570c
@@ -3053,7 +3057,11 @@ tokayAtSeedlingPlotScript:
 
 ; Subid $19: Present NPC in charge of the wild tokay museum
 tokayGameManagerScript_present:
+.if defined(ROM_COMBO)
+	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME_AGES, @askForSecret
+.else
 	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME, @askForSecret
+.endif
 	rungenericnpclowindex <TX_0a67
 
 @askForSecret:
@@ -6945,13 +6953,12 @@ patch_giveRepairedItem:
 
 @sword:
 	jumptable_memoryaddress wTmpcfc0.patchMinigame.swordLevel
-.ifndef ENABLE_NEW_GAME_PLUS
-	.dw @level3
-	.dw @level2
-.else
 	.dw @level2
 	.dw @level3
+.if defined(ROM_COMBO)
 	.dw @level4
+	.dw @level4
+
 @level4:
 	giveitem TREASURE_OBJECT_SWORD_07
 	giveitem TREASURE_OBJECT_SWORD_08
@@ -7376,19 +7383,25 @@ kingZoraScript_present_postGame:
 
 @giveSwordUpgrade:
 	jumptable_objectbyte Interaction.var03
-	.dw @giveLevel3
 	.dw @giveLevel2
+	.dw @giveLevel3
+.if defined(ROM_COMBO)
+	.dw @giveLevel4
+	.dw @giveLevel4
 
+@giveLevel4:
+	giveitem TREASURE_OBJECT_SWORD_07
+	giveitem TREASURE_OBJECT_SWORD_08
+	retscript
+.endif
 @giveLevel2:
 	giveitem TREASURE_OBJECT_SWORD_01
 	giveitem TREASURE_OBJECT_SWORD_04
 	retscript
-
 @giveLevel3:
 	giveitem TREASURE_OBJECT_SWORD_02
 	giveitem TREASURE_OBJECT_SWORD_05
 	retscript
-
 
 kingZoraScript_past_dontHavePotion:
 	checkabutton
@@ -7999,6 +8012,9 @@ tingleScript:
 	jumpifobjectbyteeq Interaction.var3e, $00, @notEnoughSeedTypes
 	jumptable_objectbyte Interaction.var3d
 	.dw @haveLevel1Satchel
+.if defined(ROM_COMBO) && defined(ENABLE_NEW_GAME_PLUS)
+	.dw @haveLevel1Satchel
+.endif
 	.dw @haveLevel2Satchel
 	.dw @haveLevel3Satchel
 
@@ -8045,13 +8061,21 @@ tingleScript:
 	giveitem TREASURE_OBJECT_SEED_SATCHEL_UPGRADE
 	checktext
 	asm15 refillSeedSatchel
+.if defined(ROM_COMBO)
+	jumpifobjectbyteeq Interaction.var3d, $03, @haveLevel3Satchel
+.else
 	jumpifobjectbyteeq Interaction.var3d, $02, @haveLevel3Satchel
+.endif
 	enableallobjects
 	scriptjump tingleScript
 
 
 @haveLevel2Satchel:
+.if defined(ROM_COMBO)
+	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME_AGES, @postgame
+.else
 	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME, @postgame
+.endif
 	scriptjump @haveLevel1Satchel
 
 @postgame:
@@ -8078,7 +8102,11 @@ tingleScript:
 
 
 @haveLevel3Satchel:
+.if defined(ROM_COMBO)
+	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME_AGES, @showReturnSecret
+.else
 	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME, @showReturnSecret
+.endif
 	scriptjump @alreadyGotSatchelUpgrade
 
 @showReturnSecret:

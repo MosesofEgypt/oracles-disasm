@@ -16,7 +16,11 @@ m_InteractionCode $41
 @subid0:
 	call checkInteractionState
 	jr nz,++
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jp nz,interactionDelete
 	ld a,GLOBALFLAG_0b

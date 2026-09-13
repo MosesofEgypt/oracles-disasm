@@ -2,7 +2,11 @@
 ; INTERAC_BIPIN_BLOSSOM_FAMILY_SPAWNER
 ; ==================================================================================================
 m_InteractionCode $ac
+.if defined(ROM_AGES) && defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	jp nz,interactionDelete
 
