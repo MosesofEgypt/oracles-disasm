@@ -525,7 +525,11 @@ shopkeeperScript_purchaseItem:
 	showtextnonexitablelowindex <TX_0e1c
 .endif
 	callscript shopkeeperConfirmPurchase
+.if defined(ROM_AGES)
 	ormemory wBoughtShopItems1, $01
+.else
+	ormemory wBoughtShopItems1, $10
+.endif
 	scriptend
 
 @buy3Hearts:

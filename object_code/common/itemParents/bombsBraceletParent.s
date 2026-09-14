@@ -251,8 +251,8 @@ parentItemCode_bracelet:
 	ld a,(w1Link.direction)
 	or $80
 	ld (wBraceletGrabbingNothing),a
-.ifdef ENABLE_RING_REDUX
-.ifdef MORE_MESSAGE_SPEEDS
+.if defined(ENABLE_RING_REDUX) || defined(PUNCH_WITH_BRACELET)
+.ifdef ENABLE_SETTINGS_MENU
 	ld a,(wMiscSettings+1)
 	bit 6,a
 	ret z
@@ -327,7 +327,7 @@ parentItemCode_bracelet:
 	ld a,LINK_ANIM_MODE_LIFT_4
 	call specialObjectSetAnimationWithLinkData
 
-.ifdef ENABLE_RING_REDUX
+.if defined(ENABLE_RING_REDUX) || defined(PUNCH_WITH_BRACELET)
 	jr @beginPickup
 
 @tryPunching:

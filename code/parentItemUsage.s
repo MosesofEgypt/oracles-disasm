@@ -51,7 +51,7 @@ setupPassiveShield:
 	jr nz,+
 	++
 .endif
-.ifdef MORE_MESSAGE_SPEEDS
+.ifdef ENABLE_SETTINGS_MENU
 	ld a,(wMiscSettings)
 	; no passive shield if flag disabled
 	bit 3,a

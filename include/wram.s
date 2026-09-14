@@ -499,12 +499,14 @@ wAutoEquipInvSlot:
 	db
 .endif
 
-.ifdef ENABLE_NEW_GAME_PLUS
+.ifdef ENABLE_SETTINGS_MENU
 wDungeonIndexPreviousFrame:
 	; Indicates which dungeon index link was in during the previous frame.
 	; Used to determine if the game should be autosaved when it changes.
 	db
+.endif
 
+.ifdef ENABLE_NEW_GAME_PLUS
 wLinkPoisonCounter:
 	; Bits 0-4: Number of poison ticks(~1sec each) remaining in the timer
 	;           Additional hits add to timer till it caps at 31
@@ -552,7 +554,8 @@ wRingBoxContentsExt: ; $c5ba-$c5be
 ; $c5ba-$c5be unused?
 .endif
 
-.ifdef ENABLE_RING_REDUX
+.if defined(ENABLE_MULTI_RING) || defined(EXTENDED_RING_BOX) || defined(ENABLE_QUICK_SWAP)
+; NOTE: multi-ring implies ring redux is also enabled
 wRingReduxFlagsExt: ; $c5bf
 ; Repurposing this byte for storing various redux related flags
 ; Bits 0-4: Set if the associated ring in the box is disabled
@@ -732,15 +735,16 @@ wPortalPos: ; $c640
 .endif
 .endif
 
-wMapleKillCounter: ; $c641/$c63e
+wMapleKillCounter: ; $c641/$c63e/$c63e
 ; Maple appears when this reaches 30 (15 with Maple's ring).
 	db
 
 wBoughtShopItems1: ; $c642/$c63f
-; Bit 0: Bought ring box (ages) or satchel (seasons) upgrade from hidden shop.
+; Bit 0: Bought ring box upgrade (ages) from hidden shop.
 ; Bit 1: Bought gasha seed 1 from hidden shop.
 ; Bit 2: Bought gasha seed 2 from hidden shop.
 ; Bit 3: Bought ring (ages) or treasure map (seasons) from hidden shop.
+; Bit 4: Bought satchel upgrade (seasons) from hidden shop.
 ; Bit 5: Bought gasha seed from normal shop (linked game only).
 ; Bit 7: Set the first time you talk to the shopkeeper for the chest game.
 	db
@@ -757,8 +761,8 @@ wBoughtShopItems2: ; $c643/$c640
 
 wMapleState: ; $c644/$c641
 ; Bits 0-3: Number of maple encounters?
-; Bit 4:    Set while touching book is being exchanged (unset at end of encounter)
-; Bit 5:    Set if the touching book has been exchanged (permanently set)
+; Bit 4:    Set while touching book/lon lon egg is being exchanged (unset at end of encounter)
+; Bit 5:    Set if the touching book/lon lon egg has been exchanged (permanently set)
 ; Bit 7:    Set if maple's heart piece has been obtained
 	db
 

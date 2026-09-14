@@ -80,14 +80,4 @@ updatePart:
 
 	ld e,Part.id
 	ld a,(de)
-.if defined(ENABLE_NEW_GAME_PLUS) || defined(ROM_COMBO)
 	jp updateObjectCaller
-.else
-	; hl = partCodeTable + [Part.id] * 2
-	rst_addDoubleIndex
-	rst_derefHl
-
-	ld a,c
-	or a
-	jp hl
-.endif

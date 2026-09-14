@@ -28,6 +28,11 @@
 	.endif
 .endif
 
+.ifndef ENABLE_MULTI_RING
+	; determines whether you can equip multiple rings at once
+;	.define ENABLE_MULTI_RING	1
+.endif
+
 .ifdef ENABLE_REDUX_EXTRAS
 	; if ENABLE_REDUX_EXTRAS is enabled, the options below will
 	; be enabled(except the commented-out ones starting with ';')
@@ -35,6 +40,11 @@
 		; determines whether the Fist/Expert's Ring requires
 		; only one empty hand to punch instead of both
 		.define ENABLE_PUNCH_WITH_ITEM			1
+	.endif
+	.ifndef PUNCH_WITH_BRACELET
+		; converts bracelet use into punches if nothing is grabbable
+		; nearby. requires either fist or experts ring though.
+		.define PUNCH_WITH_BRACELET			1
 	.endif
 	.ifndef ONE_HANDED_BIGGORON_SWORD
 		; determines whether the Biggoron's Sword occupies 1 hand instead of 2
@@ -67,10 +77,6 @@
 		; behavior of showing them all full
 		.define FILE_MENU_SHOW_CURRENT_HEARTS	1
 	.endif
-	.ifndef ENABLE_MULTI_RING
-		; determines whether you can equip multiple rings at once
-		.define ENABLE_MULTI_RING	1
-	.endif
 	.ifndef MORE_RUPEE_TYPES
 		; determines whether a 10 rupee and 30 rupee are added to the drop tables.
 		.define MORE_RUPEE_TYPES				1
@@ -88,16 +94,6 @@
 		; is enabled, this is on by default, as Vasu's Ring does this.
 		.define ENABLE_PORTAL_RING_BOX			1
 	.endif
-	.ifndef INCREASE_WALLET_SIZE
-		; determines whether or not the wallet size gets increased from
-		; 999 rupees/ore chunks to the MAX_WALLET_SIZE amount defined below
-		.define INCREASE_WALLET_SIZE			1
-	.endif
-	.ifndef REMAP_RING_LIST
-		; determines whether or not the ring list gets updated to
-		; use a more aesthetically pleasing and logical arrangement
-		.define REMAP_RING_LIST					1
-	.endif
 	.ifndef PORTAL_RING_BOX_LEVEL
 		; determines what ring box level will allow you to open the ring
 		; list without needing Vasu's Ring to be equipped. If you want
@@ -108,6 +104,16 @@
 		.else
 			.define PORTAL_RING_BOX_LEVEL			3
 		.endif
+	.endif
+	.ifndef INCREASE_WALLET_SIZE
+		; determines whether or not the wallet size gets increased from
+		; 999 rupees/ore chunks to the MAX_WALLET_SIZE amount defined below
+		.define INCREASE_WALLET_SIZE			1
+	.endif
+	.ifndef REMAP_RING_LIST
+		; determines whether or not the ring list gets updated to
+		; use a more aesthetically pleasing and logical arrangement
+		.define REMAP_RING_LIST					1
 	.endif
 	.ifndef UNRESTRICTED_TRANSFORMS
 		; normally the transforms swap link with a different SpecialObject
@@ -134,25 +140,29 @@
 	.endif
 .endif
 
+; NOTE: if you change these, you MUST update the text that
+;       describes the boxes in text/redux/combo_text.yaml
+;       and text/redux/ring_box_text.yaml, as otherwise the
+;       descriptions won't match the actual size
+.define RING_BOX_L1_SIZE		1
+.define RING_BOX_L2_SIZE		3
+.define RING_BOX_L3_SIZE		5
+.define RING_BOX_L4_SIZE		5
 .ifdef RESIZE_RING_BOX
 	; NOTE: These are the sizes of each level of ring box.
 	;		Do not go over 5 rings for non-extended box
 	;		sizes, nor 10 rings for extended box sizes.
 	.ifdef EXTENDED_RING_BOX
-		.define RING_BOX_L1_SIZE		3
-		.define RING_BOX_L2_SIZE		5
-		.define RING_BOX_L3_SIZE		10
-		.define RING_BOX_L4_SIZE		10 ; for combo rom
+		.redefine RING_BOX_L1_SIZE		3
+		.redefine RING_BOX_L2_SIZE		5
+		.redefine RING_BOX_L3_SIZE		10
+		.redefine RING_BOX_L4_SIZE		10 ; for combo rom
 	.else
-		.define RING_BOX_L1_SIZE		2
-		.define RING_BOX_L2_SIZE		4
-		.define RING_BOX_L3_SIZE		5
-		.define RING_BOX_L4_SIZE		5 ; for combo rom
+		.redefine RING_BOX_L1_SIZE		2
+		.redefine RING_BOX_L2_SIZE		4
+		.redefine RING_BOX_L3_SIZE		5
+		.redefine RING_BOX_L4_SIZE		5 ; for combo rom
 	.endif
-.else
-	.define RING_BOX_L1_SIZE		1
-	.define RING_BOX_L2_SIZE		3
-	.define RING_BOX_L3_SIZE		5
 .endif
 
 .ifdef INCREASE_WALLET_SIZE
@@ -167,33 +177,45 @@
 ;			We're simply setting up dependent defines.
 ;--------------------------------------------------------------------
 
-
 .ifdef ENABLE_FULL_REDUX
 .ifndef ENABLE_RING_REDUX
 	.define ENABLE_RING_REDUX			1
 .endif
 .endif
 
-.ifdef ENABLE_SETTINGS_MENU
-.ifndef MORE_MESSAGE_SPEEDS
-	.define MORE_MESSAGE_SPEEDS			1
+.ifdef ENABLE_MULTI_RING
+.ifndef ENABLE_RING_REDUX
+	.define ENABLE_RING_REDUX		1
 .endif
 .endif
 
-.ifdef RESIZE_RING_BOX
+.ifdef ENABLE_SETTINGS_MENU
+.ifndef ENABLE_QUICK_SWAP
+	.define ENABLE_QUICK_SWAP				1
+.endif
+.ifndef MORE_MESSAGE_SPEEDS
+	.define MORE_MESSAGE_SPEEDS				1
+.endif
+.ifndef ENABLE_PASSIVE_SHIELD
+	.define ENABLE_PASSIVE_SHIELD			1
+.endif
+.ifndef PUNCH_WITH_BRACELET
+	.define PUNCH_WITH_BRACELET				1
+.endif
+.ifndef CONTEXT_SENSITIVE_AUTO_EQUIP
+	.define CONTEXT_SENSITIVE_AUTO_EQUIP	1
+.endif
+.endif
+
 .ifndef MAX_RING_BOX_LEVEL
 	.if defined(ROM_COMBO)
-		.define MAX_RING_BOX_LEVEL 4
+		.define MAX_RING_BOX_LEVEL 			4
+		.if !defined(PORTAL_RING_BOX_LEVEL)
+			.define PORTAL_RING_BOX_LEVEL	4
+		.endif
 	.else
-		.define MAX_RING_BOX_LEVEL 3
+		.define MAX_RING_BOX_LEVEL 			3
 	.endif
-.endif
-.endif
-
-.if defined(ROM_COMBO) || defined(ENABLE_NEW_GAME_PLUS) || defined(I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX)
-.ifndef INCREASE_GFX_SPACE
-	.define INCREASE_GFX_SPACE			1
-.endif
 .endif
 
 .if defined(ROM_COMBO)

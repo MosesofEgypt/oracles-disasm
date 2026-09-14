@@ -131,7 +131,7 @@ treasureObjectData01:
 	m_TreasureSubid $0a, $02, $20, $14, TREASURE_OBJECT_SHIELD_01
 	m_TreasureSubid $0a, $03, $21, $15, TREASURE_OBJECT_SHIELD_02
 	m_TreasureSubid $0a, $03, $ff, $15, TREASURE_OBJECT_SHIELD_03
-.ifdef ENABLE_NEW_GAME_PLUS
+.if defined(ROM_COMBO)
 	m_TreasureSubid $0a, $04, <TX_00_BUTTER_SHIELD, $84, TREASURE_OBJECT_SHIELD_04
 .endif
 
@@ -153,7 +153,7 @@ treasureObjectData05:
 	m_TreasureSubid $03, $02, $ff, $11, TREASURE_OBJECT_SWORD_04
 	m_TreasureSubid $03, $03, $ff, $12, TREASURE_OBJECT_SWORD_05
 	m_TreasureSubid $01, $01, $75, $10, TREASURE_OBJECT_SWORD_06
-.ifdef ENABLE_NEW_GAME_PLUS
+.if defined(ROM_COMBO)
 	m_TreasureSubid $09, $04, <TX_00_BUTTER_SWORD, $83, TREASURE_OBJECT_SWORD_07
 	m_TreasureSubid $03, $04, $ff, $83, TREASURE_OBJECT_SWORD_08
 .endif

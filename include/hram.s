@@ -126,9 +126,7 @@
 	; This keeps track of the "state" corresponding to the above link mode.
 	hSerialLinkState		db	; $ffbf/$ffbd
 
-	.ifdef INCREASE_GFX_SPACE
-		hGfxCompressionMode	db	; $ffc0/$ffbe
-	.endif
+	hGfxCompressionMode	db	; $ffc0/$ffbe
 
 	hGdmaChunksCopiedThisFrame	db ; $ffc1/$ffbf
 	hGdmaDelayedCount			db ; $ffc2/$ffc0

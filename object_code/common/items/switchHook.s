@@ -374,11 +374,7 @@ switchHookState3:
 	; will rise and swap
 
 	call checkRelatedObject2States
-.ifdef ENABLE_RING_REDUX
 	jp nc,itemCode0a@label_07_185
-.else
-	jr nc,itemCode0a@label_07_185
-.endif
 	; Jump if an object collision, not a tile collision
 	jr nz,@@objectCollision
 
@@ -387,11 +383,7 @@ switchHookState3:
 	; Break the tile underneath whatever was latched on to
 	ld a,BREAKABLETILESOURCE_SWITCH_HOOK
 	call itemTryToBreakTile
-.ifdef ENABLE_RING_REDUX
 	jp nc,itemCode0a@label_07_185
-.else
-	jr nc,itemCode0a@label_07_185
-.endif
 
 	ld h,d
 	ld l,Item.var03

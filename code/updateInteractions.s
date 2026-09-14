@@ -83,48 +83,4 @@ getInteractionCodeTable:
 updateInteraction:
 	ld e,Interaction.id
 	ld a,(de)
-
-.if defined(ENABLE_NEW_GAME_PLUS) || defined(ROM_COMBO)
 	jp updateObjectCaller
-
-.else
-	.if defined(ROM_AGES)
-		; Get the bank number in 'b'
-		ld b,$08
-		cp $3e
-		jr c,+
-		inc b
-		cp $67
-		jr c,+
-		inc b
-		cp $98
-		jr c,+
-		inc b
-		cp $dc
-		jr c,+
-		ld b,$10
-
-	.else ; ROM_SEASONS
-		ld b,$08
-		cp $5e
-		jr c,+
-		inc b
-		cp $89
-		jr c,+
-		inc b
-		cp $c8
-		jr c,+
-		ld b,$0f
-		cp $d8
-		jr c,+
-		ld b,$15
-	.endif
-
-+
-	ld a,b
-	rst_setrombank
-	ld a,(de)
-	rst_addDoubleIndex
-	rst_derefHl
-	jp hl
-.endif

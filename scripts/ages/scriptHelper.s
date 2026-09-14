@@ -3523,7 +3523,28 @@ poeScript:
 @lastMeeting:
 	showtext TX_0b02
 	wait 30
+.if defined(ENABLE_NEW_GAME_PLUS)
+	.if !defined(ROM_COMBO)
+		jumpifglobalflagset GLOBALFLAG_STARTED_TRADE_QUEST, @alreadyReceived
+	.else
+		jumpifglobalflagset GLOBALFLAG_STARTED_TRADE_QUEST_AGES, @alreadyReceived
+	.endif
+
 	giveitem TREASURE_TRADEITEM, $00
+	scriptjump @flagAsReceived
+
+@alreadyReceived:
+	giveitem TREASURE_HEART_PIECE, $00
+@flagAsReceived:
+
+	.if !defined(ROM_COMBO)
+		setglobalflag GLOBALFLAG_STARTED_TRADE_QUEST
+	.else
+		setglobalflag GLOBALFLAG_STARTED_TRADE_QUEST_AGES
+	.endif
+.else
+	giveitem TREASURE_TRADEITEM, $00
+.endif
 	scriptjump @disappear
 
 
@@ -7881,11 +7902,7 @@ symmetryNpc_getUpgradeCapacityForText:
 	jr ++
 
 @haveRingBox:
-.ifdef RESIZE_RING_BOX
 	call getRingBoxLevel
-.else
-	ld a,(wRingBoxLevel)
-.endif
 	dec a
 	ld hl,@ringBoxCapacities
 	rst_addAToHl
@@ -7900,7 +7917,9 @@ symmetryNpc_getUpgradeCapacityForText:
 @ringBoxCapacities:
 	.db RING_BOX_L2_SIZE
 	.db RING_BOX_L3_SIZE
+.if MAX_RING_BOX_LEVEL > 3
 	.db RING_BOX_L4_SIZE
+.endif
 
 ; Sisters in the tuni nut building
 symmetryNpcSubid8And9Script:

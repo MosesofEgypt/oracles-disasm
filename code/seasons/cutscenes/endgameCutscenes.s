@@ -2006,7 +2006,7 @@ endgameCutsceneHandler_0a_stage3_seasons:
 	ld (wGenericCutscene.cbba),a
 	call incEndingCutsceneSubstate
 	call disableLcd
-.if !defined(ROM_COMBO)
+.if !defined(ROM_COMBO) || !defined(ENABLE_NEW_GAME_PLUS)
 	call bank3.generateGameTransferSecret
 	ld a,($ff00+R_SVBK)
 	push af
@@ -2031,7 +2031,7 @@ endgameCutsceneHandler_0a_stage3_seasons:
 	ld a,PALH_05
 	call loadPaletteHeader
 	call checkIsLinkedGame
-.if defined(ROM_COMBO)
+.if defined(ENABLE_NEW_GAME_PLUS)
 	ld a,GFXH_NEW_GAME_PLUS_BANNER
 .else
 	ld a,GFXH_HEROS_SECRET_TEXT
@@ -2044,7 +2044,7 @@ endgameCutsceneHandler_0a_stage3_seasons:
 	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	call fileSelect_redrawDecorations
-.if defined(ROM_COMBO)
+.if defined(ENABLE_NEW_GAME_PLUS)
 	call checkIsLinkedGame
 	jr nz,+
 		ld a,MUS_ESSENCE_ROOM
@@ -2058,7 +2058,7 @@ endgameCutsceneHandler_0a_stage3_seasons:
 	call seasons_decCutsceneTimerUnlessPaletteChanging
 	ret nz
 	ld hl,wGenericCutscene.cutsceneTimer
-.if defined(ROM_COMBO)
+.if defined(ROM_COMBO) && defined(ENABLE_NEW_GAME_PLUS)
 	ld b,$01
 .else
 	ld b,$3c
@@ -2074,7 +2074,7 @@ endgameCutsceneHandler_0a_stage3_seasons:
 	call fileSelect_redrawDecorations
 	call decCutsceneTimer
 	ret nz
-.if !defined(ROM_COMBO)
+.if !defined(ROM_COMBO) && !defined(ENABLE_NEW_GAME_PLUS)
 	call checkIsLinkedGame
 	jr nz,+
 .endif
@@ -2088,7 +2088,7 @@ endgameCutsceneHandler_0a_stage3_seasons:
 
 @state7:
 	call fileSelect_redrawDecorations
-.if defined(ROM_COMBO)
+.if defined(ROM_COMBO) || defined(ENABLE_NEW_GAME_PLUS)
 	ld a,(wTextIsActive)
 	or a
 	ret nz

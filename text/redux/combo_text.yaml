@@ -3,6 +3,22 @@
 groups:
 - group: 0x00
   data:
+  - name: TX_0057
+    index: 0x57
+    text: |-
+      You got a
+      \col(1)L-1 Ring Box\col(0)!
+      It can hold
+      three \col(1)rings\col(0)!
+
+  - name: TX_0058
+    index: 0x58
+    text: |-
+      You got a
+      \col(1)L-2 Ring Box\col(0)!
+      It can hold
+      five \col(1)rings\col(0)!
+
   - name: TX_0059
     index: 0x59
     text: |-
@@ -10,6 +26,7 @@ groups:
       \col(1)L-3 Ring Box\col(0)!
       It can hold
       ten \col(1)rings\col(0)!
+
   - name: TX_00_L4_RING_BOX
     index: auto
     text: |-
@@ -25,12 +42,27 @@ groups:
       at any time.
 - group: 0x09
   data:
+  - name: TX_091d
+    index: 0x1d
+    text: |-
+      L-1 Ring Box
+      Holds three
+      seed rings.
+
+  - name: TX_091e
+    index: 0x1e
+    text: |-
+      L-2 Ring Box
+      Holds five
+      seed rings.
+
   - name: TX_091f
     index: 0x1f
     text: |-
       L-3 Ring Box
       Holds ten
       seed rings.
+
   - name: TX_09_L4_RING_BOX
     index: 0x79
     text: |-

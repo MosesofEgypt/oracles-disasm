@@ -1348,7 +1348,7 @@ mapleKeepInBounds:
 
 ;;
 mapleSpawnItemDrops:
-	; Check if Link has the touching book
+	; Check if Link has the touching book/lon lon egg
 	ld a,TREASURE_TRADEITEM
 	call checkTreasureObtained
 	jr nc,@noTradeItem

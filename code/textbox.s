@@ -410,10 +410,14 @@ textOptionCode:
 	; Set the delay until the cursor appears
 .ifdef MORE_MESSAGE_SPEEDS
 	ld a,(wMiscSettings)
-	and $07
 .else
 	ld a,(wTextSpeed)
 .endif
+	and $07
+	cp $05
+	jr c,+
+		ld a,$04
+	+
 	ld hl,@cursorDelay
 	rst_addAToHl
 	ld a,(hl)
@@ -817,11 +821,7 @@ inventoryTextCode:
 ;;
 ; Initializes text stuff, particularly position variables for the textbox.
 initTextboxStuff:
-.ifdef MORE_MESSAGE_SPEEDS
 	call getActiveLanguage
-.else
-	ld a,(wActiveLanguage)
-.endif
 	ld b,a
 	add a
 	add b
@@ -1022,11 +1022,7 @@ getTextAddress:
 	ld b,a
 
 ; If wTextIndexH < TEXT_OFFSET_SPLIT_INDEX, text is relative to TEXT_OFFSET_1
-.ifdef MORE_MESSAGE_SPEEDS
 	call getActiveLanguage
-.else
-	ld a,(wActiveLanguage)
-.endif
 	add a
 .ifdef ROM_COMBO
 	call wIsSeasons
@@ -1055,11 +1051,7 @@ getTextAddress:
 .endif
 	jr c,+
 ; Else, text is relative to TEXT_OFFSET_2
-.ifdef MORE_MESSAGE_SPEEDS
 	call getActiveLanguage
-.else
-	ld a,(wActiveLanguage)
-.endif
 	add a
 .ifdef ROM_COMBO
 	call wIsSeasons
@@ -3158,8 +3150,13 @@ getCharacterDisplayLength:
 	ld hl,textSpeedData+2
 .else
 	ld a,(wTextSpeed)
-	swap a
-	rrca
+	and $07
+	cp $05
+	jr c,+
+		ld a,$04
+	+
+	rlca
+	rlca
 	ld hl,textSpeedData+2
 .endif
 	rst_addAToHl
@@ -3173,10 +3170,14 @@ getCharacterDisplayLength:
 textControlCodeC_0:
 .ifdef MORE_MESSAGE_SPEEDS
 	ld a,(wMiscSettings)
-	and $07
 .else
 	ld a,(wTextSpeed)
 .endif
+	and $07
+	cp $05
+	jr c,+
+		ld a,$04
+	+
 	rlca
 	rlca
 	add c

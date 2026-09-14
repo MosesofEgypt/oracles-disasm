@@ -326,6 +326,8 @@ fileSelectMode1:
 	call loadFile
 .ifdef ENABLE_MULTI_RING
 	callab bank1.updateRingEquipStatuses
+.endif
+.ifdef ENABLE_RING_REDUX
 	callab bank1.processDmgPaletteUpdate
 .endif
 	ld a,UNCMP_GFXH_16
@@ -405,9 +407,14 @@ fileSelectMode1:
 .else
 	ld hl,wTextSpeed
 	ld a,(hl)
+	and $07
 	add c
 	cp $05
-	ret nc
+	jr c,+
+		ld a,$04
+		ld (hl),a
+		ret
+	+
 	ld (hl),a
 .endif
 	ld a,SND_MENU_MOVE
@@ -417,9 +424,15 @@ fileSelectMode1:
 @textSpeedMenu_addCursorToOam:
 .ifdef MORE_MESSAGE_SPEEDS
 	ld a,(wMiscSettings)
-	and $07
 .else
 	ld a,(wTextSpeed)
+.endif
+	and $07
+.ifndef MORE_MESSAGE_SPEEDS
+	cp $05
+	jr c,+
+		ld a,$05
+	+
 .endif
 	swap a
 	ld c,a
@@ -651,7 +664,7 @@ fileSelectMode8:
 		jr nz,+
 			; just for the fuck of it, you'll be able
 			; to enter new game plus if you're persistent
-			ld hl,wRingColorPaletteB ; using this as a temp counter
+			ld hl,wcc07 ; using this as a temp counter
 			ld a,(hl)
 			cp 10
 			jr nc,++
@@ -4166,7 +4179,7 @@ loadEquippedItemSpriteData:
 .endif
 
 .ifndef WIDE_INVENTORY_SPRITES
-.ifdef ENABLE_NEW_GAME_PLUS
+.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 	; change the palette for the L-4 sword/shield
 	push hl
 	ld h,a
@@ -4183,9 +4196,7 @@ loadEquippedItemSpriteData:
 	cp $86
 	jr c,+
 .endif
-.ifdef ENABLE_NEW_GAME_PLUS
 ++
-.endif
 	ldi a,(hl)
 .ifndef WIDE_INVENTORY_SPRITES
 	jr @gotAttribute
@@ -5212,7 +5223,9 @@ loadItemIconGfx:
 			ld d,>wSwordLevel
 			ld e,a
 			ld a,(de)
-			call z,victoryRingIncLevel
+			.ifdef ENABLE_RING_REDUX
+				call z,victoryRingIncLevel
+			.endif
 			ld c,a
 			pop de
 
@@ -5530,6 +5543,7 @@ loadItemIconGfx:
 		cp $48
 		; insert the L-4 sword and shield sprites
 		m_ReadGfxDataHashedFilename spr_item_icons_sword_shield_l4
+		ld hl,{filename}
 		jr z,++
 		cp $49
 		ld hl,{filename}+$20
@@ -5785,6 +5799,8 @@ inventoryMenuState0:
 .ifdef ENABLE_NEW_GAME_PLUS
 	ld a,UNCMP_GFXH_LIFE_VIAL_INV
 	call loadUncompressedGfxHeader
+.endif
+.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 .ifndef WIDE_INVENTORY_SPRITES
 	ld a,UNCMP_GFXH_L4_SWORD_SHIELD
 	call loadUncompressedGfxHeader
@@ -5848,7 +5864,9 @@ fixupWideItemGfx:
 
 		; get the item level\subid
 		ld a,(bc)
-		call z,victoryRingIncLevel
+		.ifdef ENABLE_RING_REDUX
+			call z,victoryRingIncLevel
+		.endif
 		ld c,a
 
 		push hl
@@ -6162,7 +6180,7 @@ inventoryMenuState1:
 .ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
 	; if the item being equipped goes into the context
 	; sensitive slot, we need to reset the auto-equip.
-.ifdef MORE_MESSAGE_SPEEDS
+.ifdef ENABLE_SETTINGS_MENU
 	ld a,(wMiscSettings)
 	bit 5,a
 	ld a,<wInventoryB
@@ -6296,10 +6314,10 @@ inventoryMenuState1:
 @checkEquipRing:
 	; open the ring box menu if clicking the box in the inventory
 	; if it meets the min level, or you're carrying vasu's ring
-.ifdef ENABLE_RING_REDUX
 	ld a,(wInventorySubmenu1CursorPos)
 	cp $0f
 	jr nz,+
+.ifdef ENABLE_RING_REDUX
 	ld a,VASUS_RING
 	call cpActiveRing
 	jp z,@openRingBoxMenu
@@ -7711,7 +7729,6 @@ inventorySubscreen1_drawTreasures:
 
 @undrawRingBox:
 	; Clear away some tiles based on ring box level
-.ifdef RESIZE_RING_BOX
 	call getRingBoxLevel
 	.ifdef EXTENDED_RING_BOX
 		call inventorySubscreen1_getRingBoxWidth
@@ -7736,19 +7753,6 @@ inventorySubscreen1_drawTreasures:
 	add l
 	ld l,a
 	ld b,$03
-.else
-	ld a,(wRingBoxLevel)
-	cp $03
-	jr z,@drawRings
-
-	ld hl,@ringBoxClearTiles
-	rst_addDoubleIndex
-	ldi a,(hl)
-	ld c,(hl)
-	ld b,$03
-	ld l,a
-	ld h,>w4TileMap+1
-.endif
 	call fillRectangleInTileMapWithMenuBlock
 
 @drawRings:
@@ -7806,11 +7810,7 @@ inventorySubscreen1_drawTreasures:
 	jr nz,@drawRing
 
 	; Set text and icon for ring box based on level
-.ifdef RESIZE_RING_BOX
 	call getRingBoxLevel
-.else
-	ld a,(wRingBoxLevel)
-.endif
 	push hl
 	ld hl,@ringBoxTextIndices
 	rst_addAToHl
@@ -7826,7 +7826,7 @@ inventorySubscreen1_drawTreasures:
 	.db <TX_091d
 	.db <TX_091e
 	.db <TX_091f
-.if defined(ROM_COMBO)
+.if MAX_RING_BOX_LEVEL > 3
 	.db <TX_09_L4_RING_BOX
 .endif
 
@@ -7851,16 +7851,6 @@ inventorySubscreen1_drawTreasures:
 @ringPositions:
 	.db $84 $87 $8a $8d $90
 
-
-; This table deals with clearing part of subscreen 1 depending on your ring box level.
-;   b0: position to start at (w4TileMap+$100+X)
-;   b1: number of tiles to clear horizontally
-@ringBoxClearTiles:
-.ifndef RESIZE_RING_BOX
-	.db $81 $12 ; L0
-	.db $87 $0c ; L1
-	.db $8d $06 ; L2
-.endif
 
 .ifdef EXTENDED_RING_BOX
 inventorySubscreen1_getRingBoxWidth:
@@ -8083,7 +8073,6 @@ itemSubmenu2TextIndices_seasons:
 ;;
 ; @param[out] a Capacity of ring box.
 getRingBoxCapacity:
-.ifdef RESIZE_RING_BOX
 	ld a,(wRingBoxLevel)
 	bit 3,a
 	jr z,+
@@ -8106,19 +8095,8 @@ getRingBoxCapacity:
 	.db RING_BOX_L1_SIZE
 	.db RING_BOX_L2_SIZE
 	.db RING_BOX_L3_SIZE
+.if MAX_RING_BOX_LEVEL > 3
 	.db RING_BOX_L4_SIZE
-.else
-	push hl
-	ld a,(wRingBoxLevel)
-	ld hl,@ringBoxCapacities
-	rst_addAToHl
-	ld a,(hl)
-	or a
-	pop hl
-	ret
-
-@ringBoxCapacities:
-	.db $00 $01 $03 $05
 .endif
 
 ;;
@@ -8671,10 +8649,8 @@ subscreen1TreasureData_seasons:
 
 .endif
 
-.if defined(ROM_COMBO)
 mapMenu_performTileSubstitutionsWrapper:
 	ld a,d
-.endif
 
 ;;
 ; Performs replacements on minimap tiles, ie. for animal companion regions?
@@ -11942,7 +11918,6 @@ mapMenu_dungeonEntranceText_seasons:
 
 .include {"{GAME_DATA_DIR}/treeWarps.s"}
 
-.if defined(ROM_COMBO)
 ; NOTE: this is a copy of the function located in code/menu_code/ringMenu.s
 getRingTiles:
 	cp $ff
@@ -11954,11 +11929,7 @@ getRingTiles:
 		cp $fe   ; ring box
 		ld a,$40 ; unappraised ring
 		jr nz,+
-		.ifdef RESIZE_RING_BOX
-			call getRingBoxLevel
-		.else
-			ld a,(wRingBoxLevel)
-		.endif
+		call getRingBoxLevel
 		add $40 ; skip past all rings to ring boxes
 	+
 	call multiplyABy8
@@ -11993,10 +11964,6 @@ runRingMenu:
 runSaveAndQuitMenu:
 	jpab menuCode2.runSaveAndQuitMenu
 
-.else
-.include "code/menu_code/ringMenu.s"
-.include "code/menu_code/saveAndQuitMenu.s"
-.endif
 
 .include "code/menu_code/secretsListMenu.s"
 
@@ -12024,12 +11991,7 @@ getRingBoxClippedIndex:
 .endif
 
 
-.if defined(ROM_COMBO)
 runFakeReset:
 	jpab menuCode2.runFakeReset
-
-.else
-.include "code/menu_code/fakeResetMenu.s"
-.endif
 
 .ENDS

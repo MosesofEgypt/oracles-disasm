@@ -216,38 +216,28 @@
 	.fclose m_GfxHeaderFile
 	.define decompressed_size (decompressed_size_l | (decompressed_size_h<<8))
 
-	; Byte 1: Source bank number(if expanded)
-	.ifdef INCREASE_GFX_SPACE
-		.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
-			.db (:{filename})&$ff
-		.else
-			.db (:{filename})
-		.endif
-	.endif
-
-	; Byte 1: Source bank number & compression mode
-	.if m_GfxHeaderMode == GFX_HEADER_MODE_FORCE
-		.ifdef INCREASE_GFX_SPACE
-			.db ((\4)<<6)
-		.else
-			.db (:{filename}) | ((\4)<<6)
-		.endif
+	; Byte 1: Source bank number
+	.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
+		.db (:{filename})&$ff
 	.else
-		.ifdef INCREASE_GFX_SPACE
-			.db (cmp_mode<<6)
-		.else
-			.db (:{filename}) | (cmp_mode<<6)
-		.endif
+		.db (:{filename})
 	.endif
 
-	; Bytes 2-3(3-4 if expanded): Source address
+	; Byte 2: Source bank number & compression mode
+	.if m_GfxHeaderMode == GFX_HEADER_MODE_FORCE
+		.db ((\4)<<6)
+	.else
+		.db (cmp_mode<<6)
+	.endif
+
+	; Bytes 3-4: Source address
 	.if m_GfxHeaderMode != GFX_HEADER_MODE_FORCE && NARGS >= 4
 		dwbe ({filename})+(\4)
 	.else
 		dwbe {filename}
 	.endif
 
-	; Bytes 4-5(5-6 if expanded): Destination address & destination bank
+	; Bytes 5-6: Destination address & destination bank
 	; If arg 2 (destination) isn't a label, we'll just assume that the bank number is already
 	; baked into the parameter being passed.
 	.if \?2 == ARG_LABEL || \?2 == ARG_PENDING_CALCULATION
@@ -273,7 +263,7 @@
 		.define size_byte (\3) - 1
 	.endif
 
-	; Byte 6(7 if expanded): Size / continue bit
+	; Byte 7: Size / continue bit
 	.if m_GfxHeaderMode == GFX_HEADER_MODE_NORMAL
 		m_ContinueBitHelper size_byte, $80
 	.else
@@ -338,16 +328,12 @@
 .macro m_GfxHeaderRam
 	.if NARGS == 4
 		.db \1
-		.ifdef INCREASE_GFX_SPACE
-			.db $00 ; no compression, so pad
-		.endif
+		.db $00 ; no compression, so pad
 		dwbe \2
 		.shift
 	.else
 		.db :\1
-		.ifdef INCREASE_GFX_SPACE
-			.db $00 ; no compression, so pad
-		.endif
+		.db $00 ; no compression, so pad
 		dwbe \1
 	.endif
 
@@ -374,16 +360,12 @@
 	.fread m_GfxHeaderFile mode ; First byte of .cmp file is compression mode
 	.fclose m_GfxHeaderFile
 
-	.ifdef INCREASE_GFX_SPACE
-		.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
-			.db (:{filename})&$ff
-		.else
-			.db (:{filename})
-		.endif
-		.db (mode<<6)
+	.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
+		.db (:{filename})&$ff
 	.else
-		.db (:{filename}) | (mode<<6)
+		.db (:{filename})
 	.endif
+	.db (mode<<6)
 
 	.if NARGS == 1
 		.define m_ObjectGfxHeader_Cont 0

@@ -263,5 +263,8 @@ objectGfxHeaderTable:
 	.else
 		/* $c8 */ m_ObjectGfxHeader spr_item_icons_life_vial_slim, 1
 	.endif
+.endif
+
+.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 	/* $c9 */ m_ObjectGfxHeader spr_item_icons_sword_shield_l4, 1
 .endif

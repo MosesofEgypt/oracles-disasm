@@ -139,7 +139,7 @@ handleAutoEquipItem_body:
     ld a,b
 	push hl
 	push af
-.ifdef MORE_MESSAGE_SPEEDS
+.ifdef ENABLE_SETTINGS_MENU
 	ld hl,wMiscSettings
 	bit 4,(hl)
 	jr z,++
@@ -550,7 +550,7 @@ gfxRegisterStates:
 	.db $e7 $98 $00 $60 $07 $c7
 
 
-.ifdef ENABLE_RING_REDUX
+.ifdef ENABLE_QUICK_SWAP
 quickSwapHeldItems_body:
 	ld hl,wInventoryStorage
 	ld de,wInventoryB

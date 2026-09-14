@@ -518,7 +518,7 @@ func_4553:
 	ld a,(wAutoEquipInvSlot)
 	cp $ff
 	jr z,+
-.ifdef MORE_MESSAGE_SPEEDS
+.ifdef ENABLE_SETTINGS_MENU
 		ld a,(wMiscSettings)
 		bit 5,a
 		ld a,(wInventoryB)
@@ -669,8 +669,9 @@ getTransformedLinkID:
 
 .ifdef UNRESTRICTED_TRANSFORMS
 remapTransformedSpecialObjectGfx:
+.ifdef ENABLE_MULTI_RING
 	; NOTE: this optimization only works because the ring
-	;		ids were happen to lie in the same byte
+	;		ids just happen to lie in the same byte
 	ld a,(wEquippedRingFlags+5)
 	or $83
 	cp $ff
@@ -680,6 +681,7 @@ remapTransformedSpecialObjectGfx:
 		ld a,e
 		ret
 	+
+.endif
 
 	; figure out which ring is equipped
 	push hl

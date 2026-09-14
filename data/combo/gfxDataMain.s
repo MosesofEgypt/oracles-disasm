@@ -73,6 +73,9 @@ m_GfxData gfx_fileselect
 m_GfxData gfx_gale_tree
 m_GfxData gfx_gameover
 m_GfxData gfx_gasha_tree
+.if !defined(ENABLE_NEW_GAME_PLUS)
+    m_GfxData gfx_herossecret
+.endif
 m_GfxData gfx_hud
 m_GfxData gfx_intro_outside_castle_1
 m_GfxData gfx_intro_outside_castle_2

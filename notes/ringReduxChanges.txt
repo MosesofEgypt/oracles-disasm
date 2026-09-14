@@ -116,7 +116,7 @@ Removed rings:
         Upgraded into Farmer's Ring.
 
     Maple's Ring:
-        Converted into Quickswap Ring.
+        Converted into Fencer's Ring.
 
     Swimmer's Ring:
         Upgraded into Zora Scale Ring

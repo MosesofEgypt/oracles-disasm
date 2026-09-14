@@ -197,13 +197,13 @@ $(BUILD_DIR)/*.o: $(COMMON_INCLUDE_FILES) Makefile
 $(BUILD_DIR)/gfxdata.o: tileset_layouts_expanded/ages/*.bin
 $(BUILD_DIR)/gfxdata.o: tileset_layouts_expanded/seasons/*.bin
 
-$(BUILD_DIR)/audio.o: code/audio.s | $(BUILD_DIR)
+$(BUILD_DIR)/audio.o: code/audio.s $(REDUX_CFG_FILES) | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
-$(BUILD_DIR)/gfxdata.o: gfxdata.s | $(BUILD_DIR)
+$(BUILD_DIR)/gfxdata.o: gfxdata.s $(REDUX_CFG_FILES) | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
-$(BUILD_DIR)/textAndRoomData.o: textAndRoomData.s $(BUILD_DIR)/ages_textData.s $(BUILD_DIR)/seasons_textData.s | $(BUILD_DIR)
+$(BUILD_DIR)/textAndRoomData.o: textAndRoomData.s $(BUILD_DIR)/ages_textData.s $(BUILD_DIR)/seasons_textData.s $(REDUX_CFG_FILES) | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
-$(BUILD_DIR)/$(GAME).o: $(GAME).s $(HASHFILES) $(BUILD_DIR)/ages_textDefines.s $(BUILD_DIR)/seasons_textDefines.s Makefile | $(BUILD_DIR)
+$(BUILD_DIR)/$(GAME).o: $(GAME).s $(HASHFILES) $(BUILD_DIR)/ages_textDefines.s $(BUILD_DIR)/seasons_textDefines.s Makefile $(REDUX_CFG_FILES) | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
 
 GEN_FILES := data/ages/objectCollisionTable.s  data/seasons/objectCollisionTable.s
@@ -384,20 +384,20 @@ $(BUILD_DIR)/rooms/seasons_room06%.cmp: rooms/seasons/large/room06%.bin | $(BUIL
 	@cat $< >> $@
 
 # create a temp text.yaml by layering the base with any redux yamls needed
-$(BUILD_DIR)/ages_textLayered.yaml: text/ages/text.yaml tools/build/layerText.py | $(BUILD_DIR)
+$(BUILD_DIR)/ages_textLayered.yaml: text/ages/text.yaml tools/build/layerText.py $(REDUX_CFG_FILES) | $(BUILD_DIR)
 	@echo "Layering yamls..."
 	@$(PYTHON) tools/build/layerText.py $< text/redux text/redux/ages $@ "-D ROM_COMBO $(ORACLE_REDUX_DEFINES)"
 
-$(BUILD_DIR)/seasons_textLayered.yaml: text/seasons/text.yaml tools/build/layerText.py | $(BUILD_DIR)
+$(BUILD_DIR)/seasons_textLayered.yaml: text/seasons/text.yaml tools/build/layerText.py $(REDUX_CFG_FILES) | $(BUILD_DIR)
 	@echo "Layering yamls..."
 	@$(PYTHON) tools/build/layerText.py $< text/redux text/redux/seasons $@ "-D ROM_COMBO $(ORACLE_REDUX_DEFINES)"
 
 # Parse & compress text
-$(BUILD_DIR)/ages_textData.s: $(BUILD_DIR)/ages_textLayered.yaml text/ages/dict.yaml tools/build/parseText.py | $(BUILD_DIR)
+$(BUILD_DIR)/ages_textData.s: $(BUILD_DIR)/ages_textLayered.yaml text/ages/dict.yaml tools/build/parseText.py $(REDUX_CFG_FILES) | $(BUILD_DIR)
 	@echo "Compressing text..."
 	@$(PYTHON) tools/build/parseText.py text/ages/dict.yaml $< $@ $$(($(TEXT_INSERT_ADDRESS_AGES))) --combo
 
-$(BUILD_DIR)/seasons_textData.s: $(BUILD_DIR)/seasons_textLayered.yaml text/seasons/dict.yaml tools/build/parseText.py | $(BUILD_DIR)
+$(BUILD_DIR)/seasons_textData.s: $(BUILD_DIR)/seasons_textLayered.yaml text/seasons/dict.yaml tools/build/parseText.py $(REDUX_CFG_FILES) | $(BUILD_DIR)
 	@echo "Compressing text..."
 	@$(PYTHON) tools/build/parseText.py text/seasons/dict.yaml $< $@ $$(($(TEXT_INSERT_ADDRESS_SEASONS))) --combo
 

@@ -722,8 +722,13 @@ m_GfxHeaderStart $83, GFXH_COMMON_SPRITES
 	m_GfxHeader spr_common_sprites, $8001
 	m_GfxHeaderEnd
 
+.if defined(ENABLE_NEW_GAME_PLUS)
 m_GfxHeaderStart $84, GFXH_NEW_GAME_PLUS_BANNER
 	m_GfxHeader gfx_startnewgameplus, $8801
+.else
+m_GfxHeaderStart $84, GFXH_HEROS_SECRET_TEXT
+	m_GfxHeader gfx_herossecret, $8801
+.endif
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $85, GFXH_CREDITS_SCENE1_SEASONS

@@ -36,7 +36,6 @@ shopItemState0:
 	call checkTreasureObtained
 	jr nc,++
 
-.ifdef RESIZE_RING_BOX
 	call getRingBoxLevel
 	cp MAX_RING_BOX_LEVEL
 	; delete self if ring box maxed out
@@ -45,14 +44,11 @@ shopItemState0:
 		set 0,(hl)
 		jp interactionDelete
 	+
-.else
-	ld a,(wRingBoxLevel)
-.endif
 	dec a
 	jr z,++
 		dec a
 		ld a,$14
-		.if defined(ROM_COMBO)
+.if MAX_RING_BOX_LEVEL > 3
 			; handle 4th level ring box
 			jr z,+
 				ld a,$16
@@ -488,7 +484,7 @@ shopItemGetTilesForRupeeDisplay:
 .ifdef ROM_AGES
 	.dw w3VramTiles+$66
 	.dw w3VramTiles+$6e
-.if defined(ROM_COMBO)
+.if MAX_RING_BOX_LEVEL > 3
 	.dw w3VramTiles+$66
 .endif
 .endif
@@ -546,7 +542,7 @@ shopItemPrices:
 .ifdef ROM_AGES
 	/* $14 */ .db RUPEEVAL_300
 	/* $15 */ .db RUPEEVAL_500
-.if defined(ROM_COMBO)
+.if MAX_RING_BOX_LEVEL > 3
 	/* $16 */ .db RUPEEVAL_999
 .endif
 .endif
@@ -634,7 +630,7 @@ shopItemTreasureToGive:
 .ifdef ROM_AGES
 	/* $14 */ .db  TREASURE_RING_BOX      $03
 	/* $15 */ .db  TREASURE_HEART_PIECE   $01
-.if defined(ROM_COMBO)
+.if MAX_RING_BOX_LEVEL > 3
 	/* $16 */ .db  TREASURE_RING_BOX      $04
 .endif
 .endif
@@ -647,7 +643,11 @@ shopItemTreasureToGive:
 ;   b2: Item to sell if the first one is unavailable (or $ff to sell nothing)
 ;   b3: Value to add to x position if the first item was sold out
 shopItemReplacementTable:
+.if defined(ROM_AGES)
 	/* $00 */ .db <wBoughtShopItems1  $01 $ff $00
+.else
+	/* $00 */ .db <wBoughtShopItems1  $10 $ff $00
+.endif
 	/* $01 */ .db <wBoughtShopItems2  $08 $0d $04
 	/* $02 */ .db <wBoughtShopItems1  $02 $06 $00
 	/* $03 */ .db <wShieldLevel       $02 $11 $00
@@ -670,7 +670,7 @@ shopItemReplacementTable:
 .ifdef ROM_AGES
 	/* $14 */ .db <wBoughtShopItems1  $01 $ff $00
 	/* $15 */ .db <wBoughtShopItems2  $40 $05 $00
-.if defined(ROM_COMBO)
+.if MAX_RING_BOX_LEVEL > 3
 	/* $16 */ .db <wBoughtShopItems1  $01 $ff $00
 .endif
 .endif
@@ -713,7 +713,7 @@ shopItemTextTable:
 .ifdef ROM_AGES
 	/* $14 */ .db <TX_0059
 	/* $15 */ .db <TX_0017
-.if defined(ROM_COMBO)
+.if MAX_RING_BOX_LEVEL > 3
 	/* $16 */ .db <TX_00_L4_RING_BOX
 .endif
 .endif

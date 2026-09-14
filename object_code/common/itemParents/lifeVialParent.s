@@ -19,7 +19,11 @@ parentItemCode_lifeVial:
 	+
 
 	; ensure health isn't already full
+.if defined(ENABLE_RING_REDUX)
 	call getLinkMaxHealth
+.else
+	ld a,(wLinkMaxHealth)
+.endif
 	ld l,a
 	ld a,(wLinkHealth)
 	cp l

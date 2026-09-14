@@ -382,7 +382,7 @@ interactiond7SubidData:
 	m_InteractionSubidData $7d $0e $50 ; $80 (Roc's Cape)
 	m_InteractionSubidData $7d $10 $20 ; $81 (Rod of Seasons)
 	m_InteractionSubidData $7d $14 $00 ; $82 (Fool's Ore)
-.ifdef ENABLE_NEW_GAME_PLUS
+.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 	m_InteractionSubidData $e2 $00 $00 ; $83 (L-4 sword)
 	m_InteractionSubidData $e2 $02 $00 ; $84 (L-4 shield)
 .endif

@@ -452,7 +452,28 @@ mrWriteScript:
 	disableinput
 	wait 40
 	showtext TX_0b01
+.if defined(ENABLE_NEW_GAME_PLUS)
+	.if !defined(ROM_COMBO)
+		jumpifglobalflagset GLOBALFLAG_STARTED_TRADE_QUEST, @alreadyReceived
+	.else
+		jumpifglobalflagset GLOBALFLAG_STARTED_TRADE_QUEST_SEASONS, @alreadyReceived
+	.endif
+
 	giveitem TREASURE_TRADEITEM, $00
+	scriptjump @flagAsReceived
+
+@alreadyReceived:
+	giveitem TREASURE_HEART_PIECE, $00
+@flagAsReceived:
+
+	.if !defined(ROM_COMBO)
+		setglobalflag GLOBALFLAG_STARTED_TRADE_QUEST
+	.else
+		setglobalflag GLOBALFLAG_STARTED_TRADE_QUEST_SEASONS
+	.endif
+.else
+	giveitem TREASURE_TRADEITEM, $00
+.endif
 	orroomflag $40
 	enableinput
 @alreadyLitTorch:

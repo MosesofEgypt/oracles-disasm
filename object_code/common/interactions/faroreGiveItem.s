@@ -237,16 +237,11 @@ interactiond9_state2:
 	.dw @ringBoxUpgrade
 
 @ringBoxUpgrade:
-.ifdef RESIZE_RING_BOX
 	call getRingBoxLevel
 	cp MAX_RING_BOX_LEVEL
 	jr c,+
 		ld a,MAX_RING_BOX_LEVEL
 	+
-.else
-	ld a,(wRingBoxLevel)
-	and $03
-.endif
 	ld hl,@ringBoxSubids
 	rst_addAToHl
 	ld c,(hl)
@@ -259,10 +254,8 @@ interactiond9_state2:
 .else
 	.db $03 $03 $04 $04
 .endif
-.ifdef RESIZE_RING_BOX
 	; NOTE: padding up to 8 to allow up to 8 ring box levels
 	.db $04 $04 $04 $04
-.endif
 
 @bombUpgrade:
 	ld bc,TREASURE_OBJECT_BOMB_UPGRADE_00

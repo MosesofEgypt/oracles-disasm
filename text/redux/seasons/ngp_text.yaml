@@ -1,4 +1,12 @@
 groups:
+- group: 0x0b
+  data:
+  - name: TX_0b01
+    index: 0x01
+    text: |-
+      \pos(2)Splendid! I can
+      finally focus!
+      Here! Take this!
 - group: 0x0e
   allow_undefined: [0x2b]
   data:

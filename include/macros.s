@@ -420,11 +420,7 @@
 
 .MACRO m_CodePointer
 	.assert NARGS == 1
-	.if defined(ENABLE_NEW_GAME_PLUS)
-		3BytePointer \1
-	.else
-		.dw \1
-	.endif
+	3BytePointer \1
 .ENDM
 
 .MACRO m_GenerateCodeTable

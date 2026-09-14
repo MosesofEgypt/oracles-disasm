@@ -1,5 +1,3 @@
-.if defined(ROM_COMBO)
-; NOTE: these are copies of data and functions in bank2
 showItemText2:
 	ld hl,wInventory.activeText
 	cp (hl)
@@ -114,13 +112,6 @@ getRingBoxCapacity:
 	++
 	and $0f
 	ret
-
-@ringBoxCapacities:
-	.db $00
-	.db RING_BOX_L1_SIZE
-	.db RING_BOX_L2_SIZE
-	.db RING_BOX_L3_SIZE
-	.db RING_BOX_L4_SIZE
 .else
 	push hl
 	ld a,(wRingBoxLevel)
@@ -130,10 +121,15 @@ getRingBoxCapacity:
 	or a
 	pop hl
 	ret
+.endif
 
 @ringBoxCapacities:
-	.db $00 $01 $03 $05
-.endif
+	.db $00
+	.db RING_BOX_L1_SIZE
+	.db RING_BOX_L2_SIZE
+	.db RING_BOX_L3_SIZE
+.if MAX_RING_BOX_LEVEL > 3
+	.db RING_BOX_L4_SIZE
 .endif
 
 ;;
@@ -204,6 +200,13 @@ ringMenu_state0:
 	call ringMenu_calculateNumPagesForUnappraisedRings
 	call ringMenu_redrawRingListOrUnappraisedRings
 
+.if defined(ENABLE_DOUBLE_HEART_CAP)
+	; in order to reload the correct heart tiles, we
+	; need to force it to refresh the heart display
+	ld hl,wStatusBarNeedsRefresh
+	set 2,(hl)
+.endif
+
 	; Go to state 1
 	ld hl,wMenuActiveState
 	inc (hl)
@@ -250,18 +253,10 @@ ringMenu_drawRingBox:
 	jr nz,++
 
 	; Draw appropriate slots for rings
-.ifdef RESIZE_RING_BOX
 	call getRingBoxLevel
-.else
-	ld a,(wRingBoxLevel)
-.endif
 	inc a
-.if defined(ROM_COMBO)
 	ld d,a
 	callab bank2.mapMenu_performTileSubstitutionsWrapper
-.else
-	call mapMenu_performTileSubstitutions
-.endif
 
 	; Draw ring box icon at appropriate level
 	ld de,w4TileMap+$201
@@ -1324,25 +1319,9 @@ ringMenu_forceUnmapSelectedRingIndex:
 	ret
 
 ringMapTable
-	.db RING_LIST_PG1_UP_LEFT
-	.db RING_LIST_PG1_UP_RIGHT
-	.db RING_LIST_PG1_DOWN_LEFT
-	.db RING_LIST_PG1_DOWN_RIGHT
-
-	.db RING_LIST_PG2_UP_LEFT
-	.db RING_LIST_PG2_UP_RIGHT
-	.db RING_LIST_PG2_DOWN_LEFT
-	.db RING_LIST_PG2_DOWN_RIGHT
-
-	.db RING_LIST_PG3_UP_LEFT
-	.db RING_LIST_PG3_UP_RIGHT
-	.db RING_LIST_PG3_DOWN_LEFT
-	.db RING_LIST_PG3_DOWN_RIGHT
-
-	.db RING_LIST_PG4_UP_LEFT
-	.db RING_LIST_PG4_UP_RIGHT
-	.db RING_LIST_PG4_DOWN_LEFT
-	.db RING_LIST_PG4_DOWN_RIGHT
+	.rept $40 index tmpi
+		.db RING_LIST_IDX_{%.2x{tmpi}}
+	.endr
 .endif
 
 ;;
@@ -1660,11 +1639,7 @@ getRingTiles:
 		cp $fe   ; ring box
 		ld a,$40 ; unappraised ring
 		jr nz,+
-		.ifdef RESIZE_RING_BOX
-			call getRingBoxLevel
-		.else
-			ld a,(wRingBoxLevel)
-		.endif
+		call getRingBoxLevel
 		add $40 ; skip past all rings to ring boxes
 	+
 	call multiplyABy8

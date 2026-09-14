@@ -238,11 +238,7 @@ saveQuitMenu_state2:
 
 ;;
 saveQuitMenu_drawSprites:
-.if defined(ROM_COMBO)
 	callab bank2.fileSelect_redrawDecorationsAndSetWramBank4
-.else
-	call fileSelect_redrawDecorationsAndSetWramBank4
-.endif
 
 	; Flicker acorn if applicable
 	ld a,(wSaveQuitMenu.delayCounter)

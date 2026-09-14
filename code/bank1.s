@@ -3735,8 +3735,10 @@ standardGameState:
 .endif
 .ifdef ENABLE_NEW_GAME_PLUS
 	call updateRingsDisabled
-	call processAutosaveUpdate
 	call processPoisonTicks
+.endif
+.ifdef ENABLE_SETTINGS_MENU
+	call processAutosaveUpdate
 .endif
 .ifdef ENABLE_RING_REDUX
 	call processDmgPaletteUpdate
@@ -3950,7 +3952,7 @@ cutscene01:
 .ifdef EXTENDED_RING_BOX
 	call clearExtendedRingBox
 .endif
-.ifdef ENABLE_RING_REDUX
+.ifdef ENABLE_QUICK_SWAP
 	call updateQuickSwapItems
 .endif
 	call updateLinkBeingShocked
@@ -4058,7 +4060,7 @@ cutscene02:
 .endif
 
 
-.ifdef EXTENDED_RING_BOX
+.if defined(ENABLE_MULTI_RING) || defined(EXTENDED_RING_BOX)
 clearExtendedRingBox:
 	; clear the extended box contents if the
 	; flag indicates this code was never run
@@ -4069,6 +4071,7 @@ clearExtendedRingBox:
 	; set the flag and overwrite the rings with $ff
 	set 5,a
 	ld (wRingReduxFlagsExt),a
+.if defined(EXTENDED_RING_BOX)
 	ld a,$ff
 	push hl
 	ld hl,wRingBoxContentsExt
@@ -4078,7 +4081,44 @@ clearExtendedRingBox:
 	ldi (hl),a
 	ldi (hl),a
 	pop hl
+.endif
 +
+.endif
+
+.ifdef ENABLE_SETTINGS_MENU
+processAutosaveUpdate:
+	; don't save if transitioning
+	ld a,(wDisableLinkCollisionsAndMenu)
+	ld hl,wTextIsActive
+	or (hl)
+	ld hl,wMenuDisabled
+	or (hl)
+	ret nz
+
+	ld a,(wDungeonIndex)
+	.if defined(ROM_AGES) || defined(ROM_COMBO)
+		.if defined(ROM_COMBO)
+			call wIsSeasons
+			jr c,+
+		.endif
+
+		cp $0e ; treat lots of non-dungeon areas as overworld
+		jr nz,+
+			ld a,$ff
+		+
+	.endif
+
+	ld hl,wDungeonIndexPreviousFrame
+	cp (hl)
+	ld (hl),a
+	ret z
+
+	; only autosave if flag is set
+	ld hl,wMiscSettings+1
+	bit 7,(hl)
+	ret z
+
+	jp saveFile
 .endif
 
 .ifdef ENABLE_NEW_GAME_PLUS
@@ -4127,40 +4167,6 @@ processPoisonTicks:
 	+
 
 	ret
-
-processAutosaveUpdate:
-	; don't save if transitioning
-	ld a,(wDisableLinkCollisionsAndMenu)
-	ld hl,wTextIsActive
-	or (hl)
-	ld hl,wMenuDisabled
-	or (hl)
-	ret nz
-
-	ld a,(wDungeonIndex)
-	.if defined(ROM_AGES) || defined(ROM_COMBO)
-		.if defined(ROM_COMBO)
-			call wIsSeasons
-			jr c,+
-		.endif
-
-		cp $0e ; treat lots of non-dungeon areas as overworld
-		jr nz,+
-			ld a,$ff
-		+
-	.endif
-
-	ld hl,wDungeonIndexPreviousFrame
-	cp (hl)
-	ld (hl),a
-	ret z
-
-	; only autosave if flag is set
-	ld hl,wMiscSettings+1
-	bit 7,(hl)
-	ret z
-
-	jp saveFile
 
 updateRingsDisabled:
 	ld a,(wTextIsActive)
@@ -4232,12 +4238,12 @@ updateRingEquipStatuses:
 	ld c,a
 	call @unsetFlags
 
-	.ifdef EXTENDED_RING_BOX
-		ld de,wRingBoxContentsExt
-		ld a,(wRingReduxFlagsExt)
-		ld c,a
-		call @unsetFlags
-	.endif
+.if defined(EXTENDED_RING_BOX)
+	ld de,wRingBoxContentsExt
+	ld a,(wRingReduxFlagsExt)
+	ld c,a
+	call @unsetFlags
+.endif
 
 	; these combos can get checked multiple times a
 	; frame, so we cache them for quicker processing
@@ -4454,7 +4460,9 @@ updateAzuchu:
 	dec l
 	ld (hl),e
 	ret
+.endif
 
+.ifdef ENABLE_QUICK_SWAP
 updateQuickSwapItems:
 	ld a,(wOpenedMenuType)
 	or a

@@ -67,7 +67,7 @@
 	PROTECTION_RING		db ; $3f
 .ende
 
-.ifdef ENABLE_RING_REDUX
+.if defined(ENABLE_RING_REDUX) || defined(REMAP_RING_LIST) || defined(ENABLE_GASHA_REBALANCE)
 ; custom/reworked rings
 .define GOLD_RING			WHIMSICAL_RING
 .define VASUS_RING			FRIENDSHIP_RING

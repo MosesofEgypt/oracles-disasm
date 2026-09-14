@@ -1300,7 +1300,9 @@ m_section_superfree Item_Parents_2 NAMESPACE itemParentsExt
 	.include "object_code/common/itemParents/seedsParent.s"
 	.include "object_code/common/itemParents/harpFluteParent.s"
 	.include "object_code/common/itemParents/shovelParent.s"
+.if defined(ENABLE_NEW_GAME_PLUS)
 	.include "object_code/common/itemParents/lifeVialParent.s"
+.endif
 	.include "object_code/common/itemParents/magnetGloveParent.s"
 	.include "object_code/common/itemParents/boomerangParent.s"
 

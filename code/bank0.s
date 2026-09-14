@@ -256,9 +256,9 @@ bitTable:
 	.asc "ZELDA OOA&S"
 
 	.ifdef REGION_JP
-		.ASC "AZ7J"
+		.ASC "AZ9J"
 	.else
-		.asc "AZ7E"
+		.asc "AZ9E"
 	.endif
 
 .elif defined(ROM_SEASONS)
@@ -800,20 +800,14 @@ loadGfxRegisterStateIndex:
 	add l
 	add a
 
-.ifdef ENABLE_NEW_GAME_PLUS
 	ld hl,bank0Ext.gfxRegisterStates
-.else
-	ld hl,gfxRegisterStates
-.endif
 	rst_addDoubleIndex
 	ld b,GfxRegsStruct.size*2
 	ld de,wGfxRegs1
-.ifdef ENABLE_NEW_GAME_PLUS
 	ldh a,(<hRomBank)
 	push af
 	ld a,:bank0Ext.gfxRegisterStates
 	setrombank
-.endif
 -
 	ldi a,(hl)
 	ld (de),a
@@ -821,97 +815,13 @@ loadGfxRegisterStateIndex:
 	dec b
 	jr nz,-
 
-.ifdef ENABLE_NEW_GAME_PLUS
 	pop af
 	setrombank
-.endif
 	ld a,(wGfxRegs1.LCDC)
 	ld (wGfxRegsFinal.LCDC),a
 	ld ($ff00+R_LCDC),a
 	ret
 
-.ifndef ENABLE_NEW_GAME_PLUS
-gfxRegisterStates:
-	.db $c3 $00 $00 $c7 $c7 $c7 ; 0x00: DMG mode screen, capcom intro, ...
-	.db $c3 $00 $00 $c7 $c7 $c7
-
-	.db $c7 $00 $00 $c7 $c7 $c7 ; 0x01
-	.db $00 $00 $00 $c7 $c7 $c7
-
-	.db $ef $f0 $00 $8f $8f $0f ; 0x02: Post-d3 cutscene, twinrova/ganon fight, CUTSCENE_BLACK_TOWER_ESCAPE
-	.db $e7 $00 $00 $c7 $c7 $c7
-
-	.db $ef $f0 $00 $10 $c7 $0f ; 0x03
-	.db $f7 $f0 $00 $10 $c7 $75
-
-	.db $c7 $00 $00 $c7 $c7 $c7 ; 0x04: titlescreen
-	.db $00 $00 $00 $c7 $c7 $c7
-
-	.db $cf $00 $00 $c7 $c7 $c7 ; 0x05
-	.db $00 $00 $00 $c7 $c7 $c7
-
-	.db $a7 $00 $b0 $c7 $c7 $1f ; 0x06
-	.db $8f $00 $00 $c7 $c7 $c7
-
-	.db $c7 $00 $00 $c7 $c7 $c7 ; 0x07: map screens (both overworld and dungeon)?
-	.db $00 $00 $00 $c7 $c7 $c7
-
-	.db $a7 $00 $00 $90 $07 $00 ; 0x08
-	.db $a7 $40 $00 $90 $07 $c7
-
-	.db $c7 $70 $00 $c7 $c7 $c7 ; 0x09: temple in intro
-	.db $c7 $00 $00 $c7 $c7 $c7
-
-	.db $cf $70 $00 $c7 $c7 $c7 ; 0x0a: scrolling up the tree in the intro
-	.db $cf $00 $00 $c7 $c7 $c7
-
-	.db $cf $00 $20 $c7 $c7 $c7 ; 0x0b
-	.db $cf $00 $00 $c7 $c7 $c7
-
-	.db $a7 $00 $00 $78 $07 $27 ; 0x0c
-	.db $af $f0 $00 $78 $07 $c7
-
-	.db $c7 $10 $30 $c7 $c7 $c7 ; 0x0d
-	.db $c7 $00 $00 $c7 $c7 $c7
-
-	.db $e7 $01 $00 $4c $4c $c7 ; 0x0e
-	.db $c7 $00 $00 $c7 $c7 $c7
-
-	.db $af $f0 $00 $10 $07 $17 ; 0x0f: ring appraisal menu
-	.db $f7 $f0 $00 $10 $c7 $57
-
-	.db $b7 $f0 $00 $10 $07 $1f ; 0x10: ring list menu
-	.db $f7 $f0 $00 $10 $c7 $47
-
-	.db $ef $f0 $00 $8f $8f $0f ; 0x11
-	.db $e7 $00 $00 $40 $57 $c7
-
-	.db $ef $f0 $00 $8f $8f $0f ; 0x12
-	.db $e7 $00 $00 $90 $47 $c7
-
-	.db $e7 $00 $28 $c7 $c7 $c7 ; 0x13
-	.db $e7 $00 $28 $c7 $c7 $c7
-
-	.db $ef $f0 $00 $8f $8f $00 ; 0x14
-	.db $e7 $00 $00 $c7 $c7 $c7
-
-	.db $e7 $00 $00 $c7 $c7 $c7 ; 0x15
-	.db $e7 $00 $00 $c7 $c7 $c7
-
-	.db $ff $30 $00 $60 $07 $18 ; 0x16: farore's secret list
-	.db $ff $30 $00 $60 $07 $c7
-
-.if defined(ROM_AGES) || defined(ROM_COMBO)
-	.db $ef $00 $00 $90 $07 $00 ; 0x17: intro cinematic screen 1
-	.db $e7 $00 $00 $90 $07 $c7
-
-	.db $ef $98 $00 $68 $07 $40 ; 0x18
-	.db $ef $98 $00 $68 $07 $c7
-
-	.db $ef $00 $00 $90 $07 $30 ; 0x19
-	.db $e7 $98 $00 $60 $07 $c7
-.endif
-.endif
 
 ;;
 ; @param[out]	a	Random number
@@ -1448,9 +1358,7 @@ loadUncompressedGfxHeader:
 --
 	ldi a,(hl)
 	ld c,a
-.ifdef INCREASE_GFX_SPACE
 	inc hl ; no compression, so pad
-.endif
 	ldi a,(hl)
 	ld d,a
 	ldi a,(hl)
@@ -1504,10 +1412,8 @@ loadUniqueGfxHeaderEntry:
 	ld c,a
 	ldh (<hFF8C),a
 	ldi a,(hl)
-.ifdef INCREASE_GFX_SPACE
 	ldh (<hGfxCompressionMode),a
 	ldi a,(hl)
-.endif
 	ld b,a
 	ldi a,(hl)
 	ld c,a
@@ -1560,10 +1466,8 @@ loadGfxHeader:
 	ldi a,(hl)
 	ld c,a
 	ldi a,(hl)
-.ifdef INCREASE_GFX_SPACE
 	ldh (<hGfxCompressionMode),a
 	ldi a,(hl)
-.endif
 	ld d,a
 	ldi a,(hl)
 	ld e,a
@@ -1601,7 +1505,7 @@ loadGfxHeader:
 ;;
 ; Deals with graphics compression
 ;
-; @param hGfxCompressionMode  Compression mode (only if INCREASE_GFX_SPACE is defined)
+; @param hGfxCompressionMode  Compression mode
 ; @param	b	Data size (divided by 16, minus 1)
 ; @param	c	ROM bank (bits 0-5) and compression mode (bits 6-7)
 ; @param	de	Destination (lower 4 bits = destination bank, either vram or wram)
@@ -1614,16 +1518,9 @@ decompressGraphics:
 	xor e
 	ld e,a
 	ld a,c
-.ifdef INCREASE_GFX_SPACE
 	rst_setrombank
 	inc b
 	ldh a,(<hGfxCompressionMode)
-.else
-	and $3f
-	rst_setrombank
-	inc b
-	ld a,c
-.endif
 	and $c0
 	jp z,func_06e0
 	cp $c0
@@ -2948,12 +2845,14 @@ serialFunc_0c8d:
 	pop de
 	ret
 
-.ifdef MORE_MESSAGE_SPEEDS
 getActiveLanguage:
+.ifdef MORE_MESSAGE_SPEEDS
 	ld a,(wMiscSettings+1)
+.else
+	ld a,(wActiveLanguage)
+.endif
 	and $07
 	ret
-.endif
 
 ;;
 ; @param	a	Sound to play
@@ -3401,11 +3300,12 @@ drawAllSpritesUnconditionally:
 		rlca
 		and $03
 	++
-
+.if defined(ROM_COMBO)
 	call wIsSeasons
 	jr nc,+
 		add $05
 	+
+.endif
 	ld hl,objectOamBankTable
 	rst_addAToHl
 	ld a,(hl)
@@ -3517,16 +3417,20 @@ drawAllSpritesUnconditionally:
 
 .if defined(SUPERFREE_OAM_DATA_BANKS)
 objectOamBankTable:
+.if defined(ROM_COMBO) || defined(ROM_AGES)
 	.db AGES_ITEM_OAM_DATA_BANK
 	.db AGES_INTERAC_OAM_DATA_BANK
 	.db AGES_ENEMY_OAM_DATA_BANK
 	.db AGES_PART_OAM_DATA_BANK
 	.db AGES_SPEC_OBJ_OAM_DATA_BANK
+.endif
+.if defined(ROM_COMBO) || defined(ROM_SEASONS)
 	.db SEASONS_ITEM_OAM_DATA_BANK
 	.db SEASONS_INTERAC_OAM_DATA_BANK
 	.db SEASONS_ENEMY_OAM_DATA_BANK
 	.db SEASONS_PART_OAM_DATA_BANK
 	.db SEASONS_SPEC_OBJ_OAM_DATA_BANK
+.endif
 .endif
 
 .if !defined(ROM_COMBO)
@@ -3948,40 +3852,11 @@ getChestData:
 ;;
 ; Set Link's death respawn point based on the current room / position variables.
 setDeathRespawnPoint:
-.ifdef ENABLE_NEW_GAME_PLUS
 	ldh a,(<hRomBank)
 	push af
 	callfrombank0 bank0Ext.setDeathRespawnPoint
 	pop af
 	rst_setrombank
-.else
-	ld hl,wDeathRespawnBuffer
-	ld a,(wActiveGroup)
-	ldi (hl),a
-	ld a,(wActiveRoom)
-	ldi (hl),a
-	ld a,(wRoomStateModifier)
-	ldi (hl),a
-	ld a,(w1Link.direction)
-	ldi (hl),a
-	ld a,(w1Link.yh)
-	ldi (hl),a
-	ld a,(w1Link.xh)
-	ldi (hl),a
-	ld a,(wRememberedCompanionId)
-	ldi (hl),a
-	ld a,(wRememberedCompanionGroup)
-	ldi (hl),a
-	ld a,(wRememberedCompanionRoom)
-	ldi (hl),a
-	ld a,(wLinkObjectIndex)
-	ldi (hl),a
-	inc l
-	ld a,(wRememberedCompanionY)
-	ldi (hl),a
-	ld a,(wRememberedCompanionX)
-	ldi (hl),a
-.endif
 	ret
 
 ;;
@@ -5098,10 +4973,8 @@ loadObjectGfx:
 loadObjectGfx2:
 	ld c,a
 	ldi a,(hl)
-.ifdef INCREASE_GFX_SPACE
 	ldh (<hGfxCompressionMode),a
 	ldi a,(hl)
-.endif
 	ld l,(hl)
 	and $7f
 	ld h,a
@@ -8694,16 +8567,18 @@ cpActiveRing:
 	ld hl,wEquippedRingFlags
 	push af
 	call checkFlag
+	pop hl
+	ld a,h
+	pop hl
+	ret
 .else
 cpActiveRing:
 	push hl
 	ld hl,wActiveRing
 	cp (hl)
-.endif
-	pop hl
-	ld a,h
 	pop hl
 	ret
+.endif
 
 .ifdef ENABLE_MULTI_RING
 clearRingEquipStatuses:
@@ -8715,7 +8590,6 @@ clearRingEquipStatuses:
 	jp fillMemory
 .endif
 
-.ifdef REDUX_UTIL_FUNCS
 ;;
 ; @param	b	The first ring to check for.
 ; @param	c	The second ring to check for.
@@ -8746,9 +8620,6 @@ eitherRingActive:
 	pop de
 	ret
 
-.endif
-
-.if defined(ENABLE_NEW_GAME_PLUS) || defined(ROM_COMBO)
 updateObjectCaller:
 	push bc
 
@@ -8780,7 +8651,6 @@ updateObjectCaller:
 	ld a,c
 	or a
 	jp hl
-.endif
 
 .if defined(ENABLE_NEW_GAME_PLUS)
 getFlaskChargePrice:
@@ -9107,17 +8977,6 @@ tryNgpUpgrade:
 	ret
 .endif
 
-.ifdef ENABLE_RING_REDUX
-getLinkMaxHealth:
-	ld a,CURSED_RED_RING
-	call cpActiveRing
-	ld a,(wLinkMaxHealth)
-	ret nz
-	cp CURSE_RING_HEART_CAP
-	ret c
-	ld a,CURSE_RING_HEART_CAP
-	ret
-
 .ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
 ;;
 ; @param	a		The item to auto-equip or un-equip.
@@ -9140,6 +8999,17 @@ handleAutoEquipItem:
 	pop bc
 	ret
 .endif
+
+.ifdef ENABLE_RING_REDUX
+getLinkMaxHealth:
+	ld a,CURSED_RED_RING
+	call cpActiveRing
+	ld a,(wLinkMaxHealth)
+	ret nz
+	cp CURSE_RING_HEART_CAP
+	ret c
+	ld a,CURSE_RING_HEART_CAP
+	ret
 
 ; @param	a	Enemy id to check
 ; @param[out]	zflag set if the enemy CANNOT be picked up/thrown
@@ -9175,6 +9045,7 @@ isValidTargetForJudo:
 	dbrev %11010000 %11111110 ; 0x40-0x4f
 	dbrev %01100000 %00000000 ; 0x50-0x5f
 
+.ifdef ENABLE_MULTI_RING
 ;;
 ; @param	b	The first ring to check for.
 ; @param	c	The second ring to check for.
@@ -9195,6 +9066,7 @@ eitherRingActiveAndPopBC:
 	call eitherRingActive
 	pop bc
 	ret
+.endif
 
 getZflagOrCflagSet:
 	ret z
@@ -9309,6 +9181,23 @@ calculatePowerRingModifier:
 	.db ARMOR_RING_L2_ATK_MOD
 	.db ARMOR_RING_L3_ATK_MOD
 
+setRingComboFlag:
+	push hl
+	ld hl,wRingComboCacheFlags
+	call unsetFlag
+	pop hl
+	ret
+
+getRingComboFlag:
+	push hl
+	ld hl,wRingComboCacheFlags
+	call checkFlag
+	pop hl
+	ret
+.endif
+
+
+.ifdef ENABLE_QUICK_SWAP
 quickSwapHeldItems:
 	ldh a,(<hRomBank)
 	push af
@@ -9328,24 +9217,9 @@ quickSwapHeldItems:
 	pop af
 	rst_setrombank
 	ret
-
-setRingComboFlag:
-	push hl
-	ld hl,wRingComboCacheFlags
-	call unsetFlag
-	pop hl
-	ret
-
-getRingComboFlag:
-	push hl
-	ld hl,wRingComboCacheFlags
-	call checkFlag
-	pop hl
-	ret
 .endif
 
 
-.ifdef RESIZE_RING_BOX
 getRingBoxLevel:
 	ld a,(wRingBoxLevel)
 	and $07
@@ -9353,7 +9227,6 @@ getRingBoxLevel:
 	ret c
 	ld a,MAX_RING_BOX_LEVEL
 	ret
-.endif
 
 ;;
 disableActiveRing:

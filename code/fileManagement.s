@@ -135,27 +135,33 @@ initializeNgpFile:
 .endif
 
 	; Unequip all rings and remove from box
+.ifdef ENABLE_MULTI_RING
 	ld hl,wRingReduxFlags
 	ld a,$1f
 	ld (hl),a
+.endif
+	m_ClearSavefileSection_len wRingBoxContents, $05, $ff
+
+.if defined(ENABLE_MULTI_RING) || defined(EXTENDED_RING_BOX)
+	ld hl,wRingReduxFlagsExt
+	ld a,$1f
+	ld (hl),a
+.endif
 
 .ifdef EXTENDED_RING_BOX
-	ld hl,wRingReduxFlagsExt
-	ld (hl),a
-
 	m_ClearSavefileSection_len wRingBoxContentsExt, $05, $ff
 .endif
 
-	m_ClearSavefileSection_len wRingBoxContents, $05, $ff
+	m_ClearSavefileSection_end wDeathRespawnBuffer, wBoughtShopItems1
+	m_ClearSavefileSection_end wCompanionStates, wGashaSpotFlags
+	m_ClearSavefileSection_end (wGashaMaturity+2), wObtainedTreasureFlags
+	call clearShopFlags
 
 	xor a
 	ld (wEssencesObtained),a
 	.ifndef ENABLE_MULTI_RING
 		ld (wActiveRing),a
 	.endif
-
-	m_ClearSavefileSection_end wDeathRespawnBuffer, wGashaSpotFlags
-	m_ClearSavefileSection_end (wGashaMaturity+2), wObtainedTreasureFlags
 
 	; reset global flags while avoiding ones we want to
 	; persist across NG cycles, such as vasu rewards,
@@ -166,12 +172,10 @@ initializeNgpFile:
 	call applyFlagMask
 	pop de
 
-	push hl
 	; mask out treasure flags to keep from previous game cycle
 	ld hl,ngpAndComboTreasureFlagMask
 	ld de,wObtainedTreasureFlags
 	call applyFlagMask
-	pop hl
 
 	; clear all the room flags
 	ld hl,wGroup0RoomFlags
@@ -290,14 +294,18 @@ initializeNgpFile:
 	.db $00
 	.db $00
 .if defined(ROM_COMBO)
-	.db $e0 ; GLOBALFLAG_GOT_BOMB_UPGRADE_FROM_FAIRY
+	.db $f8 ; GLOBALFLAG_STARTED_TRADE_QUEST_SEASONS
+	;         GLOBALFLAG_STARTED_TRADE_QUEST_AGES
+	;         GLOBALFLAG_GOT_BOMB_UPGRADE_FROM_FAIRY
 	;         GLOBALFLAG_GOT_SATCHEL_UPGRADE
 	;         GLOBALFLAG_GOT_RED_AND_BLUE_ORE
 .elif defined(ROM_AGES)
-	.db $60 ; GLOBALFLAG_GOT_BOMB_UPGRADE_FROM_FAIRY
+	.db $70 ; GLOBALFLAG_STARTED_TRADE_QUEST
+	;         GLOBALFLAG_GOT_BOMB_UPGRADE_FROM_FAIRY
 	;         GLOBALFLAG_GOT_SATCHEL_UPGRADE
 .else
-	.db $80 ; GLOBALFLAG_GOT_RED_AND_BLUE_ORE
+	.db $90 ; GLOBALFLAG_STARTED_TRADE_QUEST
+	;         GLOBALFLAG_GOT_RED_AND_BLUE_ORE
 .endif
 
 	.db $ff ; keep all flags from $50 to $78(linked secrets)
@@ -311,6 +319,25 @@ initializeNgpFile:
 
 noFileManagementOp:
 	ret
+
+.if defined(ROM_COMBO) || defined(ENABLE_NEW_GAME_PLUS)
+clearShopFlags:
+	push hl
+	; selectively clear the flags for what's been bought from each shop
+	; to prevent obtaining multiple satchel/bomb/ring box upgrades
+	ld hl,wBoughtShopItems1
+	ld a,$11 ; preserve flag for ring box and satchel upgrades
+	and (hl)
+	ldi (hl),a
+	xor a
+	ldi (hl),a ; clear wBoughtShopItems2
+	ldi (hl),a ; clear wMapleState
+	ld a,$04 ; preserve flag for bomb bag upgrade
+	and (hl)
+	ld (hl),a
+	pop hl
+	ret
+.endif
 
 ;;
 initializeFile:
@@ -590,13 +617,35 @@ loadAcrossComboGame:
 	m_LoadSavefileSection_len wChildStatus,			$06
 	m_LoadSavefileSection_len wSavefileString,		$08
 	m_LoadSavefileSection_len wFluteIcon,			$01
-	m_LoadSavefileSection_end wDeathRespawnBuffer,	wObtainedTreasureFlags
+	m_LoadSavefileSection_len wBoughtShopItems2,	$01
+	m_LoadSavefileSection_len wMapleState,			$01
+	m_LoadSavefileSection_end wDeathRespawnBuffer,	wBoughtShopItems1
+	m_LoadSavefileSection_end wCompanionStates,	    wObtainedTreasureFlags
 	m_LoadSavefileSection_end wEssencesObtained,	wTradeItem+1
 	m_LoadSavefileSection_end wKilledGoldenEnemies,	wSlingshotSelectedSeeds+1
 	m_LoadSavefileSection_end wBiggoronSwordOverflowItem, wSaveFileMainSectionEnd
 	m_LoadSavefileSection_end wGroup0RoomFlags,		wGroupRoomFlagsEnd
 
 	push hl
+	; mask out shop flags to keep from previous game
+	ld de,wBoughtShopItems1
+	ld bc,wBoughtShopItems1-wFileStart
+	add hl,bc
+	ld a,(de)
+	and $11 ; preserve flag for ring box and satchel upgrades
+	or (hl)
+	ld (de),a
+
+	; move to wBoughtSubrosianShopItems
+	.rept 3
+		inc de
+		inc hl
+	.endr
+	ld a,(de)
+	and $04 ; preserve flag for bomb bag upgrade
+	or (hl)
+	ld (de),a
+
 	; mask out treasure flags to keep from previous game
 	ld hl,ngpAndComboTreasureFlagMask
 	ld de,wObtainedTreasureFlags
@@ -681,17 +730,20 @@ initializeComboGame:
 	or $08
 	ld (hl),a
 
-	.ifdef ENABLE_RING_REDUX
+	.if defined(ENABLE_MULTI_RING) || defined(EXTENDED_RING_BOX)
 		xor a
 		ld (wRingReduxFlagsExt),a
 	.endif
 
 	; clear all game tracker variables and such
-	m_ClearSavefileSection_end        wDeathRespawnBuffer, wObtainedTreasureFlags
+	m_ClearSavefileSection_end        wDeathRespawnBuffer, wBoughtShopItems1
+	m_ClearSavefileSection_end           wCompanionStates, wObtainedTreasureFlags
 	m_ClearSavefileSection_end                 wFluteIcon, wRingBoxLevel
 	m_ClearSavefileSection_end               wGlobalFlags, wSlingshotSelectedSeeds+1
 	m_ClearSavefileSection_end wBiggoronSwordOverflowItem, wSaveFileMainSectionEnd
 	m_ClearSavefileSection_end           wGroup0RoomFlags, wGroupRoomFlagsEnd
+
+	call clearShopFlags
 
 	call wIsSeasons
 	jr c,+
@@ -758,10 +810,17 @@ initializeComboGame:
 
 @bonusInventoryItems:
 	.db TREASURE_SWORD
-	.db TREASURE_ROD_OF_SEASONS
 	.db TREASURE_BIGGORON_SWORD
 	.db TREASURE_BOMBCHUS
+.if defined(WIDE_INVENTORY_SPRITES) || !defined(ENABLE_DOUBLE_HEART_CAP)
+	; NOTE: these can only be allowed with wide inventory sprites due to
+	;       there not being any tiles remaining for part of the top left
+	;       part of the harp in seasons, or the spring tile in ages.
+	;       this only applies with a doubled heart cap, as the tile in
+	;       question is being overwritten by an overlapped heart tile.
+	.db TREASURE_ROD_OF_SEASONS
 	.db TREASURE_HARP
+.endif
 	.db $00
 
 ; NOTE: we're intentionally preserving the ore flags between games
@@ -1153,7 +1212,7 @@ initialFileVariables:
 	.db <wMaxBombs,				$10
 	.db <wLinkHealth,			$10 ; 4 hearts (gets overwritten in standard game)
 	.db <wLinkMaxHealth,			$10
-.ifdef ENABLE_NEW_GAME_PLUS
+.if defined(ENABLE_NEW_GAME_PLUS) || defined(ROM_COMBO)
 initialFileVariables_ages:
 .endif
 .if defined(ROM_AGES) || defined(ROM_COMBO)
@@ -1250,9 +1309,11 @@ initialNgpFileVariables_heroGame:
 ; This string is different in ages and seasons.
 .ifdef ROM_COMBO
 saveVerificationString_ages:
-	.ASC "Z-AGES-0"
+	;.ASC "Z-AGES-0"
+	.ASC "Z21216-0"
 saveVerificationString_seasons:
-	.ASC "Z-SEAS-0"
+	;.ASC "Z-SEAS-0"
+	.ASC "Z11216-0"
 .else
 saveVerificationString:
 .if defined(ROM_AGES)

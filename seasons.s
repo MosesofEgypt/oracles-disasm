@@ -493,19 +493,6 @@ m_EnemyCodeSection
 	.include "object_code/common/enemies/spinyBeetle.s"
 	.include "object_code/common/enemies/armos.s"
 	.include "object_code/common/enemies/piranha.s"
-.ifndef ENABLE_NEW_GAME_PLUS
-	.include "object_code/common/enemies/polsVoice.s"
-	.include "object_code/common/enemies/likelike.s"
-	.include "object_code/common/enemies/gopongaFlower.s"
-	.include "object_code/common/enemies/dekuScrub.s"
-	.include "object_code/common/enemies/wallmaster.s"
-	.include "object_code/common/enemies/podoboo.s"
-	.include "object_code/common/enemies/giantBladeTrap.s"
-	.include "object_code/common/enemies/cheepcheep.s"
-	.include "object_code/common/enemies/podobooTower.s"
-	.include "object_code/common/enemies/thwimp.s"
-	.include "object_code/common/enemies/thwomp.s"
-.endif
 
 	.include "object_code/seasons/enemies/rollingSpikeTrap.s"
 	.include "object_code/seasons/enemies/pokey.s"
@@ -515,20 +502,6 @@ m_EndObjectCodeSection
 m_EnemyCodeSection
 	.include "object_code/common/enemies/commonCode.s"
 
-.ifndef ENABLE_NEW_GAME_PLUS
-	.include "object_code/common/enemies/tektite.s"
-	.include "object_code/common/enemies/stalfos.s"
-	.include "object_code/common/enemies/keese.s"
-	.include "object_code/common/enemies/babyCucco.s"
-	.include "object_code/common/enemies/zol.s"
-	.include "object_code/common/enemies/floormaster.s"
-	.include "object_code/common/enemies/cucco.s"
-	.include "object_code/common/enemies/giantCucco.s"
-	.include "object_code/common/enemies/butterfly.s"
-	.include "object_code/common/enemies/greatFairy.s"
-	.include "object_code/common/enemies/fireKeese.s"
-	.include "object_code/common/enemies/waterTektite.s"
-.endif
 	.include "object_code/common/enemies/swordEnemies.s"
 	.include "object_code/common/enemies/peahat.s"
 	.include "object_code/common/enemies/wizzrobe.s"
@@ -601,9 +574,36 @@ m_EnemyCodeSection
 	.include "code/seasons/cutscenes/transitionToDragonOnox.s"
 m_EndObjectCodeSection
 
-; NOTE: This section MUST be processed BEFORE "data/partCodeTable.s"
-.ifdef ENABLE_NEW_GAME_PLUS
+m_EnemyCodeSection
+	.include "object_code/common/enemies/commonCode.s"
 
+	.include "object_code/common/enemies/polsVoice.s"
+	.include "object_code/common/enemies/likelike.s"
+	.include "object_code/common/enemies/gopongaFlower.s"
+	.include "object_code/common/enemies/dekuScrub.s"
+	.include "object_code/common/enemies/wallmaster.s"
+	.include "object_code/common/enemies/podoboo.s"
+	.include "object_code/common/enemies/giantBladeTrap.s"
+	.include "object_code/common/enemies/cheepcheep.s"
+	.include "object_code/common/enemies/podobooTower.s"
+	.include "object_code/common/enemies/thwimp.s"
+	.include "object_code/common/enemies/thwomp.s"
+
+	.include "object_code/common/enemies/tektite.s"
+	.include "object_code/common/enemies/stalfos.s"
+	.include "object_code/common/enemies/keese.s"
+	.include "object_code/common/enemies/babyCucco.s"
+	.include "object_code/common/enemies/zol.s"
+	.include "object_code/common/enemies/floormaster.s"
+	.include "object_code/common/enemies/cucco.s"
+	.include "object_code/common/enemies/giantCucco.s"
+	.include "object_code/common/enemies/butterfly.s"
+	.include "object_code/common/enemies/greatFairy.s"
+	.include "object_code/common/enemies/fireKeese.s"
+	.include "object_code/common/enemies/waterTektite.s"
+m_EndObjectCodeSection
+
+; NOTE: This section MUST be processed BEFORE "data/partCodeTable.s"
 m_PartCodeSection
 	.include "object_code/common/parts/commonCode.s"
 
@@ -688,75 +688,6 @@ m_PartCodeSection
 	.include "object_code/seasons/parts/4a.s"
 	.include "object_code/seasons/parts/dinCrystal.s"
 m_EndObjectCodeSection
-.endif
-
-.ifndef ENABLE_NEW_GAME_PLUS
-m_PartCodeSection
-	.include "object_code/seasons/parts/holesFloortrap.s"
-	.include "object_code/seasons/parts/slingshotEyeStatue.s"
-	.include "object_code/seasons/parts/16.s"
-	.include "object_code/seasons/parts/shootingDragonHead.s"
-	.include "object_code/seasons/parts/arrowShooter.s"
-	.include "object_code/seasons/parts/wallFlameShooterFlames.s"
-	.include "object_code/seasons/parts/buriedMoldorm.s"
-	.include "object_code/seasons/parts/kingMoblinsCannons.s"
-	.include "object_code/seasons/parts/2e.s"
-	.include "object_code/seasons/parts/2f.s"
-	.include "object_code/seasons/parts/poppableBubble.s"
-	.include "object_code/seasons/parts/33.s"
-	.include "object_code/seasons/parts/38.s"
-	.include "object_code/seasons/parts/39.s"
-	.include "object_code/common/parts/vireProjectile.s"
-	.include "object_code/seasons/parts/3b.s"
-	.include "object_code/seasons/parts/poeSisterFlame.s"
-	.include "object_code/seasons/parts/3d.s"
-	.include "object_code/seasons/parts/3e.s"
-	.include "object_code/seasons/parts/kingMoblinBomb.s"
-	.include "object_code/seasons/parts/aquamentusProjectile.s"
-	.include "object_code/seasons/parts/dodongoFireball.s"
-	.include "object_code/seasons/parts/mothulaProjectile2.s"
-	.include "object_code/seasons/parts/43.s"
-	.include "object_code/seasons/parts/44.s"
-	.include "object_code/seasons/parts/45.s"
-	.include "object_code/seasons/parts/46.s"
-	.include "object_code/seasons/parts/47.s"
-	.include "object_code/seasons/parts/48.s"
-	.include "object_code/seasons/parts/49.s"
-	.include "object_code/seasons/parts/4a.s"
-	.include "object_code/seasons/parts/dinCrystal.s"
-m_EndObjectCodeSection
-.endif
-
-.ifdef ENABLE_NEW_GAME_PLUS
-m_EnemyCodeSection
-	.include "object_code/common/enemies/commonCode.s"
-
-	.include "object_code/common/enemies/polsVoice.s"
-	.include "object_code/common/enemies/likelike.s"
-	.include "object_code/common/enemies/gopongaFlower.s"
-	.include "object_code/common/enemies/dekuScrub.s"
-	.include "object_code/common/enemies/wallmaster.s"
-	.include "object_code/common/enemies/podoboo.s"
-	.include "object_code/common/enemies/giantBladeTrap.s"
-	.include "object_code/common/enemies/cheepcheep.s"
-	.include "object_code/common/enemies/podobooTower.s"
-	.include "object_code/common/enemies/thwimp.s"
-	.include "object_code/common/enemies/thwomp.s"
-
-	.include "object_code/common/enemies/tektite.s"
-	.include "object_code/common/enemies/stalfos.s"
-	.include "object_code/common/enemies/keese.s"
-	.include "object_code/common/enemies/babyCucco.s"
-	.include "object_code/common/enemies/zol.s"
-	.include "object_code/common/enemies/floormaster.s"
-	.include "object_code/common/enemies/cucco.s"
-	.include "object_code/common/enemies/giantCucco.s"
-	.include "object_code/common/enemies/butterfly.s"
-	.include "object_code/common/enemies/greatFairy.s"
-	.include "object_code/common/enemies/fireKeese.s"
-	.include "object_code/common/enemies/waterTektite.s"
-m_EndObjectCodeSection
-.endif
 
 .BANK $0b SLOT 1
 .ORG 0
@@ -842,6 +773,9 @@ m_section_superfree bank_0_Ext NAMESPACE bank0Ext
 .ends
 
 m_section_superfree Menu_Code_2 NAMESPACE menuCode2
+	.include "code/menu_code/ringMenu.s"
+	.include "code/menu_code/fakeResetMenu.s"
+	.include "code/menu_code/saveAndQuitMenu.s"
 	.ifdef ENABLE_SETTINGS_MENU
 		.include "code/menu_code/settingsMenu.s"
 	.endif

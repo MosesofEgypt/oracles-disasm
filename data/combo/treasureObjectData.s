@@ -279,10 +279,8 @@ treasureObjectData05_ages:
 	m_TreasureSubid $03, $02, $ff, $11, TREASURE_OBJECT_SWORD_04
 	m_TreasureSubid $03, $03, $ff, $12, TREASURE_OBJECT_SWORD_05
 	m_TreasureSubid $01, $01, $75, $10, TREASURE_OBJECT_SWORD_06
-.ifdef ENABLE_NEW_GAME_PLUS
 	m_TreasureSubid $09, $04, <TX_00_BUTTER_SWORD, $83, TREASURE_OBJECT_SWORD_07
 	m_TreasureSubid $03, $04, $ff, $83, TREASURE_OBJECT_SWORD_08
-.endif
 
 treasureObjectData05_seasons:
 	m_BeginTreasureSubids TREASURE_SWORD
@@ -292,11 +290,9 @@ treasureObjectData05_seasons:
 	m_TreasureSubid $03, $01, $ff, $10, TREASURE_OBJECT_SWORD_03
 	m_TreasureSubid $03, $02, $ff, $11, TREASURE_OBJECT_SWORD_04
 	m_TreasureSubid $03, $03, $ff, $12, TREASURE_OBJECT_SWORD_05
-.ifdef ENABLE_NEW_GAME_PLUS
 	m_TreasureSubid $09, $04, $ff, $85, TREASURE_OBJECT_SWORD_06 ; needs to be here as a stub
 	m_TreasureSubid $09, $04, <TX_00_BUTTER_SWORD, $85, TREASURE_OBJECT_SWORD_07
 	m_TreasureSubid $03, $04, $ff, $85, TREASURE_OBJECT_SWORD_08
-.endif
 
 treasureObjectData06_ages:
 	m_BeginTreasureSubids TREASURE_BOOMERANG
@@ -467,7 +463,9 @@ treasureObjectData2c:
 	m_TreasureSubid $02, $03, $34, $35, TREASURE_OBJECT_RING_BOX_02
 	m_TreasureSubid $02, $02, $58, $34, TREASURE_OBJECT_RING_BOX_03
 	m_TreasureSubid $02, $03, $59, $35, TREASURE_OBJECT_RING_BOX_04
+.if MAX_RING_BOX_LEVEL > 3
 	m_TreasureSubid $02, $04, <TX_00_L4_RING_BOX, $35, TREASURE_OBJECT_RING_BOX_05
+.endif
 
 treasureObjectData2d_ages:
 	m_BeginTreasureSubids TREASURE_RING

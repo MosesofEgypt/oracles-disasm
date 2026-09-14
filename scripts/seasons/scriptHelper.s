@@ -1097,11 +1097,7 @@ child_giveRupees:
 ; INTERAC_GORON
 ; ==================================================================================================
 getNextRingboxLevel:
-.ifdef RESIZE_RING_BOX
 	call getRingBoxLevel
-.else
-	ld a,(wRingBoxLevel)
-.endif
 	dec a
 	ld hl,@ringBoxCapacities
 	rst_addAToHl
@@ -1115,7 +1111,9 @@ getNextRingboxLevel:
 @ringBoxCapacities:
 	.db RING_BOX_L2_SIZE
 	.db RING_BOX_L3_SIZE
+.if MAX_RING_BOX_LEVEL > 3
 	.db RING_BOX_L4_SIZE
+.endif
 
 ; ==================================================================================================
 ; INTERAC_PIRATIAN

@@ -107,6 +107,8 @@ ifdef MORE_MESSAGE_SPEEDS
 	ORACLE_REDUX_DEFINES += -D MORE_MESSAGE_SPEEDS
 endif
 
+REDUX_CFG_FILES = $(shell find redux_config -name '*.s' -or -name '*.env')
+
 ifeq ($(ROM_COMBO), 1)
 include comboMakefile
 endif
@@ -297,19 +299,19 @@ $(BUILD_DIR)/*.o: $(COMMON_INCLUDE_FILES) Makefile
 # HACK-BASE: $(GAME).o depends on new expanded tileset layout files.
 $(BUILD_DIR)/$(GAME).o: tileset_layouts_expanded/$(GAME)/*.bin
 
-$(BUILD_DIR)/$(GAME).o: $(GAME).s $(HASHFILES) Makefile | $(BUILD_DIR)
+$(BUILD_DIR)/$(GAME).o: $(GAME).s $(HASHFILES) $(BUILD_DIR)/textDefines.s $(REDUX_CFG_FILES) Makefile | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
 
-$(BUILD_DIR)/gfxdata.o: gfxdata.s | $(BUILD_DIR)
+$(BUILD_DIR)/gfxdata.o: gfxdata.s $(REDUX_CFG_FILES) | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
 
-$(BUILD_DIR)/textAndRoomData.o: textAndRoomData.s $(BUILD_DIR)/textData.s $(BUILD_DIR)/textDefines.s | $(BUILD_DIR)
+$(BUILD_DIR)/textAndRoomData.o: textAndRoomData.s $(BUILD_DIR)/textData.s $(REDUX_CFG_FILES) | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
 
-$(BUILD_DIR)/%.o: code/%.s | $(BUILD_DIR)
+$(BUILD_DIR)/%.o: code/%.s $(REDUX_CFG_FILES) | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
 
-$(BUILD_DIR)/rooms/%.cmp: rooms/$(GAME)/small/%.bin | $(BUILD_DIR)/rooms
+$(BUILD_DIR)/rooms/%.cmp: rooms/$(GAME)/small/%.bin $(REDUX_CFG_FILES) | $(BUILD_DIR)/rooms
 	@echo "Compressing $< to $@..."
 	@$(PYTHON) tools/build/compressRoomLayout.py $< $@ $(OPTIMIZE)
 

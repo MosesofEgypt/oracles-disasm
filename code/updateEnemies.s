@@ -157,45 +157,4 @@ updateEnemy:
 	ld a,(de)
 	call getEnemyCodeTable
 
-.if defined(ENABLE_NEW_GAME_PLUS) || defined(ROM_COMBO)
 	jp updateObjectCaller
-.else
-	.if defined(ROM_AGES)
-		; Calculate bank number in 'b'
-		ld b,$0f
-		cp $70
-		jr nc,+
-		dec b
-		cp $30
-		jr nc,+
-		dec b
-		cp $08
-		jr nc,+
-		ld b,$10
-		+
-	.else ; ROM_SEASONS
-
-		ld b,$0f
-		cp $08
-		jr c,+
-		dec b
-		cp $70
-		jr nc,+
-		dec b
-		cp $30
-		jr nc,+
-		dec b
-	.endif
-	+
-
-	; hl = enemyCodeTable + a*2
-	rst_addDoubleIndex
-	rst_derefHl
-
-	ld a,b
-	setrombank
-
-	ld a,c
-	or a
-	jp jpHl
-.endif
