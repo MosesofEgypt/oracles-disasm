@@ -5904,6 +5904,30 @@ secretFunctionCaller:
 	SECRETFUNC_LOAD_UNPACKED_SECRET	db ; 4
 .ende
 
+.if defined(ROM_COMBO)
+getGlobalFlagForSisterSecret:
+	push de
+	callabaf bank0Ext.getGlobalFlagForSisterSecret_body
+	pop de
+	ret
+
+; set the sister flag for any secret flags being set
+setGlobalFlagForSisterSecret:
+	cp GLOBALFLAG_FIRST_AGES_BEGAN_SECRET
+	ret c
+	cp GLOBALFLAG_78
+	ret nc
+
+	cp GLOBALFLAG_FIRST_SEASONS_BEGAN_SECRET
+	jr nc,+
+		add 20
+		jr ++
+	+
+		sub 20
+	++
+	ld hl,wGlobalFlags
+	jp setFlag
+.endif
 
 ;;
 ; Opens a secret input menu.
@@ -11618,16 +11642,8 @@ linkState07:
 itemDelete:
 	ld h,d
 	ld l,Item.start
-	ld b,$10
-	xor a
---
-	ldi (hl),a
-	ldi (hl),a
-	ldi (hl),a
-	ldi (hl),a
-	dec b
-	jr nz,--
-	ret
+	ld b,$04
+	jp clearMemory16ByteBlocks
 
 ;;
 ; Updates an item's angle based on its direction.
@@ -11919,16 +11935,8 @@ enemyDelete:
 	call objectRemoveFromAButtonSensitiveObjectList
 	ld l,e
 	ld h,d
-	ld b,$10
-	xor a
--
-	ldi (hl),a
-	ldi (hl),a
-	ldi (hl),a
-	ldi (hl),a
-	dec b
-	jr nz,-
-	ret
+	ld b,$04
+	jp clearMemory16ByteBlocks
 
 ;;
 ; Deletes the enemy (clears its memory), then replaces its ID with the new value.
@@ -12232,6 +12240,11 @@ checkGlobalFlag:
 ;;
 ; @param	a	Global flag to set
 setGlobalFlag:
+.if defined(ROM_COMBO)
+	push af
+	call setGlobalFlagForSisterSecret
+	pop af
+.endif
 	ld hl,wGlobalFlags
 	jp setFlag
 
@@ -14571,16 +14584,8 @@ interactionDeleteAndUnmarkSolidPosition:
 interactionDelete:
 	ld h,d
 	ld l,Interaction.start
-	ld b,$10
-	xor a
--
-	ldi (hl),a
-	ldi (hl),a
-	ldi (hl),a
-	ldi (hl),a
-	dec b
-	jr nz,-
-	ret
+	ld b,$04
+	jp clearMemory16ByteBlocks
 
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
@@ -15057,16 +15062,8 @@ getFreePartSlot:
 partDelete:
 	ld h,d
 	ld l,Part.start
-	ld b,$10
-	xor a
--
-	ldi (hl),a
-	ldi (hl),a
-	ldi (hl),a
-	ldi (hl),a
-	dec b
-	jr nz,-
-	ret
+	ld b,$04
+	jp clearMemory16ByteBlocks
 
 ;;
 ; @param hl Pointer to flag mask data(first byte is byte count)

@@ -92,6 +92,75 @@ groups:
       Do you need that
       to be repeated?
        \opt()Yes \opt()No
+
+- group: 0x53
+  data:
+  - name: TX_5302
+    index: 0x02
+    text: |-
+      Here is the
+      \col(1)secret\col(0).\stop
+      \jump(TX_53_QUIET_WHISPERING)
+
+  - name: TX_5308
+    index: 0x08
+    text: |-
+      Here's the
+      \col(1)secret\col(0)!\stop
+      \jump(TX_53_QUIET_WHISPERING)
+
+  - name: TX_530e
+    index: 0x0e
+    text: |-
+      This is it!\stop
+      \jump(TX_53_QUIET_WHISPERING)
+
+  - name: TX_5314
+    index: 0x14
+    text: |-
+      The \col(1)secret\col(0) is:\stop
+      \jump(TX_53_QUIET_WHISPERING)
+
+  - name: TX_531a
+    index: 0x1a
+    text: |-
+      This was \col(1)secret\col(0)!\stop
+      \jump(TX_53_QUIET_WHISPERING)
+
+  - name: TX_5320
+    index: 0x20
+    text: |-
+      This is it!\stop
+      \jump(TX_53_QUIET_WHISPERING)
+  - name: TX_5326
+    index: 0x26
+    text: |-
+      The \col(1)secret\col(0) is:\stop
+      \jump(TX_53_QUIET_WHISPERING)
+
+  - name: TX_532c
+    index: 0x2c
+    text: |-
+      This is it:\stop
+      \jump(TX_53_QUIET_WHISPERING)
+
+  - name: TX_5333
+    index: 0x33
+    text: |-
+      The \col(1)secret\col(0) is:\stop
+      \jump(TX_53_QUIET_WHISPERING)
+
+  - name: TX_5338
+    index: 0x38
+    text: |-
+      The \col(1)secret\col(0) is:\stop
+      \jump(TX_53_QUIET_WHISPERING)
+
+  - name: TX_53_QUIET_WHISPERING
+    index: auto
+    text: |-
+      (very quiet
+       whispering)
 - group: 0x55
   data:
   - name: TX_550d

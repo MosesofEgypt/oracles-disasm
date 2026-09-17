@@ -2766,13 +2766,20 @@ oldManScript_givesShieldUpgrade:
 	wait 30
 
 	setglobalflag GLOBALFLAG_DONE_LIBRARY_SECRET
+.if !defined(ROM_COMBO)
 	generatesecret LIBRARY_RETURN_SECRET
 	showtext TX_3313
+.endif
 	scriptjump @warpLinkOut
 
 @alreadyToldSecret:
+.if defined(ROM_COMBO)
+	showtextlowindex <TX_330d
+	checktext
+.else
 	generatesecret LIBRARY_RETURN_SECRET
 	showtext TX_3314
+.endif
 
 @warpLinkOut:
 	wait 30
@@ -8031,8 +8038,12 @@ symmetryNpcSubid8And9Script:
 	setglobalflag GLOBALFLAG_DONE_SYMMETRY_SECRET
 
 @alreadyDoneSecret:
+.if defined(ROM_COMBO)
+	showtextlowindex <TX_2d25
+.else
 	generatesecret SYMMETRY_RETURN_SECRET
 	showtextlowindex <TX_2d2b
+.endif
 
 @resume:
 	enableinput
@@ -8278,9 +8289,18 @@ troySubid0Script:
 	wait 30
 	setglobalflag GLOBALFLAG_DONE_TROY_SECRET
 
+.if defined(ROM_COMBO)
+	scriptjump @alreadyDoneSecret2
+
+@alreadyDoneSecret:
+	showtextlowindex <TX_2c0b
+
+@alreadyDoneSecret2:
+.else
 @alreadyDoneSecret:
 	generatesecret TROY_RETURN_SECRET
 	showtext TX_2c0d
+.endif
 	enableinput
 	scriptjump @loop
 

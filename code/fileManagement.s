@@ -172,6 +172,31 @@ initializeNgpFile:
 	call applyFlagMask
 	pop de
 
+	; reset the flags for any secrets that don't have both
+	; the "begin" and "done" flags set. the "begin" flag for
+	; the sister secret in each game will be set when the
+	; secret is learned in the first game, and the "done"
+	; flag will be set when it's told in the other game.
+	; for example, the DEKU and TINGLE secret are sisters
+	; as they're mutually exclusive based on the order the
+	; games are played, but they still give the same reward.
+	; if both aren't set then NG+ was started without a secret
+	; having been told, so the process needs to be restarted.
+	ld hl,@ngpPairedGlobalFlags
+	ldi a,(hl)
+	-
+		ld b,a
+		ldi a,(hl)
+		ld c,a
+		call @resetPairedFlags
+		ld a,c ; swap the begin and done
+		ld c,b ; flags around to check
+		ld b,a ; both cases
+		call @resetPairedFlags
+
+		ldi a,(hl)
+		jr nz,-
+
 	; mask out treasure flags to keep from previous game cycle
 	ld hl,ngpAndComboTreasureFlagMask
 	ld de,wObtainedTreasureFlags
@@ -272,6 +297,17 @@ initializeNgpFile:
 	ld (hl),a
 	ret
 
+@resetPairedFlags:
+	push hl
+	ld a,c
+	call checkGlobalFlag
+	pop hl
+	ld a,b
+	push hl
+	call z,unsetGlobalFlag
+	pop hl
+	ret
+
 @bonusInventoryItems:
 	.db TREASURE_BIGGORON_SWORD,	$00
 	.db TREASURE_BOMBCHUS,			$00
@@ -280,8 +316,6 @@ initializeNgpFile:
 
 ; masks for each GLOBALFLAG that should persist between NG+ cycles
 @ngpGlobalFlagMask:
-
-.if defined(ROM_COMBO) || defined(ROM_AGES)
 	.db $0f; number of bytes to mask
 
 	.db $ff ; keep all first $0a flags
@@ -307,13 +341,34 @@ initializeNgpFile:
 	.db $90 ; GLOBALFLAG_STARTED_TRADE_QUEST
 	;         GLOBALFLAG_GOT_RED_AND_BLUE_ORE
 .endif
+	.db $b7 ; keep MOST flags from $50 to $78(linked secrets)
+	.db $df ; the ones we'll reset each time though are as follows:
+	.db $7e ;   DIVER_SECRET, TEMPLE_SECRET
+	.db $fb ;   MAMAMU_SECRET, PLEN_SECRET
+	.db $ed
 
-	.db $ff ; keep all flags from $50 to $78(linked secrets)
-	.db $ff
-	.db $ff
-	.db $ff
-	.db $ff
-.endif
+; list of global flags for secrets that form a pair of begin/end pair.
+; this is used to determine if an end secret is set(for carrying over
+; to the other game), and resetting it on NG+ if the begin isn't set.
+@ngpPairedGlobalFlags:
+	.db GLOBALFLAG_BEGAN_KING_ZORA_SECRET,	GLOBALFLAG_DONE_KING_ZORA_SECRET
+	.db GLOBALFLAG_BEGAN_LIBRARY_SECRET,	GLOBALFLAG_DONE_LIBRARY_SECRET
+	.db GLOBALFLAG_BEGAN_TOKAY_SECRET,		GLOBALFLAG_DONE_TOKAY_SECRET
+	.db GLOBALFLAG_BEGAN_TINGLE_SECRET,		GLOBALFLAG_DONE_TINGLE_SECRET
+	.db GLOBALFLAG_BEGAN_ELDER_SECRET,		GLOBALFLAG_DONE_ELDER_SECRET
+	.db GLOBALFLAG_BEGAN_SYMMETRY_SECRET,	GLOBALFLAG_DONE_SYMMETRY_SECRET
+	.db GLOBALFLAG_BEGAN_FAIRY_SECRET,		GLOBALFLAG_DONE_FAIRY_SECRET
+	.db GLOBALFLAG_BEGAN_TROY_SECRET,		GLOBALFLAG_DONE_TROY_SECRET
+
+	.db GLOBALFLAG_BEGAN_CLOCK_SHOP_SECRET,	GLOBALFLAG_DONE_CLOCK_SHOP_SECRET
+	.db GLOBALFLAG_BEGAN_SMITH_SECRET,		GLOBALFLAG_DONE_SMITH_SECRET
+	.db GLOBALFLAG_BEGAN_PIRATE_SECRET,		GLOBALFLAG_DONE_PIRATE_SECRET
+	.db GLOBALFLAG_BEGAN_DEKU_SECRET,		GLOBALFLAG_DONE_DEKU_SECRET
+	.db GLOBALFLAG_BEGAN_BIGGORON_SECRET,	GLOBALFLAG_DONE_BIGGORON_SECRET
+	.db GLOBALFLAG_BEGAN_RUUL_SECRET,		GLOBALFLAG_DONE_RUUL_SECRET
+	.db GLOBALFLAG_BEGAN_GRAVEYARD_SECRET,	GLOBALFLAG_DONE_GRAVEYARD_SECRET
+	.db GLOBALFLAG_BEGAN_SUBROSIAN_SECRET,	GLOBALFLAG_DONE_SUBROSIAN_SECRET
+	.db $00 ; terminator
 
 .endif
 
@@ -622,7 +677,8 @@ loadAcrossComboGame:
 	m_LoadSavefileSection_end wDeathRespawnBuffer,	wBoughtShopItems1
 	m_LoadSavefileSection_end wCompanionStates,	    wObtainedTreasureFlags
 	m_LoadSavefileSection_end wEssencesObtained,	wTradeItem+1
-	m_LoadSavefileSection_end wKilledGoldenEnemies,	wSlingshotSelectedSeeds+1
+	m_LoadSavefileSection_end wKilledGoldenEnemies,	wGlobalFlags+10
+	m_LoadSavefileSection_end wGlobalFlags+14,	    wSlingshotSelectedSeeds+1
 	m_LoadSavefileSection_end wBiggoronSwordOverflowItem, wSaveFileMainSectionEnd
 	m_LoadSavefileSection_end wGroup0RoomFlags,		wGroupRoomFlagsEnd
 

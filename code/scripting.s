@@ -186,8 +186,29 @@ scriptCmd_showPasswordScreen:
 
 ;;
 @askForSecret:
+.if defined(ROM_COMBO)
+	call getGlobalFlagForSisterSecret
+	call c,checkGlobalFlag
+	; 1 indicates failure
+	ld a,$01
+	jr z,+
+		; success
+		xor a
+	+
+	ld (wTextInputResult),a
+	push bc
+.if defined(ROM_AGES)
+	ld bc,TX_4d_QUIET_WHISPERING
+.else
+	ld bc,TX_53_QUIET_WHISPERING
+.endif
+	call showText
+	pop bc
+	jr ++
+.else
 	ld a,b
 	or $80
+.endif
 ;;
 @openSecretMenu:
 	call openSecretInputMenu
@@ -195,10 +216,15 @@ scriptCmd_showPasswordScreen:
 
 ;;
 @generateSecret:
+.if defined(ROM_COMBO)
+	call getGlobalFlagForSisterSecret
+	call c,setGlobalFlag
+.else
 	ld a,b
 	ld (wShortSecretIndex),a
 	ld bc,$0003
 	call secretFunctionCaller
+.endif
 ++
 	pop hl
 	xor a

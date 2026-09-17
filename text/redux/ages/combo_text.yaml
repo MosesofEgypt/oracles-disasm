@@ -92,6 +92,101 @@ groups:
       Do you need that
       to be repeated?
        \opt()Yes \opt()No
+- group: 0x4d
+  data:
+  - name: TX_4d03
+    index: 0x03
+    text: |-
+      Remember this:\stop
+      \jump(TX_4d_QUIET_WHISPERING)
+
+  - name: TX_4d08
+    index: 0x08
+    text: |-
+      The \col(1)secret\col(0) is:\stop
+      \jump(TX_4d_QUIET_WHISPERING)
+
+  - name: TX_4d0d
+    index: 0x0d
+    text: |-
+      Here goes!\stop
+      \jump(TX_4d_QUIET_WHISPERING)
+
+  - name:
+    - TX_4d11
+    - TX_4d12
+    index:
+    - 0x11
+    - 0x12
+    text: |-
+      Don't mix it up!\stop
+      \jump(TX_4d_QUIET_WHISPERING)
+
+  - name:
+    - TX_4d16
+    - TX_4d17
+    index:
+    - 0x16
+    - 0x17
+    text: |-
+      Tell this \col(1)secret\col(0)
+      to the master at
+      the Subrosian
+      Smithy:\stop
+      \jump(TX_4d_QUIET_WHISPERING)
+
+  - name:
+    - TX_4d1b
+    - TX_4d1c
+    index:
+    - 0x1b
+    - 0x1c
+    text: |-
+      The \col(1)secret\col(0) is:\stop
+      \jump(TX_4d_QUIET_WHISPERING)
+
+  - name: TX_4d21
+    index: 0x21
+    text: |-
+      The \col(1)secret\col(0) is:\stop
+      \jump(TX_4d_QUIET_WHISPERING)
+
+  - name:
+    - TX_4d25
+    - TX_4d26
+    index:
+    - 0x25
+    - 0x26
+    text: |-
+      \sym(0x1c)Love, love
+       the seed!\sym(0x1c)
+      Next is:\stop
+      \jump(TX_4d_QUIET_WHISPERING)
+
+  - name:
+    - TX_4d2a
+    - TX_4d2b
+    index:
+    - 0x2a
+    - 0x2b
+    text: |-
+      Tell this \col(1)secret\col(0)
+      to that
+      mountain-sized
+      \col(3)Biggoron\col(0)!\stop
+      \jump(TX_4d_QUIET_WHISPERING)
+
+  - name: TX_4d30
+    index: 0x30
+    text: |-
+      The \col(1)secret\col(0) is:\stop
+      \jump(TX_4d_QUIET_WHISPERING)
+
+  - name: TX_4d_QUIET_WHISPERING
+    index: auto
+    text: |-
+      (very quiet
+       whispering)
 - group: 0x55
   data:
   - name: TX_550d

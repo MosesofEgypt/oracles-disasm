@@ -1259,7 +1259,15 @@ unluckySailor_checkHave777OreChunks:
 	ret nz
 	ld a,(hl)
 	cp $07
+.ifdef INCREASE_WALLET_SIZE
+	; let it work for 777 or 7777
+	jr z,+
+		cp $77
+		ret nz
+	+
+.else
 	ret nz
+.endif
 	ld a,$01
 	ld (de),a
 	ret

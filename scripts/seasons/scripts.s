@@ -386,6 +386,13 @@ mayorsHouseLadyScript:
 	giveitem TREASURE_RING_BOX, $02
 @provideReturnSecret:
 	wait 20
+.if defined(ROM_COMBO)
+	scriptjump @setDoneFlag
+@doneSecret:
+	showtext TX_3103
+@setDoneFlag:
+	setglobalflag GLOBALFLAG_DONE_RUUL_SECRET
+.else
 @doneSecret:
 	generatesecret RUUL_RETURN_SECRET
 -
@@ -394,6 +401,7 @@ mayorsHouseLadyScript:
 	jumpiftextoptioneq $01, -
 	setglobalflag GLOBALFLAG_DONE_RUUL_SECRET
 	showtext TX_3107
+.endif
 	scriptjump @waitUntilTalkedTo
 
 	
@@ -1919,12 +1927,14 @@ unluckySailorScript:
 	wait 60
 	setglobalflag GLOBALFLAG_DONE_PIRATE_SECRET
 --
+.if !defined(ROM_COMBO)
 	generatesecret PIRATE_RETURN_SECRET
 -
 	showtextlowindex <TX_3a33
 	wait 30
 	jumpiftextoptioneq $00, @gotSecret
 	scriptjump -
+.endif
 @gotSecret:
 	showtextlowindex <TX_3a34
 	enableinput
@@ -2483,6 +2493,7 @@ biggoronScript:
 @correctSecret:
 	loadscript {SCRIPTS_2}.biggoronScript_giveBiggoronSword
 @generateSecret:
+.if !defined(ROM_COMBO)
 	generatesecret BIGGORON_RETURN_SECRET
 -
 	asm15 {SCRIPTS_HELP}.biggoron_loadAnimationData, $0d
@@ -2490,6 +2501,7 @@ biggoronScript:
 	asm15 {SCRIPTS_HELP}.biggoron_loadAnimationData, $0b
 	wait 30
 	jumpiftextoptioneq $00, -
+.endif
 	asm15 {SCRIPTS_HELP}.biggoron_loadAnimationData, $0d
 	showtextlowindex <TX_0b59
 	asm15 {SCRIPTS_HELP}.biggoron_loadAnimationData, $0b
@@ -5546,12 +5558,14 @@ subrosianSmithyScript:
 	setglobalflag GLOBALFLAG_DONE_SMITH_SECRET
 	wait 30
 @generateReturnSecret:
+.if !defined(ROM_COMBO)
 	generatesecret SMITH_RETURN_SECRET
 -
 	showtextlowindex <TX_3b16
 	wait 30
 	jumpiftextoptioneq $00, @gotReturnSecret
 	scriptjump -
+.endif
 @gotReturnSecret:
 	showtextlowindex <TX_3b17
 	enableinput
@@ -6487,11 +6501,13 @@ troyScript_gameBegun:
 	setglobalflag GLOBALFLAG_DONE_CLOCK_SHOP_SECRET
 
 troyScript_generateReturnSecret:
+.if !defined(ROM_COMBO)
 	generatesecret CLOCK_SHOP_RETURN_SECRET
 -
 	showtextlowindex <TX_4c0c
 	wait 30
 	jumpiftextoptioneq $00, -
+.endif
 	showtextlowindex <TX_4c0d
 	enableinput
 	wait 30
@@ -6695,12 +6711,14 @@ linkedGhiniScript_startRound:
 	setcounter1 $2d
 	setglobalflag GLOBALFLAG_DONE_GRAVEYARD_SECRET
 @generateSecret:
+.if !defined(ROM_COMBO)
 	generatesecret GRAVEYARD_RETURN_SECRET
 -
 	showtextlowindex <TX_4c1b
 	wait 30
 	jumpiftextoptioneq $00, @understoodSecret
 	scriptjump -
+.endif
 @understoodSecret:
 	showtextlowindex <TX_4c1c
 	enableinput
@@ -6853,11 +6871,13 @@ goldenCaveSubrosianScript_7d87:
 	giveitem TREASURE_BOMBCHUS, $00
 	wait 20
 --
+.if !defined(ROM_COMBO)
 	generatesecret SUBROSIAN_RETURN_SECRET
 -
 	showtextlowindex <TX_4c2c
 	wait 20
 	jumpiftextoptioneq $01, -
+.endif
 	showtextlowindex <TX_4c2d
 	asm15 {SCRIPTS_HELP}.seasonsFunc_15_652e
 	setglobalflag GLOBALFLAG_DONE_SUBROSIAN_SECRET
@@ -7128,10 +7148,12 @@ dekuScrubScript_doneSecret:
 	checkabutton
 	disableinput
 dekuScrubScript_giveReturnSecret:
+.if !defined(ROM_COMBO)
 	generatesecret DEKU_RETURN_SECRET
 	showtextlowindex <TX_4c46
 	wait 20
 	jumpiftextoptioneq $00, dekuScrubScript_giveReturnSecret
+.endif
 	showtextlowindex <TX_4c47
 	enableinput
 	scriptjump --

@@ -304,8 +304,12 @@ shootingGalleryScript_goronElderNpc:
 @tellSecret:
 	checkabutton
 	jumpifmemoryeq wTmpcfc0.shootingGallery.disableGoronNpcs, $01, @tellSecret
+.if defined(ROM_COMBO)
+	showtext TX_313a
+.else
 	generatesecret ELDER_RETURN_SECRET
 	showtext TX_313e
+.endif
 	scriptjump @tellSecret
 
 ; Parse the response to the goron asking you to take the test
@@ -475,8 +479,10 @@ shootingGalleryScript_goronElderNpc_gameDone:
 	giveitem TREASURE_BIGGORON_SWORD, $00
 	wait 30
 	setglobalflag GLOBALFLAG_DONE_ELDER_SECRET
+.if !defined(ROM_COMBO)
 	generatesecret ELDER_RETURN_SECRET
 	showtext TX_313b
+.endif
 	enableinput
 	scriptjump shootingGalleryScript_goronElderNpc@tellSecret
 @end2:
@@ -3159,14 +3165,18 @@ tokayGameManagerScript_present:
 	wait 30
 
 	setglobalflag GLOBALFLAG_DONE_TOKAY_SECRET
+.if !defined(ROM_COMBO)
 	generatesecret TOKAY_RETURN_SECRET
 	showtextlowindex <TX_0a50
+.endif
 	enableinput
 
 @alreadyGotBombUpgrade:
 	checkabutton
+.if !defined(ROM_COMBO)
 	generatesecret TOKAY_RETURN_SECRET
 	showtextlowindex <TX_0a53
+.endif
 	scriptjump @alreadyGotBombUpgrade
 
 @failedGame:
@@ -3249,6 +3259,12 @@ forestFairyScript_heartContainerSecret:
 
 	generatesecret FAIRY_RETURN_SECRET
 	setglobalflag GLOBALFLAG_DONE_FAIRY_SECRET
+.if defined(ROM_COMBO)
+	scriptjump @enableInput
+
+@alreadyGaveSecret:
+	showtext TX_114b
+.else
 	showtext TX_114c
 	scriptjump @enableInput
 
@@ -3258,6 +3274,7 @@ forestFairyScript_heartContainerSecret:
 	generatesecret FAIRY_RETURN_SECRET
 .endif
 	showtext TX_114d
+.endif
 
 @enableInput:
 	enableinput
@@ -7366,17 +7383,24 @@ kingZoraScript_present_postGame:
 	wait 30
 	callscript @giveSwordUpgrade
 	wait 30
+.if defined(ROM_COMBO)
+	setglobalflag GLOBALFLAG_DONE_KING_ZORA_SECRET
+	scriptjump kingZoraScript_present_afterD7
+.else
 	generatesecret KING_ZORA_RETURN_SECRET
 	setglobalflag GLOBALFLAG_DONE_KING_ZORA_SECRET
 	showtext TX_3439
 	scriptjump @loop
+.endif
 
 @alreadyGotUpgrade:
+.if !defined(ROM_COMBO)
 	; BUG: JP version doesn't show the correct secret when asking the 2nd time onward?
 .ifdef ENABLE_US_BUGFIXES
 	generatesecret KING_ZORA_RETURN_SECRET
 .endif
 	showtext TX_343a
+.endif
 @loop:
 	enableinput
 	scriptjump kingZoraScript_present_postGame
@@ -8110,10 +8134,15 @@ tingleScript:
 	scriptjump @alreadyGotSatchelUpgrade
 
 @showReturnSecret:
+.if defined(ROM_COMBO)
+	setglobalflag GLOBALFLAG_DONE_TINGLE_SECRET
+	scriptjump @alreadyGotSatchelUpgrade
+.else
 	generatesecret TINGLE_RETURN_SECRET
 	setglobalflag GLOBALFLAG_DONE_TINGLE_SECRET
 	showtextlowindex <TX_1e0f
 	scriptjump @endConversation
+.endif
 
 
 @koolooLimpah:
