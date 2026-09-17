@@ -376,8 +376,8 @@ interactiondeSubidData:
 	m_InteractionSubidData $61 $0e $33 ; $83 (Tune of Currents)
 	m_InteractionSubidData $61 $16 $13 ; $84 (Tune of Ages)
 .if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
-	m_InteractionSubidData $c9 $00 $00 ; $85 (L-4 sword)
-	m_InteractionSubidData $c9 $02 $00 ; $86 (L-4 shield)
+	m_InteractionSubidData $c9 $00 $30 ; $85 (L-4 sword)
+	m_InteractionSubidData $c9 $02 $30 ; $86 (L-4 shield)
 .endif
 
 	m_InteractionSubidDataEnd

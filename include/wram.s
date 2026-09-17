@@ -2533,7 +2533,7 @@ wSecretInputType: ; $cc88/$cca2
 ; $ff: 5-char secret entry
 	db
 wTextInputResult: ; $cc89/$cca3
-; This is usually set to 0 on successful text input, 1 or failure.
+; This is usually set to 0 on successful text input, 1 on failure.
 ; In the case of telling secrets to Farore, this actually returns the value of the input
 ; secret's "wShortSecretType".
 	db

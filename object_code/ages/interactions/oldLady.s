@@ -79,7 +79,7 @@ m_InteractionCode $3d
 	jr ++
 
 @initSubid5:
-	ld a,$09
+	ld a,RUUL_SECRET & $0f
 ++
 	ld e,Interaction.var3f
 	ld (de),a

@@ -119,7 +119,7 @@ m_InteractionCode $3b
 	jp interactionSetScript
 
 @initSubid06:
-	ld a,$05
+	ld a,PIRATE_SECRET & $0f
 	ld e,Interaction.var3f
 	ld (de),a
 	ld hl,{SCRIPTS_1}.linkedGameNpcScript

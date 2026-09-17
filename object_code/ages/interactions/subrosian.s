@@ -81,7 +81,7 @@ subrosian_subid04:
 
 @state0:
 	call subrosian_initGraphicsAndIncState
-	ld a,$04
+	ld a,SMITH_SECRET & $0f
 
 @initSecretTellingNpc:
 	ld e,Interaction.var3f

@@ -63,7 +63,7 @@ m_InteractionCode $be
 	call interactionInitGraphics
 	call interactionIncState
 	ld l,$7e
-	ld (hl),$02
+	ld (hl),TROY_SECRET
 	ld hl,{SCRIPTS_1}.linkedGameNpcScript
 	call interactionSetScript
 @@state1:

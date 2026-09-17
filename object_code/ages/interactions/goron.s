@@ -626,7 +626,7 @@ goronSubid0f:
 @state0:
 	call goron_initGraphicsAndIncState
 	ld l,Interaction.var3f
-	ld (hl),$08
+	ld (hl),BIGGORON_SECRET & $0f
 	ld hl,{SCRIPTS_1}.linkedGameNpcScript
 	call interactionSetScript
 	call interactionRunScript
