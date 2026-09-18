@@ -421,10 +421,7 @@ updateSoundFrequencyAndPlay:
 	jr z,++
 	ld d,$ff
 ++
-	push de
-	m_ReadChannelData wChannelSweep
-	pop de
-	ld e,a
+	ld e,c
 	ld a,(wSoundChannel)
 	sla a
 	add <hSoundData3
@@ -438,15 +435,8 @@ updateSoundFrequencyAndPlay:
 	add hl,de
 	ld a,(wSoundChannel)
 	sla a
-	;add <hSoundData3
-	;m_WriteHlToFF00PlusA
-	ld b,a
-	ld a,l
-	ld c,<hSoundData3
-	call writeIndexedHighRamAndIncrement
-	ld a,h
-	ld ($ff00+c),a
-	inc c
+	add <hSoundData3
+	m_WriteHlToFF00PlusA
 
 @handleVibrato:
 	m_ReadChannelData wChannelVibratoActive
@@ -465,7 +455,6 @@ updateSoundFrequencyAndPlay:
 
 @endVibratoWait:
 	m_WriteChannelData wChannelVibratoActive, $10
-	m_WriteChannelData wChannelVibratoCounters, $00
 
 @useVibrato:
 	m_ReadChannelData wChannelVibratoCounters
@@ -492,19 +481,18 @@ updateSoundFrequencyAndPlay:
 	pop hl
 
 	; Get final offset by multiplying raw offset with intensity
-	;jr nz,+
-	;	ld h,a
-	;	ld l,a
-	;	jr @updateSoundFrequencyWithOffset
-	;+
-	;ld e,l
-	;ld d,h
-	;-
-	;	dec a
-	;	jr z,@updateSoundFrequencyWithOffset
-	;	add hl,de
-	;	jr -
-	call multiplyHlByA
+	jr nz,+
+		ld h,a
+		ld l,a
+		jr @updateSoundFrequencyWithOffset
+	+
+	ld e,l
+	ld d,h
+	-
+		dec a
+		jr z,@updateSoundFrequencyWithOffset
+		add hl,de
+		jr -
 
 ;;
 @updateSoundFrequencyWithOffset:
@@ -550,16 +538,11 @@ updatePlayedFrequency:
 	add b
 	ld b,a
 
-	;add R_SQ1_PERIOD_LOW
-	;ld c,a
-	;ld a,(wSoundFrequencyL)
-	;ld ($ff00+c),a
-	;inc c
-
-	push bc
+	add R_SQ1_PERIOD_LOW
+	ld c,a
 	ld a,(wSoundFrequencyL)
-	ld c,R_SQ1_PERIOD_LOW
-	call writeIndexedHighRamAndIncrement
+	ld ($ff00+c),a
+	inc c
 
 	ld a,(wSoundCmdEnvelope)
 	ld e,a
@@ -568,24 +551,12 @@ updatePlayedFrequency:
 	ld ($ff00+c),a
 	inc c
 
-	;ld a,R_SQ1_TIMER_AND_DUTY
-	;add b
-	;ld c,a
-	;m_ReadChannelData wChannelDutyCycles
-	;ld ($ff00+c),a
-	;ret
-
-	pop bc
-	push bc
-	ld hl,wChannelDutyCycles
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
-	pop bc
-	ld c,R_SQ1_TIMER_AND_DUTY
-	call writeIndexedHighRamAndIncrement
+	ld a,R_SQ1_TIMER_AND_DUTY
+	add b
+	ld c,a
+	m_ReadChannelData wChannelDutyCycles
+	ld ($ff00+c),a
+	inc c
 	ret
 
 @wave:
@@ -640,11 +611,6 @@ getNextChannelByte:
 	ld a,($ff00+c)
 	ld h,a
 
-	;add a
-	;ld hl,hSoundChannelAddresses
-	;rst_addAToHl
-	;rst_derefHl
-
 	ld a,b
 	add <hSoundChannelBanks
 	ld c,a
@@ -656,17 +622,9 @@ getNextChannelByte:
 
 	; move to the next byte in the data
 	ld a,b
-	;add a
-	;add <hSoundChannelAddresses
-	;m_WriteHlToFF00PlusA
-	sla a
-	ld b,a
-	ld a,l
-	ld c,<hSoundChannelAddresses
-	call writeIndexedHighRamAndIncrement
-	ld a,h
-	ld ($ff00+c),a
-	inc c
+	add a
+	add <hSoundChannelAddresses
+	m_WriteHlToFF00PlusA
 
 	pop af
 	pop hl
@@ -690,13 +648,8 @@ doNextChannelCommand:
 	jp standardSoundCmd
 
 @cmdf0Toff:
-	add $10
-	ld hl,@table
-	call readWordFromTable
-	jp hl
-
-@table:
-	;rst_jumpTable
+	and $0f
+	rst_jumpTable
 	.dw channelCmdf0
 	.dw channelCmdf1
 	.dw channelCmdf2
@@ -881,12 +834,7 @@ channelCmdf6:
 ;;
 standardSoundCmd:
 	ld a,(wSoundChannel)
-	ld hl,@table
-	call readWordFromTable
-	jp hl
-
-@table:
-	;rst_jumpTable
+	rst_jumpTable
 	.dw standardCmdMusicSquareChannel1
 	.dw standardCmdMusicSquareChannel2
 	.dw standardCmdSfxSquareChannel1
@@ -993,15 +941,8 @@ setSoundFrequency:
 
 	ld a,(wSoundChannel)
 	sla a
-	;add <hSoundData3
-	;m_WriteHlToFF00PlusA
-	ld b,a
-	ld a,l
-	ld c,<hSoundData3
-	call writeIndexedHighRamAndIncrement
-	ld a,h
-	ld ($ff00+c),a
-	inc c
+	add <hSoundData3
+	m_WriteHlToFF00PlusA
 
 setFrequencyToHl:
 	ld a,l
@@ -1153,16 +1094,11 @@ getChannelVolume:
 @affectedByMusicVolume:
 	ld a,(wMusicVolume)
 	and $03
-	rst_jumpTable
-	.dw @muted
-	.dw @quarterVolume
-	.dw @halfVolume
-	.dw @fullVolume
-
-@muted:
-	pop af
-	xor a
-	ret
+	jr z,@mute
+	dec a
+	jr z,@quarterVolume
+	dec a
+	jr z,@halfVolume
 
 @fullVolume:
 	pop af
@@ -1178,6 +1114,11 @@ getChannelVolume:
 	pop af
 	srl a
 	srl a
+	ret
+
+@mute:
+	pop af
+	xor a
 	ret
 
 standardCmdMusicWaveChannel:
@@ -1249,11 +1190,6 @@ getWaveChannelVolume:
 	jr z,@quarterVolume
 	dec a
 	jr z,@halfVolume
-	;rst_jumpTable
-	;.dw @mute
-	;.dw @quarterVolume
-	;.dw @halfVolume
-	;.dw @fullVolume
 
 @fullVolume:
 	ld a,$20
@@ -1334,12 +1270,7 @@ channelCmdff:
 ; Ensures no sound is audible on the current channel by setting the volume to $0 or turning off the wave channel DAC
 silencePlayedSound:
 	ld a,(wSoundChannel)
-	ld hl,@table
-	call readWordFromTable
-	jp hl
-
-@table:
-	;rst_jumpTable
+	rst_jumpTable
 	.dw @musicSquareChannel
 	.dw @musicSquareChannel
 	.dw @sfxSquareChannel
@@ -1456,37 +1387,11 @@ channelCmdfe:
 	call getNextChannelByte
 	ld h,a
 	ld a,(wSoundChannel)
-	;add a
-	;add <hSoundChannelAddresses
-	;m_WriteHlToFF00PlusA
-
-	sla a
-	ld b,a
-	ld a,l
-	ld c,<hSoundChannelAddresses
-	call writeIndexedHighRamAndIncrement
-	ld a,h
-	ld ($ff00+c),a
-	inc c
+	add a
+	add <hSoundChannelAddresses
+	m_WriteHlToFF00PlusA
 
 	jp doNextChannelCommand
-
-multiplyHlByA:
-	or a
-	jr nz,+
-	ld hl,$0000
-	ret
-+
-	ld e,l
-	ld d,h
---
-	dec a
-	jr z,+
-
-	add hl,de
-	jp --
-+
-	ret
 
 .include "audio/common/frequency.s"
 .include "audio/common/envelope.s"
@@ -1733,18 +1638,6 @@ readWordFromTable:
 	ld d,(hl)
 	ld h,d
 	ld l,e
-	ret
-
-;;
-; Adds b to c, writes a to ($ff00+c), increments c.
-writeIndexedHighRamAndIncrement:
-	push af
-	ld a,b
-	add c
-	ld c,a
-	pop af
-	ld ($ff00+c),a
-	inc c
 	ret
 
 .include "audio/common/noise.s"

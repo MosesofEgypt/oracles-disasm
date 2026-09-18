@@ -2946,6 +2946,10 @@ enableTimer:
 
 ;;
 timerInterrupt:
+	; disable only the timer interrupt
+	ld a,$1b
+	ldh (<IE),a
+
 	ld hl,hFFB7
 	bit 7,(hl)
 	jr nz,@interruptEnd
@@ -2984,11 +2988,7 @@ timerInterrupt:
 -
 	ld l,a
 	ldi a,(hl)
-	push bc
-	push hl
 	call audio.b39_playSound
-	pop hl
-	pop bc
 	ld a,l
 	and $af
 	cp b
@@ -3003,6 +3003,9 @@ timerInterrupt:
 	ld ($2222),a
 
 @interruptEnd:
+	; reenable the timer interrupt
+	ld a,$1f
+	ldh (<IE),a
 	pop hl
 	pop de
 	pop bc
