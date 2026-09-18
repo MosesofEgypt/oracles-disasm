@@ -61,7 +61,7 @@ m_InteractionCode $23
 	ld e,Interaction.xh
 	ld a,(de)
 	rst_addDoubleIndex
-	rst_derefHl
+	derefHl
 
 	ldi a,(hl)
 	ld e,Interaction.var31
@@ -154,7 +154,7 @@ m_InteractionCode $23
 	ld h,d
 	ld l,Interaction.relatedObj2
 	ld e,l
-	rst_derefHl
+	derefHl
 
 	ldi a,(hl)
 	ld c,a

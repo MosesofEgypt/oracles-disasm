@@ -440,7 +440,7 @@ agesFunc_10_7298:
 	ld a,PALH_05
 	call loadPaletteHeader
 	call checkIsLinkedGame
-.if defined(ENABLE_NEW_GAME_PLUS)
+.if defined(ENABLE_NEW_GAME_PLUS) && defined(ROM_COMBO)
 	ld a,GFXH_NEW_GAME_PLUS_BANNER
 .else
 	ld a,GFXH_HEROS_SECRET_TEXT

@@ -155,13 +155,9 @@ initializeNgpFile:
 	m_ClearSavefileSection_end wDeathRespawnBuffer, wBoughtShopItems1
 	m_ClearSavefileSection_end wCompanionStates, wGashaSpotFlags
 	m_ClearSavefileSection_end (wGashaMaturity+2), wObtainedTreasureFlags
+	m_ClearSavefileSection_end wChildStage, (wSlingshotSelectedSeeds+1)
+	m_ClearSavefileSection_end wPortalGroup, wSaveFileMainSectionEnd
 	call clearShopFlags
-
-	xor a
-	ld (wEssencesObtained),a
-	.ifndef ENABLE_MULTI_RING
-		ld (wActiveRing),a
-	.endif
 
 	; reset global flags while avoiding ones we want to
 	; persist across NG cycles, such as vasu rewards,
@@ -195,6 +191,7 @@ initializeNgpFile:
 		call @resetPairedFlags
 
 		ldi a,(hl)
+		or a
 		jr nz,-
 
 	; mask out treasure flags to keep from previous game cycle
@@ -212,9 +209,10 @@ initializeNgpFile:
 	ld (wNumBombs),a
 	ld (wNumBombchus),a
 
-	ld (wSatchelSelectedSeeds),a
-	ld (wShooterSelectedSeeds),a
-	ld (wSlingshotSelectedSeeds),a
+	ld (wEssencesObtained),a
+	.ifndef ENABLE_MULTI_RING
+		ld (wActiveRing),a
+	.endif
 
 	ld hl,initialFileVariables_ages
 	call initializeFileVariables
@@ -341,11 +339,11 @@ initializeNgpFile:
 	.db $90 ; GLOBALFLAG_STARTED_TRADE_QUEST
 	;         GLOBALFLAG_GOT_RED_AND_BLUE_ORE
 .endif
-	.db $b7 ; keep MOST flags from $50 to $78(linked secrets)
-	.db $df ; the ones we'll reset each time though are as follows:
-	.db $7e ;   DIVER_SECRET, TEMPLE_SECRET
-	.db $fb ;   MAMAMU_SECRET, PLEN_SECRET
-	.db $ed
+	.db $ff ; keep all flags from $50 to $78(linked secrets)
+	.db $ff
+	.db $ff
+	.db $ff
+	.db $ff
 
 ; list of global flags for secrets that form a pair of begin/end pair.
 ; this is used to determine if an end secret is set(for carrying over
@@ -735,6 +733,33 @@ loadAcrossComboGame:
 	ld a,(de)
 	or l
 	ld (de),a
+
+	; if this is the linked game(second one played), set the 
+	; "DONE" flags for secrets with a sister "DONE" flag set
+	ld a,(wFileIsLinkedGame)
+	bit 0,a
+	jr z,++
+		ld d,$0a
+		ld e,GLOBALFLAG_DONE_CLOCK_SHOP_SECRET
+		ld c,20
+		call wIsSeasons
+		jr c,+
+			ld e,GLOBALFLAG_DONE_KING_ZORA_SECRET
+			ld c,-20
+		+
+
+		-
+			ld a,e
+			call checkGlobalFlag
+			jr z,+
+				ld a,e
+				add c
+				call setGlobalFlag
+			+
+			inc e
+			dec d
+			jr nz,-
+	++
 
 	; mask out treasure flags to keep from previous game
 	ld hl,ngpAndComboTreasureFlagMask

@@ -139,7 +139,7 @@ getVramSubtileAddressOfTile:
 	and $0f
 	ld hl,@addresses
 	rst_addDoubleIndex
-	rst_derefHl
+	derefHl
 
 	ld a,c
 	and $0f

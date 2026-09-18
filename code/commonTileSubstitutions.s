@@ -299,7 +299,7 @@ applySingleTileChanges:
 	ld hl,singleTileChangeGroupTable
 .endif
 	rst_addDoubleIndex
-	rst_derefHl
+	derefHl
 @next:
 	; Check room
 	ldi a,(hl)

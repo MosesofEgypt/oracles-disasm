@@ -409,7 +409,7 @@ moldorm_tail:
 			ld a,(de)
 			ld (hl),a
 			ld l,Enemy.relatedObj1
-			rst_derefHl
+			derefHl
 			ld l,e
 			ld a,(de)
 			ld (hl),a

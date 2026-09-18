@@ -4743,7 +4743,7 @@ unlinked:
 	.dw script71a2 ; dungeons 1 to 5 except 4
 	.dw script71a2 ; as above, but finally did 4
 	.dw stageMakuSeedGotten
-	.dw script7223 ; highest essence gotten is 8, but wc6e5 is not $09
+	.dw script7223 ; highest essence gotten is 8, but wMakuTreeRoomProgression is not $09
 	.dw stageFinishedGame
 linked:
 	jumptable_memoryaddress ws_cc39

@@ -28,7 +28,7 @@ m_PartCode $26
 	ld a,(de)
 	ld c,a
 	ld l,$d2
-	rst_derefHl
+	derefHl
 	add hl,bc
 	ld a,l
 	ld (de),a

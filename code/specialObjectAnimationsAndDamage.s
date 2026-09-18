@@ -255,7 +255,7 @@ getSpecialObjectGraphicsFrame:
 	call remapTransformedSpecialObjectGfx
 .endif
 	rst_addDoubleIndex
-	rst_derefHl
+	derefHl
 	add hl,bc
 	add hl,bc
 	add hl,bc
@@ -278,7 +278,7 @@ getSpecialObjectGraphicsFrame:
 	ld hl,specialObjectOamDataTable
 .endif
 	rst_addDoubleIndex
-	rst_derefHl
+	derefHl
 	add hl,bc
 	ld e,<w1Link.oamDataAddress
 	ldi a,(hl)
@@ -295,7 +295,7 @@ getSpecialObjectGraphicsFrame:
 	ld c,a
 
 	; Bytes 2-3: address of graphics
-	rst_derefHl
+	derefHl
 	or h
 	ret z
 

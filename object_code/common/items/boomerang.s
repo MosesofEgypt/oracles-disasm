@@ -30,7 +30,7 @@ checkBoomerangParentStillValid:
 	push hl
 	ld h,d
 	ld l,Item.relatedObj1
-	rst_derefHl
+	derefHl
 	ld a,(hl)
 	cp $00
 	pop hl

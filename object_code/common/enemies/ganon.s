@@ -42,6 +42,8 @@ m_EnemyCode $04
 .if defined(ROM_COMBO)
 	; NOTE: doing this BEFORE the room flags are updated to
 	;       allow refighting twinrova and ganon if desired.
+	ld a,GLOBALFLAG_BEAT_GANON
+	call setGlobalFlag
 	call setComboCompleted
 	call saveFile
 .endif

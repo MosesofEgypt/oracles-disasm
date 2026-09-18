@@ -184,7 +184,11 @@
 	GLOBALFLAG_S_49				db ; $49
 	GLOBALFLAG_S_4a				db ; $4a
 .if defined(ENABLE_NEW_GAME_PLUS)
-	GLOBALFLAG_STARTED_TRADE_QUEST_SEASONS	db ; $4b
+	.if defined(ROM_COMBO)
+		GLOBALFLAG_STARTED_TRADE_QUEST_SEASONS	db ; $4b
+	.else
+		GLOBALFLAG_STARTED_TRADE_QUEST	db ; $4b
+	.endif
 .else
 	GLOBALFLAG_S_4b				db ; $4b
 .endif

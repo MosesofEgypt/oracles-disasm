@@ -21,7 +21,7 @@ m_InteractionCode $b5
 
 .if defined(ROM_SEASONS)
 	ld a,$09
-	ld (wc6e5),a
+	ld (wMakuTreeRoomProgression),a
 .endif
 
 	xor a

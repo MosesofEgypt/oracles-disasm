@@ -2990,6 +2990,9 @@ mamamuYanScript:
 	asm15 giveRingAToLink, SNOWSHOE_RING
 .endif
 	orroomflag $40
+.if defined(ROM_COMBO)
+	setglobalflag GLOBALFLAG_DONE_MAMAMU_SECRET
+.endif
 	wait 30
 
 	showtextlowindex <TX_0b42

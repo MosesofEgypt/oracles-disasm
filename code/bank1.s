@@ -1734,14 +1734,14 @@ applyPaletteFadeTransitionData:
 	ld ($ff00+R_SVBK),a
 
 	push hl
-	rst_derefHl
+	derefHl
 	ld de,w2ColorComponentBuffer1
 	call extractColorComponents
 
 	pop hl
 	inc hl
 	inc hl
-	rst_derefHl
+	derefHl
 	ld de,w2ColorComponentBuffer2
 	call extractColorComponents
 
@@ -1804,7 +1804,7 @@ getPaletteFadeTransitionData:
 	ld a,b
 	ld hl,paletteTransitionIndexData
 	rst_addDoubleIndex
-	rst_derefHl
+	derefHl
 	ld a,(wActiveRoom)
 	ld b,a
 --
@@ -1847,7 +1847,7 @@ applyPaletteFadeTransitionData:
 	rst_addAToHl
 	ld a,(wRoomStateModifier)
 	rst_addDoubleIndex
-	rst_derefHl
+	derefHl
 	ld de,w2ColorComponentBuffer1
 	call extractColorComponents
 
@@ -1860,7 +1860,7 @@ applyPaletteFadeTransitionData:
 	rst_addAToHl
 	ld a,(wRoomStateModifier)
 	rst_addDoubleIndex
-	rst_derefHl
+	derefHl
 	ld de,w2ColorComponentBuffer2
 	call extractColorComponents
 
@@ -3802,7 +3802,7 @@ standardGameState:
 		ld hl,@cutsceneHandlers_ages
 	+
 	rst_addDoubleIndex
-	rst_derefHl
+	derefHl
 	jp interBankCall
 
 @cutsceneHandlers_ages:

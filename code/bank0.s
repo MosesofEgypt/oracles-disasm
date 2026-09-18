@@ -7557,9 +7557,7 @@ getPositionOffsetForVelocityOrig:
 ;;
 ; @param[out]	bc	Object's position
 objectGetPosition:
-	ldh a,(<hActiveObjectType)
-	add Object.yh
-	ld e,a
+	call objectPointDeToYhVar
 	ld a,(de)
 	ld b,a
 	inc e
@@ -7571,9 +7569,7 @@ objectGetPosition:
 ;;
 ; @param[out]	a	Object's position (short form)
 objectGetShortPosition:
-	ldh a,(<hActiveObjectType)
-	add Object.yh
-	ld e,a
+	call objectPointDeToYhVar
 ;;
 getShortPositionFromDE:
 	ld a,(de)
@@ -7593,9 +7589,7 @@ getShortPositionFromDE:
 ; @param[out]	a	Object's position (short form)
 objectGetShortPosition_withYOffset:
 	ld b,a
-	ldh a,(<hActiveObjectType)
-	add Object.yh
-	ld e,a
+	call objectPointDeToYhVar
 	ld a,(de)
 	add b
 	jr --
@@ -7742,9 +7736,7 @@ objectSetPositionInCircleArc:
 	pop bc
 
 	; Add Y offset
-	ldh a,(<hActiveObjectType)
-	add Object.yh
-	ld e,a
+	call objectPointDeToYhVar
 	ld a,(wTmpcec0+1)
 	add b
 	ld (de),a
@@ -7863,9 +7855,7 @@ objectGetRelatedObject2Var:
 ;
 ; @param[out]	a	Z position
 objectGetZAboveScreen:
-	ldh a,(<hActiveObjectType)
-	add Object.yh
-	ld e,a
+	call objectPointDeToYhVar
 	ld a,(de)
 	ld b,a
 	ldh a,(<hCameraY)
@@ -7890,9 +7880,7 @@ objectCheckWithinScreenBoundary:
 	ld b,a
 	ldh a,(<hCameraX)
 	ld c,a
-	ldh a,(<hActiveObjectType)
-	add Object.yh
-	ld e,a
+	call objectPointDeToYhVar
 	ld a,(de)
 	sub b
 	add $07
@@ -7910,9 +7898,7 @@ objectCheckWithinScreenBoundary:
 ;;
 ; @param[out]	cflag	Set if the object is within the room boundary
 objectCheckWithinRoomBoundary:
-	ldh a,(<hActiveObjectType)
-	add Object.yh
-	ld e,a
+	call objectPointDeToYhVar
 	ld hl,wRoomEdgeY
 	ld a,(de)
 	cp (hl)
@@ -8151,15 +8137,31 @@ objectCopyPosition_rawAddress:
 ;
 ; @param	bc	YX offset
 objectCopyPositionWithOffset:
+	call objectPointDeAndHlToYhVar
 	push de
 	push hl
 	pop de
 	pop hl
-	call objectTakePositionWithOffset
+	call objectCopyHlPositionToDe
 	push de
 	push hl
 	pop de
 	pop hl
+	ret
+
+objectPointDeAndHlToYhVar:
+	call objectPointDeToYhVar
+objectPointHlToYhVar:
+	ld a,l
+	and $c0
+	add Object.yh
+	ld l,a
+	ret
+
+objectPointDeToYhVar:
+	ldh a,(<hActiveObjectType)
+	add Object.yh
+	ld e,a
 	ret
 
 ;;
@@ -8176,14 +8178,8 @@ objectTakePosition:
 ; @param[out]	de	Address of this object's zh variable
 ; @param[out]	hl	Address of object h's zh variable
 objectTakePositionWithOffset:
-	ldh a,(<hActiveObjectType)
-	add Object.yh
-	ld e,a
-	ld a,l
-	and $c0
-	add Object.yh
-	ld l,a
-
+	call objectPointDeAndHlToYhVar
+objectCopyHlPositionToDe:
 	ldi a,(hl)
 	add b
 	ld (de),a

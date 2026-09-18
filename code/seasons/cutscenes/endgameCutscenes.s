@@ -2031,7 +2031,7 @@ endgameCutsceneHandler_0a_stage3_seasons:
 	ld a,PALH_05
 	call loadPaletteHeader
 	call checkIsLinkedGame
-.if defined(ENABLE_NEW_GAME_PLUS)
+.if defined(ENABLE_NEW_GAME_PLUS) && defined(ROM_COMBO)
 	ld a,GFXH_NEW_GAME_PLUS_BANNER
 .else
 	ld a,GFXH_HEROS_SECRET_TEXT

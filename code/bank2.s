@@ -3640,7 +3640,7 @@ updateStatusBar_body:
 	ld b,(hl)
 	ld c,a
 	ld hl,wDisplayedRupees
-	rst_derefHl
+	derefHl
 	call compareHlToBc
 	jr z,@updateRupeeDisplay
 
@@ -5230,7 +5230,7 @@ loadItemIconGfx:
 			pop de
 
 			; check each leveled sprite for this level
-			rst_derefHl
+			derefHl
 
 			-
 				ldi a,(hl)
@@ -5249,7 +5249,7 @@ loadItemIconGfx:
 				ldi a,(hl)
 				ld c,b
 				ld b,a
-				rst_derefHl
+				derefHl
 				bit 0,c
 				jr z,++
 					; second half of tile
@@ -5293,7 +5293,7 @@ loadItemIconGfx:
 			inc hl
 
 			; check each leveled sprite for this level
-			rst_derefHl
+			derefHl
 
 			-
 				ldi a,(hl)
@@ -5309,7 +5309,7 @@ loadItemIconGfx:
 					ld c,a
 					ldi a,(hl) ; get the bank number
 					ld b,a
-					rst_derefHl ; get the sprite data pointer
+					derefHl ; get the sprite data pointer
 					ld a,c
 					rst_addAToHl
 					jp copy20BytesFromBank
@@ -5870,7 +5870,7 @@ fixupWideItemGfx:
 		ld c,a
 
 		push hl
-		rst_derefHl
+		derefHl
 		ldi a,(hl)
 		ld b,a
 		ld a,c
@@ -7149,7 +7149,7 @@ inventorySubmenu1_drawCursor:
 	ld a,d
 	ld hl,@spritesTable
 	rst_addDoubleIndex
-	rst_derefHl
+	derefHl
 	jp addSpritesToOam_withOffset
 
 @data:

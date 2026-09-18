@@ -116,7 +116,7 @@ applyWarpDest_b04:
 	rst_derefHl
 	ld a,(wWarpDestRoom)
 	ld b,a
-	ld a,(wc6e5)
+	ld a,(wMakuTreeRoomProgression)
 	add b
 	jr label_04_033
 .endif
