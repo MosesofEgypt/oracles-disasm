@@ -185,7 +185,7 @@ generateGameTransferSecret:
 ; Calls a secret-related function based on parameter 'b':
 ;
 ; 0: Generate a secret
-; 1: Unpack a secret in ascii form (input and output are both in wTmpcec0)
+; 1: Unpack a secret in ascii form (input and output are both in wSecretBuffer)
 ; 2: Verify that the gameID of an unpacked secret is valid
 ; 3: Generate a gameID for the current file
 ; 4: Loads the data associated with an unpacked secret (ie. for game-transfer secret, this
@@ -359,10 +359,10 @@ insertBitsIntoSecretGenerationBuffer:
 	ret
 
 ;;
-; Unpacks a secret's data to wTmpcec0. (each entry in "secretDataToEncodeTable" gets
+; Unpacks a secret's data to wSecretBuffer. (each entry in "secretDataToEncodeTable" gets
 ; a separate byte in the output.)
 ;
-; Input (the secret in ascii) and output (the unpacked data) are both in wTmpcec0.
+; Input (the secret in ascii) and output (the unpacked data) are both in wSecretBuffer.
 ;
 ; @param	c	Secret type
 ; @param[out]	b	$00 if secret was valid, $01 otherwise
@@ -393,7 +393,7 @@ unpackSecret:
 	call @unpackSecretData
 
 	; Check the value of "wSecretType" stored in the secret, make sure it's correct
-	ld a,(wTmpcec0+1)
+	ld a,(wSecretBufferHeader.secretType)
 	cp c
 	jr nz,@fail
 
@@ -405,7 +405,7 @@ unpackSecret:
 
 ;;
 @unpackSecretData:
-	ld de,wTmpcec0
+	ld de,wSecretBuffer
 	ld a,$04 ; Unpack gameID, etc
 	call @unpack
 
@@ -492,7 +492,7 @@ loadUnpackedSecretData:
 	ld hl,secretDataToEncodeTable@entry0
 	ldi a,(hl)
 	ld b,a
-	ld de,wTmpcec0+4 ; Start from +4 to skip the "header"
+	ld de,wSecretGameTransferData.isHeroGame ; skip the "header"
 --
 	ld a,(de)
 	push de
@@ -508,9 +508,9 @@ loadUnpackedSecretData:
 
 	; Copy the secret's game ID
 	ld hl,wGameID
-	ld a,(wTmpcec0+2)
+	ld a,(wSecretBufferHeader.gameId)
 	ldi (hl),a
-	ld a,(wTmpcec0+3)
+	ld a,(wSecretBufferHeader.gameId+1)
 	ld (hl),a
 
 @type3: ; 5-letter secret
@@ -519,7 +519,7 @@ loadUnpackedSecretData:
 @type2: ; Ring secret
 	ld hl,secretDataToEncodeTable@entry2+1
 	ld b,$08
-	ld de,wTmpcec0+4 ; Start from +4 to skip the "header"
+	ld de,wSecretRingData.rings08To0f ; skip the "header"
 --
 	ldi a,(hl)
 	push hl
@@ -538,7 +538,7 @@ loadUnpackedSecretData:
 ;;
 verifyUnpackedSecretGameID:
 	; Get the gameID of an unpacked secret
-	ld hl,wTmpcec0+2
+	ld hl,wSecretBufferHeader.gameId
 	ldi a,(hl)
 	ld d,(hl)
 	ld e,a
@@ -654,11 +654,11 @@ convertSecretBufferToText:
 ;;
 ; Loads w7SecretGenerationBuffer based on a secret in ASCII format.
 ;
-; @param	wTmpcec0	Buffer with the secret in text format
+; @param	wSecretBuffer	Buffer with the secret in text format
 ; @param[out]	cflag		Set if there's a problem with the secret (invalid char)
 loadSecretBufferFromText:
 	call getNumCharactersForSecretType
-	ld hl,wTmpcec0
+	ld hl,wSecretBuffer
 	ld de,w7SecretGenerationBuffer
 --
 	ldi a,(hl)

@@ -378,9 +378,12 @@ interactiondeSubidData:
 .if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 	m_InteractionSubidData $c9 $00 $30 ; $85 (L-4 sword)
 	m_InteractionSubidData $c9 $02 $30 ; $86 (L-4 shield)
+.else
+	m_InteractionSubidData $00 $00 $00 ; $85 padding to keep ring box
+	m_InteractionSubidData $00 $00 $00 ; $86 upgrade at a known index
 .endif
 .if MAX_RING_BOX_LEVEL > 3
-	m_InteractionSubidData $5d $14 $30
+	m_InteractionSubidData $5d $14 $30 ; $87 L-4 ring box upgrade
 .endif
 
 	m_InteractionSubidDataEnd

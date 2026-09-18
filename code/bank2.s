@@ -473,6 +473,15 @@ fileSelectMode1:
 	jp restartThisThread
 
 .if defined(ROM_COMBO)
+askWhichGame:
+	ld a,TEXTBOXFLAG_NOCOLORS | TEXTBOXFLAG_DONTCHECKPOSITION | TEXTBOXFLAG_USE_9C_MAP_ADDRESS
+	ld (wTextboxFlags),a
+
+	ld a,$02
+	ld (wTextboxPosition),a
+	ld bc,TX_034c
+	jp showText
+
 ;;
 ; Choose between ages and seasons
 fileSelectMode9:
@@ -488,14 +497,7 @@ fileSelectMode9:
 @state0:
 	ld a,$01
 	ld (wFileSelect.mode2),a
-
-	ld a,TEXTBOXFLAG_NOCOLORS | TEXTBOXFLAG_DONTCHECKPOSITION | TEXTBOXFLAG_USE_9C_MAP_ADDRESS
-	ld (wTextboxFlags),a
-
-	ld a,$02
-	ld (wTextboxPosition),a
-	ld bc,TX_034c
-	jp showText
+	jp askWhichGame
 
 @state1:
 	call retIfTextIsActive
@@ -682,17 +684,20 @@ fileSelectMode8:
 	or a
 	jp z,setFileSelectModeTo1
 
-	call loadFile
-
 	.if defined(ROM_COMBO)
 		; change the game to whichever one was selected
 		ld a,(wSelectedTextOption)
 		rrca
 		call setIsSeasons
+		call comboLoadSpecificGame
+	.else
+		call loadFile
 	.endif
+
 
 	ld a,(wFileSelect.cursorPos)
 	ldh (<hActiveFileSlot),a
+	call eraseFile
 	call initializeNgpFile
 	call saveFile
 	jp setFileSelectModeTo1
@@ -803,10 +808,10 @@ fileSelectMode3:
 	or a
 	jp z,setFileSelectModeTo1
 
-	call loadFile
 	ld a,(wFileSelect.cursorPos)
-	ldh (<hActiveFileSlot),a
-	call saveFile
+	ld b,a
+	call copyFile
+
 	jp setFileSelectModeTo1
 
 ;;
@@ -1038,40 +1043,73 @@ fileSelectMode6:
 	.dw @mode2
 	.dw setFileSelectModeTo1
 	.dw textInput_waitForInput
+.if defined(ROM_COMBO)
+	.dw @mode5
+.endif
 
 @mode0:
 	xor a
 	ld (wSecretInputType),a
-	jp func_02_465c
+	jp initializeSecretEntryField
 
 @mode2:
 	ld hl,w4SecretBuffer
-	ld de,wTmpcec0
+	ld de,wSecretBuffer
 	ld b,$20
 	call copyMemory
 	ld bc,$0100
 	call secretFunctionCaller
 	jp nz,fileSelect_printError
 
-	ld a,(wEnemyPlacement.placedEnemyPositions+$02)
+	ld a,(wSecretGameTransferData.isLinkedGame)
 	or a
 	jr z,+
 
-	ld a,(wEnemyPlacement.cec5)
-.if defined(ROM_COMBO)
-	or a
-	call wIsSeasons
-	jr c,++
+.if !defined(ROM_COMBO)
+	; check which game GENERATED the secret(not which game the secret is FOR)
+	ld a,(wSecretGameTransferData.gameOrigin)
+
+	.if defined(ROM_AGES)
 		dec a
-	++
-.elif defined(ROM_AGES)
-	dec a
-.else; ROM_SEASONS
-	or a
-.endif
+	.else; ROM_SEASONS
+		or a
+	.endif
 	jp z,fileSelect_printError
+.endif
 +
+.if defined(ROM_COMBO)
+	ld a,$05
+	ld (wFileSelect.mode2),a
+	jp askWhichGame
+
+@mode5:
+	call retIfTextIsActive
+
+	ld a,(wSelectedTextOption)
+	; cancel and return to running entry code if option 3
+	cp $03
+	jr nz,+
+		ld a,$00
+		ld (wFileSelect.mode2),a
+		ret
+	+
+
+	; select a random game if option 2
+	cp $02
+	call z,getRandomNumber
+	and $01
+
+	; change the game to whichever one was selected
+	push af
+	call eraseFile
+	pop af
+	rrca
+	call setIsSeasons
+	call comboLoadSpecificGame
+.else
 	call loadFile
+.endif
+
 	ld bc,$0400
 	call secretFunctionCaller
 	call initializeFile
@@ -1159,10 +1197,10 @@ copyNameToW4NameBuffer:
 	call copyMemoryReverse
 	ld a,$04
 	ld (wFileSelect.textInputMaxCursorPos),a
-	jr label_02_038
+	jr initializeTextEntryField
 
 ;;
-func_02_465c:
+initializeSecretEntryField:
 	ld a,(wSecretInputType)
 	bit 7,a
 	jr nz,+
@@ -1182,7 +1220,7 @@ func_02_465c:
 	ld (wFileSelect.textInputMaxCursorPos),a
 	ld a,c
 	ld (wFileSelect.textInputMode),a
-label_02_038:
+initializeTextEntryField:
 	ld hl,wTmpcbb9
 	ld b,$0a
 	call clearMemory
@@ -3640,7 +3678,7 @@ updateStatusBar_body:
 	ld b,(hl)
 	ld c,a
 	ld hl,wDisplayedRupees
-	rst_derefHl
+	derefHl
 	call compareHlToBc
 	jr z,@updateRupeeDisplay
 
@@ -5230,7 +5268,7 @@ loadItemIconGfx:
 			pop de
 
 			; check each leveled sprite for this level
-			rst_derefHl
+			derefHl
 
 			-
 				ldi a,(hl)
@@ -5249,7 +5287,7 @@ loadItemIconGfx:
 				ldi a,(hl)
 				ld c,b
 				ld b,a
-				rst_derefHl
+				derefHl
 				bit 0,c
 				jr z,++
 					; second half of tile
@@ -5293,7 +5331,7 @@ loadItemIconGfx:
 			inc hl
 
 			; check each leveled sprite for this level
-			rst_derefHl
+			derefHl
 
 			-
 				ldi a,(hl)
@@ -5309,7 +5347,7 @@ loadItemIconGfx:
 					ld c,a
 					ldi a,(hl) ; get the bank number
 					ld b,a
-					rst_derefHl ; get the sprite data pointer
+					derefHl ; get the sprite data pointer
 					ld a,c
 					rst_addAToHl
 					jp copy20BytesFromBank
@@ -5870,7 +5908,7 @@ fixupWideItemGfx:
 		ld c,a
 
 		push hl
-		rst_derefHl
+		derefHl
 		ldi a,(hl)
 		ld b,a
 		ld a,c
@@ -7149,7 +7187,7 @@ inventorySubmenu1_drawCursor:
 	ld a,d
 	ld hl,@spritesTable
 	rst_addDoubleIndex
-	rst_derefHl
+	derefHl
 	jp addSpritesToOam_withOffset
 
 @data:

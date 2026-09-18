@@ -12,5 +12,7 @@ specialObjectLoadAnimationFrameToBuffer:
 	ld a,l
 	and $f0
 	ld l,a
-	ld de,w6SpecialObjectGfxBuffer|(:w6SpecialObjectGfxBuffer)
-	jp copy256BytesFromBank
+	ld de,w6SpecialObjectGfxBuffer
+	ld a,:w6SpecialObjectGfxBuffer
+	ld b,$00
+	jp copyGfxDataFromBank

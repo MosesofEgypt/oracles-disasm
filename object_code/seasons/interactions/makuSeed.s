@@ -13,7 +13,7 @@ m_InteractionCode $93
 	ret nz
 	call @func_5298
 	call objectSetVisible80
-	ld a,(wc6e5)
+	ld a,(wMakuTreeRoomProgression)
 	ld b,$04
 	cp $06
 	jr z,+

@@ -18,7 +18,7 @@ runSecretEntryMenu:
 @mode0:
 	ld a,GFXH_FILE_MENU_GFX
 	call loadGfxHeader
-	call func_02_465c
+	call initializeSecretEntryField
 	jp fadeinFromWhite
 
 ; Run text input
@@ -31,7 +31,7 @@ runSecretEntryMenu:
 ; Check whether secret is good
 @mode2:
 	ld hl,w4SecretBuffer
-	ld de,wTmpcec0
+	ld de,wSecretBuffer
 	ld b,$20
 	call copyMemory
 
@@ -51,9 +51,9 @@ runSecretEntryMenu:
 	jr nz,@invalidSecret
 
 
-	; [wEnemyPlacement.cec4] = the unpacked secret's "wShortSecretIndex" value (only for short secret
+	; [wSecretOtherData.secretSubType] = the unpacked secret's "wShortSecretIndex" value (only for short secret
 	; types)
-	ld a,(wEnemyPlacement.cec4)
+	ld a,(wSecretOtherData.secretSubType)
 	ld b,a
 	ld a,(wSecretInputType)
 	cp $ff
@@ -69,7 +69,7 @@ runSecretEntryMenu:
 	cp $02
 	jr z,@loadRingSecretData
 
-	; 5-letter secret: check that [wEnemyPlacement.cec4] == [wSecretInputType]&$3f (basically, this
+	; 5-letter secret: check that [wSecretOtherData.secretSubType] == [wSecretInputType]&$3f (basically, this
 	; is the short secret type that we're looking for, not somebody else's)
 	and $3f
 	sub b

@@ -1682,7 +1682,7 @@ putAwayLinksItems:
 
 @storeItemInInventory:
 	push de
-	ld d,>wRoomLayout
+	ld d,>wTmpcfc0
 	ld l,<wInventoryStorage
 -
 	ld a,(hl)
@@ -1704,16 +1704,16 @@ seasonsFunc_15_5cf0:
 	ld a,(wShopHaveEnoughRupees)
 	cp $03
 	jr z,+
-seasonsFunc_15_5cf7:
+restoreLinksItems:
 	push de
 	ld a,$ff
 	ld (wStatusBarNeedsRefresh),a
-	ld h,>wc600Block
+	ld h,>wInventoryB
 	ld de,wTmpcfc0.genericCutscene.cfdf
-	ld c,$80
+	ld c,<wInventoryB
 	call seasonsFunc_15_5d12
 	ld e,$de
-	ld c,$81
+	ld c,<wInventoryA
 	call seasonsFunc_15_5d12
 	pop de
 +
@@ -1727,7 +1727,7 @@ seasonsFunc_15_5d12:
 	ld (hl),$00
 	ld l,c
 	ldi (hl),a
-	cp $0c
+	cp ITEM_BIGGORON_SWORD
 	ret nz
 	ld (hl),a
 	ret
@@ -2699,29 +2699,19 @@ subrosianSmith_takeHardOre:
 	call loseTreasure
 
 subrosianSmith_giveUpgradedShield:
-	ld a,TREASURE_SHIELD
-	call checkTreasureObtained
-	jr c,@haveShield
-	xor a
-@haveShield:
-	inc a
-.if defined(ROM_COMBO)
-	ld c,$04
-.else
-	ld c,$03
-.endif
-	cp c
-	jr nc,+
-		; upgrade is not above max level, so use it
-		ld c,a
+	; use shield level as index of treasure object data
+	ld a,(wShieldLevel)
+.if defined(ENABLE_NEW_GAME_PLUS) || defined(ROM_COMBO)
+	; except for l4 shield, which is off by 1
+	cp $03
+	jr c,+
+		ld a,$04
 	+
-	call getFreeInteractionSlot
+.endif
+	ld c,a
+	ld b,TREASURE_SHIELD
+	call createTreasure
 	ret nz
-	ld (hl),INTERAC_TREASURE
-	inc l
-	ld (hl),TREASURE_SHIELD
-	inc l
-	ld (hl),c
 	push de
 	ld de,w1Link.yh
 	call objectCopyPosition_rawAddress

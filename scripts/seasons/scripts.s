@@ -112,7 +112,7 @@ makuTreeScript_gateHit:
 	.dw @checkLinkHitGateWithSword
 	.dw @gateHit
 @gateHit:
-	giveitem ITEM_SWORD, $03
+	giveitem TREASURE_OBJECT_SWORD_03
 	disableinput
 	wait 60
 	incstate
@@ -364,10 +364,11 @@ mayorsHouseLadyScript:
 @answeredYes:
 	askforsecret RUUL_SECRET
 	wait 20
-	jumptable_memoryaddress $cca3
+	jumptable_memoryaddress wTextInputResult
 	.dw @correctSecret
 	.dw @wrongSecret
 @correctSecret:
+	setglobalflag GLOBALFLAG_BEGAN_RUUL_SECRET
 	showtext TX_3105
 	wait 20
 	jumpifitemobtained TREASURE_RING_BOX, @upgradeRingbox
@@ -1570,10 +1571,17 @@ goronScript_upgradeRingBox:
 	wait 30
 	showtextlowindex <TX_370a
 	asm15 {SCRIPTS_HELP}.getNextRingboxLevel
-	jumpifmemoryeq $cba8, $05, @upgradeTo5
+	jumpifmemoryeq wRingBoxLevel, $02, @upgradeToL3
+.if MAX_RING_BOX_LEVEL > 3
+	jumpifmemoryeq wRingBoxLevel, $01, @upgradeToL2
+
+	giveitem TREASURE_RING_BOX, $05 ; give L-4
+	scriptjump @finishedGivingRingBox
+@upgradeToL2:
+.endif
 	giveitem TREASURE_RING_BOX, $01
 	scriptjump @finishedGivingRingBox
-@upgradeTo5:
+@upgradeToL3:
 	giveitem TREASURE_RING_BOX, $02
 @finishedGivingRingBox:
 	orroomflag $40
@@ -1905,7 +1913,7 @@ unluckySailorScript:
 	showtextlowindex <TX_3a2e
 	askforsecret PIRATE_SECRET
 	wait 30
-	jumptable_memoryaddress $cca3
+	jumptable_memoryaddress wTextInputResult
 	.dw @incorrectSecret
 	.dw @correctSecret
 @correctSecret:
@@ -1934,16 +1942,19 @@ unluckySailorScript:
 	wait 60
 	setglobalflag GLOBALFLAG_DONE_PIRATE_SECRET
 --
-.if !defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+@gotSecret:
+	showtextlowindex <TX_3a0f
+.else
 	generatesecret PIRATE_RETURN_SECRET
 -
 	showtextlowindex <TX_3a33
 	wait 30
 	jumpiftextoptioneq $00, @gotSecret
 	scriptjump -
-.endif
 @gotSecret:
 	showtextlowindex <TX_3a34
+.endif
 	enableinput
 @finishedPiratesSecret:
 	checkabutton
@@ -2488,7 +2499,7 @@ biggoronScript:
 	asm15 {SCRIPTS_HELP}.biggoron_loadAnimationData, $0b
 	askforsecret BIGGORON_SECRET
 	wait 30
-	jumptable_memoryaddress $cca3
+	jumptable_memoryaddress wTextInputResult
 	.dw @correctSecret
 	.dw @incorrectSecret
 @incorrectSecret:
@@ -4743,7 +4754,7 @@ unlinked:
 	.dw script71a2 ; dungeons 1 to 5 except 4
 	.dw script71a2 ; as above, but finally did 4
 	.dw stageMakuSeedGotten
-	.dw script7223 ; highest essence gotten is 8, but wc6e5 is not $09
+	.dw script7223 ; highest essence gotten is 8, but wMakuTreeRoomProgression is not $09
 	.dw stageFinishedGame
 linked:
 	jumptable_memoryaddress ws_cc39
@@ -5550,7 +5561,7 @@ subrosianSmithyScript:
 	showtextlowindex $0f
 	askforsecret SMITH_SECRET
 	wait 30
-	jumptable_memoryaddress $cca3
+	jumptable_memoryaddress wTextInputResult
 	.dw @correctSecret
 	.dw @incorrectSecret
 @incorrectSecret:
@@ -6500,26 +6511,36 @@ troyScript_gameBegun:
 	callscript troyScript_postGameEffects
 	callscript troyScript_giveReward
 	writememory wStatusBarNeedsRefresh, $ff
+.if !defined(ROM_COMBO)
 	wait 90
+.endif
 	enableallobjects
 	setdisabledobjectsto91
 	settileat $9d, TILEINDEX_INDOOR_UPSTAIRCASE
-	setcounter1 $2d
 	setglobalflag GLOBALFLAG_DONE_CLOCK_SHOP_SECRET
+.if defined(ROM_COMBO)
+	enableinput
+	scriptjump troyScript_doneTroySecret
+.else
+	setcounter1 $2d
+.endif
 
 troyScript_generateReturnSecret:
-.if !defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	showtextlowindex <TX_4c01
+	enableinput
+.else
 	generatesecret CLOCK_SHOP_RETURN_SECRET
 -
 	showtextlowindex <TX_4c0c
 	wait 30
 	jumpiftextoptioneq $00, -
-.endif
 	showtextlowindex <TX_4c0d
 	enableinput
 	wait 30
+.endif
 
-troyScript_doneBiggoronSecret:
+troyScript_doneTroySecret:
 	checkabutton
 	disableinput
 	scriptjump troyScript_generateReturnSecret
@@ -6561,7 +6582,7 @@ troyScript_tookTooLong:
 
 troyScript_doneSecret:
 	initcollisions
-	scriptjump troyScript_doneBiggoronSecret
+	scriptjump troyScript_doneTroySecret
 
 troyScript_giveReward:
 	jumptable_objectbyte Interaction.var03
@@ -6597,17 +6618,14 @@ lostWoodsSwordScript:
 .endif
 
 shared_giveNobleSword:
-	giveitem TREASURE_SWORD, $01
-	giveitem TREASURE_SWORD, $04
+	giveitem TREASURE_OBJECT_SWORD_01
 	retscript
 shared_giveMasterSword:
-	giveitem TREASURE_SWORD, $02
-	giveitem TREASURE_SWORD, $05
+	giveitem TREASURE_OBJECT_SWORD_02
 	retscript
 .if defined(ROM_COMBO)
 shared_giveButterSword:
-	giveitem TREASURE_SWORD, $07
-	giveitem TREASURE_SWORD, $08
+	giveitem TREASURE_OBJECT_SWORD_07
 	retscript
 .endif
 
@@ -6632,7 +6650,7 @@ linkedGhiniScript_beginningSecret:
 	wait 30
 	askforsecret GRAVEYARD_SECRET
 	wait 30
-	jumptable_memoryaddress $cca3
+	jumptable_memoryaddress wTextInputResult
 	.dw @success
 	.dw @failed
 @failed:
@@ -6769,11 +6787,12 @@ goldenCaveSubrosianScript_beginningSecret:
 @givingSecret:
 	askforsecret SUBROSIAN_SECRET
 	wait 20
-	jumptable_memoryaddress $cca3
+	jumptable_memoryaddress wTextInputResult
 	.dw @success
 	.dw @failed
 @success:
 	orroomflag $80
+	setglobalflag GLOBALFLAG_BEGAN_SUBROSIAN_SECRET
 	showtextlowindex <TX_4c21
 	jumpiftextoptioneq $00, @answeredYes
 	wait 20
@@ -6845,7 +6864,7 @@ script7d56:
 	wait 8
 	wait 8
 	setangleandanimation $10
-	asm15 {SCRIPTS_HELP}.seasonsFunc_15_5cf7
+	asm15 {SCRIPTS_HELP}.restoreLinksItems
 	asm15 {SCRIPTS_HELP}.seasonsFunc_15_652e
 	rungenericnpclowindex <TX_4c22
 script7d6b:
@@ -6871,7 +6890,7 @@ goldenCaveSubrosianScript_7d87:
 	setangleandanimation $10
 	disableinput
 	asm15 {SCRIPTS_HELP}.goldenCaveSubrosian_faceLinkUp
-	asm15 {SCRIPTS_HELP}.seasonsFunc_15_5cf7
+	asm15 {SCRIPTS_HELP}.restoreLinksItems
 	checkpalettefadedone
 	showtextlowindex <TX_4c2b
 	wait 20
@@ -6924,7 +6943,7 @@ masterDiverScript_beginningSecret:
 	wait 30
 	askforsecret DIVER_SECRET
 	wait 30
-	jumptable_memoryaddress $cca3
+	jumptable_memoryaddress wTextInputResult
 	.dw @success
 	.dw @failed
 @failed:
@@ -6979,7 +6998,7 @@ masterDiverScript_swimmingChallengeText:
 	playsound SND_WHISTLE
 	enableinput
 -
-	jumpifitemobtained TREASURE_60, @finishedChallenge
+	jumpifitemobtained TREASURE_DIVING_GOAL_STAR, @finishedChallenge
 	scriptjump -
 @finishedChallenge:
 	disableinput
@@ -7040,7 +7059,7 @@ masterDiverScript_secretDone:
 	
 	
 masterDiverScript_spawnFakeStarOre:
-	spawnitem TREASURE_60, $01
+	spawnitem TREASURE_DIVING_GOAL_STAR, $01
 	scriptend
 	
 	
@@ -7063,10 +7082,11 @@ templeGreatFairyScript_beginningSecret:
 @tellSecret:
 	askforsecret TEMPLE_SECRET
 	wait 30
-	jumptable_memoryaddress $cca3
+	jumptable_memoryaddress wTextInputResult
 	.dw @success
 	.dw @failedSecret
 @success:
+	setglobalflag GLOBALFLAG_BEGAN_TEMPLE_SECRET
 	showtextlowindex <TX_4103
 	wait 30
 .ifdef ENABLE_GASHA_REBALANCE
@@ -7132,6 +7152,7 @@ dekuScrubScript_beginningSecret:
 	.dw @failedSecret
 @success:
 	orroomflag $80
+	setglobalflag GLOBALFLAG_BEGAN_DEKU_SECRET
 	wait 20
 	showtextlowindex <TX_4c42
 	wait 20

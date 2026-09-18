@@ -1779,12 +1779,6 @@ pregameIntroCutsceneHandler:
 	ld a,SNDCTRL_STOPMUSIC
 	call playSound
 	ld a,GLOBALFLAG_3d
-.if defined(ROM_COMBO)
-	call wIsSeasons
-	jr c,+
-		ld a,GLOBALFLAG_3d_AGES
-	+
-.endif
 	jp setGlobalFlag
 	
 func_6e9a:

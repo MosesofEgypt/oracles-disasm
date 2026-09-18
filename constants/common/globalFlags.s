@@ -41,11 +41,7 @@
 	GLOBALFLAG_BEAT_POSSESSED_NAYRU		db ; $19
 	GLOBALFLAG_MOBLINS_KEEP_DESTROYED	db ; $1a: Moblin's keep destroyed?
 	GLOBALFLAG_MET_TINGLE			db ; $1b: Talked to tingle, don't necessarily have chart yet
-.if defined(ENABLE_NEW_GAME_PLUS)
 	GLOBALFLAG_1c		db ; $1c
-.else
-	GLOBALFLAG_GOT_BOMB_UPGRADE_FROM_FAIRY		db ; $1c
-.endif
 	GLOBALFLAG_CAN_BUY_FLUTE		db ; $1d
 	GLOBALFLAG_1e				db ; $1e
 	GLOBALFLAG_PATCH_REPAIRED_EVERYTHING	db ; $1f
@@ -94,11 +90,7 @@
 	GLOBALFLAG_TALKED_TO_CHEVAL		db ; $43
 	GLOBALFLAG_44				db ; $44: Maple's been met in the past
 	GLOBALFLAG_RALPH_ENTERED_BLACK_TOWER	db ; $45
-.if defined(ENABLE_NEW_GAME_PLUS)
 	GLOBALFLAG_46		db ; $46
-.else
-	GLOBALFLAG_GOT_SATCHEL_UPGRADE		db ; $46
-.endif
 
 	; Unused?
 	GLOBALFLAG_47				db ; $47
@@ -108,13 +100,13 @@
 	GLOBALFLAG_4b				db ; $4b
 .if defined(ENABLE_NEW_GAME_PLUS)
 	GLOBALFLAG_STARTED_TRADE_QUEST			db ; $4c
-	GLOBALFLAG_GOT_BOMB_UPGRADE_FROM_FAIRY	db ; $4d
-	GLOBALFLAG_GOT_SATCHEL_UPGRADE			db ; $4e
 .else
 	GLOBALFLAG_4c				db ; $4c
+.endif
+	GLOBALFLAG_GOT_BOMB_UPGRADE_FROM_FAIRY	db ; $4d
+	GLOBALFLAG_GOT_SATCHEL_UPGRADE			db ; $4e
 	GLOBALFLAG_4d				db ; $4d
 	GLOBALFLAG_4e				db ; $4e
-.endif
 	GLOBALFLAG_4f				db ; $4f
 
 .else
@@ -184,7 +176,11 @@
 	GLOBALFLAG_S_49				db ; $49
 	GLOBALFLAG_S_4a				db ; $4a
 .if defined(ENABLE_NEW_GAME_PLUS)
-	GLOBALFLAG_STARTED_TRADE_QUEST_SEASONS	db ; $4b
+	.if defined(ROM_COMBO)
+		GLOBALFLAG_STARTED_TRADE_QUEST_SEASONS	db ; $4b
+	.else
+		GLOBALFLAG_STARTED_TRADE_QUEST	db ; $4b
+	.endif
 .else
 	GLOBALFLAG_S_4b				db ; $4b
 .endif
@@ -311,11 +307,7 @@
 	GLOBALFLAG_BEAT_POSSESSED_NAYRU		db ; $19
 	GLOBALFLAG_MOBLINS_KEEP_DESTROYED_AGES	db ; $1a: Moblin's keep destroyed?
 	GLOBALFLAG_MET_TINGLE			db ; $1b: Talked to tingle, don't necessarily have chart yet
-.if defined(ENABLE_NEW_GAME_PLUS)
 	GLOBALFLAG_1c		db ; $1c
-.else
-	GLOBALFLAG_GOT_BOMB_UPGRADE_FROM_FAIRY		db ; $1c
-.endif
 	GLOBALFLAG_CAN_BUY_FLUTE		db ; $1d
 	GLOBALFLAG_1e				db ; $1e
 	GLOBALFLAG_PATCH_REPAIRED_EVERYTHING	db ; $1f
@@ -355,7 +347,9 @@
 	GLOBALFLAG_FLAME_OF_DESPAIR_LIT		db ; $3a: Beaten veran in a linked game
 	GLOBALFLAG_RETURNED_DOG			db ; $3b
 	GLOBALFLAG_ZELDA_SAVED_FROM_VIRE_AGES	db ; $3c
-	GLOBALFLAG_3d_AGES				db ; $3d: "Link summoned" cutscene viewed
+.ENDE
+
+.ENUM $3e
 	GLOBALFLAG_MAKU_GIVES_ADVICE_FROM_PRESENT_MAP		db ; $3e: Met present maku tree?
 	GLOBALFLAG_MAKU_GIVES_ADVICE_FROM_PAST_MAP		db ; $3f: Met past maku tree?
 	GLOBALFLAG_RALPH_ENTERED_PORTAL		db ; $40
@@ -364,11 +358,7 @@
 	GLOBALFLAG_TALKED_TO_CHEVAL		db ; $43
 	GLOBALFLAG_44				db ; $44: Maple's been met in the past
 	GLOBALFLAG_RALPH_ENTERED_BLACK_TOWER	db ; $45
-.if defined(ENABLE_NEW_GAME_PLUS)
 	GLOBALFLAG_46		db ; $46
-.else
-	GLOBALFLAG_GOT_SATCHEL_UPGRADE		db ; $46
-.endif
 
 	; Unused?
 	GLOBALFLAG_47				db ; $47
@@ -378,13 +368,11 @@
 	GLOBALFLAG_4b				db ; $4b
 .if defined(ENABLE_NEW_GAME_PLUS)
 	GLOBALFLAG_STARTED_TRADE_QUEST_AGES		db ; $4c
-	GLOBALFLAG_GOT_BOMB_UPGRADE_FROM_FAIRY	db ; $4d
-	GLOBALFLAG_GOT_SATCHEL_UPGRADE			db ; $4e
 .else
 	GLOBALFLAG_4c				db ; $4c
-	GLOBALFLAG_4d				db ; $4d
-	GLOBALFLAG_4e				db ; $4e
 .endif
+	GLOBALFLAG_GOT_BOMB_UPGRADE_FROM_FAIRY	db ; $4d
+	GLOBALFLAG_GOT_SATCHEL_UPGRADE			db ; $4e
 	GLOBALFLAG_4f				db ; $4f
 .ende
 .endif

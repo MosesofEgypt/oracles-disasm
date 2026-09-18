@@ -218,6 +218,14 @@
 	.endif
 .endif
 
+.ifndef MAX_SEED_SATCHEL_LEVEL
+	.if defined(ROM_COMBO)
+		.define MAX_SEED_SATCHEL_LEVEL 		4
+	.else
+		.define MAX_SEED_SATCHEL_LEVEL		3
+	.endif
+.endif
+
 .if defined(ROM_COMBO)
 .ifndef SUPERFREE_OAM_DATA_BANKS
 	.define SUPERFREE_OAM_DATA_BANKS	1

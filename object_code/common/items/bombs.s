@@ -15,7 +15,7 @@ itemCode03:
 	jr z,+
 		; ensure this bomb is what link is holding
 		ld hl,w1Link.relatedObj2
-		rst_derefHl
+		derefHl
 
 		or a
 		jr nz,+

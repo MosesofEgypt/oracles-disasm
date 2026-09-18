@@ -188,7 +188,7 @@ nextToSignTile:
 	ld hl,signTextGroupTable
 .endif
 	rst_addDoubleIndex
-	rst_derefHl
+	derefHl
 	ld a,(wActiveRoom)
 	ld b,a
 	ldh a,(<hFF8D)

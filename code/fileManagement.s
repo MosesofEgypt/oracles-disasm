@@ -69,7 +69,7 @@
 ; NOTE: we're intentionally preserving the ore flags between games and NG+ cycles
 ngpAndComboTreasureFlagMask:
 	.db $10	; count
-	.db $00
+	.db $02 ; TREASURE_SHIELD
 	.db $30	; TREASURE_BIGGORON_SWORD, TREASURE_BOMBCHUS
 	.db $00
 	.db $00
@@ -105,10 +105,13 @@ fileManagementFunction:
 	.dw saveFile
 	.dw loadFile
 	.dw eraseFile
+	.dw copyFile
 .if defined(ROM_COMBO)
 	.dw comboLoadOtherGame
+	.dw comboLoadSpecificGame
 	.dw setComboCompleted
 .else
+	.dw noFileManagementOp
 	.dw noFileManagementOp
 	.dw noFileManagementOp
 .endif
@@ -155,13 +158,9 @@ initializeNgpFile:
 	m_ClearSavefileSection_end wDeathRespawnBuffer, wBoughtShopItems1
 	m_ClearSavefileSection_end wCompanionStates, wGashaSpotFlags
 	m_ClearSavefileSection_end (wGashaMaturity+2), wObtainedTreasureFlags
+	m_ClearSavefileSection_end wChildStage, (wSlingshotSelectedSeeds+1)
+	m_ClearSavefileSection_end wPortalGroup, wSaveFileMainSectionEnd
 	call clearShopFlags
-
-	xor a
-	ld (wEssencesObtained),a
-	.ifndef ENABLE_MULTI_RING
-		ld (wActiveRing),a
-	.endif
 
 	; reset global flags while avoiding ones we want to
 	; persist across NG cycles, such as vasu rewards,
@@ -195,6 +194,7 @@ initializeNgpFile:
 		call @resetPairedFlags
 
 		ldi a,(hl)
+		or a
 		jr nz,-
 
 	; mask out treasure flags to keep from previous game cycle
@@ -212,9 +212,10 @@ initializeNgpFile:
 	ld (wNumBombs),a
 	ld (wNumBombchus),a
 
-	ld (wSatchelSelectedSeeds),a
-	ld (wShooterSelectedSeeds),a
-	ld (wSlingshotSelectedSeeds),a
+	ld (wEssencesObtained),a
+	.ifndef ENABLE_MULTI_RING
+		ld (wActiveRing),a
+	.endif
 
 	ld hl,initialFileVariables_ages
 	call initializeFileVariables
@@ -312,6 +313,7 @@ initializeNgpFile:
 	.db TREASURE_BIGGORON_SWORD,	$00
 	.db TREASURE_BOMBCHUS,			$00
 	.db TREASURE_RING_BOX,			$01
+	.db TREASURE_SHIELD,			$01
 	.db $00
 
 ; masks for each GLOBALFLAG that should persist between NG+ cycles
@@ -341,11 +343,11 @@ initializeNgpFile:
 	.db $90 ; GLOBALFLAG_STARTED_TRADE_QUEST
 	;         GLOBALFLAG_GOT_RED_AND_BLUE_ORE
 .endif
-	.db $b7 ; keep MOST flags from $50 to $78(linked secrets)
-	.db $df ; the ones we'll reset each time though are as follows:
-	.db $7e ;   DIVER_SECRET, TEMPLE_SECRET
-	.db $fb ;   MAMAMU_SECRET, PLEN_SECRET
-	.db $ed
+	.db $ff ; keep all flags from $50 to $78(linked secrets)
+	.db $ff
+	.db $ff
+	.db $ff
+	.db $ff
 
 ; list of global flags for secrets that form a pair of begin/end pair.
 ; this is used to determine if an end secret is set(for carrying over
@@ -565,6 +567,7 @@ loadFile:
 	call getLastGamePlayed
 	call setIsSeasons
 
+comboLoadSpecificGame:
 	call getFileAddress1
 	ld l,c
 	ld h,b
@@ -736,6 +739,33 @@ loadAcrossComboGame:
 	or l
 	ld (de),a
 
+	; if this is the linked game(second one played), set the 
+	; "DONE" flags for secrets with a sister "DONE" flag set
+	ld a,(wFileIsLinkedGame)
+	bit 0,a
+	jr z,++
+		ld d,$0a
+		ld e,GLOBALFLAG_DONE_CLOCK_SHOP_SECRET
+		ld c,20
+		call wIsSeasons
+		jr c,+
+			ld e,GLOBALFLAG_DONE_KING_ZORA_SECRET
+			ld c,-20
+		+
+
+		-
+			ld a,e
+			call checkGlobalFlag
+			jr z,+
+				ld a,e
+				add c
+				call setGlobalFlag
+			+
+			inc e
+			dec d
+			jr nz,-
+	++
+
 	; mask out treasure flags to keep from previous game
 	ld hl,ngpAndComboTreasureFlagMask
 	ld de,wObtainedTreasureFlags
@@ -788,6 +818,7 @@ loadAcrossComboGame:
 	.db TREASURE_BIGGORON_SWORD,	$00
 	.db TREASURE_BOMBCHUS,			$00
 	.db TREASURE_RING_BOX,			$01
+	.db TREASURE_SHIELD,			$01
 	.db $00
 
 ;;
@@ -990,7 +1021,10 @@ eraseFile:
 .if defined(ROM_COMBO)
 	; clear both files
 	call toggleIsSeasons
+
 	call getFileAddress1
+	call @clearFile
+	jp toggleIsSeasons
 .else
 	call getFileAddress2
 .endif
@@ -1007,15 +1041,68 @@ eraseFile:
 	ret
 
 ;;
+copyFile:
+	ld a,$0a
+	ld ($1111),a
+
+	; backup source save slot into c
+	ldh a,(<hActiveFileSlot)
+	ld c,a
+
+.if defined(ROM_COMBO)
+	; copy the game flags
+	call getComboSaveFileFlags
+	ld a,b
+	ldh (<hActiveFileSlot),a
+	ld a,(hl)
+	call getComboSaveFileFlags
+	ld (hl),a
+
+	; copy the save data
+	call toggleIsSeasons
+	call @copyFile
+	call toggleIsSeasons
+.endif
+	call @copyFile
+
+	; disable SRAM chip
+	ld a,$00
+	ld ($1111),a
+	ret
+
+@copyFile
+	; get the address to copy to
+	push bc
+	ld a,b
+	ldh (<hActiveFileSlot),a
+	call getFileAddress1
+	ld d,b
+	ld e,c
+	pop bc
+
+	; get the address to copy from
+	push bc
+	ld a,c
+	ldh (<hActiveFileSlot),a
+	call getFileAddress1
+	ld h,b
+	ld l,c
+
+	; do the copy
+	ld bc,$550
+	call copyMemoryBc
+	pop bc
+	ret
+
+;;
 ; Clear $0550 bytes at hl
 clearFileAtHl:
 .if defined(ROM_COMBO)
 	push hl
 	call getComboSaveFileFlags
-	; unset the flag indicating the other game in the file was started
-	res COMBO_FLAG_BIT_LINKED_STARTED,(hl)
-	; unset the flag indicating which game was last loaded
-	res COMBO_FLAG_BIT_PREVIOUS_GAME,(hl)
+	; unset all combo game flags
+	xor a
+	ld (hl),a
 	pop hl
 .endif
 	ld bc,$0550

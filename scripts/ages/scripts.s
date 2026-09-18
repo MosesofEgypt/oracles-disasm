@@ -6455,6 +6455,9 @@ tokayShopItemScript:
 	.dw @selectedShield
 	.dw @selectedShield
 	.dw @selectedShield
+.if defined(ROM_COMBO)
+	.dw @selectedShield
+.endif
 
 @selectedFeather:
 	jumpifobjectbyteeq Interaction.var39, $00, @offerGetFeatherForShovel
@@ -7385,7 +7388,6 @@ kingZoraScript_present_postGame:
 	wait 30
 .if defined(ROM_COMBO)
 	setglobalflag GLOBALFLAG_DONE_KING_ZORA_SECRET
-	scriptjump kingZoraScript_present_afterD7
 .else
 	generatesecret KING_ZORA_RETURN_SECRET
 	setglobalflag GLOBALFLAG_DONE_KING_ZORA_SECRET
@@ -7394,7 +7396,10 @@ kingZoraScript_present_postGame:
 .endif
 
 @alreadyGotUpgrade:
-.if !defined(ROM_COMBO)
+.if defined(ROM_COMBO)
+	enableinput
+	scriptjump kingZoraScript_present_afterD7
+.else
 	; BUG: JP version doesn't show the correct secret when asking the 2nd time onward?
 .ifdef ENABLE_US_BUGFIXES
 	generatesecret KING_ZORA_RETURN_SECRET

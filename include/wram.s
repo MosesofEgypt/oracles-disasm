@@ -622,7 +622,7 @@ wAnimalCompanion: ; $c610
 
 wWhichGame: ; $c611
 ; Always 0 for seasons, always 1 for ages.
-; Used primarily (only?) for secret generation.
+; Used primarily for secret generation, but also combo game logic
 	db
 
 wFileIsLinkedGame: ; $c612
@@ -721,25 +721,11 @@ wMinimapDungeonMapPosition: ; $c63c
 wMinimapDungeonFloor: ; $c63d
 	db
 
-.ifndef ROM_COMBO
-.ifdef ROM_AGES
-
-wPortalGroup: ; $c63e
-; This is set to $ff at the beginning of the game, indicating there's no portal.
-	db
-wPortalRoom: ; $c63f
-	db
-wPortalPos: ; $c640
-	db
-
-.endif
-.endif
-
 wMapleKillCounter: ; $c641/$c63e/$c63e
 ; Maple appears when this reaches 30 (15 with Maple's ring).
 	db
 
-wBoughtShopItems1: ; $c642/$c63f
+wBoughtShopItems1: ; $c642/$c63f/$c63f
 ; Bit 0: Bought ring box upgrade (ages) from hidden shop.
 ; Bit 1: Bought gasha seed 1 from hidden shop.
 ; Bit 2: Bought gasha seed 2 from hidden shop.
@@ -855,16 +841,6 @@ wGashaMaturity: ; $c65f/$c65c
 ; decreased by 200 when a gasha nut is harvested.
 	dw
 
-.ifndef ROM_COMBO
-.ifdef ROM_AGES
-wc661: ; $c661
-	db
-.else
-ws_c65d: ; TODO: figure out what this is
-	dsb 4
-.endif
-.endif
-
 wDungeonVisitedFloors: ; $c662/$c662
 ; 1 byte per dungeon ($10 total). Each byte is a bitset of visited floors for a particular dungeon.
 	dsb NUM_DUNGEONS
@@ -907,13 +883,6 @@ wNumHeartPieces: ; $c6ac/$c6a4
 wNumRupees: ; $c6ad/$c6a5
 	dw
 
-.ifndef ROM_COMBO
-.ifdef ROM_SEASONS
-wNumOreChunks: ; $c6a7
-	dw
-.endif
-.endif
-
 wShieldLevel: ; $c6af/$c6a9
 	db
 wNumBombs: ; $c6b0/$c6aa
@@ -927,9 +896,10 @@ wNumBombchus: ; $c6b3/$c6ad
 wSeedSatchelLevel: ; $c6b4/$c6ae
 ; Determines satchel capacity
 	; 0 ==  0 capacity
-	; 1 == 30 capacity
-	; 2 == 50 capacity
-	; 3 == 99 capacity
+	; 1 == 20 capacity
+	; 2 == 50 capacity (40 in combo rom)
+	; 3 == 99 capacity (70 in combo rom)
+	; 4 == 99 capacity (only in combo rom)
 	db
 wFluteIcon: ; $c6b5/$c6af
 	; Determines icon + song, but not companion
@@ -938,36 +908,6 @@ wFluteIcon: ; $c6b5/$c6af
 	; 2 == dimitri
 	; 3 == moosh
 	db
-
-.ifndef ROM_COMBO
-.ifdef ROM_AGES
-
-wSwitchHookLevel: ; $c6b6
-	db
-wSelectedHarpSong: ; $c6b7
-; 1 = Tune of Echoes;
-; 2 = Tune of Currents;
-; 3 = Tune of Ages
-	db
-wBraceletLevel: ; $c6b8
-	db
-
-.else; ROM_SEASONS
-
-wObtainedSeasons: ; $c6b0
-	db
-wBoomerangLevel: ; $c6b1
-	db
-wMagnetGlovePolarity: ; $c6b2
-; 0=S, 1=N
-	db
-wSlingshotLevel: ; $c6b3
-	db
-wFeatherLevel: ; $c6b4
-	db
-
-.endif
-.endif
 
 wNumEmberSeeds: ; $c6b9/$c6b5
 	db
@@ -986,35 +926,8 @@ wEssencesObtained: ; $c6bf/$c6bb
 wTradeItem: ; $c6c0
 	db
 
-.ifndef ROM_COMBO
-.ifdef ROM_AGES
-
-wc6c1: ; $c6c1
-	db
-wTuniNutState: ; $c6c2
-; 0: broken
-; 1: not in inventory (doing patch's game)
-; 2: fixed (only within Link's inventory?)
-	db
-wNumSlates: ; $c6c3
-; Slates used only in ages dungeon 8
-	db
-
-.else; ROM_SEASONS
-
-wPirateBellState: ; -/$c6bd
-	db
-.endif
-.endif
-
-.if defined(ROM_COMBO)
 wNumOreChunks:
 	dw
-.else
-wUnusedc6c4:
-; Used to have satchel/shooter selected seeds here
-	dsb 2
-.endif
 
 wRingBoxContents: ; $c6c6/$c6c0
 	dsb 5
@@ -1088,82 +1001,12 @@ wChildPersonality: ; $c6e4/$c6de
 ;   2: Arborist
 ;   3: Singer
 	db
-wc6e5: ; $c6e5/$c6df ; In seasons, growth of Maku tree
+wMakuTreeRoomProgression: ; $c6e5/$c6df ; In seasons, growth of Maku tree
 	db
-
-.ifndef ROM_COMBO
-.ifdef ROM_SEASONS
-
-ws_c6e0: ; TODO: figure out what this is
-	db
-
-wInsertedJewels: ; -/$c6e1
-; Bitset of jewels inserted into tarm ruins entrance.
-	db
-
-wNumTimesPlayedSubrosianDance: ; -/$c6e2
-	db
-
-wNumTimesPlayedStrangeBrothersGame: ; -/$c6e3
-	db
-
-wTalkedToPirationCaptainState: ; -/$c6e4
-; 0: Not yet talked to him after D6 beaten
-; 1: Talked to him without a bell
-; 2: Talked to him with a bell (either rusty or fixed)
-	db
-
-.endif
-.endif
-
 
 wMakuMapTextPresent: ; $c6e6/$c6e5
 ; Low byte of text index (05XX) of text to show when selecting maku tree on map
 	db
-
-.ifndef ROM_COMBO
-.ifdef ROM_AGES
-
-wMakuMapTextPast: ; $c6e7
-	db
-
-wMakuTreeState: ; $c6e8
-; Keeps track of what the Maku Tree says when you talk to her.
-; 0: Haven't met yet
-; 1: Disappeared from the present
-	db
-
-wJabuWaterLevel: ; $c6e9
-; Bits 4-7: Remembers which buttons are pressed. Corresponds to same bits in wSwitchState.
-; Bits 0-3: Actual water level (0 for drained, 2 for full)
-	db
-
-wWildTokayGameLevel: ; $c6ea
-; Goes up to 4. (Level 0 is playing for the scent seedling.)
-	db
-
-wMakuTreeSeedSatchelXPosition: ; $c6eb
-	db
-
-wPirateShipRoom: ; $c6ec
-; Low room index the pirate ship is in
-	db
-wPirateShipY: ; $c6ed
-	db
-wPirateShipX: ; $c6ee
-	db
-wPirateShipAngle: ; $c6ef
-	db
-
-wMagnetGlovePolarity: ; $c6f0
-; 0=S, 1=N
-	db
-
-wc6f0: ; $c6f0
-	dsb $1
-
-.endif ; ROM_AGES
-.endif
 
 wShortSecretIndex: ; $c6fb/$c6e6
 ; bits 0-3: index of a small secret?
@@ -1184,30 +1027,6 @@ wSecretType: ; $c6fe
 ; 2: ring secret
 ; 3: 5-letter secret
 	db
-
-.ifndef ROM_COMBO
-.ifdef ROM_SEASONS
-
-wSwitchHookLevel: ; -/$c6ea
-	db
-wBraceletLevel: ; -/$c6eb
-	db
-wSelectedHarpSong:
-	db
-
-.else
-
-wSlingshotLevel:
-	db
-wBoomerangLevel:
-	db
-wFeatherLevel:
-	db
-wObtainedSeasons:
-	db
-
-.endif
-.endif
 
 wSatchelSelectedSeeds:
 	db
@@ -1233,13 +1052,13 @@ wUnusedc6fe: ; $c6fe/$c6f1
 wBiggoronSwordOverflowItem: ; $c6ff/$c6f2
 	db
 
-
-.if defined(ROM_COMBO)
-
 ; appear in both games with cross-items, so they can't be union'd
 wSwitchHookLevel:
 	db
 wSelectedHarpSong:
+	; 1 = Tune of Echoes;
+	; 2 = Tune of Currents;
+	; 3 = Tune of Ages
 	db
 wBraceletLevel:
 	db
@@ -1248,6 +1067,7 @@ wObtainedSeasons:
 wBoomerangLevel:
 	db
 wMagnetGlovePolarity:
+	; 0=S, 1=N
 	db
 wSlingshotLevel:
 	db
@@ -1263,16 +1083,21 @@ wFeatherLevel:
 	ws_c6e0:
 		db
 	wInsertedJewels:
+		; Bitset of jewels inserted into tarm ruins entrance.
 		db
 	wNumTimesPlayedSubrosianDance:
 		db
 	wNumTimesPlayedStrangeBrothersGame:
 		db
 	wTalkedToPirationCaptainState:
+		; 0: Not yet talked to him after D6 beaten
+		; 1: Talked to him without a bell
+		; 2: Talked to him with a bell (either rusty or fixed)
 		db
 .nextu
 	; ages variables
 	wPortalGroup:
+		; This is set to $ff at the beginning of the game, indicating there's no portal.
 		db
 	wPortalRoom:
 		db
@@ -1283,20 +1108,31 @@ wFeatherLevel:
 	wc6c1:
 		db
 	wTuniNutState:
+		; 0: broken
+		; 1: not in inventory (doing patch's game)
+		; 2: fixed (only within Link's inventory?)
 		db
 	wNumSlates:
+		; Slates used only in ages dungeon 8
 		db
 	wMakuMapTextPast:
 		db
 	wMakuTreeState:
+		; Keeps track of what the Maku Tree says when you talk to her.
+		; 0: Haven't met yet
+		; 1: Disappeared from the present
 		db
 	wJabuWaterLevel:
+		; Bits 4-7: Remembers which buttons are pressed. Corresponds to same bits in wSwitchState.
+		; Bits 0-3: Actual water level (0 for drained, 2 for full)
 		db
 	wWildTokayGameLevel:
+		; Goes up to 4. (Level 0 is playing for the scent seedling.)
 		db
 	wMakuTreeSeedSatchelXPosition:
 		db
 	wPirateShipRoom:
+		; Low room index the pirate ship is in
 		db
 	wPirateShipY:
 		db
@@ -1307,7 +1143,6 @@ wFeatherLevel:
 	wc6f0:
 		dsb $1
 .endu
-.endif
 
 wSaveFileMainSectionEnd:
 	.db
@@ -2529,8 +2364,9 @@ wRoomEdgeX: ; $cc87
 
 wSecretInputType: ; $cc88/$cca2
 ; $00: 20-char secret entry
+; $01: 20-char secret entry
 ; $02: 15-char secret entry
-; $ff: 5-char secret entry
+; $ff:  5-char secret entry
 	db
 wTextInputResult: ; $cc89/$cca3
 ; This is usually set to 0 on successful text input, 1 on failure.
@@ -3277,13 +3113,28 @@ wRoomCollisionsEnd: ; $cec0
 wTmpcec0: ; $cec0
 	.db
 
+.union
+	; Data at $cec0-$ceff has several different uses depending on context.
+	; Aside from the uses listed below, it's also used for:
+	; * Functions which apply an object's speed ($cec0-$cec3)
+	; * Checking enough torches are lit to open a door ($cec0 only)
+	; * Unpacking secrets
+	wEnemyPlacement: instanceof EnemyPlacementStruct
 
-; Data at $cec0-$ceff has several different uses depending on context.
-; Aside from the uses listed below, it's also used for:
-; * Functions which apply an object's speed ($cec0-$cec3)
-; * Checking enough torches are lit to open a door ($cec0 only)
-; * Unpacking secrets
-wEnemyPlacement: instanceof EnemyPlacementStruct
+.nextu
+	wSecretBuffer:
+		.db
+
+	wSecretBufferHeader: instanceof SecretHeaderStruct
+	.union
+		wSecretGameTransferData: instanceof SecretGameTransferDataStruct
+	.nextu
+		wSecretRingData: instanceof SecretRingDataStruct
+	.nextu
+		wSecretOtherData: instanceof SecretOtherDataStruct
+	.endu
+
+.endu
 
 .ENDS
 

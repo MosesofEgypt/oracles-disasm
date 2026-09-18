@@ -3,7 +3,7 @@
 ; TODO: finish
 ; Variables:
 ;   ws_cc39: Maku tree stage
-;   wc6e5: ???
+;   wMakuTreeRoomProgression: ???
 ;   ws_c6e0: ???
 ; ==================================================================================================
 m_InteractionCode $87
@@ -131,7 +131,7 @@ makuTree_setAppropriateStage:
 	jr @setStage
 	
 @highestEssenceIs8:
-	ld a,(wc6e5)
+	ld a,(wMakuTreeRoomProgression)
 	cp $09
 	jr z,@all8Essences
 	ld a,GLOBALFLAG_GOT_MAKU_SEED

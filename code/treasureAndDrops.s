@@ -501,11 +501,14 @@ giveTreasure_body:
 		call cpActiveRing
 		jr nz,+
 			; double the item value
-			ld h,b
-			ld l,c
-			add hl,bc
-			ld b,h
-			ld c,l
+			ld a,c
+			add a
+			daa
+			ld c,a
+			ld a,b
+			adc a
+			daa
+			ld b,a
 	+
 .endif
 	; Check whether to add this to wTotalRupeesCollected
@@ -535,7 +538,7 @@ giveTreasure_body:
 	ret nc
 .else
 	; Check for overflow
-	rst_derefHl
+	derefHl
 	ld bc,$0999
 	call compareHlToBc
 	dec a
@@ -855,7 +858,7 @@ loadTreasureDisplayData:
 	ld hl,treasureDisplayData2
 .endif
 	rst_addDoubleIndex
-	rst_derefHl
+	derefHl
 	pop bc
 	add hl,bc
 
@@ -1002,7 +1005,7 @@ decideItemDrop_body:
 .endif
 	ld hl,itemDropProbabilityTable
 	rst_addDoubleIndex
-	rst_derefHl
+	derefHl
 	call getRandomNumber
 	and $3f
 	call checkFlag
@@ -1016,7 +1019,7 @@ decideItemDrop_body:
 .endif
 	ld hl,itemDropSetTable
 	rst_addDoubleIndex
-	rst_derefHl
+	derefHl
 	call getRandomNumber
 	and $1f
 	rst_addAToHl

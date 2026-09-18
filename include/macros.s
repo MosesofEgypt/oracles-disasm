@@ -87,6 +87,12 @@
 	ld ($2222),a
 .ENDM
 
+.MACRO derefHl
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
+.ENDM
+
 ; Call from bank 0
 .MACRO callfrombank0
 	.IF NARGS == 1

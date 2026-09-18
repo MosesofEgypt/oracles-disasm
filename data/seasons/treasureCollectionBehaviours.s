@@ -511,7 +511,7 @@ treasureCollectionBehaviourTable:
 	.db SND_NONE
 .endif
 
-	; TREASURE_60 (0x60)
+	; TREASURE_DIVING_GOAL_STAR (0x60)
 	.db $00
 	.db $0b
 	.db SND_GETITEM

@@ -82,6 +82,78 @@
 		dsb 8
 .endst
 
+.struct SecretHeaderStruct
+	xorCipherIndex: ; $cec0
+		db
+	secretType: ; $cec1
+		db
+	gameId: ; $cec2
+		dw
+.endst
+
+.struct SecretGameTransferDataStruct
+	isHeroGame: ; $cec4
+		db
+	gameOrigin: ; $cec5
+		; 0 for seasons, 1 for ages
+		db
+	linkNameByte0: ; $cec6
+		db
+	kidNameByte0: ; $cec7
+		db
+	linkNameByte1: ; $cec8
+		db
+	kidNameByte1: ; $cec9
+		db
+	childStatus: ; $ceca
+		db
+	linkNameByte2: ; $cecb
+		db
+	kidNameByte2: ; $cecc
+		db
+	obtainedRingBox: ; $cecd
+		db
+	linkNameByte3: ; $cece
+		db
+	animalCompanion: ; $cecf
+		db
+	linkNameByte4: ; $ced0
+		db
+	kidNameByte3: ; $ced1
+		db
+	isLinkedGame: ; $ced2
+		db
+	kidNameByte4: ; $ced3
+		db
+	linkNameByte5: ; $ced4
+		db
+.endst
+
+.struct SecretRingDataStruct
+	rings08To0f: ; $cec4
+		db
+	rings28To2f: ; $cec5
+		db
+	rings38To3f: ; $cec6
+		db
+	rings18To1f: ; $cec7
+		db
+	rings00To07: ; $cec8
+		db
+	rings20To27: ; $cec9
+		db
+	rings10To17: ; $ceca
+		db
+	rings30To37: ; $cecb
+		db
+.endst
+
+.struct SecretOtherDataStruct
+	secretSubType: ; $cec4
+		db
+.endst
+
+
 
 
 ; ==================================================================================================

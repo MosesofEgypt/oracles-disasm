@@ -25,47 +25,62 @@ shopItemState0:
 	ld a,$01
 	ld (de),a
 
-.ifdef ROM_AGES
+.if defined(ROM_COMBO) || defined(ROM_AGES)
+	; If this is the seed satchel upgrade, check whether it's already maxed
 	; If this is the ring box upgrade, check whether to change it to the L3 box
 	ld e,Interaction.subid
 	ld a,(de)
-	cp $00
+	or a
 	jr nz,++
+.endif
 
+.ifdef ROM_AGES
 	ld a,TREASURE_RING_BOX
 	call checkTreasureObtained
 	jr nc,++
-
-	call getRingBoxLevel
-	cp MAX_RING_BOX_LEVEL
-	; delete self if ring box maxed out
-	jr nz,+
-		ld hl,wBoughtShopItems1
-		set 0,(hl)
-		jp interactionDelete
-	+
-	dec a
-	jr z,++
+		call getRingBoxLevel
+		; delete self if ring box maxed out
+		jr c,+
+			ld hl,wBoughtShopItems1
+			set 0,(hl)
+			jp interactionDelete
+		+
 		dec a
-		ld a,$14
-.if MAX_RING_BOX_LEVEL > 3
-			; handle 4th level ring box
-			jr z,+
-				ld a,$16
-			+
-		.endif
-		ld (de),a
+		; delete self if ring box is maxed out
+		jr z,++
+			; ring box is at least L-2. see if we need to either
+			; set it up as L-3 or 4, or delete the item entirely
+			dec a
+			ld a,$14
+			.if MAX_RING_BOX_LEVEL > 3
+				; handle 4th level ring box
+				jr z,+
+					ld a,$16
+				+
+			.endif
+			ld (de),a
 	++
+
 	; If this is 10 bombs, delete self if Link doesn't have bombs
 	ld a,(de)
 	cp $04
-	jr nz,++
-	ld a,TREASURE_BOMBS
-	call checkTreasureObtained
+	jr nz,+++
+		ld a,TREASURE_BOMBS
+		call checkTreasureObtained
+		jp nc,interactionDelete
+		jr @checkFlutePurchasable
+	+++
+.elif defined(ROM_COMBO)
+	; If this is the seasons seed satchel upgrade, delete it if it's already maxed
+	ld a,TREASURE_SEED_SATCHEL
+	ld a,(wSeedSatchelLevel)
+	cp MAX_SEED_SATCHEL_LEVEL
 	jp nc,interactionDelete
-	jr @checkFlutePurchasable
 ++
-.else
+.endif
+
+.if defined(ROM_SEASONS)
+	; can't buy anything in seasons until the sword is acquired
 	ld a,TREASURE_SWORD
 	call checkTreasureObtained
 	jp nc,interactionDelete
@@ -650,7 +665,12 @@ shopItemReplacementTable:
 .endif
 	/* $01 */ .db <wBoughtShopItems2  $08 $0d $04
 	/* $02 */ .db <wBoughtShopItems1  $02 $06 $00
+.if defined(ROM_COMBO)
+	; account for level-4 having bit 2 set
+	/* $03 */ .db <wShieldLevel       $06 $11 $00
+.else
 	/* $03 */ .db <wShieldLevel       $02 $11 $00
+.endif
 	/* $04 */ .db <wBoughtShopItems1  $00 $ff $00
 	/* $05 */ .db <wBoughtShopItems1  $08 $ff $00
 	/* $06 */ .db <wBoughtShopItems1  $04 $ff $00
@@ -664,7 +684,12 @@ shopItemReplacementTable:
 	/* $0e */ .db <wBoughtShopItems2  $01 $ff $00
 	/* $0f */ .db <wBoughtShopItems2  $02 $ff $00
 	/* $10 */ .db <wBoughtShopItems2  $04 $ff $00
+.if defined(ROM_COMBO)
+	; account for level-4 having bit 2 set
+	/* $11 */ .db <wShieldLevel       $05 $12 $00
+.else
 	/* $11 */ .db <wShieldLevel       $01 $12 $00
+.endif
 	/* $12 */ .db <wShieldLevel       $00 $ff $00
 	/* $13 */ .db <wBoughtShopItems1  $20 $03 $00
 .ifdef ROM_AGES

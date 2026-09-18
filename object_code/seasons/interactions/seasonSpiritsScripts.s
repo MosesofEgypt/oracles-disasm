@@ -28,7 +28,7 @@ m_InteractionCode $23
 	rst_derefHl
 	call interactionSetScript
 	ld e,$7e
-	ld a,(wc6e5)
+	ld a,(wMakuTreeRoomProgression)
 	cp $09
 	ld a,$00
 	jr c,+

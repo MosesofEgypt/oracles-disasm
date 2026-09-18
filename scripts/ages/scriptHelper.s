@@ -88,6 +88,26 @@ label_15_031:
 	ld (wDisableWarpTiles),a
 	ret
 
+genericScript_giveLinkShieldUpgrade:
+	; use shield level as index of treasure object data
+	ld a,(wShieldLevel)
+.if defined(ENABLE_NEW_GAME_PLUS) || defined(ROM_COMBO)
+	; except for l4 shield, which is off by 1
+	cp $03
+	jr c,+
+		ld a,$04
+	+
+.endif
+	ld c,a
+	ld b,TREASURE_SHIELD
+	call createTreasure
+	ret nz
+	push de
+	ld de,w1Link.yh
+	call objectCopyPosition_rawAddress
+	pop de
+	ret
+
 ; ==================================================================================================
 ; INTERAC_BIPIN
 ; ==================================================================================================
@@ -2270,21 +2290,7 @@ tokayMakeLinkJump:
 
 ;;
 tokayGiveShieldUpgradeToLink:
-	ld b,TREASURE_SHIELD
-	; use shield level as index of treasure object data
-	ld a,(wShieldLevel)
-	ld c,a
-.if defined(ENABLE_NEW_GAME_PLUS) || defined(ROM_COMBO)
-	; except for l4 shield, which is off by 1
-	cp $03
-	jr c,+
-		inc c
-	+
-.endif
-	call createTreasure
-	ret nz
-	ld de,w1Link.yh
-	jp objectCopyPosition_rawAddress
+	jp genericScript_giveLinkShieldUpgrade
 
 ;;
 ; Creates a treasure object at Link's position which he will immediately pick up.
@@ -2676,34 +2682,7 @@ dumbbellManScript:
 
 ;;
 oldManGiveShieldUpgradeToLink:
-	ld a,TREASURE_SHIELD
-	call checkTreasureObtained
-	jr c,@haveShield
-	xor a
-@haveShield:
-	inc a
-.if defined(ROM_COMBO)
-	ld c,$04
-.else
-	ld c,$03
-.endif
-	cp c
-	jr nc,+
-		; upgrade is not at/above max level, so use it
-		ld c,a
-	+
-	call getFreeInteractionSlot
-	ret nz
-	ld (hl),$60
-	inc l
-	ld (hl),$01
-	inc l
-	ld (hl),c
-	push de
-	ld de,w1Link.yh
-	call objectCopyPosition_rawAddress
-	pop de
-	ret
+	jp genericScript_giveLinkShieldUpgrade
 
 ;;
 oldManWarpLinkToLibrary:
@@ -2990,6 +2969,9 @@ mamamuYanScript:
 	asm15 giveRingAToLink, SNOWSHOE_RING
 .endif
 	orroomflag $40
+.if defined(ROM_COMBO)
+	setglobalflag GLOBALFLAG_DONE_MAMAMU_SECRET
+.endif
 	wait 30
 
 	showtextlowindex <TX_0b42

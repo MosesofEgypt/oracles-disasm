@@ -505,6 +505,9 @@ shopkeeperScript_purchaseItem:
 .if defined(ROM_AGES)
 	.dw @buyUpgradeableItem
 	.dw @buyHiddenShopHeartPiece
+.if MAX_RING_BOX_LEVEL > 3
+	.dw @buyUpgradeableItem
+.endif
 .endif
 
 ; Ring box upgrade (ages) or satchel upgrade (seasons)

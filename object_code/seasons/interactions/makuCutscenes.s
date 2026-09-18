@@ -187,7 +187,7 @@ m_InteractionCode $22
 	
 @func_5610:
 	push af
-	ld hl,wc6e5
+	ld hl,wMakuTreeRoomProgression
 	ld (hl),$00
 -
 	add a

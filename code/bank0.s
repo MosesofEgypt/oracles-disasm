@@ -980,7 +980,7 @@ fillMemoryBc16ByteBlocks:
 	ret
 
 ;;
-; @param	b	# of bytes to copy
+; @param	b	# of bytes to copy ($00 counts as $100)
 ; @param	de	Source
 ; @param	hl	Destination
 copyMemoryReverse:
@@ -992,7 +992,30 @@ copyMemoryReverse:
 	ret
 
 ;;
-; @param	b	# of bytes to copy
+; Copy gfx data bytes from a specified bank.
+;
+; This DOES NOT set the bank back to its previous value, so it's not very useful.
+;
+; @param	a	WRAM Bank to copy to
+; @param	b	# of bytes to copy ($00 counts as $100)
+; @param	c	ROM Bank to copy from
+; @param	de	Address to copy to
+; @param	hl	Address to copy from
+copyGfxDataFromBank:
+	ld ($ff00+R_SVBK),a
+	ld a,c
+	rst_setrombank
+.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
+	ld a,$01
+	ld ($3333),a
+	call copyMemory
+	xor a
+	ld ($3333),a
+	ret
+.endif
+
+;;
+; @param	b	# of bytes to copy ($00 counts as $100)
 ; @param	de	Destination
 ; @param	hl	Source
 copyMemory:
@@ -1077,7 +1100,7 @@ initializeVramMap0:
 	ld ($ff00+R_VBK),a
 	ld hl,$9800
 	ld bc,$0040
-	jr clearMemoryBc16ByteBlocks
+	jp clearMemoryBc16ByteBlocks
 
 ;;
 initializeVramMap1:
@@ -2123,17 +2146,30 @@ loadFile:
 	ld c,$02
 	jr ++
 
+;;
+; @param	hActiveFileSlot	File index to copy from
+; @param    b	File index to copy to
+copyFile:
+	ld c,$04
+	jr ++
+
 .if defined(ROM_COMBO)
 ;;
 ; @param	hActiveFileSlot	File index
 comboLoadOtherGame:
-	ld c,$04
+	ld c,$05
+	jr ++
+
+;;
+; @param	hActiveFileSlot	File index
+comboLoadSpecificGame:
+	ld c,$06
 	jr ++
 
 ;;
 ; @param	hActiveFileSlot	File index
 setComboCompleted:
-	ld c,$05
+	ld c,$07
 	jr ++
 .endif
 
@@ -2141,7 +2177,7 @@ setComboCompleted:
 ;;
 ; @param	hActiveFileSlot	File index
 initializeNgpFile:
-	ld c,$06
+	ld c,$08
 	jr ++
 .endif
 
@@ -7557,9 +7593,7 @@ getPositionOffsetForVelocityOrig:
 ;;
 ; @param[out]	bc	Object's position
 objectGetPosition:
-	ldh a,(<hActiveObjectType)
-	add Object.yh
-	ld e,a
+	call objectPointDeToYhVar
 	ld a,(de)
 	ld b,a
 	inc e
@@ -7571,9 +7605,7 @@ objectGetPosition:
 ;;
 ; @param[out]	a	Object's position (short form)
 objectGetShortPosition:
-	ldh a,(<hActiveObjectType)
-	add Object.yh
-	ld e,a
+	call objectPointDeToYhVar
 ;;
 getShortPositionFromDE:
 	ld a,(de)
@@ -7593,9 +7625,7 @@ getShortPositionFromDE:
 ; @param[out]	a	Object's position (short form)
 objectGetShortPosition_withYOffset:
 	ld b,a
-	ldh a,(<hActiveObjectType)
-	add Object.yh
-	ld e,a
+	call objectPointDeToYhVar
 	ld a,(de)
 	add b
 	jr --
@@ -7742,9 +7772,7 @@ objectSetPositionInCircleArc:
 	pop bc
 
 	; Add Y offset
-	ldh a,(<hActiveObjectType)
-	add Object.yh
-	ld e,a
+	call objectPointDeToYhVar
 	ld a,(wTmpcec0+1)
 	add b
 	ld (de),a
@@ -7863,9 +7891,7 @@ objectGetRelatedObject2Var:
 ;
 ; @param[out]	a	Z position
 objectGetZAboveScreen:
-	ldh a,(<hActiveObjectType)
-	add Object.yh
-	ld e,a
+	call objectPointDeToYhVar
 	ld a,(de)
 	ld b,a
 	ldh a,(<hCameraY)
@@ -7890,9 +7916,7 @@ objectCheckWithinScreenBoundary:
 	ld b,a
 	ldh a,(<hCameraX)
 	ld c,a
-	ldh a,(<hActiveObjectType)
-	add Object.yh
-	ld e,a
+	call objectPointDeToYhVar
 	ld a,(de)
 	sub b
 	add $07
@@ -7910,9 +7934,7 @@ objectCheckWithinScreenBoundary:
 ;;
 ; @param[out]	cflag	Set if the object is within the room boundary
 objectCheckWithinRoomBoundary:
-	ldh a,(<hActiveObjectType)
-	add Object.yh
-	ld e,a
+	call objectPointDeToYhVar
 	ld hl,wRoomEdgeY
 	ld a,(de)
 	cp (hl)
@@ -8151,15 +8173,31 @@ objectCopyPosition_rawAddress:
 ;
 ; @param	bc	YX offset
 objectCopyPositionWithOffset:
+	call objectPointDeAndHlToYhVar
 	push de
 	push hl
 	pop de
 	pop hl
-	call objectTakePositionWithOffset
+	call objectCopyHlPositionToDe
 	push de
 	push hl
 	pop de
 	pop hl
+	ret
+
+objectPointDeAndHlToYhVar:
+	call objectPointDeToYhVar
+objectPointHlToYhVar:
+	ld a,l
+	and $c0
+	add Object.yh
+	ld l,a
+	ret
+
+objectPointDeToYhVar:
+	ldh a,(<hActiveObjectType)
+	add Object.yh
+	ld e,a
 	ret
 
 ;;
@@ -8176,14 +8214,8 @@ objectTakePosition:
 ; @param[out]	de	Address of this object's zh variable
 ; @param[out]	hl	Address of object h's zh variable
 objectTakePositionWithOffset:
-	ldh a,(<hActiveObjectType)
-	add Object.yh
-	ld e,a
-	ld a,l
-	and $c0
-	add Object.yh
-	ld l,a
-
+	call objectPointDeAndHlToYhVar
+objectCopyHlPositionToDe:
 	ldi a,(hl)
 	add b
 	ld (de),a
@@ -15101,25 +15133,6 @@ checkLinkCanSurface:
 	callab underwaterSurfacing.checkLinkCanSurface_isUnderwater
 	srl c
 	ret
-
-;;
-; Copy $100 bytes from a specified bank.
-;
-; This DOES NOT set the bank back to its previous value, so it's not very useful.
-;
-; @param	c	ROM Bank to copy from
-; @param	d	High byte of address to copy to
-; @param	e	WRAM Bank
-; @param	hl	Address to copy from
-copy256BytesFromBank:
-	ld a,e
-	ld ($ff00+R_SVBK),a
-	ld a,c
-	rst_setrombank
-	ld e,$00
-	ld b,$00
-	jp copyMemory
-
 .endif
 
 .if defined(ROM_COMBO)

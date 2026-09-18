@@ -238,10 +238,6 @@ interactiond9_state2:
 
 @ringBoxUpgrade:
 	call getRingBoxLevel
-	cp MAX_RING_BOX_LEVEL
-	jr c,+
-		ld a,MAX_RING_BOX_LEVEL
-	+
 	ld hl,@ringBoxSubids
 	rst_addAToHl
 	ld c,(hl)

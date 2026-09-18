@@ -304,13 +304,13 @@ movingPlatform_loadScript:
 	ld hl,movingPlatform_scriptTable
 .endif
 	rst_addDoubleIndex
-	rst_derefHl
+	derefHl
 
 @loadScript:
 	ld e,Interaction.var32
 	ld a,(de)
 	rst_addDoubleIndex
-	rst_derefHl
+	derefHl
 	jr movingPlatform_setScript
 
 movingPlatform_runScript:
@@ -494,7 +494,7 @@ redSnake_openSecretInputMenu:
 
 ;;
 redSnake_generateRingSecret:
-.if defined(ROM_COMBO)
+.if defined(ROM_COMBO) && defined(ROM_AGES)
 	ld a,GLOBALFLAG_RING_SECRET_GENERATED_AGES
 .else
 	ld a,GLOBALFLAG_RING_SECRET_GENERATED
