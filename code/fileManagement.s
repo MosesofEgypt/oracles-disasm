@@ -669,18 +669,18 @@ loadAcrossComboGame:
 	ld a,$0a
 	ld ($1111),a
 
-	m_LoadSavefileSection_len wChildStatus,			$06
-	m_LoadSavefileSection_len wSavefileString,		$08
-	m_LoadSavefileSection_len wFluteIcon,			$01
-	m_LoadSavefileSection_len wBoughtShopItems2,	$01
-	m_LoadSavefileSection_len wMapleState,			$01
-	m_LoadSavefileSection_end wDeathRespawnBuffer,	wBoughtShopItems1
-	m_LoadSavefileSection_end wCompanionStates,	    wObtainedTreasureFlags
-	m_LoadSavefileSection_end wEssencesObtained,	wTradeItem+1
-	m_LoadSavefileSection_end wKilledGoldenEnemies,	wGlobalFlags+10
-	m_LoadSavefileSection_end wGlobalFlags+14,	    wSlingshotSelectedSeeds+1
+	m_LoadSavefileSection_len wChildStatus,               $07
+	m_LoadSavefileSection_len wSavefileString,            $08
+	m_LoadSavefileSection_len wFluteIcon,                 $01
+	m_LoadSavefileSection_len wBoughtShopItems2,          $01
+	m_LoadSavefileSection_len wMapleState,                $01
+	m_LoadSavefileSection_end wDeathRespawnBuffer,        wBoughtShopItems1
+	m_LoadSavefileSection_end wCompanionStates,           wObtainedTreasureFlags
+	m_LoadSavefileSection_end wEssencesObtained,          wTradeItem+1
+	m_LoadSavefileSection_end wKilledGoldenEnemies,       wGlobalFlags+10
+	m_LoadSavefileSection_end wGlobalFlags+15,            wSlingshotSelectedSeeds+1
 	m_LoadSavefileSection_end wBiggoronSwordOverflowItem, wSaveFileMainSectionEnd
-	m_LoadSavefileSection_end wGroup0RoomFlags,		wGroupRoomFlagsEnd
+	m_LoadSavefileSection_end wGroup0RoomFlags,           wGroupRoomFlagsEnd
 
 	push hl
 	; mask out shop flags to keep from previous game
@@ -700,6 +700,40 @@ loadAcrossComboGame:
 	ld a,(de)
 	and $04 ; preserve flag for bomb bag upgrade
 	or (hl)
+	ld (de),a
+
+	pop hl
+	push hl
+
+	call determineSecretSet
+	ld de,wGlobalFlags+12
+	ld a,(de)
+	push af
+	push de
+	jr nz,+
+		; load first 20 secret bits
+		m_LoadSavefileSection_len wGlobalFlags+10, 3
+		pop de
+		ld a,(de)
+		and $0f
+		ld (de),a
+		pop af
+		and $f0
+		jr ++
+	+
+		; load second 20 secret bits
+		m_LoadSavefileSection_len wGlobalFlags+12, 3
+		pop de
+		ld a,(de)
+		and $f0
+		ld (de),a
+		pop af
+		and $0f
+	++
+	; merge the flags for the overlapping byte
+	ld l,a
+	ld a,(de)
+	or l
 	ld (de),a
 
 	; mask out treasure flags to keep from previous game
@@ -792,15 +826,16 @@ initializeComboGame:
 	.endif
 
 	; clear all game tracker variables and such
-	m_ClearSavefileSection_end        wDeathRespawnBuffer, wBoughtShopItems1
-	m_ClearSavefileSection_end           wCompanionStates, wObtainedTreasureFlags
-	m_ClearSavefileSection_end                 wFluteIcon, wRingBoxLevel
-	m_ClearSavefileSection_end               wGlobalFlags, wSlingshotSelectedSeeds+1
+	m_ClearSavefileSection_end wDeathRespawnBuffer,        wBoughtShopItems1
+	m_ClearSavefileSection_end wCompanionStates,           wObtainedTreasureFlags
+	m_ClearSavefileSection_end wFluteIcon,                 wRingBoxLevel
+	m_ClearSavefileSection_end wGlobalFlags,               wGlobalFlags+10
+	; NOTE: avoiding clearing secret flags to carry them across games
+	m_ClearSavefileSection_end wGlobalFlags+15,            wSlingshotSelectedSeeds+1
 	m_ClearSavefileSection_end wBiggoronSwordOverflowItem, wSaveFileMainSectionEnd
-	m_ClearSavefileSection_end           wGroup0RoomFlags, wGroupRoomFlagsEnd
+	m_ClearSavefileSection_end wGroup0RoomFlags,           wGroupRoomFlagsEnd
 
 	call clearShopFlags
-
 	call wIsSeasons
 	jr c,+
 		ld hl,initialFileVariables_ages
@@ -917,6 +952,34 @@ initializeComboGame:
 	.db $00
 	.db $00
 	.db $00
+
+;;
+;  Param[out]	zflag	Set   if ages-linked/seasons-unlinked.
+;                       Unset if seasons-linked/ages-unlinked.
+determineSecretSet:
+	xor a
+	push hl
+	ld hl,wFileIsLinkedGame
+	bit 0,(hl)
+	pop hl
+	call wIsSeasons
+	jr nc,+
+		; seasons
+		ret z
+
+		; linked
+		inc a ; unset zflag
+		ret
+	+
+
+	; ages
+	jr nz,+
+		; unlinked
+		inc a ; unset zflag
+	+
+
+	or a
+	ret
 .endif
 
 ;;

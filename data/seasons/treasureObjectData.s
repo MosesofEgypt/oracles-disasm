@@ -271,6 +271,9 @@ treasureObjectData2c:
 	m_TreasureSubid $02, $03, $34, $35, TREASURE_OBJECT_RING_BOX_02
 	m_TreasureSubid $02, $02, $58, $34, TREASURE_OBJECT_RING_BOX_03
 	m_TreasureSubid $02, $03, $59, $35, TREASURE_OBJECT_RING_BOX_04
+.if MAX_RING_BOX_LEVEL > 3
+	m_TreasureSubid $02, $04, <TX_00_L4_RING_BOX, $87, TREASURE_OBJECT_RING_BOX_05
+.endif
 
 treasureObjectData2d:
 	m_BeginTreasureSubids TREASURE_RING

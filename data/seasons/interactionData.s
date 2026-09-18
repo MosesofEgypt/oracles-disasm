@@ -379,6 +379,9 @@ interactiondeSubidData:
 	m_InteractionSubidData $c9 $00 $30 ; $85 (L-4 sword)
 	m_InteractionSubidData $c9 $02 $30 ; $86 (L-4 shield)
 .endif
+.if MAX_RING_BOX_LEVEL > 3
+	m_InteractionSubidData $5d $14 $30
+.endif
 
 	m_InteractionSubidDataEnd
 

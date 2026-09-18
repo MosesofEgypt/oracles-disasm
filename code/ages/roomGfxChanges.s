@@ -198,7 +198,12 @@ roomTileChangesAfterLoad0a_ages:
 ;
 roomTileChangesAfterLoad09_ages:
 	ld a,GLOBALFLAG_FINISHEDGAME
-	call checkGlobalFlag
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+
+		ld a,GLOBALFLAG_FINISHEDGAME_AGES
+	+
+.endif
 	ret z
 	ld hl,@tiles
 	jp drawRectangleToVramTiles

@@ -8024,8 +8024,15 @@ symmetryNpcSubid8And9Script:
 @determineLevelToGive:
 	wait 30
 	asm15 symmetryNpc_getUpgradeCapacityForText
-	jumpifmemoryeq wTextNumberSubstitution, $05, @giveLevel3RingBox
+	jumpifmemoryeq wRingBoxLevel, $02, @giveLevel3RingBox
 
+.if MAX_RING_BOX_LEVEL > 3
+	jumpifmemoryeq wRingBoxLevel, $01, @giveLevel2RingBox
+
+	giveitem TREASURE_OBJECT_RING_BOX_05 ; give L-4
+	scriptjump ++
+@giveLevel2RingBox:
+.endif
 	; Level 2 box
 	giveitem TREASURE_OBJECT_RING_BOX_01
 	scriptjump ++
@@ -8212,7 +8219,11 @@ troy_chooseRandomAnimalText:
 
 ; Troy at target carts
 troySubid0Script:
+.if defined(ROM_COMBO)
+	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME_AGES, @postgame
+.else
 	jumpifglobalflagset GLOBALFLAG_FINISHEDGAME, @postgame
+.endif
 	scriptend
 
 @postgame:
@@ -8293,7 +8304,7 @@ troySubid0Script:
 	scriptjump @alreadyDoneSecret2
 
 @alreadyDoneSecret:
-	showtextlowindex <TX_2c0b
+	showtext TX_2c0b
 
 @alreadyDoneSecret2:
 .else

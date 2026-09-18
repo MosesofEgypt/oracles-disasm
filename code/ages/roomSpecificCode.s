@@ -161,7 +161,11 @@ roomSpecificCode8:
 ;;
 ; Play nayru music on impa's house screen, for some reason
 roomSpecificCode9:
+.if defined(ROM_COMBO)
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
+.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.endif
 	call checkGlobalFlag
 	ret z
 	ld a, MUS_NAYRU

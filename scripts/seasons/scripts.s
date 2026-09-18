@@ -373,16 +373,23 @@ mayorsHouseLadyScript:
 	jumpifitemobtained TREASURE_RING_BOX, @upgradeRingbox
 	showtext TX_3109
 	wait 20
-	giveitem TREASURE_RING_BOX, $03
+	giveitem TREASURE_RING_BOX, $03 ; give L-2 if never obtained
 	scriptjump @provideReturnSecret
 @upgradeRingbox:
 	showtext TX_3108
 	wait 20
 	asm15 {SCRIPTS_HELP}.getNextRingboxLevel
-	jumpifmemoryeq wTextNumberSubstitution, $05, @upgradeTo5
+	jumpifmemoryeq wRingBoxLevel, $02, @upgradeToL3
+.if MAX_RING_BOX_LEVEL > 3
+	jumpifmemoryeq wRingBoxLevel, $01, @upgradeToL2
+
+	giveitem TREASURE_RING_BOX, $05 ; give L-4
+	scriptjump @provideReturnSecret
+@upgradeToL2:
+.endif
 	giveitem TREASURE_RING_BOX, $01
 	scriptjump @provideReturnSecret
-@upgradeTo5:
+@upgradeToL3:
 	giveitem TREASURE_RING_BOX, $02
 @provideReturnSecret:
 	wait 20

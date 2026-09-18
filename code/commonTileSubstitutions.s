@@ -354,6 +354,12 @@ applySingleTileChanges:
 
 @finishedGameOnly:
 	ld a,GLOBALFLAG_FINISHEDGAME
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+
+		ld a,GLOBALFLAG_FINISHEDGAME_AGES
+	+
+.endif
 	push hl
 	call checkGlobalFlag
 	pop hl

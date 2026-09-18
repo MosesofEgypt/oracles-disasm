@@ -386,6 +386,9 @@ interactiond7SubidData:
 	m_InteractionSubidData $e2 $00 $30 ; $83 (L-4 sword)
 	m_InteractionSubidData $e2 $02 $30 ; $84 (L-4 shield)
 .endif
+.if MAX_RING_BOX_LEVEL > 3
+	m_InteractionSubidData $79 $14 $30
+.endif
 
 	m_InteractionSubidDataEnd
 

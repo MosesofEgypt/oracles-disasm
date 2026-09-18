@@ -2947,8 +2947,9 @@ enableTimer:
 ;;
 timerInterrupt:
 	; disable only the timer interrupt
-	ld a,$1b
-	ldh (<IE),a
+	ld a,($ff00+R_IE)
+	and INT_TIMER ~ $FF
+	ld ($ff00+R_IE),a
 
 	ld hl,hFFB7
 	bit 7,(hl)
@@ -3004,8 +3005,9 @@ timerInterrupt:
 
 @interruptEnd:
 	; reenable the timer interrupt
-	ld a,$1f
-	ldh (<IE),a
+	ld a,($ff00+R_IE)
+	or INT_TIMER
+	ld ($ff00+R_IE),a
 	pop hl
 	pop de
 	pop bc
@@ -8149,30 +8151,15 @@ objectCopyPosition_rawAddress:
 ;
 ; @param	bc	YX offset
 objectCopyPositionWithOffset:
-	ldh a,(<hActiveObjectType)
-	add Object.yh
-	ld e,a
-	ld a,l
-	and $c0
-	add Object.yh
-	ld l,a
-
-	ld a,(de)
-	add b
-	ldi (hl),a
-
-	inc e
-	inc e
-	inc l
-	ld a,(de)
-	add c
-	ldi (hl),a
-	inc e
-	inc e
-	inc l
-
-	ld a,(de)
-	ldi (hl),a
+	push de
+	push hl
+	pop de
+	pop hl
+	call objectTakePositionWithOffset
+	push de
+	push hl
+	pop de
+	pop hl
 	ret
 
 ;;
@@ -9253,6 +9240,7 @@ getRingBoxLevel:
 	cp MAX_RING_BOX_LEVEL
 	ret c
 	ld a,MAX_RING_BOX_LEVEL
+	ld (wRingBoxLevel),a
 	ret
 
 ;;

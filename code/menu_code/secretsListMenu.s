@@ -316,7 +316,7 @@ secretListMenu_getSecretData:
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
 	@unlinked_ages:
-		.db $03, GLOBALFLAG_FINISHEDGAME,		$00
+		.db $03, GLOBALFLAG_FINISHEDGAME_AGES,		$00
 		.db $85, GLOBALFLAG_RING_SECRET_GENERATED_AGES,	$02
 .else
 	@unlinked:
