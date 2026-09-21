@@ -195,25 +195,10 @@ handleAutoEquipItem_body:
 	ld a,(wAutoEquipInvSlot)
 	cp $ff
 	jr nz,+
-		push hl
-		; find d in wInventoryStorage
-		ld hl,wInventoryStorage
-		ld e,$10
-		-
-			ldi a,(hl)
-			cp d
-			jr z,++
-				dec e
-				jr nz,-
-					; failed to find it
-					pop hl
-					ret
-			++
-		dec l
-		ld a,l
+		call locateItemInInventory
 		ld (wAutoEquipInvSlot),a
-		pop hl
 	+
+
 	ld a,(wAutoEquipInvSlot)
 	ld e,a
 	ld d,>wInventoryStorage
@@ -227,9 +212,26 @@ handleAutoEquipItem_body:
 		push hl
 		ld l,<wInventoryB
 		ldi (hl),a
+		ld e,(hl)
 		ldi (hl),a
-		pop hl
+
+		; put the swapped out item in the inventory
+		ld a,(wAutoEquipInvSlot)
+		ld l,a
+		ld h,>wInventoryStorage
 		ld (hl),d
+
+		; find a spot to put the other item(if it exists)
+		ld a,e
+		or a
+		jr z,++
+			ld d,$00
+			call locateItemInInventory
+			ld l,a
+			ld (hl),e
+		++
+		pop hl
+		jr @@finish
 	+
 .endif
 	ld d,a
@@ -247,14 +249,37 @@ handleAutoEquipItem_body:
 		pop hl
 	+
 .endif
-	ld (hl),d
+	ld (hl),d ; pull out item being autoequipped
 	ld d,>wInventoryStorage
-	ld (de),a
+	ld (de),a ; store biggorons sword in inventory
 
+@@finish:
 	ld hl,(wStatusBarNeedsRefresh)
 	set 0,(hl)
 	set 1,(hl)
 	xor a ; set flag indicating swap occurred
+	ret
+
+locateItemInInventory:
+	push de
+	push hl
+	; find d in wInventoryStorage
+	ld hl,wInventoryStorage
+	ld e,$10
+	-
+		ldi a,(hl)
+		cp d
+		jr z,++
+			dec e
+			jr nz,-
+				; failed to find it
+				pop hl
+				ret
+		++
+	dec l
+	ld a,l
+	pop hl
+	pop de
 	ret
 .endif
 

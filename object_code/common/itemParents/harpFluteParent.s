@@ -167,11 +167,11 @@ parentItemCode_harp:
 	jr nc,@tuneEchoesInVain
 
 @tuneOfAges:
-	call restartSound
 .ifdef ROM_COMBO
 	call wIsSeasons
 	jr c,@tuneEchoesInVain
 .endif
+	call restartSound
 
 	ld a,CUTSCENE_TIMEWARP
 	ld (wCutsceneTrigger),a
