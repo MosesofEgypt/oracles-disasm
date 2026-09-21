@@ -1,4 +1,8 @@
+.if defined(ROM_COMBO)
+animationGfxHeaders_ages:
+.else
 animationGfxHeaders:
+.endif
 	; waterfall 1
 	m_GfxHeaderAnim gfx_animations_1, $8841, $02, $000
 	m_GfxHeaderAnim gfx_animations_1, $8841, $02, $020

@@ -1,22 +1,26 @@
+.if defined(ROM_COMBO)
+data_4556_seasons:
+.else
 data_4556:
-	.dw data_4556_0
-	.dw data_4556_1
-	.dw data_4556_2
-	.dw data_4556_3
-	.dw data_4556_4
-	.dw data_4556_5
-	.dw data_4556_6
-	.dw data_4556_7
-	.dw data_4556_8
-	.dw data_4556_9
-	.dw data_4556_A
-	.dw data_4556_B
-	.dw data_4556_C
-	.dw data_4556_D
-	.dw data_4556_E
-	.dw data_4556_F
+.endif
+	.dw @data_4556_0
+	.dw @data_4556_1
+	.dw @data_4556_2
+	.dw @data_4556_3
+	.dw @data_4556_4
+	.dw @data_4556_5
+	.dw @data_4556_6
+	.dw @data_4556_7
+	.dw @data_4556_8
+	.dw @data_4556_9
+	.dw @data_4556_A
+	.dw @data_4556_B
+	.dw @data_4556_C
+	.dw @data_4556_D
+	.dw @data_4556_E
+	.dw @data_4556_F
 
-data_4556_0:
+@data_4556_0:
 	.db $10
         .db $ab $e0 $40 $01
         .db $ab $ea $42 $01
@@ -35,7 +39,7 @@ data_4556_0:
         .db $d0 $17 $10 $00
         .db $d0 $1d $1e $00
 
-data_4556_1:
+@data_4556_1:
 	.db $1b
         .db $a8 $e9 $4a $01
         .db $a8 $f2 $4c $01
@@ -65,7 +69,7 @@ data_4556_1:
         .db $e0 $23 $1a $00
         .db $e0 $2b $1c $00
 
-data_4556_2:
+@data_4556_2:
 	.db $1c
         .db $a8 $e0 $52 $01
         .db $a8 $e8 $54 $01
@@ -96,7 +100,7 @@ data_4556_2:
         .db $e8 $17 $14 $00
         .db $e8 $1f $00 $00
 
-data_4556_3:
+@data_4556_3:
 	.db $1f
         .db $d4 $f9 $0e $00
         .db $d4 $01 $1c $00
@@ -130,7 +134,7 @@ data_4556_3:
         .db $b8 $07 $64 $01
         .db $b8 $0f $68 $01
 
-data_4556_A:
+@data_4556_A:
 	.db $1f
         .db $b0 $e8 $4c $09
         .db $b0 $f0 $4e $09
@@ -164,7 +168,7 @@ data_4556_A:
         .db $04 $2d $00 $00
         .db $e0 $39 $00 $00
 
-data_4556_D:
+@data_4556_D:
 	.db $18
         .db $ac $e0 $5a $01
         .db $ac $ea $4e $01
@@ -191,7 +195,7 @@ data_4556_D:
         .db $e0 $37 $28 $00
         .db $d0 $03 $00 $00
 
-data_4556_E:
+@data_4556_E:
 	.db $27
         .db $d0 $d4 $24 $00
         .db $d0 $dc $0e $00
@@ -233,7 +237,7 @@ data_4556_E:
         .db $b0 $20 $22 $09
         .db $b0 $28 $24 $09
 
-data_4556_F:
+@data_4556_F:
 	.db $20
         .db $a8 $df $52 $01
         .db $b0 $e8 $7e $01
@@ -268,7 +272,7 @@ data_4556_F:
         .db $b8 $11 $66 $01
         .db $b8 $24 $68 $01
 
-data_4556_5:
+@data_4556_5:
 	.db $18
         .db $d8 $ec $14 $00
         .db $d8 $f4 $34 $00
@@ -295,7 +299,7 @@ data_4556_5:
         .db $c0 $14 $6c $01
         .db $c0 $1c $68 $01
 
-data_4556_6:
+@data_4556_6:
 	.db $16
         .db $a8 $ec $5a $01
         .db $a8 $f4 $58 $01
@@ -320,7 +324,7 @@ data_4556_6:
         .db $d0 $18 $14 $00
         .db $d0 $20 $08 $00
 
-data_4556_4:
+@data_4556_4:
 	.db $1a
         .db $d0 $e8 $18 $00
         .db $d0 $f0 $34 $00
@@ -349,7 +353,7 @@ data_4556_4:
         .db $00 $25 $00 $00
         .db $00 $e4 $72 $08
 
-data_4556_B:
+@data_4556_B:
 	.db $23
         .db $cc $e8 $1c $00
         .db $cc $f0 $22 $00
@@ -387,7 +391,7 @@ data_4556_B:
         .db $b4 $04 $02 $00
         .db $b4 $0c $28 $00
 
-data_4556_C:
+@data_4556_C:
 	.db $0d
         .db $b8 $fc $1a $00
         .db $b8 $04 $1c $00
@@ -403,7 +407,7 @@ data_4556_C:
         .db $c8 $24 $0a $00
         .db $c8 $2c $0a $00
 
-data_4556_7:
+@data_4556_7:
 	.db $28
         .db $b0 $e0 $c0 $09
         .db $b0 $e8 $c2 $09
@@ -446,7 +450,7 @@ data_4556_7:
         .db $08 $1d $08 $00
         .db $08 $24 $1a $00
 
-data_4556_8:
+@data_4556_8:
 	.db $24
         .db $a8 $f8 $50 $01
         .db $a8 $00 $52 $01
@@ -485,7 +489,7 @@ data_4556_8:
         .db $08 $1b $2c $00
         .db $08 $23 $1a $00
 
-data_4556_9:
+@data_4556_9:
 	.db $28
 	.db $a8 $e0 $e6 $09
 	.db $a8 $e8 $e8 $09

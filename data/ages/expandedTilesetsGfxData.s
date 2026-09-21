@@ -3,5 +3,9 @@
 ; cross over any banks.
 
 .REPT $80 index tmpi
-	m_GfxData gfx_tileset{%.2x{tmpi}}
+	.if defined(ROM_COMBO)
+		m_GfxData ages_gfx_tileset{%.2x{tmpi}}
+	.else
+		m_GfxData gfx_tileset{%.2x{tmpi}}
+	.endif
 .ENDR

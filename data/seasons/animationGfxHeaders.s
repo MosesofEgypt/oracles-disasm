@@ -1,4 +1,8 @@
+.if defined(ROM_COMBO)
+animationGfxHeaders_seasons:
+.else
 animationGfxHeaders:
+.endif
 	; water and flowers
 	m_GfxHeaderAnim gfx_animations_1, $8881, $04, $140
 	m_GfxHeaderAnim gfx_animations_1, $8881, $04, $180
