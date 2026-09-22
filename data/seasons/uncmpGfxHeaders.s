@@ -83,6 +83,7 @@ uncmpGfxHeaderTable:
 	.dw @uncmpGfxHeader_inventorySubscreen4Page0Gfx
 	.dw @uncmpGfxHeader_inventorySubscreen4Page1Gfx
 	.dw @uncmpGfxHeader_inventorySubscreen4Page2Gfx
+	.dw @uncmpGfxHeader_inventorySubscreen4Page3Gfx
 .endif
 
 
@@ -506,5 +507,9 @@ uncmpGfxHeaderTable:
 
 @uncmpGfxHeader_inventorySubscreen4Page2Gfx:
 	m_GfxHeader gfx_settings_text_page_2, $8a00
+	m_GfxHeaderEnd
+
+@uncmpGfxHeader_inventorySubscreen4Page3Gfx:
+	m_GfxHeader gfx_settings_text_page_3, $8a00
 	m_GfxHeaderEnd
 .endif

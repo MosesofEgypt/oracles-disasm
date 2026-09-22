@@ -139,23 +139,48 @@ handleAutoEquipItem_body:
     ld a,b
 	push hl
 	push af
+	ld hl,wMiscSettings+1
 .ifdef ENABLE_SETTINGS_MENU
-	ld hl,wMiscSettings
-	bit 4,(hl)
-	jr z,++
-.endif
-		bit 5,(hl)
-		ld hl,wInventoryB
+	; only check the flag for items being autoequipped, not restored
+	jr nz,+++
+		; ensure the flag for this auto-equip item is set
+		ld b,$20
+
+		cp ITEM_ROD_OF_SEASONS
 		jr z,+
-			inc l
+			cp ITEM_HARP
+			jr z,+
+				srl b
+				cp ITEM_SEED_SATCHEL
+				jr z,+
+					cp ITEM_SHOVEL
+					jr z,+
+						srl b
+		+
+		ld a,b
+		and (hl)
+		jr nz,+++
+			pop af
+			jr ++
+	+++
+.endif
+		dec hl
+		bit 5,(hl)
+		ld hl,wInventoryA
+		ld b,(hl)
+		dec hl
+		jr z,+
+			ld b,(hl)
+			inc hl
 		+
 		pop af
-		push af
 		push de
 		ld d,a
 		jr nz,+
 			; equipping. only swap if not already equipped
 			cp (hl)
+			jr z,++++
+			cp b
 			jr z,++++
 				ld a,(wAutoEquipInvSlot)
 				cp $ff
@@ -181,8 +206,6 @@ handleAutoEquipItem_body:
 		+++
 			pop de
 	++
-	pop hl
-	ld a,h
 	pop hl
 	ret
 
@@ -249,9 +272,48 @@ handleAutoEquipItem_body:
 		pop hl
 	+
 .endif
+	cp ITEM_HARP
+	jr nz,++
+		; harp being unequipped. restore the previously equipped tune
+		push hl
+		ld hl,wAutoEquipSubtypeInfo
+		ld a,(hl)
+		and $03
+		jr z,+
+			; only set if it was valid
+			ld (wSelectedHarpSong),a
+			ld a,(hl)
+			and $fc
+			ld (hl),a
+		+
+		pop hl
+		ld a,ITEM_HARP
+	++
+
+	cp ITEM_SEED_SATCHEL
+	jr nz,++
+		; satchel being unequipped. restore the previously equipped seeds
+		push hl
+		ld hl,wAutoEquipSubtypeInfo
+		ld a,(hl)
+		and $e0
+		jr z,+
+			; only set if it was valid
+			swap a
+			srl a
+			dec a
+			ld (wSatchelSelectedSeeds),a
+			ld a,(hl)
+			and $1f
+			ld (hl),a
+		+
+		pop hl
+		ld a,ITEM_SEED_SATCHEL
+	++
+
 	ld (hl),d ; pull out item being autoequipped
 	ld d,>wInventoryStorage
-	ld (de),a ; store biggorons sword in inventory
+	ld (de),a ; store item in inventory
 
 @@finish:
 	ld hl,(wStatusBarNeedsRefresh)
@@ -274,6 +336,7 @@ locateItemInInventory:
 			jr nz,-
 				; failed to find it
 				pop hl
+				pop de
 				ret
 		++
 	dec l

@@ -497,6 +497,12 @@ wAutoEquipInvSlot:
 	; low byte of the inventory slot the context-sensitive item was pulled
 	; from when equipped, and the previously equipped item was put into
 	db
+
+wAutoEquipSubtypeInfo:
+	; Bits 0-1: Previously equipped song (0 == unset)
+	; Bits 2-4: Unused
+	; Bits 5-7: Previously equipped satchel seeds +1 (0 == unset)
+	db
 .endif
 
 .ifdef ENABLE_SETTINGS_MENU
@@ -673,17 +679,15 @@ wTotalRupeesCollected: ; $c627
 wMiscSettings: ; $c629
 	; Bits  0-2: Text speed(0-7)
 	; Bit     3: Set if passive shield should be enabled
-	; Bit     4: Set if context-sensitive items should be enabled.
-	;            This includes rod of seasons on stumps, the harp
-	;            when on warp tiles, the bracelet when pushing on a
-	;            wall tile, the shovel when pushing on a dirt tile,
-	;            the magnetic gloves when facing a magnetic tile, and
-	;            the switch hook when facing a diamond switch hook tile
+	; Bit     4: Set if quick drop/throw should be enabled
 	; Bit     5: Set if context-sensitive item should go in A.
 	;            Unset if context-sensitive item should go in B.
 	; Bit     6: Set if quick-swap should be enabled.
 	; Bit     7: Set if low-heart warning should be enabled.
 	; Bits 8-10: Active language
+	; Bit    11: Set if context-sensitive sword/bracelet should be enabled.
+	; Bit    12: Set if context-sensitive seeds/shovel should be enabled.
+	; Bit    13: Set if context-sensitive rod/harp should be enabled.
 	; Bit    14: Set if punching with bracelet should be enabled
 	; Bit    15: Set if dungeon entrance autosaving should be enabled
 	dw

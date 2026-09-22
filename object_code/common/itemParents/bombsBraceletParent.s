@@ -443,9 +443,10 @@ parentItemCode_bracelet:
 
 .ifdef ENABLE_QUICK_ITEM_DROP
 .ifdef ENABLE_RING_REDUX
-	call isHasteRingEquipped
+	ld a,(wMiscSettings)
+	bit 4,a
 	ld a,(wGameKeysJustPressed)
-	jr nz,+
+	jr z,+
 .endif
 	ld a,(wGameKeysPressed)
 	+

@@ -160,18 +160,31 @@ autoEquipHarp:
 	ld a,ITEM_HARP
 
 	call handleAutoEquipItem
-	jr nz,+
-		ld l,Interaction.var2a
-		res 0,(hl)
+	; only do the stuff below if swap occurred
+	ret nz
 
-		ld a,(wAutoEquipInvSlot)
-		; if it was unequipped, the slot will be $ff
-		cp $ff
-		jr z,+
-			set 0,(hl)
-			ld a,$01
-			ld (wSelectedHarpSong),a
-	+
+	ld l,Interaction.var2a
+	res 0,(hl)
+
+	ld a,(wAutoEquipInvSlot)
+	; if it was unequipped, the slot will be $ff
+	cp $ff
+	ret z
+
+	set 0,(hl)
+
+	; need to switch to tune of echoes
+	ld a,(wSelectedHarpSong)
+	and $03
+
+	push hl
+	ld hl,wAutoEquipSubtypeInfo
+	or (hl)
+	ld (hl),a
+	pop hl
+
+	ld a,$01
+	ld (wSelectedHarpSong),a
 	ret
 
 @getCoordDist:

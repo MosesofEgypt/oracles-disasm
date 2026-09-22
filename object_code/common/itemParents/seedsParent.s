@@ -360,9 +360,26 @@ parentItemCode_satchel:
 	or (hl)
 	jr nz,@clear
 
+.if defined(ENABLE_RING_REDUX)
+	ld a,MYSTIC_SEED_RING
+	call cpActiveRing
+	jr z,+
+		; 8 seconds without ring
+		ld a,$01
+		ldd (hl),a
+		ld (hl),$e0
+		jr ++
+	+
+		; 60 seconds with ring
+		ld a,$0e
+		ldd (hl),a
+		ld (hl),$10
+	++
+.else
 	ld a,$03
 	ldd (hl),a
 	ld (hl),$c0
+.endif
 
 	ld a,b
 	call decNumActiveSeeds

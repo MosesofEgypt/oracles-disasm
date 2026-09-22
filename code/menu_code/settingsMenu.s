@@ -1,5 +1,5 @@
-.define SETTINGS_COUNT      $08
-.define SETTINGS_PER_PAGE   $03
+.define SETTINGS_COUNT      12
+.define SETTINGS_PER_PAGE   3
 
 updateSettingsMenu:
 	ld a,(wKeysJustPressed)
@@ -83,25 +83,29 @@ updateSettingsMenu:
 optionValuesAndOffsets:
 	.db $02, 1<<6
 	.dw wMiscSettings
-
 	.db $02, 1<<4
 	.dw wMiscSettings
-
 	.db $02, 1<<5
 	.dw wMiscSettings
 
 	.db $02, 1<<3
-	.dw wMiscSettings
+	.dw wMiscSettings+1
+	.db $02, 1<<4
+	.dw wMiscSettings+1
+	.db $02, 1<<5
+	.dw wMiscSettings+1
 
+	.db $02, 1<<3
+	.dw wMiscSettings
 	.db $02, 1<<6
 	.dw wMiscSettings+1
-
 	.db $02, 1<<7
 	.dw wMiscSettings+1
 
 	.db $02, 1<<7
 	.dw wMiscSettings
-
+	.db $02, 1<<7
+	.dw wRumbleSettings
 	.db $08, $00
 	.dw wMiscSettings
 
@@ -262,36 +266,45 @@ inventorySubmenu3_drawCursors:
 	call getSelectedSettingIndex
 	rst_jumpTable
 	.dw @drawCursorQuickSwap
-	.dw @drawCursorContextSensitiveItems
+	.dw @drawCursorQuickDrop
 	.dw @drawCursorContextSensitiveButton
+
+	.dw @drawCursorContextSensitiveItems0
+	.dw @drawCursorContextSensitiveItems1
+	.dw @drawCursorContextSensitiveItems2
 
 	.dw @drawCursorPassiveShield
 	.dw @drawCursorBraceletPunch
 	.dw @drawCursorDungeonAutosaving
 
 	.dw @drawCursorLowHeartWarning
+	.dw @drawCursorCartridgeRumble
 	.dw @drawCursorMessageSpeed
 	.dw $0000
 
 @drawCursorQuickSwap:
+@drawCursorContextSensitiveItems0:
 @drawCursorPassiveShield:
 @drawCursorLowHeartWarning:
 	ld b,$38
 	jr @drawCursor2
 
-@drawCursorContextSensitiveItems:
+@drawCursorQuickDrop:
+@drawCursorContextSensitiveItems1:
 @drawCursorBraceletPunch:
+@drawCursorCartridgeRumble:
 	ld b,$50
 	jr @drawCursor2
 
 @drawCursorContextSensitiveButton:
+@drawCursorContextSensitiveItems2:
 @drawCursorDungeonAutosaving:
 	ld b,$68
 	jr @drawCursor2
 
 @drawCursorMessageSpeed:
 	ld hl,@cursorOffsets8
-	ld b,$51
+	ld b,$69
 	jr @drawCursor
 
 @drawCursor2:
@@ -399,12 +412,19 @@ getSelectedSettingIndex:
 
 itemSubmenu3TextIndices:
 	.db <TX_09_QUICK_SWAP
-	.db <TX_09_CONTEXT_SENSITIVE_ITEMS
+	.db <TX_09_QUICK_DROP
 	.db <TX_09_CONTEXT_SENSITIVE_BUTTON
+
+	.db <TX_09_CONTEXT_SENSITIVE_ITEMS_0
+	.db <TX_09_CONTEXT_SENSITIVE_ITEMS_1
+	.db <TX_09_CONTEXT_SENSITIVE_ITEMS_2
+
 	.db <TX_09_PASSIVE_SHIELD
 	.db <TX_09_BRACELET_PUNCH
 	.db <TX_09_DUNGEON_AUTOSAVE
+
 	.db <TX_09_LOW_HEART_WARNING
+	.db <TX_09_CARTRIDGE_RUMBLE
 	.db <TX_09_MESSAGE_SPEED
 	.db $00
 

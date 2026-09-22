@@ -1,6 +1,6 @@
 ; See data/ages/gfxHeaders.s for more info.
 
-.define NUM_GFX_HEADERS $c2
+.define NUM_GFX_HEADERS $c3
 
 gfxHeaderTable:
 	.repeat NUM_GFX_HEADERS index COUNT
@@ -1174,11 +1174,8 @@ m_GfxHeaderStart $be, GFXH_SAVE_MENU_GFX_DUNGEON_NGP
 	m_GfxHeaderEnd
 .else
 m_GfxHeaderStart $bb, GFXH_FILE_MENU_NEW_GAME_PLUS
-	m_GfxHeaderEnd
 m_GfxHeaderStart $bc, GFXH_PICK_A_FILE_MENU_LAYOUT
-	m_GfxHeaderEnd
 m_GfxHeaderStart $bd, GFXH_SAVE_MENU_LAYOUT_DUNGEON_NGP_GAMEOVER
-	m_GfxHeaderEnd
 m_GfxHeaderStart $be, GFXH_SAVE_MENU_GFX_DUNGEON_NGP
 	m_GfxHeaderEnd
 .endif
@@ -1199,13 +1196,15 @@ m_GfxHeaderStart $c1, GFXH_INVENTORY_SUBSCREEN_4_PAGE_2
 	m_GfxHeader flg_inventory_screen_4_page_2, w4AttributeMap+$040
 	m_GfxHeaderEnd
 
+m_GfxHeaderStart $c2, GFXH_INVENTORY_SUBSCREEN_4_PAGE_3
+	m_GfxHeader map_inventory_screen_4_page_3, w4TileMap+$040
+	m_GfxHeader flg_inventory_screen_4_page_3, w4AttributeMap+$040
+	m_GfxHeaderEnd
+
 .else
 m_GfxHeaderStart $bf, GFXH_INVENTORY_SUBSCREEN_4_PAGE_0
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $c0, GFXH_INVENTORY_SUBSCREEN_4_PAGE_1
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $c1, GFXH_INVENTORY_SUBSCREEN_4_PAGE_2
+m_GfxHeaderStart $c2, GFXH_INVENTORY_SUBSCREEN_4_PAGE_3
 	m_GfxHeaderEnd
 .endif

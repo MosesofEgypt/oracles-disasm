@@ -1,6 +1,6 @@
 ; See data/ages/gfxHeaders.s for more info.
 
-.define NUM_GFX_HEADERS $fc
+.define NUM_GFX_HEADERS $ff
 
 gfxHeaderTable:
 	.repeat NUM_GFX_HEADERS index COUNT
@@ -1244,19 +1244,24 @@ m_GfxHeaderStart $c1, GFXH_INVENTORY_SUBSCREEN_4_PAGE_2
 	m_GfxHeader flg_inventory_screen_4_page_2, w4AttributeMap+$040
 	m_GfxHeaderEnd
 
+m_GfxHeaderStart $c2, GFXH_INVENTORY_SUBSCREEN_4_PAGE_3
+	m_GfxHeader map_inventory_screen_4_page_3, w4TileMap+$040
+	m_GfxHeader flg_inventory_screen_4_page_3, w4AttributeMap+$040
+	m_GfxHeaderEnd
+
 .else
 m_GfxHeaderStart $bf, GFXH_INVENTORY_SUBSCREEN_4_PAGE_0
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $c0, GFXH_INVENTORY_SUBSCREEN_4_PAGE_1
-	m_GfxHeaderEnd
-
 m_GfxHeaderStart $c1, GFXH_INVENTORY_SUBSCREEN_4_PAGE_2
+m_GfxHeaderStart $c2, GFXH_INVENTORY_SUBSCREEN_4_PAGE_3
 	m_GfxHeaderEnd
 .endif
 
+m_GfxHeaderStart $c3, PLACEHOLDER_0
+m_GfxHeaderStart $c4, PLACEHOLDER_1
+	m_GfxHeaderEnd
 
-m_GfxHeaderStart $c2, GFXH_INVENTORY_SCREEN_AGES
+m_GfxHeaderStart $c5, GFXH_INVENTORY_SCREEN_AGES
 	m_GfxHeader ages_gfx_inventory_hud_1, $8000
 	m_GfxHeader spr_present_past_symbols, $8300
 	m_GfxHeader spr_quest_items_5, $8400
@@ -1279,7 +1284,7 @@ m_GfxHeaderStart $c2, GFXH_INVENTORY_SCREEN_AGES
 	m_GfxHeader flg_inventory_screen_1, w4AttributeMap+$040
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $c3, GFXH_NAYRU_SINGING_CUTSCENE
+m_GfxHeaderStart $c6, GFXH_NAYRU_SINGING_CUTSCENE
 	m_GfxHeader spr_nayru_singing_cutscene, $8000
 	m_GfxHeader gfx_nayru_singing_cutscene_1, $8800
 	m_GfxHeader gfx_nayru_singing_cutscene_2, $9000
@@ -1288,7 +1293,7 @@ m_GfxHeaderStart $c3, GFXH_NAYRU_SINGING_CUTSCENE
 	m_GfxHeader flg_nayru_singing_cutscene, $9801
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $c4, GFXH_OVERWORLD_MAP_PRESENT
+m_GfxHeaderStart $c7, GFXH_OVERWORLD_MAP_PRESENT
 	m_GfxHeader gfx_minimap_tiles_present_1, $8801
 	m_GfxHeader gfx_minimap_tiles_common,    $9001
 	m_GfxHeader gfx_minimap_tiles_present_2, $9601
@@ -1298,7 +1303,7 @@ m_GfxHeaderStart $c4, GFXH_OVERWORLD_MAP_PRESENT
 	m_GfxHeader flg_present_minimap,         w4AttributeMap
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $c5, GFXH_PAST_MAP
+m_GfxHeaderStart $c8, GFXH_PAST_MAP
 	m_GfxHeader gfx_minimap_tiles_past_1,   $8801
 	m_GfxHeader gfx_minimap_tiles_common,   $9001
 	m_GfxHeader gfx_minimap_tiles_past_2,   $9601
@@ -1308,77 +1313,77 @@ m_GfxHeaderStart $c5, GFXH_PAST_MAP
 	m_GfxHeader flg_past_minimap,           w4AttributeMap
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $c6, GFXH_DUNGEON_0_BLURB_AGES
+m_GfxHeaderStart $c9, GFXH_DUNGEON_0_BLURB_AGES
 	m_GfxHeader gfx_blurb_makupath, $8c00
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $c7, GFXH_DUNGEON_1_BLURB_AGES
+m_GfxHeaderStart $ca, GFXH_DUNGEON_1_BLURB_AGES
 	m_GfxHeader ages_gfx_blurb_d1, $8c00
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $c8, GFXH_DUNGEON_2_BLURB_AGES
+m_GfxHeaderStart $cb, GFXH_DUNGEON_2_BLURB_AGES
 	m_GfxHeader ages_gfx_blurb_d2, $8c00
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $c9, GFXH_DUNGEON_3_BLURB_AGES
+m_GfxHeaderStart $cc, GFXH_DUNGEON_3_BLURB_AGES
 	m_GfxHeader ages_gfx_blurb_d3, $8c00
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $ca, GFXH_DUNGEON_4_BLURB_AGES
+m_GfxHeaderStart $cd, GFXH_DUNGEON_4_BLURB_AGES
 	m_GfxHeader ages_gfx_blurb_d4, $8c00
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $cb, GFXH_DUNGEON_5_BLURB_AGES
+m_GfxHeaderStart $ce, GFXH_DUNGEON_5_BLURB_AGES
 	m_GfxHeader ages_gfx_blurb_d5, $8c00
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $cc, GFXH_DUNGEON_6_BLURB_AGES
+m_GfxHeaderStart $cf, GFXH_DUNGEON_6_BLURB_AGES
 	m_GfxHeader ages_gfx_blurb_d6, $8c00
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $cd, GFXH_DUNGEON_7_BLURB_AGES
+m_GfxHeaderStart $d0, GFXH_DUNGEON_7_BLURB_AGES
 	m_GfxHeader ages_gfx_blurb_d7, $8c00
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $ce, GFXH_DUNGEON_8_BLURB_AGES
+m_GfxHeaderStart $d1, GFXH_DUNGEON_8_BLURB_AGES
 	m_GfxHeader ages_gfx_blurb_d8, $8c00
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $cf, GFXH_DUNGEON_9_BLURB_AGES
+m_GfxHeaderStart $d2, GFXH_DUNGEON_9_BLURB_AGES
 	m_GfxHeader gfx_blurb_blacktowerturret, $8c00
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $d0, GFXH_DUNGEON_A_BLURB_AGES
+m_GfxHeaderStart $d3, GFXH_DUNGEON_A_BLURB_AGES
 	m_GfxHeader gfx_blurb_roomofrites, $8c00
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $d1, GFXH_DUNGEON_B_BLURB_AGES
+m_GfxHeaderStart $d4, GFXH_DUNGEON_B_BLURB_AGES
 	m_GfxHeader ages_gfx_blurb_heroscave, $8c00
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $d2, GFXH_DUNGEON_C_BLURB_AGES
+m_GfxHeaderStart $d5, GFXH_DUNGEON_C_BLURB_AGES
 	m_GfxHeader ages_gfx_blurb_d6, $8c00
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $d3, GFXH_DUNGEON_D_BLURB_AGES
+m_GfxHeaderStart $d6, GFXH_DUNGEON_D_BLURB_AGES
 	m_GfxHeader gfx_blurb_makupath, $8c00
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $d4, GFXH_DUNGEON_E_BLURB_AGES
+m_GfxHeaderStart $d7, GFXH_DUNGEON_E_BLURB_AGES
 	m_GfxHeader gfx_blurb_makupath, $8c00
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $d5, GFXH_DUNGEON_F_BLURB_AGES
+m_GfxHeaderStart $d8, GFXH_DUNGEON_F_BLURB_AGES
 	m_GfxHeader gfx_blurb_makupath, $8c00
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $d6, GFXH_BLACK_TOWER_MIDDLE
+m_GfxHeaderStart $d9, GFXH_BLACK_TOWER_MIDDLE
 	m_GfxHeader map_black_tower_middle, $99e0
 	m_GfxHeader flg_black_tower_middle, $99e1
 	m_GfxHeader map_black_tower_middle, w3VramTiles+$020
 	m_GfxHeader flg_black_tower_middle, w3VramAttributes+$020
 	; Fall through
-m_GfxHeaderStart $d7, GFXH_BLACK_TOWER_BASE
+m_GfxHeaderStart $da, GFXH_BLACK_TOWER_BASE
 	m_GfxHeader map_black_tower_base, $9b40
 	m_GfxHeader flg_black_tower_base, $9b41
 	m_GfxHeader map_black_tower_base, w3VramTiles+$180
@@ -1390,84 +1395,84 @@ m_GfxHeaderStart $d7, GFXH_BLACK_TOWER_BASE
 	m_GfxHeader gfx_black_tower_scene_4, $9001
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $d8, GFXH_SEAWEED_CUT
+m_GfxHeaderStart $db, GFXH_SEAWEED_CUT
 	m_GfxHeader spr_seaweed_cut, $8001
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $d9, GFXH_WING_DUNGEON_COLLAPSING_1
+m_GfxHeaderStart $dc, GFXH_WING_DUNGEON_COLLAPSING_1
 	m_GfxHeader map_wing_dungeon_collapsing_1, w2TmpGfxBuffer
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $da, GFXH_WING_DUNGEON_COLLAPSING_2
+m_GfxHeaderStart $dd, GFXH_WING_DUNGEON_COLLAPSING_2
 	m_GfxHeader map_wing_dungeon_collapsing_2, w2TmpGfxBuffer
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $db, GFXH_WING_DUNGEON_COLLAPSING_3
+m_GfxHeaderStart $de, GFXH_WING_DUNGEON_COLLAPSING_3
 	m_GfxHeader map_wing_dungeon_collapsing_3, w2TmpGfxBuffer
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $dc, GFXH_WING_DUNGEON_COLLAPSED
+m_GfxHeaderStart $df, GFXH_WING_DUNGEON_COLLAPSED
 	m_GfxHeader map_wing_dungeon_collapsed, w2TmpGfxBuffer
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $dd, GFXH_TILESET_BLACK_TOWER
+m_GfxHeaderStart $e0, GFXH_TILESET_BLACK_TOWER
 	m_GfxHeader gfx_tileset_black_tower, $8801
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $de, GFXH_COMMON_SPRITES_TO_WRAM
+m_GfxHeaderStart $e1, GFXH_COMMON_SPRITES_TO_WRAM
 	m_GfxHeader spr_common_sprites, w6DragonOnoxTileMap1
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $df, GFXH_MERMAIDS_CAVE_WALL_RETRACTION
+m_GfxHeaderStart $e2, GFXH_MERMAIDS_CAVE_WALL_RETRACTION
 	m_GfxHeader map_mermaids_cave_wall_retraction, w2TmpGfxBuffer
 	m_GfxHeader flg_mermaids_cave_wall_retraction, w2TmpAttrBuffer
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $e0, GFXH_ANCIENT_TOMB_WALL_RETRACTION
+m_GfxHeaderStart $e3, GFXH_ANCIENT_TOMB_WALL_RETRACTION
 	m_GfxHeader map_ancient_tomb_wall_retraction, w2TmpGfxBuffer
 	m_GfxHeader flg_ancient_tomb_wall_retraction, w2TmpAttrBuffer
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $e1, GFXH_JABU_OPENING_1
+m_GfxHeaderStart $e4, GFXH_JABU_OPENING_1
 	m_GfxHeader map_jabu_opening_1, w3VramTiles+$0e0
 	m_GfxHeader flg_jabu_opening_1, w3VramAttributes+$0e0
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $e2, GFXH_JABU_OPENING_2
+m_GfxHeaderStart $e5, GFXH_JABU_OPENING_2
 	m_GfxHeader map_jabu_opening_2, w3VramTiles+$0e0
 	m_GfxHeader flg_jabu_opening_2, w3VramAttributes+$0e0
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $e3, GFXH_BLACK_TOWER_STAGE_3_LAYOUT
+m_GfxHeaderStart $e6, GFXH_BLACK_TOWER_STAGE_3_LAYOUT
 	m_GfxHeader map_black_tower_stage_3_top, w4TileMap
 	m_GfxHeader flg_black_tower_stage_3_top, w4AttributeMap
 	m_GfxHeader map_black_tower_stage_3_middle, $9800
 	m_GfxHeader flg_black_tower_stage_3_middle, $9801
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $e4, GFXH_BLACK_TOWER_STAGE_2_LAYOUT
+m_GfxHeaderStart $e7, GFXH_BLACK_TOWER_STAGE_2_LAYOUT
 	m_GfxHeader map_black_tower_stage_2, $9840
 	m_GfxHeader flg_black_tower_stage_2, $9841
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $e5, GFXH_BLACK_TOWER_STAGE_1_LAYOUT
+m_GfxHeaderStart $e8, GFXH_BLACK_TOWER_STAGE_1_LAYOUT
 	m_GfxHeader map_black_tower_stage_1, $99c0
 	m_GfxHeader flg_black_tower_stage_1, $99c1
 	m_GfxHeader map_black_tower_stage_1, w3VramTiles
 	m_GfxHeader flg_black_tower_stage_1, w3VramAttributes
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $e6, GFXH_CREDITS_SCENE_MAKU_TREE_PAST
+m_GfxHeaderStart $e9, GFXH_CREDITS_SCENE_MAKU_TREE_PAST
 	m_GfxHeader map_credits_maku_past_top_rows, $9800
 	m_GfxHeader flg_credits_maku_past_top_rows, $9801
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $e7, GFXH_CREDITS_SCENE1_AGES
+m_GfxHeaderStart $ea, GFXH_CREDITS_SCENE1_AGES
 	m_GfxHeader ages_map_credits_scene1_top_rows, $9800
 	m_GfxHeader ages_flg_credits_scene1_top_rows, $9801
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $e8, GFXH_CREDITS_IMAGE1_AGES
+m_GfxHeaderStart $eb, GFXH_CREDITS_IMAGE1_AGES
 	m_GfxHeader spr_credits_font, $8000
 	m_GfxHeader spr_credits_font_planners, $8400
 	m_GfxHeader ages_gfx_credits_image1_1, $8800
@@ -1476,12 +1481,12 @@ m_GfxHeaderStart $e8, GFXH_CREDITS_IMAGE1_AGES
 	m_GfxHeader ages_flg_credits_image1, $9801
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $e9, GFXH_CREDITS_SCENE2_AGES
+m_GfxHeaderStart $ec, GFXH_CREDITS_SCENE2_AGES
 	m_GfxHeader ages_map_credits_scene2, $9a00
 	m_GfxHeader ages_flg_credits_scene2, $9a01
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $ea, GFXH_CREDITS_IMAGE2_AGES
+m_GfxHeaderStart $ed, GFXH_CREDITS_IMAGE2_AGES
 	m_GfxHeader spr_credits_font, $8000
 	m_GfxHeader spr_credits_font, w4TileMap
 	m_GfxHeader spr_credits_font_nakanowatari, w4AttributeMap
@@ -1495,12 +1500,12 @@ m_GfxHeaderStart $ea, GFXH_CREDITS_IMAGE2_AGES
 	m_GfxHeader ages_flg_credits_image2, $9801
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $eb, GFXH_CREDITS_SCENE3_AGES
+m_GfxHeaderStart $ee, GFXH_CREDITS_SCENE3_AGES
 	m_GfxHeader ages_map_credits_scene3_top_rows, $9800
 	m_GfxHeader ages_flg_credits_scene3_top_rows, $9801
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $ec, GFXH_CREDITS_IMAGE3_AGES
+m_GfxHeaderStart $ef, GFXH_CREDITS_IMAGE3_AGES
 	m_GfxHeader spr_credits_font, $8000
 	m_GfxHeader spr_credits_font, w4TileMap
 	m_GfxHeader spr_credits_font_object_designers, w4AttributeMap
@@ -1513,12 +1518,12 @@ m_GfxHeaderStart $ec, GFXH_CREDITS_IMAGE3_AGES
 	m_GfxHeader ages_flg_credits_image3, $9801
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $ed, GFXH_CREDITS_SCENE4_AGES
+m_GfxHeaderStart $f0, GFXH_CREDITS_SCENE4_AGES
 	m_GfxHeader ages_map_credits_scene4_top_rows, $9a00
 	m_GfxHeader ages_flg_credits_scene4_top_rows, $9a01
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $ee, GFXH_CREDITS_IMAGE4_AGES
+m_GfxHeaderStart $f1, GFXH_CREDITS_IMAGE4_AGES
 	m_GfxHeader spr_credits_font, $8000
 	m_GfxHeader spr_credits_font, w4TileMap
 	m_GfxHeader spr_credits_font_music, w4AttributeMap
@@ -1531,7 +1536,7 @@ m_GfxHeaderStart $ee, GFXH_CREDITS_IMAGE4_AGES
 	m_GfxHeader ages_flg_credits_image4, $9801
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $ef, GFXH_CREDITS_LINKED_SCENE1_AGES
+m_GfxHeaderStart $f2, GFXH_CREDITS_LINKED_SCENE1_AGES
 	m_GfxHeader gfx_tileset_overworld_standard, $8801
 	m_GfxHeader gfx_tileset_overworld_present, $8e01
 	m_GfxHeader gfx_tileset_credits, $9301
@@ -1539,7 +1544,7 @@ m_GfxHeaderStart $ef, GFXH_CREDITS_LINKED_SCENE1_AGES
 	m_GfxHeader ages_flg_credits_linked_scene1, $9801
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $f0, GFXH_CREDITS_LINKED_SCENE2_AGES
+m_GfxHeaderStart $f3, GFXH_CREDITS_LINKED_SCENE2_AGES
 	m_GfxHeader gfx_tileset_overworld_standard, $8801
 	m_GfxHeader gfx_tileset_overworld_present, $8e01
 	m_GfxHeader gfx_tileset_credits, $9301
@@ -1547,7 +1552,7 @@ m_GfxHeaderStart $f0, GFXH_CREDITS_LINKED_SCENE2_AGES
 	m_GfxHeader ages_flg_credits_linked_scene2, $9801
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $f1, GFXH_CREDITS_LINKED_SCENE3_AGES
+m_GfxHeaderStart $f4, GFXH_CREDITS_LINKED_SCENE3_AGES
 	m_GfxHeader gfx_tileset_overworld_standard, $8801
 	m_GfxHeader gfx_tileset_overworld_present, $8e01
 	m_GfxHeader gfx_tileset_credits, $9301
@@ -1555,7 +1560,7 @@ m_GfxHeaderStart $f1, GFXH_CREDITS_LINKED_SCENE3_AGES
 	m_GfxHeader ages_flg_credits_linked_scene3, $9801
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $f2, GFXH_CREDITS_LINKED_SCENE4_AGES
+m_GfxHeaderStart $f5, GFXH_CREDITS_LINKED_SCENE4_AGES
 	m_GfxHeader gfx_tileset_overworld_standard, $8801
 	m_GfxHeader gfx_tileset_overworld_present, $8e01
 	m_GfxHeader gfx_tileset_credits, $9301
@@ -1563,13 +1568,13 @@ m_GfxHeaderStart $f2, GFXH_CREDITS_LINKED_SCENE4_AGES
 	m_GfxHeader ages_flg_credits_linked_scene4, $9801
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $f3, GFXH_TO_BE_CONTINUED_AGES
+m_GfxHeaderStart $f6, GFXH_TO_BE_CONTINUED_AGES
 	m_GfxHeader ages_gfx_tobecontinued, $8800
 	m_GfxHeader map_tobecontinued, $9800
 	m_GfxHeader flg_tobecontinued, $9801
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $f4, GFXH_INTRO_LINK_RIDING_HORSE_AGES
+m_GfxHeaderStart $f7, GFXH_INTRO_LINK_RIDING_HORSE_AGES
 	m_GfxHeader spr_intro_link_on_horse_front, $8000
 	m_GfxHeader gfx_intro_link_on_horse_front_bg, $8800
 	m_GfxHeader gfx_intro_link_face_shot, $9000
@@ -1591,7 +1596,7 @@ m_GfxHeaderStart $f4, GFXH_INTRO_LINK_RIDING_HORSE_AGES
 	m_GfxHeader flg_intro_link_on_horse_front_bg, $9ec1
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $f5, GFXH_INTRO_TEMPLE_SCENE_AGES
+m_GfxHeaderStart $f8, GFXH_INTRO_TEMPLE_SCENE_AGES
 	m_GfxHeader ages_gfx_tileset_dungeon_standard_1, $8801
 	m_GfxHeader ages_gfx_tileset_dungeon_standard_2, $9001
 	m_GfxHeader gfx_tileset_maku_path, $9401
@@ -1602,11 +1607,11 @@ m_GfxHeaderStart $f5, GFXH_INTRO_TEMPLE_SCENE_AGES
 	m_GfxHeader ages_flg_intro_triforce_room, w3VramAttributes
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $f6, GFXH_FILE_MENU_WITH_MESSAGE_SPEED
+m_GfxHeaderStart $f9, GFXH_FILE_MENU_WITH_MESSAGE_SPEED
 	m_GfxHeader map_file_menu_message_speed, w4TileMap+$240
 	m_GfxHeader flg_file_menu_message_speed, w4AttributeMap+$240
 	; Fall through
-m_GfxHeaderStart $f7, GFXH_FILE_MENU
+m_GfxHeaderStart $fa, GFXH_FILE_MENU
 	m_GfxHeader spr_din_1, $8001, $06
 	m_GfxHeader spr_nayru_1, $8061, $04
 	m_GfxHeader gfx_messagespeed, $9200
@@ -1614,7 +1619,7 @@ m_GfxHeaderStart $f7, GFXH_FILE_MENU
 	m_GfxHeader gfx_copy, $8a01
 	m_GfxHeader gfx_erase, $8aa1
 	; Fall through
-m_GfxHeaderStart $f8, GFXH_FILE_MENU_LAYOUT
+m_GfxHeaderStart $fb, GFXH_FILE_MENU_LAYOUT
 	m_GfxHeader map_file_menu_top, w4TileMap
 	m_GfxHeader flg_file_menu_top, w4AttributeMap
 	m_GfxHeader map_file_menu_middle, w4TileMap+$0a0
@@ -1623,7 +1628,7 @@ m_GfxHeaderStart $f8, GFXH_FILE_MENU_LAYOUT
 	m_GfxHeader flg_file_menu_bottom, w4AttributeMap+$1e0
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $f9, GFXH_SCENE_CREDITS_MAKUTREE_AGES
+m_GfxHeaderStart $fc, GFXH_SCENE_CREDITS_MAKUTREE_AGES
 	m_GfxHeader ages_spr_credits_makutree, $8000
 	m_GfxHeader ages_gfx_credits_makutree_1, $8800
 	m_GfxHeader ages_gfx_credits_makutree_2, $9000
@@ -1634,7 +1639,7 @@ m_GfxHeaderStart $f9, GFXH_SCENE_CREDITS_MAKUTREE_AGES
 	m_GfxHeader ages_flg_credits_gametitle, $9c41
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $fa, GFXH_UNAPPRAISED_RING_LIST_AGES
+m_GfxHeaderStart $fd, GFXH_UNAPPRAISED_RING_LIST_AGES
 	m_GfxHeader map_unappraised_ring_list, w4TileMap
 	m_GfxHeader flg_unappraised_ring_list, w4AttributeMap
 	m_GfxHeader ages_gfx_inventory_hud_1, $8000
@@ -1643,7 +1648,7 @@ m_GfxHeaderStart $fa, GFXH_UNAPPRAISED_RING_LIST_AGES
 	m_GfxHeader gfx_hud, $9000
 	m_GfxHeaderEnd
 
-m_GfxHeaderStart $fb, GFXH_APPRAISED_RING_LIST_AGES
+m_GfxHeaderStart $fe, GFXH_APPRAISED_RING_LIST_AGES
 	m_GfxHeader map_appraised_ring_list, w4TileMap
 	m_GfxHeader flg_appraised_ring_list, w4AttributeMap
 	m_GfxHeader ages_gfx_inventory_hud_1, $8000

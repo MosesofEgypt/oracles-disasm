@@ -33,16 +33,35 @@ groups:
       nothing grabbable
       (requires ring).
 
-  - name: TX_09_CONTEXT_SENSITIVE_ITEMS
+  - name: TX_09_CONTEXT_SENSITIVE_ITEMS_0
     index: 0x72
     text: |-
-      Contextual Items
-      Items are auto-equipped
-      when pressing/standing on
-      an area they can be used.
+      Sword & Bracelet
+      Sword/Bracelet is
+      auto-equipped when
+      touching a cuttable
+      or liftable block.
+
+  - name: TX_09_CONTEXT_SENSITIVE_ITEMS_1
+    index: 0x73
+    text: |-
+      Seeds & Shovel
+      Ember Seeds/Shovel is
+      auto-equipped when
+      touching a burnable
+      or diggable block.
+
+  - name: TX_09_CONTEXT_SENSITIVE_ITEMS_2
+    index: 0x74
+    text: |-
+      Rod & Harp
+      Rod/Harp is
+      auto-equipped if
+      standing on a stump
+      or a time portal.
 
   - name: TX_09_CONTEXT_SENSITIVE_BUTTON
-    index: 0x73
+    index: 0x75
     text: |-
       Context Button
       The button that all
@@ -50,7 +69,7 @@ groups:
       are equipped to.
 
   - name: TX_09_LOW_HEART_WARNING
-    index: 0x74
+    index: 0x76
     text: |-
       Low-Heart Beep
       A warning sound will play
@@ -58,7 +77,7 @@ groups:
       less of your max health.
 
   - name: TX_09_QUICK_SWAP
-    index: 0x75
+    index: 0x77
     text: |-
       Quick Swapping
       Hold Select to swap
@@ -67,3 +86,22 @@ groups:
       items. Release without
       pressing \abtn/\bbtn to
       open the map.
+
+  - name: TX_09_QUICK_DROP
+    index: 0x78
+    text: |-
+      Quick Drop/Throw
+      Continue to hold
+      \abtn/\bbtn after lifting
+      something to instantly
+      drop it. Moving will
+      instead throw it.
+
+  - name: TX_09_CARTRIDGE_RUMBLE
+    index: 0x79
+    text: |-
+      Cartridge Rumble
+      Enables rumble
+      when taking damage.
+      Requires the cartridge
+      have rumble support.

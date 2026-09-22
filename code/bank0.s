@@ -11378,6 +11378,7 @@ decPegasusSeedCounter:
 	dec l
 	ld b,$00
 	ld c,$07
+.if !defined(ENABLE_RING_REDUX)
 	ld a,PEGASUS_RING
 	call cpActiveRing
 	jr z,+
@@ -11390,6 +11391,7 @@ decPegasusSeedCounter:
 	jr nz,+
 	ld b,$80
 +
+.endif
 	call decHlRef16WithCap
 	ret z
 	ldi a,(hl)

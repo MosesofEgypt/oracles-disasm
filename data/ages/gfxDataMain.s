@@ -617,9 +617,12 @@
 	m_GfxData flg_inventory_screen_4_page_1
 	m_GfxData map_inventory_screen_4_page_2
 	m_GfxData flg_inventory_screen_4_page_2
+	m_GfxData map_inventory_screen_4_page_3
+	m_GfxData flg_inventory_screen_4_page_3
 	m_GfxData gfx_settings_text_page_0
 	m_GfxData gfx_settings_text_page_1
 	m_GfxData gfx_settings_text_page_2
+	m_GfxData gfx_settings_text_page_3
 	m_GfxData gfx_rings_uncomp
 .endif
 

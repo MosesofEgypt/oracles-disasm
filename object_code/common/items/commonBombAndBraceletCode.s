@@ -276,24 +276,29 @@ data_649a:
 ; b2: Throw speed without toss ring
 ; b3: Throw speed with toss ring
 itemWeights:
+	; ages first set
 	.db $1c $10 SPEED_180 SPEED_280
 	.db $20 $00 SPEED_080 SPEED_100
-.if defined(ROM_COMBO)
-	; ages
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+	; ages second set
 	.db $28 $20 SPEED_1a0 SPEED_280
 	.db $20 $00 SPEED_080 SPEED_100
+.endif
+.if defined(ROM_COMBO)
+	; ages third set
 	.db $20 $e0 SPEED_140 SPEED_180
 	.db $20 $00 SPEED_080 SPEED_100
 
-	; seasons
-.endif
-.if defined(ROM_AGES) && !defined(ROM_COMBO)
-	.db $28 $20 SPEED_1a0 SPEED_280
+	; seasons first set
+	.db $1c $10 SPEED_180 SPEED_280
 	.db $20 $00 SPEED_080 SPEED_100
-.else
+.endif
+.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+	; seasons second set
 	.db $20 $00 SPEED_100 SPEED_180
 	.db $20 $00 SPEED_0c0 SPEED_100
 .endif
+	; seasons third set
 	.db $20 $e0 SPEED_140 SPEED_180
 	.db $20 $00 SPEED_080 SPEED_100
 

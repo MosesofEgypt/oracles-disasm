@@ -409,7 +409,7 @@ func_4553:
 	; Done if holding something or riding a minecart (or both)
 	ld a,c
 	or a
-	jr nz,@animationFound
+	jp nz,@animationFound
 
 	; Check if using magnet gloves
 	ld a,(wMagnetGloveState)
@@ -417,7 +417,7 @@ func_4553:
 	jr z,+
 
 	ld c,$09
-	jr @animationFound
+	jp @animationFound
 +
 	; Check if he's holding out the shield, and what level
 	ld a,(wUsingShield)
@@ -467,17 +467,32 @@ func_4553:
 @pushingAnimation:
 .ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
 	call getItemForTileBeingPushedOn
-	cp ITEM_SEED_SATCHEL
-	jr nz,+
-		; it's the seed satchel, so we need to switch to ember seeds
-		xor a
-		ld (wSatchelSelectedSeeds),a
-		ld a,ITEM_SEED_SATCHEL
-	+
 	or a
 	jr z,+
 		cp a ; equip
+		ld c,a
 		call handleAutoEquipItem
+		ld a,c
+
+		; if it wasn't equipped, don't do anything
+		jr nz,+
+			cp ITEM_SEED_SATCHEL
+			jr nz,+
+				; it's the seed satchel, so might need to switch to ember seeds
+				ld a,(wSatchelSelectedSeeds)
+				inc a
+				swap a
+				sla a
+				and $e0
+
+				push hl
+				ld hl,wAutoEquipSubtypeInfo
+				or (hl)
+				ld (hl),a
+				pop hl
+
+				xor a
+				ld (wSatchelSelectedSeeds),a
 	+
 .endif
 	ld a,(w1Link.direction)
@@ -612,8 +627,8 @@ getItemForTileBeingPushedOn:
 
 @breakableSourcesAndItems:
 	.db BREAKABLETILESOURCE_SHOVEL|$80      ITEM_SHOVEL
-	.db BREAKABLETILESOURCE_BRACELET|$80    ITEM_BRACELET
 	.db BREAKABLETILESOURCE_SWORD_L1|$80    ITEM_SWORD
+	.db BREAKABLETILESOURCE_BRACELET|$80    ITEM_BRACELET
 	.db BREAKABLETILESOURCE_EMBER_SEED|$80  ITEM_SEED_SATCHEL
 	.db $00 ; terminator
 .endif
