@@ -40,12 +40,12 @@ checkDisplayDmgModeScreen:
 	or a
 	jr z,++
 
-	call serialFunc_0c8d
+	call manageSerialConnection
 	jr @vblankLoop
 ++
-	call serialFunc_0c85
-	ld a,$03
-	ldh (<hFFBE),a
+	call initializeSerialConnection
+	ld a,SERIAL_LINK_MODE_FILE_HOST
+	ldh (<hSerialLinkMode),a
 	xor a
 	ldh (<hSerialLinkState),a
 	jr @vblankLoop
@@ -343,7 +343,7 @@ fileSelectMode1:
 	jr z,++
 
 	ldh (<hActiveFileSlot),a
-	ld d,$00
+	ld d,FileDisplayStruct.fileLoadResult
 	call getFileDisplayVariableAddress
 	bit 7,(hl)
 	ld a,$05
@@ -659,7 +659,7 @@ fileSelectMode8:
 	jr z,+
 		; determine if file is completed
 		ldh a,(<hActiveFileSlot)
-		ld d,FileDisplayStruct.b7
+		ld d,FileDisplayStruct.completionType
 		call getFileDisplayVariableAddress
 		ld a,(hl)
 		and $03 ; NOTE: doing $03 here to account for "Combo beaten" bit
@@ -677,30 +677,28 @@ fileSelectMode8:
 			ld (hl),$00
 	+
 .endif
-
-	ld a,SND_SELECTITEM
-	call playSound
 	ld a,(wFileSelect.cursorPos2)
 	or a
-	jp z,setFileSelectModeTo1
+	jp z,+
+		.if defined(ROM_COMBO)
+			; change the game to whichever one was selected
+			ld a,(wSelectedTextOption)
+			rrca
+			call setIsSeasons
+			call comboLoadSpecificGame
+		.else
+			call loadFile
+		.endif
 
-	.if defined(ROM_COMBO)
-		; change the game to whichever one was selected
-		ld a,(wSelectedTextOption)
-		rrca
-		call setIsSeasons
-		call comboLoadSpecificGame
-	.else
-		call loadFile
-	.endif
-
-
-	ld a,(wFileSelect.cursorPos)
-	ldh (<hActiveFileSlot),a
-	call eraseFile
-	call initializeNgpFile
-	call saveFile
-	jp setFileSelectModeTo1
+		ld a,(wFileSelect.cursorPos)
+		ldh (<hActiveFileSlot),a
+		call eraseFile
+		call initializeNgpFile
+		call saveFile
+	+
+	call setFileSelectModeTo1
+	ld a,SND_SELECTITEM
+	jp playSound
 .endif
 
 ;;
@@ -743,7 +741,7 @@ fileSelectMode3:
 	jp z,setFileSelectModeTo1
 
 	ldh (<hActiveFileSlot),a
-	ld d,$00
+	ld d,FileDisplayStruct.fileLoadResult
 	call getFileDisplayVariableAddress
 	bit 7,(hl)
 	jr z,+
@@ -915,7 +913,7 @@ fileSelectMode4:
 	ret nz
 
 	ldh a,(<hActiveFileSlot)
-	ld d,$02
+	ld d,FileDisplayStruct.numHearts
 	call getFileDisplayVariableAddress
 	ld a,(hl)
 	or a
@@ -2094,7 +2092,7 @@ loadFileDisplayVariables:
 @nextFile:
 	call loadFile
 	ldh a,(<hActiveFileSlot)
-	ld d,$00
+	ld d,FileDisplayStruct.fileLoadResult
 	call getFileDisplayVariableAddress
 	ld a,c
 	ldi (hl),a
@@ -2204,7 +2202,7 @@ fileSelectDrawHeartsAndDeathCounter:
 	jr nc,+++
 
 	; Jump if the cursor is on an empty file
-	ld d,$00
+	ld d,FileDisplayStruct.fileLoadResult
 	call getFileDisplayVariableAddress
 	bit 7,(hl)
 	jr nz,+++
@@ -2217,7 +2215,7 @@ fileSelectDrawHeartsAndDeathCounter:
 .endif
 
 	; Draw death count
-	ld d,$04
+	ld d,FileDisplayStruct.deathCountL
 	call getFileDisplayVariableAddress_paramE
 	ld e,l
 	ld d,h
@@ -2239,7 +2237,7 @@ fileSelectDrawHeartsAndDeathCounter:
 
 	; Draw hearts
 	ld a,(wFileSelect.cursorPos)
-	ld d,$02
+	ld d,FileDisplayStruct.numHearts
 	call getFileDisplayVariableAddress
 	ldi a,(hl)
 	ld b,(hl)
@@ -2419,18 +2417,18 @@ fileSelectMode7:
 	call clearMemory
 
 	call textInput_updateEntryCursor
-	call serialFunc_0c85
+	call initializeSerialConnection
 
-	ld a,$04
-	ldh (<hFFBE),a
+	ld a,SERIAL_LINK_MODE_FILE_CLIENT
+	ldh (<hSerialLinkMode),a
 	xor a
 	ldh (<hSerialLinkState),a
-	ld (wGenericCutscene.endingCutsceneSubstate),a
+	ld (wFileSelect.fileTransferErrorCode),a
 
 	ld hl,wFileSelect.linkTimer
 	ld a,$f0
 	ldi (hl),a
-	ld a,$1e
+	ld a,$1e	; wFileSelect.linkErrorCode (what does $1e mean?)
 	ld (hl),a
 
 	jp loadGfxRegisterState5AndIncFileSelectMode2
@@ -2441,65 +2439,68 @@ fileSelectMode7:
 	ldh a,(<hSerialInterruptBehaviour)
 	or a
 	jr nz,++
+		ldh a,(<hSerialTransferErrorCode)
+		or a
+		jp nz,@loadSerialLinkFailedScreen
+			ld hl,wFileSelect.linkTimer
+			dec (hl)
+			jr nz,+
+				ld a,SERIAL_CODE_TIMEOUT
+				ldh (<hSerialTransferErrorCode),a
+				jp @loadSerialLinkFailedScreen
+			+
+			jp requestSerialConnection
+	++
+		ld a,(wFileSelect.linkErrorCode)
+		or a
+		jr z,+
+			dec a
+			ld (wFileSelect.linkErrorCode),a
+			ret
+	+
 
-	ldh a,(<hFFBD)
-	or a
-	jp nz,@func_02_4c55
-	ld hl,wFileSelect.linkTimer
-	dec (hl)
-	jr nz,+
-
-	ld a,$80
-	ldh (<hFFBD),a
-	jp @func_02_4c55
-+
-	jp serialFunc_0c73
-++
-	ld a,(wFileSelect.cbc0)
-	or a
-	jr z,+
-
-	dec a
-	ld (wFileSelect.cbc0),a
-	ret
-+
-	call serialFunc_0c8d
-	ldh a,(<hFFBD)
+	call manageSerialConnection
+	ldh a,(<hSerialTransferErrorCode)
 	or a
 	jr z,+
+		cp SERIAL_CODE_UNKNOWN_3	; I've looked everywhere, and I can't find
+		;                             a location that this error could be set.
+		jr z,+
+			jp nz,@loadSerialLinkFailedScreen
+	+
 
-	cp $83
-	jr z,+
-
-	jp nz,@func_02_4c55
-+
+	; continue if our client is in the "waitForSerialActivity" state
 	ldh a,(<hSerialLinkState)
 	cp $07
 	ret nz
+
+	; find a non-empty file in the ones we received
 	ld e,$03
--
-	dec e
-	ld d,$00
-	call getFileDisplayVariableAddress_paramE
-	bit 7,(hl)
-	jr z,+
+	-
+		dec e
+		ld d,FileDisplayStruct.fileLoadResult
+		call getFileDisplayVariableAddress_paramE
+		bit 7,(hl)
+		jr z,+
+			; bit 7 is set, so file is empty
+			ld a,e
+			or a
+			jr nz,-
 
-	ld a,e
-	or a
-	jr nz,-
-
-	ld a,$85
-	ld (wGenericCutscene.endingCutsceneSubstate),a
-	ld a,$ff
-	ld (wFileSelect.cursorPos),a
-	jp @func_02_4c4b
-+
+		; couldn't find any valid files
+		ld a,SERIAL_CODE_NO_VALID_FILES
+		ld (wFileSelect.fileTransferErrorCode),a
+		ld a,$ff
+		ld (wFileSelect.cursorPos),a
+		jp @shutdownTransfer
+	+
+	; found a non-empty file. select it
 	jp loadGfxRegisterState5AndIncFileSelectMode2
 
 ;;
 ; State 2: Reloading graphics to show other files
 @state2:
-	call serialFunc_0c8d
+	call manageSerialConnection
 	ld a,$06
 	ld (wFileSelect.cursorOffset),a
 	xor a
@@ -2516,7 +2517,7 @@ fileSelectMode7:
 ;;
 ; State 3: Selecting file from other game
 @state3:
-	call serialFunc_0c8d
+	call manageSerialConnection
 	call fileSelectUpdateInput
 	jr nz,@selectedSomething
 
@@ -2529,22 +2530,22 @@ fileSelectMode7:
 @moveCursorToQuit:
 	ld a,$03
 	ld (wFileSelect.cursorPos),a
-	ld a,$8f
-	ld (wGenericCutscene.endingCutsceneSubstate),a
+	ld a,SERIAL_CODE_CLIENT_DISCONNECT
+	ld (wFileSelect.fileTransferErrorCode),a
 
 @selectedSomething:
 	ld a,(wFileSelect.cursorPos)
 	cp $03
-	jr z,@func_02_4c4b
+	jr z,@shutdownTransfer
 
 .else
 
 @moveCursorToQuit:
 	ld a,$03
 	ld (wFileSelect.cursorPos),a
-	ld a,$8f
-	ld (wGenericCutscene.endingCutsceneSubstate),a
-	jr @func_02_4c4b
+	ld a,SERIAL_CODE_CLIENT_DISCONNECT
+	ld (wFileSelect.fileTransferErrorCode),a
+	jr @shutdownTransfer
 
 @selectedSomething:
 	ld a,(wFileSelect.cursorPos)
@@ -2553,7 +2554,7 @@ fileSelectMode7:
 
 .endif
 
-	ld d,FileDisplayStruct.b0
+	ld d,FileDisplayStruct.fileLoadResult
 	call getFileDisplayVariableAddress
 	bit 7,(hl) ; Check if file is blank
 	jr z,+
@@ -2564,21 +2565,23 @@ fileSelectMode7:
 	ld a,(wOpenedMenuType)
 	cp MENU_RING_LINK
 	jr nz,+
-
-	; Link menu from blue snake
+	; move to the "prepareAndSendFileSelectPacket" state
+	; (Link menu from blue snake)
 	ld a,$0c
 	ldh (<hSerialLinkState),a
 	ld a,$05
 	ld (wFileSelect.mode2),a
 	ret
 +
-	; Linking from file select screen
+	; move to the "prepareAndSendShutdownPacket" state
+	; (Linking from file select screen)
 	ld a,$08
 	ldh (<hSerialLinkState),a
 	jp loadGfxRegisterState5AndIncFileSelectMode2
 
 ;;
-@func_02_4c4b:
+@shutdownTransfer:
+	; move to the "prepareAndSendShutdownPacket" state
 	ld a,$08
 	ldh (<hSerialLinkState),a
 	ld a,$05
@@ -2586,43 +2589,49 @@ fileSelectMode7:
 	ret
 
 ;;
-@func_02_4c55:
+@loadSerialLinkFailedScreen:
 	call disableLcd
 	ld a,GFXH_ERROR_TEXT
 	call loadGfxHeader
 	call loadGfxRegisterState5AndIncFileSelectMode2
+
+	; move to the "prepareAndSendShutdownPacket" state
 	ld a,$08
 	ldh (<hSerialLinkState),a
 	ld a,$06
 	ld (wFileSelect.mode2),a
 	ld a,180
 	ld (wFileSelect.linkTimer),a
-	ldh a,(<hFFBD)
-	ld (wFileSelect.cbc0),a
+	ldh a,(<hSerialTransferErrorCode)
+	ld (wFileSelect.linkErrorCode),a
 	ret
 
 ;;
 ; Selected a file from the file select screen
 @state4:
-	call serialFunc_0c8d
+	call manageSerialConnection
 	ldh a,(<hSerialInterruptBehaviour)
 	or a
 	ret nz
 
-	call loadFile
+	.if defined(ROM_COMBO)
+		call comboLoadSpecificGame
+	.else
+		call loadFile
+	.endif
 
 	; set hl = wRingFortuneStuff + fileIndex * $16
 	ld a,(wFileSelect.cursorPos)
 	inc a
-	ld hl,w4RingFortuneStuff
+	ld hl,w4SerialDataBuffer
 	ld bc,$0016
--
-	dec a
-	jr z,+
+	-
+		dec a
+		jr z,+
 
-	add hl,bc
-	jr -
-+
+		add hl,bc
+		jr -
+	+
 	; Copy to the first $16 bytes of the new file to create ($c600-$c615). Includes link/child
 	; name, animal companion, etc.
 	ld b,$16
@@ -2630,22 +2639,62 @@ fileSelectMode7:
 	call copyMemory
 	ld hl,wFileIsLinkedGame
 	set 0,(hl)
+
+	.if defined(ROM_COMBO)
+		; toggle the game, since the header we received has
+		; whichGame set to the originating game's value.
+		; only need to do this for the combo since separate
+		; games will each set it properly when they're saved
+		dec hl
+		ld a,(hl)
+		rrca
+		call setIsSeasons
+	.endif
+
 	ld l,<wFileIsCompleted
-	ld (hl),$00
+	; TODO: figure out why NG+ tiers are being seemingly
+	;       randomly set on transferred files.
+	;.if defined(ROM_COMBO)
+	;	ld a,(hl)
+	;	and $30
+	;	ld (hl),a
+	;.else
+		ld (hl),$00
+	;.endif
+
 	call initializeFile
+.if defined(ROM_COMBO)
+	; copy the heart count over to the new file
+	ld a,(wFileSelect.cursorPos)
+	ld d,FileDisplayStruct.numHeartContainers
+	call getFileDisplayVariableAddress
+	ld a,(hl)
+	ld hl,wLinkHealth
+	ldi (hl),a
+	ldi (hl),a
+	call saveFile
+.endif
+	call setFileSelectModeTo1
 	ld a,SND_SELECTITEM
-	call playSound
-	jp setFileSelectModeTo1
+	jp playSound
 
 ;;
 ; State 5: Connected successfully, waiting for data?
 @state5:
-	call serialFunc_0c8d
+	call manageSerialConnection
 	ldh a,(<hSerialInterruptBehaviour)
 	or a
 	ret nz
 
 @cancelLink:
+.if defined(ROM_COMBO)
+	; restore the game identifying function now that we're
+	; going back to ingame and it's not toggling constantly
+	ld a,(wWhichGame)
+	xor $01
+	rrca
+	call setIsSeasons
+.endif
 	ld a,(wOpenedMenuType)
 	cp MENU_RING_LINK
 	jp z,closeMenu
@@ -2656,13 +2705,13 @@ fileSelectMode7:
 ;;
 ; State 6: error
 @state6:
-	call serialFunc_0c8d
+	call manageSerialConnection
 	ldh a,(<hSerialInterruptBehaviour)
 	or a
 	ret nz
 
-	ld a,(wFileSelect.cbc0)
-	ldh (<hFFBD),a
+	ld a,(wFileSelect.linkErrorCode)
+	ldh (<hSerialTransferErrorCode),a
 	ld a,(wKeysJustPressed)
 	or a
 	jr nz,@cancelLink
@@ -2743,7 +2792,7 @@ fileSelectDrawLink:
 	push de
 
 	; Draw triforce symbol for hero's files
-	ld d,$07
+	ld d,FileDisplayStruct.completionType
 	call getFileDisplayVariableAddress_paramE
 	xor a
 	ld b,$10
@@ -2822,7 +2871,7 @@ updateFileLinkPaletteForNewGamePlus:
 	ld a,(hl)
 
 	; get the NG+ color to use in b
-	ld d,FileDisplayStruct.b7
+	ld d,FileDisplayStruct.completionType
 	call getFileDisplayVariableAddress
 	ld a,(hl)
 	and $30

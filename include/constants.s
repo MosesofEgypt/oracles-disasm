@@ -26,6 +26,7 @@
 .include "constants/common/objectGfxHeaders.s"
 .include "constants/common/objectSpeeds.s"
 .include "constants/common/other.s"
+.include "constants/common/serial.s"
 .include "constants/common/parts.s"
 .include "constants/common/rings.s"
 .include "constants/common/roomFlags.s"

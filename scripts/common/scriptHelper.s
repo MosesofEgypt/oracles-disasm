@@ -516,7 +516,7 @@ blueSnake_linkOrFortune:
 	ld b,$03
 	call secretFunctionCaller
 
-	call serialFunc_0c85
+	call initializeSerialConnection
 	ld a,(wSelectedTextOption)
 	ld e,Interaction.var39
 	ld (de),a

@@ -360,14 +360,14 @@ runIntro:
 	or a
 	jr z,+
 
-	call serialFunc_0c8d
+	call manageSerialConnection
 	ld a,$09
 	ld (wTmpcbb4),a
 	jr @nextStage
 +
-	call serialFunc_0c85
-	ld a,$03
-	ldh (<hFFBE),a
+	call initializeSerialConnection
+	ld a,SERIAL_LINK_MODE_FILE_HOST
+	ldh (<hSerialLinkMode),a
 	xor a
 	ldh (<hSerialLinkState),a
 	ld a,(wKeysJustPressed)

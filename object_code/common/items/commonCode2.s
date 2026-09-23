@@ -8,11 +8,11 @@ kenpoMasterComboActive:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 isDeepUnderwater:
-	ldh (<hFFBD),a	; store temporarily for restoring later
+	ldh (<hTempVal0),a	; store temporarily for restoring later
 	ld a,(wTilesetFlags)
 	cpl
 	and TILESETFLAG_UNDERWATER
-	ldh a,(<hFFBD)	; restore a from temp var
+	ldh a,(<hTempVal0)	; restore a from temp var
 	ret
 .endif
 .endif

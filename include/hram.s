@@ -109,19 +109,23 @@
 	; If this is nonzero then this gameboy uses an external clock (is the "slave").
 	; In JP region, this is $d0 or $d1; in the US region, it's $e0 or $e1.
 	hSerialInterruptBehaviour	db	; $ffba/$ffb8
+
 	; Serial interrupt sets this to 1 if a byte has been read
 	hReceivedSerialByte		db	; $ffbb/$ffb9
+
 	; Value of byte from R_SB
 	hSerialByte			db	; $ffbc/$ffba
 
-	hFFBD				db	; $ffbd/$ffbb
+	; 0 if no errors occurred
+	hSerialTransferErrorCode				db	; $ffbd/$ffbb
 
 	; This variable is the link "mode" (what it's doing right now).
-	; $01: either ring link or ring fortune
-	; $02: either ring link or ring fortune
-	; $03: ready to receive a link (titlescreen or "can't run on DMG" screen)
-	; $04: "game link"
-	hFFBE				db	; $ffbe/$ffbc
+	; $01: serving as the host that receives the fortune
+	; $02: serving as the client that initiates the fortune
+	; $03: serving as the host that receives a file transfer request
+	;      (this is seen on the titlescreen or "can't run on DMG" screen)
+	; $04: serving as the client that initiates a file transfer request
+	hSerialLinkMode				db	; $ffbe/$ffbc
 
 	; This keeps track of the "state" corresponding to the above link mode.
 	hSerialLinkState		db	; $ffbf/$ffbd
@@ -132,6 +136,8 @@
 	hGdmaDelayedCount			db ; $ffc2/$ffc0
 	; debug feature for tracking delayed frames
 	hGdmaDelayedCountTotal      dsb 4 ;
+
+	hTempVal0					db
 
 	; Marker for end of "normal" hram (memory gets cleared up to here upon game initialization)
 	hramEnd			 	.db	; $ffc2/$ffc0

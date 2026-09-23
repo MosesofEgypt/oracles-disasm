@@ -2809,37 +2809,40 @@ data_0bfd:
 serialInterrupt:
 	ldh a,(<hSerialInterruptBehaviour)
 	or a
-	jr z,@internalClock
-
-@externalClock:
-	ld a,($ff00+R_SB)
-	ldh (<hSerialByte),a
-	xor a
-	ld ($ff00+R_SB),a
-	inc a
-	ldh (<hReceivedSerialByte),a
-	pop af
-	reti
-
-@internalClock:
-	; If received $d0 or $d1 ($e0 or $e1 for US region), switch to external clock
-	ld a,($ff00+R_SB)
-	cp $d1 + SERIAL_UPPER_NIBBLE
 	jr z,+
-
-	cp $d0 + SERIAL_UPPER_NIBBLE
-	jr nz,++
-+
-	ldh (<hSerialInterruptBehaviour),a
-	xor a
-	ld ($ff00+R_SB),a
-	pop af
-	reti
-++
-	ld a,$d1 + SERIAL_UPPER_NIBBLE
-	ld ($ff00+R_SB),a
-	ld a,$80
-	call writeToSC
+		; receiving data(using external clock)
+		ld a,($ff00+R_SB)
+		ldh (<hSerialByte),a
+		xor a
+		ld ($ff00+R_SB),a
+		inc a
+		ldh (<hReceivedSerialByte),a
+		jr @done
+	+
+		; sending data(using internal clock)
+		ld a,($ff00+R_SB)
+		cp PACKET_TYPE_DATA_PUT
+		jr z,+
+			; check to see if we're sending a request for data
+			cp PACKET_TYPE_DATA_GET
+			jr nz,++
+		+
+			; we were either just designated as the data sender, or
+			; we're continuing to send until we send a GET request.
+			ldh (<hSerialInterruptBehaviour),a
+			xor a
+			ld ($ff00+R_SB),a
+			jr @done
+		++
+			; either sending a request for receiving data, or we haven't
+			; yet established a serial link(and thus we need to listen).
+			; either way, we switch to receiving data(external clock) and
+			; tell the other gameboy begin sending data(internal clock)
+			ld a,PACKET_TYPE_DATA_PUT
+			ld ($ff00+R_SB),a
+			ld a,SERIAL_MODE_GET
+			call writeToSC
+@done
 	pop af
 	reti
 
@@ -2847,20 +2850,26 @@ serialInterrupt:
 ; Writes A to SC. Also writes $00 or $01 beforehand which might just be to reset any active
 ; transfers?
 writeToSC:
+	;push af
 	push af
 	and $01
 	ld ($ff00+R_SC),a
+	; high-speed has no noticible effect here
 	pop af
+	;or $02 ; enable high speed connection
 	ld ($ff00+R_SC),a
+	;pop af
 	ret
 
 ;;
-serialFunc_0c73:
+; Initiates a serial connection with us as the sender.
+requestSerialConnection:
 	xor a
-	ldh (<hFFBD),a
-	ld a,$d0 + SERIAL_UPPER_NIBBLE
+	ldh (<hSerialTransferErrorCode),a
+	; indicate to the other gameboy to begin receiving data
+	ld a,PACKET_TYPE_DATA_GET
 	ld ($ff00+R_SB),a
-	ld a,$81
+	ld a,SERIAL_MODE_PUT
 	jr writeToSC
 
 ;;
@@ -2871,13 +2880,13 @@ disableSerialPort:
 	jr writeToSC
 
 ;;
-serialFunc_0c85:
-	jpab serialCode.func_44ac
+initializeSerialConnection:
+	jpab serialCode.initializeSerialConnection_body
 
 ;;
-serialFunc_0c8d:
+manageSerialConnection:
 	push de
-	callab serialCode.func_4000
+	callab serialCode.manageSerialConnection_body
 	pop de
 	ret
 

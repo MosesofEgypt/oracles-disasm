@@ -242,11 +242,11 @@ m_InteractionCode $89
 @label_0a_036:
 	ldh a,(<hSerialInterruptBehaviour)
 	or a
-	jp z,serialFunc_0c73
+	jp z,requestSerialConnection
 
 	and $01
-	add $01
-	ldh (<hFFBE),a
+	add SERIAL_LINK_MODE_FORTUNE_HOST
+	ldh (<hSerialLinkMode),a
 	call interactionIncSubstate
 
 	ld l,Interaction.counter1
@@ -255,27 +255,12 @@ m_InteractionCode $89
 	jp showTextNonExitable
 
 @state5Substate2:
-	call serialFunc_0c8d
+	call manageSerialConnection
 	ldh a,(<hSerialInterruptBehaviour)
 	or a
 	ret nz
 
-	ld a,($ff00+R_SVBK)
-	push af
-	ld a,:w4RingFortuneStuff
-	ld ($ff00+R_SVBK),a
-	ldh a,(<hFFBD)
-	ld b,a
-	ld a,(wGenericCutscene.endingCutsceneSubstate)
-	ld e,a
-	ld a,(w4RingFortuneStuff)
-	ld c,a
-
-	pop af
-	ld ($ff00+R_SVBK),a
-
-	ld a,b
-	or e
+	call @getSerialTransferResult
 	jr nz,@blueSnakeErrorCondition
 
 	; Put 'c' into var3a (ring to get from fortune)
@@ -288,13 +273,20 @@ m_InteractionCode $89
 	jr @setBlueSnakeExitScript
 
 @blueSnakeErrorCondition:
-	ld hl,{SCRIPTS_1}.blueSnakeScript_doNotRemoveCable
+	; determine what error message to show
 	ld a,e
-	cp $8f
+
+	; client either hit "quit", or disconnected the link cable
+	ld hl,{SCRIPTS_1}.blueSnakeScript_doNotRemoveCable
+	cp SERIAL_CODE_CLIENT_DISCONNECT
 	jr z,@setBlueSnakeExitScript
+
+	; didn't receive any valid files from host
 	ld hl,{SCRIPTS_1}.blueSnakeExitScript_noValidFile
-	cp $85
+	cp SERIAL_CODE_NO_VALID_FILES
 	jr z,@setBlueSnakeExitScript
+
+	; unknown error
 	ld hl,{SCRIPTS_1}.blueSnakeExitScript_linkFailed
 
 @setBlueSnakeExitScript:
@@ -313,25 +305,37 @@ m_InteractionCode $89
 	jp interactionIncSubstate
 
 @state5Substate4:
-	ld a,($ff00+R_SVBK)
-	push af
-	ld a,:w4RingFortuneStuff
-	ld ($ff00+R_SVBK),a
-
-	ldh a,(<hFFBD)
-	ld b,a
-	ld a,(wGenericCutscene.endingCutsceneSubstate)
-	ld e,a
-
-	pop af
-	ld ($ff00+R_SVBK),a
-
-	ld a,b
-	or e
+	call @getRingFortuneResult
 	jr nz,@blueSnakeErrorCondition
 
 	ld hl,{SCRIPTS_1}.blueSnakeScript_successfulRingTransfer
 	jr @setBlueSnakeExitScript
+
+@getSerialTransferResult:
+	ld a,($ff00+R_SVBK)
+	push af
+	ld a,:w4SerialDataBuffer
+	ld ($ff00+R_SVBK),a
+	ldh a,(<hSerialTransferErrorCode)
+	ld b,a
+	ld a,(wFileSelect.fileTransferErrorCode)
+	ld e,a
+
+	; retrieve the calculated ring from the serial buffer
+	ld a,(w4SerialDataBuffer)
+	ld c,a
+
+	pop af
+	ld ($ff00+R_SVBK),a
+	ld a,b
+	or e
+	ret
+
+@getRingFortuneResult:
+	ld l,c	; backup
+	call @getSerialTransferResult
+	ld c,l	; restore
+	ret
 
 
 ; Populates var36, var37, var38 as described in the variable list.

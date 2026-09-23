@@ -562,6 +562,10 @@ saveFile:
 .endif
 
 ;;
+; @param[out]	a	$00 if file was loaded successfully.
+;                   $01 if first file copy is invalid.
+;                   $02 if second file copy is invalid.
+;                   $ff if all file copies are invalid.
 loadFile:
 .ifdef ROM_COMBO
 	call getLastGamePlayed

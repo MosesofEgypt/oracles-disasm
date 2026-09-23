@@ -26,14 +26,15 @@
 .define DeathRespawnStruct.size $0c
 
 .STRUCT FileDisplayStruct
-	b0		db ; Bit 7 set if the file is blank
-	b1		db
+	fileLoadResult		db ; Bit 7 set if the file is blank
+	fileLoadResult2		db ; copy of previous value
 	numHearts	db
 	numHeartContainers	db
 	deathCountL	db
 	deathCountH	db
-	b6		db ; Bit 0: linked game
-	b7		db ; Bit 0: completed game, 1: hero's file
+	isLinked		db ; Bit 0: linked game
+	completionType		db ; Bit 0: completed game
+	                       ; Bit 1: hero's file
 .ENDST
 .define FileDisplayStruct.size 8
 
@@ -153,6 +154,98 @@
 		db
 .endst
 
+.struct TransferStatusPacketStruct
+	packetLen:		; always $03, which includes this byte
+		db
+	packetType:
+		; transfer status represented by a SERIAL_MODE to move to.
+		; this will be set to PACKET_TYPE_STATUS_SUCCESS if the packet
+		; was successfully received and passed checksum validation.
+		; otherwise it'll be set to PACKET_TYPE_STATUS_FAILURE
+		; to indicate that a retry is being requested
+		db
+	checksum:		; sum of previous bytes
+		db
+.endst
+
+.struct LoadFilePacketStruct
+	packetLen:		; always $04, which includes this byte
+		db
+	packetType:		; always set to PACKET_TYPE_LOAD_FILE_GET
+		db
+	fileIndex:		; copy of hActiveFileSlot
+		db
+	checksum:		; sum of previous bytes
+		db
+.endst
+
+.struct RingDataPacketStruct
+	packetLen:		; always $0a, which includes this byte
+		db
+	ringsObtained:	; copy of wRingsObtained
+		dsb $08
+	checksum:		; sum of previous bytes
+		db
+.endst
+
+.struct FileHeaderPacketStruct
+	packetLen:          ; always $21, which includes this byte
+		db
+
+	; NOTE: the data BELOW is the same as in FileDisplayStruct
+	fileLoadResult:     ; result from calling loadFile
+	;                     (non-zero indicates error) $01
+		db
+	fileLoadResult2:    ; copy of fileLoadResult     $02
+		db
+	linkMaxHealth:      ; copy of wLinkMaxHealth     $03
+		db
+	linkMaxHealth2:     ; copy of wLinkMaxHealth     $04
+		db
+	deathCounter:       ; copy of wDeathCounter      $05
+		dw
+	isLinked:           ; copy of wFileIsLinkedGame  $07
+		db
+	completionType:     ; Bit 0: completed game      $08
+	                    ; Bit 1: hero's file
+		db
+	; NOTE: the data ABOVE is the same as in FileDisplayStruct
+
+	gameID:             ; copy of wGameID           $09
+		dw
+	linkName:           ; copy of wLinkName         $0b
+		dsb 5
+
+	; NOTE: these constants MUST be 0 and 1 or a lot will break
+	constZero:          ;                           $10
+		db
+	constOne:           ;                           $11
+		db
+
+	kidName:            ; copy of wKidName          $12
+		dsb 6
+	childStatus:        ; $copy of wChildStatus     $18
+		db
+	animalCompanion:    ; copy of wAnimalCompanion  $19
+		db
+	whichGame:          ; copy of wWhichGame        $1a
+		db
+	isLinkedGame:       ; copy of wFileIsLinkedGame $1b
+		db
+	isHeroGame:         ; copy of wFileIsHeroGame   $1c
+		db
+	isCompleted:        ; copy of wFileIsCompleted  $1d
+		; NOTE: upper nibble is being repurposed for the NG+ cycle
+		db
+	obtainedRingBox:    ; copy of wObtainedRingBox  $1e
+		db
+
+	packetType:         ;                           $1f
+		; always set to either PACKET_TYPE_HEADER_SEASONS or PACKET_TYPE_HEADER_AGES
+		db
+	checksum:           ; sum of previous bytes     $20
+		db
+.endst
 
 
 

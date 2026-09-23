@@ -1311,7 +1311,11 @@ wMenuUnionStart:
 		db
 	linkTimer: ; $cbbf
 		db
-	cbc0: ; $cbc0
+	linkErrorCode: ; $cbc0
+		db
+	cbc1: ; $cbc1
+		db
+	fileTransferErrorCode: ; $cbc2
 		db
 
 .nextu wMapMenu
@@ -3848,9 +3852,9 @@ w4PacketByteIndex:		db		; $d981
 
 w4PacketChecksum:		db		; $d982
 
-w4d983:				db		; $d983
+w4SerialStateIdle:		db		; $d983
 
-w4d984:				db		; $d984
+w4ReceivingPacketBytes:		db		; $d984
 
 w4DisableLinkTimeout:		db		; $d985
 
@@ -3862,18 +3866,32 @@ w4NumPacketBytes:		db		; $d987
 
 ; Can be $00 (not sending), $01 (sending), or $80?
 w4WaitingForNextByte:		db		; $d988
-w4FileLinkTimer:		dw		; $d989
-w4d98b:				db		; $d98b
-w4d98c:				db		; $d98c
+w4FileLinkTimer:			dw		; $d989
+w4SendingEmptyPacket:		db		; $d98b
+w4d98c:						db		; $d98c
 
 ; TODO: Rename this? It seems to be a temporary buffer. Sometimes it consists of the first $16 bytes
 ; of a file ($c600-$c615) copied across the link cable.
-w4RingFortuneStuff:		dsb $16*3	; $d98d
+w4SerialDataBuffer:		dsb $16*3	; $d98d
 
 w4Filler1:			dsb $16		; $d9cf
 
 ; First byte should be the length of the packet (including itself).
-w4PacketBuffer:			dsb $21b	; $d9e5
+.union
+	w4PacketBuffer:			dsb $21b	; $d9e5
+.nextu
+	w4FileHeaderPacket:
+		instanceof FileHeaderPacketStruct
+.nextu
+	w4LoadFilePacket:
+		instanceof LoadFilePacketStruct
+.nextu
+	w4RingDataPacket:
+		instanceof RingDataPacketStruct
+.nextu
+	w4TransferStatusPacket:
+		instanceof TransferStatusPacketStruct
+.endu
 
 w4GfxBuf1:			dsb $200	; $dc00
 w4GfxBuf2:			dsb $200	; $de00
