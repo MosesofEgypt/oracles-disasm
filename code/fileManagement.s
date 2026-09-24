@@ -789,15 +789,24 @@ loadAcrossComboGame:
 
 	; give the player the bonus items
 	ld hl,@bonusInventoryItems
+	ld a,(hl)
 	-
-		ld a,(hl)
 		call checkTreasureObtained
-		ldi a,(hl)
-		ld c,(hl)
 		inc hl
-		push hl
-		call c,giveTreasure
-		pop hl
+		ldi a,(hl)
+		jr nc,+
+			; we have this treasure.
+			; see if we have the required treasure
+			call checkTreasureObtained
+			jr nc,+
+				ldd a,(hl)
+				ld c,a
+				dec hl
+				ldi a,(hl)
+				call giveTreasure
+				inc hl
+		+
+		inc hl
 		ld a,(hl)
 		or a
 		jr nz,-
@@ -819,10 +828,11 @@ loadAcrossComboGame:
 	ret
 
 @bonusInventoryItems:
-	.db TREASURE_BIGGORON_SWORD,	$00
-	.db TREASURE_BOMBCHUS,			$00
-	.db TREASURE_RING_BOX,			$01
-	.db TREASURE_SHIELD,			$01
+	;	item to give                item required   level/amount
+	.db TREASURE_BIGGORON_SWORD,    TREASURE_PUNCH, $00
+	.db TREASURE_BOMBCHUS,          TREASURE_BOMBS, $00
+	.db TREASURE_RING_BOX,          TREASURE_PUNCH, $01
+	.db TREASURE_SHIELD,            TREASURE_PUNCH, $01
 	.db $00
 
 ;;
@@ -913,9 +923,20 @@ initializeComboGame:
 	ld a,(hl)
 	-
 		call checkTreasureObtained
+		inc hl
 		ldi a,(hl)
-		ld c,$00 ; give 0 of whatever the consumable item is
-		call c,giveTreasure
+		jr nc,+
+			; we have this treasure.
+			; see if we have the required treasure
+			call checkTreasureObtained
+			jr nc,+
+				dec hl
+				dec hl
+				ldi a,(hl)
+				ld c,$00
+				inc hl
+				call giveTreasure
+		+
 		ld a,(hl)
 		or a
 		jr nz,-
@@ -935,17 +956,21 @@ initializeComboGame:
 	jp saveFile
 
 @bonusInventoryItems:
-	.db TREASURE_SWORD
-	.db TREASURE_BIGGORON_SWORD
-	.db TREASURE_BOMBCHUS
+	;	item to give                item required
+	.db TREASURE_SWORD,             TREASURE_PUNCH
+	.db TREASURE_BIGGORON_SWORD,    TREASURE_PUNCH
+	.db TREASURE_BOMBCHUS,          TREASURE_BOMBS
 .if defined(WIDE_INVENTORY_SPRITES) || !defined(ENABLE_DOUBLE_HEART_CAP)
 	; NOTE: these can only be allowed with wide inventory sprites due to
 	;       there not being any tiles remaining for part of the top left
 	;       part of the harp in seasons, or the spring tile in ages.
 	;       this only applies with a doubled heart cap, as the tile in
 	;       question is being overwritten by an overlapped heart tile.
-	.db TREASURE_ROD_OF_SEASONS
-	.db TREASURE_HARP
+	.db TREASURE_ROD_OF_SEASONS,    TREASURE_PUNCH
+	.db TREASURE_HARP,              TREASURE_PUNCH
+.endif
+.if defined(ENABLE_NEW_GAME_PLUS)
+	.db TREASURE_LIFE_VIAL,         TREASURE_PUNCH
 .endif
 	.db $00
 
@@ -954,7 +979,11 @@ initializeComboGame:
 	.db $10
 	.db $a4	; TREASURE_PUNCH, TREASURE_SWORD, TREASURE_ROD_OF_SEASONS
 	.db $30	; TREASURE_BIGGORON_SWORD, TREASURE_BOMBCHUS
+.if defined(ENABLE_NEW_GAME_PLUS)
+	.db $04 ; TREASURE_LIFE_VIAL
+.else
 	.db $00
+.endif
 	.db $00
 	.db $00
 	.db $90	; TREASURE_RING_BOX, TREASURE_POTION
@@ -973,7 +1002,11 @@ initializeComboGame:
 	.db $10
 	.db $24	; TREASURE_PUNCH, TREASURE_SWORD
 	.db $30	; TREASURE_BIGGORON_SWORD, TREASURE_BOMBCHUS
+.if defined(ENABLE_NEW_GAME_PLUS)
+	.db $06 ; TREASURE_HARP, TREASURE_LIFE_VIAL
+.else
 	.db $02	; TREASURE_HARP
+.endif
 	.db $00
 	.db $e0	; TREASURE_TUNE_OF_ECHOES, TREASURE_TUNE_OF_CURRENTS, TREASURE_TUNE_OF_AGES
 	.db $90	; TREASURE_RING_BOX, TREASURE_POTION
