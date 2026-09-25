@@ -11,6 +11,13 @@
 .define SERIAL_CLOCK_INTERNAL 		$01
 .define SERIAL_TRANSFER_ENABLED		$80
 
+; NOTE: The designation between GET and PUT here is a bit of a misnomer.
+;       The byte currently in R_SB is transmitted to the other gameboy
+;       while the other gameboy sends us it's R_SB contents.
+;       This happens regardless of whether we're in a GET or PUT state.
+;       The distinction is useful however, as it indicates which device
+;       is expected to be sending or receiving the data.
+
 ; $80/$81
 .define SERIAL_MODE_GET				SERIAL_TRANSFER_ENABLED | SERIAL_CLOCK_EXTERNAL
 .define SERIAL_MODE_PUT				SERIAL_TRANSFER_ENABLED | SERIAL_CLOCK_INTERNAL

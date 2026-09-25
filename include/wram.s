@@ -3867,7 +3867,11 @@ w4NumPacketBytes:		db		; $d987
 ; Can be $00 (not sending), $01 (sending), or $80?
 w4WaitingForNextByte:		db		; $d988
 w4FileLinkTimer:			dw		; $d989
-w4SendingEmptyPacket:		db		; $d98b
+
+; if set to 0, the serial connection manager will toggle
+; every frame between listening for(and possibly receiving)
+; serial data, and (also possibly) sending serial data
+w4IsSerialInSleepMode:		db		; $d98b
 w4d98c:						db		; $d98c
 
 ; TODO: Rename this? It seems to be a temporary buffer. Sometimes it consists of the first $16 bytes

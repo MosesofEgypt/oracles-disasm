@@ -2810,56 +2810,48 @@ serialInterrupt:
 	ldh a,(<hSerialInterruptBehaviour)
 	or a
 	jr z,+
-		; receiving data(using external clock)
+		; actively processing serial requests(receiving or transmitting)
 		ld a,($ff00+R_SB)
 		ldh (<hSerialByte),a
 		xor a
 		ld ($ff00+R_SB),a
+
+		; signal that its okay to start the next serial operation
 		inc a
 		ldh (<hReceivedSerialByte),a
 		jr @done
 	+
-		; sending data(using internal clock)
+		; currently listening idly for serial activity
+		; to start receiving or transmitting data
 		ld a,($ff00+R_SB)
+
+		; check to see if we're being told to begin
+		; actively processing a serial connection.
+		; this could have been requested by either
+		; ourselves(via manageSerialConnection_body) or
+		; a client(by sending us a PACKET_TYPE_DATA signal)
 		cp PACKET_TYPE_DATA_PUT
 		jr z,+
-			; check to see if we're sending a request for data
-			cp PACKET_TYPE_DATA_GET
-			jr nz,++
+		cp PACKET_TYPE_DATA_GET
+		jr nz,++
 		+
-			; we were either just designated as the data sender, or
-			; we're continuing to send until we send a GET request.
+			; we're being told to begin transmitting or receiving data
 			ldh (<hSerialInterruptBehaviour),a
 			xor a
 			ld ($ff00+R_SB),a
 			jr @done
 		++
-			; either sending a request for receiving data, or we haven't
-			; yet established a serial link(and thus we need to listen).
-			; either way, we switch to receiving data(external clock) and
-			; tell the other gameboy begin sending data(internal clock)
+			; received some other kind of data.
+			; continue the connection by requesting another transfer.
+			; hopefully we'll receive a GET or PUT signal so we can
+			; update hSerialInterruptBehaviour and operate on the data.
 			ld a,PACKET_TYPE_DATA_PUT
 			ld ($ff00+R_SB),a
 			ld a,SERIAL_MODE_GET
-			call writeToSC
+			call updateSerialInterruptControl
 @done
 	pop af
 	reti
-
-;;
-; Writes A to SC. Also writes $00 or $01 beforehand which might just be to reset any active
-; transfers?
-writeToSC:
-	;push af
-	push af
-	and $01
-	ld ($ff00+R_SC),a
-	; high-speed has no noticible effect here
-	pop af
-	;or $02 ; enable high speed connection
-	ld ($ff00+R_SC),a
-	;pop af
-	ret
 
 ;;
 ; Initiates a serial connection with us as the sender.
@@ -2870,14 +2862,24 @@ requestSerialConnection:
 	ld a,PACKET_TYPE_DATA_GET
 	ld ($ff00+R_SB),a
 	ld a,SERIAL_MODE_PUT
-	jr writeToSC
+
+;;
+; Writes A to SC. Also writes $00 or $01 beforehand which might just be to reset any active
+; transfers?
+updateSerialInterruptControl:
+	push af
+	and $01
+	ld ($ff00+R_SC),a
+	pop af
+	ld ($ff00+R_SC),a
+	ret
 
 ;;
 disableSerialPort:
 	xor a
 	ldh (<hSerialInterruptBehaviour),a
 	ld ($ff00+R_SB),a
-	jr writeToSC
+	jr updateSerialInterruptControl
 
 ;;
 initializeSerialConnection:

@@ -13,29 +13,44 @@ manageSerialConnection_body:
 	call processSerialMode
 	pop de
 
-	ldh a,(<SC)
-	rlca
-	jr c,++
-		ldh a,(<hSerialInterruptBehaviour)
-		cp PACKET_TYPE_DATA_GET
-		jr z,+
-			; not receiving data. are we transmitting?
-			ld a,(w4SendingEmptyPacket)
-			or a
-			jr nz,++
-				; we're "sending" an empty packet, so idle for a frame instead
-				ld a,(w4SerialStateIdle)
-				xor $01
-				ld (w4SerialStateIdle),a
-				jr z,++
-					ldh a,(<hSerialInterruptBehaviour)
-		+
-		and SERIAL_MODE_PUT
-		call writeToSC
-	++
+	call refreshSerialInterruptControl
 	pop af
 	ldh (<SVBK),a
 	ret
+
+refreshSerialInterruptControl:
+	; if there's currently a transfer going, we don't
+	; need to consider updating the control register
+	ld a,($ff00+R_SC)
+	rlca
+	ret c
+
+	; no serial activity currently occurring(sending or receiving).
+	; check if we intend to enable it.
+	ldh a,(<hSerialInterruptBehaviour)
+	cp PACKET_TYPE_DATA_GET
+	jr z,+
+		; not planning to receive data.
+		; are we idly listening for a connection?
+		ld a,(w4IsSerialInSleepMode)
+		or a
+		ret nz
+
+		; toggle between sending and receiving every frame
+		ld a,(w4SerialStateIdle)
+		xor $01
+		ld (w4SerialStateIdle),a
+		ret z
+
+		; the serial interrupt behavior is known to be non-zero
+		; and not "receive data" at this point, so we can expect
+		; that we're switching to a mode of transmitting data.
+		ldh a,(<hSerialInterruptBehaviour)
+	+
+
+	; trigger the serial interrupt to send or receive data
+	and SERIAL_MODE_PUT
+	jp updateSerialInterruptControl
 
 
 processSerialMode:
@@ -48,8 +63,8 @@ processSerialMode:
 	.dw serialLinkModeFileClient
 
 
-requestNextSerialByte:
-	call waitForSerialByte
+awaitTransferSignalAndSendByte:
+	call awaitTransferSignal
 	cp SERIAL_CODE_TIMEOUT
 	ret z
 
@@ -57,74 +72,82 @@ requestNextSerialByte:
 ;;
 ; Send the byte [w4PacketBuffer+[w4PacketByteIndex]] over the link cable.
 sendPacketByte:
+	; prepare hl to point to the byte we're sending this frame
 	ld a,(w4PacketByteIndex)
 	ld hl,w4PacketBuffer
 	rst_addAToHl
+
+	; first byte sent is always the packet size.
 	ld a,(w4PacketByteIndex)
 	or a
-	jr nz,@nextByte
+	jr nz,++
+		; determine if there's any data at all
+		ld a,(hl)
+		or a
+		jr nz,+
+			; size is zero(including the size byte itself), so nothing to send
+			inc a	; put the serial connection to sleep
+			jr @done
+		+
 
-	; first byte sent is always the packet size
-	ld a,(hl)
-	or a
-	jr nz,@getNumBytes
+		; setup the packet size and reset the checksum
+		ld (w4NumPacketBytes),a
+		xor a
+		ld (w4PacketChecksum),a
+	++
 
-	; no data to send
-	inc a
-	ld (w4SendingEmptyPacket),a
-	ret
-
-@getNumBytes:
-	ld (w4NumPacketBytes),a
-	xor a
-	ld (w4PacketChecksum),a
-
-@nextByte:
-	; move to the next byte index for the next iteration
+	; move to the next byte for the next iteration
 	inc a
 	ld (w4PacketByteIndex),a
 
+	; decrement remaining bytes to send
 	ld a,(w4NumPacketBytes)
 	dec a
 	ld (w4NumPacketBytes),a
+
+	; get the next byte value to be sent
 	ldi a,(hl)
 	jr nz,+
-		; Finished receiving packet
+		; last byte, which is always the checksum.
+		; use the checksum we've calculated as we've been sending
 		xor a
 		ld (w4WaitingForNextByte),a
 		ld a,(w4PacketChecksum)
 	+
-	ldh (<SB),a ; Send: # of bytes remaining to be read, or [w4PacketChecksum] if finished
+
+	ld ($ff00+R_SB),a
+
+	; update the checksum
 	ld hl,w4PacketChecksum
 	add (hl)
 	ld (hl),a
-	xor a
-	ld (w4SendingEmptyPacket),a
+	xor a	; keep the serial connection awake
+@done
+	ld (w4IsSerialInSleepMode),a
 	ret
 
 
-waitForSerialActivity:
+serialIdleSnoozeLoop:
 	ldh a,(<hReceivedSerialByte)
 	or a
 	ret z
 
 	ld a,$01
-	ld (w4SendingEmptyPacket),a
+	ld (w4IsSerialInSleepMode),a
 	xor a
 	ld ($ff00+R_SB),a
 	ldh (<hReceivedSerialByte),a
 	ret
 
-
-receivePacket:
-	call waitForSerialByte
+awaitTransferSignalAndPrepareForNextPacket:
+	call awaitTransferSignal
 	cp SERIAL_CODE_TIMEOUT
 	jp z,disableSerialPort
 	jp prepareForNextPacket
 
 ;;
 shutdownSerialOnAck:
-	call waitForSerialByte
+	call awaitTransferSignal
 	jp disableSerialPort
 
 
@@ -132,8 +155,8 @@ shutdownSerialOnAck:
 ; If available, receive another byte and write it to w4PacketBuffer+[w4PacketByteIndex].
 receivePacketByte:
 	xor a
-	ld (w4SendingEmptyPacket),a
-	call waitForSerialByte
+	ld (w4IsSerialInSleepMode),a
+	call awaitTransferSignal
 	cp SERIAL_CODE_TIMEOUT
 	ret z
 
@@ -208,35 +231,57 @@ receivePacketByte:
 serialLinkModeFileClient:
 	ldh a,(<hSerialLinkState)
 	rst_jumpTable
+	; STAGE 0
 	.dw receiveFile1
-	.dw waitForNextPacket
+	; NOTE: a status packet was sent by receiveFile1
+	.dw continueSendingPacketWithRetries
+
 	.dw receiveFile2
-	.dw waitForNextPacket
+	; NOTE: a status packet was sent by receiveFile2
+	.dw continueSendingPacketWithRetries
+
 	.dw receiveFile3
-	.dw waitForNextPacket
-	.dw receiveStatusPacket
-	.dw waitForSerialActivity
+	; NOTE: a status packet was sent by receiveFile3
+	.dw continueSendingPacketWithRetries
 
-	; these next 4 states are for game linking only
-	.dw prepareAndSendShutdownPacket
-	.dw requestAndReceiveNextPacket
+	; STAGE 1
 	.dw receiveStatusPacket
-	.dw shutdownSerialOnAck
+	.dw serialIdleSnoozeLoop
 
-	; states below here are for ring transfers only
-	.dw prepareAndSendLoadFilePacket
-	.dw requestAndReceiveNextPacket
-	.dw receiveStatusPacket
-	.dw receiveAndMergeRingsObtained
-	.dw waitForNextPacket
-	.dw receivePacket
-	.dw sendMergedRingsObtainedPacket
-	.dw waitForNextPacket
-	.dw receiveStatusPacket
-	.dw sendSuccessPacket
-	.dw waitForNextPacket
-	.dw receivePacket
-	.dw updateObtainedRings
+	; STAGE 2-A
+	; these states are for game transfers only
+		.dw prepareShutdownPacket
+		.dw continueSendingPacket
+		.dw receiveStatusPacket
+
+		; STAGE 3-A
+		.dw shutdownSerialOnAck
+
+	; STAGE 2-B
+	; these states are for ring transfers only
+		.dw prepareLoadFilePacket
+		.dw continueSendingPacket
+		.dw receiveStatusPacket
+
+		; STAGE 3-B
+		.dw receiveAndMergeRingsObtained
+		; NOTE: a status packet was sent by receiveAndMergeRingsObtained
+		.dw continueSendingPacketWithRetries
+
+		.dw awaitTransferSignalAndPrepareForNextPacket
+
+		; STAGE 4-B
+		.dw sendMergedRingsObtainedPacket
+		.dw continueSendingPacketWithRetries
+		.dw receiveStatusPacket
+
+		; STAGE 5-B
+		.dw sendSuccessPacket
+		.dw continueSendingPacketWithRetries
+
+		.dw awaitTransferSignalAndPrepareForNextPacket
+
+		.dw updateObtainedRings
 
 
 ; supplying save files to the other game
@@ -244,30 +289,55 @@ serialLinkModeFileClient:
 serialLinkModeFileHost:
 	ldh a,(<hSerialLinkState)
 	rst_jumpTable
+	; STAGE 0
 	.dw transmitFile1
-	.dw waitForNextPacket
+	.dw continueSendingPacketWithRetries
 	.dw receiveStatusPacket
+
 	.dw transmitFile2
-	.dw waitForNextPacket
+	.dw continueSendingPacketWithRetries
 	.dw receiveStatusPacket
+
 	.dw transmitFile3
-	.dw waitForNextPacket
+	.dw continueSendingPacketWithRetries
 	.dw receiveStatusPacket
+
+	; STAGE 1
 	.dw sendSuccessPacket
-	.dw waitForNextPacket
+	.dw continueSendingPacketWithRetries
+
+	; STAGE 2
 	.dw receiveLoadFilePacket
-	.dw waitForNextPacket
-	.dw shutdownSerialOnAck
-	.dw waitForNextPacket
-	.dw receivePacket
-	.dw prepareAndSendRingsObtainedPacket
-	.dw waitForNextPacket
-	.dw receiveStatusPacket
-	.dw receiveMergedRingsObtained
-	.dw sendSuccessPacket
-	.dw waitForNextPacket
-	.dw receiveStatusPacket
-	.dw updateObtainedRings
+
+	; STAGE 2-A
+	; these states are for game transfers only
+		; NOTE: a status packet was sent by receiveLoadFilePacket
+		.dw continueSendingPacketWithRetries
+
+		; STAGE 3-A
+		.dw shutdownSerialOnAck
+
+	; STAGE 2-B
+	; these states are for ring transfers only
+		; NOTE: a status packet was sent by receiveLoadFilePacket
+		.dw continueSendingPacketWithRetries
+
+		.dw awaitTransferSignalAndPrepareForNextPacket
+
+		; STAGE 3-B
+		.dw prepareRingsObtainedPacket
+		.dw continueSendingPacketWithRetries
+		.dw receiveStatusPacket
+
+		; STAGE 4-B
+		.dw receiveMergedRingsObtained
+		.dw sendSuccessPacket
+		.dw continueSendingPacketWithRetries
+
+		; STAGE 5-B
+		.dw receiveStatusPacket
+
+		.dw updateObtainedRings
 
 
 transmitFile1:
@@ -369,12 +439,11 @@ sendFileHeader:
 	ld (w4WaitingForNextByte),a
 	jp sendPacketByte
 
-
 ;;
 ; Returns from caller if no new byte has been read from the serial port.
 ;
 ; @param[out]	a	SERIAL_CODE_TIMEOUT if timeout occurred.
-waitForSerialByte:
+awaitTransferSignal:
 	ldh a,(<hReceivedSerialByte)
 	or a
 	jr nz,@byteReceived
@@ -402,13 +471,14 @@ waitForSerialByte:
 	ldh (<hSerialTransferErrorCode),a
 
 setLinkTimerTo180:
+	; 180 frames(2 or 4? seconds) of timeout
 	ld a,180
 	ld (w4FileLinkTimer),a
 	ld a,$00
 	ld (w4FileLinkTimer+1),a
 	ret
 
-; this should really be a stubbed out mode
+; this should really be a stubbed out mode that doesn't do anything
 serialLinkModeNone:
 
 ; supplies the file header to the other game BEFORE
@@ -416,12 +486,19 @@ serialLinkModeNone:
 serialLinkModeFortuneHost:
 	ldh a,(<hSerialLinkState)
 	rst_jumpTable
+	; STAGE 0
 	.dw sendFileHeader
-	.dw waitForNextPacket
+	.dw continueSendingPacketWithRetries
 	.dw receiveStatusPacket
+
+	; STAGE 1
 	.dw receiveRingFortuneSeed
-	.dw waitForNextPacket
-	.dw receivePacket
+	; NOTE: a status packet was sent by receiveRingFortuneSeed
+	.dw continueSendingPacketWithRetries
+
+	.dw awaitTransferSignalAndPrepareForNextPacket
+
+	; STAGE 2
 	.dw determineRingFortuneRing
 
 ; supplies the file header to the other game AFTER
@@ -429,12 +506,19 @@ serialLinkModeFortuneHost:
 serialLinkModeFortuneClient:
 	ldh a,(<hSerialLinkState)
 	rst_jumpTable
+	; STAGE 0
 	.dw receiveRingFortuneSeed
-	.dw waitForNextPacket
-	.dw receivePacket
+	; NOTE: a status packet was sent by receiveRingFortuneSeed
+	.dw continueSendingPacketWithRetries
+
+	.dw awaitTransferSignalAndPrepareForNextPacket
+
+	; STAGE 1
 	.dw sendFileHeader
-	.dw waitForNextPacket
+	.dw continueSendingPacketWithRetries
 	.dw receiveStatusPacket
+
+	; STAGE 2
 	.dw determineRingFortuneRing
 
 
@@ -503,8 +587,8 @@ prepareForPacket:
 
 
 ;;
-waitForNextPacket:
-	call requestNextSerialByte
+continueSendingPacketWithRetries:
+	call awaitTransferSignalAndSendByte
 	call returnIfPacketNotComplete
 
 	; check if something happened that requires we retry 
@@ -570,7 +654,7 @@ receiveLoadFilePacket:
 	jp sendSuccessPacket
 
 
-prepareAndSendRingsObtainedPacket:
+prepareRingsObtainedPacket:
 	call prepareForNextPacket
 	ld hl,w4SerialDataBuffer
 	ld de,wRingsObtained
@@ -579,15 +663,15 @@ prepareAndSendRingsObtainedPacket:
 	jr sendRingsObtainedPacket
 
 
-prepareAndSendShutdownPacket:
+prepareShutdownPacket:
 	ld hl,continuePacket
 	call setPacketBuffer
 	ld a,$01
 	ld (w4WaitingForNextByte),a
 	jp sendPacketByte
 
-requestAndReceiveNextPacket:
-	call requestNextSerialByte
+continueSendingPacket:
+	call awaitTransferSignalAndSendByte
 	call returnIfPacketNotComplete
 	jp prepareForNextPacket
 
@@ -630,6 +714,7 @@ receiveAndMergeRingsObtained:
 
 
 sendMergedRingsObtainedPacket:
+	; NOTE: this is unnecessary, as the previous state already did this
 	call prepareForNextPacket
 sendRingsObtainedPacket:
 	ld a,_sizeof_w4RingDataPacket
@@ -712,7 +797,7 @@ receiveStatusPacket:
 	ret
 
 
-prepareAndSendLoadFilePacket:
+prepareLoadFilePacket:
 	ld hl,fileSelectPacket
 	call setPacketBuffer
 	dec hl
@@ -929,7 +1014,7 @@ initializeSerialConnection_body:
 	ldh (<R_SB),a
 	ld a,SERIAL_MODE_GET
 	ld (w4WaitingForNextByte),a
-	call writeToSC
+	call updateSerialInterruptControl
 
 	pop af
 	ldh (<SVBK),a
