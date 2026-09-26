@@ -244,6 +244,10 @@ handleAutoEquipItem_body:
 		ld h,>wInventoryStorage
 		ld (hl),d
 
+		; fix this if unequipping harp/satchel
+		ld a,d
+		call restoreHarpSeedIndex
+
 		; find a spot to put the other item(if it exists)
 		ld a,e
 		or a
@@ -272,6 +276,43 @@ handleAutoEquipItem_body:
 		pop hl
 	+
 .endif
+	call restoreHarpSeedIndex
+
+	ld (hl),d ; pull out item being autoequipped
+	ld d,>wInventoryStorage
+	ld (de),a ; store item in inventory
+
+@@finish:
+	ld hl,(wStatusBarNeedsRefresh)
+	set 0,(hl)
+	set 1,(hl)
+	xor a ; set flag indicating swap occurred
+	ret
+
+locateItemInInventory:
+	push de
+	push hl
+	; find d in wInventoryStorage
+	ld hl,wInventoryStorage
+	ld e,$10
+	-
+		ldi a,(hl)
+		cp d
+		jr z,++
+			dec e
+			jr nz,-
+				; failed to find it
+				pop hl
+				pop de
+				ret
+		++
+	dec l
+	ld a,l
+	pop hl
+	pop de
+	ret
+
+restoreHarpSeedIndex:
 	cp ITEM_HARP
 	jr nz,++
 		; harp being unequipped. restore the previously equipped tune
@@ -310,39 +351,6 @@ handleAutoEquipItem_body:
 		pop hl
 		ld a,ITEM_SEED_SATCHEL
 	++
-
-	ld (hl),d ; pull out item being autoequipped
-	ld d,>wInventoryStorage
-	ld (de),a ; store item in inventory
-
-@@finish:
-	ld hl,(wStatusBarNeedsRefresh)
-	set 0,(hl)
-	set 1,(hl)
-	xor a ; set flag indicating swap occurred
-	ret
-
-locateItemInInventory:
-	push de
-	push hl
-	; find d in wInventoryStorage
-	ld hl,wInventoryStorage
-	ld e,$10
-	-
-		ldi a,(hl)
-		cp d
-		jr z,++
-			dec e
-			jr nz,-
-				; failed to find it
-				pop hl
-				pop de
-				ret
-		++
-	dec l
-	ld a,l
-	pop hl
-	pop de
 	ret
 .endif
 
