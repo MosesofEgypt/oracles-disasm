@@ -24,19 +24,46 @@
 .endif
 
 .ifdef ENABLE_RING_REDUX
+	.macro m_GoldRingBuffTier
+		.assert NARGS == 3
+		.ifndef GOLD_RING_TIER_COUNT
+			.define GOLD_RING_TIER_COUNT 0
+		.endif
+
+		.define NAME_BASE {"GOLD_RING_TIER_{GOLD_RING_TIER_COUNT}"}
+
+		.define {NAME_BASE}_HEALTH_CUTOFF  \1
+		.define {NAME_BASE}_DAMAGE_ADDED  -\2
+		.define {NAME_BASE}_DAMAGE_REDUCED \3
+
+		.undefine NAME_BASE
+		.redefine GOLD_RING_TIER_COUNT GOLD_RING_TIER_COUNT+1
+	.endm
+
+	; NOTE: these MUST be in health-ascending order
+	;                  health  damage  damage
+	;                  cutoff  added   reduced
+	; NOTE: damage added is in 1/4 heart increments, while
+	;       damage reduced is in 1/8 heart increments
+	m_GoldRingBuffTier     1,     6,    127
+	m_GoldRingBuffTier   1*4,     5,     12
+	m_GoldRingBuffTier   2*4,     4,      8
+	m_GoldRingBuffTier   4*4,     3,      6
+	m_GoldRingBuffTier   6*4,     2,      2
+	m_GoldRingBuffTier   8*4,     2,      1
+	m_GoldRingBuffTier  32*4,     1,      1
+
 	; NOTE: these values are in 1/8 heart increments, so 8 == 1 heart
 		; these determine how much each ring modifies link's sword damage.
 		.define RED_RING_ATK_MOD			8
-		.define GREEN_RING_ATK_MOD			6
-		.define GOLD_RING_ATK_MOD			4
+		.define GREEN_RING_ATK_MOD			4
 		.define CURSED_RED_RING_ATK_MOD		8
 		.define MAX_RING_ATK_MOD			(8*5)
 
 	; NOTE: these values are 1/8 increments, so 3 = 37.5% damage reduction
 		; these determine how much each ring modifies link's damage taken.
 		.define BLUE_RING_DEF_MOD			4
-		.define GREEN_RING_DEF_MOD			3
-		.define GOLD_RING_DEF_MOD			2
+		.define GREEN_RING_DEF_MOD			2
 		.define CURSED_RED_RING_DEF_MOD		0
 		.define HOLY_RING_DEF_MOD			2
 		.define MAX_RING_DEF_MOD			3
@@ -55,7 +82,6 @@
 	; NOTE: these values are in 1/4 heart increments, so 4 == 1 heart
 		; these values determine how many hearts must be
 		; remaining/lost for the ring to get its effect.
-		.define GOLD_RING_HEART_CUTOFF		(4*4)
 		.define LIGHT_RING_L1_CUTOFF		(4*3)
 		.define LIGHT_RING_L2_CUTOFF		(4*6)
 

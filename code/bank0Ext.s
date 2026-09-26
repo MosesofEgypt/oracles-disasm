@@ -355,6 +355,102 @@ restoreHarpSeedIndex:
 .endif
 
 .ifdef ENABLE_RING_REDUX
+calculateGoldRingDefenseBuff:
+	ld e,b
+	; we compare the health after it would take this damage
+	ld a,(wLinkHealth)
+
+	; need to do this since e is in multiples of 8
+	; and wLinkHealth is in multiples of 4
+	sra e
+
+	; if link's health is $40 or higher then it can't be
+	; taken down to 0 in one hit, so we skip this check.
+	cp $40
+	jr nc,+++
+		; if the health went negative or to 0 and we weren't
+		; already at 1/4 heart remaining, we modify the damage
+		; to bring down to exactly 1/4 of a heart remaining
+		add e
+		ld e,$00
+		jr z,++
+		bit 7,a
+		jr z,+++
+		++
+			ld a,(wLinkHealth)
+			cp $01
+			jr z,+++
+				dec a
+				sla a
+				xor $ff
+				ld b,a
+				ret
+	+++
+	add e
+
+	ld hl,@goldRingDefenseTiers
+	-
+		cp (hl)
+		inc hl
+		jr c,++
+		jr z,++
+			; not at or below this health cutoff.
+			; continue trying until we hit the terminator
+			inc hl
+			jr -
+	++
+	ld a,(hl)
+	add b
+	ld b,a
+	bit 7,a
+	ret nz
+
+	; cap to minimum damage
+	ld b,$ff
+	ret
+
+@goldRingDefenseTiers:
+.rept GOLD_RING_TIER_COUNT index tmpi
+	.define NAME_BASE {"GOLD_RING_TIER_{tmpi}"}
+	.db {NAME_BASE}_HEALTH_CUTOFF
+	.db {NAME_BASE}_DAMAGE_REDUCED
+	.undefine NAME_BASE
+.endr
+	.db $ff, $00; terminator
+
+calculateGoldRingAttackBuff:
+	; calculate the gold ring buff
+	ld a,GOLD_RING
+	call cpActiveRing
+	ret nz
+
+	; gold ring gives increasing attack with decreasing health
+	ld a,(wLinkHealth)
+	ld hl,@goldRingAttackTiers
+	-
+		cp (hl)
+		inc hl
+		jr c,++
+		jr z,++
+			; not at or below this health cutoff.
+			; continue trying until we hit the terminator
+			inc hl
+			jr -
+	++
+	ld a,(hl)
+	add b
+	ld b,a
+	ret
+
+@goldRingAttackTiers:
+.rept GOLD_RING_TIER_COUNT index tmpi
+	.define NAME_BASE {"GOLD_RING_TIER_{tmpi}"}
+	.db {NAME_BASE}_HEALTH_CUTOFF
+	.db {NAME_BASE}_DAMAGE_ADDED
+	.undefine NAME_BASE
+.endr
+	.db $ff, $00 ; terminator
+
 fractionOf8Multiply:
 	push hl
 	push de

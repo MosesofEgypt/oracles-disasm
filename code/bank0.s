@@ -11481,11 +11481,7 @@ checkUseItems:
 ++
 	ldh a,(<hRomBank)
 	push af
-.if defined(ROM_COMBO)
 	callfrombank0 itemParents.functionCaller
-.else
-	callfrombank0 bank6.functionCaller
-.endif
 	pop af
 	setrombank
 	ret
@@ -13123,19 +13119,11 @@ updateAllObjects:
 	rrca
 	call c,bank5.func_410d
 
-.if defined(ROM_COMBO)
 	ld a,:itemParents.updateGrabbedObjectPosition
-.else
-	ld a,:bank6.updateGrabbedObjectPosition
-.endif
 	setrombank
 	ld a,(wLinkGrabState)
 	rlca
-.if defined(ROM_COMBO)
 	call c,itemParents.updateGrabbedObjectPosition
-.else
-	call c,bank6.updateGrabbedObjectPosition
-.endif
 
 	call loadLinkAndCompanionAnimationFrame
 
@@ -13230,19 +13218,11 @@ seasonsFunc_34a0:
 	callfrombank0 enemyCode4.seasonsFunc_0f_7159
 .endif
 
-.if defined(ROM_COMBO)
 	ld a,:itemParents.updateGrabbedObjectPosition
-.else
-	ld a,:bank6.updateGrabbedObjectPosition
-.endif
 	rst_setrombank
 	ld a,(wLinkGrabState)
 	rlca
-.if defined(ROM_COMBO)
 	call c,itemParents.updateGrabbedObjectPosition
-.else
-	call c,bank6.updateGrabbedObjectPosition
-.endif
 
 	call loadLinkAndCompanionAnimationFrame
 	callfrombank0 itemCode.updateItemsPost

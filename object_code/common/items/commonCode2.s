@@ -272,26 +272,13 @@ itemCalculateSwordDamage:
 	+
 	; checkCursed
 	add b
-	ldbc CURSED_RED_RING, GOLD_RING
+	ldbc CURSED_RED_RING, $ff
 	call eitherRingActive
 	ld b,$00
 	jr nz,+
 		ld b,CURSED_RED_RING_ATK_MOD
 	+
-	; checkGold
-	jr nc,+
-		add GOLD_RING_ATK_MOD
-		ld c,a
-		push hl
-		ld hl,wLinkHealth
-		ld a,(hl)
-		cp GOLD_RING_HEART_CUTOFF
-		pop hl
-		ld a,c
-		jr nz,+
-			; below health threshold, so double effect
-			add GOLD_RING_ATK_MOD
-	+
+
 	; capToMaxDamage
 	add b
 	cp MAX_RING_ATK_MOD
@@ -313,10 +300,18 @@ itemCalculateSwordDamage:
 	+
 	call calculatePowerRingModifier
 
-	ld e,a
+	ld b,a
+	ld a,GOLD_RING
+	call cpActiveRing
+	jr nz,+
+		push hl
+		callab bank0Ext.calculateGoldRingAttackBuff
+		pop hl
+	+
+
 	ld a,(w1ParentItem2.var3a)
 	; incorporate the modifiers
-	add e
+	add b
 	bit 7,a
 	jr nz,+
 		ld a,$ff
@@ -342,6 +337,7 @@ itemCalculateSwordDamage:
 	pop hl
 	ld (de),a
 	ret
+
 .else
 	ld b,a
 	ld a,(w1ParentItem2.var3a)

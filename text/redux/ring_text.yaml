@@ -378,8 +378,8 @@ groups:
   - name: TX_3089
     index: 0x89
     text: |-
-      ATK: +75%
-      DEF: +37%
+      ATK: +50%
+      DEF: +25%
 
   - name: TX_308a
     index: 0x8a
@@ -662,8 +662,8 @@ groups:
   - name: TX_30be
     index: 0xbe
     text: |-
-      ATK: +50% \times2 if
-      DEF: +25% \heart < 4
+      ATK: \up  DEF: \up
+      More if \heart is low
 
   - name: TX_30bf
     index: 0xbf

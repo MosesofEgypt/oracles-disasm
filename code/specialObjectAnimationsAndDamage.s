@@ -919,11 +919,16 @@ linkUpdateDamageToApplyForRings:
 	+
 	sub b
 
-	ldbc RED_HOLY_RING, $ff
+	ldbc CURSED_RED_RING, RED_HOLY_RING
 	call eitherRingActive
+	ld b,$00
 	jr nz,+
+		ld b,CURSED_RED_RING_DEF_MOD
+	+
+	jr nc,+
 		sub HOLY_RING_DEF_MOD
 	+
+	sub b
 
 	ldbc BLUE_RING, GREEN_RING
 	call eitherRingActive
@@ -933,24 +938,6 @@ linkUpdateDamageToApplyForRings:
 	+
 	jr nc,+
 		sub GREEN_RING_DEF_MOD
-	+
-	sub b
-
-	ldbc CURSED_RED_RING, GOLD_RING
-	call eitherRingActive
-	ld b,$00
-	jr nz,+
-		ld b,CURSED_RED_RING_DEF_MOD
-	+
-	jr nc,+
-		sub GOLD_RING_DEF_MOD
-		ld c,a
-		ld a,(wLinkHealth)
-		cp GOLD_RING_HEART_CUTOFF
-		ld a,c
-		jr nc,++
-			sub GOLD_RING_DEF_MOD
-		++
 	+
 	sub b
 
@@ -995,13 +982,24 @@ linkUpdateDamageToApplyForRings:
 		sla a
 	+
 .endif
+	ld b,a
+
+	; calculate gold ring defense buff
+	ld a,GOLD_RING
+	call cpActiveRing
+	jr nz,+
+		push hl
+		callab bank0Ext.calculateGoldRingDefenseBuff
+		pop hl
+	+
+	ld a,b
+
+	; if wearing blue cursed, all damage becomes 1/4 heart
+	call applyCurseArmorDamageCap
 
 	; calculate and apply dodge chance
 	; for each luck ring, give a 25% chance to reduce damage taken to 1/4 heart
 	ld e,$01
-
-	; if wearing blue cursed, all damage becomes 1/4 heart
-	call applyCurseArmorDamageCap
 
 	ldbc GREEN_LUCK_RING, BLUE_LUCK_RING
 	call eitherRingActive
@@ -1035,6 +1033,7 @@ linkUpdateDamageToApplyForRings:
 	ld e,SpecialObject.damageToApply
 	ld (de),a
 	ret
+
 .else
 	ld b,a
 	ld hl,@ringDamageModifierTable

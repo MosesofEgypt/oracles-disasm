@@ -23,18 +23,17 @@ Ring Stacking:
         Examples:
             Red Ring        = +100%
             Red Curse Ring  = +100%
-            Gold Ring       = +100% (assuming we have less than 4 hearts)
             Green Ring      = +75%
             Power Ring L-3  = +3
 
             Master Sword    = 5 base damage
-                Total = 5*(1 + (1 + 1 + 1 + 0.75)) + 3 = 26.75 = 26 damage
+                Total = 5*(1 + (1 + 1 + 0.75)) + 3 = 21.75 = 21 damage
 
             Noble Sword     = 3 base damage
-                Total = 3*(1 + (1 + 1 + 1 + 0.75)) + 3 = 17.25 = 17 damage
+                Total = 3*(1 + (1 + 1 + 0.75)) + 3 = 14.25 = 14 damage
 
             Wooden Sword    = 2 base damage
-                Total = 2*(1 + (1 + 1 + 1 + 0.75)) + 3 = 12.25 = 12 damage
+                Total = 2*(1 + (1 + 1 + 0.75)) + 3 = 10.5 = 10 damage
         
         When calculating damage taken, the +- modifiers are first added to the base damage, which
         is then multiplied by the sum of the multipliers. The final value is rounded down, and is
@@ -44,21 +43,20 @@ Ring Stacking:
         Examples:
             NOTE: 1 point of damage == 1/8 of a heart
      
-            Gold Ring        = -25%
             Green Ring       = -37.5%
             Armor Ring L-1   = -1
 
             Cheep Cheep      = 4 base damage
-                Total = max(1, (4 - 1)*max(0.375, (1 - 0.25 - 0.375)))  = 1.125 = 1 damage
+                Total = max(1, (4 - 1)*max(0.375, (1 - 0.375)))  = 1.875 = 1 damage
 
             Blue Darknut     = 8 base damage
-                Total = max(1, (8 - 1)*max(0.375, (1 - 0.25 - 0.375)))  = 2.625 = 2 damage
+                Total = max(1, (8 - 1)*max(0.375, (1 - 0.375)))  = 4.375 = 4 damage
 
             Ganon Trident    = 12 base damage
-                Total = max(1, (12 - 1)*max(0.375, (1 - 0.25 - 0.375))) = 4.125 = 3 damage
+                Total = max(1, (12 - 1)*max(0.375, (1 - 0.375))) = 6.875 = 6 damage
 
             Ganon (Contact?) = 16 base damage
-                Total = max(1, (16 - 1)*max(0.375, (1 - 0.25 - 0.375))) = 5.625 = 5 damage
+                Total = max(1, (16 - 1)*max(0.375, (1 - 0.375))) = 9.375 = 9 damage
 
     Color variations:
         The color rings can be combined to produce an extra 6 colors for 10 total.
@@ -127,8 +125,7 @@ Removed rings:
 
 New rings:
     Gold Ring:
-        Gives +50% sword damage and -25% damage taken.
-        If you have less than 4 hearts, these double to +100% and -50%.
+        Gives small attack and defense buffs that increase significantly with lower health.
 
     Haste Ring:
         Bumps movement speed on the current tile to the next fastest.
@@ -176,9 +173,8 @@ New rings:
         Enables use of items in slot B while underwater(does not prevent you from surfacing).
         Dive underwater forever.
 
-    Quickswap Ring:
-        Enables swapping your A/B items with the first 2 in your inventory.
-        Hold Select and press A or B to swap. If Select is released without swapping, map is opened.
+    Fencer's Ring:
+        Using the shield just before taking damage will stun the enemy and prevent damage.
 
     Curse Power Ring:
         Adds 100% more base attack, but your hearts are constantly capped to 4.
@@ -220,9 +216,6 @@ Modified rings:
     Power/Armor Rings L-1/2/3:
         Each tier increases the buff by 1 without increasing the debuff.
         This means wearing a L-3 of each doesn't cancel each other out.
-
-    Green Ring:
-        25% more damage dealt and 12.5% less damage taken than the original Green Ring.
 
     Fist/Experts Ring:
         Works with only 1 item slot empty instead of requiring both.

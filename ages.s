@@ -129,9 +129,24 @@ m_EndScriptSection
 
 
 m_section_free Bank_6 NAMESPACE bank6
-
 	.include "code/interactableTiles.s"
+	.include {"{GAME_DATA_DIR}/signText.s"}
+
 	.include "code/specialObjectAnimationsAndDamage.s"
+
+	.include {"{GAME_DATA_DIR}/specialObjectAnimationData.s"}
+	.include "object_code/ages/specialObjects/linkInCutscene.s"
+
+	.include "object_code/ages/specialObjects/timeWarp.s"
+	.include "object_code/common/specialObjects/minecart.s"
+	.include "object_code/ages/specialObjects/companionCutscene.s"
+.ends
+
+m_section_superfree Item_Parents NAMESPACE itemParents
+	; NOTE: these are needed in here as well due to them relying
+	;       on several animation related function in here for link
+	.include "code/specialObjectAnimationsAndDamage.s"
+	.include {"{GAME_DATA_DIR}/specialObjectAnimationData.s"}
 
 	.include "code/parentItemUsage.s"
 
@@ -154,15 +169,6 @@ m_section_free Bank_6 NAMESPACE bank6
 	.include "object_code/common/itemParents/commonCode.s"
 
 	.include {"{GAME_DATA_DIR}/itemUsageTables.s"}
-
-	.include "object_code/common/specialObjects/minecart.s"
-
-	.include {"{GAME_DATA_DIR}/specialObjectAnimationData.s"}
-	.include "object_code/ages/specialObjects/companionCutscene.s"
-	.include "object_code/ages/specialObjects/linkInCutscene.s"
-	.include {"{GAME_DATA_DIR}/signText.s"}
-
-	.include "object_code/ages/specialObjects/timeWarp.s"
 .ends
 
 m_section_superfree Bank_6_Raft NAMESPACE bank6Raft

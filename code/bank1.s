@@ -4430,11 +4430,8 @@ updateAzuchu:
 	ldbc ITEM_AZUCHU,$01
 	ld d,>w1Link
 
-.if defined(ROM_COMBO)
 	callab itemParents.itemCreateUniqueChildWithID
-.else
-	callab bank6.itemCreateUniqueChildWithID
-.endif
+
 	; the c flag will get overwritten by the callab, so we have
 	; to do the same check to determine if it was created correctly
 	ld a,h
