@@ -132,6 +132,19 @@ bomb_flower_subid1:
 	jp interactionRunScript
 
 @state3:
+.if defined(ENABLE_NEW_GAME_PLUS)
+	call getIsNewGamePlus
+	jr z,+
+		; lower link to 1 heart if he's too close to the bomb flower
+		ld c,$20
+		call objectCheckLinkWithinDistance
+		jr nc,+
+			ld a,$04
+			ld (wLinkHealth),a
+			; make him look hurt
+			ld (w1Link.invincibilityCounter),a
+	+
+.endif
 	call objectSetInvisible
 	jp interactionRunScript
 
