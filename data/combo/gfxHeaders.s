@@ -368,7 +368,6 @@ m_GfxHeaderStart $3a, GFXH_UNAPPRAISED_RING_LIST_SEASONS
 	m_GfxHeader seasons_gfx_inventory_hud_1, $8000
 	m_GfxHeader gfx_rings, $8a00
 	m_GfxHeader seasons_gfx_inventory_hud_2, $8e00
-	m_GfxHeader gfx_hud, $9000
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $3b, GFXH_APPRAISED_RING_LIST_SEASONS

@@ -1707,6 +1707,19 @@ ringMenu_updateDisplayedRingNumberWithGivenComparator:
 	ld hl,w4TileMap+$105
 	ldd (hl),a
 	ld (hl),c
+.if defined(ROM_COMBO)
+	; for some reason the tilemap is getting fucked up in
+	; the combo rom for the "No." gfx. use some fuct tape here
+	dec hl
+	ld a,$eb
+	ldd (hl),a
+	dec a
+	ld (hl),a
+	set 2,h
+	ld a,$07
+	ldi (hl),a
+	ld (hl),a
+.endif
 	jp ringMenu_copyTilemapToVram
 
 ;;

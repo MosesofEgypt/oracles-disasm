@@ -11918,25 +11918,6 @@ getFreeEnemySlot:
 	ret
 
 ;;
-getFreeEnemySlot_uncounted:
-	ldhl FIRST_ENEMY_INDEX, Enemy.start
---
-	ld a,(hl)
-	or a
-	jr z,+
-	inc h
-	ld a,h
-	cp LAST_ENEMY_INDEX+1
-	jr c,--
-	or h
-	ret
-+
-	inc a
-	ldi (hl),a
-	xor a
-	ret
-
-;;
 enemyDelete:
 	ld e,Enemy.enabled
 	call objectRemoveFromAButtonSensitiveObjectList
@@ -12267,22 +12248,14 @@ unsetGlobalFlag:
 ;
 clearEnemiesKilledList:
 	ld h,$00
-	.if defined(ROM_AGES) || defined(ROM_COMBO)
 	jr ++
-	.else
-	jp ++
-	.endif
 
 ;;
 ; Calls bank2._addRoomToEnemiesKilledList.
 ;
 addRoomToEnemiesKilledList:
 	ld h,$01
-	.if defined(ROM_AGES) || defined(ROM_COMBO)
 	jr ++
-	.else
-	jp ++
-	.endif
 
 ;;
 ; Marks an enemy as killed so it doesn't respawn for a bit.
@@ -12290,11 +12263,7 @@ addRoomToEnemiesKilledList:
 ;
 markEnemyAsKilledInRoom:
 	ld h,$02
-	.if defined(ROM_AGES) || defined(ROM_COMBO)
 	jr ++
-	.else
-	jp ++
-	.endif
 
 ;;
 ; Places the numbers $00-$ff into w4RandomBuffer in a random order.
@@ -12302,11 +12271,7 @@ markEnemyAsKilledInRoom:
 ;
 generateRandomBuffer:
 	ld h,$04
-	.if defined(ROM_AGES) || defined(ROM_COMBO)
 	jr ++
-	.else
-	jp ++
-	.endif
 
 ;;
 ; Get a random position for an enemy and store it in wEnemyPlacement.enemyPos.
@@ -12315,11 +12280,7 @@ generateRandomBuffer:
 ; @param	hFF8B	"Flags" (set when placing an enemy in the editor)
 getRandomPositionForEnemy:
 	ld h,$05
-	.if defined(ROM_AGES) || defined(ROM_COMBO)
 	jr ++
-	.else
-	jp ++
-	.endif
 
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
@@ -12712,6 +12673,7 @@ mainThreadStart:
 	; if there's delayed GDMA to do, dont process game
 	; logic or anything that might modify gfx buffers
 	jr z,+
+		; my kingdom for a uint32
 		ld hl,hGdmaDelayedCountTotal
 		inc (hl)
 		jr nz,++
@@ -13079,17 +13041,21 @@ updateAllObjects:
 	callfrombank0 bank1.func_4000
 
 	; Call func_410d if Link is riding something
-	ld a,:bank5.func_410d
-	setrombank
 	ld a,(wLinkObjectIndex)
 	rrca
-	call c,bank5.func_410d
+	jr nc,+
+		ld a,:bank5.func_410d
+		setrombank
+		call bank5.func_410d
+	+
 
-	ld a,:itemParents.updateGrabbedObjectPosition
-	setrombank
 	ld a,(wLinkGrabState)
 	rlca
-	call c,itemParents.updateGrabbedObjectPosition
+	jr nc,+
+		ld a,:itemParents.updateGrabbedObjectPosition
+		setrombank
+		call itemParents.updateGrabbedObjectPosition
+	+
 
 	call loadLinkAndCompanionAnimationFrame
 
@@ -13184,11 +13150,13 @@ seasonsFunc_34a0:
 	callfrombank0 enemyCode4.seasonsFunc_0f_7159
 .endif
 
-	ld a,:itemParents.updateGrabbedObjectPosition
-	rst_setrombank
 	ld a,(wLinkGrabState)
 	rlca
-	call c,itemParents.updateGrabbedObjectPosition
+	jr nc,+
+		ld a,:itemParents.updateGrabbedObjectPosition
+		rst_setrombank
+		call itemParents.updateGrabbedObjectPosition
+	+
 
 	call loadLinkAndCompanionAnimationFrame
 	callfrombank0 itemCode.updateItemsPost
@@ -13249,82 +13217,25 @@ clearReservedInteraction0:
 ;
 clearDynamicInteractions:
 	ldde FIRST_DYNAMIC_INTERACTION_INDEX, Interaction.start
-.if defined(ROM_COMBO)
 	jr +
-.else
---
-	ld h,d
-.ifdef AGES_ENGINE
-	ld l,e
-.else
-	ld l,Interaction.start
-.endif
-	ld b,$04
-	call clearMemory16ByteBlocks
-	inc d
-	ld a,d
-	cp $e0
-	jr c,--
-	ret
-.endif
 
 ;;
 clearItems:
 	ldde FIRST_ITEM_INDEX, Item.start
-.if defined(ROM_COMBO)
 	jr +
-.else
---
-	ld h,d
-.ifdef AGES_ENGINE
-	ld l,e
-.else
-	ld l,Item.start
-.endif
-	ld b,$04
-	call clearMemory16ByteBlocks
-	inc d
-	ld a,d
-	cp $e0
-	jr c,--
-	ret
-.endif
 
 ;;
 clearEnemies:
 	ldde FIRST_ENEMY_INDEX, Enemy.start
-.if defined(ROM_COMBO)
 	jr +
-.else
---
-	ld h,d
-.ifdef AGES_ENGINE
-	ld l,e
-.else
-	ld l,Enemy.start
-.endif
-	ld b,$04
-	call clearMemory16ByteBlocks
-	inc d
-	ld a,d
-	cp $e0
-	jr c,--
-	ret
-.endif
 
 ;;
 clearParts:
 	ldde FIRST_PART_INDEX, Part.start
 --
-.if defined(ROM_COMBO)
 	+
-.endif
 	ld h,d
-.if defined(AGES_ENGINE) || defined(ROM_COMBO)
 	ld l,e
-.else
-	ld l,Part.start
-.endif
 	ld b,$04
 	call clearMemory16ByteBlocks
 	inc d
@@ -14532,25 +14443,36 @@ checkRoomPackAfterWarp:
 .endif
 
 ;;
+getFreeEnemySlot_uncounted:
+	ldhl FIRST_ENEMY_INDEX, Enemy.start
+	jr +
+
+;;
 ; @param[out]	hl	Address of a free interaction slot (on the id byte)
 ; @param[out]	zflag	Set if a free slot was found
 getFreeInteractionSlot:
-	ld hl,(FIRST_DYNAMIC_INTERACTION_INDEX<<8) | $40
+	ldhl FIRST_DYNAMIC_INTERACTION_INDEX, Interaction.start
+	jr +
+
+;;
+; @param[out]	hl	Address of part slot ("id" byte)
+; @param[out]	zflag	nz if no free slot was available
+getFreePartSlot:
+	ldhl FIRST_PART_INDEX, Part.start
+	+
 --
 	ld a,(hl)
 	or a
 	jr z,++
-
 	inc h
 	ld a,h
 	cp $e0
 	jr c,--
-
 	or h
 	ret
 ++
-	inc (hl)
-	inc l
+	inc a
+	ldi (hl),a
 	xor a
 	ret
 
@@ -15018,27 +14940,6 @@ getLinkedHerosCaveSideEntranceRoom:
 	ret
 
 .endif
-
-;;
-; @param[out]	hl	Address of part slot ("id" byte)
-; @param[out]	zflag	nz if no free slot was available
-getFreePartSlot:
-	ldhl FIRST_PART_INDEX, Part.start
---
-	ld a,(hl)
-	or a
-	jr z,++
-	inc h
-	ld a,h
-	cp LAST_PART_INDEX+1
-	jr c,--
-	or h
-	ret
-++
-	inc a
-	ldi (hl),a
-	xor a
-	ret
 
 ;;
 partDelete:

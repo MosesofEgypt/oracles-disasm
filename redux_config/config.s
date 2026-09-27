@@ -72,6 +72,8 @@
 		.define WIDE_INVENTORY_SPRITES			1
 	.endif
 	.ifndef RESTOCK_SHOP_ON_PURCHASE
+		; when buying an item in the shop, it will be
+		; restocked without needing to reload the room.
 		.define RESTOCK_SHOP_ON_PURCHASE		1
 	.endif
 	.ifndef FILE_MENU_SHOW_CURRENT_HEARTS

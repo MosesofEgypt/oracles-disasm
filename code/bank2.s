@@ -4248,14 +4248,12 @@ loadEquippedItemSpriteData:
 			ldi a,(hl)
 			ld c,a
 
-		.ifdef WIDE_INVENTORY_SPRITES
 			ldi a,(hl)
 			set 3,a
+		.ifdef WIDE_INVENTORY_SPRITES
 			inc a
-			ld (de),a
-		.else
-			inc hl
 		.endif
+			ld (de),a
 			jr ++
 	+
 	ld a,c
