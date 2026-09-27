@@ -617,11 +617,7 @@ companionPreventLinkFromPassing_noExtraChecks:
 ;;
 companionUpdateMovement:
 	call companionCalculateAdjacentWallsBitset
-.if defined(ROM_COMBO)
 	callab bank5.specialObjectUpdatePosition
-.else
-	call specialObjectUpdatePosition
-.endif
 
 	; Don't attempt to break tile on ground if in midair
 	ld h,d

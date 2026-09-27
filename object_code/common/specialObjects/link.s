@@ -6071,3 +6071,134 @@ linkState12:
 	.db $00 $f8 ; DIR_LEFT
 
 .include {"{GAME_DATA_DIR}/tile_properties/landableTilesFromCliffs.s"}
+
+;;
+; Checks everything in wAButtonSensitiveObjectList (npcs mostly) and triggers them if the
+; A button has been pressed near them.
+;
+; @param[out]	cflag	Set if Link just pressed A next to an object
+linkInteractWithAButtonSensitiveObjects:
+    ld c,$00
+	ld a,(wGameKeysJustPressed)
+	and BTN_A
+	ret z
+
+	; If he's in a shop, he can interact while holding something
+	ld a,(wInShop)
+	or a
+	jr nz,+
+
+	; If he's not in a shop, this should return if he's holding something
+	ld a,(wLinkGrabState)
+	or a
+	ret nz
++
+	push de
+	ld e,SpecialObject.direction
+	ld a,(de)
+	ld hl,@positionOffsets
+	rst_addDoubleIndex
+
+	; Store y + offset into [hFF8D]
+	ld e,SpecialObject.yh
+	ld a,(de)
+	add (hl)
+	ldh (<hFF8D),a
+
+	; Store x + offset into [hFF8C]
+	inc hl
+	ld e,SpecialObject.xh
+	ld a,(de)
+	add (hl)
+	ldh (<hFF8C),a
+
+	; Check all objects in the list
+	ld de,wAButtonSensitiveObjectList
+---
+	; Get the object in hl
+	ld a,(de)
+	ld h,a
+	inc e
+	ld a,(de)
+	ld l,a
+	or h
+	jr z,+
+
+	; Check if link is directly in front of the object
+	push hl
+	ldh a,(<hFF8D)
+	ld b,a
+	ldh a,(<hFF8C)
+	ld c,a
+	call objectHCheckContainsPoint
+	pop hl
+	jr nc,+
+
+	; Link is next to the object; only trigger it if the "pressedAButton" variable is
+	; not already set.
+	bit 0,(hl)
+	jr z,@foundObject
++
+	inc e
+	ld a,e
+	cp <wAButtonSensitiveObjectListEnd
+	jr c,---
+
+	; No object found
+	pop de
+    scf
+	ccf
+	ret
+
+@foundObject:
+	; Set the object's "pressedAButton" variable.
+	set 0,(hl)
+
+	; For some reason, set Link's invincibility whenever triggering an object?
+	ld hl,w1Link.invincibilityCounter
+	ld a,(hl)
+	or a
+	ld a,$fc
+	jr z,++
+
+	bit 7,(hl)
+	jr nz,@negativeValue
+
+	; Link's invincibility already has a positive value ($01-$7f), meaning he's
+	; flashing red from damage.
+	; Make sure he stays invincible for at least 4 more frames?
+	ld a,$04
+	cp (hl)
+	jr c,@doneWithInvincibility
+	jr ++
+
+	; Negative value for invincibility means he isn't flashing red.
+	; Again, this makes sure he stays invincible for at least 4 more frames.
+@negativeValue:
+	cp (hl)
+	jr nc,@doneWithInvincibility
+++
+	ld (hl),a
+
+@doneWithInvincibility:
+	; Disable ring transformations for 8 frames? (He can't normally interact with
+	; objects while transformed... so what's the point of this?)
+	ld a,$08
+	ld (wDisableRingTransformations),a
+
+	; Disable pushing animation
+	ld a,$80
+	ld (wForceLinkPushAnimation),a
+
+	ld hl,wLinkTurningDisabled
+	set 7,(hl)
+
+	pop de
+    scf
+	ret
+
+@positionOffsets:
+	.db $f6 $00 ; DIR_UP
+	.db $00 $0a ; DIR_RIGHT
+	.db $0a $00 ; DIR_DOWN
+	.db $00 $f6 ; DIR_LEFT

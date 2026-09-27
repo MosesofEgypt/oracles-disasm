@@ -615,8 +615,12 @@ shopkeeperCheckLinkHasItemAlready:
 		ld l,<wLifeVialMaxCharges
 		ld a,(hl)
 		cp $99
-		jr z,@cantSell
-		ret
+		ret nz
+		ld a,TREASURE_RED_LIFE_VIAL
+		ld hl,wObtainedTreasureFlags
+		call checkFlag
+		ret z
+		jr @cantSell
 	++
 .endif
 

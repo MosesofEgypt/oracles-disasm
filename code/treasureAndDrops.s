@@ -108,6 +108,23 @@ giveTreasure_body:
 	push hl
 	push de
 	ld a,b
+.ifdef ENABLE_NEW_GAME_PLUS
+	cp TREASURE_HEART_CONTAINER
+	jr nz,+
+		ld a,(wLinkMaxHealth)
+		.ifdef ENABLE_DOUBLE_HEART_CAP
+			cp $80
+		.else
+			cp $40
+		.endif
+		jr nz,+
+			; convert heart containers into life vials in NG+ if maxed on hearts
+			ld hl,wStatusBarNeedsRefresh
+			set 1,(hl)
+			ld b,TREASURE_LIFE_VIAL_CHARGE
+	+
+	ld a,b
+.endif
 	ldh (<hFF8B),a
 	push bc
 
@@ -130,10 +147,13 @@ giveTreasure_body:
 	call @giveTreasure
 .ifdef ENABLE_NEW_GAME_PLUS
 	push af
-	ld a,b
+	ldh a,(<hFF8B)
+	cp TREASURE_LIFE_VIAL
+	jr z,+
 	cp TREASURE_LIFE_VIAL_CHARGE
+	+
 	jr nz,+
-		; if giving life vial, ensure the charges are full
+		; if giving life vial or charge, ensure the charges are full
 		ld hl,wLifeVialMaxCharges
 		ldd a,(hl)
 		ld (hl),a
@@ -361,6 +381,32 @@ giveTreasure_body:
 ; Add c to [de] as a bcd value.
 ; Mode 4 is also called by mode d, mode f.
 @mode4:
+.ifdef ENABLE_NEW_GAME_PLUS
+	ldh a,(<hFF8B)
+	cp TREASURE_LIFE_VIAL
+	jr z,+
+	cp TREASURE_LIFE_VIAL_CHARGE
+	+
+	jr nz,+
+		ld a,(wLifeVialMaxCharges)
+		cp $99
+		jr nz,+
+			ld a,TREASURE_RED_LIFE_VIAL
+			ld hl,wObtainedTreasureFlags
+			call checkFlag
+			jr nz,+
+				ld a,TREASURE_RED_LIFE_VIAL
+				call setFlag
+				; double the effectiveness of the life vial charges
+				ld a,$49
+				ld (wLifeVialMaxCharges),a
+				ld a,(wStatusBarNeedsRefresh)
+				or $03
+				ld (wStatusBarNeedsRefresh),a
+				set 0,(hl)
+				set 1,(hl)
+	+
+.endif
 	ld a,e
 	cp <wSeedSatchelLevel
 	ld a,(de)

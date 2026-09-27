@@ -971,6 +971,7 @@ initializeComboGame:
 .endif
 .if defined(ENABLE_NEW_GAME_PLUS)
 	.db TREASURE_LIFE_VIAL,         TREASURE_PUNCH
+	.db TREASURE_RED_LIFE_VIAL,     TREASURE_LIFE_VIAL
 .endif
 	.db $00
 
@@ -993,7 +994,11 @@ initializeComboGame:
 	.db $00
 	.db $c0	; TREASURE_RED_ORE, TREASURE_BLUE_ORE
 	.db $80	; TREASURE_HARD_ORE
+.if defined(ENABLE_NEW_GAME_PLUS)
+	.db $08 ; TREASURE_RED_LIFE_VIAL
+.else
 	.db $00
+.endif
 	.db $00
 	.db $00
 	.db $00
@@ -1016,7 +1021,11 @@ initializeComboGame:
 	.db $00
 	.db $c0	; TREASURE_RED_ORE, TREASURE_BLUE_ORE
 	.db $80	; TREASURE_HARD_ORE
+.if defined(ENABLE_NEW_GAME_PLUS)
+	.db $08 ; TREASURE_RED_LIFE_VIAL
+.else
 	.db $00
+.endif
 	.db $00
 	.db $00
 	.db $00

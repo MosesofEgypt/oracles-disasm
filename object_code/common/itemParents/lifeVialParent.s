@@ -43,8 +43,13 @@ parentItemCode_lifeVial:
 	ld a,$01
 	ld (de),a
 
-	; exactly 17 frames between heart refills
+	; exactly 17 frames between heart refills for
+	; the blue life vial, and double that for red
 	ld a,$11
+	call isRedLifeVial
+	jr z,+
+		add a
+	+
 	ld e,Item.counter1
 	ld (de),a
 
@@ -84,20 +89,35 @@ parentItemCode_lifeVial:
 	set 1,(hl)
 
 	; heal 1 heart
+	push bc
 	ld hl,wLinkHealth
-	ldi a,(hl)
-	inc a
-	cp (hl)
+	ldi a,(hl) ; move hl to the health cap
+	ld b,4
+	call isRedLifeVial
 	jr z,+
+		ld b,8
+	+
+
+	-
 		inc a
-		cp (hl)
+		cp (hl) ; don't heal over the health cap
 		jr z,+
-			inc a
-			cp (hl)
-			jr z,+
-				inc a
+		dec b
+		jr nz,-
 	+
 	dec l
 	ld (hl),a
 
+	pop bc
 	jr @state0
+
+isRedLifeVial:
+	push hl
+	push af
+	ld a,TREASURE_RED_LIFE_VIAL
+	ld hl,wObtainedTreasureFlags
+	call checkFlag
+	pop hl
+	ld a,h
+	pop hl
+	ret

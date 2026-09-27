@@ -123,13 +123,13 @@ treasureDisplayData2:
 	.db TREASURE_HARP,               $00, $00, $00, $00, $05, <TX_0941 ; X TREASURE_HARP (0x11)
 .ifdef ENABLE_NEW_GAME_PLUS
 .ifdef WIDE_INVENTORY_SPRITES
-	.db TREASURE_LIFE_VIAL,          $bb, $01, $bb, $21, $07, <TX_09_LIFE_VIAL ; TREASURE_LIFE_VIAL
+	.db TREASURE_LIFE_VIAL,          $bb, $04, $bb, $24, $07, <TX_09_LIFE_VIAL ; TREASURE_LIFE_VIAL
 	.db $00,                         $07, $00, $07, $00, $ff, <TX_0900 ; TREASURE_SLINGSHOT (0x13)
-	.db TREASURE_LIFE_VIAL_CHARGE,   $bb, $01, $bb, $21, $ff, <TX_0900 ; TREASURE_LIFE_VIAL
+	.db TREASURE_LIFE_VIAL_CHARGE,   $bb, $04, $bb, $24, $ff, <TX_0900 ; TREASURE_LIFE_VIAL
 .else
-	.db TREASURE_LIFE_VIAL,          $bb, $01, $00, $00, $01, <TX_09_LIFE_VIAL ; TREASURE_LIFE_VIAL
+	.db TREASURE_LIFE_VIAL,          $bb, $04, $00, $00, $01, <TX_09_LIFE_VIAL ; TREASURE_LIFE_VIAL
 	.db $00,                         $07, $00, $07, $00, $ff, <TX_0900 ; TREASURE_SLINGSHOT (0x13)
-	.db TREASURE_LIFE_VIAL_CHARGE,   $bb, $01, $00, $00, $ff, <TX_0900 ; TREASURE_LIFE_VIAL
+	.db TREASURE_LIFE_VIAL_CHARGE,   $bb, $04, $00, $00, $ff, <TX_0900 ; TREASURE_LIFE_VIAL
 .endif
 .else
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_12

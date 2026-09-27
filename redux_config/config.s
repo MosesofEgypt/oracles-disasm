@@ -71,6 +71,9 @@
 		; determines whether the inventory items are 2 or 3 tiles wide
 		.define WIDE_INVENTORY_SPRITES			1
 	.endif
+	.ifndef RESTOCK_SHOP_ON_PURCHASE
+		.define RESTOCK_SHOP_ON_PURCHASE		1
+	.endif
 	.ifndef FILE_MENU_SHOW_CURRENT_HEARTS
 		; determines whether the save menu shows the number of
 		; hearts link actually has full instead of the default

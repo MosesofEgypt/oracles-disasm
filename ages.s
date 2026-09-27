@@ -115,13 +115,28 @@ m_EndScriptSection
 
 .BANK $05 SLOT 1
 .ORG 0
+m_section_superfree Bank_5 NAMESPACE bank5
+	.define SKIP_COMPANION_COMMON_CODE
+	.include "code/specialObjects.s"
+	.undefine SKIP_COMPANION_COMMON_CODE
 
-	 m_section_free Bank_5 NAMESPACE bank5
-		.include "code/specialObjects.s"
+	.include {"{GAME_DATA_DIR}/tile_properties/tileTypeMappings.s"}
+	.include {"{GAME_DATA_DIR}/tile_properties/cliffTiles.s"}
+.ends
 
-		.include {"{GAME_DATA_DIR}/tile_properties/tileTypeMappings.s"}
-		.include {"{GAME_DATA_DIR}/tile_properties/cliffTiles.s"}
-	.ends
+m_section_superfree Bank_5_Ext NAMESPACE bank5Ext
+	.define SKIP_LINK_COMMON_CODE
+	.include "object_code/common/specialObjects/commonCode.s"
+	.undefine SKIP_LINK_COMMON_CODE
+
+	.include "object_code/common/specialObjects/maple.s"
+	.include "object_code/common/specialObjects/ricky.s"
+	.include "object_code/common/specialObjects/dimitri.s"
+	.include "object_code/common/specialObjects/moosh.s"
+
+	.include {"{GAME_DATA_DIR}/tile_properties/tileTypeMappings.s"}
+	.include {"{GAME_DATA_DIR}/tile_properties/cliffTiles.s"}
+.ends
 
 
 .BANK $06 SLOT 1

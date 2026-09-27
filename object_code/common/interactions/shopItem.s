@@ -199,6 +199,27 @@ shopItemState0:
 	ld a,(de)
 	ldi (hl),a
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld e,Interaction.subid
+	ld a,(de)
+	cp $0c
+	jr nz,+
+		; if it's the fairy flask, fix the palette
+		ld a,TREASURE_RED_LIFE_VIAL
+		ld hl,wObtainedTreasureFlags
+		call checkFlag
+		ld e,Interaction.oamFlagsBackup
+		ld a,(de)
+		jr z,++
+			inc a
+		++
+		add $03
+		ld (de),a
+		inc e
+		ld (de),a
+	+
+.endif
+
 	call objectSetVisible83
 	jr shopItemUpdateRupeeDisplay
 
@@ -207,7 +228,18 @@ shopItemState5:
 	xor a
 	ld (wDisabledObjects),a
 	ld (wMenuDisabled),a
+.if defined(RESTOCK_SHOP_ON_PURCHASE)
+	; make link drop the item, move it back, and
+	; reinitialize it as whatever it may become now
+	call shopItemState4
+	call shopItemClearRupeeDisplay
+	ld e,Interaction.state
+	xor a
+	ld (de),a
+	ret
+.else
 	jp interactionDelete
+.endif
 
 
 ; State 2: item picked up by Link

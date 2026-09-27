@@ -6255,31 +6255,6 @@ objectRemoveFromAButtonSensitiveObjectList:
 	ret
 
 ;;
-; Checks everything in wAButtonSensitiveObjectList (npcs mostly) and triggers them if the
-; A button has been pressed near them.
-;
-; @param[out]	cflag	Set if Link just pressed A next to the object
-linkInteractWithAButtonSensitiveObjects:
-	push bc
-	push af
-	ldh a,(<hRomBank)
-	push af
-	callfrombank0 bank0Ext.linkInteractWithAButtonSensitiveObjects_body
-	ld a,c
-	or a
-	scf
-	jr nz,+
-		ccf
-	+
-	pop bc
-	ld a,b
-	rst_setrombank
-	pop bc
-	ld a,b
-	pop bc
-	ret
-
-;;
 objectCheckContainsPoint:
 	ld h,d
 	ldh a,(<hActiveObjectType)
@@ -13013,11 +12988,7 @@ loadScreenMusicAndSetRoomPack:
 dismountCompanionAndSetRememberedPositionToScreenCenter:
 	ldh a,(<hRomBank)
 	push af
-	.if defined(ROM_COMBO)
-		ld a,:bank5Ext.companionDismount
-	.else
-		ld a,:bank5.companionDismount
-	.endif
+	ld a,:bank5Ext.companionDismount
 	rst_setrombank
 
 	ld de,w1Companion
@@ -13026,13 +12997,8 @@ dismountCompanionAndSetRememberedPositionToScreenCenter:
 	ld a,d
 	ldh (<hActiveObject),a
 
-	.if defined(ROM_COMBO)
-		call bank5Ext.companionDismount
-		call bank5Ext.saveLinkLocalRespawnAndCompanionPosition
-	.else
-		call bank5.companionDismount
-		call bank5.saveLinkLocalRespawnAndCompanionPosition
-	.endif
+	call bank5Ext.companionDismount
+	call bank5Ext.saveLinkLocalRespawnAndCompanionPosition
 
 	; After saving the companion's position, overwrite it with values for the center
 	; of the screen?

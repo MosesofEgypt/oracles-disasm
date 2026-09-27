@@ -1,135 +1,3 @@
-;;
-; Checks everything in wAButtonSensitiveObjectList (npcs mostly) and triggers them if the
-; A button has been pressed near them.
-;
-; @param[out]	c	Non-zero if Link just pressed A next to the object
-linkInteractWithAButtonSensitiveObjects_body:
-    ld c,$00
-	ld a,(wGameKeysJustPressed)
-	and BTN_A
-	ret z
-
-	; If he's in a shop, he can interact while holding something
-	ld a,(wInShop)
-	or a
-	jr nz,+
-
-	; If he's not in a shop, this should return if he's holding something
-	ld a,(wLinkGrabState)
-	or a
-	ret nz
-+
-	push de
-	ld e,SpecialObject.direction
-	ld a,(de)
-	ld hl,@positionOffsets
-	rst_addDoubleIndex
-
-	; Store y + offset into [hFF8D]
-	ld e,SpecialObject.yh
-	ld a,(de)
-	add (hl)
-	ldh (<hFF8D),a
-
-	; Store x + offset into [hFF8C]
-	inc hl
-	ld e,SpecialObject.xh
-	ld a,(de)
-	add (hl)
-	ldh (<hFF8C),a
-
-	; Check all objects in the list
-	ld de,wAButtonSensitiveObjectList
----
-	; Get the object in hl
-	ld a,(de)
-	ld h,a
-	inc e
-	ld a,(de)
-	ld l,a
-	or h
-	jr z,+
-
-	; Check if link is directly in front of the object
-	push hl
-	ldh a,(<hFF8D)
-	ld b,a
-	ldh a,(<hFF8C)
-	ld c,a
-	call objectHCheckContainsPoint
-	pop hl
-	jr nc,+
-
-	; Link is next to the object; only trigger it if the "pressedAButton" variable is
-	; not already set.
-	bit 0,(hl)
-	jr z,@foundObject
-+
-	inc e
-	ld a,e
-	cp <wAButtonSensitiveObjectListEnd
-	jr c,---
-
-	; No object found
-	pop de
-    ld c,$00
-	ret
-
-@foundObject:
-	; Set the object's "pressedAButton" variable.
-	set 0,(hl)
-
-	; For some reason, set Link's invincibility whenever triggering an object?
-	ld hl,w1Link.invincibilityCounter
-	ld a,(hl)
-	or a
-	ld a,$fc
-	jr z,++
-
-	bit 7,(hl)
-	jr nz,@negativeValue
-
-	; Link's invincibility already has a positive value ($01-$7f), meaning he's
-	; flashing red from damage.
-	; Make sure he stays invincible for at least 4 more frames?
-	ld a,$04
-	cp (hl)
-	jr c,@doneWithInvincibility
-	jr ++
-
-	; Negative value for invincibility means he isn't flashing red.
-	; Again, this makes sure he stays invincible for at least 4 more frames.
-@negativeValue:
-	cp (hl)
-	jr nc,@doneWithInvincibility
-++
-	ld (hl),a
-
-@doneWithInvincibility:
-	; Disable ring transformations for 8 frames? (He can't normally interact with
-	; objects while transformed... so what's the point of this?)
-	ld a,$08
-	ld (wDisableRingTransformations),a
-
-	; Disable pushing animation
-	ld a,$80
-	ld (wForceLinkPushAnimation),a
-
-	ld hl,wLinkTurningDisabled
-	set 7,(hl)
-
-	pop de
-    ld c,$01
-	ret
-
-@positionOffsets:
-	.db $f6 $00 ; DIR_UP
-	.db $00 $0a ; DIR_RIGHT
-	.db $0a $00 ; DIR_DOWN
-	.db $00 $f6 ; DIR_LEFT
-
-
-
 .ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
 ;;
 ; @param	b		The item to auto-equip or un-equip.
@@ -630,6 +498,84 @@ getNgpUpgradeCount:
 	.db $21 $22 $10 $00 $00 $00 $00 $00; NG+2 strong enemy
 	.db $43 $23 $21 $10 $00 $00 $00 $00; NG+3 strong enemy
 .endif
+
+;;
+; Loads variables related to each of the 3 files (heart display, etc)
+loadFileDisplayVariables:
+	ld a,$02
+	ldh (<hActiveFileSlot),a
+@nextFile:
+	call loadFile
+	ldh a,(<hActiveFileSlot)
+	ld d,FileDisplayStruct.fileLoadResult
+	ld e,a
+	ld a,e
+	swap a
+	rrca
+	add d
+	ld hl,w4FileDisplayVariables
+	rst_addAToHl
+
+	ld a,c
+	ldi (hl),a
+	ld a,(wWhichGame)
+	and $01
+	xor $01
+	ldi (hl),a
+.ifdef FILE_MENU_SHOW_CURRENT_HEARTS
+	ld a,(wLinkHealth)
+	or a
+	jr nz,+
+		ld a,(wLinkMaxHealth)
+		srl a
+		and $fc
+		cp $0c
+		jr nc,++
+			ld a,$0c
+		++
+	+
+	ldi (hl),a
+	ld a,(wLinkMaxHealth)
+.else
+	ld a,(wLinkMaxHealth)
+	ldi (hl),a
+.endif
+	ldi (hl),a
+	ld a,(wDeathCounter)
+	ldi (hl),a
+	ld a,(wDeathCounter+1)
+	ldi (hl),a
+	ld a,(wFileIsLinkedGame)
+	ldi (hl),a
+.if defined(ROM_COMBO)
+	ld a,(wFileIsCompleted)
+	and $f3
+.else
+	ld a,(wFileIsHeroGame)
+	add a
+	and $02
+	ld e,a
+	ld a,(wFileIsCompleted)
+	and $f1
+	or e
+.endif
+	ldi (hl),a
+	ldh a,(<hActiveFileSlot)
+	add a
+	ld e,a
+	add a
+	add e
+	ld hl,w4NameBuffer
+	rst_addAToHl
+	ld de,wLinkName
+	ld b,$06
+	call copyMemoryReverse
+	ld hl,hActiveFileSlot
+	dec (hl)
+	bit 7,(hl)
+	jr z,@nextFile
+	inc (hl)
+	ret
 
 ;;
 ; Set Link's death respawn point based on the current room / position variables.

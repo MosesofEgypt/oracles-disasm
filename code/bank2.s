@@ -275,7 +275,7 @@ fileSelectMode1:
 	call loadGfxHeader
 	ld a,PALH_05
 	call loadPaletteHeader
-	call loadFileDisplayVariables
+	callab bank0Ext.loadFileDisplayVariables
 	call textInput_updateEntryCursor
 	call fileSelectDrawHeartsAndDeathCounter
 	jp loadGfxRegisterState5AndIncFileSelectMode2
@@ -639,7 +639,7 @@ fileSelectMode8:
 	call disableLcd
 	ld a,GFXH_FILE_MENU_NEW_GAME_PLUS
 	call loadGfxHeader
-	call loadFileDisplayVariables
+	callab bank0Ext.loadFileDisplayVariables
 	call textInput_updateEntryCursor
 	ld a,UNCMP_GFXH_08
 	call loadUncompressedGfxHeader
@@ -724,7 +724,7 @@ fileSelectMode3:
 	call disableLcd
 	ld a,GFXH_FILE_MENU_COPY
 	call loadGfxHeader
-	call loadFileDisplayVariables
+	callab bank0Ext.loadFileDisplayVariables
 	call textInput_updateEntryCursor
 	ld a,UNCMP_GFXH_08
 	call loadUncompressedGfxHeader
@@ -871,7 +871,7 @@ fileSelectMode4:
 	call loadGfxHeader
 	ld a,PALH_06
 	call loadPaletteHeader
-	call loadFileDisplayVariables
+	callab bank0Ext.loadFileDisplayVariables
 	call textInput_updateEntryCursor
 	call fileSelectDrawHeartsAndDeathCounter
 	jp loadGfxRegisterState5AndIncFileSelectMode2
@@ -2083,77 +2083,6 @@ data_02_4a28:
 	.db $2d $20 $0e $0f $00
 
 .endif
-
-;;
-; Loads variables related to each of the 3 files (heart display, etc)
-loadFileDisplayVariables:
-	ld a,$02
-	ldh (<hActiveFileSlot),a
-@nextFile:
-	call loadFile
-	ldh a,(<hActiveFileSlot)
-	ld d,FileDisplayStruct.fileLoadResult
-	call getFileDisplayVariableAddress
-	ld a,c
-	ldi (hl),a
-	ld a,(wWhichGame)
-	and $01
-	xor $01
-	ldi (hl),a
-.ifdef FILE_MENU_SHOW_CURRENT_HEARTS
-	ld a,(wLinkHealth)
-	or a
-	jr nz,+
-		ld a,(wLinkMaxHealth)
-		srl a
-		and $fc
-		cp $0c
-		jr nc,++
-			ld a,$0c
-		++
-	+
-	ldi (hl),a
-	ld a,(wLinkMaxHealth)
-.else
-	ld a,(wLinkMaxHealth)
-	ldi (hl),a
-.endif
-	ldi (hl),a
-	ld a,(wDeathCounter)
-	ldi (hl),a
-	ld a,(wDeathCounter+1)
-	ldi (hl),a
-	ld a,(wFileIsLinkedGame)
-	ldi (hl),a
-.if defined(ROM_COMBO)
-	ld a,(wFileIsCompleted)
-	and $f3
-.else
-	ld a,(wFileIsHeroGame)
-	add a
-	and $02
-	ld e,a
-	ld a,(wFileIsCompleted)
-	and $f1
-	or e
-.endif
-	ldi (hl),a
-	ldh a,(<hActiveFileSlot)
-	add a
-	ld e,a
-	add a
-	add e
-	ld hl,w4NameBuffer
-	rst_addAToHl
-	ld de,wLinkName
-	ld b,$06
-	call copyMemoryReverse
-	ld hl,hActiveFileSlot
-	dec (hl)
-	bit 7,(hl)
-	jr z,@nextFile
-	inc (hl)
-	ret
 
 ;;
 ; Updates the displayed text and the cursor?
@@ -4249,19 +4178,19 @@ loadEquippedItemSpriteData:
 	ld b,a
 .ifdef ENABLE_NEW_GAME_PLUS
 	; insert the vial sprite
-.if defined(ROM_COMBO)
-	call wIsSeasons
-	jr c,+
+	.if defined(ROM_COMBO)
+		call wIsSeasons
+		jr c,+
+			cp $bb
+			jr +++
+		+
+			cp $b9
+		+++
+	.elif defined(ROM_AGES)
 		cp $bb
-		jr +++
-	+
+	.else
 		cp $b9
-	+++
-.elif defined(ROM_AGES)
-	cp $bb
-.else
-	cp $b9
-.endif
+	.endif
 	jr z,++
 .endif
 
@@ -4295,6 +4224,43 @@ loadEquippedItemSpriteData:
 @gotAttribute:
 .endif
 
+.ifdef ENABLE_NEW_GAME_PLUS
+	; modify life vial palette to fit tier
+	ld c,a
+	dec de
+	ld a,(de)
+	inc de
+	cp TREASURE_LIFE_VIAL
+	jr nz,+
+		ld a,TREASURE_RED_LIFE_VIAL
+		push hl
+		ld hl,wObtainedTreasureFlags
+		call checkFlag
+		pop hl
+		jr z,+
+			dec hl
+			ldi a,(hl)
+			set 3,a
+			inc a
+			ld (de),a
+			inc de
+
+			ldi a,(hl)
+			ld c,a
+
+		.ifdef WIDE_INVENTORY_SPRITES
+			ldi a,(hl)
+			set 3,a
+			inc a
+			ld (de),a
+		.else
+			inc hl
+		.endif
+			jr ++
+	+
+	ld a,c
+.endif
+
 	; Store into [wItemSpriteAttribtue1]
 	set 3,a
 	ld (de),a
@@ -4310,6 +4276,7 @@ loadEquippedItemSpriteData:
 	; Store into [wItemSpriteAttribute2]
 	set 3,a
 	ld (de),a
+++
 
 	; Calculate [wItemSpriteXOffset]
 	inc e
@@ -8272,6 +8239,42 @@ drawTreasureDisplayDataToBg:
 		inc hl
 		call @writeTile
 	+
+
+.ifdef ENABLE_NEW_GAME_PLUS
+	; modify life vial palette to fit tier
+	push hl
+	inc hl
+	ldd a,(hl)
+	cp <TX_09_LIFE_VIAL
+	jr nz,+
+		ld a,TREASURE_RED_LIFE_VIAL
+		ld hl,wObtainedTreasureFlags
+		call checkFlag
+		jr z,+
+			; move to the flags and change to red
+			ld h,d
+			ld l,e
+			set 2,h
+
+			; modify the top tile(s)
+			.ifdef WIDE_INVENTORY_SPRITES
+			inc (hl)
+			.endif
+			dec hl
+			inc (hl)
+
+			ld a,$20
+			rst_addAToHl
+
+			; modify the bottom tile(s)
+			.ifdef WIDE_INVENTORY_SPRITES
+			inc (hl)
+			inc hl
+			.endif
+			inc (hl)
+	+
+	pop hl
+.endif
 
 	; Draw the "extra tiles" (ammo count, etc)
 	ld a,$20

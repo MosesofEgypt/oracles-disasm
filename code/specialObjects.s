@@ -400,9 +400,6 @@ func_410d:
 .include "object_code/common/specialObjects/transformedLink.s"
 .include "object_code/common/specialObjects/linkRidingAnimal.s"
 
-.if defined(ROM_COMBO)
-.include "object_code/seasons/specialObjects/subrosiaDanceLink.s"
-
 ; these were split out due to bank size constraints
 specialObjectCode_ricky:
 	jpab bank5Ext.specialObjectCode_ricky
@@ -416,6 +413,9 @@ specialObjectCode_moosh:
 specialObjectCode_maple:
 	jpab bank5Ext.specialObjectCode_maple
 
+.if defined(ROM_COMBO)
+.include "object_code/seasons/specialObjects/subrosiaDanceLink.s"
+
 specialObjectCode_minecart:
 	jpab bank6Ext.specialObjectCode_minecart
 
@@ -426,11 +426,6 @@ specialObjectCode_raft:
 specialObjectCode_minecart:
 	; Jump to code in bank 6 to handle it
 	jpab bank6.specialObjectCode_minecart
-
-.include "object_code/common/specialObjects/maple.s"
-.include "object_code/common/specialObjects/ricky.s"
-.include "object_code/common/specialObjects/dimitri.s"
-.include "object_code/common/specialObjects/moosh.s"
 
 specialObjectCode_raft:
 .if defined(ROM_AGES)
