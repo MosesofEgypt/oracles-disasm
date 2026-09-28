@@ -6475,6 +6475,9 @@ inventoryMenuState1:
 +
 	ld (wActiveRing),a
 .endif
+.ifdef ENABLE_RING_REDUX
+	call markEquippedRingFlagsDirty
+.endif
 	ld a,SND_SELECTITEM
 	jp playSound
 

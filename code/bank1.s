@@ -4186,6 +4186,11 @@ updateRingsDisabled:
 ; they typically need to be checked multiple times each frame.
 ;
 updateRingEquipStatuses:
+	ld hl,wReduxOptimizationFlags
+	bit 0,(hl)
+	ret nz
+	set 0,(hl)
+
 	call clearRingEquipStatuses
 
 .ifdef ENABLE_NEW_GAME_PLUS

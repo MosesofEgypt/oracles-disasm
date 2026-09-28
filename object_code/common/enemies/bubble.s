@@ -38,6 +38,10 @@ m_EnemyCode $15
 		ld b,(hl)
 		ld (hl),a
 
+		.ifdef ENABLE_RING_REDUX
+			call markEquippedRingFlagsDirty
+		.endif
+
 		; only show the message if not already disabled
 		ld a,b
 		or a

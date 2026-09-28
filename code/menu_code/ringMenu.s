@@ -716,6 +716,10 @@ ringMenu_selectedRingFromList:
 	rst_addAToHl
 	ld (hl),c
 
+.ifdef ENABLE_RING_REDUX
+	call markEquippedRingFlagsDirty
+.endif
+
 	; Fall through
 
 ;;

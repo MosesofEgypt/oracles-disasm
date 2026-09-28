@@ -2912,6 +2912,10 @@ wDeleteEnergyBeads: ; $cd2d
 ; When nonzero, energy beads (part ID $53) delete themselves? Used when getting essence.
 	db
 
+.ifdef ENABLE_RING_REDUX
+wReduxOptimizationFlags:
+	db
+.endif
 ; $cd2e-$cd2f unused?
 
 .ENDS

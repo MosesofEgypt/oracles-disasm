@@ -85,6 +85,9 @@ m_InteractionCode $a8
 .ifdef ENABLE_MULTI_RING
 	ld hl,wRingReduxFlags
 	set 5,(hl)
+.ifdef ENABLE_RING_REDUX
+	call markEquippedRingFlagsDirty
+.endif
 .else
 	ld hl,wActiveRing
 	ld (hl),FIST_RING

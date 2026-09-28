@@ -8616,10 +8616,23 @@ cpActiveRing:
 clearRingEquipStatuses:
 	ld a,$ff
 	ld (wRingComboCacheFlags),a
-
 	ld hl,wEquippedRingFlags
-	ld b,$08
-	jp fillMemory
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ldi (hl),a
+	ld (hl),a
+	ret
+
+markEquippedRingFlagsDirty:
+	push hl
+	ld hl,wReduxOptimizationFlags
+	res 0,(hl)
+	pop hl
+	ret
 .endif
 
 ;;
