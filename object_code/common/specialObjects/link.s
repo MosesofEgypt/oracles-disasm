@@ -3034,11 +3034,13 @@ linkState01:
 .else
 	jr c,@updateDirection
 .endif
+.ifndef UNRESTRICTED_TRANSFORMS
 	; Check whether Link is wearing a transformation ring or is a baby
 	callab bank6.getTransformedLinkID
 	ld a,b
 	or a
 	jp nz,setLinkIDOverride
+.endif
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 	; Handle movement

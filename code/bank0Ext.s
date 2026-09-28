@@ -82,11 +82,16 @@ handleAutoEquipItem_body:
 ; @param hl                The equipped item slot to swap out
 ; @param wAutoEquipInvSlot The inventory item slot to swap with.
 ;                          If this is $ff, it must be searched for.
+; @param[out] zflag        Set if swap occurred
 @swapItemWithInventory:
 	ld a,(wAutoEquipInvSlot)
 	cp $ff
 	jr nz,+
 		call locateItemInInventory
+		jr c,++
+			or $01
+			ret
+		++
 		ld (wAutoEquipInvSlot),a
 	+
 
@@ -122,6 +127,10 @@ handleAutoEquipItem_body:
 		jr z,++
 			ld d,$00
 			call locateItemInInventory
+			jr c,++
+				or $01
+				ret
+			++
 			ld l,a
 			ld (hl),e
 		++
@@ -172,12 +181,15 @@ locateItemInInventory:
 				; failed to find it
 				pop hl
 				pop de
+				scf
+				ccf
 				ret
 		++
 	dec l
 	ld a,l
 	pop hl
 	pop de
+	scf
 	ret
 
 restoreHarpSeedIndex:

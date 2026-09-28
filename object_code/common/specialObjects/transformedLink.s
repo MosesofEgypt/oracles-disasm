@@ -113,12 +113,14 @@ specialObjectCode_transformedLink:
 	or a
 	jr nz,@resetIDToNormal
 
+.ifndef UNRESTRICTED_TRANSFORMS
 	callab bank6.getTransformedLinkID
 	ld e,SpecialObject.id
 	ld a,(de)
 	cp b
 	ld a,b
 	jr nz,@resetIDToNormal
+.endif
 ++
 	call specialObjectUpdateAdjacentWallsBitset
 	call linkUpdateKnockback

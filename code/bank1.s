@@ -3701,6 +3701,11 @@ func_5a60:
 
 .ifdef ENABLE_RING_REDUX
 processDmgPaletteUpdate:
+	ld hl,wOptimizationFlags
+	bit 1,(hl)
+	ret nz
+	set 1,(hl)
+
 	; record whether the gameboy ring is equipped or not so we can
 	; check if we need to force the palettes to reload instantly
 	ld a,DMG_COLOR_RING
@@ -3738,7 +3743,6 @@ standardGameState:
 	call processDmgPaletteUpdate
 	call updateAzuchu
 	call updateParryTimers
-	call updateColorRingPalettes
 .endif
 	ld a,(wLinkDeathTrigger)
 	cp $ff
@@ -4186,10 +4190,11 @@ updateRingsDisabled:
 ; they typically need to be checked multiple times each frame.
 ;
 updateRingEquipStatuses:
-	ld hl,wReduxOptimizationFlags
+	ld hl,wOptimizationFlags
 	bit 0,(hl)
 	ret nz
 	set 0,(hl)
+	res 1,(hl) ; indicate that the DMG palette needs to be refreshed
 
 	call clearRingEquipStatuses
 
@@ -4244,6 +4249,8 @@ updateRingEquipStatuses:
 	call @unsetFlags
 .endif
 
+	call updateColorRingPalettes
+
 	; these combos can get checked multiple times a
 	; frame, so we cache them for quicker processing
 	push bc
@@ -4256,9 +4263,24 @@ updateRingEquipStatuses:
 	ld a,$01
 	call @cacheComboActive
 
-	pop bc
+	; cache the transform rings
+	ld hl,@transformRings
+	-
+		ldi a,(hl)
+		call cpActiveRing
+		ld a,$02
+		call z,setRingComboFlag
+		ld a,(hl)
+		or a
+		jr nz,-
 
+	pop bc
 	ret
+
+@transformRings:
+	.db LIKE_LIKE_RING, MOBLIN_RING, OCTO_RING
+	.db FIRST_GEN_RING, SUBROSIAN_RING
+	.db $00
 
 @unsetFlags
 	ld b,$05
@@ -4279,40 +4301,9 @@ updateRingEquipStatuses:
 	jp z,setRingComboFlag
 	ret
 
-.endif
-
-.ifdef ENABLE_RING_REDUX
-updateParryTimers:
-	; decrement parry timers
-	ld hl,wShieldParryTimers
-	ld a,(hl)
-	or a
-	ret z
-
-	push bc
-	swap a
-	and $0e
-	or a
-	jr z,++
-		dec a
-		dec a
-		swap a
-	++
-
-	ld b,a
-	ld a,(hl)
-	and $1f
-	or a
-	jr z,++
-		dec a
-	++
-	or b
-	ld (hl),a
-
-	pop bc
-	ret
-
 updateColorRingPalettes:
+	; rings changed. update the palettes
+
 	; get the flags specifying the color rings that are equipped
 	ld hl,wEquippedRingFlags+6
 	ldi a,(hl)	; get the flag bits for 3 of the 4 color rings
@@ -4321,17 +4312,10 @@ updateColorRingPalettes:
 	ld a,(hl) 	; get the last ring flag
 	and $01		; mask
 	or b		; mix to get flags for all 4 color rings in the same byte
-
-	; see if they've changed since last frame
-	ld hl,wColorRingFlags
-	cp (hl)
-	ret z
-
-	; rings changed. update the palettes
-	ld b,a		; store flags for color checking
-	ld (hl),a	; store the new ring flags
+	ld b,a
 
 	ld hl,wRingColorPaletteA
+
 	; initialize with link's original palette
 	ld a,(wLinkOrigOamPalette)
 	ld (hl),a
@@ -4380,6 +4364,39 @@ updateColorRingPalettes:
 	ld a,(hl)
 	inc l
 	ld (hl),a
+	ret
+
+.endif
+
+.ifdef ENABLE_RING_REDUX
+updateParryTimers:
+	; decrement parry timers
+	ld hl,wShieldParryTimers
+	ld a,(hl)
+	or a
+	ret z
+
+	push bc
+	swap a
+	and $0e
+	or a
+	jr z,++
+		dec a
+		dec a
+		swap a
+	++
+
+	ld b,a
+	ld a,(hl)
+	and $1f
+	or a
+	jr z,++
+		dec a
+	++
+	or b
+	ld (hl),a
+
+	pop bc
 	ret
 
 updateAzuchu:

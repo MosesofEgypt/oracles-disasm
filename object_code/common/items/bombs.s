@@ -1,9 +1,3 @@
-.ifdef ENABLE_RING_REDUX
-miningBombComboActive:
-	xor a
-	jp getRingComboFlag
-.endif
-
 ;;
 ; ITEM_BOMB
 itemCode03:

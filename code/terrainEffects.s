@@ -14,7 +14,7 @@ func_0eda:
 func_0eda_fromWithinBank:
 .else
 	ld a,:terrainEffects.shadowAnimation
-	rst_setrombank
+	setrombank
 .endif
 
 	; Get the end of used OAM, get how many sprites are to be drawn, check
@@ -119,21 +119,29 @@ _drawObjectTerrainEffects:
 	ret
 
 @onGround:
+	ld a,(wOptimizationFlags)
+	bit 2,a
+	call z,calculateRoomHasTerrainEffectTiles
+	bit 3,a
+	ret z
+
 	ld a,(wScrollMode)
 	cp $08
 	ret z
 	push hl
+	; get the object's current tile position in short yx format
 	ld a,l
 	and $c0
-	add $0b
+	add Object.yh
 	ld l,a
 	ldi a,(hl)
 	ld b,a
+	; round y-position up and use upper nibble(tile index)
 	add $05
 	and $f0
 	ld c,a
 	inc l
-	ld l,(hl)
+	ld l,(hl) ; get Object.xh upper nibble
 	ld a,l
 	xor b
 	ld h,a
@@ -143,6 +151,7 @@ _drawObjectTerrainEffects:
 	or c
 	ld c,a
 	ld b,>wRoomLayout
+	; determine what tile the object is on
 	ld a,(bc)
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
@@ -155,25 +164,24 @@ _drawObjectTerrainEffects:
 	; (Even though the somaria block is solid, the grass animation can be seen when item drops
 	; land on top of it, so this disables that.)
 	cp $f9
-	jr nz,+
+	jr nz,++
 	ld b,a
 	ld a,(wActiveGroup)
 	or a
 	ld a,b
-	jr z,+
+	jr z,++
 	jr @end
-+
 .endif
 
 .if defined(ROM_COMBO)
-	call wIsSeasons
-	jr c,+
-		cp TILEINDEX_GRASS
-		jr z,@walkingInGrass
-		cp TILEINDEX_PUDDLE_AGES
-		jr nz,@end
-		jr @walkingInPuddle
 	+
+	; ages
+	cp TILEINDEX_GRASS
+	jr z,@walkingInGrass
+	cp TILEINDEX_PUDDLE_AGES
+	jr nz,@end
+	jr @walkingInPuddle
+	++
 
 	; Seasons has multiple grass and shallow water tiles, so this checks ranges
 	; instead of exact values
@@ -191,6 +199,7 @@ _drawObjectTerrainEffects:
 	jr nz,@end
 
 .elif defined(ROM_SEASONS)
+	++
 	; Seasons has multiple grass and shallow water tiles, so this checks ranges
 	; instead of exact values
 	cp TILEINDEX_GRASS
@@ -232,3 +241,74 @@ _drawObjectTerrainEffects:
 @end:
 	pop hl
 	ret
+
+calculateRoomHasTerrainEffectTiles:
+	push de
+	push hl
+	push bc
+	ld hl,@terrainEffectTiles
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+		ld hl,@terrainEffectTiles_seasons
+	+
+.endif
+	-
+		ld bc,wRoomLayout
+		--
+			ld a,(bc)
+			cp (hl)
+			jr nz,++
+				; found a match
+				or a
+				jr +
+			++
+			inc bc
+			ld a,c
+			cp <wRoomLayout+$b0
+			jr c,--
+
+		ldi a,(hl)
+		or a
+		jr nz,-
+	+
+
+	ld a,(wOptimizationFlags)
+	set 2,a
+	res 3,a
+	jr z,+
+		set 3,a
+	+
+	ld (wOptimizationFlags),a
+	pop bc
+	pop hl
+	pop de
+	ret
+
+@terrainEffectTiles:
+.if defined(ROM_COMBO)
+	.db TILEINDEX_GRASS
+	.db TILEINDEX_PUDDLE_AGES
+	.db $00
+
+@terrainEffectTiles_seasons:
+	.db TILEINDEX_GRASS
+	.db TILEINDEX_GRASS+1
+	.db TILEINDEX_PUDDLE_SEASONS
+	.db TILEINDEX_PUDDLE_SEASONS+1
+	.db TILEINDEX_PUDDLE_SEASONS+2
+	.db $00
+
+.elif defined(ROM_SEASONS)
+	.db TILEINDEX_GRASS
+	.db TILEINDEX_PUDDLE
+	.db $00
+.else
+	; For seasons, $f8-$f9 count as grass, $fa-$fc count as puddles
+	.db TILEINDEX_GRASS
+	.db TILEINDEX_GRASS+1
+	.db TILEINDEX_PUDDLE
+	.db TILEINDEX_PUDDLE+1
+	.db TILEINDEX_PUDDLE+2
+	.db $00
+.endif

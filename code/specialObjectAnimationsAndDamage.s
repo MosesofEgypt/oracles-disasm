@@ -633,13 +633,13 @@ getItemForTileBeingPushedOn:
 	.db $00 ; terminator
 .endif
 
+.ifndef UNRESTRICTED_TRANSFORMS
 ;;
 ; Gets the ID to use for the Link object based on what transformation rings he's wearing
 ; (see constants/common/specialObjects.s).
 ; Under normal circumstances, this will return 0 (SPECIALOBJECT_LINK).
 ; @param[out] b Special object ID to use, based on the ring Link is wearing
 getTransformedLinkID:
-.ifndef UNRESTRICTED_TRANSFORMS
 	ld hl,wDisableRingTransformations
 	ld a,(hl)
 	or a
@@ -678,24 +678,18 @@ getTransformedLinkID:
 	ld b,a
 	ret
 ++
-.endif
 	ld b,$00
 	ret
+.endif
 
 .ifdef UNRESTRICTED_TRANSFORMS
 remapTransformedSpecialObjectGfx:
-.ifdef ENABLE_MULTI_RING
-	; NOTE: this optimization only works because the ring
-	;		ids just happen to lie in the same byte
-	ld a,(wEquippedRingFlags+5)
-	or $83
-	cp $ff
-
-	; if any rings are equipped, the above won't be zero
-	jr nz,+
-		ld a,e
-		ret
-	+
+.ifdef ENABLE_RING_REDUX
+	push hl
+	call transformRingActive
+	pop hl
+	ld a,e
+	ret nz
 .endif
 
 	; figure out which ring is equipped

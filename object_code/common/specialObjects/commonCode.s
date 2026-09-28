@@ -110,31 +110,33 @@ updateLinkInvincibilityCounter:
 .ifdef ENABLE_RING_REDUX
 	ld a,(hl)
 	or a
-	jr z,++
-		ldbc GBA_TIME_RING, GBA_NATURE_RING
-		call eitherRingActive
-		ldbc $07,$05
-		jr z,+
-			jr nc,++
-		+
-		jr nc,+
-			dec c
-		+
+	ret z
 
-		ld a,(wFrameCounter)
-		and b
-		cp c
-		jr c,++
-			bit 7,a
-			jr z,+
-				cp $80
-				jr z,++ 	; if the number is already max negative, don't decrement
-				dec (hl)
-				jr ++
-			+
-				cp $7f
-				jr z,++ 	; if the number is already max positive, don't increment
-				inc (hl)
+	ldbc GBA_TIME_RING, GBA_NATURE_RING
+	call eitherRingActive
+	ldbc $07,$05
+	jr z,+++
+		jr nc,++
+		jr +
+	+++
+	jr nc,+
+		dec c
+	+
+
+	ld a,(wFrameCounter)
+	and b
+	cp c
+	jr c,++
+		bit 7,a
+		jr z,+
+			cp $80
+			jr z,++ 	; if the number is already max negative, don't decrement
+			dec (hl)
+			jr ++
+		+
+			cp $7f
+			jr z,++ 	; if the number is already max positive, don't increment
+			inc (hl)
 	++
 .endif
 	ld a,(hl)

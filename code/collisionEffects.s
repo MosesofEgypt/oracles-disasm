@@ -1367,7 +1367,7 @@ collisionEffect39:
 ;;
 ; COLLISIONEFFECT_3b
 collisionEffect3b:
-	ld a,$02
+	ld a,SPECIALOBJECT_LINK_AS_BABY
 	call setLinkIDOverride
 	ld a,ENEMYDMG_1c
 	jp applyDamageToEnemyOrPart

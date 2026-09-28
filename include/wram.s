@@ -2912,11 +2912,14 @@ wDeleteEnergyBeads: ; $cd2d
 ; When nonzero, energy beads (part ID $53) delete themselves? Used when getting essence.
 	db
 
-.ifdef ENABLE_RING_REDUX
-wReduxOptimizationFlags:
+wOptimizationFlags: ; $cd2e
+	; Bit 0: Unset if ring equip statuses need to be recalculated
+	; Bit 1: Unset if DMG Palette needs to be reapplied
+	; Bit 2: Unset if bit 3 needs to be calculated
+	; Bit 3: Set if the room contains terrain-effect tiles
 	db
-.endif
-; $cd2e-$cd2f unused?
+
+; $cd2f unused?
 
 .ENDS
 

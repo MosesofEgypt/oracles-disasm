@@ -83,7 +83,8 @@ init:
 
 .ifdef ENABLE_MULTI_RING
 	call clearRingEquipStatuses
-	call markEquippedRingFlagsDirty
+	xor a
+	ld (wOptimizationFlags),a
 .endif
 .ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
 	ld a,$ff

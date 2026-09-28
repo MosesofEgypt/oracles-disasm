@@ -171,28 +171,6 @@ interBankCall:
 	ret
 
 ;;
-; Call a function in any bank, from any bank.
-; Returns the "af" register the called function
-; @param e Bank of the function to call
-; @param hl Address of the function to call
-interBankCallReturnAf:
-	push hl
-	ld a,(hRomBank)
-	push af
-	ld a,e
-	ld (hRomBank),a
-	ld ($2222),a
-	call jpHl
-	pop hl
-	push af
-	ld a,h
-	ld (hRomBank),a
-	ld ($2222),a
-	pop af
-	pop hl
-	ret
-
-;;
 ; Jump to hl.
 ; @param hl Address to jump to.
 jpHl:
@@ -308,6 +286,27 @@ resetGame:
 	ld sp,wMainStackTop
 	jpfrombank0 bank3.init
 
+;;
+; Call a function in any bank, from any bank.
+; Returns the "af" register the called function
+; @param e Bank of the function to call
+; @param hl Address of the function to call
+interBankCallReturnAf:
+	push hl
+	ld a,(hRomBank)
+	push af
+	ld a,e
+	ld (hRomBank),a
+	ld ($2222),a
+	call jpHl
+	pop hl
+	push af
+	ld a,h
+	ld (hRomBank),a
+	ld ($2222),a
+	pop af
+	pop hl
+	ret
 
 ;;
 ; Get the number of set bits in a.
@@ -1893,7 +1892,7 @@ resumeThreadNextFrameAndSaveBank:
 	ld a,b
 	call resumeThreadInAFrames
 	ld a,c
-	rst_setrombank
+	setrombank
 	pop bc
 	ret
 
@@ -3171,7 +3170,7 @@ drawAllSpritesUnconditionally:
 ++
 	; Update the puddle animation
 	ld a,:terrainEffects.puddleAnimationFrames
-	rst_setrombank
+	setrombank
 
 	; Every 16 frames, the animation changes
 	ld a,(wFrameCounter)
@@ -3309,7 +3308,7 @@ drawAllSpritesUnconditionally:
 .endif
 
 	pop af
-	rst_setrombank
+	setrombank
 	ret
 
 ;;
@@ -3338,20 +3337,19 @@ drawAllSpritesUnconditionally:
 .if defined(SUPERFREE_OAM_DATA_BANKS)
 	; Get bank of animation frame data
 	push hl
-	ld a,h
-	cp >w1Companion+1
 	ld a,l
-	jr nc,+
-		and $c0
-		jr nz,+
-			; special object
-			ld a,$04
-			jr ++
+	rlca
+	rlca
+	and $03
+	jr nz,+
+		; item or special object
+		ld a,h
+		cp >w1Companion+1
+		ld a,$04 ; special object
+		jr c,+
+			; regular item
+			xor a
 	+
-		rlca
-		rlca
-		and $03
-	++
 .if defined(ROM_COMBO)
 	call wIsSeasons
 	jr nc,+
@@ -3531,6 +3529,18 @@ _getObjectPositionOnScreen:
 	rlca
 	ret nc
 
+	; don't draw terrain effects if the object is on
+	; the ground and the room doesn't contain any
+	bit 7,e
+	jr nz,++
+		ld a,(wOptimizationFlags)
+		and $0c
+		cp $04
+		jr z,+
+			ld a,(hl)
+			rlca
+	++
+
 	; Draw shadows and stuff if bit 6 is set
 	rlca
 .if defined(ROM_COMBO)
@@ -3541,10 +3551,10 @@ _getObjectPositionOnScreen:
 		ldh (<hFF8F),a
 		ld c,e
 		callab terrainEffects.drawObjectTerrainEffects
-	+
 .else
 	call c,_drawObjectTerrainEffects
 .endif
+	+
 
 	; Account for Z position
 	ld a,d
@@ -3696,6 +3706,18 @@ _getObjectPositionOnScreen_duringScreenTransition:
 	rlca
 	ret nc
 
+	; don't draw terrain effects if the object is on
+	; the ground and the room doesn't contain any
+	bit 7,e
+	jr nz,++
+		ld a,(wOptimizationFlags)
+		and $0c
+		cp $04
+		jr z,+
+			ld a,(hl)
+			rlca
+	++
+
 	; Draw shadows and stuff if bit 6 is set
 	rlca
 .if defined(ROM_COMBO)
@@ -3706,10 +3728,10 @@ _getObjectPositionOnScreen_duringScreenTransition:
 		ldh (<hFF8F),a
 		ld c,e
 		callab terrainEffects.drawObjectTerrainEffects
-	+
 .else
 	call c,_drawObjectTerrainEffects
 .endif
+	+
 
 	ld a,d
 	add e
@@ -4150,7 +4172,7 @@ updateCamera:
 	call          bank1.updateGfxRegs2Scroll
 	call          bank1.updateScreenShake
 	pop af
-	rst_setrombank
+	setrombank
 	ret
 
 ;;
@@ -4160,7 +4182,7 @@ resetCamera:
 	callfrombank0 bank1.calculateCameraPosition
 	call          bank1.updateGfxRegs2Scroll
 	pop af
-	rst_setrombank
+	setrombank
 	ret
 
 ;;
@@ -4943,7 +4965,7 @@ refreshObjectGfx:
 	xor a
 	ld (wLoadedTreeGfxIndex),a
 	pop af
-	rst_setrombank
+	setrombank
 	ret
 
 ;;
@@ -5004,7 +5026,7 @@ loadWeaponGfx:
 	callfrombank0 dataLoading.loadWeaponGfx
 .endif
 	pop af
-	rst_setrombank
+	setrombank
 	ret
 
 ;;
@@ -5063,7 +5085,7 @@ loadObjectGfx2:
 .else
 	ld a,:dataLoading.insertIndexIntoLoadedObjectGfx
 .endif
-	rst_setrombank
+	setrombank
 	ld b,$1f
 	jp queueDmaTransferFromRom
 
@@ -6830,7 +6852,7 @@ checkEnemyAndPartCollisionsIfTextInactive:
 	push af
 	callfrombank0 bank7.checkEnemyAndPartCollisions
 	pop af
-	rst_setrombank
+	setrombank
 	ret
 
 ;;
@@ -8629,8 +8651,15 @@ clearRingEquipStatuses:
 
 markEquippedRingFlagsDirty:
 	push hl
-	ld hl,wReduxOptimizationFlags
+	ld hl,wOptimizationFlags
 	res 0,(hl)
+	pop hl
+	ret
+
+markTerrainEffectFlagsDirty:
+	push hl
+	ld hl,wOptimizationFlags
+	res 2,(hl)
 	pop hl
 	ret
 .endif
@@ -9134,9 +9163,10 @@ remoteBombComboActive:
 
 judoMasterComboActive:
 	push hl
-	ld h,a
+	push af
 	ld a,$01
 	call getRingComboFlag
+	pop hl
 	ld a,h
 	pop hl
 	ret
@@ -9233,12 +9263,16 @@ setRingComboFlag:
 	pop hl
 	ret
 
+miningBombComboActive:
+	xor a
+	jr getRingComboFlag
+
+transformRingActive:
+	ld a,$02
+
 getRingComboFlag:
-	push hl
 	ld hl,wRingComboCacheFlags
-	call checkFlag
-	pop hl
-	ret
+	jp checkFlag
 .endif
 
 
@@ -9540,7 +9574,7 @@ _interactionActuallyRunScript:
 .else
 	ld a,SCRIPT_BANK
 .endif
-	rst_setrombank
+	setrombank
 --
 	ld a,(hl)
 	or a
@@ -9560,12 +9594,12 @@ _interactionActuallyRunScript:
 	jr c,--
 
 	pop af
-	rst_setrombank
+	setrombank
 	xor a
 	ret
 ++
 	pop af
-	rst_setrombank
+	setrombank
 	scf
 	ret
 
@@ -13143,7 +13177,7 @@ func_3539:
 	xor a
 	ld (wc4b6),a
 	pop af
-	rst_setrombank
+	setrombank
 	ret
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
@@ -13167,7 +13201,7 @@ seasonsFunc_34a0:
 	rlca
 	jr nc,+
 		ld a,:itemParents.updateGrabbedObjectPosition
-		rst_setrombank
+		setrombank
 		call itemParents.updateGrabbedObjectPosition
 	+
 
@@ -13184,7 +13218,7 @@ seasonsFunc_34a0:
 	ld (wc4b6),a
 
 	pop af
-	rst_setrombank
+	setrombank
 	ret
 
 .endif
@@ -13286,13 +13320,13 @@ getEntryFromObjectTable2:
 	ldh a,(<hRomBank)
 	push af
 	ld a, :objectData.objectTable2
-	rst_setrombank
+	setrombank
 	ld a,b
 	ld hl, objectData.objectTable2
 	rst_addDoubleIndex
 	rst_derefHl
 	pop af
-	rst_setrombank
+	setrombank
 	ret
 
 .endif
@@ -13899,6 +13933,7 @@ loadRoomLayout:
 	ld hl,wRoomLayout
 	ld b,(LARGE_ROOM_HEIGHT+1)*16
 	call clearMemory
+	call markTerrainEffectFlagsDirty
 .if defined(ROM_COMBO)
 	ld a,:roomLayouts.roomLayoutGroupTable_seasons
 	ld hl,roomLayouts.roomLayoutGroupTable_seasons
@@ -14547,7 +14582,7 @@ checkObjectIsCloseToPosition:
 	inc b
 +
 	pop af
-	rst_setrombank
+	setrombank
 
 	ld a,b
 	or a
@@ -14620,7 +14655,7 @@ interactionRunSimpleScript:
 .else
 	ld a,SIMPLE_SCRIPT_BANK
 .endif
-	rst_setrombank
+	setrombank
 
 	ld h,d
 	ld l,Interaction.scriptPtr
@@ -14634,13 +14669,13 @@ interactionRunSimpleScript:
 
 	call interactionSetSimpleScript
 	pop af
-	rst_setrombank
+	setrombank
 	xor a
 	ret
 
 @scriptEnd:
 	pop af
-	rst_setrombank
+	setrombank
 	scf
 	ret
 

@@ -131,11 +131,8 @@ addSpritesFromBankToOam_withOffset:
 ; @param	e	Bank where the OAM data is
 ; @param	hl	OAM data
 addSpritesFromBankToOam:
-	ldh a,(<hRomBank)
-	push af
-	ld a,e
-	rst_setrombank
-	call addSpritesToOam
-	pop af
-	rst_setrombank
+	push bc
+	ld bc,$0000
+	call addSpritesFromBankToOam_withOffset
+	pop bc
 	ret
