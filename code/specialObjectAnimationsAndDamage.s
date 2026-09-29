@@ -41,19 +41,15 @@ label_06_032:
 .else
 	ld hl,specialObjectAnimationTable
 .endif
-	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	addDoubleIndex
+	derefHl
 	add hl,bc
 
 ;;
 ; @param	d	Object
 ; @param	hl	Address of pointer to animation data
 specialObjectNextAnimationFrame:
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	derefHl
 
 	; Check for loop
 	ldi a,(hl)
@@ -112,7 +108,7 @@ loadLinkAndCompanionAnimationFrame_body:
 			ld hl,@data_ages
 		+
 	.endif
-	rst_addAToHl
+	addAToHl
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 	; CROSSITEMS: The cape animation was added at index 256. It must account for link's
@@ -254,7 +250,7 @@ getSpecialObjectGraphicsFrame:
 .ifdef UNRESTRICTED_TRANSFORMS
 	call remapTransformedSpecialObjectGfx
 .endif
-	rst_addDoubleIndex
+	addDoubleIndex
 	derefHl
 	add hl,bc
 	add hl,bc
@@ -277,7 +273,7 @@ getSpecialObjectGraphicsFrame:
 .else
 	ld hl,specialObjectOamDataTable
 .endif
-	rst_addDoubleIndex
+	addDoubleIndex
 	derefHl
 	add hl,bc
 	ld e,<w1Link.oamDataAddress
@@ -585,7 +581,7 @@ getItemForTileBeingPushedOn:
 	ld a,(hl)
 	add a
 	ld hl,@facingOffsets
-	rst_addAToHl
+	addAToHl
 	ldi a,(hl)
 	add b
 	ld b,a

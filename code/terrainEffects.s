@@ -213,9 +213,7 @@ _drawObjectTerrainEffects:
 @walkingInPuddle:
 	inc e
 	ld hl,wPuddleAnimationPointer
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	derefHl
 	jr @grassOrWater
 
 @walkingInGrass:

@@ -206,7 +206,7 @@ applyOffsetTableHL:
 	add a
 	add e
 
-	rst_addAToHl
+	addAToHl
 
 	; b0: Y offset
 	ld e,Item.yh

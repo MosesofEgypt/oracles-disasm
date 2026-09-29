@@ -23,7 +23,7 @@ checkEnemyAndPartCollisions:
 	ld a,(w1Link.direction)
 	add a
 	add a
-	rst_addAToHl
+	addAToHl
 	ld de,wShieldY
 	ld a,(w1Link.yh)
 	add (hl)

@@ -42,7 +42,7 @@ specialObjectCode_link:
 	ld hl,wRingColorPaletteA
 	ld a,(wFrameCounter)
 	and $01
-	rst_addAToHl
+	addAToHl
 	ld a,(hl)
 
 	ld hl,w1Link.oamFlags
@@ -4707,7 +4707,7 @@ updateLinkSpeed_withParam:
 	ld (de),a
 	and $7f
 	ld hl,@speedTable
-	rst_addAToHl
+	addAToHl
 
 	; Set Link's initial speed value if it was zero?
 	ld e,<w1Link.speed
@@ -4779,7 +4779,7 @@ updateLinkSpeed_withParam:
 				ld a,e
 				add b
 				ld hl,@hasteSpeedUpgradeTable
-				rst_addAToHl
+				addAToHl
 				ld a,(hl)
 				jr +
 	++
@@ -4793,7 +4793,7 @@ updateLinkSpeed_withParam:
 	add c
 	and $7f
 	ld hl,@speedTable
-	rst_addAToHl
+	addAToHl
 	ld a,(hl)
 	ld h,d
 	ld l,<w1Link.speedTmp
@@ -4921,7 +4921,7 @@ specialObjectUpdatePositionGivenVelocity:
 	; bits will be set.
 	ld a,c
 	ld hl,@bitsToCheck
-	rst_addAToHl
+	addAToHl
 	ld a,e
 	and (hl)
 	ld e,a
@@ -5008,7 +5008,7 @@ specialObjectUpdatePositionGivenVelocity:
 @tileEdgeAdjust:
 	ld a,c
 	ld hl,slideAngleTable
-	rst_addAToHl
+	addAToHl
 	ld a,(hl)
 	and $03
 	ret nz

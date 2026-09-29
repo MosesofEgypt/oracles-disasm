@@ -54,7 +54,11 @@ updateAnimationQueue:
 	and $1f
 	ld (wAnimationQueueHead),a
 	ld hl,w2AnimationQueue
-	rst_addAToHl
+	add l
+	ld l,a
+	jr nc,+
+		inc h
+	+
 	ld a,:w2AnimationQueue
 	ldh (R_SVBK),a
 	ld b,(hl)
@@ -107,7 +111,7 @@ updateAnimationDataPointer:
 	; Load hl with a pointer to the animationData structure
 	push hl
 	inc hl
-	rst_derefHl
+	derefHl
 
 	; e = animation gfx index
 	ld e,(hl)
@@ -146,7 +150,11 @@ updateAnimationDataPointer:
 	ldh (R_SVBK),a
 	ld a,e
 	ld hl,w2AnimationQueue
-	rst_addAToHl
+	add l
+	ld l,a
+	jr nc,+
+		inc h
+	+
 	ld (hl),b
 	xor a
 	ldh (R_SVBK),a

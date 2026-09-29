@@ -2,14 +2,8 @@
 ; rst_jumpTable
 	add a
 	pop hl
-	add l
-	ld l,a
-	jr nc,+
-	inc h
-+
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	addAToHl
+	derefHl
 	jp hl
 
 .ORGA $0010
@@ -22,19 +16,12 @@
 
 .ORGA $0018
 ; rst_addDoubleIndex
-	push bc
-	ld c,a
-	ld b,$00
-	add hl,bc
-	add hl,bc
-	pop bc
+	addDoubleIndex
 	ret
 
 .ORGA $0020
 ; rst_derefHl
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	derefHl
 	ret
 
 .ORGA $0028
@@ -3357,20 +3344,16 @@ drawAllSpritesUnconditionally:
 	+
 .endif
 	ld hl,objectOamBankTable
-	rst_addAToHl
+	addAToHl
 	ld a,(hl)
 	pop hl
 	setrombank
 
 	; Object.oamDataAddress
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	derefHl
 .else
 	; Object.oamDataAddress
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	derefHl
 
 	; Get address, bank of animation frame data
 	ld a,h
@@ -5618,9 +5601,7 @@ retrieveTextCharacter:
 	ldi a,(hl)
 	setrombank
 
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	derefHl
 	add hl,bc
 	pop bc
 
@@ -6923,9 +6904,7 @@ lookupCollisionTable:
 lookupCollisionTable_paramE:
 	ld a,(wActiveCollisions)
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	derefHl
 	jr lookupKey
 
 ;;
@@ -6939,9 +6918,7 @@ findByteInCollisionTable:
 findByteInCollisionTable_paramE:
 	ld a,(wActiveCollisions)
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	derefHl
 	jr findByteAtHl
 
 ;;
@@ -7574,7 +7551,7 @@ getPositionOffsetForVelocityOrig:
 	; Get X values
 	inc c
 	ld a,$0e
-	rst_addAToHl
+	addAToHl
 
 	ldi a,(hl)
 	ld (bc),a
@@ -8716,9 +8693,7 @@ updateObjectCaller:
 @execObjectCode:
 	ldi a,(hl)
 	push af
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	derefHl
 	pop af
 	setrombank
 
@@ -8847,9 +8822,7 @@ tryNgpUpgradeUncapped:
 	; determine which table to use for upgrade values
 	dec a	; NG+0 has no upgrade table
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	derefHl
 	pop af
 	push bc
 	ld b,a
@@ -9939,16 +9912,12 @@ interactionSetAnimation:
 	ld hl,interactionAnimationTable
 .endif
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	derefHl
 	add hl,bc
 
 ;;
 _interactionNextAnimationFrame:
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	derefHl
 
 	; Byte 0: how many frames to hold it (or $ff to loop)
 	ldi a,(hl)
@@ -10553,16 +10522,12 @@ enemySetAnimation:
 	ld hl,enemyAnimationTable
 .endif
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	derefHl
 	add hl,bc
 
 ;;
 _enemyNextAnimationFrame:
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	derefHl
 
 	; Byte 0: how many frames to hold it (or $ff to loop)
 	ldi a,(hl)
@@ -10609,9 +10574,7 @@ _enemyNextAnimationFrame:
 	ld hl,enemyOamDataTable
 .endif
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	derefHl
 	add hl,bc
 
 	; Set the address of the oam data
@@ -10853,9 +10816,7 @@ partSetAnimation:
 	ld hl,partAnimationTable
 .endif
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	derefHl
 	add hl,bc
 
 	call _partNextAnimationFrame
@@ -10872,9 +10833,7 @@ partSetAnimation:
 ; Note: this sets the ROM bank to $11 before returning.
 ;
 _partNextAnimationFrame:
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	derefHl
 
 	; Byte 0: how many frames to hold it (or $ff to loop)
 	ldi a,(hl)
@@ -10921,9 +10880,7 @@ _partNextAnimationFrame:
 	ld hl,partOamDataTable
 .endif
 	rst_addDoubleIndex
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	derefHl
 	add hl,bc
 
 	; Set the address of the oam data

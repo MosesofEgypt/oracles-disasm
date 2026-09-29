@@ -48,7 +48,7 @@ label_07_227:
 	ld c,$00
 +
 	ld hl,@data
-	rst_addAToHl
+	addAToHl
 	ld a,(hl)
 	and $f0
 	swap a
@@ -209,7 +209,7 @@ itemCode07Post:
 ; @param	hl	Usually points to swordArcData
 itemSetPositionInSwordArc:
 	add a
-	rst_addDoubleIndex
+	addDoubleIndex
 
 ;;
 ; Copy Link's position (accounting for raised floors, with Z position 2 higher than Link)

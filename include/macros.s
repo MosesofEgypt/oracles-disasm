@@ -93,6 +93,22 @@
 	ld l,a
 .ENDM
 
+.MACRO addDoubleIndex
+	push bc
+	ld c,a
+	ld b,$00
+	add hl,bc
+	add hl,bc
+	pop bc
+.ENDM
+
+.MACRO addAToHl
+	add l
+	ld l,a
+	jr nc,$01
+	inc h
+.ENDM
+
 ; Call from bank 0
 .MACRO callfrombank0
 	.IF NARGS == 1

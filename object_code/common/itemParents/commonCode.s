@@ -14,9 +14,7 @@ getHeldObject:
 	+
 	; get the object held by w1Link
 	ld hl,w1Link.relatedObj2
-	ldi a,(hl)
-	ld h,(hl)
-	ld l,a
+	derefHl
 	; test that the object is enabled
 	xor a
 	or (hl)

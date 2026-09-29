@@ -552,7 +552,7 @@ ecom_getAdjacentWallsBitset:
 	push de
 	call ecom_getAdjacentWallTableOffset
 	ld b,d
-	rst_addAToHl
+	addAToHl
 	ld d,h
 	ld e,l
 	ld h,b

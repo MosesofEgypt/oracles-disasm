@@ -188,7 +188,7 @@ updateGameKeysPressed:
 	and $f0
 	swap a
 	ld hl,@directionButtonToAngle
-	rst_addAToHl
+	addAToHl
 	ld a,(hl)
 	ld (wLinkAngle),a
 	ret
