@@ -20,23 +20,23 @@ seasonsFunc_03_79cd:
 fillTmpGfxBufferWithHFF8B:
 	ldh (<hFF8B),a
 	ld a,$01
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$9800
 	ld bc,$0040
 	ldh a,(<hFF8B)
 	call fillMemoryBc16ByteBlocks
 	xor a
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$9800
 	ld bc,$0400
 	jp clearMemoryBc
 
 seasonsFunc_03_7a88:
 	ldh (<hFF8B),a
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,$04
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w4TileMap
 	ld bc,$0240
 	call clearMemoryBc
@@ -45,7 +45,7 @@ seasonsFunc_03_7a88:
 	ldh a,(<hFF8B)
 	call fillMemoryBc16ByteBlocks
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 .endif
 
@@ -621,13 +621,13 @@ endgameCutsceneHandler_09_stage0_body_seasons:
 	call refreshObjectGfx
 	call hideStatusBar
 	ld a,$02
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w2TilesetBgPalettes+$10
 	ld b,$08
 	ld a,$ff
 	call fillMemory
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,$07
 	ldh (<hDirtyBgPalettes),a
 	ld b,$02
@@ -907,17 +907,17 @@ endgameCutsceneHandler_09_stage1_body_seasons:
 	call disableLcd
 	call clearOam
 	xor a
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$8000
 	ld bc,$2000
 	call clearMemoryBc
 	xor a
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$9c00
 	ld bc,$0400
 	call clearMemoryBc
 	ld a,$01
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$9c00
 	ld bc,$0400
 	call clearMemoryBc
@@ -2008,10 +2008,10 @@ endgameCutsceneHandler_0a_stage3_seasons:
 	call disableLcd
 .if !defined(ROM_COMBO) || !defined(ENABLE_NEW_GAME_PLUS)
 	call bank3.generateGameTransferSecret
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,:w7d800
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w7SecretText1
 	ld de,w7d800
 	ld bc,$1800
@@ -2021,7 +2021,7 @@ endgameCutsceneHandler_0a_stage3_seasons:
 	dec b
 	jr nz,-
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 .endif
 
 	ld a,GFXH_SECRET_FOR_LINKED_GAME

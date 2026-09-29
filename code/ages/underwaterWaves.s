@@ -27,7 +27,7 @@ checkUpdateUnderwaterWaves:
 	inc (hl)
 
 	ld a,:w2WaveScrollValues
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	ld a,(wGfxRegs2.SCX)
 	ld c,a
@@ -52,7 +52,7 @@ checkUpdateUnderwaterWaves:
 	jr nz,--
 
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;

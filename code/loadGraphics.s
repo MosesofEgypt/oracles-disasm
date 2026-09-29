@@ -1,9 +1,9 @@
 ;;
 initGbaModePaletteData:
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,:w2GbaModePaletteData
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	ld hl,gbaModePaletteData
 	ld de,w2GbaModePaletteData
@@ -11,14 +11,14 @@ initGbaModePaletteData:
 	call copyMemory
 
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;
 ; Redraw dirty palettes
 refreshDirtyPalettes:
 	ld a,$02
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	ldh a,(<hDirtyBgPalettes)
 	ld d,a
@@ -302,7 +302,7 @@ gbaModePaletteData:
 
 ;;
 resumeThreadNextFrameIfLcdIsOn:
-	ld a,($ff00+R_LCDC)
+	ldh a,(R_LCDC)
 	rlca
 	ret nc
 

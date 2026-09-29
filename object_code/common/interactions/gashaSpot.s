@@ -563,10 +563,10 @@ m_InteractionCode $b6
 	; Do something with w3VramAttributes ($400 bytes ahead)?
 	ld bc,$0400
 	add hl,bc
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,:w3VramAttributes
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld b,$04
 ---
 	ld c,$04
@@ -586,7 +586,7 @@ m_InteractionCode $b6
 	jr nz,---
 
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	call interactionIncState
 	ld l,Interaction.counter1
 	ld (hl),$08
@@ -632,10 +632,10 @@ m_InteractionCode $b6
 	pop de
 
 	; Draw the next frame of the tree's disappearance
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,:w3VramTiles
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld b,$04
 ---
 	ld c,$04
@@ -654,7 +654,7 @@ m_InteractionCode $b6
 	jr nz,---
 
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,UNCMP_GFXH_29
 	call loadUncompressedGfxHeader
 

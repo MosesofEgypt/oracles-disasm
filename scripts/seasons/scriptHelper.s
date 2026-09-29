@@ -204,12 +204,12 @@ D7randomlyPlaceNonEnemyArmos_body:
 	ld h,>wRoomLayout
 	ld (hl),$25
 	ld a,$03
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld h,LAST_ENEMY_INDEX
 	ld (hl),$25
 
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	call getFreeEnemySlot
 	ret nz

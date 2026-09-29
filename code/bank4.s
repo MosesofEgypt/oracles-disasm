@@ -79,7 +79,7 @@ b4VBlankFunction\1:
 vblankRunBank4Function_b04:
 	pop hl
 	ldi a,(hl)
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ldi a,(hl)
 	ld e,a
 	ld b,$cd

@@ -994,7 +994,7 @@ seasonsFunc_03_7a17:
 	jr nz,-
 	ld a,(wGfxRegs1.LCDC)
 	ld (wGfxRegsFinal.LCDC),a
-	ld ($ff00+R_LCDC),a
+	ldh (R_LCDC),a
 	ret
 
 seasonsFunc_03_7a2e:
@@ -1049,23 +1049,23 @@ incCutsceneState2:
 fillTmpGfxBufferWithHFF8B:
 	ldh (<hFF8B),a
 	ld a,$01
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$9800
 	ld bc,$0040
 	ldh a,(<hFF8B)
 	call fillMemoryBc16ByteBlocks
 	xor a
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$9800
 	ld b,$40
 	jp clearMemory16ByteBlocks
 
 seasonsFunc_03_7a88:
 	ldh (<hFF8B),a
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,$04
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w4TileMap
 	ld b,$24
 	call clearMemory16ByteBlocks
@@ -1074,7 +1074,7 @@ seasonsFunc_03_7a88:
 	ldh a,(<hFF8B)
 	call fillMemory16ByteBlocks
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 seasonsFunc_03_7aa9:
@@ -1426,15 +1426,15 @@ cutscene0eFunc7:
 
 cutscene0dFunca:
 	call disableLcd
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,$02
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w2TilesetBgPalettes
 	ld b,$40
 	call clearMemory
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	call clearScreenVariablesAndWramBank1
 	call clearOam
 	ld a,PALH_0f
@@ -1480,10 +1480,10 @@ cutscene0dFuncc:
 	jp setGlobalFlag
 
 seasonsFunc_03_7db8:
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,$03
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w3VramTiles
 	ld b,$024
 	call clearMemory16ByteBlocks
@@ -1492,5 +1492,5 @@ seasonsFunc_03_7db8:
 	ld a,$02
 	call fillMemory16ByteBlocks
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret

@@ -24,11 +24,11 @@ cutscene13:
 	ld (wTilesetFlags),a
 
 	ld a,:w2DungeonLayout
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w2DungeonLayout+$3f
 	ld (hl),$ff
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	ld a,$04
 	jp fadeoutToWhiteWithDelay

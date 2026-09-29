@@ -6,7 +6,7 @@ func_4000:
 	or a
 	call nz,func_400b
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;
@@ -973,7 +973,7 @@ resetFollowingLinkObjectPosition:
 	ldh (<hFF8C),a
 
 	ld a,:w2LinkWalkPath
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	; Fill w2LinkWalkPath with the correct values to move out from the screen edge
 	ld hl,w2LinkWalkPath + $2f
@@ -993,7 +993,7 @@ resetFollowingLinkObjectPosition:
 	jr nz,--
 
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	; Initialize the object's position
 	ld a,(wFollowingLinkObjectType)
@@ -1407,10 +1407,10 @@ func_46ca:
 	ld a,(hl)
 	add $40
 	ld d,a
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,$03
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	push de
 	ld hl,wTmpVramBuffer
 	ld b,$20
@@ -1424,7 +1424,7 @@ func_46ca:
 	ld c,$e0
 	call func_46ff
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 ;;
 func_46ff:
@@ -1471,10 +1471,10 @@ copyTileRowToVramBuffer:
 	add hl,bc
 
 	; Load wram bank
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,:w3VramTiles
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	; Copy tiles to wTmpVramBuffer+$00
 	push hl
@@ -1492,7 +1492,7 @@ copyTileRowToVramBuffer:
 	call @copyFunc
 
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;
@@ -1547,7 +1547,7 @@ cpLinkState0e:
 ; @param	c	Amplitude
 initWaveScrollValues_body:
 	ld a,:w2WaveScrollValues
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld de,@sineWave
 	ld hl,w2WaveScrollValues
 --
@@ -1587,7 +1587,7 @@ initWaveScrollValues_body:
 	jr nz,-
 
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 @sineWave:
@@ -1607,7 +1607,7 @@ initWaveScrollValues_body:
 ; @param	b	Affects the frequency of the wave?
 loadBigBufferScrollValues_body:
 	ld a,:w2WaveScrollValues
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,(wFrameCounter)
 	and $7f
 	ld c,a
@@ -1626,7 +1626,7 @@ loadBigBufferScrollValues_body:
 	jr nz,--
 
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;
@@ -1731,7 +1731,7 @@ applyPaletteFadeTransitionData:
 	ret z
 
 	ld a,:w2ColorComponentBuffer1
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	push hl
 	derefHl
@@ -1746,7 +1746,7 @@ applyPaletteFadeTransitionData:
 	call extractColorComponents
 
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	ld a,$ff
 	ld (wLoadedTilesetPalette),a
@@ -1837,7 +1837,7 @@ applyPaletteFadeTransitionData:
 .endif
 	inc hl
 	ld a,:w2ColorComponentBuffer1
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ldi a,(hl)
 	push hl
 	swap a
@@ -1865,7 +1865,7 @@ applyPaletteFadeTransitionData:
 	call extractColorComponents
 
 	ld a,$00
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	ld a,$ff
 	ld (wLoadedTilesetPalette),a
@@ -1899,7 +1899,7 @@ resetFollowingLinkPath:
 	ld e,a
 
 	ld a,:w2LinkWalkPath
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	; Fill each entry in w2LinkWalkPath with Link's position/direction
 	ld hl,w2LinkWalkPath
@@ -1916,7 +1916,7 @@ resetFollowingLinkPath:
 
 	; Set both to 0
 	ld (wLinkPathIndex),a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	; Initialize object position
 	ld a,(wFollowingLinkObjectType)
@@ -1942,7 +1942,7 @@ checkUpdateFollowingLinkObject:
 
 	call @update
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 @update:
@@ -1965,7 +1965,7 @@ checkUpdateFollowingLinkObject:
 	ld e,a
 
 	ld a,:w2LinkWalkPath
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	; Return if Link's position/direction has not changed
 	ldi a,(hl)
@@ -2004,7 +2004,7 @@ checkUpdateFollowingLinkObject:
 	ldi (hl),a
 
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	; Update object's position
 	ld a,(wFollowingLinkObject)
@@ -2439,7 +2439,7 @@ cutscene17:
 initWaveScrollValuesForEverySecondLine:
 	call initWaveScrollValues
 	ld a,:w2WaveScrollValues
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w2WaveScrollValues
 	ld b,$80
 -
@@ -2450,7 +2450,7 @@ initWaveScrollValuesForEverySecondLine:
 	jr nz,-
 
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;
@@ -2512,7 +2512,7 @@ cutscene15:
 @@initWaveScrollValuesInverted:
 	call initWaveScrollValues
 	ld a,:w2WaveScrollValues
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w2WaveScrollValues
 	ld b,$80
 -
@@ -2525,7 +2525,7 @@ cutscene15:
 	jr nz,-
 
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 @@substate1:
@@ -2542,7 +2542,7 @@ cutscene15:
 	call disableLcd
 	call clearOam
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	; Clear all objects except Link
 	ld hl,$d040
@@ -2650,7 +2650,7 @@ m_section_free Bank_1_Code_2 NAMESPACE bank1
 ; Load 8 bytes into wDungeonMapData and up to $100 bytes into w2DungeonLayout.
 loadDungeonLayout_b01:
 	ld a,$02
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	call clearDungeonLayout
 	ld a,(wDungeonIndex)
 .if defined(ROM_COMBO)
@@ -2707,7 +2707,7 @@ loadDungeonLayout_b01:
 	ld (hl),a
 @end:
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	jp setVisitedRoomFlag
 
 ;;
@@ -3224,7 +3224,7 @@ paletteThread_mixBG567Palettes:
 	ld b,3*4
 ++
 	ld a,:w2TilesetBgPalettes
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 @nextColor:
 	push bc
@@ -3276,7 +3276,7 @@ paletteThread_mixBG567Palettes:
 	jr nz,@nextColor
 
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;
@@ -5673,7 +5673,7 @@ updateSeedTreeRefillData:
 .endif
 
 	ld a,:wxSeedTreeRefillData
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 .if defined(ROM_COMBO)
 	ld hl,seedTreeRefillLocations_seasons
 	call wIsSeasons
@@ -5697,7 +5697,7 @@ updateSeedTreeRefillData:
 	jr nz,--
 
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 .include {"{GAME_DATA_DIR}/seedTreeRefillData.s"}
@@ -5887,12 +5887,12 @@ initializeSeedTreeRefillData:
 .endif
 
 	ld a,:wxSeedTreeRefillData
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,wxSeedTreeRefillData
 	ld b,NUM_SEED_TREES*8
 	call clearMemory
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;

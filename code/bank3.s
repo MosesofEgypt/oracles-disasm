@@ -9,11 +9,11 @@ init:
 	call setIsSeasons
 .endif
 	xor a
-	ld ($ff00+R_IF),a
-	ld ($ff00+R_IE),a
-	ld ($ff00+R_STAT),a
-	ld ($ff00+R_TAC),a
-	ld ($ff00+R_SC),a
+	ldh (R_IF),a
+	ldh (R_IE),a
+	ldh (R_STAT),a
+	ldh (R_TAC),a
+	ldh (R_SC),a
 	xor a
 	ld ($1111),a
 
@@ -25,9 +25,9 @@ init:
 
 	; Initialize CGB registers
 	xor a
-	ld ($ff00+R_RP),a
-	ld ($ff00+R_SVBK),a
-	ld ($ff00+R_VBK),a
+	ldh (R_RP),a
+	ldh (R_SVBK),a
+	ldh (R_VBK),a
 	call setCpuToDoubleSpeed
 +
 	ld hl,hActiveFileSlot
@@ -49,17 +49,17 @@ init:
 
 	; Initialize DMG palettes
 	ld a,%11100100
-	ld ($ff00+R_BGP),a
-	ld ($ff00+R_OBP0),a
+	ldh (R_BGP),a
+	ldh (R_OBP0),a
 	ld a,%01101100
-	ld ($ff00+R_OBP1),a
+	ldh (R_OBP1),a
 
 	call initSound
 
 	ld a,$c7
-	ld ($ff00+R_LYC),a
+	ldh (R_LYC),a
 	ld a,$40
-	ld ($ff00+R_STAT),a
+	ldh (R_STAT),a
 
 	xor a
 	ld hl,hGdmaDelayedCountTotal
@@ -69,9 +69,9 @@ init:
 	ld  (hl),a
 	ldh (<hGdmaChunksCopiedThisFrame),a
 	ldh (<hGdmaDelayedCount),a
-	ld ($ff00+R_IF),a
+	ldh (R_IF),a
 	ld a,$0f
-	ld ($ff00+R_IE),a
+	ldh (R_IE),a
 
 .ifdef ROM_COMBO
 	callab gfxLoading.initGbaModePaletteData
@@ -95,35 +95,35 @@ init:
 
 ;;
 setCpuToDoubleSpeed:
-	ld a,($ff00+R_KEY1)
+	ldh a,(R_KEY1)
 	rlca
 	ret c
 
 	xor a
-	ld ($ff00+R_IF),a
-	ld ($ff00+R_IE),a
+	ldh (R_IF),a
+	ldh (R_IE),a
 	ld a,$01
-	ld ($ff00+R_KEY1),a
+	ldh (R_KEY1),a
 	ld a,$30
-	ld ($ff00+R_P1),a
+	ldh (R_P1),a
 	stop
 	nop
 -
-	ld a,($ff00+R_KEY1)
+	ldh a,(R_KEY1)
 	rlca
 	jr nc,-
 
 	xor a
-	ld ($ff00+R_P1),a
-	ld ($ff00+R_IF),a
-	ld ($ff00+R_IE),a
+	ldh (R_P1),a
+	ldh (R_IF),a
+	ldh (R_IE),a
 	ret
 
 ;;
 ; This is copied to RAM and run from there.
 oamDmaFunction:
 	ld a,>wOam
-	ld ($ff00+R_DMA),a
+	ldh (R_DMA),a
 	ld a,$28
 -
 	dec a
@@ -198,15 +198,15 @@ generateGameTransferSecret:
 ; @param[out]	zflag	Generally set on success
 secretFunctionCaller_body:
 	push de
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,TEXT_BANK
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	call @jumpTable
 
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	pop de
 	ret
 
@@ -585,7 +585,7 @@ generateGameIDIfNeeded:
 	; The GameID can't be 0, so read from R_DIV until we get a nonzero value.
 	or a
 	jr nz,+
-	ld a,($ff00+R_DIV)
+	ldh a,(R_DIV)
 	jr --
 +
 	ld l,<wGameID

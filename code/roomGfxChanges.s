@@ -19,10 +19,10 @@ readParametersForRectangleDrawing:
 ; @param	de	Where to write the data (should point to w3VramTiles)
 ; @param	hl	The address of the data to write to the given address
 drawRectangleToVramTiles_withParameters:
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,:w3VramTiles
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	jr drawRectangleToVramTiles@nextRow
 
 ;;
@@ -35,10 +35,10 @@ drawRectangleToVramTiles_withParameters:
 ; 			b3: # of rows
 ; 			b4+: The data to write to the given address
 drawRectangleToVramTiles:
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,:w3VramTiles
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	call readParametersForRectangleDrawing
 
 @nextRow:
@@ -61,7 +61,7 @@ drawRectangleToVramTiles:
 	jr nz,@nextRow
 
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 .if defined(ROM_COMBO) || defined(ROM_AGES)
@@ -78,7 +78,7 @@ copyRectangleFromTmpGfxBuffer_paramBc:
 ; 			b2-b3: Where to write the data (should point somewhere in wram 3)
 ; 			b4-b5: Where to read data from (should point somewhere in wram 2)
 copyRectangleFromTmpGfxBuffer:
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 
 	ldi a,(hl)
@@ -95,11 +95,11 @@ copyRectangleFromTmpGfxBuffer:
 	push bc
 --
 	ld a,:w2TmpGfxBuffer
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ldi a,(hl)
 	ld b,a
 	ld a,:w3VramTiles
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,b
 	ld (de),a
 	inc de
@@ -116,7 +116,7 @@ copyRectangleFromTmpGfxBuffer:
 	jr nz,@nextRow
 
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;

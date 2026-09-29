@@ -617,12 +617,12 @@ interaction21_subid17:
 
 	; Retrieve whatever tile was there before the chest
 	ld a,:w3RoomLayoutBuffer
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld b,>w3RoomLayoutBuffer
 	ld a,(bc)
 	ld l,a
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	ld a,l
 	call setTile

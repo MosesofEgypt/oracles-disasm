@@ -24,7 +24,7 @@ m_InteractionCode $65
 	ld (de),a
 
 	ld a,$02
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	ld a,$80
 	ld hl,w2TmpGfxBuffer
@@ -41,7 +41,7 @@ m_InteractionCode $65
 	call @func_51c0
 
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	call getFreeInteractionSlot
 	ret nz
@@ -83,7 +83,7 @@ m_InteractionCode $65
 	call func_52d9
 	call func_537e
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ldh a,(<hActiveObject)
 	ld d,a
 	ld a,$70
@@ -147,7 +147,7 @@ func_5258:
 	ret
 func_5261:
 	ld a,$02
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,(wScreenOffsetX)
 	cpl
 	inc a
@@ -386,14 +386,14 @@ roomTileChangesAfterLoad02_body:
 	jr func_545a
 func_5440:
 	ld a,$03
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	push de
 	ld de,wTmpVramBuffer
 	ld b,$20
 	call copyMemory
 	pop de
 	ld a,$02
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,wTmpVramBuffer
 	ld b,$20
 	jp copyMemory
@@ -469,7 +469,7 @@ func_545a:
 	ld c,$03
 	call func_553a
 	ld a,$03
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w3VramTiles
 	ld a,$80
 	call func_552a
@@ -497,7 +497,7 @@ func_545a:
 	ld a,$0b
 	call func_552a
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	pop hl
 	pop de
 	ret
@@ -517,10 +517,10 @@ func_552a:
 	ret
 func_553a:
 	ld a,c
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	call copyMemory
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 table_5544:
 	.db $00 $d8

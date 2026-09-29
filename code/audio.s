@@ -184,7 +184,7 @@ initSound:
 
 	ld a,SND_VOLUME_MAX
 	ld (wSoundVolume),a
-	ld ($ff00+R_MASTER_VOLUME_AND_PANNING),a
+	ldh (R_MASTER_VOLUME_AND_PANNING),a
 
 	ld a,$00
 	ld (wSoundFadeDirection),a
@@ -192,9 +192,9 @@ initSound:
 	ld (wSoundDisabled),a
 	ld (wMusicMuted),a
 	ld a,$8f
-	ld ($ff00+R_SOUND_ENABLE),a
+	ldh (R_SOUND_ENABLE),a
 	ld a,$ff
-	ld ($ff00+R_SOUND_PANNING),a
+	ldh (R_SOUND_PANNING),a
 	ld c,@readFunctionEnd-@readFunction
 	ld hl,@readFunction
 	ld de,wMusicReadFunction
@@ -298,7 +298,7 @@ updateSound:
 	jp nz,@ret
 
 	ld a,(wSoundVolume)
-	ld ($ff00+R_MASTER_VOLUME_AND_PANNING),a
+	ldh (R_MASTER_VOLUME_AND_PANNING),a
 	ld a,(wSoundFadeDirection)
 	or a
 	jr z,@updateChannels
@@ -565,11 +565,11 @@ updatePlayedFrequency:
 	call isWaveChannelUnavailable
 	ret nz
 	ld a,l
-	ld ($ff00+R_WAVE_PERIOD_LOW),a
+	ldh (R_WAVE_PERIOD_LOW),a
 	ld a,h
-	ld ($ff00+R_WAVE_PERIOD_HIGH_AND_CTRL),a
+	ldh (R_WAVE_PERIOD_HIGH_AND_CTRL),a
 	ld a,$00
-	ld ($ff00+R_WAVE_TIMER),a
+	ldh (R_WAVE_TIMER),a
 label_39_030:
 	ret
 
@@ -789,7 +789,7 @@ channelCmdf0:
 
 @sfxNoiseChannel:
 	call getNextChannelByte
-	ld ($ff00+R_NOISE_VOLUME_AND_ENVELOPE),a
+	ldh (R_NOISE_VOLUME_AND_ENVELOPE),a
 	ld a,$00
 	ld (R_NOISE_TIMER),a
 	ld a,$80
@@ -1053,7 +1053,7 @@ updateSquareChannelVolume:
 	jr nz,+
 		; Channel 1 only: sweep off
 		ld a,$08
-		ld ($ff00+R_SQ1_SWEEP),a
+		ldh (R_SQ1_SWEEP),a
 	+
 
 	; Set channel volume
@@ -1094,7 +1094,7 @@ updateWaveChannelVolume:
 	ret nz
 
 	ld a,(wWaveChannelVolume+MUS_WAVE)
-	ld ($ff00+R_WAVE_OUTPUT_LEVEL),a
+	ldh (R_WAVE_OUTPUT_LEVEL),a
 	ret
 
 ;;
@@ -1158,7 +1158,7 @@ standardCmdSfxWaveChannel:
 	m_WriteChannelData wWaveChannelVolume
 	call isWaveChannelUnavailable
 	jr nz,+
-		ld ($ff00+R_WAVE_OUTPUT_LEVEL),a
+		ldh (R_WAVE_OUTPUT_LEVEL),a
 	+
 
 	jp setChannelWaitCounter
@@ -1182,11 +1182,11 @@ standardCmdSfxWaveChannel:
 	jr nz,+
 
 	m_ReadChannelData wWaveChannelVolume
-	ld ($ff00+R_WAVE_OUTPUT_LEVEL),a
+	ldh (R_WAVE_OUTPUT_LEVEL),a
 	ld a,(wSoundFrequencyL)
-	ld ($ff00+R_WAVE_PERIOD_LOW),a
+	ldh (R_WAVE_PERIOD_LOW),a
 	ld a,(wSoundFrequencyH)
-	ld ($ff00+R_WAVE_PERIOD_HIGH_AND_CTRL),a
+	ldh (R_WAVE_PERIOD_HIGH_AND_CTRL),a
 +
 	jp setChannelWaitCounter
 
@@ -1255,24 +1255,24 @@ standardCmdMusicNoiseChannel:
 	sla a
 	sla a
 	or l
-	ld ($ff00+R_NOISE_VOLUME_AND_ENVELOPE),a
+	ldh (R_NOISE_VOLUME_AND_ENVELOPE),a
 	ld a,h
-	ld ($ff00+R_NOISE_FREQUENCY_AND_RAND),a
+	ldh (R_NOISE_FREQUENCY_AND_RAND),a
 	ld a,$80
-	ld ($ff00+R_NOISE_CTRL),a
+	ldh (R_NOISE_CTRL),a
 @wait:
 	jp setChannelWaitCounter
 
 ;;
 standardCmdSfxNoiseChannel:
 	ld a,(wSoundCmd)
-	ld ($ff00+R_NOISE_FREQUENCY_AND_RAND),a
+	ldh (R_NOISE_FREQUENCY_AND_RAND),a
 	ld a,$00
-	ld ($ff00+R_NOISE_TIMER),a
+	ldh (R_NOISE_TIMER),a
 	ld a,(wTriggerSfxNoiseChannelOnNextSound)
 	or a
 	jr z,+
-	ld ($ff00+R_NOISE_CTRL),a
+	ldh (R_NOISE_CTRL),a
 +
 	ld a,$00
 	ld (wTriggerSfxNoiseChannelOnNextSound),a
@@ -1326,7 +1326,7 @@ silencePlayedSound:
 
 	; Disable DAC
 	ld a,$00
-	ld ($ff00+R_WAVE_DAC_ENABLE),a
+	ldh (R_WAVE_DAC_ENABLE),a
 	ret
 
 @sfxWaveChannel:
@@ -1340,21 +1340,21 @@ silencePlayedSound:
 	ld (wWaveformIndex),a
 	call setWaveform
 	ld a,(wWaveChannelVolume+MUS_WAVE)
-	ld ($ff00+R_WAVE_OUTPUT_LEVEL),a
+	ldh (R_WAVE_OUTPUT_LEVEL),a
 	ret
 ++
 
 	; Disable DAC
 	ld a,$00
-	ld ($ff00+R_WAVE_DAC_ENABLE),a
+	ldh (R_WAVE_DAC_ENABLE),a
 	ret
 
 @noiseChannel:
 	; Set volume to $0 and trigger channel
 	ld a,$08
-	ld ($ff00+R_NOISE_VOLUME_AND_ENVELOPE),a
+	ldh (R_NOISE_VOLUME_AND_ENVELOPE),a
 	ld a,$80
-	ld ($ff00+R_NOISE_CTRL),a
+	ldh (R_NOISE_CTRL),a
 	ret
 
 ;;
@@ -1365,8 +1365,8 @@ setWaveform:
 @waitLoop:
 	; Wait for channel 3 to be on
 	ld a,$00
-	ld ($ff00+R_WAVE_DAC_ENABLE),a
-	ld a,($ff00+R_SOUND_ENABLE)
+	ldh (R_WAVE_DAC_ENABLE),a
+	ldh a,(R_SOUND_ENABLE)
 	and $04
 	jr nz,@waitLoop
 
@@ -1385,14 +1385,14 @@ setWaveform:
 
 -	; Enable channel 3
 	ld a,$80
-	ld ($ff00+R_WAVE_DAC_ENABLE),a
-	ld a,($ff00+R_WAVE_DAC_ENABLE)
+	ldh (R_WAVE_DAC_ENABLE),a
+	ldh a,(R_WAVE_DAC_ENABLE)
 	and $80
 	jr z,-
 
 	; Restart channel 3 (but trashes lower frequency bits?)
 	ld a,$80
-	ld ($ff00+R_WAVE_PERIOD_HIGH_AND_CTRL),a
+	ldh (R_WAVE_PERIOD_HIGH_AND_CTRL),a
 	ret
 
 ;;

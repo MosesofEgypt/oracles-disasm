@@ -4,7 +4,7 @@
 runSecretListMenu:
 	call clearOam
 	ld a,TEXT_BANK
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	call @runState
 	jp secretListMenu_drawCursorSprite
 
@@ -49,7 +49,7 @@ secretListMenu_state0:
 ;;
 ; @param	a	Vram bank to fill with $ff
 @clearVramBank:
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$8000
 	ld bc,$0100
 	ld a,$ff
@@ -224,7 +224,7 @@ secretListMenu_printSecret:
 ; Loads gfx for all secret names directly to vram starting at $8a00.
 secretListMenu_loadAllSecretNames:
 	xor a
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 
 	ld de,$8a00
 	ld b,$00
@@ -261,7 +261,7 @@ secretListMenu_loadAllSecretNames:
 	cp $90
 	jr c,++
 	ld a,$01
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld a,$80
 ++
 	ld d,a

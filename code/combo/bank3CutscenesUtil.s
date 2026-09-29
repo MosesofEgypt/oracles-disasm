@@ -25,13 +25,13 @@ createInteraction:
 clearFadingPalettes2:
 	; Clear w2FadingBgPalettes and w2FadingSprPalettes
 	ld a,:w2FadingBgPalettes
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w2FadingBgPalettes
 	ld b,$80
 	call clearMemory
 
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	dec a
 	ldh (<hSprPaletteSources),a
 	ldh (<hDirtySprPalettes),a

@@ -179,7 +179,7 @@ seasonsTable_03_6844:
 
 seasonsFunc_03_684c:
 	ld a,$02
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,(wGenericCutscene.cbb8)
 	and $07
 	ld hl,w2WaveScrollValues
@@ -195,7 +195,7 @@ seasonsFunc_03_684c:
 	ld b,$10
 	call copyMemory
 	ld a,$00
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,$d9e0
 	ld de,$94e1
 	ld bc,$0102
@@ -491,7 +491,7 @@ cutsceneHandler_0c_stage5:
 
 seasonsFunc_03_6a9d:
 	ld a,$02
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,(wGenericCutscene.cbbe)
 	dec a
 	and $03
@@ -504,7 +504,7 @@ seasonsFunc_03_6a9d:
 	ld de,w2Filler6+$50
 	call seasonsFunc_03_6b22
 	ld a,$00
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,$d9e0
 	ld de,$8ce0
 	ld bc,$0102
@@ -516,7 +516,7 @@ seasonsFunc_03_6aca:
 	jr nz,seasonsFunc_03_6a9d
 	ld (hl),$10
 	ld a,$02
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,(wGenericCutscene.cbbe)
 	ld hl,seasonsTable_03_6b1a
 	rst_addDoubleIndex
@@ -531,7 +531,7 @@ seasonsFunc_03_6aca:
 	ld de,w2Filler6+$50
 	call seasonsFunc_03_6b22
 	ld a,$00
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,$d9c0
 	ld de,$88e1
 	ld bc,$0102

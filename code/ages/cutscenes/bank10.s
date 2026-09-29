@@ -417,10 +417,10 @@ agesFunc_10_7298:
 	call disableLcd
 .if !defined(ROM_COMBO) || !defined(ENABLE_NEW_GAME_PLUS)
 	callab bank3.generateGameTransferSecret
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,TEXT_BANK
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w7SecretText1
 	ld de,w7d800
 	ld bc,$1800
@@ -430,7 +430,7 @@ agesFunc_10_7298:
 	dec b
 	jr nz,-
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 .endif
 	
 	ld a,GFXH_SECRET_FOR_LINKED_GAME

@@ -158,13 +158,13 @@ m_InteractionCode $ae
 	ret
 
 @label_0b_234:
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld l,Interaction.counter1
 	ld a,(hl)
 	ld b,a
 	ld a,:w4TileMap
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,b
 	ld hl,w4TileMap
 	rst_addDoubleIndex
@@ -183,7 +183,7 @@ m_InteractionCode $ae
 	call loadUncompressedGfxHeader
 	pop de
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	ld h,d
 	ld l,Interaction.counter1
@@ -215,7 +215,7 @@ m_InteractionCode $ae
 
 @label_0b_236:
 	push de
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,(hl) ; [counter1]
 	ld b,a
@@ -230,14 +230,14 @@ m_InteractionCode $ae
 @tileLoop:
 	push bc
 	ld a,:w3VramTiles
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,(de)
 	ld b,a
 	inc de
 	ld a,(de)
 	ld c,a
 	ld a,:w4TileMap
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld (hl),b
 	inc hl
 	ld (hl),c
@@ -253,7 +253,7 @@ m_InteractionCode $ae
 	ld a,UNCMP_GFXH_09
 	call loadUncompressedGfxHeader
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	pop de
 	ret
 

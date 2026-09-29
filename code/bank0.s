@@ -765,16 +765,16 @@ getInputWithAutofire:
 
 ;;
 disableLcd:
-	ld a,($ff00+R_LCDC)
+	ldh a,(R_LCDC)
 	rlca
 	ret nc
 	push bc
-	ld a,($ff00+R_IE)
+	ldh a,(R_IE)
 	ld b,a
 	and INT_VBLANK ~ $FF
-	ld ($ff00+R_IE),a
+	ldh (R_IE),a
 -
-	ld a,($ff00+R_LY)
+	ldh a,(R_LY)
 	cp $91
 	jr c,-
 	ld a,$03
@@ -783,10 +783,10 @@ disableLcd:
 	ld (wGfxRegsFinal.LCDC),a
 	ld (wGfxRegs2.LCDC),a
 	ld (wGfxRegs1.LCDC),a
-	ld ($ff00+R_LCDC),a
-	ld ($ff00+R_IF),a
+	ldh (R_LCDC),a
+	ldh (R_IF),a
 	ld a,b
-	ld ($ff00+R_IE),a
+	ldh (R_IE),a
 	pop bc
 	ret
 
@@ -818,7 +818,7 @@ loadGfxRegisterStateIndex:
 	setrombank
 	ld a,(wGfxRegs1.LCDC)
 	ld (wGfxRegsFinal.LCDC),a
-	ld ($ff00+R_LCDC),a
+	ldh (R_LCDC),a
 	ret
 
 
@@ -1001,7 +1001,7 @@ copyMemoryReverse:
 ; @param	de	Address to copy to
 ; @param	hl	Address to copy from
 copyGfxDataFromBank:
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,c
 	rst_setrombank
 .ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
@@ -1073,12 +1073,12 @@ clearVram:
 	call disableLcd
 	call clearOam
 	ld a,$01
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$8000
 	ld bc,$0200
 	call clearMemoryBc16ByteBlocks
 	xor a
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$8000
 	ld bc,$0200
 	jr clearMemoryBc16ByteBlocks
@@ -1090,13 +1090,13 @@ initializeVramMaps:
 initializeVramMap0:
 	call disableLcd
 	ld a,$01
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$9800
 	ld bc,$0040
 	ld a,$80
 	call fillMemoryBc16ByteBlocks
 	xor a
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$9800
 	ld bc,$0040
 	jp clearMemoryBc16ByteBlocks
@@ -1105,13 +1105,13 @@ initializeVramMap0:
 initializeVramMap1:
 	call disableLcd
 	ld a,$01
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$9c00
 	ld bc,$0040
 	ld a,$80
 	call fillMemoryBc16ByteBlocks
 	xor a
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$9c00
 	ld bc,$0040
 	jp clearMemoryBc16ByteBlocks
@@ -1121,13 +1121,13 @@ initializeVramMap1:
 loadPaletteHeader:
 	push de
 	ld l,a
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	ld c,a
 	ldh a,(<hRomBank)
 	ld b,a
 	push bc
 	ld a,$02
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 .if defined(ROM_COMBO)
 	ld a,:bank1Moveable.paletteHeaderTable_seasons ; they're in the same bank
 	rst_setrombank
@@ -1241,7 +1241,7 @@ loadPaletteHeader:
 	ld a,b
 	rst_setrombank
 	ld a,c
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	pop de
 	ret
 
@@ -1276,7 +1276,7 @@ _queueDmaTransfer:
 		set 0,l
 	+
 .endif
-	ld a,($ff00+R_LCDC)
+	ldh a,(R_LCDC)
 	rlca
 	jr nc,++
 
@@ -1311,12 +1311,12 @@ _queueDmaTransfer:
 ; If LCD is off, copy data immediately?
 	ldh a,(<hRomBank)
 	push af
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	push de
 	push hl
 	ld a,c
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	setrombank
 .ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
 	bit 0,l
@@ -1334,13 +1334,13 @@ _queueDmaTransfer:
 	inc l
 	pop de
 	ld a,e
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld (hl),d
 	inc l
 	ldi (hl),a
 	ld (hl),b
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	pop af
 	setrombank
 	xor a
@@ -1354,7 +1354,7 @@ _queueDmaTransfer:
 ; @trashes{bc,de,hl}
 loadUncompressedGfxHeader:
 	ld e,a
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	ld c,a
 	ldh a,(<hRomBank)
 	ld b,a
@@ -1421,7 +1421,7 @@ loadUncompressedGfxHeader:
 	ld a,b
 	rst_setrombank
 	ld a,c
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;
@@ -1463,7 +1463,7 @@ loadUniqueGfxHeaderEntry:
 	call queueDmaTransferFromRom
 	pop hl
 	ld a,$00
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,:animationAndUniqueGfxData.uniqueGfxHeaderTable
 	setrombank
 	ldi a,(hl)
@@ -1473,7 +1473,7 @@ loadUniqueGfxHeaderEntry:
 ; @param	a	The index of the gfx header to load
 loadGfxHeader:
 	ld e,a
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	ld c,a
 	ldh a,(<hRomBank)
 	ld b,a
@@ -1521,7 +1521,7 @@ loadGfxHeader:
 	ld a,b
 	rst_setrombank
 	ld a,c
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;
@@ -1535,8 +1535,8 @@ loadGfxHeader:
 decompressGraphics:
 	ld a,e
 	and $0f
-	ld ($ff00+R_VBK),a
-	ld ($ff00+R_SVBK),a
+	ldh (R_VBK),a
+	ldh (R_SVBK),a
 	xor e
 	ld e,a
 	ld a,c
@@ -1930,7 +1930,7 @@ _nextThread:
 	ld sp,wMainStackTop
 	ld h,>wThreadStateBuffer
 	ld a,$01
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	jr _mainLoop_nextThread
 
 
@@ -2033,7 +2033,7 @@ _mainLoop_nextThread:
 	callfrombank0 dataLoading.refreshDirtyPalettes
 .endif
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,wc49e
 	inc (hl)
 	ld hl,wGfxRegs1
@@ -2207,17 +2207,17 @@ vblankInterrupt:
 	; Copy wram variables to real equivalents
 	ld hl,wGfxRegsFinal
 	ldi a,(hl)
-	ld ($ff00+R_LCDC),a
+	ldh (R_LCDC),a
 	ldi a,(hl)
-	ld ($ff00+R_SCY),a
+	ldh (R_SCY),a
 	ldi a,(hl)
-	ld ($ff00+R_SCX),a
+	ldh (R_SCX),a
 	ldi a,(hl)
-	ld ($ff00+R_WY),a
+	ldh (R_WY),a
 	ldi a,(hl)
-	ld ($ff00+R_WX),a
+	ldh (R_WX),a
 	ldi a,(hl)
-	ld ($ff00+R_LYC),a
+	ldh (R_LYC),a
 
 	; increment wVBlankChecker
 	inc (hl)
@@ -2245,9 +2245,9 @@ vblankInterrupt:
 	ld a,(de)
 	ldi (hl),a
 
-	ld a,($ff00+R_VBK)
+	ldh a,(R_VBK)
 	ld b,a
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	ld c,a
 	push bc
 
@@ -2266,9 +2266,9 @@ vblankInterrupt:
 
 	pop bc
 	ld a,c
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,b
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 
 	ld hl,wGfxRegs6.LCDC
 	ldi a,(hl)
@@ -2353,7 +2353,7 @@ vblankFunctionsStart:
 vblankFunction0a8e:
 	pop hl
 	ldi a,(hl)
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ldi a,(hl)
 	ld e,a
 	ldi a,(hl)
@@ -2398,7 +2398,7 @@ vblankCopyTileFunction:
 	push de
 
 	xor a
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ldi a,(hl)
 	ld e,a
 	ldi a,(hl)
@@ -2408,7 +2408,7 @@ vblankCopyTileFunction:
 
 	ld e,c
 	ld a,$01
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 
 ;;
 ; @param	de	Destination (vram)
@@ -2438,7 +2438,7 @@ vblankCopyTileFunction:
 vblankFunction0ad9:
 	pop hl
 	ldi a,(hl)
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ldi a,(hl)
 	ld e,a
 	ldi a,(hl)
@@ -2458,7 +2458,7 @@ vblankDmaFunction:
 	pop hl
 
 	; ensure we only try to copy data during vblank
-	ld a,($ff00+R_STAT)
+	ldh a,(R_STAT)
 	and $03
 	cp $02
 	jr nc,++
@@ -2520,7 +2520,7 @@ vblankDmaFunction:
 	+
 
 	ldi a,(hl) 		; src bank
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld ($2222),a
 .ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
 	bit 0,(hl)
@@ -2531,21 +2531,21 @@ vblankDmaFunction:
 	+
 .endif
 	ldi a,(hl) 		; src start addr low
-	ld ($ff00+R_HDMA1),a
+	ldh (R_HDMA1),a
 	ldi a,(hl) 		; src start addr high
-	ld ($ff00+R_HDMA2),a
+	ldh (R_HDMA2),a
 	ldi a,(hl) 		; dst start addr low
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ldi a,(hl) 		; dst start addr high
-	ld ($ff00+R_HDMA3),a
+	ldh (R_HDMA3),a
 	ldi a,(hl) 		; dst end addr low
-	ld ($ff00+R_HDMA4),a
+	ldh (R_HDMA4),a
 	ldh a,(<hGdmaChunksCopiedThisFrame)
 	add (hl)
 	inc a
 	ldh (<hGdmaChunksCopiedThisFrame),a
 	ldi a,(hl) 		; (copy length)/$10 - 1
-	ld ($ff00+R_HDMA5),a
+	ldh (R_HDMA5),a
 	jp vblankFunctionRet
 
 
@@ -2554,7 +2554,7 @@ vblankDmaFunction:
 ; Update all palettes marked as dirty.
 updateDirtyPalettes:
 	ld a,$02
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	ldh a,(<hDirtyBgPalettes)
 	ld d,a
@@ -2611,16 +2611,16 @@ lcdInterrupt:
 	jr nc,@behaviour2OrHigher
 
 	or a
-	ld a,($ff00+R_LY)
+	ldh a,(R_LY)
 	ld l,a
 	ld h,>wBigBuffer
 	ldi a,(hl)
 	jr nz,+
 
-	ld ($ff00+R_SCX),a
+	ldh (R_SCX),a
 	jr ++
 +
-	ld ($ff00+R_SCY),a
+	ldh (R_SCY),a
 ++
 	push hl
 	ld hl,wOptimizeScreenWaveEffect
@@ -2640,7 +2640,7 @@ lcdInterrupt:
 	ld a,l
 	cp $90
 	jr nc,+
-	ld ($ff00+R_LYC),a
+	ldh (R_LYC),a
 +
 	pop hl
 	pop af
@@ -2657,22 +2657,22 @@ lcdInterrupt:
 	jr nz,@notStatusBar
 	ld hl,wGfxRegs3
 -
-	ld a,($ff00+R_STAT)
+	ldh a,(R_STAT)
 	and c
 	jr nz,-
 
 	ldi a,(hl)
-	ld ($ff00+R_LCDC),a
+	ldh (R_LCDC),a
 	ldi a,(hl)
-	ld ($ff00+R_SCY),a
+	ldh (R_SCY),a
 	ldi a,(hl)
-	ld ($ff00+R_SCX),a
+	ldh (R_SCX),a
 	ldi a,(hl)
-	ld ($ff00+R_WY),a
+	ldh (R_WY),a
 	ldi a,(hl)
-	ld ($ff00+R_WX),a
+	ldh (R_WX),a
 	ldi a,(hl)
-	ld ($ff00+R_LYC),a
+	ldh (R_LYC),a
 	ldh a,(<hLcdInterruptBehaviour)
 	cp $02
 	jr nz,+
@@ -2699,11 +2699,11 @@ lcdInterrupt:
 
 ;;
 lcdInterrupt_setLcdcToA7:
-	ld a,($ff00+R_STAT)
+	ldh a,(R_STAT)
 	and c
 	jr nz,lcdInterrupt_setLcdcToA7
 	ld a,$a7
-	ld ($ff00+R_LCDC),a
+	ldh (R_LCDC),a
 	jr lcdInterrupt_clearLYC
 
 ;;
@@ -2711,13 +2711,13 @@ lcdInterrupt_setLcdcToA7:
 ;   * Once on line $47 (list menu) or $57 (appraisal menu), where the textbox starts.
 ;   * If on the list menu, once more on line $87, where the textbox ends.
 lcdInterrupt_ringMenu:
-	ld a,($ff00+R_STAT)
+	ldh a,(R_STAT)
 	and c
 	jr nz,lcdInterrupt_ringMenu
 
-	ld ($ff00+R_SCX),a ; SCX = 0
+	ldh (R_SCX),a ; SCX = 0
 	ld a,$87
-	ld ($ff00+R_LCDC),a
+	ldh (R_LCDC),a
 
 	ldh a,(<hLcdInterruptCounter)
 	dec a
@@ -2727,7 +2727,7 @@ lcdInterrupt_ringMenu:
 	or a
 	jr z,+
 	ld a,$87 ; Trigger LCD interrupt again later on line $87
-	ld ($ff00+R_LYC),a
+	ldh (R_LYC),a
 +
 	ld a,$02
 	ldh (<hLcdInterruptCounter),a
@@ -2735,19 +2735,19 @@ lcdInterrupt_ringMenu:
 
 @afterTextbox:
 	ld a,$80
-	ld ($ff00+R_SCY),a
+	ldh (R_SCY),a
 	jr lcdInterrupt_clearWXY
 
 ;;
 lcdInterrupt_clearWXY:
 	ld a,$c7
-	ld ($ff00+R_WY),a
-	ld ($ff00+R_WX),a
+	ldh (R_WY),a
+	ldh (R_WX),a
 
 ;;
 lcdInterrupt_clearLYC:
 	ld a,$c7
-	ld ($ff00+R_LYC),a
+	ldh (R_LYC),a
 _lcdInterruptEnd:
 	pop bc
 	pop hl
@@ -2756,16 +2756,16 @@ _lcdInterruptEnd:
 
 ;;
 lcdInterrupt_0bea:
-	ld a,($ff00+R_STAT)
+	ldh a,(R_STAT)
 	and c
 	jr nz,lcdInterrupt_0bea
 	ld hl,wGfxRegs7.LCDC
 	ldi a,(hl)
-	ld ($ff00+R_LCDC),a
+	ldh (R_LCDC),a
 	ldi a,(hl)
-	ld ($ff00+R_SCY),a
+	ldh (R_SCY),a
 	ldi a,(hl)
-	ld ($ff00+R_SCX),a
+	ldh (R_SCX),a
 	jr lcdInterrupt_clearLYC
 
 ; Table of functions in bank $04?
@@ -2810,10 +2810,10 @@ serialInterrupt:
 	or a
 	jr z,+
 		; actively processing serial requests(receiving or transmitting)
-		ld a,($ff00+R_SB)
+		ldh a,(R_SB)
 		ldh (<hSerialByte),a
 		xor a
-		ld ($ff00+R_SB),a
+		ldh (R_SB),a
 
 		; signal that its okay to start the next serial operation
 		inc a
@@ -2822,7 +2822,7 @@ serialInterrupt:
 	+
 		; currently listening idly for serial activity
 		; to start receiving or transmitting data
-		ld a,($ff00+R_SB)
+		ldh a,(R_SB)
 
 		; check to see if we're being told to begin
 		; actively processing a serial connection.
@@ -2837,7 +2837,7 @@ serialInterrupt:
 			; we're being told to begin transmitting or receiving data
 			ldh (<hSerialInterruptBehaviour),a
 			xor a
-			ld ($ff00+R_SB),a
+			ldh (R_SB),a
 			jr @done
 		++
 			; received some other kind of data.
@@ -2845,7 +2845,7 @@ serialInterrupt:
 			; hopefully we'll receive a GET or PUT signal so we can
 			; update hSerialInterruptBehaviour and operate on the data.
 			ld a,PACKET_TYPE_DATA_PUT
-			ld ($ff00+R_SB),a
+			ldh (R_SB),a
 			ld a,SERIAL_MODE_GET
 			call updateSerialInterruptControl
 @done
@@ -2859,7 +2859,7 @@ requestSerialConnection:
 	ldh (<hSerialTransferErrorCode),a
 	; indicate to the other gameboy to begin receiving data
 	ld a,PACKET_TYPE_DATA_GET
-	ld ($ff00+R_SB),a
+	ldh (R_SB),a
 	ld a,SERIAL_MODE_PUT
 
 ;;
@@ -2868,16 +2868,16 @@ requestSerialConnection:
 updateSerialInterruptControl:
 	push af
 	and $01
-	ld ($ff00+R_SC),a
+	ldh (R_SC),a
 	pop af
-	ld ($ff00+R_SC),a
+	ldh (R_SC),a
 	ret
 
 ;;
 disableSerialPort:
 	xor a
 	ldh (<hSerialInterruptBehaviour),a
-	ld ($ff00+R_SB),a
+	ldh (R_SB),a
 	jr updateSerialInterruptControl
 
 ;;
@@ -2964,17 +2964,17 @@ disableTimer:
 	ld hl,hFFB7
 	set 0,(hl)
 	xor a
-	ld ($ff00+R_TAC),a
+	ldh (R_TAC),a
 	ret
 
 ;;
 enableTimer:
 	xor a
-	ld ($ff00+R_TAC),a
+	ldh (R_TAC),a
 	ld a,<wMusicQueue
 	ldh (<hMusicQueueTail),a
 	ldh (<hMusicQueueHead),a
-	ld a,($ff00+R_KEY1)
+	ldh a,(R_KEY1)
 	rlca
 	ld a,$77
 	jr c,+
@@ -2993,9 +2993,9 @@ enableTimer:
 ;;
 timerInterrupt:
 	; disable only the timer interrupt
-	ld a,($ff00+R_IE)
+	ldh a,(R_IE)
 	and INT_TIMER ~ $FF
-	ld ($ff00+R_IE),a
+	ldh (R_IE),a
 
 	ld hl,hFFB7
 	bit 7,(hl)
@@ -3011,9 +3011,9 @@ timerInterrupt:
 	jr nz,+
 
 	ld (hl),$07
-	ld a,($ff00+R_TMA)
+	ldh a,(R_TMA)
 	dec a
-	ld ($ff00+R_TIMA),a
+	ldh (R_TIMA),a
 +
 	ld a,:audio.b39_updateMusicVolume
 	ld ($2222),a
@@ -3051,9 +3051,9 @@ timerInterrupt:
 
 @interruptEnd:
 	; reenable the timer interrupt
-	ld a,($ff00+R_IE)
+	ldh a,(R_IE)
 	or INT_TIMER
-	ld ($ff00+R_IE),a
+	ldh (R_IE),a
 	pop hl
 	pop de
 	pop bc
@@ -4282,7 +4282,7 @@ func_1383:
 	ld (wActiveRoom),a
 	ld a,b
 	ld (wScreenTransitionDirection),a
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	ld c,a
 	ldh a,(<hRomBank)
 	ld b,a
@@ -4309,7 +4309,7 @@ func_1383:
 	ld a,b
 	rst_setrombank
 	ld a,c
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	pop de
 	ret
 
@@ -4323,7 +4323,7 @@ func_1383:
 ; @param	a	Amplitude
 initWaveScrollValues:
 	ldh (<hFF93),a
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	ld c,a
 	ldh a,(<hRomBank)
 	ld b,a
@@ -4337,7 +4337,7 @@ initWaveScrollValues:
 	ld a,b
 	rst_setrombank
 	ld a,c
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;
@@ -4347,7 +4347,7 @@ initWaveScrollValues:
 ; @param	a	Affects the frequency of the wave?
 loadBigBufferScrollValues:
 	ldh (<hFF93),a
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	ld c,a
 	ldh a,(<hRomBank)
 	ld b,a
@@ -4361,7 +4361,7 @@ loadBigBufferScrollValues:
 	ld a,b
 	rst_setrombank
 	ld a,c
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;
@@ -4371,7 +4371,7 @@ func_13c6:
 	ldh a,(<hRomBank)
 	push af
 	ld a,:w2ColorComponentBuffer1
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	push de
 	push bc
 	ld de,w2ColorComponentBuffer1
@@ -4383,7 +4383,7 @@ func_13c6:
 	pop af
 	setrombank
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	jp startFadeBetweenTwoPalettes
 
 ;;
@@ -4448,15 +4448,15 @@ setTileWithoutGfxReload:
 ; @param	b	New index for tile
 ; @param	c	Position to change
 setTileInRoomLayoutBuffer:
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,:w3RoomLayoutBuffer
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,b
 	ld b,>w3RoomLayoutBuffer
 	ld (bc),a
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;
@@ -4797,10 +4797,10 @@ retrieveTileCollisionValue:
 	ld h,>w3TileCollisions
 	ld l,a
 	ld a,:w3TileCollisions
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld l,(hl)
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,l
 	ret
 
@@ -4808,7 +4808,7 @@ retrieveTileCollisionValue:
 ; Load data into wRoomCollisions based on wRoomLayout and w3TileCollisions
 loadRoomCollisions:
 	ld a,:w3TileCollisions
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld d,>w3TileCollisions
 	ld hl,wRoomLayout
 	ld b,LARGE_ROOM_HEIGHT*$10
@@ -4824,7 +4824,7 @@ loadRoomCollisions:
 
 	call @blankDataAroundCollisions
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;
@@ -4903,20 +4903,20 @@ getTileIndexFromRoomLayoutBuffer:
 
 ;;
 getTileIndexFromRoomLayoutBuffer_paramC:
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,:w3RoomLayoutBuffer
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld b,>w3RoomLayoutBuffer
 	ld a,(bc)
 	ld e,a
 	ld a,:w3TileCollisions
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld l,e
 	ld h,>w3TileCollisions
 	ld b,(hl)
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,b
 	cp $10
 	jr nc,++
@@ -5079,7 +5079,7 @@ loadObjectGfx2:
 	pop de
 	ld c,:w4GfxBuf1
 	ld a,$01
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 .if defined(ROM_COMBO)
 	ld a,:gfxLoading.insertIndexIntoLoadedObjectGfx
 .else
@@ -5101,7 +5101,7 @@ loadObjectGfx2:
 	ld b,$1f
 	call decompressGraphics
 	ld a,$01
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 .if defined(ROM_COMBO)
 	ld a,:gfxLoading.insertIndexIntoLoadedObjectGfx
 .else
@@ -6017,7 +6017,7 @@ openSecretInputMenu:
 ;;
 ; @param[out]	zflag	Set if no menu is being displayed.
 updateMenus:
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	ld c,a
 	ldh a,(<hRomBank)
 	ld b,a
@@ -6027,7 +6027,7 @@ updateMenus:
 	ld a,b
 	rst_setrombank
 	ld a,c
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,(wOpenedMenuType)
 	or a
 	ret
@@ -6092,7 +6092,7 @@ copy20BytesFromBank:
 copyBytesFromBank:
 	; don't try to copy while the PPU is active
 	-
-		ld a,($ff00+R_STAT)
+		ldh a,(R_STAT)
 		and $03
 		jr nz,-
 
@@ -6153,7 +6153,7 @@ copyW4PaletteDataToW2TilesetBgPalettes:
 	ld h,$08
 +++
 	ld l,a
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	ld c,a
 	ldh a,(<hRomBank)
 	ld b,a
@@ -6163,7 +6163,7 @@ copyW4PaletteDataToW2TilesetBgPalettes:
 	ld a,b
 	rst_setrombank
 	ld a,c
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;
@@ -8494,10 +8494,10 @@ objectMimicBgTile:
 	ld bc,w2TilesetBgPalettes
 	call addAToBc
 
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,:w2TilesetBgPalettes
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	; Copy the background palette to sprite palette 6
 	ld hl,w2TilesetSprPalettes+6*8
@@ -8514,7 +8514,7 @@ objectMimicBgTile:
 	set 6,(hl)
 
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;
@@ -9538,12 +9538,12 @@ objectMarkSolidPosition:
 	call objectGetShortPosition
 	ld b,a
 	ld a,:w2SolidObjectPositions
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,b
 	ld hl,w2SolidObjectPositions
 	call setFlag
 	ld a,$00
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;
@@ -9551,12 +9551,12 @@ objectUnmarkSolidPosition:
 	call objectGetShortPosition
 	ld b,a
 	ld a,:w2SolidObjectPositions
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,b
 	ld hl,w2SolidObjectPositions
 	call unsetFlag
 	ld a,$00
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 .endif
@@ -11938,13 +11938,13 @@ getActiveRoomFromDungeonMapPosition:
 getRoomInDungeon:
 	ldh (<hFF8B),a
 	ld a, :w2DungeonLayout
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	call getDungeonLayoutAddress
 	ldh a,(<hFF8B)
 	rst_addAToHl
 	ld l,(hl)
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,l
 	ret
 
@@ -12673,7 +12673,7 @@ setPaletteThreadDelay:
 ;;
 paletteFadeThreadStart:
 	ld a,:w2TilesetBgPalettes
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	callfrombank0 bank1.paletteFadeHandler
 	call          bank1.checkLockBG7Color3ToBlack
@@ -13226,7 +13226,7 @@ seasonsFunc_34a0:
 ;;
 clearWramBank1:
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w1Link.enabled
 	ld bc,$0100
 	jp clearMemoryBc16ByteBlocks
@@ -13376,19 +13376,19 @@ checkDungeonUsesToggleBlocks:
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 seasonsFunc_35cc:
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	ld c,a
 	ldh a,(<hRomBank)
 	ld b,a
 	push bc
 	ld a,$02
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	callfrombank0 bank1.paletteThread_calculateFadingPalettes
 	pop bc
 	ld a,b
 	rst_setrombank
 	ld a,c
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 func_35ec:
@@ -13596,7 +13596,7 @@ loadTilesetLayout:
 	call copyMemory
 
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 
@@ -13886,14 +13886,14 @@ loadTilesetAndRoomLayout:
 
 	; Copy wRoomLayout to w3RoomLayoutBuffer
 	ld a,:w3RoomLayoutBuffer
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w3RoomLayoutBuffer
 	ld de,wRoomLayout
 	ld b,_sizeof_wRoomLayout
 	call copyMemoryReverse
 
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	pop af
 	rst_setrombank
 	ret
@@ -14286,7 +14286,7 @@ loadRoomLayout:
 ; changes to them.
 ;
 generateVramTilesWithRoomChanges:
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	ld c,a
 	ldh a,(<hRomBank)
 	ld b,a
@@ -14311,7 +14311,7 @@ generateVramTilesWithRoomChanges:
 	ld a,b
 	rst_setrombank
 	ld a,c
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;
@@ -14324,11 +14324,11 @@ generateVramTilesWithRoomChanges:
 ; @param[out]	c	Top-left tile index
 getTileMappingData:
 	ld c,a
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 
 	ld a,:w3TileMappingData
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	ld a,c
 	call setHlToTileMappingDataPlusATimes8
@@ -14354,7 +14354,7 @@ getTileMappingData:
 	ld a,(wTmpcec0)
 	ld c,a
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;
@@ -14386,10 +14386,10 @@ setTile:
 	ld a,e
 	ld (wChangedTileQueueTail),a
 
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,:w2ChangedTileQueue
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	; Populate the new entry for the queue
 	ld a,e
@@ -14405,7 +14405,7 @@ setTile:
 	call setTileWithoutGfxReload
 
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	or h
 	ret
 
@@ -14442,7 +14442,7 @@ setTileInAllBuffers:
 setInterleavedTile:
 	push de
 	ld e,a
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	ld c,a
 	ldh a,(<hRomBank)
 	ld b,a
@@ -14457,7 +14457,7 @@ setInterleavedTile:
 	ld a,b
 	rst_setrombank
 	ld a,c
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	pop de
 	ret
 

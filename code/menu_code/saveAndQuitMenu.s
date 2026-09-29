@@ -8,7 +8,7 @@ saveQuitMenu_checkIsGameOver:
 ;;
 runSaveAndQuitMenu:
 	ld a,$00
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	call @runState
 	jp saveQuitMenu_drawSprites
 

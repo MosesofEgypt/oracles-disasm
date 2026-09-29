@@ -57,12 +57,12 @@ m_InteractionCode $66
 	call objectGetShortPosition
 	ld c,a
 	ld a,$03
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld b,LAST_INTERACTION_INDEX
 	ld a,(bc)
 	ld b,a
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,b
 	jp setTile
 @subid0:
@@ -77,7 +77,7 @@ m_InteractionCode $66
 	ld a,$01
 	ld (de),a
 	ld a,$03
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld b,LAST_INTERACTION_INDEX
 	ld hl,@@table_5610
 	ld a,$a3
@@ -97,7 +97,7 @@ m_InteractionCode $66
 	ld l,$57
 	ld (hl),$a2
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 @@table_5610:
 	.db $35 $37 $39 $55

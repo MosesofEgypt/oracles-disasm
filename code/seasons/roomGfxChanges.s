@@ -317,7 +317,7 @@ roomTileChangesAfterLoad03_seasons:
 	ld (wRoomLayout+$14),a
 	ld (wRoomLayout+$24),a
 
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	ld c,a
 	ldh a,(<hRomBank)
 	ld b,a
@@ -327,7 +327,7 @@ roomTileChangesAfterLoad03_seasons:
 
 loadDinsTroupeTileChanges:
 	ld a,:w3VramTiles
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 @getAddress:
 	ld a,(de)
@@ -386,7 +386,7 @@ loadDinsTroupeTileChanges:
 	ld a,b
 	rst_setrombank
 	ld a,c
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,TREE_GFXH_02
 	jp loadTreeGfx
 
@@ -441,7 +441,7 @@ roomTileChangesAfterLoad0e_seasons:
 	call checkGlobalFlag
 	ret nz
 
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	ld c,a
 	ldh a,(<hRomBank)
 	ld b,a

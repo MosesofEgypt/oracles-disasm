@@ -5,23 +5,23 @@
 func_6e9a:
 	ldh (<hFF8B),a
 	ld a,$01
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$9800
 	ld bc,$0040
 	ldh a,(<hFF8B)
 	call fillMemoryBc16ByteBlocks
 	xor a
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$9800
 	ld bc,$0400
 	jp clearMemoryBc
 
 func_6ed6:
 	ldh (<hFF8B),a
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,$04
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w4TileMap
 	ld bc,$0240
 	call clearMemoryBc
@@ -30,7 +30,7 @@ func_6ed6:
 	ldh a,(<hFF8B)
 	call fillMemoryBc16ByteBlocks
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 .endif
 
@@ -630,19 +630,19 @@ endgameCutsceneHandler_09_stage1_ages:
 	call disableLcd
 	call clearOam
 	xor a
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$8000
 	ld bc,$2000
 	call clearMemoryBc
 
 	xor a
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$9c00
 	ld bc,$0400
 	call clearMemoryBc
 
 	ld a,$01
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$9c00
 	ld bc,$0400
 	call clearMemoryBc
@@ -974,13 +974,13 @@ endgameCutsceneHandler_20:
 	call refreshObjectGfx
 	call hideStatusBar
 	ld a,$02
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w2TilesetBgPalettes+$10
 	ld b,$08
 	ld a,$ff
 	call fillMemory
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,$07
 	ldh (<hDirtyBgPalettes),a
 	call getFreeInteractionSlot

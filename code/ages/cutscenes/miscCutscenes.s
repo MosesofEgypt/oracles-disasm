@@ -1201,15 +1201,15 @@ blackTowerCompleteCutsceneHandler:
 	or a
 	ret nz
 	call hideStatusBar
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,$02
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w2TilesetBgPalettes+$10
 	ld b,$30
 	call clearMemory
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	callab bank1.checkDisableUnderwaterWaves
 	xor a
 	ld (wScrollMode),a
@@ -1728,15 +1728,15 @@ pregameIntroCutsceneHandler:
 	jp cutscene_incCutsceneState
 @stateA:
 	call disableLcd
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,$02
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w2TilesetBgPalettes
 	ld b,$40
 	call clearMemory
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	call clearScreenVariablesAndWramBank1
 	call clearOam
 	ld a,PALH_0f
@@ -1784,23 +1784,23 @@ pregameIntroCutsceneHandler:
 func_6e9a:
 	ldh (<hFF8B),a
 	ld a,$01
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$9800
 	ld bc,$0040
 	ldh a,(<hFF8B)
 	call fillMemoryBc16ByteBlocks
 	xor a
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$9800
 	ld bc,$0400
 	jp clearMemoryBc
 
 func_6eb7:
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	
 	ld a,$03
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	
 	ld hl,w3VramTiles
 	ld bc,$0240
@@ -1812,17 +1812,17 @@ func_6eb7:
 	call fillMemoryBc16ByteBlocks
 	
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 .ifndef ROM_COMBO
 ; moved for rom combo
 func_6ed6:
 	ldh (<hFF8B),a
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,$04
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w4TileMap
 	ld bc,$0240
 	call clearMemoryBc
@@ -1831,7 +1831,7 @@ func_6ed6:
 	ldh a,(<hFF8B)
 	call fillMemoryBc16ByteBlocks
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 .endif
 
@@ -1958,27 +1958,27 @@ cutscene_decCBB3whenFadeDone:
 	jp decCutsceneTimer
 
 func_6f9e:
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,$02
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w2TilesetBgPalettes+$10
 	ld b,$30
 	call clearMemory
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 func_6fb0:
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	
 	ld a,$02
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w2FadingBgPalettes
 	ld b,$80
 	call clearMemory
 	
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	call hideStatusBar
 	ld a,$fc
 	ldh (<hBgPaletteSources),a
@@ -2092,7 +2092,7 @@ func_701d:
 	ld bc,$260c
 	call func_70f7
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	call reloadTileMap
 	ld a,SND_DOORCLOSE
 	call playSound
@@ -2142,7 +2142,7 @@ wallRetraction_dungeon8:
 	ld bc,$4d04
 	call func_70f7
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	call reloadTileMap
 	ld a,SND_DOORCLOSE
 	call playSound
@@ -2196,12 +2196,12 @@ func_712f:
 	ld b,a
 -
 	ld a,$02
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,(de)
 	inc de
 	ldh (<hFF8B),a
 	ld a,:w3VramTiles
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ldh a,(<hFF8B)
 	ldi (hl),a
 	dec b
@@ -2437,7 +2437,7 @@ func_03_7244:
 	
 @@func_72ec:
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	call clearItems
 	call clearEnemies
 	call clearParts
@@ -2471,7 +2471,7 @@ func_03_7244:
 	callab tilesets.func_04_6f07
 +
 	ld a,$03
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld bc,$02c0
 	ld hl,w3VramTiles
 	call clearMemoryBc
@@ -2627,7 +2627,7 @@ func_745c:
 	push bc
 	push hl
 	ld a,c
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld b,$00
 --
 	ld a,(hl)

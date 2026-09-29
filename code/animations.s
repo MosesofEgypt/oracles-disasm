@@ -56,10 +56,10 @@ updateAnimationQueue:
 	ld hl,w2AnimationQueue
 	rst_addAToHl
 	ld a,:w2AnimationQueue
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld b,(hl)
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,b
 	call loadAnimationGfxIndex
 	ld hl,wAnimationState
@@ -143,13 +143,13 @@ updateAnimationDataPointer:
 	ld a,e
 	ld (wAnimationQueueTail),a
 	ld a,:w2AnimationQueue
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,e
 	ld hl,w2AnimationQueue
 	rst_addAToHl
 	ld (hl),b
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	or h
 	ret
 

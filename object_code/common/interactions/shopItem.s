@@ -319,10 +319,10 @@ shopItemUpdateRupeeDisplay:
 	call shopItemGetTilesForRupeeDisplay
 	ret nc
 ++
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,:w3VramTiles
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	push de
 	ldi a,(hl)
 	ld e,a
@@ -344,7 +344,7 @@ shopItemUpdateRupeeDisplay:
 
 	pop de
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,wInShop
 	set 2,(hl)
 	ret

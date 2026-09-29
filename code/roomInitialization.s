@@ -334,7 +334,7 @@ generateRandomBuffer:
 
 	; Insert numbers $00-$ff into w4TileMap
 	ld a,:w4RandomBuffer
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w4RandomBuffer
 	ld b,$00
 --
@@ -363,7 +363,7 @@ generateRandomBuffer:
 	jr nz,--
 
 	ld a,$01
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	pop de
 	ret
 
@@ -582,13 +582,13 @@ getNextValueFromRandomBuffer:
 	inc (hl)
 
 	ld a,:w4RandomBuffer
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld l,(hl)
 	ld h,>w4RandomBuffer
 	ld h,(hl)
 
 	ld a,$01
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,h
 	ret
 

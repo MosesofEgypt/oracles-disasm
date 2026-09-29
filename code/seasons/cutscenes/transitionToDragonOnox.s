@@ -81,7 +81,7 @@ seasonsFunc_0f_6f75:
 	call disableLcd
 	call seasonsFunc_0f_70b4_swapGraphics
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	call loadCommonGraphics
 	call fadeinFromWhite
 	ld a,$02
@@ -120,7 +120,7 @@ seasonsFunc_0f_6f75:
 	res 7,(hl)
 	call seasons_func_0f_722f
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,$03
 	ld (wTmpcfc0.normal.cfc0+$08),a
 	ret
@@ -134,7 +134,7 @@ seasonsFunc_0f_704d:
 	res 7,(hl)
 	call seasons_func_0f_722f
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,$02
 	call loadGfxRegisterStateIndex
 	ld a,(wTmpcfc0.fallDownHoleEvent.filler+$0e)
@@ -158,13 +158,13 @@ seasonsFunc_0f_704d:
 	call disableLcd
 
 	xor a
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$9800
 	ld bc,$0400
 	call clearMemoryBc
 
 	ld a,$01
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$9800
 	ld bc,$0040
 	ld a,$0d
@@ -185,7 +185,7 @@ seasonsFunc_0f_70b4_swapGraphics:
 	ld a,PALH_BG_DRAGON_ONOX
 	call loadPaletteHeader
 	xor a
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$9800
 	ld bc,$0400
 	call clearMemoryBc
@@ -195,7 +195,7 @@ seasonsFunc_0f_70b4_swapGraphics:
 	call clearMemory
 
 	ld a,$01
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$9800
 	ld bc,$0040
 	ld a,$0d
@@ -207,7 +207,7 @@ seasonsFunc_0f_70b4_swapGraphics:
 	call fillMemory
 
 	ld a,$03
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w3VramTiles
 	ld bc,$02c0
 	call clearMemoryBc
@@ -232,7 +232,7 @@ seasonsFunc_0f_70b4_swapGraphics:
 	res 7,(hl)
 	call seasons_func_0f_722f
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 +
 	ld b,(hl)
@@ -242,7 +242,7 @@ seasonsFunc_0f_70b4_swapGraphics:
 	ld (hl),b
 	call seasons_func_0f_712a
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;
@@ -404,7 +404,7 @@ seasons_func_0f_71fb:
 
 seasons_func_0f_722f:
 	ld a,$03
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w3VramTiles+$140
 	ld b,$e0
 	call clearMemory
@@ -461,7 +461,7 @@ table_7291:
 ; @param	hl	a few values between w6DragonOnoxTileMap1-$db00 in bank 6 (w6Filler1, etc)
 seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer:
 	ld a,$06
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld de,wTmpVramBuffer
 -
 	ldi a,(hl)
@@ -476,7 +476,7 @@ seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer:
 ; @param	hl	$d802(w3VramTiles)/$dc02(w3TileMappingIndices) in bank 3
 seasonsFunc_0f_72a5_copyFromwTmpVramBufferIntoBank3:
 	ld a,$03
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld de,wTmpVramBuffer
 ---
 	ld b,$04
@@ -528,7 +528,7 @@ seasons_func_0f_72dc:
 	ld c,$20
 +
 	ld a,$03
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld de,wTmpVramBuffer+$0f
 --
 	ld b,$10
@@ -550,7 +550,7 @@ seasons_func_0f_72dc:
 	ret
 ++
 	ld a,$03
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld de,wTmpVramBuffer
 	ld c,$0a
 --
@@ -581,7 +581,7 @@ seasons_func_0f_7325:
 	ld c,$20
 +
 	ld a,$03
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld de,wTmpVramBuffer+$07
 --
 	ld b,$04
@@ -607,7 +607,7 @@ seasons_func_0f_7325:
 	ret
 ++
 	ld a,$03
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld de,wTmpVramBuffer
 --
 	ld b,$04

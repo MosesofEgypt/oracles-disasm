@@ -64,7 +64,7 @@ fileSelect_redrawDecorations:
 	pop af
 	rst_setrombank
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 

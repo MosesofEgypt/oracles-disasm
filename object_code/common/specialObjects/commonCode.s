@@ -1605,12 +1605,12 @@ companionCheckCanSpawn:
 	call objectGetShortPosition
 	ld b,a
 	ld a,:w2SolidObjectPositions
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,b
 	ld hl,w2SolidObjectPositions
 	call checkFlag
 	ld a,$00
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	jr z,+
 	pop af
 	jp itemDelete

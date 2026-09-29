@@ -2012,10 +2012,10 @@ func_02_494a:
 ; Load the appropriate characters based on whether it's doing name input or
 ; secret input.
 textInput_loadCharacterGfx:
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,:w5NameEntryCharacterGfx
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	xor a
 	ld (wFileSelect.fontXor),a
 	ld de,w5NameEntryCharacterGfx
@@ -2057,7 +2057,7 @@ textInput_loadCharacterGfx:
 .endif
 
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;
@@ -2655,7 +2655,7 @@ fileSelectMode7:
 fileSelect_redrawDecorationsAndSetWramBank4:
 	call clearOam
 	ld a,$04
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,@sprites
 	jp addSpritesToOam
 
@@ -2808,11 +2808,11 @@ updateFileLinkPaletteForNewGamePlus:
 	ld b,a
 
 	; for New Game Plus we change link's color by updating the palette
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 
 	ld a,:w2TilesetBgPalettes
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	; update sprite palette 0
 	ld a,b
@@ -2833,7 +2833,7 @@ updateFileLinkPaletteForNewGamePlus:
 	set 0,(hl)
 	pop af
 
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	pop de
 	pop bc
 	pop hl
@@ -3077,7 +3077,7 @@ runBank2Function:
 ;;
 hideStatusBar_body:
 	ld a,$04
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,wDontUpdateStatusBar
 
 	; If (wDontUpdateStatusBar) isn't $77, set the sprite priority bit?
@@ -3142,11 +3142,11 @@ copyW2TilesetBgPalettesToW4PaletteData_body:
 	ld b,$80
 -
 	ld a,:w2TilesetBgPalettes
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld c,(hl)
 	inc l
 	ld a,:w4PaletteData
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,c
 	ld (de),a
 	inc de
@@ -3165,11 +3165,11 @@ copyW4PaletteDataToW2TilesetBgPalettes_body:
 	ld b,$80
 -
 	ld a,:w4PaletteData
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld c,(hl)
 	inc l
 	ld a,:w2TilesetBgPalettes
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,c
 	ld (de),a
 	inc de
@@ -3337,13 +3337,13 @@ saveGraphicsOnEnterMenu_body:
 	call disableLcd
 	call copyW2TilesetBgPalettesToW4PaletteData_body
 	ld a,:w4SavedOam
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,wOam
 	ld de,w4SavedOam
 	ld b,$a0
 	call copyMemory
 	ld a,$01
-	ld ($ff00+R_VBK),a
+	ldh (R_VBK),a
 	ld hl,$8600
 	ld bc,$0180
 	ld de,w4SavedVramTiles
@@ -3380,7 +3380,7 @@ reloadGraphicsOnExitMenu_body:
 	push de
 	call disableLcd
 	ld a,:w4SavedOam
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld de,$8601
 	ldbc $17, :w4SavedVramTiles
 	ld hl,w4SavedVramTiles
@@ -3428,7 +3428,7 @@ reloadGraphicsOnExitMenu_body:
 
 	ld a,(wGfxRegs1.LCDC)
 	ld (wGfxRegsFinal.LCDC),a
-	ld ($ff00+R_LCDC),a
+	ldh (R_LCDC),a
 	pop de
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
@@ -3619,7 +3619,7 @@ updateStatusBar_body:
 	ret nz
 
 	ld a,$04
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	call loadStatusBarMap
 
 	; Check whether A and B items need refresh
@@ -3808,7 +3808,7 @@ updateStatusBar_body:
 	ld (hl),a
 +
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,(wcbe8)
 .ifndef ONE_HANDED_BIGGORON_SWORD
 	bit 7,a
@@ -4376,7 +4376,7 @@ drawItemTilesOnStatusBar:
 .endif
 
 	ld a,$04
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,(wInventoryB)
 	ld de,wBItemTreasure
 	call loadEquippedItemSpriteData
@@ -5742,11 +5742,11 @@ runInventoryMenu:
 	ld (wEquippedItemOamTail),a
 	ldh (<hOamTail),a
 	ld a,$04
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	call @inventoryMenuStates
 	call inventoryMenuDrawSprites
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	jp updateStatusBar
 
 ;;
@@ -8832,7 +8832,7 @@ runMapMenu:
 ;;
 mapMenu_state0:
 	ld a,:w4TileMap
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	call loadMinimapDisplayRoom
 
@@ -8984,7 +8984,7 @@ mapMenu_state0:
 ; Code for both overworld & dungeon maps
 @commonCode:
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	call mapMenu_drawSprites
 
 	xor a
@@ -10972,7 +10972,7 @@ mapMenu_drawJewelLocations:
 ; This blanks out all unvisited tiles when opening the map screen.
 mapMenu_clearUnvisitedTiles:
 	ld a,:w4TileMap
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 .ifdef ROM_COMBO
 	call wIsSeasons
@@ -11116,7 +11116,7 @@ dungeonMap_getLinkIconPosition:
 ; Called once when opening the dungeon map.
 dungeonMap_drawFloorList:
 	ld a,:w4TileMap
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	ld a,(wDungeonIndex)
 	ld hl,dungeonMapFloorListStartPositions
@@ -11213,11 +11213,11 @@ dungeonMap_generateScrollableTilemap:
 	ldh (<hFF8C),a
 @nextTile:
 	ld a,:w2DungeonLayout
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ldi a,(hl)
 	ld c,a
 	ld a,:w4GfxBuf1
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,c
 	call dungeonMap_getTileForRoom
 	ld (de),a
@@ -11261,7 +11261,7 @@ dungeonMap_generateScrollableTilemap:
 ;
 ; Prior to calling this, w4GfxBuf stores the tilemap to be scrolled through.
 dungeonMap_updateScroll:
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,(wMapMenu.dungeonScrollY)
 	call multiplyABy8
@@ -11277,7 +11277,7 @@ dungeonMap_updateScroll:
 	ld c,$08
 @nextColumn:
 	ld a,:w4GfxBuf1
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	; a = tile index
 	ld a,(hl)
@@ -11315,7 +11315,7 @@ dungeonMap_updateScroll:
 	; Done drawing tiles
 
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	; Missing a "ret" opcode here.
 	; This normally doesn't seem to cause any problems, though perhaps it's related to

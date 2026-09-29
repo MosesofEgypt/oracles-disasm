@@ -234,7 +234,7 @@ m_InteractionCode $89
 	dec (hl)
 	jr nz,@label_0a_036
 	xor a
-	ld ($ff00+R_SB),a
+	ldh (R_SB),a
 	ld hl,{SCRIPTS_1}.blueSnakeExitScript_cableNotConnected
 	ld b,$80
 	jr @setBlueSnakeExitScript
@@ -312,10 +312,10 @@ m_InteractionCode $89
 	jr @setBlueSnakeExitScript
 
 @getSerialTransferResult:
-	ld a,($ff00+R_SVBK)
+	ldh a,(R_SVBK)
 	push af
 	ld a,:w4SerialDataBuffer
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ldh a,(<hSerialTransferErrorCode)
 	ld b,a
 	ld a,(wFileSelect.fileTransferErrorCode)
@@ -326,7 +326,7 @@ m_InteractionCode $89
 	ld c,a
 
 	pop af
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,b
 	or e
 	ret

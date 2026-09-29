@@ -21,7 +21,7 @@ manageSerialConnection_body:
 refreshSerialInterruptControl:
 	; if there's currently a transfer going, we don't
 	; need to consider updating the control register
-	ld a,($ff00+R_SC)
+	ldh a,(R_SC)
 	rlca
 	ret c
 
@@ -115,7 +115,7 @@ sendPacketByte:
 		ld a,(w4PacketChecksum)
 	+
 
-	ld ($ff00+R_SB),a
+	ldh (R_SB),a
 
 	; update the checksum
 	ld hl,w4PacketChecksum
@@ -135,7 +135,7 @@ serialIdleSnoozeLoop:
 	ld a,$01
 	ld (w4IsSerialInSleepMode),a
 	xor a
-	ld ($ff00+R_SB),a
+	ldh (R_SB),a
 	ldh (<hReceivedSerialByte),a
 	ret
 
@@ -205,7 +205,7 @@ receivePacketByte:
 	xor a
 	ld (w4WaitingForNextByte),a
 	ld (w4ReceivingPacketBytes),a
-	ld ($ff00+R_SB),a
+	ldh (R_SB),a
 	ret
 
 @getNextByte:
@@ -221,7 +221,7 @@ receivePacketByte:
 	add (hl)
 	ld (hl),a
 	xor a
-	ld ($ff00+R_SB),a
+	ldh (R_SB),a
 	ld (w4ReceivingPacketBytes),a
 	ret
 

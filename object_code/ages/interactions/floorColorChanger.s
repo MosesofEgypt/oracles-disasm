@@ -66,13 +66,13 @@ m_InteractionCode $22
 	; wBigBuffer.
 	callab roomInitialization.generateRandomBuffer
 	ld a,:w4RandomBuffer
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld hl,w4RandomBuffer
 	ld de,wBigBuffer
 	ld b,$00
 	call copyMemory
 	ld a,$01
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	ldh a,(<hActiveObject)
 	ld d,a

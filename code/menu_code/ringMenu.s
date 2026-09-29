@@ -150,7 +150,7 @@ runRingMenu:
 	set TEXTBOXFLAG_BIT_NOCOLORS,(hl)
 
 	ld a,:w4TileMap
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 
 	call @runStateCode
 

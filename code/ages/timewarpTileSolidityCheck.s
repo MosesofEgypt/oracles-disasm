@@ -2,7 +2,7 @@
 ; @param[out]	c	$00 if there is no solid object at that position, $01 if there is
 checkSolidObjectAtWarpDestPos:
 	ld a,:w2SolidObjectPositions
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld a,(wWarpDestPos)
 	ld hl,w2SolidObjectPositions
 	call checkFlag
@@ -11,17 +11,17 @@ checkSolidObjectAtWarpDestPos:
 	inc c
 +
 	xor a
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;
 clearSolidObjectPositions:
 	ld a,:w2SolidObjectPositions
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ld b,$10
 	ld hl,w2SolidObjectPositions
 	call clearMemory
-	ld ($ff00+R_SVBK),a
+	ldh (R_SVBK),a
 	ret
 
 ;;
