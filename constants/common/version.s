@@ -50,14 +50,6 @@
 .endif
 
 
-; Oracle of Ages has some "garbage" data, possibly a side-effect of the build process that caused
-; data from previous builds (even from seasons!) to leak into the final ROM. We'll include that data
-; only when building vanilla ROMs.
-.if defined(BUILD_VANILLA) && defined(REGION_US)
-	.define INCLUDE_GARBAGE
-.endif
-
-
 
 ; Define to help with building directory strings, maybe other stuff
 .if defined(ROM_COMBO)
