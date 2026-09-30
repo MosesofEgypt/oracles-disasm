@@ -10,15 +10,18 @@
 	.ifndef ENABLE_GASHA_REBALANCE
 		; determines whether to use the updated gasha system.
 		; to learn how it works, look at 'notes/gashaRebalanceMechanics.txt'
-		.define ENABLE_GASHA_REBALANCE		1
+		.define ENABLE_GASHA_REBALANCE
 	.endif
 	.ifndef ENABLE_SECRET_GASHA_RINGS
 		; determines whether rings exclusive to linked games are available
 		; in the final ring tier. requires ENABLE_GASHA_REBALANCE to work.
-;		.define ENABLE_SECRET_GASHA_RINGS 	1 	; keeping here for documentation
+;		.define ENABLE_SECRET_GASHA_RINGS  	; keeping here for documentation
 	.endif
 	.ifndef LAVA_SWIMMING_RING
-		; determines which ring enables swimming in lava
+		; determines which ring enables swimming in lava.
+		; NOTE: this shouldn't be enabled unless your mod is designed
+		;       around it, as many screen transitions arent built to
+		;       handle it, and will result in getting stuck in walls.
 ;		.define LAVA_SWIMMING_RING			HIKERS_RING	; keeping here for documentation
 	.endif
 .endif
@@ -113,7 +116,7 @@
 
 	; determines whether the hurricane spin lasts until you release the button.
 	; takes precedence over SPIN_SWING_COUNTER
-;	.define INDEFINITE_HURRICANE_SPIN	1
+;	.define INDEFINITE_HURRICANE_SPIN
 
 	; determines how many sword beams will be allowed on
 	; screen when the ring combo to increase them is active.
@@ -132,7 +135,7 @@
 
 .ifdef PORTAL_RING_BOX_LEVEL
 .ifndef ENABLE_PORTAL_RING_BOX
-	.define ENABLE_PORTAL_RING_BOX		1
+	.define ENABLE_PORTAL_RING_BOX
 .endif
 .endif
 
@@ -238,21 +241,21 @@
 
 .endif
 
-.macro m_RingListRow
-	.ifndef RING_LIST_IDX
-		.define RING_LIST_IDX 0
-	.endif
-
-	.rept NARGS
-		.define RING_LIST_IDX_{%.2x{RING_LIST_IDX}} \1
-		.redefine RING_LIST_IDX RING_LIST_IDX+1
-		.shift
-	.endr
-.endm
-
 .ifdef REMAP_RING_LIST
+	.macro m_RingListRow
+		.ifndef RING_LIST_IDX
+			.define RING_LIST_IDX 0
+		.endif
+
+		.rept NARGS
+			.define RING_LIST_IDX_{%.2x{RING_LIST_IDX}} \1
+			.redefine RING_LIST_IDX RING_LIST_IDX+1
+			.shift
+		.endr
+	.endm
+
 	; determines whether to remap the index numbers of each ring as well
-	.define REMAP_RING_LIST_NUMBERS		1
+	.define REMAP_RING_LIST_NUMBERS
 
 	; NOTE: If you want to rearrange where the rings show up in the list, do so here.
 	;		HOWEVER, make sure you do not mess with the structure.
@@ -276,6 +279,8 @@
 	m_RingListRow	DMG_COLOR_RING		GBA_NATURE_RING		CURSED_RED_RING		FAIRYS_RING
 	m_RingListRow	OCTO_RING			LIKE_LIKE_RING		MOBLIN_RING			SUBROSIAN_RING
 	m_RingListRow	FIRST_GEN_RING		GBA_TIME_RING		CURSED_BLUE_RING	VASUS_RING
+
+	.undefine RING_LIST_IDX
 .endif
 
 
@@ -292,44 +297,41 @@
 	.ifndef ENABLE_PORTAL_RING_BOX
 		; If we want the redux, but don't want a portal box, we at least
 		; allow Vasu's Ring to work as a portal to the ring list.
-		.define ENABLE_PORTAL_RING_BOX	1
+		.define ENABLE_PORTAL_RING_BOX
 	.endif
 
 	.ifndef REDUX_UTIL_FUNCS
 		; necessary for basically all ring combos
-		.define REDUX_UTIL_FUNCS		1
+		.define REDUX_UTIL_FUNCS
 	.endif
 
 	.ifndef ENABLE_MULTI_RING
 		; necessary for so many things(combos, effect stacking, etc)
-		.define ENABLE_MULTI_RING		1
+		.define ENABLE_MULTI_RING
 	.endif
 
 	.ifndef ENABLE_PUNCH_WITH_ITEM
 		; the text for the rings indicate this is possible, so we're forcing it on
-		.define ENABLE_PUNCH_WITH_ITEM 	1
+		.define ENABLE_PUNCH_WITH_ITEM
 	.endif
 .endif
 
 .ifdef ENABLE_MULTI_RING
 	.ifndef UNRESTRICTED_TRANSFORMS
 		; necessary if multiple rings can be equipped at once
-		.define UNRESTRICTED_TRANSFORMS	1
+		.define UNRESTRICTED_TRANSFORMS
 	.endif
 	.ifndef ENABLE_RING_REDUX
 		; allowing multiple rings to be worn at once without the redux
 		; essentially requires rewriting the entire ring system again.
 		; not doing that.
-		.define ENABLE_RING_REDUX		1
+		.define ENABLE_RING_REDUX
 	.endif
 .endif
 
 .ifdef UNRESTRICTED_TRANSFORMS
 	.ifndef REDUX_UTIL_FUNCS
 		; necessary for transform rework
-		.define REDUX_UTIL_FUNCS		1
+		.define REDUX_UTIL_FUNCS
 	.endif
 .endif
-
-.redefine RING_LIST_IDX 0
-.undefine RING_LIST_IDX

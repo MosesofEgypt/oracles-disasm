@@ -15,22 +15,22 @@
 	.ifndef RESIZE_RING_BOX
 		; determines whether to update the ring box sizes with
 		; the values under the RESIZE_RING_BOX define below.
-		.define RESIZE_RING_BOX				1
+		.define RESIZE_RING_BOX
 	.endif
 	.ifndef EXTENDED_RING_BOX
 		; determines whether the set of "extended" values
 		; will be used when RESIZE_RING_BOX is defined
-		.define EXTENDED_RING_BOX			1
+		.define EXTENDED_RING_BOX
 	.endif
 	.ifndef ENABLE_REDUX_EXTRAS
 		; whether to enable all the extra redux features below
-		.define ENABLE_REDUX_EXTRAS			1
+		.define ENABLE_REDUX_EXTRAS
 	.endif
 .endif
 
 .ifndef ENABLE_MULTI_RING
 	; determines whether you can equip multiple rings at once
-;	.define ENABLE_MULTI_RING	1
+;	.define ENABLE_MULTI_RING
 .endif
 
 .ifdef ENABLE_REDUX_EXTRAS
@@ -39,65 +39,65 @@
 	.ifndef ENABLE_PUNCH_WITH_ITEM
 		; determines whether the Fist/Expert's Ring requires
 		; only one empty hand to punch instead of both
-		.define ENABLE_PUNCH_WITH_ITEM			1
+		.define ENABLE_PUNCH_WITH_ITEM
 	.endif
 	.ifndef PUNCH_WITH_BRACELET
 		; converts bracelet use into punches if nothing is grabbable
 		; nearby. requires either fist or experts ring though.
-		.define PUNCH_WITH_BRACELET			1
+		.define PUNCH_WITH_BRACELET
 	.endif
 	.ifndef ONE_HANDED_BIGGORON_SWORD
 		; determines whether the Biggoron's Sword occupies 1 hand instead of 2
-;		.define ONE_HANDED_BIGGORON_SWORD		1 	; keeping here for documentation
+;		.define ONE_HANDED_BIGGORON_SWORD 	; keeping here for documentation
 	.endif
 	.ifndef ADVANCE_SHOP_ALWAYS_OPEN
 		; determines whether the advance shop is open even on GBC
-		.define ADVANCE_SHOP_ALWAYS_OPEN			1
+		.define ADVANCE_SHOP_ALWAYS_OPEN
 	.endif
 	.ifndef NEW_GAME_PLUS_NEEDS_COMPLETION
 		; determines whether a NG+ file can only be started from a completed file.
-		.define NEW_GAME_PLUS_NEEDS_COMPLETION	1
+		.define NEW_GAME_PLUS_NEEDS_COMPLETION
 	.endif
 	.ifndef ENABLE_PASSIVE_SHIELD
 		; determines whether your shield can be used passively on the side
-		.define ENABLE_PASSIVE_SHIELD	1
+		.define ENABLE_PASSIVE_SHIELD
 	.endif
 	.ifndef CONTEXT_SENSITIVE_AUTO_EQUIP
 		; determines whether to automatically equip certain items
 		; if you are standing/pushing on the tile they are used on
-		.define CONTEXT_SENSITIVE_AUTO_EQUIP	1
+		.define CONTEXT_SENSITIVE_AUTO_EQUIP
 	.endif
 	.ifndef WIDE_INVENTORY_SPRITES
 		; determines whether the inventory items are 2 or 3 tiles wide
-		.define WIDE_INVENTORY_SPRITES			1
+		.define WIDE_INVENTORY_SPRITES
 	.endif
 	.ifndef RESTOCK_SHOP_ON_PURCHASE
 		; when buying an item in the shop, it will be
 		; restocked without needing to reload the room.
-		.define RESTOCK_SHOP_ON_PURCHASE		1
+		.define RESTOCK_SHOP_ON_PURCHASE
 	.endif
 	.ifndef FILE_MENU_SHOW_CURRENT_HEARTS
 		; determines whether the save menu shows the number of
 		; hearts link actually has full instead of the default
 		; behavior of showing them all full
-		.define FILE_MENU_SHOW_CURRENT_HEARTS	1
+		.define FILE_MENU_SHOW_CURRENT_HEARTS
 	.endif
 	.ifndef MORE_RUPEE_TYPES
 		; determines whether a 10 rupee and 30 rupee are added to the drop tables.
-		.define MORE_RUPEE_TYPES				1
+		.define MORE_RUPEE_TYPES
 	.endif
 	.ifndef ENABLE_QUICK_ITEM_DROP
 		; determines whether holding the item button after pulling out a
 		; bomb or picking something up causes link to instantly drop it.
 		; if the ring redux is also enabled, this effect is limited to
 		; only occuring if the Haste Ring is equipped
-		.define ENABLE_QUICK_ITEM_DROP 			1
+		.define ENABLE_QUICK_ITEM_DROP
 	.endif
 	.ifndef ENABLE_PORTAL_RING_BOX
 		; determines whether to allow entering the ring list from
 		; the inventory by clicking the ring box. if the ring redux
 		; is enabled, this is on by default, as Vasu's Ring does this.
-		.define ENABLE_PORTAL_RING_BOX			1
+		.define ENABLE_PORTAL_RING_BOX
 	.endif
 	.ifndef PORTAL_RING_BOX_LEVEL
 		; determines what ring box level will allow you to open the ring
@@ -113,12 +113,12 @@
 	.ifndef INCREASE_WALLET_SIZE
 		; determines whether or not the wallet size gets increased from
 		; 999 rupees/ore chunks to the MAX_WALLET_SIZE amount defined below
-		.define INCREASE_WALLET_SIZE			1
+		.define INCREASE_WALLET_SIZE
 	.endif
 	.ifndef REMAP_RING_LIST
 		; determines whether or not the ring list gets updated to
 		; use a more aesthetically pleasing and logical arrangement
-		.define REMAP_RING_LIST					1
+		.define REMAP_RING_LIST
 	.endif
 	.ifndef UNRESTRICTED_TRANSFORMS
 		; normally the transforms swap link with a different SpecialObject
@@ -127,21 +127,21 @@
 		; never swapping link out, and instead remapping his sprites on
 		; a case-by-case basis for each action he may be performing.
 		; determines whether to enable this or now
-		.define UNRESTRICTED_TRANSFORMS			1
+		.define UNRESTRICTED_TRANSFORMS
 	.endif
 	.ifndef MAGNET_GLOVES_CAN_PUSH_ENEMIES
 		; normally the magnet gloves are restricted to pulling enemies, but
 		; being able to push them away is a nice feature sometimes.
-		.define MAGNET_GLOVES_CAN_PUSH_ENEMIES	1
+		.define MAGNET_GLOVES_CAN_PUSH_ENEMIES
 	.endif
 	.ifndef ENABLE_RUMBLE
 		; enables rumble(if the cart supports it)
-		.define ENABLE_RUMBLE					1
+		.define ENABLE_RUMBLE
 	.endif
 	.ifndef ENABLE_EVIL_BULLSHIT_BEAMOS
 		; makes beamos fire homing beams.
 		; trust me, just don't. it's bullshit
-;		.define ENABLE_EVIL_BULLSHIT_BEAMOS	1
+;		.define ENABLE_EVIL_BULLSHIT_BEAMOS
 	.endif
 .endif
 
@@ -184,37 +184,37 @@
 
 .ifdef ENABLE_FULL_REDUX
 .ifndef ENABLE_RING_REDUX
-	.define ENABLE_RING_REDUX			1
+	.define ENABLE_RING_REDUX
 .endif
 .endif
 
 .ifdef ENABLE_MULTI_RING
 .ifndef ENABLE_RING_REDUX
-	.define ENABLE_RING_REDUX		1
+	.define ENABLE_RING_REDUX
 .endif
 .endif
 
 .ifdef ENABLE_SETTINGS_MENU
 .ifndef ENABLE_QUICK_SWAP
-	.define ENABLE_QUICK_SWAP				1
+	.define ENABLE_QUICK_SWAP
 .endif
 .ifndef ENABLE_QUICK_DROP
-	.define ENABLE_QUICK_DROP				1
+	.define ENABLE_QUICK_DROP
 .endif
 .ifndef CONTEXT_SENSITIVE_AUTO_EQUIP
-	.define CONTEXT_SENSITIVE_AUTO_EQUIP	1
+	.define CONTEXT_SENSITIVE_AUTO_EQUIP
 .endif
 .ifndef ENABLE_PASSIVE_SHIELD
-	.define ENABLE_PASSIVE_SHIELD			1
+	.define ENABLE_PASSIVE_SHIELD
 .endif
 .ifndef PUNCH_WITH_BRACELET
-	.define PUNCH_WITH_BRACELET				1
+	.define PUNCH_WITH_BRACELET
 .endif
 .ifndef ENABLE_RUMBLE
-	.define ENABLE_RUMBLE	1
+	.define ENABLE_RUMBLE
 .endif
 .ifndef MORE_MESSAGE_SPEEDS
-	.define MORE_MESSAGE_SPEEDS				1
+	.define MORE_MESSAGE_SPEEDS
 .endif
 .endif
 
@@ -237,14 +237,8 @@
 	.endif
 .endif
 
-.if defined(ROM_COMBO)
-.ifndef SUPERFREE_OAM_DATA_BANKS
-	.define SUPERFREE_OAM_DATA_BANKS	1
-.endif
-.endif
-
 .ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE
-	.redefine I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND	1
+	.define I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND
 	; WLA refuses to work with me on banks 256 and higher
-	;.redefine I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
+	;.define I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
 .endif

@@ -763,16 +763,35 @@ m_section_free Objects_3 namespace objectData
 
 .ends
 
-
-.BANK $13 SLOT 1
-.ORG 0
-
-	.define BASE_OAM_DATA_BANK $13
-	.export BASE_OAM_DATA_BANK
-
-	.include {"{GAME_DATA_DIR}/specialObjectOamData.s"}
+m_section_superfree Item_OAM_Data
+	_sectionStart:
+	.define ITEM_OAM_DATA_BANK		:_sectionStart EXPORT
 	.include "data/itemOamData.s"
+.ends
+
+m_section_superfree Part_OAM_Data
+	_sectionStart:
+	.define PART_OAM_DATA_BANK		:_sectionStart EXPORT
+	.include {"{GAME_DATA_DIR}/partOamData.s"}
+.ends
+
+m_section_superfree Special_Object_OAM_Data
+	_sectionStart:
+	.define SPEC_OBJ_OAM_DATA_BANK	:_sectionStart EXPORT
+	.include {"{GAME_DATA_DIR}/specialObjectOamData.s"}
+.ends
+
+m_section_superfree Enemy_OAM_Data
+	_sectionStart:
+	.define ENEMY_OAM_DATA_BANK		:_sectionStart EXPORT
 	.include {"{GAME_DATA_DIR}/enemyOamData.s"}
+.ends
+
+m_section_superfree Interaction_OAM_Data
+	_sectionStart:
+	.define INTERAC_OAM_DATA_BANK		:_sectionStart EXPORT
+	.include {"{GAME_DATA_DIR}/interactionOamData.s"}
+.ends
 
 
 .BANK $14 SLOT 1
@@ -781,9 +800,6 @@ m_section_free Objects_3 namespace objectData
 m_section_superfree Terrain_Effects NAMESPACE terrainEffects
 	.include "data/terrainEffects.s"
 .ends
-
-	.include {"{GAME_DATA_DIR}/interactionOamData.s"}
-	.include {"{GAME_DATA_DIR}/partOamData.s"}
 
 
 .BANK $15 SLOT 1

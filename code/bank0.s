@@ -3321,7 +3321,6 @@ drawAllSpritesUnconditionally:
 	ldi a,(hl)
 	ldh (<hFF8E),a
 
-.if defined(SUPERFREE_OAM_DATA_BANKS)
 	; Get bank of animation frame data
 	push hl
 	ld a,l
@@ -3351,18 +3350,7 @@ drawAllSpritesUnconditionally:
 
 	; Object.oamDataAddress
 	derefHl
-.else
-	; Object.oamDataAddress
-	derefHl
 
-	; Get address, bank of animation frame data
-	ld a,h
-	and $c0
-	rlca
-	rlca
-	add BASE_OAM_DATA_BANK
-	setrombank
-.endif
 	set 6,h
 	res 7,h
 
@@ -3448,22 +3436,24 @@ drawAllSpritesUnconditionally:
 	jr nz,@nextSprite
 	jr @doneDrawing
 
-.if defined(SUPERFREE_OAM_DATA_BANKS)
 objectOamBankTable:
-.if defined(ROM_COMBO) || defined(ROM_AGES)
+.if defined(ROM_COMBO)
 	.db AGES_ITEM_OAM_DATA_BANK
 	.db AGES_INTERAC_OAM_DATA_BANK
 	.db AGES_ENEMY_OAM_DATA_BANK
 	.db AGES_PART_OAM_DATA_BANK
 	.db AGES_SPEC_OBJ_OAM_DATA_BANK
-.endif
-.if defined(ROM_COMBO) || defined(ROM_SEASONS)
 	.db SEASONS_ITEM_OAM_DATA_BANK
 	.db SEASONS_INTERAC_OAM_DATA_BANK
 	.db SEASONS_ENEMY_OAM_DATA_BANK
 	.db SEASONS_PART_OAM_DATA_BANK
 	.db SEASONS_SPEC_OBJ_OAM_DATA_BANK
-.endif
+.else
+	.db ITEM_OAM_DATA_BANK
+	.db INTERAC_OAM_DATA_BANK
+	.db ENEMY_OAM_DATA_BANK
+	.db PART_OAM_DATA_BANK
+	.db SPEC_OBJ_OAM_DATA_BANK
 .endif
 
 .if !defined(ROM_COMBO)
