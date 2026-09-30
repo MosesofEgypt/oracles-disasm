@@ -78,7 +78,7 @@ parentItemCode_sword:
 @state1:
 	ld a,(wcc63)
 	rlca
-	jp c,@label_4c8b
+	jp c,@doSpinAttack
 
 	call specialObjectAnimate_optimized
 .ifdef ENABLE_RING_REDUX
@@ -226,8 +226,13 @@ parentItemCode_sword:
 	call @checkAndRetForSwordPoke
 	call parentItemCheckButtonPressed
 	ret nz
+.ifdef ENABLE_RING_REDUX
+	; reset this
+	xor a
+	ld (wSwordDamageCached),a
+.endif
 
-@label_4c8b:
+@doSpinAttack:
 	ld h,d
 	ld a,$02
 	ld (wcc63),a

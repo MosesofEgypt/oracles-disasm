@@ -119,11 +119,13 @@ _drawObjectTerrainEffects:
 	ret
 
 @onGround:
+.ifdef ENABLE_TERRAIN_EFFECT_OPTIMIZATIONS
 	ld a,(wOptimizationFlags)
 	bit 2,a
 	call z,calculateRoomHasTerrainEffectTiles
 	bit 3,a
 	ret z
+.endif
 
 	ld a,(wScrollMode)
 	cp $08
@@ -240,6 +242,32 @@ _drawObjectTerrainEffects:
 	pop hl
 	ret
 
+.ifdef ENABLE_TERRAIN_EFFECT_OPTIMIZATIONS
+getIsTerrainEffectTile:
+	push hl
+	ld hl,calculateRoomHasTerrainEffectTiles@terrainEffectTiles
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+		ld hl,calculateRoomHasTerrainEffectTiles@terrainEffectTiles_seasons
+	+
+.endif
+	ld a,(hl)
+	-
+		cp b
+		jr nz,++
+			; found a match
+			or $01
+			jr +
+		++
+
+		ldi a,(hl)
+		or a
+		jr nz,-
+	+
+	pop hl
+	ret
+
 calculateRoomHasTerrainEffectTiles:
 	push de
 	push hl
@@ -309,4 +337,5 @@ calculateRoomHasTerrainEffectTiles:
 	.db TILEINDEX_PUDDLE+1
 	.db TILEINDEX_PUDDLE+2
 	.db $00
+.endif
 .endif

@@ -142,26 +142,28 @@ COMMONDATAFILES = $(shell find data/ -name '*.s' | grep -v '/ages/\|/seasons/\|/
 GAMEDATAFILES  = $(shell find data/$(GAME)/ -name '*.s')
 
 # These will be auto-generated, so they don't necessarily exist atm
-GAMEDATAFILES += $(BUILD_DIR)/paletteData.s
-GAMEDATAFILES += $(BUILD_DIR)/paletteHeaders.s
-GAMEDATAFILES += $(BUILD_DIR)/objectCollisionTable.s
-GAMEDATAFILES += $(BUILD_DIR)/enemyCollisionModes.s
-GAMEDATAFILES += $(BUILD_DIR)/animationData.s
-GAMEDATAFILES += $(BUILD_DIR)/animationGroups.s
-GAMEDATAFILES += $(BUILD_DIR)/partData.s
-GAMEDATAFILES += $(BUILD_DIR)/partOamData.s
-GAMEDATAFILES += $(BUILD_DIR)/partAnimations.s
-GAMEDATAFILES += $(BUILD_DIR)/enemyData.s
-GAMEDATAFILES += $(BUILD_DIR)/enemyOamData_ages.s
-GAMEDATAFILES += $(BUILD_DIR)/enemyOamData_seasons.s
-GAMEDATAFILES += $(BUILD_DIR)/enemyAnimations.s
-GAMEDATAFILES += $(BUILD_DIR)/interactionData.s
-GAMEDATAFILES += $(BUILD_DIR)/interactionOamData_ages.s
-GAMEDATAFILES += $(BUILD_DIR)/interactionOamData_seasons.s
-GAMEDATAFILES += $(BUILD_DIR)/interactionAnimations.s
-GAMEDATAFILES += $(BUILD_DIR)/specialObjectOamData.s
-GAMEDATAFILES += $(BUILD_DIR)/specialObjectAnimationData.s
-GAMEDATAFILES += $(BUILD_DIR)/specialObjectAnimationPointers.s
+GEN_DST_FILES  = $(BUILD_DIR)/paletteData.s
+GEN_DST_FILES += $(BUILD_DIR)/paletteHeaders.s
+GEN_DST_FILES += $(BUILD_DIR)/objectCollisionTable.s
+GEN_DST_FILES += $(BUILD_DIR)/enemyCollisionModes.s
+GEN_DST_FILES += $(BUILD_DIR)/animationData.s
+GEN_DST_FILES += $(BUILD_DIR)/animationGroups.s
+GEN_DST_FILES += $(BUILD_DIR)/partData.s
+GEN_DST_FILES += $(BUILD_DIR)/partOamData.s
+GEN_DST_FILES += $(BUILD_DIR)/partAnimations.s
+GEN_DST_FILES += $(BUILD_DIR)/enemyData.s
+GEN_DST_FILES += $(BUILD_DIR)/enemyOamData_ages.s
+GEN_DST_FILES += $(BUILD_DIR)/enemyOamData_seasons.s
+GEN_DST_FILES += $(BUILD_DIR)/enemyAnimations.s
+GEN_DST_FILES += $(BUILD_DIR)/interactionData.s
+GEN_DST_FILES += $(BUILD_DIR)/interactionOamData_ages.s
+GEN_DST_FILES += $(BUILD_DIR)/interactionOamData_seasons.s
+GEN_DST_FILES += $(BUILD_DIR)/interactionAnimations.s
+GEN_DST_FILES += $(BUILD_DIR)/specialObjectOamData.s
+GEN_DST_FILES += $(BUILD_DIR)/specialObjectAnimationData.s
+GEN_DST_FILES += $(BUILD_DIR)/specialObjectAnimationPointers.s
+
+GAMEDATAFILES += $(GEN_DST_FILES)
 
 MAIN_ASM_FILES = $(shell find code/ object_code/ objects/ scripts/ -name '*.s')
 AUDIO_FILES     = $(shell find audio/ -name '*.s')
@@ -194,7 +196,7 @@ $(BUILD_DIR)/gfxdata.o: $(GFX_DATA_FILES)
 $(BUILD_DIR)/gfxdata.o: $(HASHFILES)
 $(BUILD_DIR)/*.o: $(COMMON_INCLUDE_FILES) $(COMMON_REBUILD_TRIGGERS)
 
-$(BUILD_DIR)/audio.o: $(AUDIO_FILES)
+$(BUILD_DIR)/audio.o: $(AUDIO_FILES) $(BUILD_DIR)/enemyCollisionModes.s
 
 $(BUILD_DIR)/gfxdata.o: tileset_layouts_expanded/ages/*.bin
 $(BUILD_DIR)/gfxdata.o: tileset_layouts_expanded/seasons/*.bin
@@ -211,14 +213,14 @@ $(BUILD_DIR)/textAndRoomData.o: textAndRoomData.s | $(BUILD_DIR)
 $(BUILD_DIR)/%.o: code/%.s | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
 
-GEN_FILES := data/ages/objectCollisionTable.s  data/seasons/objectCollisionTable.s
-GEN_FILES += data/ages/enemyData.s             data/seasons/enemyData.s
-GEN_FILES += data/ages/partData.s              data/seasons/partData.s
-GEN_FILES += constants/common/enemyCollisionModes.s
+GEN_SRC_FILES := data/ages/objectCollisionTable.s  data/seasons/objectCollisionTable.s
+GEN_SRC_FILES += data/ages/enemyData.s             data/seasons/enemyData.s
+GEN_SRC_FILES += data/ages/partData.s              data/seasons/partData.s
+GEN_SRC_FILES += constants/common/enemyCollisionModes.s
 
-$(BUILD_DIR)/objectCollisionTable.s:   $(GEN_FILES) | $(BUILD_DIR)
-$(BUILD_DIR)/partData.s:               $(GEN_FILES) $(BUILD_DIR)/objectCollisionTable.s | $(BUILD_DIR)
-$(BUILD_DIR)/enemyData.s:              $(GEN_FILES) $(BUILD_DIR)/partData.s | $(BUILD_DIR)
+$(BUILD_DIR)/objectCollisionTable.s:   $(GEN_SRC_FILES) | $(BUILD_DIR)
+$(BUILD_DIR)/partData.s:               $(GEN_SRC_FILES) $(BUILD_DIR)/objectCollisionTable.s | $(BUILD_DIR)
+$(BUILD_DIR)/enemyData.s:              $(GEN_SRC_FILES) $(BUILD_DIR)/partData.s | $(BUILD_DIR)
 $(BUILD_DIR)/enemyCollisionModes.s: $(BUILD_DIR)/enemyData.s $(BUILD_DIR)/partData.s $(BUILD_DIR)/objectCollisionTable.s | $(BUILD_DIR)
 	@echo "Combining enemy, part, and collision data..."
 	@$(PYTHON) tools/build/makeComboCollisionModesAndEnemyPartData.py $(BUILD_DIR) data/ages data/seasons

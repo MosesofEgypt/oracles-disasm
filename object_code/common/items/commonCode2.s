@@ -248,14 +248,13 @@ tryBreakTileWithSword:
 ; Calculates the value for Item.damage, accounting for ring modifiers.
 ;
 itemCalculateSwordDamage:
+.ifdef ENABLE_RING_REDUX
+	ld a,(wSwordDamageCached)
+	or a
+	ret nz
+
 	ld e,Item.var3a
 	ld a,(de)
-.ifdef ENABLE_RING_REDUX
-	push hl
-	ld hl,wSwordBaseDamageCached
-	cp (hl)
-	ldi (hl),a
-	jr z,@done
 
 	ld e,a
 	; calculate the multipliers(divisor is 8, so 1.5x will be $0c)
@@ -332,13 +331,14 @@ itemCalculateSwordDamage:
 	+
 .endif
 	ld e,Item.damage
-	ld (hl),a
-@done
-	pop hl
 	ld (de),a
+	ld a,$01
+	ld (wSwordDamageCached),a
 	ret
 
 .else
+	ld e,Item.var3a
+	ld a,(de)
 	ld b,a
 	ld a,(w1ParentItem2.var3a)
 	or a

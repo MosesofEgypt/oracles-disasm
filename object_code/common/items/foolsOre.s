@@ -13,9 +13,7 @@ itemCode1e:
 .ifdef ENABLE_RING_REDUX
 	; reset this
 	xor a
-	ld hl,wSwordBaseDamageCached
-	ldi (hl),a
-	ld (hl),a
+	ld (wSwordDamageCached),a
 .endif
 .if defined(ROM_COMBO)
 	ld a,UNCMP_GFXH_SEASONS_1f

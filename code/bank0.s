@@ -43,8 +43,6 @@
 .ORGA $0040
 ; VBlank interrupt
 	push af
-	push bc
-	push de
 	push hl
 	jp vblankInterrupt
 
@@ -279,7 +277,6 @@ resetGame:
 ; @param e Bank of the function to call
 ; @param hl Address of the function to call
 interBankCallReturnAf:
-	push hl
 	ld a,(hRomBank)
 	push af
 	ld a,e
@@ -292,7 +289,6 @@ interBankCallReturnAf:
 	ld (hRomBank),a
 	ld ($2222),a
 	pop af
-	pop hl
 	ret
 
 ;;
@@ -2211,7 +2207,8 @@ vblankInterrupt:
 	jr nz,++
 
 ; The following code will only run when the main loop is explicitly waiting for vblank.
-
+	push bc
+	push de
 	ld de,wGfxRegs2
 	ld l,<wGfxRegs3
 	ld a,(de)
@@ -2256,6 +2253,8 @@ vblankInterrupt:
 	ldh (R_SVBK),a
 	ld a,b
 	ldh (R_VBK),a
+	pop de
+	pop bc
 
 	ld hl,wGfxRegs6.LCDC
 	ldi a,(hl)
@@ -2274,8 +2273,6 @@ vblankInterrupt:
 +
 	ld ($2222),a
 	pop hl
-	pop de
-	pop bc
 	pop af
 	reti
 
@@ -3502,6 +3499,7 @@ _getObjectPositionOnScreen:
 	rlca
 	ret nc
 
+.ifdef ENABLE_TERRAIN_EFFECT_OPTIMIZATIONS
 	; don't draw terrain effects if the object is on
 	; the ground and the room doesn't contain any
 	bit 7,e
@@ -3513,6 +3511,7 @@ _getObjectPositionOnScreen:
 			ld a,(hl)
 			rlca
 	++
+.endif
 
 	; Draw shadows and stuff if bit 6 is set
 	rlca
@@ -3679,6 +3678,7 @@ _getObjectPositionOnScreen_duringScreenTransition:
 	rlca
 	ret nc
 
+.ifdef ENABLE_TERRAIN_EFFECT_OPTIMIZATIONS
 	; don't draw terrain effects if the object is on
 	; the ground and the room doesn't contain any
 	bit 7,e
@@ -3690,6 +3690,7 @@ _getObjectPositionOnScreen_duringScreenTransition:
 			ld a,(hl)
 			rlca
 	++
+.endif
 
 	; Draw shadows and stuff if bit 6 is set
 	rlca
@@ -4421,6 +4422,18 @@ setTileWithoutGfxReload:
 ; @param	b	New index for tile
 ; @param	c	Position to change
 setTileInRoomLayoutBuffer:
+.ifdef ENABLE_TERRAIN_EFFECT_OPTIMIZATIONS
+	push hl
+	push de
+	callabaf terrainEffects.getIsTerrainEffectTile
+	jr z,+
+		ld a,(wOptimizationFlags)
+		set 3,a
+		ld (wOptimizationFlags),a
+	+
+	pop de
+	pop hl
+.endif
 	ldh a,(R_SVBK)
 	push af
 	ld a,:w3RoomLayoutBuffer
@@ -8623,12 +8636,14 @@ markEquippedRingFlagsDirty:
 	pop hl
 	ret
 
+.ifdef ENABLE_TERRAIN_EFFECT_OPTIMIZATIONS
 markTerrainEffectFlagsDirty:
 	push hl
 	ld hl,wOptimizationFlags
 	res 2,(hl)
 	pop hl
 	ret
+.endif
 .endif
 
 ;;
@@ -13880,7 +13895,9 @@ loadRoomLayout:
 	ld hl,wRoomLayout
 	ld b,(LARGE_ROOM_HEIGHT+1)*16
 	call clearMemory
+.ifdef ENABLE_TERRAIN_EFFECT_OPTIMIZATIONS
 	call markTerrainEffectFlagsDirty
+.endif
 .if defined(ROM_COMBO)
 	ld a,:roomLayouts.roomLayoutGroupTable_seasons
 	ld hl,roomLayouts.roomLayoutGroupTable_seasons
