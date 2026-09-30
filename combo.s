@@ -1266,8 +1266,8 @@ m_section_superfree Object_Pointers_seasons namespace objectData_seasons
 	.include "objects/seasons/pointers.s"
 .ends
 
-m_section_superfree Data_4556
-	.include {"{GAME_DATA_DIR}/data_4556.s"}
+m_section_superfree Credits_Text_Oam_Data
+	.include {"{GAME_DATA_DIR}/creditsTextOamData.s"}
 .ends
 
 m_section_superfree Item_Parents NAMESPACE itemParents

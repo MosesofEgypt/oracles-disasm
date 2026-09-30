@@ -260,14 +260,19 @@ ROOMLAYOUTFILES := $(foreach file, $(ROOMLAYOUTFILES), \
                     $(BUILD_DIR)/rooms/$(notdir $(file)))
 
 # Common data files (for both games)
-COMMONDATAFILES = $(shell find data/ -name '*.s' | grep -v '/ages/\|/seasons/')
+COMMONDATAFILES = $(shell find data/ -name '*.s' | grep -v '/ages/\|/seasons/\|/combo/')
 
 # Game-specific data files
-GAMEDATAFILES = $(shell find data/$(GAME)/ -name '*.s')
+GAMEDATAFILES   = $(shell find data/$(GAME)/ -name '*.s')
 
-MAIN_ASM_FILES = $(shell find code/ object_code/ objects/ scripts/ -name '*.s' | grep -v '/$(OTHERGAME)/')
-AUDIO_FILES = $(shell find audio/ -name '*.s' -o -name '*.bin' | grep -v '/$(OTHERGAME)/')
+MAIN_ASM_FILES  = $(shell find code/ object_code/ objects/ scripts/ -name '*.s' | grep -v '/$(OTHERGAME)/')
+AUDIO_FILES     = $(shell find audio/ -name '*.s' | grep -v '/$(OTHERGAME)/')
+AUDIO_BIN_FILES = $(shell find audio/*/ -name '*.bin' | grep -v '/$(OTHERGAME)/')
+GFX_DATA_FILES  = $(shell find data/ -name 'expandedTilesets.s' \
+                                 -or -name "gfxDataMain.s" \
+                                 -or -name "expandedTilesetsGfxData.s")
 COMMON_INCLUDE_FILES = $(shell find constants/ include/ -name '*.s' | grep -v '/$(OTHERGAME)/')
+COMMON_REBUILD_TRIGGERS = $(REDUX_CFG_FILES) Makefile
 
 
 ifneq ($(BUILD_VANILLA),true)
@@ -287,31 +292,37 @@ endif
 $(BUILD_DIR)/linkfile: linkfile_$(GAME)
 	sed 's/BUILD_DIR/${BUILD_DIR}/' $< > $@
 
-$(BUILD_DIR)/$(GAME).o: $(MAIN_ASM_FILES) $(COMMONDATAFILES) $(GAMEDATAFILES)
-$(BUILD_DIR)/textAndRoomData.o: $(ROOMLAYOUTFILES)
+$(BUILD_DIR)/$(GAME).o: $(MAIN_ASM_FILES) $(COMMONDATAFILES) $(GAMEDATAFILES) $(AUDIO_BIN_FILES)
+$(BUILD_DIR)/$(GAME).o: $(BUILD_DIR)/audio.o $(BUILD_DIR)/gfxdata.o $(BUILD_DIR)/textAndRoomData.o
+$(BUILD_DIR)/$(GAME).o: $(BUILD_DIR)/textDefines.s
+$(BUILD_DIR)/textAndRoomData.o: $(BUILD_DIR)/textData.s $(ROOMLAYOUTFILES)
 $(BUILD_DIR)/textAndRoomData.o: rooms/$(GAME)/*.bin
 $(BUILD_DIR)/gfxdata.o: $(GFXFILES)
 $(BUILD_DIR)/gfxdata.o: $(HASHFILES)
+$(BUILD_DIR)/gfxdata.o: $(GFX_DATA_FILES)
+$(BUILD_DIR)/*.o: $(COMMON_INCLUDE_FILES) $(COMMON_REBUILD_TRIGGERS)
 
 $(BUILD_DIR)/audio.o: $(AUDIO_FILES)
-$(BUILD_DIR)/*.o: $(COMMON_INCLUDE_FILES) Makefile
 
 # HACK-BASE: $(GAME).o depends on new expanded tileset layout files.
 $(BUILD_DIR)/$(GAME).o: tileset_layouts_expanded/$(GAME)/*.bin
 
-$(BUILD_DIR)/$(GAME).o: $(GAME).s $(HASHFILES) $(BUILD_DIR)/textDefines.s $(REDUX_CFG_FILES) Makefile | $(BUILD_DIR)
+$(BUILD_DIR)/$(GAME).o: $(GAME).s $(HASHFILES) | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
 
-$(BUILD_DIR)/gfxdata.o: gfxdata.s $(REDUX_CFG_FILES) | $(BUILD_DIR)
+$(BUILD_DIR)/gfxdata.o: gfxdata.s | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
 
-$(BUILD_DIR)/textAndRoomData.o: textAndRoomData.s $(BUILD_DIR)/textData.s $(REDUX_CFG_FILES) | $(BUILD_DIR)
+$(BUILD_DIR)/textAndRoomData.o: textAndRoomData.s | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
 
-$(BUILD_DIR)/%.o: code/%.s $(REDUX_CFG_FILES) | $(BUILD_DIR)
+$(BUILD_DIR)/audio.o: code/audio.s | $(BUILD_DIR)
 	$(CC) -o $@ $(CFLAGS) $<
 
-$(BUILD_DIR)/rooms/%.cmp: rooms/$(GAME)/small/%.bin $(REDUX_CFG_FILES) | $(BUILD_DIR)/rooms
+$(BUILD_DIR)/%.o: code/%.s | $(BUILD_DIR)
+	$(CC) -o $@ $(CFLAGS) $<
+
+$(BUILD_DIR)/rooms/%.cmp: rooms/$(GAME)/small/%.bin | $(BUILD_DIR)/rooms
 	@echo "Compressing $< to $@..."
 	@$(PYTHON) tools/build/compressRoomLayout.py $< $@ $(OPTIMIZE)
 

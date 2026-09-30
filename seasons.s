@@ -768,7 +768,7 @@ m_section_superfree Terrain_Effects NAMESPACE terrainEffects
 .BANK $14 SLOT 1
 .ORG 0
 
-	.include {"{GAME_DATA_DIR}/data_4556.s"}
+	.include {"{GAME_DATA_DIR}/creditsTextOamData.s"}
 
 	.include {"{GAME_DATA_DIR}/interactionAnimations.s"}
 

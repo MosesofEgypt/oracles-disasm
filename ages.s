@@ -825,7 +825,7 @@ m_section_superfree Terrain_Effects NAMESPACE terrainEffects
 	.ends
 
 	 m_section_free Bank16 NAMESPACE bank16
-		.include {"{GAME_DATA_DIR}/data_4556.s"}
+		.include {"{GAME_DATA_DIR}/creditsTextOamData.s"}
 		.include {"{GAME_DATA_DIR}/endgameCutsceneOamData.s"}
 	.ends
 

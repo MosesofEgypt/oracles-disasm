@@ -14881,27 +14881,27 @@ interactionFunc_3e6d:
 	push af
 .if defined(ROM_COMBO)
 	call wIsSeasons
-	ld a,:data_4556_seasons
-	ld hl,data_4556_seasons
+	ld a,:creditsTextOamData_seasons
+	ld hl,creditsTextOamData_seasons
 	jr c,+
-		ld hl,data_4556_ages
+		ld hl,creditsTextOamData_ages
 	+
 	rst_setrombank
 	ld a,e
 .else
 
 .if defined(ROM_AGES)
-	ld a,:bank16.data_4556
+	ld a,:bank16.creditsTextOamData
 .else
-	ld a,:data_4556
+	ld a,:creditsTextOamData
 .endif
 	rst_setrombank
 
 	ld a,e
 .if defined(ROM_AGES)
-	ld hl,bank16.data_4556
+	ld hl,bank16.creditsTextOamData
 .else
-	ld hl,data_4556
+	ld hl,creditsTextOamData
 .endif
 .endif
 	rst_addDoubleIndex
