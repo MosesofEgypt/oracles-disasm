@@ -402,11 +402,16 @@ wRumbleSettings: ; $c4bc
 
 .RAMSECTION Wram0_c4c0
 
+.union
 wTerrainEffectsBuffer: ; $c4c0
 ; This might only be used for drawing objects' shadows, though in theory it could also be
 ; used to draw puddles and grass as objects walk over them.  Each entry is 4 bytes: Y, X,
 ; and an address in the "Special_Animations" section (bank $14).
 	dsb $40
+.nextu
+wItemBoundingBoxes:
+	dsb $40
+.endu
 
 wObjectsToDraw: ; $c500
 ; A buffer keeping track of which objects to draw, in what order (first = highest
@@ -2323,15 +2328,8 @@ wUsingShield: ; $cc6f/$cc89
 
 
 ; Offset from link's position, used for collision calculations
-wShieldY: ; $cc70/$cc8a
-	db
-wShieldX: ; $cc71
-	db
-
-wShieldHeight: ; $cc72
-	db
-wShieldWidth: ; $cc73
-	db
+wShieldBoundingBox: ; $cc70/$cc8a
+	instanceof BoundingBoxStruct
 
 .if !defined(ROM_COMBO)
 wGrabbableObjectBuffer: ; $cc74

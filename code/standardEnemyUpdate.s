@@ -22,7 +22,7 @@ enemyStandardUpdate:
 
 	ld l,Enemy.var2a
 	bit 7,(hl)
-	jr nz,@ret04
+	jr nz,@retJustHitStatus
 
 	ld e,Enemy.knockbackCounter
 	ld a,(de)
@@ -41,8 +41,8 @@ enemyStandardUpdate:
 	or a
 	jr nz,@stunned
 
-@ret00:
-	ld c,$00
+@retNormalStatus:
+	ld c,ENEMYSTATUS_NORMAL
 	ret
 
 @uninitialized:
@@ -57,23 +57,23 @@ enemyStandardUpdate:
 	inc e
 	ld a,$01
 	ld (de),a
-	jr @ret00
+	jr @retNormalStatus
 
-@ret04:
-	ld c,$04
+@retJustHitStatus:
+	ld c,ENEMYSTATUS_JUST_HIT
 	ret
 
 @knockback:
 	ld l,e
 	dec (hl)
-	ld c,$05
+	ld c,ENEMYSTATUS_KNOCKBACK
 	ret
 
 @healthZero:
 	ld l,Enemy.var3f
 	bit 1,(hl)
-	jr nz,@ret00
-	ld c,$03
+	jr nz,@retNormalStatus
+	ld c,ENEMYSTATUS_NO_HEALTH
 	ret
 
 @stunned:
@@ -103,7 +103,7 @@ enemyStandardUpdate:
 	ld a,(hl)
 .ifdef ENABLE_RING_REDUX
 	cp $02
-	jr z,@ret02
+	jr z,@retStunnedStatus
 .endif
 	cp $08
 	jr c,@reachedGround
@@ -116,7 +116,7 @@ enemyStandardUpdate:
 
 	ld c,$20
 	call objectUpdateSpeedZAndBounce
-	jr nc,@ret02
+	jr nc,@retStunnedStatus
 
 	ld h,d
 
@@ -126,6 +126,6 @@ enemyStandardUpdate:
 	ldi (hl),a
 	ld (hl),a
 
-@ret02:
-	ld c,$02
+@retStunnedStatus:
+	ld c,ENEMYSTATUS_STUNNED
 	ret

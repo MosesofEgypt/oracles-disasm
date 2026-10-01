@@ -156,6 +156,7 @@ New rings:
 
     Hiker's Ring:
         Movement unaffected by ice/quicksand.
+        Prevents breaking cracked floors while standing on them.
         No speed penalty while moving on stairs/grass/vines.
 
     Mystic Ring:

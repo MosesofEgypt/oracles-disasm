@@ -314,7 +314,11 @@ linkApplyTileTypes:
 	ret
 
 @tileType_crackedFloor:
+.ifdef ENABLE_RING_REDUX
+	ld a,HIKERS_RING
+.else
 	ld a,ROCS_RING
+.endif
 	call cpActiveRing
 	jr z,@tileType_normal
 

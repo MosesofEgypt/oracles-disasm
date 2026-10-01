@@ -467,7 +467,7 @@ parentItemCode_bracelet:
 		ret z
 
 		call judoMasterComboActive
-		jr nz,+++
+		jr z,+++
 			ld h,d
 			ld l,Item.state
 			ld (hl),$06

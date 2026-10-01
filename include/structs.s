@@ -25,6 +25,13 @@
 .ENDST
 .define DeathRespawnStruct.size $0c
 
+.STRUCT BoundingBoxStruct
+	xMin	db
+	xMax	db
+	yMin	db
+	yMax	db
+.ENDST
+
 .STRUCT FileDisplayStruct
 	fileLoadResult		db ; Bit 7 set if the file is blank
 	fileLoadResult2		db ; copy of previous value

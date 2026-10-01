@@ -139,8 +139,12 @@
 
 	hTempVal0					db ; $ffc7/$ffc5
 
+	; instances of BoundingBoxStruct
+	hLinkBoundingBox			dsb $04 ; $ffc8/$ffc6
+	hEnemyBoundingBox			dsb $04 ; $ffcc/$ffca
+
 	; Marker for end of "normal" hram (memory gets cleared up to here upon game initialization)
-	hramEnd			 	.db	; $ffc8/$ffc6
+	hramEnd			 	.db	; $ffd0/$ffce
 .ende
 
 .enum $ffda export

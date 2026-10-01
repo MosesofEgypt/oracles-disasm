@@ -1,6 +1,33 @@
 ;;
 ; For each Enemy and each Part, check for collisions with Link and Items.
 checkEnemyAndPartCollisions:
+	push bc
+
+	; calculate bounding box for link
+	ld hl,w1Link.collisionRadiusX
+	ld bc,hLinkBoundingBox
+	call initializeItemBoundingBoxVars
+
+	; calculate bounding box for each item
+	ld hl,FIRST_ITEM_INDEX<<8
+	ld bc,wItemBoundingBoxes
+	-
+		ld l,Item.collisionRadiusY
+		ldi a,(hl)
+		or (hl)
+		jr nz,+
+			inc bc
+			inc bc
+			inc bc
+		+
+		call nz,initializeItemBoundingBoxVars
+		inc bc
+
+		inc h
+		ld a,h
+		cp LAST_STANDARD_ITEM_INDEX+$01
+		jr c,-
+
 	; Calculate shield position
 	ld hl,@shieldCollisionData
 .if defined(ENABLE_PASSIVE_SHIELD) || defined(ENABLE_NEW_GAME_PLUS)
@@ -24,29 +51,42 @@ checkEnemyAndPartCollisions:
 	add a
 	add a
 	addAToHl
-	ld de,wShieldY
-	ld a,(w1Link.yh)
-	add (hl)
-	ld (de),a
-	inc hl
-	inc e
-	ld a,(w1Link.xh)
-	add (hl)
-	ld (de),a
 
-	inc hl
-	inc e
+	; calculate bounding box for shield
+	; get the pos-y(e) and pos-x(d)
 	ldi a,(hl)
-	ld (de),a
-	inc e
+	ld e,a
 	ldi a,(hl)
-	ld (de),a
+	ld d,a
+
+	; get the height(c) and width(b)
+	ldi a,(hl)
+	ld c,a
+	ld b,(hl)
+
+	ld hl,wShieldBoundingBox
+	ld a,(w1Link.xh)
+	add d
+	sub b
+	ldi (hl),a
+	add b
+	add b
+	ldi (hl),a
+
+	ld a,(w1Link.yh)
+	add e
+	sub c
+	ldi (hl),a
+	add c
+	add c
+	ld (hl),a
 
 	; Check collisions for all Enemies
 	ld a,Enemy.start
 	ldh (<hActiveObjectType),a
 	ld d,FIRST_ENEMY_INDEX
 	ld a,d
+	pop bc
 @nextEnemy:
 	ldh (<hActiveObject),a
 	ld h,d
@@ -212,9 +252,37 @@ enemyCheckCollisions:
 	ld a,(hl)
 	ldh (<hFF91),a
 
-	; Check invincibility
 	ld a,l
-	add Object.invincibilityCounter-Object.zh
+	add Object.collisionRadiusX-Object.zh
+	ld l,a
+	ld bc,hEnemyBoundingBox
+	call initializeItemBoundingBoxVars
+
+	; NOTE; we reverse these since we check opposite edges
+	ld e,h
+	ld b,l
+	ld hl,hEnemyBoundingBox
+	; swap left/right sides
+	ldi a,(hl)
+	ld c,a
+	ldd a,(hl)
+	ldi (hl),a
+	ld a,c
+	ldi (hl),a
+
+	; swap top/bottom sides
+	ldi a,(hl)
+	ld c,a
+	ldd a,(hl)
+	ldi (hl),a
+	ld a,c
+	ldi (hl),a
+
+	; Check invincibility
+	ld h,e
+	ld d,h
+	ld a,b
+	add Object.invincibilityCounter-Object.yh
 	ld l,a
 	ld a,(hl)
 	or a
@@ -267,15 +335,20 @@ enemyCheckCollisions:
 	cp b
 	jr nc,@nextItem
 
-	ld l,Item.yh
-	ld b,(hl)
-	ld l,Item.xh
-	ld c,(hl)
-	ld l,Item.collisionRadiusY
 	ldh a,(<hActiveObjectType)
-	add Object.collisionRadiusY
+	add Object.collisionRadiusX
 	ld e,a
-	call checkObjectsCollidedFromVariables
+
+	push hl
+	ld a,h
+	sub FIRST_ITEM_INDEX
+	add a
+	add a
+	ld hl,wItemBoundingBoxes
+	ld bc,hEnemyBoundingBox
+	addAToHl
+	call checkObjectsCollidedOptimized
+	pop hl
 	jp c,@handleCollision
 
 @nextItem:
@@ -329,15 +402,12 @@ enemyCheckCollisions:
 	jr z,@checkHitLink
 
 	; Check if current object is within the shield's hitbox
-	ld hl,wShieldY
-	ldi a,(hl)
-	ld b,a
-	ldi a,(hl)
-	ld c,a
 	ldh a,(<hActiveObjectType)
-	add <Object.collisionRadiusY
+	add <Object.collisionRadiusX
 	ld e,a
-	call checkObjectsCollidedFromVariables
+	ld bc,hEnemyBoundingBox
+    ld hl,wShieldBoundingBox
+	call checkObjectsCollidedOptimized
 	ld hl,w1Link
 
 .ifdef ENABLE_RING_REDUX
@@ -347,20 +417,17 @@ enemyCheckCollisions:
 	ld a,(wShieldParryTimers)
 	and $e0
 	jr z,+
-		ld a,(wUsingShield)
-		bit 7,a
-		jr nz,+
-			; successful parry. stun enemy
-			ld a,ITEMCOLLISION_PEGASUS_SEED|$80
-			ldh (<hFF90),a
-			ld a,(w1Link.damage)	; backup
-			push af
-			xor a
-			ld (w1Link.damage),a
-			call @handleCollision
-			pop af
-			ld (w1Link.damage),a	; restore
-			ret
+		; successful parry. stun enemy
+		ld a,ITEMCOLLISION_PEGASUS_SEED|$80
+		ldh (<hFF90),a
+		ld a,(w1Link.damage)	; backup
+		push af
+		xor a
+		ld (w1Link.damage),a
+		call @handleCollision
+		pop af
+		ld (w1Link.damage),a	; restore
+		ret
 	+
 
 	; Don't interact with if invincible
@@ -448,17 +515,15 @@ enemyCheckCollisions:
 	ret z
 
 	; If link and the current object collide, damage link
-
-	ld h,e
-	ld l,<w1Link.yh
-	ld b,(hl)
-	ld l,<w1Link.xh
-	ld c,(hl)
-	ld l,<w1Link.collisionRadiusY
 	ldh a,(<hActiveObjectType)
-	add Object.collisionRadiusY
+	add Object.collisionRadiusX
 	ld e,a
-	call checkObjectsCollidedFromVariables
+	ld bc,hEnemyBoundingBox
+    ld hl,hLinkBoundingBox
+	call checkObjectsCollidedOptimized
+	ld a,(wLinkObjectIndex)
+	ld h,a
+	ld l,$00
 	jp c,@handleCollision
 	ret
 
@@ -486,15 +551,18 @@ enemyCheckCollisions:
 	ret
 
 ;;
-; @param de Object 1 (Enemy/Part?)
-; @param hl Object 2 (Link/Item?)
-; @param hFF8D Y-position?
-; @param hFF8E X-position?
+; @param hl Object 1 (Link/Item)
+; @param de Object 2 (Enemy/Part)
 ; @param hFF90 Collision type
 @handleCollision:
-	ld a,l
-	and $c0
-	ld l,a
+	ld l,Item.yh
+	ldi a,(hl)
+	ldh (<hFF8D),a
+	inc l
+	ldi a,(hl)
+	ldh (<hFF8C),a
+
+	ld l,$00
 	push hl
 	ld a,WEAPON_ITEM_INDEX
 	cp h
@@ -1741,6 +1809,70 @@ applyDamageToLink:
 	LINKDMG_34	dsb 4
 	LINKDMG_38	dsb 4
 .ENDE
+
+;;
+; @param	hl	Address of the item's collisionRadiusX variable
+; @param	bc	Address of the destination bounding box struct
+initializeItemBoundingBoxVars:
+	ldd a,(hl)
+	ld d,a
+	ld e,(hl)
+
+	ld a,l
+	add Object.xh - Object.collisionRadiusY
+	ld l,a
+	ldd a,(hl)
+	sub d
+	ld (bc),a
+	inc bc
+	add d
+	add d
+	ld (bc),a
+	inc bc
+
+	dec l
+	ld a,(hl)
+	sub e
+	ld (bc),a
+	inc bc
+	add e
+	add e
+	ld (bc),a
+	ret
+
+;;
+; Check if an object has collided with another object.
+; Optimized to work with object 1 supplying a bounding box.
+;
+; @param	hl	Address of object 1's bounding box
+; @param	bc	Address of object 2's bounding box (L/R and T/B sides must be swapped)
+; @param[out]	cflag	Set if collision, unset if no collision
+checkObjectsCollidedOptimized:
+	ld a,(bc)
+	cp (hl) ; no collision if 2's right-edge coordinate less than 1's left-edge
+	ccf
+	ret nc
+
+	inc l
+	inc c
+	ld a,(bc)
+	dec a   ; offset by 1 to capture (hl) == a
+	cp (hl) ; no collision if 2's left-edge coordinate greater than 1's right-edge
+	ret nc
+
+	inc l
+	inc c
+	ld a,(bc)
+	cp (hl) ; no collision if 2's bottom-edge coordinate less than 1's top-edge
+	ccf
+	ret nc
+
+	inc l
+	inc c
+	ld a,(bc)
+	dec a   ; offset by 1 to capture (hl) == a
+	cp (hl) ; no collision if 2's top-edge coordinate greater than 1's bottom-edge
+	ret
 
 
 .ifdef ENABLE_RING_REDUX

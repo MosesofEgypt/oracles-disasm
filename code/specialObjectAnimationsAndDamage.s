@@ -681,11 +681,9 @@ getTransformedLinkID:
 .ifdef UNRESTRICTED_TRANSFORMS
 remapTransformedSpecialObjectGfx:
 .ifdef ENABLE_RING_REDUX
-	push hl
 	call transformRingActive
-	pop hl
 	ld a,e
-	ret nz
+	ret z
 .endif
 
 	; figure out which ring is equipped

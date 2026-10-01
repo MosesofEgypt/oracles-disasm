@@ -6316,8 +6316,8 @@ objectHCheckContainsPoint:
 ; Check if 2 objects have collided.
 ;
 ; @param	bc	YX position of object 1
-; @param	de	Address of object 1's collisionRadiusY variable
-; @param	hl	Address of object 2's collisionRadiusY variable
+; @param	hl	Address of object 1's collisionRadiusY variable
+; @param	de	Address of object 2's collisionRadiusY variable
 ; @param	ff8e	X position object 2
 ; @param	ff8f	Y position object 2
 ; @param[out]	cflag	Set if collision, unset if no collision
@@ -8616,8 +8616,9 @@ cpActiveRing:
 
 .ifdef ENABLE_MULTI_RING
 clearRingEquipStatuses:
-	ld a,$ff
+	xor a
 	ld (wRingComboCacheFlags),a
+	dec a
 	ld hl,wEquippedRingFlags
 	ldi (hl),a
 	ldi (hl),a
@@ -9139,16 +9140,6 @@ remoteBombComboActive:
 	ldbc PEACE_RING,BOMBERS_RING
 	jr bothRingsActive
 
-judoMasterComboActive:
-	push hl
-	push af
-	ld a,$01
-	call getRingComboFlag
-	pop hl
-	ld a,h
-	pop hl
-	ret
-
 victoryRingIncLevel:
 	push de
 	ld d,a
@@ -9237,20 +9228,24 @@ calculatePowerRingModifier:
 setRingComboFlag:
 	push hl
 	ld hl,wRingComboCacheFlags
-	call unsetFlag
+	call setFlag
 	pop hl
 	ret
 
 miningBombComboActive:
-	xor a
-	jr getRingComboFlag
+	ld a,(wRingComboCacheFlags)
+	and $01
+	ret
+
+judoMasterComboActive:
+	ld a,(wRingComboCacheFlags)
+	and $02
+	ret
 
 transformRingActive:
-	ld a,$02
-
-getRingComboFlag:
-	ld hl,wRingComboCacheFlags
-	jp checkFlag
+	ld a,(wRingComboCacheFlags)
+	and $04
+	ret
 .endif
 
 

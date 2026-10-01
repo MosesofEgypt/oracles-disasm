@@ -547,7 +547,7 @@ explosionTryToBreakNextTile:
 
 	call miningBombComboActive
 
-	ret nz
+	ret z
 	ld a,BREAKABLETILESOURCE_SHOVEL
 	push hl
 	call tryToBreakTile
