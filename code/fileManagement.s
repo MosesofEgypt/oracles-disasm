@@ -9,6 +9,10 @@
 	COMBO_FLAG_BIT_6				db
 	COMBO_FLAG_BIT_PREVIOUS_GAME	db ; set for seasons, unset for ages
 .ende
+
+.enum 0
+	COMBO_GLOBALFLAG_BIT_LAST_INTRO_SEEN	db
+.ende
 .endif
 
 ; Parameters:
@@ -1381,6 +1385,35 @@ getComboCompleted:
 	push hl
 	call _comboFlagHelper
 	bit COMBO_FLAG_BIT_LINKED_BEATEN,(hl)
+	jr _comboFlagReturn
+
+setComboLastIntroSeen:
+	push hl
+	call _comboGlobalFlagHelper
+	set COMBO_GLOBALFLAG_BIT_LAST_INTRO_SEEN,(hl)
+	jr _comboFlagReturn
+
+unsetComboLastIntroSeen:
+	push hl
+	call _comboGlobalFlagHelper
+	res COMBO_GLOBALFLAG_BIT_LAST_INTRO_SEEN,(hl)
+	jr _comboFlagReturn
+
+toggleComboLastIntroSeen:
+	push hl
+	call _comboGlobalFlagHelper
+	bit COMBO_GLOBALFLAG_BIT_LAST_INTRO_SEEN,(hl)
+	set COMBO_GLOBALFLAG_BIT_LAST_INTRO_SEEN,(hl)
+	scf
+	jr z,_comboFlagReturn
+	res COMBO_GLOBALFLAG_BIT_LAST_INTRO_SEEN,(hl)
+	ccf
+	jr _comboFlagReturn
+
+getComboLastIntroSeen:
+	push hl
+	call _comboGlobalFlagHelper
+	bit COMBO_GLOBALFLAG_BIT_LAST_INTRO_SEEN,(hl)
 
 _comboFlagReturn:
 	; disable SRAM chip
@@ -1393,7 +1426,19 @@ _comboFlagHelper:
 	; enable SRAM chip
 	ld a,$0a
 	ld ($1111),a
-	call getComboSaveFileFlags
+	jr getComboSaveFileFlags
+
+_comboGlobalFlagHelper:
+	; enable SRAM chip
+	ld a,$0a
+	ld ($1111),a
+	jr getComboGlobalFlags
+
+;;
+; @param[out] hl Address of the flags for this savefile combo
+getComboGlobalFlags:
+	; using the last byte in the block
+	ld hl,$bfff
 	ret
 
 ;;

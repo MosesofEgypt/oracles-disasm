@@ -8,46 +8,37 @@
 
 .RAMSECTION Wram0_c000
 
-.if !defined(I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND)
+; ####################################################
+; NOTE: Due to how fragile the audio engine is, i've
+;       opted to not move most of these variables, so
+;       instead we've got a kinda messy padding setup
+; ####################################################
+
+; Function copied to RAM to read a byte from another bank.
+; NOTE: THIS CODE SHOULD ONLY EVER BE CALLED BY
+;       CODE IN THE AUDIO BANK, OR CODE IN BANK 0
+.if defined(I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND)
+	; NOTE: these function allocations are EXACT size, so
+	;       don't mess with them without updating audio.s
 	wMusicReadFunction: ; $c000
-	; Function copied to RAM to read a byte from another bank.
-	; NOTE: THIS CODE SHOULD ONLY EVER BE CALLED BY
-	;       CODE IN THE AUDIO BANK, OR CODE IN BANK 0
-		dsb $11
+		dsb $16
+.else
+	wMusicReadFunction: ; $c000
+		dsb $0c
 
-	.if defined(ROM_COMBO)
-		wIsSeasons
-			dsb $03
-	.endif
-
-.elif defined(ROM_COMBO)
-	wGrabbableObjectBuffer:
-		dsb $10
-	wGrabbableObjectBufferEnd:
-		.db
-
-	wc010:	; padding
-		dsb $4
+	wc00c:	; $c00c
+		dsb	$0a	; padding
 .endif
 
-wSoundFadeCounter: ; $c014
+wSoundFadeCounter: ; $c016
 ; When [wSoundFadeCounter]&[wSoundFadeSpeed] == 0, volume is incremented or decremented.
 	db
 
-wSoundFadeDirection: ; $c015
+wSoundFadeDirection: ; $c017
 ; $01 for fadeout (volume down), $0a for fadein
 	db
 
-wSoundFadeSpeed: ; $c016
-	db
-
-wLoadingSoundBank: ; $c017
-; Used within the music playing functions
-	db
-
-wSoundTmp: ; $c018
-; Initially used as the index of the sound to play, then as a channel index. Only used in
-; one function.
+wSoundFadeSpeed: ; $c018
 	db
 
 wSoundChannelValue: ; $c019
@@ -164,29 +155,42 @@ wChannelVolumes: ; $c07d
 	; Never read for wave channels
 	dsb 8
 
-.if defined(I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND)
-	wMusicReadFunction:
-		dsb $17
+wSoundTmp: ; $c085
+; Initially used as the index of the sound to play, then as a channel index. Only used in
+; one function.
+	db
 
-	.if defined(ROM_COMBO)
-		wIsSeasons
-			; function to set carry flag if seasons, or clear
-			; it if ages. exists in hram so it can be modified.
-			; will contain a variant of this function:
-			;	scf
-			;	ccf		; this may be replaced with a return
-			;	ret
-			; the cflag will be cleared if ages and set if seasons
-			dsb $03
-	.endif
-.elif defined(ROM_COMBO)
-wGrabbableObjectBuffer:
-	dsb $10
-wGrabbableObjectBufferEnd:
-	.db
+wLoadingSoundBank: ; $c086
+; Used within the music playing functions
+	db
+
+.if defined(ROM_COMBO)
+	; these are changed whenever the combo rom toggles between games.
+	; we cache them here so we don't need to spend ~60 cycles every
+	; time we need to retrieve them(loading from here is only 16).
+	wScriptBank:			; $c087
+		db
+	wScriptHelpBank:		; $c088
+		db
+	wSimpleScriptBank:		; $c089
+		db
+	wObjectOamTableOffset:	; $c08a
+		db
+
+	wc08b:					; $c08b
+		dsb	$12	; padding
+
+	wIsSeasons:					; $c09d
+		; function to set carry flag if seasons, or clear
+		; it if ages. exists in hram so it can be modified.
+		; will contain a variant of this function:
+		;	scf
+		;	ccf		; this may be replaced with a return
+		;	ret
+		; the cflag will be cleared if ages and set if seasons
+		dsb $03
+
 .endif
-
-; $c085-$c09f unused?
 
 .ENDS
 
@@ -211,8 +215,17 @@ wThread2StackTop: 	.db	; $c270
 wThread3Stack: 		dsb $50		; palette thread
 wThread3StackTop: 	.db	; $c2c0
 
-wc2c0:
-	dsb $20
+.if defined(ROM_COMBO)
+	wc2c0:
+		dsb $10
+	wGrabbableObjectBuffer:		; $c2d0
+		dsb $10
+	wGrabbableObjectBufferEnd:	; $c2e0
+		.db
+.else
+	wc2c0:
+		dsb $20
+.endif
 
 wThreadStateBuffer: ; $c2e0
 ; $20 byte buffer (with a few 2-byte gaps)
@@ -434,6 +447,13 @@ wOptimizeScreenWaveEffect: ; $c580
 	; CPU cycles trying to determine if the offset is repeated
 	db
 
+wEquippedItemOamTail:
+	; end of the OAM for just the hud gfx
+	db
+
+wEquippedIconGfxExtToUse:
+	db
+
 .ifdef ENABLE_MULTI_RING
 wEquippedRingFlags: ; $c581-$c588
 	; one bit for each ring to indicate if it's equipped this frame or not
@@ -445,53 +465,57 @@ wRingComboCacheFlags: ; $c589
 .endif
 
 .ifdef ENABLE_RING_REDUX
-wLinkOrigOamPalette: ; $c58a
+wLinkOrigOamPalette:
 	db
 
-wRingColorPaletteA: ; $c58b
+wRingColorPaletteA:
 	; first color palette to toggle between
 	db
 
-wRingColorPaletteB: ; $c58c
+wRingColorPaletteB:
 	; second color palette to toggle between
 	db
 
-wColorRingFlags: ; $c58d
+wColorRingFlags:
 	; the wEquippedRingFlags from the previous frame for the color rings
 	db
-.endif
 
-.ifdef ENABLE_NEW_GAME_PLUS
-wNgpEnemiesUpgradedThisRoom:	; $c58e
-	; tracks how many enemies have been upgraded in tier this room
-	; high nibble tracks strong upgrades
-	; low nibble tracks weak upgrades
-	db
-
-wNgpUncappedUpgradesThisRoom:	; $c58f
-	; tracks how many parts and respawning enemies have been upgraded in tier this room
-	; high nibble tracks projectile upgrades
-	; low nibble tracks enemy upgrades
-	db
-
-wRingsDisabledCounter: ; $c590
-	db
-.endif
-
-.ifdef ENABLE_RING_REDUX
 wDmgRingEquippedPreviousFrame:
 	db
 
 wSwordDamageCached:
 	db
+
+wShieldParryTimers:
+	; Bits 0-4: Cooldown frames before parry can be reattempted
+	; Bits 5-7: Number of frames remaining for a parry to count
+	db
 .endif
 
-wEquippedItemOamTail:
-	; end of the OAM for just the hud gfx
+.ifdef ENABLE_NEW_GAME_PLUS
+wNgpEnemiesUpgradedThisRoom:
+	; tracks how many enemies have been upgraded in tier this room
+	; high nibble tracks strong upgrades
+	; low nibble tracks weak upgrades
 	db
 
-wEquippedIconGfxExtToUse:
+wNgpUncappedUpgradesThisRoom:
+	; tracks how many parts and respawning enemies have been upgraded in tier this room
+	; high nibble tracks projectile upgrades
+	; low nibble tracks enemy upgrades
 	db
+
+wRingsDisabledCounter:
+	db
+
+wLinkPoisonCounter:
+	; Bits 0-4: Number of poison ticks(~1sec each) remaining in the timer
+	;           Additional hits add to timer till it caps at 31
+	; Bit    5: Health poisoned(lose 1/4 heart each tick)
+	; Bit    6: Speed poisoned(immobilized every other frame)
+	; Bit    7: Strength poisoned(attack halved, and damage received doubled)
+	db
+.endif
 
 .ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
 wAutoEquipInvSlot:
@@ -510,23 +534,6 @@ wAutoEquipSubtypeInfo:
 wDungeonIndexPreviousFrame:
 	; Indicates which dungeon index link was in during the previous frame.
 	; Used to determine if the game should be autosaved when it changes.
-	db
-.endif
-
-.ifdef ENABLE_NEW_GAME_PLUS
-wLinkPoisonCounter:
-	; Bits 0-4: Number of poison ticks(~1sec each) remaining in the timer
-	;           Additional hits add to timer till it caps at 31
-	; Bit    5: Health poisoned(lose 1/4 heart each tick)
-	; Bit    6: Speed poisoned(immobilized every other frame)
-	; Bit    7: Strength poisoned(attack halved, and damage received doubled)
-	db
-.endif
-
-.ifdef ENABLE_RING_REDUX
-wShieldParryTimers:
-	; Bits 0-4: Cooldown frames before parry can be reattempted
-	; Bits 5-7: Number of frames remaining for a parry to count
 	db
 .endif
 

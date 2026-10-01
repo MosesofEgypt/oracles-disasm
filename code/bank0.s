@@ -194,6 +194,31 @@ secretSymbols: ; TODO
 .endif
 	.db $ff
 
+.ORGA $ee
+; putting this here so we can simplify table offset calculation
+objectOamBankTable:
+.if defined(ROM_COMBO)
+	.db AGES_ITEM_OAM_DATA_BANK
+	.db AGES_INTERAC_OAM_DATA_BANK
+	.db AGES_ENEMY_OAM_DATA_BANK
+	.db AGES_PART_OAM_DATA_BANK
+	.db AGES_SPEC_OBJ_OAM_DATA_BANK
+	.db SEASONS_ITEM_OAM_DATA_BANK
+	.db SEASONS_INTERAC_OAM_DATA_BANK
+	.db SEASONS_ENEMY_OAM_DATA_BANK
+	.db SEASONS_PART_OAM_DATA_BANK
+	.db SEASONS_SPEC_OBJ_OAM_DATA_BANK
+
+
+.define OBJECT_OAM_TABLE_OFFSET_AGES	$00
+.define OBJECT_OAM_TABLE_OFFSET_SEASONS	$05
+.else
+	.db ITEM_OAM_DATA_BANK
+	.db INTERAC_OAM_DATA_BANK
+	.db ENEMY_OAM_DATA_BANK
+	.db PART_OAM_DATA_BANK
+	.db SPEC_OBJ_OAM_DATA_BANK
+.endif
 
 .ORGA $00f8
 
@@ -3319,7 +3344,6 @@ drawAllSpritesUnconditionally:
 	ldh (<hFF8E),a
 
 	; Get bank of animation frame data
-	push hl
 	ld a,l
 	rlca
 	rlca
@@ -3333,16 +3357,15 @@ drawAllSpritesUnconditionally:
 			; regular item
 			xor a
 	+
+	add <objectOamBankTable
+	ld b,$00
+	ld c,a
 .if defined(ROM_COMBO)
-	call wIsSeasons
-	jr nc,+
-		add $05
-	+
+	ld a,(wObjectOamTableOffset)
+	add c
+	ld c,a
 .endif
-	ld hl,objectOamBankTable
-	addAToHl
-	ld a,(hl)
-	pop hl
+	ld a,(bc)
 	setrombank
 
 	; Object.oamDataAddress
@@ -3432,26 +3455,6 @@ drawAllSpritesUnconditionally:
 	dec c
 	jr nz,@nextSprite
 	jr @doneDrawing
-
-objectOamBankTable:
-.if defined(ROM_COMBO)
-	.db AGES_ITEM_OAM_DATA_BANK
-	.db AGES_INTERAC_OAM_DATA_BANK
-	.db AGES_ENEMY_OAM_DATA_BANK
-	.db AGES_PART_OAM_DATA_BANK
-	.db AGES_SPEC_OBJ_OAM_DATA_BANK
-	.db SEASONS_ITEM_OAM_DATA_BANK
-	.db SEASONS_INTERAC_OAM_DATA_BANK
-	.db SEASONS_ENEMY_OAM_DATA_BANK
-	.db SEASONS_PART_OAM_DATA_BANK
-	.db SEASONS_SPEC_OBJ_OAM_DATA_BANK
-.else
-	.db ITEM_OAM_DATA_BANK
-	.db INTERAC_OAM_DATA_BANK
-	.db ENEMY_OAM_DATA_BANK
-	.db PART_OAM_DATA_BANK
-	.db SPEC_OBJ_OAM_DATA_BANK
-.endif
 
 .if !defined(ROM_COMBO)
 	.include "code/terrainEffects.s"
@@ -6577,6 +6580,23 @@ _checkCollisionWithHAndD:
 	ld e,Item.collisionRadiusY
 	jp checkObjectsCollidedFromVariables
 
+
+; ####################################################
+; NOTE: the "or" operation unsets the cflag, and
+;       the below code heavily relies on this fact
+;       to ensure the return values are as intended
+; ####################################################
+
+
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+;;
+checkLinkVulnerableAndIDZero:
+	ld a,(w1Link.id)
+	or a
+	ret nz
+	jr checkLinkVulnerable
+.endif
+
 ;;
 ; Checks link's ID is 0, and checks various other things impeding game control
 ; (wLinkDeathTrigger, wLinkInAir, and link being in a spinner?)
@@ -6585,31 +6605,14 @@ _checkCollisionWithHAndD:
 checkLinkID0AndControlNormal:
 	ld a,(w1Link.id)
 	or a
+	ret nz
 .if defined(ROM_COMBO)
 	call wIsSeasons
 	jr nc,+++
-	jr z,checkLinkVulnerableAndIDZero
 .elif defined(ROM_AGES)
-	jr z,+++
+	jr +++
 .else
-	jr z,checkLinkVulnerableAndIDZero
-.endif
-	xor a
-	ret
-
-;;
-checkLinkVulnerableAndIDZero:
-
-.if defined(ROM_AGES) || defined(ROM_COMBO)
-.if defined(ROM_COMBO)
-	call wIsSeasons
-	jr c,checkLinkVulnerable
-.endif
-	ld a,(w1Link.id)
-	or a
-	jr z,checkLinkVulnerable
-	xor a
-	ret
+	jr checkLinkVulnerable
 .endif
 
 ;;
@@ -6623,7 +6626,7 @@ checkLinkVulnerable:
 	or (hl)
 	ld l,<w1Link.knockbackCounter
 	or (hl)
-	jr nz,checkLinkCollisionsEnabled@noCarry
+	ret nz
 
 ;;
 ; Check if link should respond to collisions, perhaps other things?
@@ -6632,47 +6635,32 @@ checkLinkVulnerable:
 checkLinkCollisionsEnabled:
 	ld a,(w1Link.collisionType)
 	rlca
-	jr nc,@noCarry
-
-.if defined(ROM_SEASONS) || defined(ROM_COMBO)
-.if defined(ROM_COMBO)
-	call wIsSeasons
-	jr c,+
-.endif
-	ld a,(wLinkDeathTrigger)
-	or a
-	jr nz,@noCarry
-	+
-.endif
+	ret nc
 
 	ld a,(wDisableLinkCollisionsAndMenu)
 	or a
-	jr nz,@noCarry
+	ret nz
 
 	ld a,(wMenuDisabled)
 	or a
-	jr nz,@noCarry
+	ret nz
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 +++
 	ld a,(wLinkDeathTrigger)
 	or a
-	jr nz,@noCarry
+	ret nz
 .endif
 
 	; Check if in a spinner
 	ld a,(wcc95)
 	rlca
-	jr c,@noCarry
+	ccf
+	ret nc
 
 	ld a,(wLinkInAir)
 	rlca
-	jr c,@noCarry
-
-	scf
-	ret
-@noCarry:
-	xor a
+	ccf
 	ret
 
 ;;
@@ -8251,20 +8239,7 @@ breakCrackedFloor:
 ;			water)
 objectCheckTileAtPositionIsWater:
 	call objectGetTileAtPosition
-.if defined(ROM_COMBO)
-	call wIsSeasons
-	jr c,+
-		sub TILEINDEX_PUDDLE_AGES
-		cp TILERANGE_WATER_AGES
-		ret
-	+
-	sub TILEINDEX_PUDDLE_SEASONS
-	cp TILERANGE_WATER_SEASONS
-.else
-	sub TILEINDEX_PUDDLE
-	cp TILERANGE_WATER
-.endif
-	ret
+	jr +
 
 ;;
 ; This function is used by zoras, presumably to check which positions they can spawn at.
@@ -8273,6 +8248,7 @@ objectCheckTileAtPositionIsWater:
 ; @param[out]	cflag	Set if the tile at that position is water (even shallow water)
 checkTileAtPositionIsWater:
 	call getTileAtPosition
+	+
 .if defined(ROM_COMBO)
 	call wIsSeasons
 	jr c,+
@@ -9539,11 +9515,7 @@ _interactionActuallyRunScript:
 	ldh a,(<hRomBank)
 	push af
 .if defined(ROM_COMBO)
-	ld a,SCRIPT_BANK_SEASONS
-	call wIsSeasons
-	jr c,+
-		ld a,SCRIPT_BANK_AGES
-	+
+	ld a,(wScriptBank)
 .else
 	ld a,SCRIPT_BANK
 .endif
@@ -9554,8 +9526,10 @@ _interactionActuallyRunScript:
 	jr z,++
 
 .if defined(ROM_COMBO)
-	call wIsSeasons
-	jr c,+
+	ld a,(wScriptBank)
+	cp SCRIPT_BANK_SEASONS
+	ld a,(hl)
+	jr z,+
 		call scripts1Ages.runScriptCommand
 		jr +++
 	+
@@ -9721,11 +9695,8 @@ _scriptFunc_setupAsmCallAnyBank:
 ;;
 _scriptFunc_setupAsmCall:
 .if defined(ROM_COMBO)
-	call wIsSeasons
-	ld d,SCRIPT_HELP_SEASONS_BANK
-	jr c,++
-		ld d,SCRIPT_HELP_AGES_BANK
-	++
+	ld a,(wScriptHelpBank)
+	ld d,a
 .else
 	ld d,SCRIPT_HELP_BANK
 .endif
@@ -9901,16 +9872,13 @@ interactionSetAnimation:
 		ld a,:interactionAnimationTable_ages
 		ld hl,interactionAnimationTable_ages
 	+
-	setrombank
-	ld e,Interaction.id
-	ld a,(de)
 .else
+	ld hl,interactionAnimationTable
 	ld a,:interactionAnimationTable
+.endif
 	setrombank
 	ld e,Interaction.id
 	ld a,(de)
-	ld hl,interactionAnimationTable
-.endif
 	rst_addDoubleIndex
 	derefHl
 	add hl,bc
@@ -9955,8 +9923,6 @@ _interactionNextAnimationFrame:
 	ld a,h
 	ld (de),a
 
-	ld e,Interaction.id
-	ld a,(de)
 .if defined(ROM_COMBO)
 	ld hl,interactionOamDataTable_seasons
 	call wIsSeasons
@@ -9966,6 +9932,8 @@ _interactionNextAnimationFrame:
 .else
 	ld hl,interactionOamDataTable
 .endif
+	ld e,Interaction.id
+	ld a,(de)
 	rst_addDoubleIndex
 	rst_derefHl
 	add hl,bc
@@ -10511,16 +10479,13 @@ enemySetAnimation:
 		ld a,:enemyAnimationTable_ages
 		ld hl,enemyAnimationTable_ages
 	+
-	setrombank
-	ld e,Enemy.id
-	ld a,(de)
 .else
+	ld hl,enemyAnimationTable
 	ld a,:enemyAnimationTable
+.endif
 	setrombank
 	ld e,Enemy.id
 	ld a,(de)
-	ld hl,enemyAnimationTable
-.endif
 	rst_addDoubleIndex
 	derefHl
 	add hl,bc
@@ -10562,8 +10527,6 @@ _enemyNextAnimationFrame:
 	ld a,h
 	ld (de),a
 
-	ld e,Enemy.id
-	ld a,(de)
 .if defined(ROM_COMBO)
 	ld hl,enemyOamDataTable_seasons
 	call wIsSeasons
@@ -10573,6 +10536,8 @@ _enemyNextAnimationFrame:
 .else
 	ld hl,enemyOamDataTable
 .endif
+	ld e,Enemy.id
+	ld a,(de)
 	rst_addDoubleIndex
 	derefHl
 	add hl,bc
@@ -10805,16 +10770,13 @@ partSetAnimation:
 	jr c,+
 		ld hl,partAnimationTable_ages
 	+
-	setrombank
-	ld e,Part.id
-	ld a,(de)
 .else
+	ld hl,partAnimationTable
 	ld a,:partAnimationTable
+.endif
 	setrombank
 	ld e,Part.id
 	ld a,(de)
-	ld hl,partAnimationTable
-.endif
 	rst_addDoubleIndex
 	derefHl
 	add hl,bc
@@ -10868,8 +10830,6 @@ _partNextAnimationFrame:
 	ld a,h
 	ld (de),a
 
-	ld e,Part.id
-	ld a,(de)
 .if defined(ROM_COMBO)
 	ld hl,partOamDataTable_seasons
 	call wIsSeasons
@@ -10879,6 +10839,8 @@ _partNextAnimationFrame:
 .else
 	ld hl,partOamDataTable
 .endif
+	ld e,Part.id
+	ld a,(de)
 	rst_addDoubleIndex
 	derefHl
 	add hl,bc
@@ -14606,11 +14568,7 @@ interactionRunSimpleScript:
 	ldh a,(<hRomBank)
 	push af
 .if defined(ROM_COMBO)
-	ld a,SIMPLE_SCRIPT_BANK_SEASONS
-	call wIsSeasons
-	jr c,+
-		ld a,SIMPLE_SCRIPT_BANK_AGES
-	+
+	ld a,(wSimpleScriptBank)
 .else
 	ld a,SIMPLE_SCRIPT_BANK
 .endif
@@ -15007,6 +14965,23 @@ toggleIsSeasons:
 	call wIsSeasons
 	ccf
 
+.MACRO m_ComboInitializeBanksAndTables
+	.assert NARGS >= 4
+	ld (hl),\1
+	inc hl
+	ld (hl),\2
+	inc hl
+	ld (hl),\3
+	inc hl
+	ld (hl),\4
+	inc hl
+
+	.shift
+	.shift
+	.shift
+	.shift
+.ENDM
+
 ;;
 ; @param	cflag	If set, game will be set to seasons
 setIsSeasons:
@@ -15021,6 +14996,23 @@ setIsSeasons:
 		inc hl
 	+
 	ld (hl),$c9			; ret
+
+	; setup several bank numbers and table pointers for quicker reference
+	ld hl,wScriptBank
+	jr nc,+
+		m_ComboInitializeBanksAndTables	\
+			SCRIPT_BANK_SEASONS, \
+			SCRIPT_HELP_SEASONS_BANK, \
+			SIMPLE_SCRIPT_BANK_SEASONS, \
+			OBJECT_OAM_TABLE_OFFSET_SEASONS
+		jr ++
+	+
+		m_ComboInitializeBanksAndTables	\
+			SCRIPT_BANK_AGES, \
+			SCRIPT_HELP_AGES_BANK, \
+			SIMPLE_SCRIPT_BANK_AGES, \
+			OBJECT_OAM_TABLE_OFFSET_AGES
+	++
 	pop hl
 	ret
 .elif defined(ROM_AGES)

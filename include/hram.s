@@ -130,18 +130,24 @@
 	; This keeps track of the "state" corresponding to the above link mode.
 	hSerialLinkState		db	; $ffbf/$ffbd
 
-	hGfxCompressionMode	db	; $ffc0/$ffbe
+	hActiveCollisionsTable	.dw ; $ffc0/$ffbe
+	hTempVal0				db ; $ffc0/$ffbe
 
-	hGdmaChunksCopiedThisFrame	db ; $ffc1/$ffbf
-	hGdmaDelayedCount			db ; $ffc2/$ffc0
+	hGfxCompressionMode		.db	; $ffc1/$ffbf
+	hTempVal1				db ; $ffc1/$ffbf
+
+	hItemCollisionBomb		.db ; $ffc2/$ffc0
+	hTempVal2				db ; $ffc2/$ffc0
+	hTempVal3			 	db ; $ffc3/$ffc1
+
+	hGdmaDelayedCount			db ; $ffc4/$ffc2
+	hGdmaChunksCopiedThisFrame	db ; $ffc5/$ffc3
 	; debug feature for tracking delayed frames
-	hGdmaDelayedCountTotal      dsb 4 ; $ffc3/$ffc1
-
-	hTempVal0					db ; $ffc7/$ffc5
+	hGdmaDelayedCountTotal      dsb 4 ; $ffc6/$ffc4
 
 	; instances of BoundingBoxStruct
-	hLinkBoundingBox			dsb $04 ; $ffc8/$ffc6
-	hEnemyBoundingBox			dsb $04 ; $ffcc/$ffca
+	hLinkBoundingBox			dsb $04 ; $ffca/$ffc8
+	hEnemyBoundingBox			dsb $04 ; $ffce/$ffc9
 
 	; Marker for end of "normal" hram (memory gets cleared up to here upon game initialization)
 	hramEnd			 	.db	; $ffd0/$ffce

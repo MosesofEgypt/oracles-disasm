@@ -3,6 +3,15 @@
 checkEnemyAndPartCollisions:
 	push bc
 
+.ifdef ROM_COMBO
+	ld a,ITEMCOLLISION_BOMB_S
+	call wIsSeasons
+	jr c,+
+		ld a,ITEMCOLLISION_BOMB_A
+	+
+	ld (hItemCollisionBomb),a
+.endif
+
 	; calculate bounding box for link
 	ld hl,w1Link.collisionRadiusX
 	ld bc,hLinkBoundingBox
@@ -81,6 +90,21 @@ checkEnemyAndPartCollisions:
 	add c
 	ld (hl),a
 
+.if defined(ROM_COMBO)
+	; setup the collision table pointer for enemies
+	call wIsSeasons
+	ld hl,hActiveCollisionsTable
+	ld (hl),<enemyActiveCollisions_seasons
+	inc hl
+	ld (hl),>enemyActiveCollisions_seasons
+	jr c,+
+		dec hl
+		ld (hl),>enemyActiveCollisions_ages
+		inc hl
+		ld (hl),<enemyActiveCollisions_ages
+	+
+.endif
+
 	; Check collisions for all Enemies
 	ld a,Enemy.start
 	ldh (<hActiveObjectType),a
@@ -94,7 +118,6 @@ checkEnemyAndPartCollisions:
 	bit 7,(hl)
 	jr z,+
 
-	ld a,(hl)
 	ld l,Enemy.var2a
 	bit 7,(hl)
 	call z,enemyCheckCollisions
@@ -103,6 +126,21 @@ checkEnemyAndPartCollisions:
 	ld a,d
 	cp LAST_ENEMY_INDEX+1
 	jr c,@nextEnemy
+
+.if defined(ROM_COMBO)
+	; setup the collision table pointer for parts
+	call wIsSeasons
+	ld hl,hActiveCollisionsTable
+	ld (hl),<partActiveCollisions_seasons
+	inc hl
+	ld (hl),>partActiveCollisions_seasons
+	jr c,+
+		dec hl
+		ld (hl),>partActiveCollisions_ages
+		inc hl
+		ld (hl),<partActiveCollisions_ages
+	+
+.endif
 
 	; Check collisions for all Parts
 	ld a,Part.start
@@ -196,17 +234,16 @@ checkEnemyAndPartCollisions:
 ; action.
 ; @param d Part index
 partCheckCollisions:
-	ld e,Part.collisionType
-	ld a,(de)
 .ifdef ROM_COMBO
-	ld hl,partActiveCollisions_seasons
-	call wIsSeasons
-	jr c,+
-		ld hl,partActiveCollisions_ages
-	+
+	ld hl,hActiveCollisionsTable
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 .else
 	ld hl,partActiveCollisions
 .endif
+	ld e,Part.collisionType
+	ld a,(de)
 	ld e,Part.yh
 	jr ++
 
@@ -217,14 +254,15 @@ partCheckCollisions:
 ; @param d Enemy index
 enemyCheckCollisions:
 .ifdef ROM_COMBO
-	ld hl,enemyActiveCollisions_seasons
-	call wIsSeasons
-	jr c,+
-		ld hl,enemyActiveCollisions_ages
-	+
+	ld hl,hActiveCollisionsTable
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
 .else
 	ld hl,enemyActiveCollisions
 .endif
+	ld e,Enemy.collisionType
+	ld a,(de)
 	ld e,Enemy.yh
 
 ++
@@ -312,11 +350,9 @@ enemyCheckCollisions:
 	ld bc,$0e07
 	ldh a,(<hFF90)
 .ifdef ROM_COMBO
-	cp ITEMCOLLISION_BOMB_S
-	call wIsSeasons
-	jr c,+
-		cp ITEMCOLLISION_BOMB_A
-	+
+	ld l,a
+	ld a,(hItemCollisionBomb)
+	cp l
 .else
 	cp ITEMCOLLISION_BOMB
 .endif
@@ -1943,17 +1979,15 @@ collisionLinkBounce:
 	ld a,(hl)
 	pop hl
 
+	; only judo stun if enemy
 	jr nz,+
-		; only judo stun if enemy
-		call isValidTargetForJudo
-		jr z,+
-			; change collision type
-			ld a,EXPERTS_RING
-			call cpActiveRing
+		; change collision type
+		ld a,EXPERTS_RING
+		call cpActiveRing
 
-			; experts ring causes a stun, not just a bump
-			ld a,COLLISIONEFFECT_STUN
-			ret z
+		; experts ring causes a stun, not just a bump
+		ld a,COLLISIONEFFECT_STUN
+		ret z
 	+
 
 	ld a,SND_JUMP

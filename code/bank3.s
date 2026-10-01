@@ -5,7 +5,7 @@ m_section_free Bank_3 NAMESPACE bank3
 init:
 	di
 .if defined(ROM_COMBO)
-	scf
+	callabaf fileManagement.toggleComboLastIntroSeen
 	call setIsSeasons
 .endif
 	xor a

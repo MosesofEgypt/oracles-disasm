@@ -193,10 +193,10 @@ mapleState2:
 .if defined(ROM_COMBO)
 	call wIsSeasons
 	jr c,+
-		call checkLinkID0AndControlNormal
+		call checkLinkVulnerableAndIDZero
 		jr ++
 	+
-		call checkLinkVulnerableAndIDZero
+		call checkLinkID0AndControlNormal
 	++
 .elif defined(ROM_AGES)
 	call checkLinkVulnerableAndIDZero

@@ -210,6 +210,8 @@ initSound:
 ; NOTE: THIS CODE SHOULD ONLY EVER BE CALLED BY
 ;       CODE IN THIS BANK, OR CODE IN BANK 0
 @readFunction:
+	; NOTE: this function's size cannot be increased without
+	;       doing something about the WRAM allocated to it.
 	ld ($2222),a
 .ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND
 	ld a,$01

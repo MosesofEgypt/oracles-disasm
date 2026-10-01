@@ -462,6 +462,11 @@ func_4553:
 	; Pushing against a wall
 @pushingAnimation:
 .ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
+	; don't bother with costly autoequip checks if already autoequipped
+	ld a,(wAutoEquipInvSlot)
+	cp $ff
+	jr nz,+
+
 	call getItemForTileBeingPushedOn
 	or a
 	jr z,+

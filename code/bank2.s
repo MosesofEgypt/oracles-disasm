@@ -302,6 +302,10 @@ fileSelectMode1:
 		; press B to go back to intro
 		xor a
 		ldh (<hIntroInputsEnabled),a
+		.if defined(ROM_COMBO)
+			callabaf fileManagement.toggleComboLastIntroSeen
+			call setIsSeasons
+		.endif
 		jp startGame
 	+
 .endif
