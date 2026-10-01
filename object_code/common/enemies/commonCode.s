@@ -1310,7 +1310,7 @@ ecom_stateHeld:
 	.dw ecom_held_substate0_struggle
 	.dw ecom_held_substate1_struggling
 	.dw ecom_held_substate1_struggling
-	.dw ecom_fallToGroundAndSetState8
+	.dw ecom_held_substate3_struggling
 
 ecom_held_substate0_struggle:
 	ld h,d
@@ -1343,6 +1343,14 @@ ecom_held_substate1_struggling:
 	ld h,d
 	ld l,Enemy.substate
 	ld (hl),$03
+	ret
+
+ecom_held_substate3_struggling:
+	call ecom_fallToGroundAndSetState8
+	ret nz
+	ld e,Enemy.substate
+	xor a
+	ld (de),a
 	ret
 
 .endif

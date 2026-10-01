@@ -25,7 +25,7 @@ m_EnemyCode $4b
 	.dw ballAndChain_state_uninitialized
 	.dw ballAndChain_state_stub
 .ifdef ENABLE_RING_REDUX
-	.dw ecom_stateHeld
+	.dw ballAndChain_stateHeld
 .else
 	.dw ballAndChain_state_stub
 .endif
@@ -95,6 +95,25 @@ ballAndChain_state_switchHook:
 ballAndChain_state_stub:
 	ret
 
+
+.ifdef ENABLE_RING_REDUX
+ballAndChain_stateHeld:
+	call ecom_stateHeld
+	ld e,Enemy.state
+	ld a,(de)
+	cp $02
+	ret z
+
+	; reset these so he doesn't break when released
+	xor a
+	ld l,Enemy.counter1
+	ld (hl),a
+	ld l,Enemy.var30
+	ldi (hl),a
+	ld a,$08
+	ld (hl),a
+	ret
+.endif
 
 ; Waiting for Link to be close enough to attack
 ballAndChain_state8:
