@@ -674,10 +674,56 @@ updateGrabbedObjectPosition:
 	add b
 	ldi (hl),a
 .ifdef ENABLE_RING_REDUX
-	jp animateEnemyShakingWhileHeld
-.else
-	ret
+	; only animate enemies shaking
+	ld a,l
+	and $c0
+	cp $80
+	ret nz
+
+	; we want the enemy in the center for every other
+	; frame to make the movement feel smoother
+	ld a,(wFrameCounter)
+	rrca
+	ret nc
+
+	; make the enemy shake back and forth, but increase
+	; shake distance as the timer gets closer to 0
+	ld l,Enemy.stunCounter
+	ld a,(hl)
+	or a
+	; so, it appears that the vine sprout is an enemy, which causes
+	; it to vibrate uncontrollably since it's stun counter is 0.
+	; for this edge case(and any others idk of), we solve it by
+	; not vibrating if the stun counter is 0. makes sense anyway
+	ret z
+
+	push bc
+	ld b,$02
+	-
+		sub 45
+		jr c,+
+		dec b
+		jr nz,-
+	+
+	ld a,b
+	or a
+	jr z,++
+		ld a,(wFrameCounter)
+		and $02
+		jr z,+
+			xor a
+			sub b
+			ld b,a
+		+
+		ld a,b
+
+		ld l,Enemy.xh
+		add (hl)
+		ld (hl),a
+	++
+	pop bc
 .endif
+	ret
 
 
 ; Each 2 bytes are Z/X offsets relative to Link where an object should be placed.

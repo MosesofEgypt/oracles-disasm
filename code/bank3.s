@@ -121,14 +121,15 @@ setCpuToDoubleSpeed:
 
 ;;
 ; This is copied to RAM and run from there.
+; NOTE: Optimization to reduce HRAM usage taken from here:
+;       https://gbdev.io/pandocs/OAM_DMA_Transfer.html#best-practices
 oamDmaFunction:
-	ld a,>wOam
-	ldh (R_DMA),a
-	ld a,$28
+	ld ($ff00+c),a
 -
-	dec a
+	dec b
 	jr nz,-
-	ret
+	ret z	; Conditional `ret` is 1 M-cycle slower, which avoids
+			; reading from the stack on the last M-cycle of DMA.
 oamDmaFunctionEnd:
 
 

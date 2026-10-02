@@ -1273,7 +1273,9 @@ m_section_superfree Credits_Text_Oam_Data
 m_section_superfree Item_Parents NAMESPACE itemParents
 	; NOTE: these are needed in here as well due to them relying
 	;       on several animation related function in here for link
+	.define ITEM_PARENT_REQUIRED_CODE_ONLY
 	.include "code/specialObjectAnimationsAndDamage.s"
+	.undefine ITEM_PARENT_REQUIRED_CODE_ONLY
 	.include {"{BUILD_DIR}/specialObjectAnimationData.s"}
 	.include "object_code/common/itemParents/commonCode.s"
 
@@ -1292,7 +1294,9 @@ m_section_superfree Item_Parents NAMESPACE itemParents
 m_section_superfree Item_Parents_2 NAMESPACE itemParentsExt
 	; NOTE: these are needed in here as well due to them relying
 	;       on several animation related function in here for link
+	.define ITEM_PARENT_REQUIRED_CODE_ONLY
 	.include "code/specialObjectAnimationsAndDamage.s"
+	.undefine ITEM_PARENT_REQUIRED_CODE_ONLY
 	.include {"{BUILD_DIR}/specialObjectAnimationData.s"}
 	.include "object_code/common/itemParents/commonCode.s"
 

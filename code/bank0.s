@@ -580,6 +580,28 @@ getLowestSetBit:
 	ret
 
 ;;
+; Identical to checkFlag, but more efficient and doesn't preserve hl or bc
+; @param a Bit to check
+; @param hl Start of flags
+checkFlagOptimized:
+	ld b,a
+	and $f8
+	rlca
+	swap a
+	ld c,a
+	ld a,b
+	and $07
+	ld b,$00
+	add hl,bc
+	ld c,(hl)
+	ld hl,bitTable
+	add l
+	ld l,a
+	ld a,(hl)
+	and c
+	ret
+
+;;
 ; A "flag" is just a bit in memory. These flag-related functions take a base address
 ; ('hl'), and check a bit in memory starting at that address ('a').
 ;
@@ -2271,6 +2293,9 @@ vblankInterrupt:
 	call updateDirtyPalettes
 
 	di
+	ld a,>wOam
+	ld b,40		; delay for a total of 4x40 = 160 M-cycles
+	ld c,R_DMA
 	call hOamFunc
 
 	pop bc
@@ -2492,7 +2517,7 @@ vblankDmaFunction:
 		pop hl
 		jr c,+
 			++
-			; ensure we're process at least some GDMAs each frame
+			; ensure we're processing at least some GDMAs each frame
 			ldh a,(<hGdmaChunksCopiedThisFrame)
 			or a
 			jr z,+
@@ -3174,7 +3199,7 @@ drawAllSpritesUnconditionally:
 	call objectQueueDraw
 	inc d
 	ld a,d
-	cp $d6
+	cp FIRST_ITEM_INDEX
 	jr c,@loop
 ++
 	; Update the puddle animation
@@ -3761,25 +3786,25 @@ queueDrawEverything:
 	ldi (hl),a
 	ldi (hl),a
 
-	ld de,FIRST_ITEM_INDEX<<8
+	ldde FIRST_ITEM_INDEX,Item.start
 	ld b,Item.yh
 	call @func
 
-	ld de,$d080
+	ldde FIRST_ENEMY_INDEX,Enemy.start
 	ld b,Enemy.yh
 	call @func
 
-	ld de,$d0c0
+	ldde FIRST_PART_INDEX,Part.start
 	ld b,Part.yh
 	call @func
 
-	ld de,$d040
+	ldde FIRST_INTERACTION_INDEX,Interaction.start
 	ld b,Interaction.yh
 @func:
 	call objectQueueDraw
 	inc d
 	ld a,d
-	cp $e0
+	cp OBJECT_END_INDEX
 	jr c,@func
 	ret
 
@@ -5788,7 +5813,7 @@ getARoomFlags:
 ; @param[out]	a	Room flags
 ; @param[out]	hl	Address of room flags
 getRoomFlags:
-	ld hl, flagLocationGroupTable
+	ld hl,flagLocationGroupTable
 .if defined(ROM_COMBO)
 	cp $02
 	jr nz,+
@@ -6360,12 +6385,6 @@ objectCheckCollidedWithLink_notDeadAndNotGrabbing:
 	ld a,(wLinkGrabState)
 	and $be
 	ret nz
-;;
-objectCheckCollidedWithLink_notDead:
-	ld a,(wLinkDeathTrigger)
-	or a
-	ret nz
-	jr objectCheckCollidedWithLink
 
 ;;
 objectCheckCollidedWithLink_onGround:
@@ -6375,7 +6394,11 @@ objectCheckCollidedWithLink_onGround:
 	ld a,(w1Link.zh)
 	or a
 	ret nz
-	jr objectCheckCollidedWithLink_notDead
+;;
+objectCheckCollidedWithLink_notDead:
+	ld a,(wLinkDeathTrigger)
+	or a
+	ret nz
 
 ;;
 ; @param[out]	cflag	Set if the object is touching Link.
@@ -6620,6 +6643,21 @@ checkLinkID0AndControlNormal:
 ;
 ; @param[out]	cflag	Set if link is vulnerable
 checkLinkVulnerable:
+.if defined(ROM_COMBO)
+	ld a,(wLinkVulnerableCached)
+	rlca
+	bit 1,a
+	ret nz
+
+	call @check
+	rr a
+	or $01
+	ld (wLinkVulnerableCached),a
+	rlca
+	ret
+
+@check:
+.endif
 	; Check var2a, invincibilityCounter, knockbackCounter
 	ld hl,w1Link.var2a
 	ldi a,(hl)
@@ -7569,7 +7607,9 @@ getPositionOffsetForVelocityOrig:
 ;;
 ; @param[out]	bc	Object's position
 objectGetPosition:
-	call objectPointDeToYhVar
+	ldh a,(<hActiveObjectType)
+	add Object.yh
+	ld e,a
 	ld a,(de)
 	ld b,a
 	inc e
@@ -7581,7 +7621,9 @@ objectGetPosition:
 ;;
 ; @param[out]	a	Object's position (short form)
 objectGetShortPosition:
-	call objectPointDeToYhVar
+	ldh a,(<hActiveObjectType)
+	add Object.yh
+	ld e,a
 ;;
 getShortPositionFromDE:
 	ld a,(de)
@@ -7601,7 +7643,9 @@ getShortPositionFromDE:
 ; @param[out]	a	Object's position (short form)
 objectGetShortPosition_withYOffset:
 	ld b,a
-	call objectPointDeToYhVar
+	ldh a,(<hActiveObjectType)
+	add Object.yh
+	ld e,a
 	ld a,(de)
 	add b
 	jr --
@@ -7720,7 +7764,7 @@ checkBEnemySlotsAvailable:
 	or a
 	ret z
 	ld a,h
-	cp $e0
+	cp OBJECT_END_INDEX
 	ret c
 	or h
 	ret
@@ -7748,7 +7792,9 @@ objectSetPositionInCircleArc:
 	pop bc
 
 	; Add Y offset
-	call objectPointDeToYhVar
+	ldh a,(<hActiveObjectType)
+	add Object.yh
+	ld e,a
 	ld a,(wTmpcec0+1)
 	add b
 	ld (de),a
@@ -7867,7 +7913,9 @@ objectGetRelatedObject2Var:
 ;
 ; @param[out]	a	Z position
 objectGetZAboveScreen:
-	call objectPointDeToYhVar
+	ldh a,(<hActiveObjectType)
+	add Object.yh
+	ld e,a
 	ld a,(de)
 	ld b,a
 	ldh a,(<hCameraY)
@@ -7892,7 +7940,9 @@ objectCheckWithinScreenBoundary:
 	ld b,a
 	ldh a,(<hCameraX)
 	ld c,a
-	call objectPointDeToYhVar
+	ldh a,(<hActiveObjectType)
+	add Object.yh
+	ld e,a
 	ld a,(de)
 	sub b
 	add $07
@@ -7910,7 +7960,9 @@ objectCheckWithinScreenBoundary:
 ;;
 ; @param[out]	cflag	Set if the object is within the room boundary
 objectCheckWithinRoomBoundary:
-	call objectPointDeToYhVar
+	ldh a,(<hActiveObjectType)
+	add Object.yh
+	ld e,a
 	ld hl,wRoomEdgeY
 	ld a,(de)
 	cp (hl)
@@ -8071,11 +8123,11 @@ objectCheckIsOverHazard:
 	ld (wObjectTileIndex),a
 .endif
 .if defined(ROM_COMBO)
-	ld hl,hazardCollisionTable_seasons
-	call wIsSeasons
-	jr c,+
-		ld hl,hazardCollisionTable_ages
-	+
+	ld hl,wHazardCollisionTable
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
+	ld a,(wObjectTileIndex)
 .else
 	ld hl,hazardCollisionTable
 .endif
@@ -8162,18 +8214,13 @@ objectCopyPositionWithOffset:
 	ret
 
 objectPointDeAndHlToYhVar:
-	call objectPointDeToYhVar
-objectPointHlToYhVar:
+	ldh a,(<hActiveObjectType)
+	add Object.yh
+	ld e,a
 	ld a,l
 	and $c0
 	add Object.yh
 	ld l,a
-	ret
-
-objectPointDeToYhVar:
-	ldh a,(<hActiveObjectType)
-	add Object.yh
-	ld e,a
 	ret
 
 ;;
@@ -8282,7 +8329,7 @@ findItemWithID:
 findItemWithID_startingAfterH:
 	inc h
 	ld a,h
-	cp $e0
+	cp OBJECT_END_INDEX
 	jr c,---
 	or h
 	ret
@@ -8309,7 +8356,7 @@ objectFindSameTypeObjectWithID:
 func_228f:
 	inc h
 	ld a,h
-	cp $e0
+	cp OBJECT_END_INDEX
 	jr c,--
 	or h
 	ret
@@ -8574,11 +8621,12 @@ cpActiveRingCheckFF:
 cpActiveRing:
 	; determine if the flag is set
 	push hl
+	push bc
+	ld (hTempVal2),a
 	ld hl,wEquippedRingFlags
-	push af
-	call checkFlag
-	pop hl
-	ld a,h
+	call checkFlagOptimized
+	ld a,(hTempVal2)
+	pop bc
 	pop hl
 	ret
 .else
@@ -9047,10 +9095,11 @@ isValidTargetForJudo:
 	ld hl,@judoTargets
 
 @isValidTarget:
-	push af
-	call checkFlag
-	pop hl
-	ld a,h
+	push bc
+	ld (hTempVal2),a
+	call checkFlagOptimized
+	ld a,(hTempVal2)
+	pop bc
 	pop hl
 	ret
 
@@ -9208,20 +9257,11 @@ setRingComboFlag:
 	pop hl
 	ret
 
-miningBombComboActive:
-	ld a,(wRingComboCacheFlags)
-	and $01
-	ret
-
 judoMasterComboActive:
 	ld a,(wRingComboCacheFlags)
 	and $02
 	ret
 
-transformRingActive:
-	ld a,(wRingComboCacheFlags)
-	and $04
-	ret
 .endif
 
 
@@ -10677,59 +10717,6 @@ enemyDie:
 
 	ld a,SND_KILLENEMY
 	jp playSound
-
-.ifdef ENABLE_RING_REDUX
-animateEnemyShakingWhileHeld:
-	; only animate enemies shaking
-	ld a,l
-	and $c0
-	cp $80
-	ret nz
-
-	; we want the enemy in the center for every other
-	; frame to make the movement feel smoother
-	ld a,(wFrameCounter)
-	rrca
-	ret nc
-
-	; make the enemy shake back and forth, but increase
-	; shake distance as the timer gets closer to 0
-	ld l,Enemy.stunCounter
-	ld a,(hl)
-	or a
-	; so, it appears that the vine sprout is an enemy, which causes
-	; it to vibrate uncontrollably since it's stun counter is 0.
-	; for this edge case(and any others idk of), we solve it by
-	; not vibrating if the stun counter is 0. makes sense anyway
-	ret z
-
-	push bc
-	ld b,$02
-	-
-		sub 45
-		jr c,+
-		dec b
-		jr nz,-
-	+
-	ld a,b
-	or a
-	jr z,++
-		ld a,(wFrameCounter)
-		and $02
-		jr z,+
-			xor a
-			sub b
-			ld b,a
-		+
-		ld a,b
-
-		ld l,Enemy.xh
-		add (hl)
-		ld (hl),a
-	++
-	pop bc
-	ret
-.endif
 
 ;;
 partAnimate:
@@ -13010,17 +12997,13 @@ updateAllObjects:
 	ld a,(wLinkObjectIndex)
 	rrca
 	jr nc,+
-		ld a,:bank5.func_410d
-		setrombank
-		call bank5.func_410d
+		callfrombank0 bank5.func_410d
 	+
 
 	ld a,(wLinkGrabState)
 	rlca
 	jr nc,+
-		ld a,:itemParents.updateGrabbedObjectPosition
-		setrombank
-		call itemParents.updateGrabbedObjectPosition
+		callfrombank0 itemParents.updateGrabbedObjectPosition
 	+
 
 	call loadLinkAndCompanionAnimationFrame
@@ -13206,7 +13189,7 @@ clearParts:
 	call clearMemory16ByteBlocks
 	inc d
 	ld a,d
-	cp $e0
+	cp OBJECT_END_INDEX
 	jr c,--
 	ret
 
@@ -14435,7 +14418,7 @@ getFreePartSlot:
 	jr z,++
 	inc h
 	ld a,h
-	cp $e0
+	cp OBJECT_END_INDEX
 	jr c,--
 	or h
 	ret
@@ -14913,39 +14896,6 @@ partDelete:
 	ld b,$04
 	jp clearMemory16ByteBlocks
 
-;;
-; @param hl Pointer to flag mask data(first byte is byte count)
-; @param de Pointer to flag data to be masked
-applyFlagMask:
-	push bc
-	ld b,(hl)
-	inc hl
-	-
-		ld a,(de)
-		and (hl)
-		ld (de),a
-		inc de
-		inc hl
-		dec b
-		jr nz,-
-	pop bc
-	ret
-
-;;
-; @param b	Number of bytes to merge
-; @param hl Pointer to flag data to merge
-; @param de Pointer to flag data to be merged into
-mergeFlags:
-	-
-		ld a,(de)
-		or (hl)
-		ld (de),a
-		inc de
-		inc hl
-		dec b
-		jr nz,-
-	ret
-
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 
@@ -15005,6 +14955,12 @@ setIsSeasons:
 			SCRIPT_HELP_SEASONS_BANK, \
 			SIMPLE_SCRIPT_BANK_SEASONS, \
 			OBJECT_OAM_TABLE_OFFSET_SEASONS
+
+		ld hl,wHazardCollisionTable
+		ld a,<hazardCollisionTable_seasons
+		ldi (hl),a
+		ld a,>hazardCollisionTable_seasons
+		ldi (hl),a
 		jr ++
 	+
 		m_ComboInitializeBanksAndTables	\
@@ -15012,6 +14968,12 @@ setIsSeasons:
 			SCRIPT_HELP_AGES_BANK, \
 			SIMPLE_SCRIPT_BANK_AGES, \
 			OBJECT_OAM_TABLE_OFFSET_AGES
+
+		ld hl,wHazardCollisionTable
+		ld a,<hazardCollisionTable_ages
+		ldi (hl),a
+		ld a,>hazardCollisionTable_ages
+		ldi (hl),a
 	++
 	pop hl
 	ret

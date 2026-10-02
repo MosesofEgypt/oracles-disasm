@@ -121,11 +121,12 @@ ecom_checkHazardsCommon:
 	ld bc,$05ff
 	call objectGetRelativeTile
 .if defined(ROM_COMBO)
-	ld hl,hazardCollisionTable_seasons
-	call wIsSeasons
-	jr c,+
-		ld hl,hazardCollisionTable_ages
-	+
+	ld e,a
+	ld hl,wHazardCollisionTable
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
+	ld a,e
 .else
 	ld hl,hazardCollisionTable
 .endif
@@ -136,11 +137,11 @@ ecom_checkHazardsCommon:
 	ld bc,$0501
 	call objectGetRelativeTile
 .if defined(ROM_COMBO)
-	ld hl,hazardCollisionTable_seasons
-	call wIsSeasons
-	jr c,+
-		ld hl,hazardCollisionTable_ages
-	+
+	ld hl,wHazardCollisionTable
+	ldi a,(hl)
+	ld h,(hl)
+	ld l,a
+	ld a,e
 .else
 	ld hl,hazardCollisionTable
 .endif

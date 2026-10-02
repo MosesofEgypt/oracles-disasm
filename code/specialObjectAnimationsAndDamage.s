@@ -85,12 +85,12 @@ specialObjectNextAnimationFrame:
 	ld (de),a
 	ret
 
-
 .if defined(ROM_COMBO)
 	.include {"{BUILD_DIR}/specialObjectAnimationPointers.s"}
 .else
 	.include {"{GAME_DATA_DIR}/specialObjectAnimationPointers.s"}
 .endif
+.ifndef ITEM_PARENT_REQUIRED_CODE_ONLY
 ;;
 loadLinkAndCompanionAnimationFrame_body:
 	ld a,$ff
@@ -1315,3 +1315,11 @@ linkApplyDamage:
 	ld (de),a
 ++
 	ret
+
+.ifdef ENABLE_RING_REDUX
+transformRingActive:
+	ld a,(wRingComboCacheFlags)
+	and $04
+	ret
+.endif
+.endif

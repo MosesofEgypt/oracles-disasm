@@ -1,5 +1,12 @@
 .enum $ff80 export
-	hOamFunc			dsb $a	; $ff80
+	hOamFunc			dsb 6	; $ff80
+
+	; More general-purpose variables added by
+	; reducing complexity of the OAM function
+	hFF86				db	; $ff86
+	hFF87				db	; $ff87
+	hFF88				db	; $ff88
+	hFF89				db	; $ff89
 
 	; General-purpose variables
 	hFF8A				db	; $ff8a

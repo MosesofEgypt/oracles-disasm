@@ -192,11 +192,11 @@ checkUseItems:
 
 	; When in the overworld, only check buttons if not swimming
 @normal:
-.ifdef ENABLE_RING_REDUX
-	call getCanUseItemsInWater
-.else
 	ld a,(wLinkSwimmingState)
 	or a
+.ifdef ENABLE_RING_REDUX
+	; don't need to check if not swimming
+	call nz,getCanUseItemsInWater
 .endif
 	jr z,@checkAB
 	jr @updateParentItems
@@ -379,7 +379,6 @@ initializeParentItem:
 ; @param[out]	c	Value for upper nibble of Item.enabled
 ; @param[out]	hl	Parent item slot to write to
 ; @param[out]	zflag	Set if valid values for 'c' and 'hl' are returned.
-; @addr{498c
 chooseParentItemSlot:
 	ld a,c
 	and $0f
@@ -575,11 +574,6 @@ parentItemCode_satchel:
 
 .ifdef ENABLE_RING_REDUX
 getCanUseItemsInWater:
-	; don't need to check if not swimming
-	ld a,(wLinkSwimmingState)
-	or a
-	ret z
-
 	; only allow item usage if currently underwater
 	and $80
 	jr nz,+

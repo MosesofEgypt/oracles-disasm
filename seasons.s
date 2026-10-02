@@ -166,7 +166,9 @@ m_section_free Bank_6 NAMESPACE bank6
 m_section_superfree Item_Parents NAMESPACE itemParents
 	; NOTE: these are needed in here as well due to them relying
 	;       on several animation related function in here for link
+	.define ITEM_PARENT_REQUIRED_CODE_ONLY
 	.include "code/specialObjectAnimationsAndDamage.s"
+	.undefine ITEM_PARENT_REQUIRED_CODE_ONLY
 	.include {"{GAME_DATA_DIR}/specialObjectAnimationData.s"}
 
 	.include "code/parentItemUsage.s"

@@ -176,9 +176,15 @@ wLoadingSoundBank: ; $c086
 		db
 	wObjectOamTableOffset:	; $c08a
 		db
+	wHazardCollisionTable:	; $c08c
+		dw
+	wLinkVulnerableCached:	; $c08b
+		; Bit 0: Set if bit 8 calculated
+		; Bit 8: Set to checkLinkVulnerable result
+		db
 
-	wc08b:					; $c08b
-		dsb	$12	; padding
+	wc08c:					; $c08e
+		dsb	$0f	; padding
 
 	wIsSeasons:					; $c09d
 		; function to set carry flag if seasons, or clear
@@ -3646,6 +3652,7 @@ wRoomLayoutEnd: ; $cfc0
 .define FIRST_DYNAMIC_ITEM_INDEX	$d7 ; First object slot for items that's dynamically allocated
 .define LAST_DYNAMIC_ITEM_INDEX		$db
 
+.define OBJECT_END_INDEX		$e0
 .define LAST_ITEM_INDEX			$df
 
 ; Index for weapon item being used (sword, cane, switch hook, etc)

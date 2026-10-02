@@ -607,3 +607,10 @@ instantBombComboActive:
 	.db $f4 $f3 $00
 	.db $f2 $00 $00
 .endif
+
+.ifdef ENABLE_RING_REDUX
+miningBombComboActive:
+	ld a,(wRingComboCacheFlags)
+	and $01
+	ret
+.endif

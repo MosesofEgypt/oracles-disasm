@@ -15,7 +15,7 @@ checkEnemyAndPartCollisions:
 	; calculate bounding box for link
 	ld hl,w1Link.collisionRadiusX
 	ld bc,hLinkBoundingBox
-	call initializeItemBoundingBoxVars
+	call initializeObject1BoundingBoxVars
 
 	; calculate bounding box for each item
 	ld hl,FIRST_ITEM_INDEX<<8
@@ -29,7 +29,7 @@ checkEnemyAndPartCollisions:
 			inc bc
 			inc bc
 		+
-		call nz,initializeItemBoundingBoxVars
+		call nz,initializeObject1BoundingBoxVars
 		inc bc
 
 		inc h
@@ -39,23 +39,30 @@ checkEnemyAndPartCollisions:
 
 	; Calculate shield position
 	ld hl,@shieldCollisionData
-.if defined(ENABLE_PASSIVE_SHIELD) || defined(ENABLE_NEW_GAME_PLUS)
 	ld a,(wUsingShield)
-.endif
 
-.ifdef ENABLE_PASSIVE_SHIELD
-	bit 7,a
-	; smaller hitbox if passively held
-	jr z,+
-		ld hl,@shieldCollisionDataPassive
-	+
-.endif
 .ifdef ENABLE_NEW_GAME_PLUS
 	cp $04
 	jr nz,+
 		ld hl,@shieldCollisionDataL4
 	+
 .endif
+.ifdef ENABLE_PASSIVE_SHIELD
+	bit 7,a
+	; smaller hitbox if passively held
+	jr z,+
+		ld hl,@shieldCollisionDataPassive
+	+
+	res 7,a
+.endif
+.ifdef ENABLE_NEW_GAME_PLUS
+	cp $04
+	jr c,+
+		; treat L-4 shield as L-3
+		ld a,ITEMCOLLISION_L3_SHIELD
+	+
+.endif
+	ld (hTempVal2),a
 	ld a,(w1Link.direction)
 	add a
 	add a
@@ -294,32 +301,11 @@ enemyCheckCollisions:
 	add Object.collisionRadiusX-Object.zh
 	ld l,a
 	ld bc,hEnemyBoundingBox
-	call initializeItemBoundingBoxVars
-
-	; NOTE; we reverse these since we check opposite edges
-	ld e,h
-	ld b,l
-	ld hl,hEnemyBoundingBox
-	; swap left/right sides
-	ldi a,(hl)
-	ld c,a
-	ldd a,(hl)
-	ldi (hl),a
-	ld a,c
-	ldi (hl),a
-
-	; swap top/bottom sides
-	ldi a,(hl)
-	ld c,a
-	ldd a,(hl)
-	ldi (hl),a
-	ld a,c
-	ldi (hl),a
+	call initializeObject2BoundingBoxVars
 
 	; Check invincibility
-	ld h,e
 	ld d,h
-	ld a,b
+	ld a,l
 	add Object.invincibilityCounter-Object.yh
 	ld l,a
 	ld a,(hl)
@@ -343,7 +329,7 @@ enemyCheckCollisions:
 	ldh a,(<hFF93)
 	ld h,a
 	ld a,b
-	call @checkFlag
+	call checkFlagOptimized
 	ld h,e
 	jr z,@nextItem
 
@@ -370,10 +356,6 @@ enemyCheckCollisions:
 	add c
 	cp b
 	jr nc,@nextItem
-
-	ldh a,(<hActiveObjectType)
-	add Object.collisionRadiusX
-	ld e,a
 
 	push hl
 	ld a,h
@@ -409,21 +391,9 @@ enemyCheckCollisions:
 	ret nc
 
 	; If the shield is out...
-	ld a,(wUsingShield)
-.ifdef ENABLE_PASSIVE_SHIELD
-	; remove passively-held flag
-	res 7,a
-.endif
+	ld a,(hTempVal2)
 	or a
 	jp z,@checkHitLink
-
-.ifdef ENABLE_NEW_GAME_PLUS
-	; treat L-4 shield as L-3
-	cp $04
-	jr c,+
-		ld a,ITEMCOLLISION_L3_SHIELD
-	+
-.endif
 
 	; Store shield level as collision type
 	ldh (<hFF90),a
@@ -434,19 +404,17 @@ enemyCheckCollisions:
 	ldh a,(<hFF93)
 	ld h,a
 	ldh a,(<hFF90)
-	call @checkFlag
+	call checkFlagOptimized
 	jr z,@checkHitLink
 
 	; Check if current object is within the shield's hitbox
-	ldh a,(<hActiveObjectType)
-	add <Object.collisionRadiusX
-	ld e,a
 	ld bc,hEnemyBoundingBox
     ld hl,wShieldBoundingBox
 	call checkObjectsCollidedOptimized
 	ld hl,w1Link
 
 .ifdef ENABLE_RING_REDUX
+	; check link if the object didn't hit the shield
 	jr nc,@checkHitLink
 
 	; check if this is a parry
@@ -475,8 +443,8 @@ enemyCheckCollisions:
 	ret nz
 
 	; if wearing both rings, the shield can deal damage based on link's speed
-	call smashingBoardComboActive
-	jp nz,@handleCollision
+	call smashingBoardActive
+	jp z,@handleCollision
 
 	; reference for link's speeds
 	; 20: walking up stairs
@@ -498,14 +466,10 @@ enemyCheckCollisions:
 	jp z,@handleCollision
 
 	ld a,(w1Link.damage)	; backup
-	push af
+	ld (hTempVal3),a
 
 	; calculate the damage and store in w1Link.damage
-	ld a,(wUsingShield)
-.ifdef ENABLE_PASSIVE_SHIELD
-	; remove passively-held flag
-	res 7,a
-.endif
+	ld a,(hTempVal2)
 	ld c,a
 	xor a
 	sub b
@@ -518,7 +482,7 @@ enemyCheckCollisions:
 	ldh (<hFF90),a
 
 	call @handleCollision
-	pop af
+	ld a,(hTempVal3)
 	ld (w1Link.damage),a	; restore
 	ret
 .else
@@ -535,56 +499,28 @@ enemyCheckCollisions:
 	ret nz
 
 	; Check if the current object responds to link's collisionType
-	ld a,(wLinkObjectIndex)
-	ld h,a
-	ld e,a
-	ld l,<w1Link.collisionType
-	ld a,(hl)
-	and $7f
-	ldh (<hFF90),a
 	ldh a,(<hFF92)
 	ld l,a
 	ldh a,(<hFF93)
 	ld h,a
-	ldh a,(<hFF90)
-	call @checkFlag
+	ld a,(wLinkObjectIndex)
+	ld b,a
+	ld c,SpecialObject.collisionType
+	ld a,(bc)
+	and $7f
+	ldh (<hFF90),a
+	call checkFlagOptimized
 	ret z
 
 	; If link and the current object collide, damage link
-	ldh a,(<hActiveObjectType)
-	add Object.collisionRadiusX
-	ld e,a
 	ld bc,hEnemyBoundingBox
     ld hl,hLinkBoundingBox
 	call checkObjectsCollidedOptimized
+	ret nc
+
 	ld a,(wLinkObjectIndex)
 	ld h,a
 	ld l,$00
-	jp c,@handleCollision
-	ret
-
-;;
-; This appears to behave identically to the checkFlag function in bank 0.
-; I guess it's a bit more efficient?
-; @param a Bit to check
-; @param hl Start of flags
-@checkFlag:
-	ld b,a
-	and $f8
-	rlca
-	swap a
-	ld c,a
-	ld a,b
-	and $07
-	ld b,$00
-	add hl,bc
-	ld c,(hl)
-	ld hl,bitTable
-	add l
-	ld l,a
-	ld a,(hl)
-	and c
-	ret
 
 ;;
 ; @param hl Object 1 (Link/Item)
@@ -611,6 +547,16 @@ enemyCheckCollisions:
 	jr ++
 
 @notWeaponItem:
+.if defined(ROM_COMBO)
+	; recalculate this each frame
+	ld a,(wLinkObjectIndex)
+	cp h
+	jr nz,+
+		; link was hit, so reset this
+		xor a
+		ld (wLinkVulnerableCached),a
+	+
+.endif
 	ldh a,(<hFF8D)
 	ld b,a
 	ldh a,(<hFF8C)
@@ -707,16 +653,6 @@ enemyCheckCollisions:
 	.dw collisionEffect3d
 	.dw collisionEffect3e
 	.dw collisionEffect3f
-
-.ifdef ENABLE_RING_REDUX
-smashingBoardComboActive:
-	; don't allow passively using it
-	ld a,(wUsingShield)
-	bit 7,a
-	ret nz
-	ldbc STEADFAST_RING,HASTE_RING
-	jp bothRingsActive
-.endif
 
 ; Parameters which get passed to collision code functions:
 ; bc = link / item object (points to the start of the object)
@@ -1847,9 +1783,9 @@ applyDamageToLink:
 .ENDE
 
 ;;
-; @param	hl	Address of the item's collisionRadiusX variable
+; @param	hl	Address of the object 1's collisionRadiusX variable
 ; @param	bc	Address of the destination bounding box struct
-initializeItemBoundingBoxVars:
+initializeObject1BoundingBoxVars:
 	ldd a,(hl)
 	ld d,a
 	ld e,(hl)
@@ -1873,6 +1809,37 @@ initializeItemBoundingBoxVars:
 	inc bc
 	add e
 	add e
+	ld (bc),a
+	ret
+
+;;
+; @param	hl	Address of the object 2's collisionRadiusX variable
+; @param	bc	Address of the destination bounding box struct
+; NOTE: The difference for object2 is the xMin/xMax and yMin/yMax are swapped
+initializeObject2BoundingBoxVars:
+	ldd a,(hl)
+	ld d,a
+	ld e,(hl)
+
+	ld a,l
+	add Object.xh - Object.collisionRadiusY
+	ld l,a
+	ldd a,(hl)
+	add d
+	ld (bc),a
+	inc bc
+	sub d
+	sub d
+	ld (bc),a
+	inc bc
+
+	dec l
+	ld a,(hl)
+	add e
+	ld (bc),a
+	inc bc
+	sub e
+	sub e
 	ld (bc),a
 	ret
 
@@ -1912,6 +1879,16 @@ checkObjectsCollidedOptimized:
 
 
 .ifdef ENABLE_RING_REDUX
+smashingBoardActive:
+	; don't allow passively using the smashing board
+	ld a,(wUsingShield)
+	and $80
+	xor $80
+	ret z
+	ld a,(wRingComboCacheFlags)
+	and $08
+	ret
+
 enemyPogoComboActive:
 	push bc
 	ldbc STEADFAST_RING,ROCS_RING
@@ -2019,7 +1996,7 @@ isValidTargetForPogo:
 		; this is a part
 		ld a,(hl)
 		ld hl,@pogoTargets
-		call checkFlag
+		call checkFlagOptimized
 		jr ++
 	+
 	xor a

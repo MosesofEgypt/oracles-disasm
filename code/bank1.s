@@ -3744,6 +3744,11 @@ standardGameState:
 	call updateAzuchu
 	call updateParryTimers
 .endif
+.if defined(ROM_COMBO)
+	; recalculate this each frame
+	xor a
+	ld (wLinkVulnerableCached),a
+.endif
 	ld a,(wLinkDeathTrigger)
 	cp $ff
 	jr nz,+
@@ -4273,6 +4278,10 @@ updateRingEquipStatuses:
 		ld a,(hl)
 		or a
 		jr nz,-
+
+	ldbc STEADFAST_RING,HASTE_RING
+	ld a,$03
+	call @cacheComboActive
 
 	pop bc
 	ret

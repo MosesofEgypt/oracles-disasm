@@ -1459,6 +1459,39 @@ getComboSaveFileFlags:
 .endif
 
 ;;
+; @param hl Pointer to flag mask data(first byte is byte count)
+; @param de Pointer to flag data to be masked
+applyFlagMask:
+	push bc
+	ld b,(hl)
+	inc hl
+	-
+		ld a,(de)
+		and (hl)
+		ld (de),a
+		inc de
+		inc hl
+		dec b
+		jr nz,-
+	pop bc
+	ret
+
+;;
+; @param b	Number of bytes to merge
+; @param hl Pointer to flag data to merge
+; @param de Pointer to flag data to be merged into
+mergeFlags:
+	-
+		ld a,(de)
+		or (hl)
+		ld (de),a
+		inc de
+		inc hl
+		dec b
+		jr nz,-
+	ret
+
+;;
 ; @param hl Address of initial values (should point to initialFileVariables or some
 ; variant)
 initializeFileVariables:
