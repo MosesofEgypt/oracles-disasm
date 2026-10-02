@@ -68,18 +68,17 @@ itemCode02:
 	bit 0,(hl)
 	ret z
 
-	ld a,FIST_RING
-	call cpActiveRing
+	isRingEquipped FIST_RING
 	ld l,Item.collisionType
 	jr z,+
 		; expert punch
-		ldbc 8,-4
+		ldbc 7,-4
 		; increment to ITEMCOLLISION_EXPERT_PUNCH
 		inc (hl)
 		jr ++
 	+
 		; super punch
-		ldbc 15,-6
+		ldbc 10,-6
 		; switch to ITEMCOLLISION_SWORDSPIN
 		; doing this so onox can be hurt
 		ld (hl),ITEMCOLLISION_SWORDSPIN|$80

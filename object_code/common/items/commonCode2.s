@@ -1,9 +1,8 @@
 .ifdef ENABLE_RING_REDUX
 kenpoMasterComboActive:
-	push bc
-	ldbc EXPERTS_RING,FIST_RING
-	call bothRingsActive
-	pop bc
+	isRingEquipped EXPERTS_RING
+	ret nz
+	isRingEquipped FIST_RING
 	ret
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
@@ -25,10 +24,7 @@ tryBreakTileWithExpertsRing:
 	ld a,BREAKABLETILESOURCE_EXPERTS_RING
 .ifdef ENABLE_RING_REDUX
 	call @breakTileHelper
-
-	push bc
 	call kenpoMasterComboActive
-	pop bc
 
 	; do a super punch only with both rings
 	ret nz
@@ -42,11 +38,12 @@ tryBreakTileWithExpertsRing:
 		ld c,h
 		ld a,(w1Link.direction)
 		add a
+		add a
 
 		; copy offsets for explosion into b and a
 		push hl
 		ld hl,tryBreakTileWithSword@linkOffsets
-		rst_addDoubleIndex
+		rst_addAToHl
 		ld b,(hl)
 		inc l
 		ld a,(hl)
@@ -54,11 +51,13 @@ tryBreakTileWithExpertsRing:
 		; point back to the interaction
 		ld h,c
 		ld l,Interaction.xh
-		; add the its x coordinate to the offset and update xh with it
+
+		; add its x coordinate to the offset and update xh with it
 		add a,(hl)
 		ldd (hl),a
 		dec l
-		; add the its y coordinate to the offset and update yh with it
+
+		; add its y coordinate to the offset and update yh with it
 		ld a,b
 		add a,(hl)
 		ld (hl),a
@@ -67,17 +66,15 @@ tryBreakTileWithExpertsRing:
 	pop bc
 
 	; break rocks with your bare hands if you've obtained bombs
-	ld a,TREASURE_BOMBS
-	call checkTreasureObtained
-	jr nc,+
+	isTreasureFlagSet TREASURE_BOMBS
+	jr z,+
 		ld a,BREAKABLETILESOURCE_BOMB
 		call @breakTileHelper
 	+
 
 	; break pots and rocks if you've obtained the bracelet
-	ld a,TREASURE_BRACELET
-	call checkTreasureObtained
-	jr nc,+
+	isTreasureFlagSet TREASURE_BRACELET
+	jr z,+
 		ld a,BREAKABLETILESOURCE_SWORD_L2
 		call @breakTileHelper
 
@@ -86,9 +83,8 @@ tryBreakTileWithExpertsRing:
 	+
 
 	; destroy the ground and clear dirt if you've obtained the shovel
-	ld a,TREASURE_SHOVEL
-	call checkTreasureObtained
-	jr nc,+
+	isTreasureFlagSet TREASURE_SHOVEL
+	jr z,+
 	.if defined(ROM_AGES) || defined(ROM_COMBO)
 		; no destroying dirt while deep underwater
 		call isDeepUnderwater
@@ -100,9 +96,8 @@ tryBreakTileWithExpertsRing:
 	+
 
 	; cut down trees if you've obtained ember seeds
-	ld a,TREASURE_EMBER_SEEDS
-	call checkTreasureObtained
-	jr nc,+
+	isTreasureFlagSet TREASURE_EMBER_SEEDS
+	jr z,+
 		ld a,BREAKABLETILESOURCE_EMBER_SEED
 		call @breakTileHelper
 	+
@@ -300,8 +295,7 @@ itemCalculateSwordDamage:
 	call calculatePowerRingModifier
 
 	ld b,a
-	ld a,GOLD_RING
-	call cpActiveRing
+	isRingEquipped GOLD_RING
 	jr nz,+
 		push hl
 		callab bank0Ext.calculateGoldRingAttackBuff

@@ -978,8 +978,7 @@ linkUpdateDamageToApplyForRings:
 	ld b,a
 
 	; calculate gold ring defense buff
-	ld a,GOLD_RING
-	call cpActiveRing
+	isRingEquipped GOLD_RING
 	jr nz,+
 		push hl
 		callab bank0Ext.calculateGoldRingDefenseBuff
@@ -1111,8 +1110,7 @@ linkApplyDamage:
 	ld l,SpecialObject.damageToApply
 .ifdef ENABLE_RING_REDUX
 	; must be wearing ring ...
-	ld a,STEADFAST_RING
-	call cpActiveRing
+	isRingEquipped STEADFAST_RING
 	jr nz,+
 		; using shield ...
 		ld a,(wUsingShield)
@@ -1135,8 +1133,7 @@ linkApplyDamage:
 	ld b,a
 	jr nz,+
 
-	ld a,CURSED_RED_RING
-	call cpActiveRing
+	isRingEquipped CURSED_RED_RING
 	jr nz,+
 		; prevent hardlock due to fairy waiting till link is healed
 		ld a,(wDisabledObjects)
@@ -1154,8 +1151,7 @@ linkApplyDamage:
 
 	; Protection ring does fixed damage on each hit
 	ld b,a
-	ld a,PROTECTION_RING
-	call cpActiveRing
+	isRingEquipped PROTECTION_RING
 	jr nz,+
 	ld b,$f8
 .endif
@@ -1173,8 +1169,7 @@ linkApplyDamage:
 	jr z,+
 
 	; Steadfast ring halves knockback
-	ld a,STEADFAST_RING
-	call cpActiveRing
+	isRingEquipped STEADFAST_RING
 	jr nz,+
 	ld l,SpecialObject.knockbackCounter
 	srl (hl)
@@ -1242,8 +1237,7 @@ linkApplyDamage:
 	call checkTreasureObtained
 .ifdef ENABLE_RING_REDUX
 	jr c,+++
-		ld a,FAIRYS_RING
-		call cpActiveRing
+		isRingEquipped FAIRYS_RING
 		scf
 		ccf
 		jr nz,@noPotion

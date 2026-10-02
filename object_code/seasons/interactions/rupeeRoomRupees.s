@@ -68,11 +68,9 @@ m_InteractionCode $1d
 	ld hl,@@chosenRupeeVal
 	rst_addAToHl
 	ld c,(hl)
-	ld a,GOLD_JOY_RING
-	call cpActiveRing
+	isRingEquipped GOLD_JOY_RING
 	jr z,@@doubleRupees
-	ld a,RED_JOY_RING
-	call cpActiveRing
+	isRingEquipped RED_JOY_RING
 	jr nz,@@giveRupees
 
 @@doubleRupees:

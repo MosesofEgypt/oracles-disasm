@@ -1,28 +1,47 @@
 .ifdef ENABLE_RING_REDUX
-eitherRangRingEquipped:
-	push bc
-	ldbc RANG_RING_L2,RANG_RING_L1
-	jp eitherRingActiveAndPopBC
+getRangRingDamageBonus:
+	isRingEquipped RANG_RING_L1
+	jr z,+
+		; L-1 not equipped. what about L-2?
+		isRingEquipped RANG_RING_L2
+
+		ld c,$00
+		ret nz
+
+		; only L-2 equipped
+		ld c,-2
+		ret
+	+
+
+	; L-2 not equipped. what about L-1?
+	isRingEquipped RANG_RING_L2
+	ld c,-1
+	ret nz
+
+	; both equipped
+	ld c,-4
+	ret
 
 superBoomerangComboActive:
-	ld a,TOSS_RING
-	call cpActiveRing
+	isRingEquipped TOSS_RING
 	jr z,+
-		ld a,HASTE_RING
-		call cpActiveRing
+		isRingEquipped HASTE_RING
 		ret nz
 	+
-@zIfEither
-	call eitherRangRingEquipped
-	jp getZflagOrCflagSet
+	isRingEquipped RANG_RING_L1
+	ret z
+	isRingEquipped RANG_RING_L2
+	ret
 
 diggerangComboActive:
-	push bc
-	ldbc TOSS_RING,DISCOVERY_RING
-	call bothRingsActive
-	pop bc
+	isRingEquipped TOSS_RING
 	ret nz
-	jr superBoomerangComboActive@zIfEither
+	isRingEquipped DISCOVERY_RING
+	ret nz
+	isRingEquipped RANG_RING_L1
+	ret z
+	isRingEquipped RANG_RING_L2
+	ret
 
 ;;
 ; @param[out]	zflag	Set if the parent is null
@@ -37,9 +56,10 @@ checkBoomerangParentStillValid:
 	ret
 
 lightningBoomerangComboActive:
-	push bc
-	ldbc RANG_RING_L1,RANG_RING_L2
-	jp eitherRingActiveAndPopBC
+	isRingEquipped RANG_RING_L1
+	ret z
+	isRingEquipped RANG_RING_L2
+	ret
 .endif
 
 ;;
@@ -104,17 +124,10 @@ itemCode06:
 	ld (hl),c
 
 .ifdef ENABLE_RING_REDUX
-	call eitherRangRingEquipped
-
-	jr nz,+
-		ld c,-4
-		jr c,+
-			ld c,-2
-		jr +++
-	+
-	jr nc,++
-		ld c,-1
-	+++
+	call getRangRingDamageBonus
+	ld a,c
+	or a
+	jr z,++
 
 	call lightningBoomerangComboActive
 	jr nz,+
@@ -125,12 +138,10 @@ itemCode06:
 	+
 .else
 	ld c,-1
-	ld a,RANG_RING_L1
-	call cpActiveRing
+	isRingEquipped RANG_RING_L1
 	jr z,+
 
-	ld a,RANG_RING_L2
-	call cpActiveRing
+	isRingEquipped RANG_RING_L2
 	jr nz,++
 	ld c,-2
 +
@@ -377,9 +388,8 @@ magicBoomerangTryToBreakTile:
 	; if wearing these rings, the boomerang just eats dirt up
 	call diggerangComboActive
 	jr nz,+
-		ld a,TREASURE_SHOVEL
-		call checkTreasureObtained
-		jr nc,+
+		isTreasureFlagSet TREASURE_SHOVEL
+		jr z,+
 			ld a,BREAKABLETILESOURCE_SHOVEL
 			call itemTryToBreakTile
 	+

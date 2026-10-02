@@ -94,12 +94,10 @@ m_PartCode $28
 	jp partDelete
 
 @collected:
-	ld a,$26
-	call cpActiveRing
+	isRingEquipped GOLD_JOY_RING
 	ld c,$18
 	jr z,+
-	ld a,$25
-	call cpActiveRing
+	isRingEquipped BLUE_JOY_RING
 	jr nz,++
 +
 	ld c,$30

@@ -41,8 +41,7 @@ m_EnemyCode $77
 	ld (hl),$3c
 	ld l,Enemy.health
 .if defined(ENABLE_RING_REDUX)
-	ld a,MYSTIC_SEED_RING
-	call cpActiveRing
+	isRingEquipped MYSTIC_SEED_RING
 	jr nz,++
 		; double damage from seeds
 		dec (hl)

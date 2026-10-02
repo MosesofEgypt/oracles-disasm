@@ -462,6 +462,7 @@ wEquippedIconGfxExtToUse:
 
 .ifdef ENABLE_MULTI_RING
 wEquippedRingFlags: ; $c581-$c588
+	; NOTE: THIS MUST NOT SPAN ACROSS DIFFERENT 256 BYTE CHUNKS
 	; one bit for each ring to indicate if it's equipped this frame or not
 	dsb $08
 

@@ -13,11 +13,10 @@ m_EnemyCode $15
 	jr nz,@normalStatus
 
 .ifdef ENABLE_RING_REDUX
-	ld a,RED_HOLY_RING
+	isRingEquipped RED_HOLY_RING
 .else
-	ld a,WHISP_RING
+	isRingEquipped WHISP_RING
 .endif
-	call cpActiveRing
 	jr z,@normalStatus
 
 .ifdef ENABLE_NEW_GAME_PLUS

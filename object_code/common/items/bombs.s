@@ -105,8 +105,7 @@ itemCode03:
 ; Bomb being held
 @heldState1:
 	; Bombs don't explode while being held if the peace ring is equipped
-	ld a,PEACE_RING
-	call cpActiveRing
+	isRingEquipped PEACE_RING
 	jp z,bombResetAnimationAndSetVisiblec1
 
 	call bombUpdateAnimation
@@ -240,8 +239,7 @@ itemUpdateExplosion:
 .ifdef ENABLE_RING_REDUX
 	push bc
 	push af
-	ld a,BLAST_RING
-	call cpActiveRing
+	isRingEquipped BLAST_RING
 	pop bc
 	ld a,b
 	pop bc
@@ -321,8 +319,7 @@ itemInitializeBombExplosion:
 	set 7,(hl)
 
 	; Increase damage if using blast ring
-	ld a,BLAST_RING
-	call cpActiveRing
+	isRingEquipped BLAST_RING
 	jr nz,+
 	ld l,Item.damage
 	dec (hl)
@@ -390,8 +387,7 @@ explosionCheckAndApplyLinkCollision:
 	cp SPECIALOBJECT_MINECART
 	ret z
 
-	ld a,BOMBPROOF_RING
-	call cpActiveRing
+	isRingEquipped BOMBPROOF_RING
 	ret z
 
 	call checkLinkVulnerable
@@ -521,9 +517,8 @@ explosionTryToBreakNextTile:
 	call tryToBreakTile
 	pop hl
 
-	ld a,TREASURE_SHOVEL
-	call checkTreasureObtained
-	ret nc
+	isTreasureFlagSet TREASURE_SHOVEL
+	ret z
 
 	; in order to destroy everything(even after tiles change)
 	; we need to reset the counter once it hits 0xFF so it can
@@ -594,8 +589,10 @@ explosionTryToBreakNextTile:
 	.db $fc $e0 $00
 
 instantBombComboActive:
-	ldbc BOMBPROOF_RING,HASTE_RING
-	jp bothRingsActive
+	isRingEquipped BOMBPROOF_RING
+	ret nz
+	isRingEquipped HASTE_RING
+	ret
 .else
 	.db $f8 $f3 $f3
 	.db $f8 $0c $f3

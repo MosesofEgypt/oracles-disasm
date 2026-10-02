@@ -74,7 +74,7 @@ parentItemCode_harp:
 ++
 	call specialObjectAnimate_optimized
 .ifdef ENABLE_RING_REDUX
-	call isHasteRingEquipped
+	isRingEquipped HASTE_RING
 	call z,specialObjectAnimate_optimized
 .endif
 	call @getSelectedSongAddr

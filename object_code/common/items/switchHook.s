@@ -136,7 +136,7 @@ itemCode0a:
 	; Depending on the switch hook's level, set speed (b) and # frames to extend (c)
 	ldbc SPEED_200,$29
 .ifdef ENABLE_RING_REDUX
-	call isHasteRingEquipped
+	isRingEquipped HASTE_RING
 	jr nz,+
 		ldbc SPEED_440,$14
 	+
@@ -146,7 +146,7 @@ itemCode0a:
 	jr z,+
 	ldbc SPEED_300,$26
 .ifdef ENABLE_RING_REDUX
-	call isHasteRingEquipped
+	isRingEquipped HASTE_RING
 	jr nz,+
 		ldbc SPEED_620,$13
 	+
@@ -357,7 +357,7 @@ switchHookState3:
 	jp nz,func_5902
 
 .ifdef ENABLE_RING_REDUX
-	call isHasteRingEquipped
+	isRingEquipped HASTE_RING
 	jr nz,+
 		ld l,Item.animParameter
 		bit 7,(hl)

@@ -6374,8 +6374,7 @@ inventoryMenuState1:
 	cp $0f
 	jr nz,+
 .ifdef ENABLE_RING_REDUX
-	ld a,VASUS_RING
-	call cpActiveRing
+	isRingEquipped VASUS_RING
 	jp z,@openRingBoxMenu
 .endif
 .ifdef PORTAL_RING_BOX_LEVEL

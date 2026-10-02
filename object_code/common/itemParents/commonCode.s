@@ -516,7 +516,7 @@ parentItemGenericState1:
 	rlca
 .ifdef ENABLE_RING_REDUX
 	jr c,+
-		call isHasteRingEquipped
+		isRingEquipped HASTE_RING
 		call z,specialObjectAnimate_optimized
 		ld e,Item.animParameter
 		ld a,(de)
@@ -782,8 +782,7 @@ alchemyRingRestock:
 	ret nz
 
 	; ring must be equipped
-	ld a,ALCHEMY_RING
-	call cpActiveRing
+	isRingEquipped ALCHEMY_RING
 	jr nz,@clearAndReturn
 
 	; check the items type
@@ -817,18 +816,26 @@ alchemyRingRestock:
 	; if we have that many rupees, remove them and do alchemy
 	call removeRupeeValue
 
-	; set the amount of ammo in "a" to 1
-	ld a,$01
-	call alchemyJoyComboActive
-	jr nz,+
-		; increase the number if wearing green joy
-		inc a
-	+
-	jr nc,+
-		; increase the number if wearing gold joy
-		inc a
-	+
+	; determine the ammo to generate
+	isRingEquipped GREEN_JOY_RING
 
+	; increase the amount if wearing
+	; green joy and/or gold joy rings
+	jr z,+
+		isRingEquipped GOLD_JOY_RING
+		ld a,$01
+		jr nz,++ ; jump if neither equipped
+			; one equipped
+			inc a
+			jr ++
+	+
+		isRingEquipped GOLD_JOY_RING
+		ld a,$02
+		; jump if only 1 equipped
+		jr nz,++
+			; both equipped
+			inc a
+	++
 	or a
 	ret
 
@@ -838,22 +845,25 @@ alchemyRingRestock:
 	ret
 
 swordBeamHeartCutoff:
-	ldbc LIGHT_RING_L2,LIGHT_RING_L1
-	call eitherRingActive
-	ld c,$00
-	jr nz,+
-		jr nc,++
-			ld c,$7f
-			ret
-		++
+	isRingEquipped LIGHT_RING_L1
+	jr z,+
+		; L-1 not equipped. what about L-2?
+		isRingEquipped LIGHT_RING_L2
+		ld c,$00
+		ret nz
+
+		; only L-2 equipped
 		ld c,LIGHT_RING_L2_CUTOFF
+		ret
 	+
-	ret nc
+
+	; L-2 not equipped. what about L-1?
+	isRingEquipped LIGHT_RING_L2
 	ld c,LIGHT_RING_L1_CUTOFF
+	ret nz
+
+	; both equipped
+	ld c,$7f
 	ret
 
-alchemyJoyComboActive:
-	push bc
-	ldbc GREEN_JOY_RING,GOLD_JOY_RING
-	jp eitherRingActiveAndPopBC
 .endif

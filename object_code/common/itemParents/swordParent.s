@@ -1,25 +1,23 @@
 .ifdef ENABLE_RING_REDUX
 hurricaneSpinComboActive:
-	push bc
-	ldbc SPIN_RING,CHARGE_RING
-	call bothRingsActive
-	pop bc
+	isRingEquipped SPIN_RING
+	ret nz
+	isRingEquipped CHARGE_RING
 	ret
 
 beamosComboActive:
-	ld a,ENERGY_RING
-	call cpActiveRing
+	isRingEquipped ENERGY_RING
 	ret nz
-
-	push bc
-	ldbc LIGHT_RING_L2,LIGHT_RING_L1
-	call eitherRingActive
-	pop bc
-	jp getZflagOrCflagSet
+	isRingEquipped LIGHT_RING_L2
+	ret z
+	isRingEquipped LIGHT_RING_L2
+	ret
 
 swordShmupComboActive:
-	ldbc ENERGY_RING,CHARGE_RING
-	jp bothRingsActive
+	isRingEquipped ENERGY_RING
+	ret nz
+	isRingEquipped CHARGE_RING
+	ret
 .endif
 
 ;;
@@ -53,8 +51,7 @@ parentItemCode_sword:
 	ld a,(wLinkHealth)
 	cp $05
 	jr c,++
-	ld a,DBL_EDGED_RING
-	call cpActiveRing
+	isRingEquipped DBL_EDGED_RING
 	jr nz,++
 	ld e,Item.var3a
 	ld a,$f8
@@ -82,7 +79,7 @@ parentItemCode_sword:
 
 	call specialObjectAnimate_optimized
 .ifdef ENABLE_RING_REDUX
-	call isHasteRingEquipped
+	isRingEquipped HASTE_RING
 	call z,specialObjectAnimate_optimized
 .endif
 	ld h,d
@@ -183,8 +180,7 @@ parentItemCode_sword:
 	call parentItemCheckButtonPressed
 	jp z,@deleteSelf
 	call @checkAndRetForSwordPoke
-	ld a,CHARGE_RING
-	call cpActiveRing
+	isRingEquipped CHARGE_RING
 	ld c,$01
 	jr nz,+
 	ld c,$04
@@ -195,8 +191,7 @@ parentItemCode_sword:
 	ld (hl),a
 	ret nc
 
-	ld a,ENERGY_RING
-	call cpActiveRing
+	isRingEquipped ENERGY_RING
 	jr nz,+
 
 	call @createSwordBeam
@@ -238,8 +233,7 @@ parentItemCode_sword:
 	ld (wcc63),a
 	ld l,Item.state
 	ld (hl),$04
-	ld a,SPIN_RING
-	call cpActiveRing
+	isRingEquipped SPIN_RING
 	ld a,$05
 	jr nz,+
 	ld a,$09
@@ -460,12 +454,10 @@ parentItemCode_sword:
 	call swordBeamHeartCutoff
 .else
 	ld c,$08
-	ld a,LIGHT_RING_L1
-	call cpActiveRing
+	isRingEquipped LIGHT_RING_L1
 	jr z,++
 	ld c,$0c
-	ld a,LIGHT_RING_L2
-	call cpActiveRing
+	isRingEquipped LIGHT_RING_L2
 	jr z,++
 	ld c,$00
 ++

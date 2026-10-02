@@ -343,13 +343,13 @@ enemyCheckCollisions:
 	cp ITEMCOLLISION_BOMB
 .endif
 	jr nz,++
-
-	ld l,Item.collisionRadiusY
-	ld a,(hl)
-	ld c,a
-	add a
-	ld b,a
-++
+		; bomb related
+		ld l,Item.collisionRadiusY
+		ld a,(hl)
+		ld c,a
+		add a
+		ld b,a
+	++
 	ld l,Item.zh
 	ldh a,(<hFF91)
 	sub (hl)
@@ -1294,8 +1294,7 @@ collisionEffect36:
 	ld a,b ; load object upper byte address into a
 	cp >w1Link
 	jr nz,+
-		ld a,GREEN_HOLY_RING
-		call cpActiveRing
+		isRingEquipped GREEN_HOLY_RING
 		jp z,collisionEffect09
 	+
 	; check if azuchu
@@ -1318,8 +1317,7 @@ collisionEffect36:
 	res 7,(hl)
 
 	; Apply damage if green holy ring is not equipped
-	ld a,GREEN_HOLY_RING
-	call cpActiveRing
+	isRingEquipped GREEN_HOLY_RING
 	ld a,$f8
 	jr nz,+
 	xor a
@@ -1795,6 +1793,11 @@ initializeObject1BoundingBoxVars:
 	ld l,a
 	ldd a,(hl)
 	sub d
+	cp $f0
+	jr c,+
+		; position wrapped around to below 0. set to 0
+		xor a
+	+
 	ld (bc),a
 	inc bc
 	add d
@@ -1805,6 +1808,11 @@ initializeObject1BoundingBoxVars:
 	dec l
 	ld a,(hl)
 	sub e
+	cp $f0
+	jr c,+
+		; position wrapped around to below 0. set to 0
+		xor a
+	+
 	ld (bc),a
 	inc bc
 	add e
@@ -1830,6 +1838,12 @@ initializeObject2BoundingBoxVars:
 	inc bc
 	sub d
 	sub d
+	dec a	; offset by 1 to capture (hl) == a
+	cp $f0
+	jr c,+
+		; position wrapped around to below 0. set to 0
+		xor a
+	+
 	ld (bc),a
 	inc bc
 
@@ -1840,6 +1854,12 @@ initializeObject2BoundingBoxVars:
 	inc bc
 	sub e
 	sub e
+	dec a	; offset by 1 to capture (hl) == a
+	cp $f0
+	jr c,+
+		; position wrapped around to below 0. set to 0
+		xor a
+	+
 	ld (bc),a
 	ret
 
@@ -1859,7 +1879,6 @@ checkObjectsCollidedOptimized:
 	inc l
 	inc c
 	ld a,(bc)
-	dec a   ; offset by 1 to capture (hl) == a
 	cp (hl) ; no collision if 2's left-edge coordinate greater than 1's right-edge
 	ret nc
 
@@ -1873,7 +1892,6 @@ checkObjectsCollidedOptimized:
 	inc l
 	inc c
 	ld a,(bc)
-	dec a   ; offset by 1 to capture (hl) == a
 	cp (hl) ; no collision if 2's top-edge coordinate greater than 1's bottom-edge
 	ret
 
@@ -1890,10 +1908,9 @@ smashingBoardActive:
 	ret
 
 enemyPogoComboActive:
-	push bc
-	ldbc STEADFAST_RING,ROCS_RING
-	call bothRingsActive
-	pop bc
+	isRingEquipped STEADFAST_RING
+	ret nz
+	isRingEquipped ROCS_RING
 	ret
 
 collisionLinkBounce:
@@ -1911,21 +1928,17 @@ collisionLinkBounce:
 		ld a,c
 		cp <w1Link
 		jr nz,+
+			; @check that Link is in the air and falling
+			ld a,(wLinkInAir)
+			and $0f
+			cp $02
 
-	; @check that Link is in the air and falling
-	ld a,(wLinkInAir)
-	and $0f
-
-	; check that link is fully in the air
-	cp $02
+			; check the rings are equipped
+			call z,enemyPogoComboActive
 	+
 	pop bc
 	ld a,b
 	pop bc
-	ret nz
-
-	; check the rings are equipped
-	call enemyPogoComboActive
 	ret nz
 
 	; ensure this is something link can pogo safely on
@@ -1959,8 +1972,7 @@ collisionLinkBounce:
 	; only judo stun if enemy
 	jr nz,+
 		; change collision type
-		ld a,EXPERTS_RING
-		call cpActiveRing
+		isRingEquipped EXPERTS_RING
 
 		; experts ring causes a stun, not just a bump
 		ld a,COLLISIONEFFECT_STUN

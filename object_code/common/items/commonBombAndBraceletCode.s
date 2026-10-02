@@ -82,8 +82,7 @@ itemBeginThrow:
 	ld (de),a
 
 	; Bytes 2,3: Throw speed with and without toss ring, respectively
-	ld a,TOSS_RING
-	call cpActiveRing
+	isRingEquipped TOSS_RING
 	jr nz,+
 	inc hl
 +

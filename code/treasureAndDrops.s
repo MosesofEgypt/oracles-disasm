@@ -57,6 +57,12 @@ checkTreasureObtained_body:
 ; @param	b	Treasure
 loseTreasure_body:
 	push hl
+.ifdef ENABLE_PASSIVE_SHIELD
+	; reset shield and mermaid suit cache flags
+	ld a,(wOptimizationFlags)
+	and $0f
+	ld (wOptimizationFlags),a
+.endif
 	ld a,b
 	call loseTreasure_helper
 	pop hl
@@ -107,6 +113,12 @@ loseTreasure_helper:
 giveTreasure_body:
 	push hl
 	push de
+.ifdef ENABLE_PASSIVE_SHIELD
+	; reset shield and mermaid suit cache flags
+	ld a,(wOptimizationFlags)
+	and $0f
+	ld (wOptimizationFlags),a
+.endif
 	ld a,b
 .ifdef ENABLE_NEW_GAME_PLUS
 	cp TREASURE_HEART_CONTAINER
@@ -535,16 +547,16 @@ giveTreasure_body:
 	call getRupeeValue
 
 .ifdef ENABLE_RING_REDUX
-	ld a,GOLD_JOY_RING
-	call cpActiveRing
+	isRingEquipped GOLD_JOY_RING
 	jr nz,+
 		ld a,e
 		cp <wNumRupees
-		ld a,RED_JOY_RING
-		jr z,+++
-			ld a,GREEN_JOY_RING
+		jr z,++
+			isRingEquipped GREEN_JOY_RING
+			jr +++
+		++
+			isRingEquipped RED_JOY_RING
 		+++
-		call cpActiveRing
 		jr nz,+
 			; double the item value
 			ld a,c
@@ -1036,8 +1048,7 @@ decideItemDrop_body:
 .ifdef ENABLE_RING_REDUX
 	push de
 	push af
-	ld a,DISCOVERY_RING
-	call cpActiveRing
+	isRingEquipped DISCOVERY_RING
 	pop de
 	ld a,d
 	jr nz,+
@@ -1875,9 +1886,8 @@ checkIncreaseGashaMaturityForGettingTreasure:
 
 .ifdef ENABLE_RING_REDUX
 tripleHeartJoyComboActive:
-	push bc
-	ldbc BLUE_JOY_RING,GOLD_JOY_RING
-	call bothRingsActive
-	pop bc
+	isRingEquipped BLUE_JOY_RING
+	ret nz
+	isRingEquipped GOLD_JOY_RING
 	ret
 .endif

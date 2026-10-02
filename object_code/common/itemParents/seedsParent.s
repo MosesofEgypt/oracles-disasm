@@ -26,8 +26,7 @@ parentItemCode_slingshot:
 	jr nz,+
 	ld c,$03
 .ifdef ENABLE_RING_REDUX
-	ld a,MYSTIC_SEED_RING
-	call cpActiveRing
+	isRingEquipped MYSTIC_SEED_RING
 
     ; reduce how many slots we request based on how many seeds are onscreen
 	jr nz,+
@@ -124,7 +123,7 @@ parentItemCode_shooter:
 	call parentItemCheckButtonPressed
 .ifdef ENABLE_RING_REDUX
 	jr z,+
-		call isHasteRingEquipped
+		isRingEquipped HASTE_RING
 		call z,@checkUpdateAngle
 		jp @checkUpdateAngle
 	+
@@ -287,8 +286,7 @@ parentItemCode_shooter:
 
 .ifdef ENABLE_RING_REDUX
 @getFiredSeedLimit:
-	ld a,MYSTIC_SEED_RING
-	call cpActiveRing
+	isRingEquipped MYSTIC_SEED_RING
 	ld a,(wIsSeedShooterInUse)
 
     ; if the ring is on, we can fire 5 seeds at once
@@ -341,8 +339,7 @@ parentItemCode_satchel:
 
 	ld e,$01
 .ifdef ENABLE_RING_REDUX
-	ld a,MYSTIC_SEED_RING
-	call cpActiveRing
+	isRingEquipped MYSTIC_SEED_RING
 	jr nz,+
 		ld e,$00
 	+
@@ -361,8 +358,7 @@ parentItemCode_satchel:
 	jr nz,@clear
 
 .if defined(ENABLE_RING_REDUX)
-	ld a,MYSTIC_SEED_RING
-	call cpActiveRing
+	isRingEquipped MYSTIC_SEED_RING
 	jr z,+
 		; 8 seconds without ring
 		ld a,$01

@@ -1,9 +1,8 @@
 .ifdef ENABLE_RING_REDUX
 hadoukenComboActive:
-	push bc
-	ldbc EXPERTS_RING,ENERGY_RING
-	call bothRingsActive
-	pop bc
+	isRingEquipped EXPERTS_RING
+	ret nz
+	isRingEquipped ENERGY_RING
 	ret
 .endif
 
@@ -79,13 +78,7 @@ parentItemCode_punch:
 	call itemCreateChild
 
 	; Check for fist ring (weak punch) or expert's ring (strong punch)
-.ifdef ENABLE_MULTI_RING
-	ld a,EXPERTS_RING
-	call cpActiveRing
-.else
-	ld a,(wActiveRing)
-	cp EXPERTS_RING
-.endif
+	isRingEquipped EXPERTS_RING
 
 .ifdef ENABLE_RING_REDUX
 	push af
@@ -197,7 +190,7 @@ parentItemCode_punch:
 @state1:
 	; Wait for the animation to finish, then delete the item
 .ifdef ENABLE_RING_REDUX
-	call isHasteRingEquipped
+	isRingEquipped HASTE_RING
 	jr nz,+
 		ld e,Item.animParameter
 		ld a,(de)

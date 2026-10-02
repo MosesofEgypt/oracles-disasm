@@ -8088,8 +8088,7 @@ checkLinkIsOverHazard:
 	cp $04
 	jr nz,+
 		; treat lava as water with ring on
-		ld a,LAVA_SWIMMING_RING
-		call cpActiveRing
+		isRingEquipped LAVA_SWIMMING_RING
 		ld a,$04
 		jr nz,+
 			ld a,$01
@@ -8621,12 +8620,28 @@ cpActiveRingCheckFF:
 cpActiveRing:
 	; determine if the flag is set
 	push hl
-	push bc
 	ld (hTempVal2),a
-	ld hl,wEquippedRingFlags
-	call checkFlagOptimized
+
+	; get the bit mask
+	and $07
+	ld h,>bitTable
+	add <bitTable
+	ld l,a
+	ld a,(hl)
+	ld (hTempVal3),a
+
+	; get the byte to mask
+	ld h,>wEquippedRingFlags
 	ld a,(hTempVal2)
-	pop bc
+	rlca
+	swap a
+	and $07
+	add <wEquippedRingFlags
+	ld l,a
+
+	; apply the mask
+	ld a,(hTempVal3)
+	and (hl)
 	pop hl
 	ret
 .else
@@ -8639,6 +8654,12 @@ cpActiveRing:
 .endif
 
 .ifdef ENABLE_MULTI_RING
+remoteBombComboActive:
+	isRingEquipped PEACE_RING
+	ret nz
+	isRingEquipped BOMBERS_RING
+	ret
+
 clearRingEquipStatuses:
 	xor a
 	ld (wRingComboCacheFlags),a
@@ -9079,8 +9100,7 @@ handleAutoEquipItem:
 
 .ifdef ENABLE_RING_REDUX
 getLinkMaxHealth:
-	ld a,CURSED_RED_RING
-	call cpActiveRing
+	isRingEquipped CURSED_RED_RING
 	ld a,(wLinkMaxHealth)
 	ret nz
 	cp CURSE_RING_HEART_CAP
@@ -9123,53 +9143,10 @@ isValidTargetForJudo:
 	dbrev %11010000 %11111110 ; 0x40-0x4f
 	dbrev %01100000 %00000000 ; 0x50-0x5f
 
-.ifdef ENABLE_MULTI_RING
-;;
-; @param	b	The first ring to check for.
-; @param	c	The second ring to check for.
-; @param[out]	zflag	Set if both 'b' and 'c' rings are active.
-bothRingsActive:
-	push af
-	ld a,b
-	call cpActiveRing
-	jr nz,+
-		ld a,c
-		call cpActiveRing
-	+
-	pop bc
-	ld a,b
-	ret
-
-eitherRingActiveAndPopBC:
-	call eitherRingActive
-	pop bc
-	ret
-.endif
-
-getZflagOrCflagSet:
-	ret z
-	ret nc
-	xor a
-	ret
-
-isHasteRingEquipped:
-	push de
-	ld d,a
-	ld a,HASTE_RING
-	call cpActiveRing
-	ld a,d
-	pop de
-	ret
-
-remoteBombComboActive:
-	ldbc PEACE_RING,BOMBERS_RING
-	jr bothRingsActive
-
 victoryRingIncLevel:
 	push de
 	ld d,a
-	ld a,VICTORY_RING
-	call cpActiveRing
+	isRingEquipped VICTORY_RING
 	ld a,d
 	pop de
 	ret nz
@@ -9187,8 +9164,7 @@ victoryRingIncLevel:
 applyCurseArmorDamageCap:
 	; if wearing blue curse, all damage becomes 1/4 heart
 	push af
-	ld a,CURSED_BLUE_RING
-	call cpActiveRing
+	isRingEquipped CURSED_BLUE_RING
 	jr nz,+
 		pop af
 		; do reduced damage of 1/4 heart
@@ -10648,11 +10624,10 @@ enemyDie:
 
 	; Update all gasha kill counters
 .ifdef ENABLE_RING_REDUX
-	ld a,FARMERS_RING
+	isRingEquipped FARMERS_RING
 .else
-	ld a,GASHA_RING
+	isRingEquipped GASHA_RING
 .endif
-	call cpActiveRing
 	ld a,$ff
 	jr z,+
 	xor a
@@ -11318,8 +11293,7 @@ decPegasusSeedCounter:
 	ld b,$00
 	ld c,$07
 .if !defined(ENABLE_RING_REDUX)
-	ld a,PEGASUS_RING
-	call cpActiveRing
+	isRingEquipped PEGASUS_RING
 	jr z,+
 
 	ld c,$0f

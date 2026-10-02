@@ -528,12 +528,10 @@ m_InteractionCode $60
 	cp TREASURE_ORE_CHUNKS
 	jr nz,++
 
-	ld a,GOLD_JOY_RING
-	call cpActiveRing
+	isRingEquipped GOLD_JOY_RING
 	jr z,+
 
-	ld a,GREEN_JOY_RING
-	call cpActiveRing
+	isRingEquipped GREEN_JOY_RING
 	jr nz,++
 +
 	inc c

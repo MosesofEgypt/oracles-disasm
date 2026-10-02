@@ -66,8 +66,7 @@ dealSpikeDamageToLink:
 	ld (hl),40 ; 40 frames invincibility
 
 	; Get damage value (4 normally, 2 with red luck ring)
-	ld a,RED_LUCK_RING
-	call cpActiveRing
+	isRingEquipped RED_LUCK_RING
 	ld a,-4
 	jr nz,+
 	sra a
@@ -112,31 +111,32 @@ updateLinkInvincibilityCounter:
 	or a
 	ret z
 
-	ldbc GBA_TIME_RING, GBA_NATURE_RING
-	call eitherRingActive
-	ldbc $07,$05
-	jr z,+++
-		jr nc,++
-		jr +
-	+++
-	jr nc,+
+	ldbc $07,$06
+	isRingEquipped GBA_TIME_RING
+	jr nz,+
 		dec c
 	+
-
-	ld a,(wFrameCounter)
-	and b
+	isRingEquipped GBA_NATURE_RING
+	jr nz,+
+		dec c
+	+
+	ld a,$06
 	cp c
-	jr c,++
-		bit 7,a
-		jr z,+
-			cp $80
-			jr z,++ 	; if the number is already max negative, don't decrement
-			dec (hl)
-			jr ++
-		+
-			cp $7f
-			jr z,++ 	; if the number is already max positive, don't increment
-			inc (hl)
+	jr z,++
+		ld a,(wFrameCounter)
+		and b
+		cp c
+		jr c,++
+			bit 7,a
+			jr z,+
+				cp $80
+				jr z,++ 	; if the number is already max negative, don't decrement
+				dec (hl)
+				jr ++
+			+
+				cp $7f
+				jr z,++ 	; if the number is already max positive, don't increment
+				inc (hl)
 	++
 .endif
 	ld a,(hl)
@@ -233,8 +233,7 @@ linkApplyTileTypes:
 	cp TILETYPE_LAVA
 	jr nz,+
 		; treat lava as water with ring on
-		ld a,LAVA_SWIMMING_RING
-		call cpActiveRing
+		isRingEquipped LAVA_SWIMMING_RING
 		ld a,TILETYPE_LAVA
 		jr nz,+
 			ld a,TILETYPE_WATER
@@ -315,11 +314,10 @@ linkApplyTileTypes:
 
 @tileType_crackedFloor:
 .ifdef ENABLE_RING_REDUX
-	ld a,HIKERS_RING
+	isRingEquipped HIKERS_RING
 .else
-	ld a,ROCS_RING
+	isRingEquipped ROCS_RING
 .endif
-	call cpActiveRing
 	jr z,@tileType_normal
 
 	; Don't break the floor until Link has stood there for 32 frames
@@ -381,11 +379,10 @@ linkApplyTileTypes:
 
 @tileType_ice:
 .ifdef ENABLE_RING_REDUX
-	ld a,HIKERS_RING
+	isRingEquipped HIKERS_RING
 .else
-	ld a,SNOWSHOE_RING
+	isRingEquipped SNOWSHOE_RING
 .endif
-	call cpActiveRing
 	jr z,@notSwimming
 
 	ld hl,wIsTileSlippery
@@ -489,8 +486,7 @@ linkApplyTileTypes:
 	or a
 	jp nz,@tileType_normal
 
-	ld a,QUICKSAND_RING
-	call cpActiveRing
+	isRingEquipped QUICKSAND_RING
 	jp z,@tileType_normal
 
 	ldbc SPEED_80, TILETYPE_UPCONVEYOR

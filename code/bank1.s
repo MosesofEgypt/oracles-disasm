@@ -3708,8 +3708,7 @@ processDmgPaletteUpdate:
 
 	; record whether the gameboy ring is equipped or not so we can
 	; check if we need to force the palettes to reload instantly
-	ld a,DMG_COLOR_RING
-	call cpActiveRing
+	isRingEquipped DMG_COLOR_RING
 	ld a,$00
 	ld hl,wDmgRingEquippedPreviousFrame
 	jr nz,+
@@ -4259,13 +4258,14 @@ updateRingEquipStatuses:
 	; these combos can get checked multiple times a
 	; frame, so we cache them for quicker processing
 	push bc
+	push de
 
 	ldbc DISCOVERY_RING,BLAST_RING
-	xor a
+	ld d,$00
 	call @cacheComboActive
 
 	ldbc EXPERTS_RING,TOSS_RING
-	ld a,$01
+	ld d,$01
 	call @cacheComboActive
 
 	; cache the transform rings
@@ -4280,9 +4280,10 @@ updateRingEquipStatuses:
 		jr nz,-
 
 	ldbc STEADFAST_RING,HASTE_RING
-	ld a,$03
+	ld d,$03
 	call @cacheComboActive
 
+	pop de
 	pop bc
 	ret
 
@@ -4306,9 +4307,16 @@ updateRingEquipStatuses:
 	ret
 
 @cacheComboActive:
-	call bothRingsActive
-	jp z,setRingComboFlag
-	ret
+	ld a,b
+	call cpActiveRing
+	ret nz
+
+	ld a,c
+	call cpActiveRing
+	ret nz
+
+	ld a,d
+	jp setRingComboFlag
 
 updateColorRingPalettes:
 	; rings changed. update the palettes
@@ -4410,8 +4418,7 @@ updateParryTimers:
 
 updateAzuchu:
 	; determine if wearing ring
-	ld a,AZUCHU_RING
-	call cpActiveRing
+	isRingEquipped AZUCHU_RING
 	ret nz
 
 	; only run every few frames to prevent lag

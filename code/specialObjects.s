@@ -13,15 +13,14 @@ updateSpecialObjects:
 	and $3f
 	ld (hl),a
 
-	ld a,TREASURE_MERMAID_SUIT
+	isTreasureFlagSet TREASURE_MERMAID_SUIT
 .ifdef ROM_COMBO
 	call wIsSeasons
 	jr nc,+
-		ld a,TREASURE_MERMAID_SUIT_SEASONS
+		isTreasureFlagSet TREASURE_MERMAID_SUIT_SEASONS
 	+
 .endif
-	call checkTreasureObtained
-	jr nc,+
+	jr z,+
 	set 6,(hl)
 +
 .if defined(ROM_AGES) || defined(ROM_COMBO)

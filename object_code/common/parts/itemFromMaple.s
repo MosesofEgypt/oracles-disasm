@@ -210,8 +210,7 @@ m_PartCode $15
 	rst_addDoubleIndex
 	ldi a,(hl)
 	ld b,a
-	ld a,GOLD_JOY_RING
-	call cpActiveRing
+	isRingEquipped GOLD_JOY_RING
 	ldi a,(hl)
 	jr z,+
 	cp $ff

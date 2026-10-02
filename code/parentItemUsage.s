@@ -35,6 +35,12 @@ clearAllParentItems_body:
 
 .ifdef ENABLE_PASSIVE_SHIELD
 setupPassiveShield:
+.ifdef ENABLE_SETTINGS_MENU
+	ld a,(wMiscSettings)
+	; no passive shield if flag disabled
+	bit 3,a
+	jr z,+
+.endif
 	; no passive shield if sidescrolling
 	ld a,(wTilesetFlags)
 	bit TILESETFLAG_BIT_SIDESCROLL,a
@@ -46,25 +52,17 @@ setupPassiveShield:
 	call wIsSeasons
 	jr c,++
 .endif
-	ld a,(wTilesetFlags)
 	and TILESETFLAG_UNDERWATER
 	jr nz,+
 	++
-.endif
-.ifdef ENABLE_SETTINGS_MENU
-	ld a,(wMiscSettings)
-	; no passive shield if flag disabled
-	bit 3,a
-	jr z,+
 .endif
 	; no passive shield if holding something
 	ld a,(wLinkGrabState)
 	or a
 	jr nz,+
 
-	ld a,TREASURE_SHIELD
-	call checkTreasureObtained
-	jr nc,+
+	isTreasureFlagSet TREASURE_SHIELD
+	jr z,+
 		ld a,(wShieldLevel)
 		.ifdef ENABLE_RING_REDUX
 			call victoryRingIncLevel
@@ -178,8 +176,7 @@ checkUseItems:
 	bit TILESETFLAG_BIT_UNDERWATER,a
 	jr z,@normal
 .ifdef ENABLE_RING_REDUX
-	ld a,SWIMMERS_RING
-	call cpActiveRing
+	isRingEquipped SWIMMERS_RING
 	jr z,@normal
 .endif
 
@@ -296,23 +293,10 @@ checkItemUsed:
 .endif
 
 	; Nothing equipped; return unless Link is wearing a punching ring
-.ifdef ENABLE_RING_REDUX
-	ldbc EXPERTS_RING,FIST_RING
-	call eitherRingActive
+	isRingEquipped EXPERTS_RING
 	jr z,@punch
-	ret nc
-.else
-.ifdef ENABLE_MULTI_RING
-	ld a,EXPERTS_RING
-	call cpActiveRing
-.else
-	ld a,(wActiveRing)
-	cp EXPERTS_RING
-.endif
-	jr z,@punch
-	cp FIST_RING
+	isRingEquipped FIST_RING
 	ret nz
-.endif
 
 	; Punch if nothing equipped
 @punch:
@@ -582,30 +566,24 @@ getCanUseItemsInWater:
 	+
 
 	push bc
-	ldbc ZORA_SCALE_RING,ROCS_RING
-	call eitherRingActive
-	ld b,0
+	isRingEquipped ZORA_SCALE_RING
+	ld b,1
 	jr nz,+
 		inc b
 	+
-	jr nc,+
+	isRingEquipped ROCS_RING
+	jr nz,+
 		inc b
 	+
 
-	ld a,TREASURE_MERMAID_SUIT
-.ifdef ROM_COMBO
-	call wIsSeasons
-	jr nc,+
-		ld a,TREASURE_MERMAID_SUIT_SEASONS
-	+
-.endif
-	call checkTreasureObtained
-	jr nc,+
+	isTreasureFlagSet TREASURE_MERMAID_SUIT
+	jr z,+
 		inc b
 	+
+
 	ld a,b
 	pop bc
-	cp $02
+	cp $03
 	ret c
 	xor a
 	ret

@@ -38,8 +38,8 @@ parentItemCode_feather:
 .ifdef ENABLE_RING_REDUX
 	or a
 	call nz,getCanUseItemsInWater
-	or (hl)
 .endif
+	or (hl)
 	jr nz,@deleteParent
 
 	ld a,(wLinkInAir)
@@ -63,8 +63,7 @@ parentItemCode_feather:
 +
 	ld hl,w1Link.speedZ
 .ifdef ENABLE_RING_REDUX
-	ld a,ROCS_RING
-	call cpActiveRing
+	isRingEquipped ROCS_RING
     ; Jump higher in sidescrolling rooms with rocs ring
 	jr nz,+
 		ld bc,$fd90

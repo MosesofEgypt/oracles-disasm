@@ -79,8 +79,7 @@ refreshDirtyPalettes:
 	jr nz,-
 .ifdef ENABLE_RING_REDUX
 	; maybe make palettes monochrome green
-	ld a,DMG_COLOR_RING
-	call cpActiveRing
+	isRingEquipped DMG_COLOR_RING
 	pop bc
 	jr nz,+
 		push hl
@@ -108,8 +107,7 @@ refreshDirtyPalettes:
 @gbaBrightenPalette:
 .ifdef ENABLE_RING_REDUX
 	; maybe make palettes monochrome green
-	ld a,DMG_COLOR_RING
-	call cpActiveRing
+	isRingEquipped DMG_COLOR_RING
 	jr nz,+
 		; backup color for restoring later and then convert
 		push de
@@ -164,8 +162,7 @@ refreshDirtyPalettes:
 	set 7,l
 	ld h,c
 .ifdef ENABLE_RING_REDUX
-	ld a,DMG_COLOR_RING
-	call cpActiveRing
+	isRingEquipped DMG_COLOR_RING
 	jr nz,+
 		; restore color
 		pop bc

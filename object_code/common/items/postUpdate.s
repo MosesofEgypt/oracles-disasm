@@ -215,6 +215,8 @@ itemCode07Post:
 itemSetPositionInSwordArc_punch:
 	add a
 	addDoubleIndex
+	inc hl
+	inc hl
 	jr itemInitializePositionFromLinkPosition
 .endif
 

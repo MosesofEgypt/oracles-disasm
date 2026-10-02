@@ -72,6 +72,23 @@
 	.ENDIF
 .ENDM
 
+.MACRO isRingEquipped
+	.assert NARGS == 1
+	.ifdef ENABLE_MULTI_RING
+		ld a,(wEquippedRingFlags+(\1>>3))
+		and 1<<(\1&$07)
+	.else
+		ld a,wActiveRing
+		cp \1
+	.endif
+.ENDM
+
+.MACRO isTreasureFlagSet
+	.assert NARGS == 1
+	ld a,(wObtainedTreasureFlags+(\1>>3))
+	and 1<<(\1&$07)
+.ENDM
+
 .MACRO ldbc
 	ld bc, (((\1)&$ff)<<8) | ((\2)&$ff)
 .endm
@@ -1149,6 +1166,9 @@
 	.db \1&$ff, \2|(\1>>8)
 .endm
 
+; ==================================================================================================
+; Macro for New Game Plus related features
+; ==================================================================================================
 
 .ifdef ENABLE_NEW_GAME_PLUS
 .define PALETTE_GREEN		$00

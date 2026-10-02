@@ -84,8 +84,7 @@ itemCode05:
 	jr nz,@@setDamage
 
 	; Whimsical ring: usually 1 damage, with a 1/256 chance of doing 12 damage
-	ld a,WHIMSICAL_RING
-	call cpActiveRing
+	isRingEquipped WHIMSICAL_RING
 	jr nz,@@setDamage
 	call getRandomNumber
 	or a

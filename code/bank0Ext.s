@@ -300,8 +300,7 @@ calculateGoldRingDefenseBuff:
 
 calculateGoldRingAttackBuff:
 	; calculate the gold ring buff
-	ld a,GOLD_RING
-	call cpActiveRing
+	isRingEquipped GOLD_RING
 	ret nz
 
 	; gold ring gives increasing attack with decreasing health

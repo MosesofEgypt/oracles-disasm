@@ -44,8 +44,7 @@ m_InteractionCode $b6
 	or a
 	jr nz,+
 
-	ld a,DISCOVERY_RING
-	call cpActiveRing
+	isRingEquipped DISCOVERY_RING
 	jr nz,+
 
 	ld a,SND_COMPASS

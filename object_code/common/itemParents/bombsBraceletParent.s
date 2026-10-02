@@ -121,8 +121,7 @@ parentItemCode_bomb:
 	call getBombLimit
 .else
 	ld e,$01
-	ld a,BOMBERS_RING
-	call cpActiveRing
+	isRingEquipped BOMBERS_RING
 	jr nz,+
 	inc e
 +
@@ -331,10 +330,10 @@ parentItemCode_bracelet:
 	jr @beginPickup
 
 @tryPunching:
-	ldbc EXPERTS_RING,FIST_RING
-	call eitherRingActive
+	isRingEquipped EXPERTS_RING
 	jr z,+
-		ret nc
+		isRingEquipped FIST_RING
+		ret nz
 	+
 
 	; make sure the button was just pressed so we can't rapid-fire punch
@@ -748,7 +747,7 @@ parentItemCode_bracelet:
 		dec l ; decrement animCounter
 		dec (hl)
 		jr z,++
-			call isHasteRingEquipped
+			isRingEquipped HASTE_RING
 			jr nz,++
 				dec (hl)
 		++
@@ -869,8 +868,7 @@ parentItemCode_bracelet:
 
 getBombLimit:
 	ld e,$01
-	ld a,BOMBERS_RING
-	call cpActiveRing
+	isRingEquipped BOMBERS_RING
 	ret nz
 	ld e,$04
 	ret

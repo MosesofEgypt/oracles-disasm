@@ -260,8 +260,7 @@ m_PartCode $01
 	jr z,@deleteSelf
 
 	ld b,a
-	ld a,GOLD_JOY_RING
-	call cpActiveRing
+	isRingEquipped GOLD_JOY_RING
 	ldi a,(hl)
 	jr z,@doubleDrop
 

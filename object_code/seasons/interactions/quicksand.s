@@ -27,8 +27,7 @@ m_InteractionCode $5e
 	ld bc,$2105
 	call @checkLinkWithinAPartOfQuicksand
 	ret nc
-	ld a,QUICKSAND_RING
-	call cpActiveRing
+	isRingEquipped QUICKSAND_RING
 	jr z,+
 	call objectGetAngleTowardLink
 	xor ANGLE_DOWN

@@ -1611,11 +1611,10 @@ linkState02:
 	ld (wLinkSwimmingState),a
 
 .ifdef ENABLE_RING_REDUX
-	ld a,BLUE_LUCK_RING
+	isRingEquipped BLUE_LUCK_RING
 .else
-	ld a,GOLD_LUCK_RING
+	isRingEquipped GOLD_LUCK_RING
 .endif
-	call cpActiveRing
 	ld a,$fc
 	jr nz,+
 	sra a
@@ -3147,41 +3146,45 @@ func_5631:
 updateHeartRingCounter:
 	ld e,a
 .ifdef ENABLE_RING_REDUX
-	ldbc HEART_RING_L2, HEART_RING_L1
-	call eitherRingActive
 	ldbc $02, $10
+	isRingEquipped HEART_RING_L2
 	jr z,+
+		; L-2 not equipped. what about L-1?
 		ld c,$08
-		jr nc,@clearCounter
-	+
 
-	; heartLevel2Or3
-	jr c,+
-		inc b
+		isRingEquipped HEART_RING_L1
+		jr nz,@clearCounter
+
+		; L-1 equipped
+		jr ++
 	+
+		; L-2 equipped. what about L-1?
+
+		isRingEquipped HEART_RING_L1
+		jr z,++
+			; L-1 not equipped
+			inc b
+	++
+
 	; check rings
 	; NOTE: only doubling ONCE if either ring is worn, as the code that
 	; 		handles health refills will double if both rings are worn.
-	push bc
-	ldbc BLUE_JOY_RING,GOLD_JOY_RING
-	call eitherRingActive
-	pop bc
-	jr z,+
-	jr nc,++
-		+
-		sla c
+	isRingEquipped BLUE_JOY_RING
+	jr z,++
+		isRingEquipped GOLD_JOY_RING
+		jr nz,+
 	++
+		sla c
+	+
 .else
-	ld a,(wActiveRing)
-
 	; b = number of steps (divided by $100, in pixels) until you get a heart refill.
 	; c = number of quarter hearts to refill (times 4).
 
 	ldbc $02,$08
-	cp HEART_RING_L1
+	isRingEquipped HEART_RING_L1
 	jr z,@heartRingEquipped
 
-	cp HEART_RING_L2
+	isRingEquipped HEART_RING_L2
 	jr nz,@clearCounter
 	ldbc $03,$10
 .endif
@@ -3484,11 +3487,10 @@ linkUpdateDrowning:
 ; Sets Link's speed, speedTmp, var12, and var35 variables.
 linkSetSwimmingSpeed:
 .ifdef ENABLE_RING_REDUX
-	ld a,ZORA_SCALE_RING
+	isRingEquipped ZORA_SCALE_RING
 .else
-	ld a,SWIMMERS_RING
+	isRingEquipped SWIMMERS_RING
 .endif
-	call cpActiveRing
 	ld a,SPEED_e0
 	jr z,+
 	ld a,SPEED_80
@@ -3513,11 +3515,10 @@ linkSetSwimmingSpeed:
 ; other variables.
 linkSetSwimmingSpeedTmp:
 .ifdef ENABLE_RING_REDUX
-	ld a,ZORA_SCALE_RING
+	isRingEquipped ZORA_SCALE_RING
 .else
-	ld a,SWIMMERS_RING
+	isRingEquipped SWIMMERS_RING
 .endif
-	call cpActiveRing
 	ld a,SPEED_e0
 	jr z,+
 	ld a,SPEED_80
@@ -3657,11 +3658,10 @@ linkUpdateDiving:
 	jr nz,@pressedB
 
 .ifdef ENABLE_RING_REDUX
-	ld a,ZORA_SCALE_RING
+	isRingEquipped ZORA_SCALE_RING
 .else
-	ld a,ZORA_RING
+	isRingEquipped ZORA_RING
 .endif
-	call cpActiveRing
 	ret z
 
 	ld e,SpecialObject.counter2
@@ -3827,20 +3827,10 @@ linkUpdateVelocity:
 @mermaidSuit:
 	ld c,$98
 	call updateLinkSpeed_withParam
-.ifdef ENABLE_MULTI_RING
 .ifdef ENABLE_RING_REDUX
-	ld a,ZORA_SCALE_RING
+	isRingEquipped ZORA_SCALE_RING
 .else
-	ld a,SWIMMERS_RING
-.endif
-	call cpActiveRing
-.else
-	ld a,(wActiveRing)
-.ifdef ENABLE_RING_REDUX
-	cp ZORA_SCALE_RING
-.else
-	cp SWIMMERS_RING
-.endif
+	isRingEquipped SWIMMERS_RING
 .endif
 	jr nz,+
 
@@ -3854,8 +3844,7 @@ linkUpdateVelocity:
 	jr nz,+
 
 .ifdef ENABLE_RING_REDUX
-	ld a,ZORA_SCALE_RING
-	call cpActiveRing
+	isRingEquipped ZORA_SCALE_RING
 	jr nz,++
 		ld a,(wFrameCounter)
 		and $04
@@ -4095,11 +4084,10 @@ linkState01_sidescroll:
 
 @onIce:
 .ifdef ENABLE_RING_REDUX
-	ld a,HIKERS_RING
+	isRingEquipped HIKERS_RING
 .else
-	ld a,SNOWSHOE_RING
+	isRingEquipped SNOWSHOE_RING
 .endif
-	call cpActiveRing
 	jr z,@notOnIce
 
 	ld c,$88
@@ -4476,8 +4464,7 @@ linkUpdateInAir_sidescroll:
 +
 	ld hl,wActiveTileType
 .ifdef LAVA_SWIMMING_RING
-	ld a,LAVA_SWIMMING_RING
-	call cpActiveRing
+	isRingEquipped LAVA_SWIMMING_RING
 	ldi a,(hl)
 	jr z,+
 		cp TILETYPE_SS_LAVA
@@ -4767,14 +4754,13 @@ updateLinkSpeed_withParam:
 		ld a,(wUseSimulatedInput)
 		cp $01
 		jr z,++
-			ld a,HIKERS_RING
-			call cpActiveRing
+			isRingEquipped HIKERS_RING
 			jr nz,+
 				; always standard movement if wearing hiker's ring
 				ld b,$04
 			+
 
-			call isHasteRingEquipped
+			isRingEquipped HASTE_RING
 			jr nz,++
 				ld a,e
 				add b

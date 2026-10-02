@@ -18,8 +18,7 @@ itemCode27:
 
 .ifdef ENABLE_RING_REDUX
 	; if ring equipped, increase beam damage and speed 50%
-	ld a,VICTORY_RING
-	call cpActiveRing
+	isRingEquipped VICTORY_RING
 	jr nz,+
 		ld l,Item.damage
 		ld a,(hl)
@@ -56,8 +55,7 @@ itemCode27:
 @state1:
 .ifdef ENABLE_RING_REDUX
 	; if ring equipped, ignore that we might've hit an enemy
-	ld a,VICTORY_RING
-	call cpActiveRing
+	isRingEquipped VICTORY_RING
 	jr z,+
 		call itemUpdateDamageToApply
 		jr nz,@collision

@@ -31,8 +31,7 @@ itemCode24:
 	ld (hl),$03
 
 .ifdef ENABLE_RING_REDUX
-	ld a,MYSTIC_SEED_RING
-	call cpActiveRing
+	isRingEquipped MYSTIC_SEED_RING
 	jr nz,+
 		; increase bounces to 6
 		ld (hl),$06
@@ -111,8 +110,7 @@ itemCode24:
 	ld hl,@slingshotAngleTable-1
 	rst_addAToHl
 .ifdef ENABLE_RING_REDUX
-	ld a,MYSTIC_SEED_RING
-	call cpActiveRing
+	isRingEquipped MYSTIC_SEED_RING
 
 	; double seed damage if wearing ring
 	jr nz,+
@@ -330,8 +328,7 @@ seedItemState1:
 ; Behaviour on collision with enemy; again slightly different
 @seedCollidedWithEnemy:
 .ifdef ENABLE_RING_REDUX
-	ld a,VICTORY_RING
-	call cpActiveRing
+	isRingEquipped VICTORY_RING
 	jr nz,+
 		; allow hadouken to pierce enemies with victory ring
 		ld e,Item.var37
@@ -480,8 +477,7 @@ seedItemState1:
 	ld c,a
 
 	; check ring
-	ld a,MYSTIC_SEED_RING
-	call cpActiveRing
+	isRingEquipped MYSTIC_SEED_RING
 	jr nz,++
 		ld a,b
 		cp $40
