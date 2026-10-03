@@ -655,6 +655,8 @@ def png_to_2bpp(filein, **kwargs):
     #assert type(filein) is file # Doesn't work in python3
 
     width, height, rgba, info = png.Reader(filein).asRGBA8()
+    if height < 16:
+        arguments["interleave"] = False
 
     # png.Reader returns flat pixel data. Nested is easier to work with
     len_px  = len('rgba')
@@ -942,6 +944,7 @@ def main():
             kwargs['fromFormat'] = extension
 
         method = methods.get(kwargs['mode'], None)
+
         del kwargs['mode']
 
         if method == None:
