@@ -75,7 +75,7 @@ ngpAndComboTreasureFlagMask:
 	.db $10	; count
 	.db $02 ; TREASURE_SHIELD
 	.db $30	; TREASURE_BIGGORON_SWORD, TREASURE_BOMBCHUS
-	.db $00
+	.db $04 ; TREASURE_LIFE_VIAL
 	.db $00
 	.db $00
 	.db $90	; TREASURE_RING_BOX, TREASURE_POTION
@@ -93,7 +93,7 @@ ngpAndComboTreasureFlagMask:
 	.db $07 ; TREASURE_RED_ORE, TREASURE_BLUE_ORE, TREASURE_HARD_ORE
 	.db $00
 .endif
-	.db $00
+	.db $08 ; TREASURE_RED_LIFE_VIAL
 	.db $00
 	.db $00
 	.db $00
@@ -837,6 +837,7 @@ loadAcrossComboGame:
 	.db TREASURE_BOMBCHUS,          TREASURE_BOMBS, $00
 	.db TREASURE_RING_BOX,          TREASURE_PUNCH, $01
 	.db TREASURE_SHIELD,            TREASURE_PUNCH, $01
+	.db TREASURE_LIFE_VIAL,         TREASURE_PUNCH, $00
 	.db $00
 
 ;;

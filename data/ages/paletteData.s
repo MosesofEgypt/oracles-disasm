@@ -1480,6 +1480,7 @@ paletteData48b0:
 .endif
 
 paletteData48e0:
+	; NOTE: this is the HUD bg palette
 	m_RGB16 $0d $01 $05
 	m_RGB16 $1d $01 $03
 	m_RGB16 $1f $1a $11

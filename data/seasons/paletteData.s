@@ -1357,6 +1357,7 @@ paletteData4800:
 	m_RGB16 $1f $1f $1f
 
 paletteData4830:
+	; NOTE: this is the HUD bg palette
 	m_RGB16 $0d $01 $05
 	m_RGB16 $1d $01 $03
 	m_RGB16 $1f $1a $11

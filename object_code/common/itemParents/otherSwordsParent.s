@@ -98,15 +98,13 @@ parentItemCode_punch:
 		jr c,+++
 			++
 
-			ld a,TREASURE_SLINGSHOT
-			call checkTreasureObtained
-			jr c,+
-				ld a,TREASURE_SHOOTER
-				call checkTreasureObtained
+			isTreasureFlagSet TREASURE_SLINGSHOT
+			jr nz,+
+				isTreasureFlagSet TREASURE_SHOOTER
 			+
 
 			push hl
-			jr nc,+
+			jr z,+
 				ld e,Item.relatedObj2+1
 				ld a,>w1Link
 				ld (de),a
