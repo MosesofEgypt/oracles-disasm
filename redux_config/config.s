@@ -48,7 +48,7 @@
 	.endif
 	.ifndef ONE_HANDED_BIGGORON_SWORD
 		; determines whether the Biggoron's Sword occupies 1 hand instead of 2
-;		.define ONE_HANDED_BIGGORON_SWORD 	; keeping here for documentation
+		.define ONE_HANDED_BIGGORON_SWORD
 	.endif
 	.ifndef ADVANCE_SHOP_ALWAYS_OPEN
 		; determines whether the advance shop is open even on GBC

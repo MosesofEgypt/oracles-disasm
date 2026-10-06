@@ -186,7 +186,36 @@ itemCode0cPost:
 	ld a,(de)
 	ld hl,biggoronSwordArcData
 	call itemSetPositionInSwordArc
+.ifdef WIDE_INVENTORY_SPRITES
+	call itemCode0cPost_loadBiggoronBladeTiles
+.endif
 	jp itemCalculateSwordDamage
+
+.ifdef WIDE_INVENTORY_SPRITES
+itemCode0cPost_reloadBiggoronBladeTiles:
+	ld h,d
+	ld l,Item.counter2
+	ld (hl),$ff
+
+itemCode0cPost_loadBiggoronBladeTiles:
+	; we need to repurpose part of the biggoron sword sprite
+	; tiles, so instead we dynamically load them when needed
+	ld h,d
+	ld l,Item.var30
+	ld a,(hl)
+	rra
+	and $01
+	add UNCMP_GFXH_BIGGORON_SWORD_VERTICAL
+
+	ld l,Item.counter2
+	cp (hl)
+	ld (hl),a
+	ret z
+	push de
+	call loadUncompressedGfxHeader
+	pop de
+	ret
+.endif
 
 ;;
 ; ITEM_CANE_OF_SOMARIA

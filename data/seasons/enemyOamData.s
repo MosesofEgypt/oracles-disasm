@@ -1,4 +1,5 @@
 enemyOamData491d9:
+enemyOamDataBlank:
 	.db $00
 
 enemyOamData491da:

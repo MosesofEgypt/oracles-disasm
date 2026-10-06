@@ -182,13 +182,7 @@ wLoadingSoundBank: ; $c086
 		; Bit 0: Set if bit 8 calculated
 		; Bit 8: Set to checkLinkVulnerable result
 		db
-	wRightItemTileIndex:	; $c08e
-		db
-
-	wc08f:					; $c08f
-		dsb	$0e	; padding
-
-	wIsSeasons:					; $c09d
+	wIsSeasons:					; $c08f
 		; function to set carry flag if seasons, or clear
 		; it if ages. exists in hram so it can be modified.
 		; will contain a variant of this function:
@@ -198,6 +192,13 @@ wLoadingSoundBank: ; $c086
 		; the cflag will be cleared if ages and set if seasons
 		dsb $03
 
+	wc092:					; $c092
+		dsb	$0e	; padding
+.endif
+
+.ifdef ULTRAWIDE_INVENTORY_SPRITES
+	wRightItemTileIndex:
+		db
 .endif
 
 .ENDS

@@ -228,7 +228,7 @@ m_GfxHeaderStart $1f, GFXH_DUNGEON_F_BLURB
 m_GfxHeaderStart $20, GFXH_HUD
 	m_GfxHeader gfx_hud, $9000
 .ifdef ULTRAWIDE_INVENTORY_SPRITES
-	m_GfxHeader gfx_hud_ultrawide, $9051, $04, $00
+	m_GfxHeader gfx_hud_ultrawide, $9050, $04, $00
 .endif
 	m_GfxHeaderEnd
 
@@ -378,7 +378,7 @@ m_GfxHeaderStart $3a, GFXH_UNAPPRAISED_RING_LIST
 	m_GfxHeader gfx_inventory_hud_2, $8e00
 	m_GfxHeader gfx_hud, $9000
 .ifdef ULTRAWIDE_INVENTORY_SPRITES
-	m_GfxHeader gfx_hud_ultrawide, $9051, $04, $00
+	m_GfxHeader gfx_hud_ultrawide, $9050, $04, $00
 .endif
 	m_GfxHeaderEnd
 
@@ -729,7 +729,7 @@ m_GfxHeaderStart $97, GFXH_SECRET_FOR_LINKED_GAME
 	m_GfxHeader gfx_hud, $9000, $08
 	m_GfxHeader gfx_hud, $9001
 .ifdef ULTRAWIDE_INVENTORY_SPRITES
-	m_GfxHeader gfx_hud_ultrawide, $9051, $04, $00
+	m_GfxHeader gfx_hud_ultrawide, $9050, $04, $00
 .endif
 	m_GfxHeader gfx_fileselect, $9201
 	m_GfxHeader gfx_secrettoholodrum, $8801
@@ -814,7 +814,7 @@ m_GfxHeaderStart $9e, GFXH_INTRO_TEMPLE_SCENE
 	m_GfxHeader gfx_tileset_maku_path, $9401
 	m_GfxHeader gfx_hud, $9000, $08
 .ifdef ULTRAWIDE_INVENTORY_SPRITES
-	m_GfxHeader gfx_hud_ultrawide, $9051, $04, $00
+	m_GfxHeader gfx_hud_ultrawide, $9050, $04, $00
 .endif
 	m_GfxHeader map_intro_triforce_room, $9800
 	m_GfxHeader flg_intro_triforce_room, $9801
@@ -841,7 +841,7 @@ m_GfxHeaderStart $a0, GFXH_FILE_MENU_GFX
 	m_GfxHeader gfx_hud, $9000
 	m_GfxHeader gfx_hud, $9001
 .ifdef ULTRAWIDE_INVENTORY_SPRITES
-	m_GfxHeader gfx_hud_ultrawide, $9051, $04, $00
+	m_GfxHeader gfx_hud_ultrawide, $9050, $04, $00
 .endif
 	m_GfxHeader spr_fileselect_decorations, $8200
 	m_GfxHeader gfx_fileselect, $9201

@@ -202,7 +202,8 @@ galeSeedMenu_state5:
 	xor a
 	ld (wCutsceneState),a
 	ld (wGameState),a
-	ret
+	ld a,$03
+	jp setMusicVolume
 .endif
 
 ;;

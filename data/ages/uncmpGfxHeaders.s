@@ -36,8 +36,9 @@ uncmpGfxHeaderTable:
 	.dw @uncmpGfxHeader_foolsOre
 
 .ifdef WIDE_INVENTORY_SPRITES
-	.dw @uncmpGfxHeader_itemIconsEquipped1
-	.dw @uncmpGfxHeader_itemIconsEquipped2
+	.dw @uncmpGfxHeader_biggoronSwordVertical
+	.dw @uncmpGfxHeader_biggoronSwordHorizontal
+	.dw @uncmpGfxHeader_itemIconsEquipped
 	.dw @uncmpGfxHeader_itemIconsWide
 	.dw @uncmpGfxHeader_boomerang
 	.dw @uncmpGfxHeader_magicBoomerang
@@ -211,8 +212,10 @@ uncmpGfxHeaderTable:
 	m_GfxHeaderEnd
 
 @uncmpGfxHeader1b:
-.ifdef ENABLE_ALT_BIGGORON_SPRITES
-	m_GfxHeader spr_biggoron_sword_item_alt, $8521
+.if defined(ENABLE_ALT_BIGGORON_SPRITES)
+	m_GfxHeader spr_biggoron_sword_item_alt, $8561, $06, $40
+.elif defined(WIDE_INVENTORY_SPRITES)
+	m_GfxHeader spr_swords, $8561, $06, $e0
 .else
 	m_GfxHeader spr_swords, $8521, $0e, $a0
 .endif
@@ -378,11 +381,23 @@ uncmpGfxHeaderTable:
 
 
 .ifdef WIDE_INVENTORY_SPRITES
-@uncmpGfxHeader_itemIconsEquipped1:
-	m_GfxHeaderRam w4ItemIconGfxExt, $84e1, $04
+@uncmpGfxHeader_biggoronSwordVertical:
+.if defined(ENABLE_ALT_BIGGORON_SPRITES)
+	m_GfxHeader spr_biggoron_sword_item_alt, $8521, $04, $a0
+.else
+	m_GfxHeader spr_swords, $8521, $04, $140
+.endif
 	m_GfxHeaderEnd
 
-@uncmpGfxHeader_itemIconsEquipped2:
+@uncmpGfxHeader_biggoronSwordHorizontal:
+.if defined(ENABLE_ALT_BIGGORON_SPRITES)
+	m_GfxHeader spr_biggoron_sword_item_alt, $8521, $04, $00
+.else
+	m_GfxHeader spr_swords, $8521, $04, $a0
+.endif
+	m_GfxHeaderEnd
+
+@uncmpGfxHeader_itemIconsEquipped:
 	m_GfxHeaderRam w4ItemIconGfxExt, $85c1, $04
 	m_GfxHeaderEnd
 

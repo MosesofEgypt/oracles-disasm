@@ -3383,6 +3383,15 @@ reloadGraphicsOnExitMenu_body:
 	ldh (<hCameraX),a
 	push de
 	call disableLcd
+.ifdef WIDE_INVENTORY_SPRITES
+	ld de,w1WeaponItem.id
+	ld a,(de)
+	cp ITEM_BIGGORON_SWORD
+	jr nz,+
+		; biggoron's sword is being swung. reload its gfx
+		callab itemCode.itemCode0cPost_reloadBiggoronBladeTiles
+	+
+.endif
 	ld a,:w4SavedOam
 	ldh (R_SVBK),a
 	ld de,$8601
@@ -3945,13 +3954,7 @@ updateStatusBar_body:
 		add $08
 		add e
 		ldi (hl),a
-		ld a,(wEquippedIconGfxExtToUse)
-		or a
-		ld a,$50
-		jr z,++
-			; first extended section in use, so use second
-			add $0e
-		++
+		ld a,$5e
 		ldi (hl),a
 		ld a,(wBItemSpriteAttribute3)
 		ldi (hl),a
@@ -3990,13 +3993,7 @@ updateStatusBar_body:
 		add $08
 		add c
 		ldi (hl),a
-		ld a,(wEquippedIconGfxExtToUse)
-		or a
-		ld a,$4e
-		jr z,++
-			; first extended section in use, so use second
-			add $0e
-		++
+		ld a,$5c
 		ldi (hl),a
 		ld a,(wAItemSpriteAttribute3)
 		ldi (hl),a

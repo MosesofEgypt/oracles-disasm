@@ -1,4 +1,5 @@
 enemyOamData4d1d9: ; Unused
+enemyOamDataBlank:
 	.db $00
 
 enemyOamData4d1da:

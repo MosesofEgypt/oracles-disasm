@@ -1188,39 +1188,6 @@ loadWeaponGfx:
 	jr nc,+
 	inc l
 +
-.ifdef WIDE_INVENTORY_SPRITES
-	; only set wLoadedItemGraphic2 as not overrrideable if the
-	; gfx being loaded is the biggorons sword(it needs the space)
-	cp UNCMP_GFXH_1b
-	push hl
-	push af
-	push de
-	ld e,l
-	ld hl,wEquippedIconGfxExtToUse
-	jr nz,+
-		; biggorons sword(the gfx2 item we cant share space with) in use
-		xor a
-		jr +++
-	+
-	ld a,e
-	cp <wLoadedItemGraphic1
-	jr nz,++
-		; boomerang or some other gfx1 item in use
-		ld a,$01
-
-	+++
-		cp (hl)
-		jr z,++
-			; we're toggling which extended gfx section is
-			; usable, so the status bar needs refreshing
-			ld (hl),a
-			ld hl,wStatusBarNeedsRefresh
-			set 0,(hl)
-	++
-	pop de
-	pop af
-	pop hl
-.endif
 	cp (hl)
 	ret z
 

@@ -82,15 +82,27 @@ m_EnemyCode $5a
 	ld e,Enemy.visible
 	ld a,$80
 	ld (de),a
-.if defined(ROM_COMBO)
-	xor a
-.else
-	ld a,$08
-.endif
 	ld e,Enemy.oamDataAddress
+.ifdef ROM_COMBO
+	call wIsSeasons
+	jr c,+
+		ld a,<enemyOamDataBlank_ages
+		ld (de),a
+		inc e
+		ld a,>enemyOamDataBlank_ages
+		jr ++
+	+
+		ld a,<enemyOamDataBlank_seasons
+		ld (de),a
+		inc e
+		ld a,>enemyOamDataBlank_seasons
+	++
+.else
+	ld a,<enemyOamDataBlank
 	ld (de),a
-	xor a
 	inc e
+	ld a,>enemyOamDataBlank
+.endif
 	ld (de),a
 .endif
 

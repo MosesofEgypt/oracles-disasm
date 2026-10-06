@@ -6077,10 +6077,8 @@ checkReloadStatusBarGraphics:
 			ret z
 			bit 7,a
 			ret z
-
 	+
-	ld a,(wEquippedIconGfxExtToUse)
-	add UNCMP_GFXH_ITEM_ICONS_EQUIPPED_EXT_1
+	ld a,UNCMP_GFXH_ITEM_ICONS_EQUIPPED_EXT
 .endif
 	jp loadUncompressedGfxHeader
 

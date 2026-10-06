@@ -204,8 +204,13 @@ itemOamData4d083:
 
 itemOamData4d08c:
 	.db $02
+.ifdef WIDE_INVENTORY_SPRITES
+	.db $fb $04 $00 $00
+	.db $0b $04 $02 $00
+.else
 	.db $fb $04 $0a $00
 	.db $0b $04 $0c $00
+.endif
 
 itemOamData4d095:
 	.db $02
@@ -219,8 +224,13 @@ itemOamData4d09e:
 
 itemOamData4d0a7:
 	.db $02
+.ifdef WIDE_INVENTORY_SPRITES
+	.db $15 $04 $00 $40
+	.db $05 $04 $02 $40
+.else
 	.db $15 $04 $0a $40
 	.db $05 $04 $0c $40
+.endif
 
 itemOamData4d0b0:
 	.db $02

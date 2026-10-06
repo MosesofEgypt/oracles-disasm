@@ -105,9 +105,8 @@ checkEnemyAndPartCollisions:
 	inc hl
 	ld (hl),>enemyActiveCollisions_seasons
 	jr c,+
-		dec hl
 		ld (hl),>enemyActiveCollisions_ages
-		inc hl
+		dec hl
 		ld (hl),<enemyActiveCollisions_ages
 	+
 .endif
@@ -142,9 +141,8 @@ checkEnemyAndPartCollisions:
 	inc hl
 	ld (hl),>partActiveCollisions_seasons
 	jr c,+
-		dec hl
 		ld (hl),>partActiveCollisions_ages
-		inc hl
+		dec hl
 		ld (hl),<partActiveCollisions_ages
 	+
 .endif
