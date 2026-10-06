@@ -176,15 +176,17 @@ wLoadingSoundBank: ; $c086
 		db
 	wObjectOamTableOffset:	; $c08a
 		db
-	wHazardCollisionTable:	; $c08c
+	wHazardCollisionTable:	; $c08b
 		dw
-	wLinkVulnerableCached:	; $c08b
+	wLinkVulnerableCached:	; $c08d
 		; Bit 0: Set if bit 8 calculated
 		; Bit 8: Set to checkLinkVulnerable result
 		db
+	wRightItemTileIndex:	; $c08e
+		db
 
-	wc08c:					; $c08e
-		dsb	$0f	; padding
+	wc08f:					; $c08f
+		dsb	$0e	; padding
 
 	wIsSeasons:					; $c09d
 		; function to set carry flag if seasons, or clear

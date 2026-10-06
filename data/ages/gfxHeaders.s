@@ -104,6 +104,11 @@ m_GfxHeaderStart $08, GFXH_INVENTORY_SCREEN
 	m_GfxHeader spr_quest_items_4, $8e01
 	m_GfxHeader map_inventory_textbar, w4TileMap+$1e0
 	m_GfxHeader flg_inventory_textbar, w4AttributeMap+$1e0
+.ifdef ULTRAWIDE_INVENTORY_SPRITES
+	; load the ultrawide selection brackets
+	m_GfxHeader spr_hud_ultrawide_brackets, $85e0, $02, $00
+	m_GfxHeader spr_hud_ultrawide_brackets, $8e00, $02, $20
+.endif
 	; Fall through
 m_GfxHeaderStart $09, GFXH_INVENTORY_SUBSCREEN_1
 	m_GfxHeader map_inventory_screen_1, w4TileMap+$040
@@ -222,22 +227,46 @@ m_GfxHeaderStart $1f, GFXH_DUNGEON_F_BLURB
 
 m_GfxHeaderStart $20, GFXH_HUD
 	m_GfxHeader gfx_hud, $9000
+.ifdef ULTRAWIDE_INVENTORY_SPRITES
+	m_GfxHeader gfx_hud_ultrawide, $9051, $04, $00
+.endif
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $21, GFXH_HUD_LAYOUT_NORMAL
+.ifdef ULTRAWIDE_INVENTORY_SPRITES
+	m_GfxHeader map_hud_normal_ultrawide, w4StatusBarTileMap
+	m_GfxHeader flg_hud_normal_ultrawide, w4StatusBarAttributeMap
+.else
 	m_GfxHeader map_hud_normal, w4StatusBarTileMap
 	m_GfxHeader flg_hud_normal, w4StatusBarAttributeMap
+.endif
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $22, GFXH_HUD_LAYOUT_EXTRA_HEARTS
+.ifdef ULTRAWIDE_INVENTORY_SPRITES
+	m_GfxHeader map_hud_extra_hearts_ultrawide, w4StatusBarTileMap
+	m_GfxHeader flg_hud_extra_hearts_ultrawide, w4StatusBarAttributeMap
+.else
 	m_GfxHeader map_hud_extra_hearts, w4StatusBarTileMap
 	m_GfxHeader flg_hud_extra_hearts, w4StatusBarAttributeMap
+.endif
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $23, GFXH_HUD_LAYOUT_BIGGORON_SWORD
+.ifdef ULTRAWIDE_INVENTORY_SPRITES
+	m_GfxHeader map_hud_biggoron_sword_ultrawide, w4TileMap+$240
+	m_GfxHeader flg_hud_biggoron_sword_ultrawide, w4AttributeMap+$240
+.else
 	m_GfxHeader map_hud_biggoron_sword, w4TileMap+$240
 	m_GfxHeader flg_hud_biggoron_sword, w4AttributeMap+$240
+.endif
+.ifdef ENABLE_ALT_BIGGORON_SPRITES
+	m_GfxHeader gfx_biggoron_sword_alt_large, w4ItemIconGfx
+.elif defined(WIDE_INVENTORY_SPRITES)
+	m_GfxHeader gfx_biggoron_sword_large, w4ItemIconGfx
+.else
 	m_GfxHeader spr_biggoron_sword_icon, w4ItemIconGfx
+.endif
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $24, GFXH_24
@@ -348,6 +377,9 @@ m_GfxHeaderStart $3a, GFXH_UNAPPRAISED_RING_LIST
 	m_GfxHeader gfx_rings, $8a00
 	m_GfxHeader gfx_inventory_hud_2, $8e00
 	m_GfxHeader gfx_hud, $9000
+.ifdef ULTRAWIDE_INVENTORY_SPRITES
+	m_GfxHeader gfx_hud_ultrawide, $9051, $04, $00
+.endif
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $3b, GFXH_APPRAISED_RING_LIST
@@ -696,6 +728,9 @@ m_GfxHeaderStart $97, GFXH_SECRET_FOR_LINKED_GAME
 	m_GfxHeader spr_fileselect_decorations, $8200
 	m_GfxHeader gfx_hud, $9000, $08
 	m_GfxHeader gfx_hud, $9001
+.ifdef ULTRAWIDE_INVENTORY_SPRITES
+	m_GfxHeader gfx_hud_ultrawide, $9051, $04, $00
+.endif
 	m_GfxHeader gfx_fileselect, $9201
 	m_GfxHeader gfx_secrettoholodrum, $8801
 	m_GfxHeader map_file_menu_top, w3VramTiles
@@ -778,6 +813,9 @@ m_GfxHeaderStart $9e, GFXH_INTRO_TEMPLE_SCENE
 	m_GfxHeader gfx_tileset_dungeon_standard_2, $9001
 	m_GfxHeader gfx_tileset_maku_path, $9401
 	m_GfxHeader gfx_hud, $9000, $08
+.ifdef ULTRAWIDE_INVENTORY_SPRITES
+	m_GfxHeader gfx_hud_ultrawide, $9051, $04, $00
+.endif
 	m_GfxHeader map_intro_triforce_room, $9800
 	m_GfxHeader flg_intro_triforce_room, $9801
 	m_GfxHeader map_intro_triforce_room, w3VramTiles
@@ -802,6 +840,9 @@ m_GfxHeaderStart $a0, GFXH_FILE_MENU_GFX
 	m_GfxHeader spr_rod_of_seasons, $81a0, $04
 	m_GfxHeader gfx_hud, $9000
 	m_GfxHeader gfx_hud, $9001
+.ifdef ULTRAWIDE_INVENTORY_SPRITES
+	m_GfxHeader gfx_hud_ultrawide, $9051, $04, $00
+.endif
 	m_GfxHeader spr_fileselect_decorations, $8200
 	m_GfxHeader gfx_fileselect, $9201
 	m_GfxHeaderEnd

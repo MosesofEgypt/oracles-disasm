@@ -69,69 +69,6 @@ closeMenu:
 	ld (wTextIsActive),a
 	jp fastFadeoutToWhite
 
-.ifdef EXTENDED_RING_BOX
-arrowUpSpriteBlue
-	.db $01
-	.db $00 $00 $0e $04
-
-arrowDownSpriteRed
-	.db $01
-	.db $00 $00 $0e $45
-
-getRingBoxContents:
-	ld hl,wRingBoxContents
-	cp $05
-	ret c
-	ld hl,wRingBoxContentsExt
-	ret
-
-getRingBoxClippedIndex:
-	cp $05
-	ret c
-	sub $05
-	ret
-.endif
-
-;;
-; @param[out] a Capacity of ring box.
-getRingBoxCapacity:
-.ifdef RESIZE_RING_BOX
-	ld a,(wRingBoxLevel)
-	bit 3,a
-	jr z,+
-		ld a,(wRingBoxLevel)
-		swap a
-		jr ++
-	+
-		push hl
-		and $0f
-		ld hl,@ringBoxCapacities
-		rst_addAToHl
-		ld a,(hl)
-		pop hl
-	++
-	and $0f
-	ret
-.else
-	push hl
-	ld a,(wRingBoxLevel)
-	ld hl,@ringBoxCapacities
-	rst_addAToHl
-	ld a,(hl)
-	or a
-	pop hl
-	ret
-.endif
-
-@ringBoxCapacities:
-	.db $00
-	.db RING_BOX_L1_SIZE
-	.db RING_BOX_L2_SIZE
-	.db RING_BOX_L3_SIZE
-.if MAX_RING_BOX_LEVEL > 3
-	.db RING_BOX_L4_SIZE
-.endif
-
 ;;
 ; This is either the "ring appraisal" or "ring list" menu.
 ; If "wRingMenu_mode" is 0, it's the appraisal menu; otherwise it's the ring list.

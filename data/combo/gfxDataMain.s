@@ -74,7 +74,7 @@ m_GfxData gfx_gale_tree
 m_GfxData gfx_gameover
 m_GfxData gfx_gasha_tree
 .if !defined(ENABLE_NEW_GAME_PLUS)
-    m_GfxData gfx_herossecret
+	m_GfxData gfx_herossecret
 .endif
 m_GfxData gfx_hud
 m_GfxData gfx_intro_outside_castle_1
@@ -157,7 +157,15 @@ m_GfxData map_twinrova_closeup
 m_GfxData map_unappraised_ring_list
 m_GfxData oth_twinrova_lava_layout
 m_GfxData oth_twinrova_normal_layout
-m_GfxData spr_biggoron_sword_icon
+.ifdef ENABLE_ALT_BIGGORON_SPRITES
+	m_GfxData spr_biggoron_sword_item_alt
+	m_GfxData gfx_biggoron_sword_alt
+	m_GfxData gfx_biggoron_sword_alt_large
+.elif defined(WIDE_INVENTORY_SPRITES)
+	m_GfxData gfx_biggoron_sword_large
+.else
+	m_GfxData spr_biggoron_sword_icon
+.endif
 m_GfxData spr_bladetraps
 m_GfxData spr_boat_theend
 m_GfxData spr_boulder
@@ -747,8 +755,8 @@ m_GfxData spr_item_icons_3
 
 ; these ones exist in both games
 .macro m_GfxDataBothGames
-    m_GfxData ages_\1
-    m_GfxData seasons_\1
+	m_GfxData ages_\1
+	m_GfxData seasons_\1
 .endm
 
 m_GfxDataBothGames flg_credits_gametitle
@@ -865,27 +873,27 @@ m_GfxData gfx_titlescreen_combo
 m_GfxData map_titlescreen_combo
 
 .ifdef ENABLE_NEW_GAME_PLUS
-    m_GfxData map_pick_a_file_menu_middle
-    m_GfxData flg_pick_a_file_menu_middle
-    m_GfxData map_pick_a_file_menu_bottom
-    m_GfxData flg_pick_a_file_menu_bottom
-    m_GfxData gfx_startnewgameplus
-    m_GfxData gfx_newgameplus
-    m_GfxData gfx_savescreen_dungeon_ngp
-    m_GfxData flg_save_menu_middle_dungeon_ngp_gameover
-    m_GfxData map_save_menu_middle_dungeon_ngp_gameover
-    m_GfxData gfx_make
-    .ifndef WIDE_INVENTORY_SPRITES
-        m_GfxData spr_item_icons_life_vial_slim
-    .endif
+	m_GfxData map_pick_a_file_menu_middle
+	m_GfxData flg_pick_a_file_menu_middle
+	m_GfxData map_pick_a_file_menu_bottom
+	m_GfxData flg_pick_a_file_menu_bottom
+	m_GfxData gfx_startnewgameplus
+	m_GfxData gfx_newgameplus
+	m_GfxData gfx_savescreen_dungeon_ngp
+	m_GfxData flg_save_menu_middle_dungeon_ngp_gameover
+	m_GfxData map_save_menu_middle_dungeon_ngp_gameover
+	m_GfxData gfx_make
+	.ifndef WIDE_INVENTORY_SPRITES
+		m_GfxData spr_item_icons_life_vial_slim
+	.endif
 .endif
 
 .if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
-    m_GfxData spr_item_icons_sword_shield_l4
-    .if defined(WIDE_INVENTORY_SPRITES)
-        m_GfxData spr_item_icons_wide_sword_l4
-        m_GfxData spr_item_icons_wide_shield_l4
-    .endif
+	m_GfxData spr_item_icons_sword_shield_l4
+	.if defined(WIDE_INVENTORY_SPRITES)
+		m_GfxData spr_item_icons_wide_sword_l4
+		m_GfxData spr_item_icons_wide_shield_l4
+	.endif
 .endif
 
 .ifdef ENABLE_SETTINGS_MENU
@@ -901,31 +909,42 @@ m_GfxData map_titlescreen_combo
 	m_GfxData gfx_settings_text_page_1
 	m_GfxData gfx_settings_text_page_2
 	m_GfxData gfx_settings_text_page_3
-    m_GfxData gfx_rings_uncomp
+	m_GfxData gfx_rings_uncomp
 .endif
 
+
 .ifdef WIDE_INVENTORY_SPRITES
-    m_GfxData spr_item_icons_wide
-    m_GfxData spr_item_icons_wide_boomerang_l2
-    m_GfxData spr_item_icons_wide_bracelet_l2
-    m_GfxData spr_item_icons_wide_feather_l2
-    m_GfxData spr_item_icons_wide_magnet_glove_n
-    m_GfxData spr_item_icons_wide_seeds_sprite
-    m_GfxData spr_item_icons_song_sprites
-    m_GfxData spr_item_icons_wide_shield_l2
-    m_GfxData spr_item_icons_wide_shield_l3
-    m_GfxData spr_item_icons_wide_sword_l2
-    m_GfxData spr_item_icons_wide_sword_l3
-    m_GfxData spr_item_icons_wide_switch_hook_l2
-    m_GfxData spr_item_icons_wide_songs
-    m_GfxData spr_item_icons_wide_flute_partners
-    m_GfxData gfx_item_icons_wide_fixup_tiles
-    m_GfxData spr_item_icons_wide_rod_hud
-    m_GfxData spr_item_icons_wide_satchel_hud
-    m_GfxData spr_item_icons_wide_shooter_hud
-    m_GfxData spr_item_icons_wide_slingshot_l1_hud
-    m_GfxData spr_item_icons_wide_slingshot_l2_hud
-    .ifdef ENABLE_NEW_GAME_PLUS
-        m_GfxData spr_item_icons_life_vial
-    .endif
+	m_GfxData spr_item_icons_wide
+	m_GfxData spr_item_icons_wide_boomerang_l2
+	m_GfxData spr_item_icons_wide_bracelet_l2
+	m_GfxData spr_item_icons_wide_feather_l2
+	m_GfxData spr_item_icons_wide_magnet_glove_n
+	m_GfxData spr_item_icons_wide_seeds_sprite
+	m_GfxData spr_item_icons_song_sprites
+	m_GfxData spr_item_icons_wide_shield_l2
+	m_GfxData spr_item_icons_wide_shield_l3
+	m_GfxData spr_item_icons_wide_sword_l2
+	m_GfxData spr_item_icons_wide_sword_l3
+	m_GfxData spr_item_icons_wide_switch_hook_l2
+	m_GfxData spr_item_icons_wide_songs
+	m_GfxData spr_item_icons_wide_flute_partners
+	m_GfxData gfx_item_icons_wide_fixup_tiles
+	m_GfxData spr_item_icons_wide_rod_hud
+	m_GfxData spr_item_icons_wide_satchel_hud
+	m_GfxData spr_item_icons_wide_shooter_hud
+	m_GfxData spr_item_icons_wide_slingshot_l1_hud
+	m_GfxData spr_item_icons_wide_slingshot_l2_hud
+	.ifdef ENABLE_NEW_GAME_PLUS
+		m_GfxData spr_item_icons_life_vial
+	.endif
+	.ifdef ULTRAWIDE_INVENTORY_SPRITES
+		m_GfxData gfx_hud_ultrawide
+		m_GfxData spr_hud_ultrawide_brackets
+		m_GfxData flg_hud_biggoron_sword_ultrawide
+		m_GfxData map_hud_biggoron_sword_ultrawide
+		m_GfxData flg_hud_extra_hearts_ultrawide
+		m_GfxData map_hud_extra_hearts_ultrawide
+		m_GfxData flg_hud_normal_ultrawide
+		m_GfxData map_hud_normal_ultrawide
+	.endif
 .endif

@@ -872,6 +872,7 @@ m_section_superfree bank_0_Ext NAMESPACE bank0Ext
 .ends
 
 m_section_superfree Menu_Code_2 NAMESPACE menuCode2
+	.include "code/menu_code/inventoryMenu.s"
 	.include "code/menu_code/ringMenu.s"
 	.include "code/menu_code/fakeResetMenu.s"
 	.include "code/menu_code/saveAndQuitMenu.s"

@@ -3660,7 +3660,7 @@ updateStatusBar_body:
 	ld b,(hl)
 	ld c,a
 	ld hl,wDisplayedRupees
-	derefHl
+	rst_derefHl
 	call compareHlToBc
 	jr z,@updateRupeeDisplay
 
@@ -3686,6 +3686,27 @@ updateStatusBar_body:
 
 	ld hl,w4StatusBarTileMap+$2c
 	call correctAddressForExtraHeart
+
+.ifdef ULTRAWIDE_INVENTORY_SPRITES
+	; set c to $ff if the thousands place is available
+	ld a,(wcbe8)
+	rlca
+	jr c,+++	; allow 4-digit display if biggoron's sword equipped.
+	ld a,l
+	and $0f
+	ld c,a
+	ld a,(wRightItemTileIndex)
+	add $02
+	cp c
+	+++
+	ld c,$00
+	jr nc,++
+		dec c
+	++
+.endif
+
+	; NOTE: can draw 4 digits only if the tile to the left of the 
+	;       hundreds digit wasn't written over by an equipped item
 .ifdef INCREASE_WALLET_SIZE
 	; write an X into the tens place(which may be overwritten below)
 	ld (hl),$1b
@@ -3694,13 +3715,18 @@ updateStatusBar_body:
 	; display only the thousands and hundreds
 	; digits if the rupee count is over 999
 	ld de,wDisplayedRupees+1
+.ifdef ULTRAWIDE_INVENTORY_SPRITES
+	bit 0,c
+	jr nz,+++ ; move to 1's place if allowed to draw all 4
+.endif
 	ld a,(de)
 	cp $10
 	jr nc,++
-	; revert pointers back so we can overwrite the X
-	inc hl
-	dec de
-++
+		+++
+		; revert pointers back so we can overwrite the X
+		inc hl
+		dec de
+	++
 	xor a
 	jr +++
 
@@ -3730,6 +3756,22 @@ updateStatusBar_body:
 
 	xor a
 	call @drawRupeeDigit
+.ifdef ULTRAWIDE_INVENTORY_SPRITES
+	bit 0,c
+	jr z,+
+		call @drawRupeeDigit
+		push hl
+		; fix the hud tile priority flags
+		set 2,h
+		inc l
+		set 7,(hl)
+		ld a,l
+		sub $20
+		ld l,a
+		set 7,(hl)
+		pop hl
+.endif
+
 .else
 	ld c,$10
 	ld a,(wDisplayedRupees)
@@ -3814,36 +3856,58 @@ updateStatusBar_body:
 	xor a
 	ldh (R_SVBK),a
 	ld a,(wcbe8)
+
 .ifndef ONE_HANDED_BIGGORON_SWORD
 	bit 7,a
 	jp nz,@biggoronSword
 .endif
 
 	; Update item sprites
-	ld e,$10
-	ld bc,$1038
+	ld bc,$1038 ; B item y-coordinate and A item x-coordinate
+	ld e,b      ; B item x-coordinate
+.if defined(ULTRAWIDE_INVENTORY_SPRITES)
+	; if item B has more than 2 tiles, shift it left 8 pixels
+	ld a,(wBItemDisplayMode)
+	cp $ff
+	jr z,+
+		ld e,$08
+	+
+
+	; if item A has a level/count, shift it right 8 pixels
+	ld a,(wAItemDisplayMode)
+	and $0f
+	cp $0c
+	jr nc,+
+	cp $02
+	jr c,++
+	cp $06
+	jr c,+
+		++
+		ld c,$40
+.elif defined(WIDE_INVENTORY_SPRITES)
+	rrca
+	jr nc,+
+		ld c,$30
+.else
 	rrca
 	jr nc,+
 	ld c,$30
 +
-
-.ifndef WIDE_INVENTORY_SPRITES
 	; If harp is equipped, adjust sprite X-position 8 pixels right
 	ld hl,wInventoryB
 	ld a,ITEM_HARP
 	cp (hl)
 	jr nz,+
-	set 3,e
-+
+		set 3,e
+	+
 	inc l
 	cp (hl)
 	jr nz,+
-
-	ld a,c
-	add $08
-	ld c,a
-+
+		ld a,c
+		add $08
+		ld c,a
 .endif
++
 
 	ld hl,wOam
 	ld a,b
@@ -3866,11 +3930,14 @@ updateStatusBar_body:
 	ldi (hl),a
 
 .ifdef WIDE_INVENTORY_SPRITES
+	xor a
+	ld (hTempVal0),a
 	ld a,(wBItemDisplayMode)
 	cp $ff
 	jr z,+
 	bit 7,a
 	jr z,+
+		ld (hTempVal0),a
 		; render the third sprite
 		ld a,b
 		ldi (hl),a
@@ -3938,6 +4005,7 @@ updateStatusBar_body:
 
 	ld a,l
 	ld (wEquippedItemOamTail),a
+	ldh (<hOamTail),a
 
 	; we don't need to make sprite blockers if the menu is opened
 	ld a,(wOpenedMenuType)
@@ -3964,6 +4032,17 @@ updateStatusBar_body:
 	ld b,(hl)
 	ld l,<wOam+13
 	ld c,(hl)
+.ifdef WIDE_INVENTORY_SPRITES
+	ld a,(hTempVal0)
+	or a
+	jr z,+
+		; there's 3 sprites in item B, so the offset we 
+		; read the X coordinate for A needs to be shifted
+		ld b,c
+		ld l,<wOam+17
+		ld c,(hl)
+	+
+.endif
 	pop hl
 .ifdef WIDE_INVENTORY_SPRITES
 	ld de,wAItemDisplayMode
@@ -3971,29 +4050,18 @@ updateStatusBar_body:
 	ld de,wAItemSpriteAttribute1
 .endif
 	call @createItemSpriteBlockers
-	ld a,l
-	ldh (<hOamTail),a
-	ld (wEquippedItemOamTail),a
 	pop bc
 	pop de
 	ret
 
 @createItemSpriteBlockers:
 .ifdef WIDE_INVENTORY_SPRITES
-	ld a,(wEquippedItemOamTail)
-	cp $28
-	ret nc
-
 	ld a,b
 	call @createItemSpriteBlocker
-	ld a,(wEquippedItemOamTail)
-	cp $28
 	ret nc
 
 	ld a,c
 	call @createItemSpriteBlocker
-	ld a,(wEquippedItemOamTail)
-	cp $28
 	ret nc
 
 	; check if this is a 3-tile wide item
@@ -4006,10 +4074,13 @@ updateStatusBar_body:
 	ld a,c
 	add $08
 	call @createItemSpriteBlocker
+	ret nc
 .else
 	ld a,(de)
 	bit 4,a
 	ld a,b
+	; only make a sprite blocker if the sprite uses
+	; a palette that makes use of transparent colors
 	call nz,@createItemSpriteBlocker
 	inc e
 	ld a,(de)
@@ -4020,7 +4091,6 @@ updateStatusBar_body:
 	ret
 
 @createItemSpriteBlocker:
-.ifdef WIDE_INVENTORY_SPRITES
 	push bc
 	ld b,a
 	ld a,l
@@ -4028,17 +4098,24 @@ updateStatusBar_body:
 	ld a,b
 	pop bc
 	ret nc
-.endif
 
 	; we need to make a sprite to block later
 	; sprites from rendering through this one
 	ld (hl),$10
 	inc l
+.ifdef WIDE_INVENTORY_SPRITES
+	; ensure these are aligned to the tile boundaries
+	and $f8
+.endif
 	ldi (hl),a
 	ld (hl),$4c
 	inc l
 	ld (hl),$08
 	inc l
+	ld a,l
+	ld (wEquippedItemOamTail),a
+	ldh (<hOamTail),a
+	cp $28
 	ret
 
 .ifndef ONE_HANDED_BIGGORON_SWORD
@@ -4046,17 +4123,42 @@ updateStatusBar_body:
 	ld a,$10
 	ld (wEquippedItemOamTail),a
 	ldh (<hOamTail),a
+	ld b,a
 	ld hl,wOam
 	ld de,@oamData
-	ld b,$10
+.ifdef WIDE_INVENTORY_SPRITES
+	call copyMemoryReverse
+
+	; we don't need to make sprite blockers if the menu is opened
+	ld a,(wOpenedMenuType)
+	or a
+	ret nz
+	ld a,$18
+	call @createItemSpriteBlocker
+	ld a,$20
+	call c,@createItemSpriteBlocker
+	ld a,$28
+	call c,@createItemSpriteBlocker
+	ld a,$30
+	call c,@createItemSpriteBlocker
+	ret
+.else
 	jp copyMemoryReverse
 .endif
 
 @oamData:
+.if defined(ENABLE_ALT_BIGGORON_SPRITES)
+	.db $10 $18 $78 $0c ; B Item
+	.db $10 $20 $7a $09
+	.db $10 $28 $7c $09 ; A Item
+	.db $10 $30 $7e $09
+.else
 	.db $10 $18 $78 $0b ; B Item
 	.db $10 $20 $7a $0b
 	.db $10 $28 $7c $0b ; A Item
 	.db $10 $30 $7e $0b
+.endif
+.endif
 
 ;;
 ; Subtracts hl by 1 if you have 15+ hearts - status bar needs to be compressed
@@ -4098,10 +4200,30 @@ loadEquippedItemGfx:
 	ld e,<w4ItemIconGfx+$40
 	call c,loadItemIconGfx
 
+.ifdef ULTRAWIDE_INVENTORY_SPRITES
+	call setupHudIconBgTileProperties
+	ld a,l
+	and $0f
+	ld (wRightItemTileIndex),a
+	ld hl,wStatusBarNeedsRefresh
+	set 3,(hl) ; trigger rupee refresh
+	ret
+.endif
+
 ;;
 setupHudIconBgTileProperties:
 	ld bc,$0020
+.ifdef ULTRAWIDE_INVENTORY_SPRITES
+	ld hl,w4StatusBarAttributeMap+$01
+	; if item B has ONLY 2 tiles, shift it right 8 pixels
+	ld a,(wBItemDisplayMode)
+	cp $ff
+	jr nz,+
+		inc hl
+	+
+.else
 	ld hl,w4StatusBarAttributeMap+$02
+.endif
 	ld a,(wBItemSpriteXOffset)
 	bit 7,a
 .ifdef WIDE_INVENTORY_SPRITES
@@ -4109,7 +4231,11 @@ setupHudIconBgTileProperties:
 	jr nz,+
 		call @func1
 		ld a,(wBItemSpriteAttribute3)
-		ld hl,w4StatusBarAttributeMap+$03
+		.ifdef ULTRAWIDE_INVENTORY_SPRITES
+			ld hl,w4StatusBarAttributeMap+$02
+		.else
+			ld hl,w4StatusBarAttributeMap+$03
+		.endif
 		inc a
 		call nz,@func1
 	+
@@ -4117,18 +4243,42 @@ setupHudIconBgTileProperties:
 	call z,@func1
 .endif
 
+.ifdef ULTRAWIDE_INVENTORY_SPRITES
+	ld l,<w4StatusBarAttributeMap+$08
+	ld a,(wAItemDisplayMode)
+	cp $ff	; check if no extra tiles
+	jr z,++
+	bit 7,a	; check if not 3-tile
+	jr z,+++
+		; might be 3-tile. check if seeds
+		and $0f
+		cp $08
+		jr c,+++
+		cp $0c
+		jr nc,++
+	+++
+	and $0f
+	cp $02	; check if rod
+	jr z,++
+	cp $05	; check if harp
+	jr nz,+
+		++
+		dec l
+.else
 	ld l,<w4StatusBarAttributeMap+$07
 	ld a,(wcbe8)
 	rrca
 	jr nc,+
-	dec l
+		dec l
+.endif
 +
 	ld a,(wAItemSpriteXOffset)
 	bit 7,a
 	ret nz
-.ifdef WIDE_INVENTORY_SPRITES
+
 	; handle an extra sprite
 	call @func1
+.if !defined(ULTRAWIDE_INVENTORY_SPRITES)
 	ld a,(wcbe8)
 	rrca
 	ld hl,w4StatusBarAttributeMap+$08
@@ -4139,11 +4289,20 @@ setupHudIconBgTileProperties:
 	inc a
 	ret z
 .endif
+
+.if defined(WIDE_INVENTORY_SPRITES)
+	ld a,(wAItemSpriteAttribute3)
+	inc a
+	ret z
+.endif
 ;;
 @func1:
-	or a
-	call nz,@func2
+	push af
 	dec l
+	call @func2
+	pop af
+	or a
+	ret z
 ;;
 @func2:
 	ld d,l
@@ -4151,6 +4310,7 @@ setupHudIconBgTileProperties:
 	add hl,bc
 	ld (hl),b
 	ld l,d
+	inc l
 	ret
 
 ;;
@@ -4174,7 +4334,7 @@ loadEquippedItemSpriteData:
 	cp $01
 	jr z,+
 		or a
-		jr z,@clearItem
+		jp z,@clearItem
 	+
 
 	; Put left sprite index in 'b'
@@ -4198,7 +4358,10 @@ loadEquippedItemSpriteData:
 	jr z,++
 .endif
 
-.ifndef WIDE_INVENTORY_SPRITES
+.ifdef WIDE_INVENTORY_SPRITES
+	++
+	ldi a,(hl)
+.else
 .if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
 	; change the palette for the L-4 sword/shield
 	push hl
@@ -4215,10 +4378,8 @@ loadEquippedItemSpriteData:
 	jr z,+
 	cp $86
 	jr c,+
-.endif
 ++
 	ldi a,(hl)
-.ifndef WIDE_INVENTORY_SPRITES
 	jr @gotAttribute
 +
 	ldi a,(hl)
@@ -4228,19 +4389,15 @@ loadEquippedItemSpriteData:
 @gotAttribute:
 .endif
 
+	ld c,a
 .ifdef ENABLE_NEW_GAME_PLUS
 	; modify life vial palette to fit tier
-	ld c,a
 	dec de
 	ld a,(de)
 	inc de
 	cp TREASURE_LIFE_VIAL
 	jr nz,+
-		ld a,TREASURE_RED_LIFE_VIAL
-		push hl
-		ld hl,wObtainedTreasureFlags
-		call checkFlag
-		pop hl
+		isTreasureFlagSet TREASURE_RED_LIFE_VIAL
 		jr z,+
 			dec hl
 			ldi a,(hl)
@@ -4252,23 +4409,63 @@ loadEquippedItemSpriteData:
 			ldi a,(hl)
 			ld c,a
 
-			ldi a,(hl)
-			set 3,a
-		.ifdef WIDE_INVENTORY_SPRITES
-			inc a
-		.endif
-			ld (de),a
+			.ifdef WIDE_INVENTORY_SPRITES
+				ldi a,(hl)
+				set 3,a
+				inc a
+				ld (de),a
+			.else
+				inc hl
+			.endif
 			jr ++
 	+
-	ld a,c
+.endif
+.if defined(ENABLE_ALT_BIGGORON_SPRITES) && defined(ONE_HANDED_BIGGORON_SWORD)
+	dec hl
+	dec hl
+	ldi a,(hl)
+	inc hl
+	cp $94 ; biggoron sword left sprite index
+	jr nz,+
+		; fix the palette for 3-wide alt sprite
+		inc hl
+		inc hl
+		inc hl
+		inc hl
+
+		ld a,$09
+		ld (de),a
+		inc de
+
+		ld a,$0c
+		ld (de),a
+		inc de
+
+		ld a,$08
+		ld (de),a
+		inc de
+
+		ld a,$9f
+		ld (de),a
+		inc de
+
+		ld a,$0c
+		ld (de),a
+
+		ld c,$95 ; middle sprite index
+		ld d,$96 ; right sprite index
+		jr @done
+	+
 .endif
 
-	; Store into [wItemSpriteAttribtue1]
+	ld a,c
+
+	; Store into [wItemSpriteAttribute1]
 	set 3,a
 	ld (de),a
 
 	; Read the right sprite + attribute bytes
-	inc e
+	inc de
 	ldi a,(hl)
 
 	; Put right sprite index in 'c'
@@ -4280,13 +4477,13 @@ loadEquippedItemSpriteData:
 	ld (de),a
 ++
 
-	; Calculate [wItemSpriteXOffset]
-	inc e
+	; Setup [wItemSpriteXOffset]
+	inc de
 	ld a,$08
 	ld (de),a
 
 	; Copy value for [wItemDisplayMode]
-	inc e
+	inc de
 	ldi a,(hl)
 	ld (de),a
 
@@ -4317,21 +4514,35 @@ loadEquippedItemSpriteData:
 	jr z,+
 	bit 7,a
 	jr z,+
-		swap a
-		and $07
-		set 3,a
-		ld (de),a
-		ld d,c
-		inc d
-		jr ++
+		; don't display seed items as 3/4 tiles
+		and $0f
+		cp $08
+		jr c,++
+		cp $0c
+		jr c,+
+			++
+			; not a seed item
+			dec hl
+			ldi a,(hl) ; get the palette from wDisplayMode
+			swap a
+			and $07
+			set 3,a
+			ld (de),a
+			ld d,c
+			inc d
+			jr ++
 	+
+		; seed item
 		ld a,$ff
 		ld (de),a
 		xor a
 		ld d,a
 	++
+	inc hl
+.else
+	inc hl
 .endif
-
+@done
 	scf
 	ret
 
@@ -4389,6 +4600,9 @@ drawItemTilesOnStatusBar:
 	call loadEquippedItemSpriteData
 	call setupHudIconBgTileProperties
 
+.ifdef ULTRAWIDE_INVENTORY_SPRITES
+	ld de,w4StatusBarTileMap+$25
+.else
 	; Draw A button item
 	; Need to check if the status bar is squished to the left
 	ld a,(wcbe8)
@@ -4397,6 +4611,7 @@ drawItemTilesOnStatusBar:
 	jr nc,+
 	dec e
 +
+.endif
 	ld a,(wAItemTreasure)
 	ld b,a
 	ld a,(wAItemDisplayMode)
@@ -4415,7 +4630,26 @@ drawItemTilesOnStatusBar:
 @drawItem:
 	ld c,a
 	rlca
+.ifdef ULTRAWIDE_INVENTORY_SPRITES
+	jr nc,+
+		ld a,c
+
+		; handle seed counts for satchel/slingshot/shooter
+		and $0f
+		cp $08
+		ret c
+		cp $0c
+		ret nc
+
+		; these are seeds. determine if vertical or horizontal
+		bit 7,c
+		ld c,$07		; display quantity vertically
+		jr z,+
+			ld c,$01	; display quantity horizontally
+	+
+.else
 	ret c
+.endif
 
 	; Get the number to display in 'b' (if applicable)
 	ld a,b
@@ -5171,6 +5405,25 @@ loadItemIconGfx:
 	ld b,a
 
 .ifdef WIDE_INVENTORY_SPRITES
+	.if defined(ENABLE_ALT_BIGGORON_SPRITES) && defined(ONE_HANDED_BIGGORON_SWORD)
+		cp $94
+		jr c,+
+		cp $97
+		jr nc,+
+			m_ReadGfxDataHashedFilename gfx_biggoron_sword_alt
+			ld hl,{filename}
+			ld b,:{filename}
+			sub $94
+			add a
+			add a
+			add a
+			add a
+			add a
+			rst_addAToHl
+			jp copy20BytesFromBank
+		+
+	.endif
+
 	.ifdef ENABLE_NEW_GAME_PLUS
 		; insert the vial sprite
 		.if defined(ROM_COMBO)
@@ -5286,7 +5539,7 @@ loadItemIconGfx:
 			pop de
 
 			; check each leveled sprite for this level
-			derefHl
+			rst_derefHl
 
 			-
 				ldi a,(hl)
@@ -5305,7 +5558,7 @@ loadItemIconGfx:
 				ldi a,(hl)
 				ld c,b
 				ld b,a
-				derefHl
+				rst_derefHl
 				bit 0,c
 				jr z,++
 					; second half of tile
@@ -5349,7 +5602,7 @@ loadItemIconGfx:
 			inc hl
 
 			; check each leveled sprite for this level
-			derefHl
+			rst_derefHl
 
 			-
 				ldi a,(hl)
@@ -5365,7 +5618,7 @@ loadItemIconGfx:
 					ld c,a
 					ldi a,(hl) ; get the bank number
 					ld b,a
-					derefHl ; get the sprite data pointer
+					rst_derefHl ; get the sprite data pointer
 					ld a,c
 					rst_addAToHl
 					jp copy20BytesFromBank
@@ -5436,14 +5689,14 @@ loadItemIconGfx:
 	.dw {filename}
 	.dw @@fluteSwaps
 
-	.db $ab
+	.db $ac
 	.db <wSelectedHarpSong
 	m_ReadGfxDataHashedFilename spr_item_icons_wide_songs
 	.db :{filename}
 	.dw {filename}
 	.dw @@harpSwaps1
 
-	.db $ac
+	.db $ad
 	.db <wSelectedHarpSong
 	m_ReadGfxDataHashedFilename spr_item_icons_wide_songs
 	.db :{filename}
@@ -5804,17 +6057,7 @@ showItemText2:
 ;;
 ; Initialization
 inventoryMenuState0:
-	ld hl,wInventorySubmenu2CursorPos
-	ld a,(hl)
-	cp $08
-	jr nc,+
-	ld (hl),$00
-+
-
 	xor a
-	ld (wInventorySubmenu),a
-	ld (wInventory.cbba),a
-
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
 	call wIsSeasons
@@ -5840,227 +6083,7 @@ inventoryMenuState0:
 	+
 .endif
 
-	call loadCommonGraphics
-.if defined(ROM_COMBO)
-	ld a,GFXH_INVENTORY_SCREEN_SEASONS
-	call wIsSeasons
-	jr c,+
-		ld a,GFXH_INVENTORY_SCREEN_AGES
-	+
-.else
-	ld a,GFXH_INVENTORY_SCREEN
-.endif
-	call loadGfxHeader
-
-.ifdef ENABLE_NEW_GAME_PLUS
-	ld a,UNCMP_GFXH_LIFE_VIAL_INV
-	call loadUncompressedGfxHeader
-.endif
-.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
-.ifndef WIDE_INVENTORY_SPRITES
-	ld a,UNCMP_GFXH_L4_SWORD_SHIELD
-	call loadUncompressedGfxHeader
-.endif
-.endif
-
-.ifdef WIDE_INVENTORY_SPRITES
-	; load the wide item icons
-	ld a,UNCMP_GFXH_ITEM_ICONS_WIDE
-	call loadUncompressedGfxHeader
-	call fixupWideItemGfx
-.else
-	; CROSSITEMS: Overwrite L-1 boomerang sprite with L-2 sprite if applicable. (This was
-	; necessary due to VRAM limitations.)
-	ld a,(wBoomerangLevel)
-	cp $02
-	jr nz,+
-	ld a,UNCMP_GFXH_MAGIC_BOOMERANG_INV
-	call loadUncompressedGfxHeader
-+
-	; Do the same with the hyper slingshot.
-	ld a,(wSlingshotLevel)
-	cp $02
-	jr nz,+
-	ld a,UNCMP_GFXH_HYPER_SLINGSHOT_INV
-	call loadUncompressedGfxHeader
-+
-.endif
-
-	ld a,UNCMP_GFXH_06
-	call loadUncompressedGfxHeader
-	ld a,PALH_0a
-	call loadPaletteHeader
-.if defined(ROM_COMBO)
-	callab bank19.getNumUnappraisedRings
-.else
-	callab dataLoading.getNumUnappraisedRings
-.endif
-	call func_02_55b2
-	ld a,$01
-	ld (wMenuActiveState),a
-	call fastFadeinFromWhite
-	ld a,$03
-	jp loadGfxRegisterStateIndex
-
-.ifdef WIDE_INVENTORY_SPRITES
-fixupWideItemGfx:
-	push hl
-	push bc
-	ld hl,itemGfxIconFixupInfo
-	-
-		ld b,>wc600Block
-		ldi a,(hl)
-		ld c,a
-
-		; increment the level if necessary
-		cp <wSwordLevel
-		jr z,+
-			cp <wShieldLevel
-		+
-
-		; get the item level\subid
-		ld a,(bc)
-		.ifdef ENABLE_RING_REDUX
-			call z,victoryRingIncLevel
-		.endif
-		ld c,a
-
-		push hl
-		derefHl
-		ldi a,(hl)
-		ld b,a
-		ld a,c
-		cp b
-		jr c,+
-			ld a,b
-		+
-		rst_addAToHl
-
-		; get the gfx header to load and load it
-		ld a,(hl)
-		call loadUncompressedGfxHeader
-		pop hl
-		inc hl
-		inc hl
-
-		ld a,(hl)
-		or a
-		jr nz,-
-
-	pop bc
-	pop hl
-	jp fixupWideItemGfx_harpOfAges
-
-itemGfxIconFixupInfo:
-    .db <wBoomerangLevel
-    .dw @itemGfxHeadersBySubid_boomerang
-
-    .db <wBraceletLevel
-    .dw @itemGfxHeadersBySubid_bracelet
-
-    .db <wFeatherLevel
-    .dw @itemGfxHeadersBySubid_feather
-
-    .db <wMagnetGlovePolarity
-    .dw @itemGfxHeadersBySubid_magnetGlove
-
-    .db <wSwitchHookLevel
-    .dw @itemGfxHeadersBySubid_switchHook
-
-    .db <wSwordLevel
-    .dw @itemGfxHeadersBySubid_sword
-
-    .db <wShieldLevel
-    .dw @itemGfxHeadersBySubid_shield
-
-    .db <wFluteIcon
-    .dw @itemGfxHeadersBySubid_flutePartners
-
-	.db $00; terminator
-
-@itemGfxHeadersBySubid_boomerang:
-	.db $02
-	.db UNCMP_GFXH_ITEM_ICONS_BOOMERANG_L1
-	.db UNCMP_GFXH_ITEM_ICONS_BOOMERANG_L1
-	.db UNCMP_GFXH_ITEM_ICONS_BOOMERANG_L2
-
-@itemGfxHeadersBySubid_bracelet:
-	.db $02
-	.db UNCMP_GFXH_ITEM_ICONS_BRACELET_L1
-	.db UNCMP_GFXH_ITEM_ICONS_BRACELET_L1
-	.db UNCMP_GFXH_ITEM_ICONS_BRACELET_L2
-
-@itemGfxHeadersBySubid_feather:
-	.db $02
-	.db UNCMP_GFXH_ITEM_ICONS_FEATHER_L1
-	.db UNCMP_GFXH_ITEM_ICONS_FEATHER_L1
-	.db UNCMP_GFXH_ITEM_ICONS_FEATHER_L2
-
-@itemGfxHeadersBySubid_magnetGlove:
-	.db $01
-	.db UNCMP_GFXH_ITEM_ICONS_MAGNET_GLOVE_S
-	.db UNCMP_GFXH_ITEM_ICONS_MAGNET_GLOVE_N
-
-@itemGfxHeadersBySubid_switchHook:
-	.db $02
-	.db UNCMP_GFXH_ITEM_ICONS_SWITCH_HOOK_L1
-	.db UNCMP_GFXH_ITEM_ICONS_SWITCH_HOOK_L1
-	.db UNCMP_GFXH_ITEM_ICONS_SWITCH_HOOK_L2
-
-@itemGfxHeadersBySubid_sword:
-.ifdef ENABLE_NEW_GAME_PLUS
-	.db $04
-.else
-	.db $03
-.endif
-	.db UNCMP_GFXH_ITEM_ICONS_SWORD_L1
-	.db UNCMP_GFXH_ITEM_ICONS_SWORD_L1
-	.db UNCMP_GFXH_ITEM_ICONS_SWORD_L2
-	.db UNCMP_GFXH_ITEM_ICONS_SWORD_L3
-.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
-	.db UNCMP_GFXH_ITEM_ICONS_SWORD_L4
-.endif
-
-@itemGfxHeadersBySubid_shield:
-.ifdef ENABLE_NEW_GAME_PLUS
-	.db $04
-.else
-	.db $03
-.endif
-	.db UNCMP_GFXH_ITEM_ICONS_SHIELD_L1
-	.db UNCMP_GFXH_ITEM_ICONS_SHIELD_L1
-	.db UNCMP_GFXH_ITEM_ICONS_SHIELD_L2
-	.db UNCMP_GFXH_ITEM_ICONS_SHIELD_L3
-.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
-	.db UNCMP_GFXH_ITEM_ICONS_SHIELD_L4
-.endif
-
-@itemGfxHeadersBySubid_flutePartners:
-	.db $04
-	.db UNCMP_GFXH_ITEM_ICONS_FLUTE_NONE
-	.db UNCMP_GFXH_ITEM_ICONS_FLUTE_RICKY
-	.db UNCMP_GFXH_ITEM_ICONS_FLUTE_DIMITRI
-	.db UNCMP_GFXH_ITEM_ICONS_FLUTE_MOOSH
-
-
-fixupWideItemGfx_harpOfAges:
-	push hl
-    ld a,(wSelectedHarpSong)
-	and $03
-    ld hl,@itemGfxHeadersBySubid_harpTunes
-	rst_addAToHl
-	ld a,(hl)
-	call loadUncompressedGfxHeader
-	pop hl
-	ret
-
-@itemGfxHeadersBySubid_harpTunes:
-	.db UNCMP_GFXH_ITEM_ICONS_NO_TUNE
-	.db UNCMP_GFXH_ITEM_ICONS_TUNE_OF_ECHOES
-	.db UNCMP_GFXH_ITEM_ICONS_TUNE_OF_CURRENTS
-	.db UNCMP_GFXH_ITEM_ICONS_TUNE_OF_AGES
-
-.endif
+	jpab menuCode2.inventoryMenuState0_body
 
 ;;
 func_02_55a8:
@@ -6713,7 +6736,7 @@ inventoryMenuState2:
 	ld (de),a
 .ifdef WIDE_INVENTORY_SPRITES
 	call inventoryMenuState1@finalizeEquip
-	jp fixupWideItemGfx_harpOfAges
+	jpab menuCode2.fixupWideItemGfx_harpOfAges
 .else
 	jp inventoryMenuState1@finalizeEquip
 .endif
@@ -6831,7 +6854,7 @@ inventoryMenuState3:
 
 @subState2:
 .ifdef WIDE_INVENTORY_SPRITES
-	call fixupWideItemGfx
+	callab menuCode2.fixupWideItemGfx
 .endif
 	ld a,$c7
 	ld (wGfxRegs2.WINX),a
@@ -7153,9 +7176,21 @@ inventorySubscreen0_drawCursor:
 	jp addSpritesToOam_withOffset
 
 @cursorSprites:
+.ifdef ULTRAWIDE_INVENTORY_SPRITES
+	.db $08
+	.db $1f $17 $5e $00 ; top-left corner
+	.db $1f $1f $e0 $00 ; top-left middle
+	.db $1f $27 $e0 $00 ; top-right middle
+	.db $1f $2f $5e $20 ; top-right corner
+	.db $31 $17 $5e $40 ; bottom-left corner
+	.db $31 $1f $e0 $40 ; bottom-left middle
+	.db $31 $27 $e0 $40 ; bottom-right middle
+	.db $31 $2f $5e $60 ; bottom-right corner
+.else
 	.db $02
 	.db $28 $18 $0c $22 ; left
 	.db $28 $38 $0c $02 ; right
+.endif
 
 ;;
 inventorySubmenu1_drawCursor:
@@ -7207,7 +7242,7 @@ inventorySubmenu1_drawCursor:
 	ld a,d
 	ld hl,@spritesTable
 	rst_addDoubleIndex
-	derefHl
+	rst_derefHl
 	jp addSpritesToOam_withOffset
 
 @data:
@@ -7713,6 +7748,35 @@ inventorySubscreen0_drawStoredItems:
 	inc bc
 	ld a,(bc)
 	ld d,a
+.ifdef ULTRAWIDE_INVENTORY_SPRITES
+	; if this item will have 3 or more tiles,
+	; center it by shifting 1 tile to the left
+	push hl
+	inc hl
+	inc hl
+	inc hl
+	inc hl
+	ld a,(hl)
+	pop hl
+	cp $ff
+	jr z,+
+		; assume it's 3+ tiles wide, and increment back if it's not
+		dec e
+
+		; check if the 3-tile flag is set
+		bit 7,a
+		jr z,+
+
+		and $0f
+		cp $0c ; check if 4-tile wide
+		jr z,+
+		cp $03 ; check if horizontal level/quantity, or seasons
+		jr c,+
+		cp $05 ; check if vertical level/quantity
+		jr nc,+
+			inc e
+	+
+.endif
 	call drawTreasureDisplayDataToBg
 	ldh a,(<hFF8D)
 	dec a
@@ -8129,35 +8193,6 @@ itemSubmenu2TextIndices_seasons:
 .endif
 
 ;;
-; @param[out] a Capacity of ring box.
-getRingBoxCapacity:
-	ld a,(wRingBoxLevel)
-	bit 3,a
-	jr z,+
-		ld a,(wRingBoxLevel)
-		swap a
-		jr ++
-	+
-		push hl
-		and $0f
-		ld hl,@ringBoxCapacities
-		rst_addAToHl
-		ld a,(hl)
-		pop hl
-	++
-	and $0f
-	ret
-
-@ringBoxCapacities:
-	.db $00
-	.db RING_BOX_L1_SIZE
-	.db RING_BOX_L2_SIZE
-	.db RING_BOX_L3_SIZE
-.if MAX_RING_BOX_LEVEL > 3
-	.db RING_BOX_L4_SIZE
-.endif
-
-;;
 ; Fills a rectangle with that block tile that separates sections of the inventory menu.
 ;
 ; @param	bc	Height, width
@@ -8219,30 +8254,38 @@ drawTreasureDisplayDataToBg:
 	ld b,a
 	call @writeTile
 
+.ifdef WIDE_INVENTORY_SPRITES
+	; check if we need to draw tiles 3 and/or 4
 	ld a,(hl)
 	cp $ff
 	jr z,+
 	bit 7,a
 	jr z,+
-		; draw the third tile
-		; sprite index for the third tile is the previous tile+2,
-		; and the palette is the upper nibble of the mode minus 8
-		dec hl
-		dec hl
-		inc e
+		and $0f
 
-		; get the palette
-		swap a
-		and $07
-		ld b,a
+		; don't display seed items as 3/4 tiles
+		cp $08
+		jr c,++
+		cp $0c
+		jr c,+
+			++
+			; draw the third tile
+			; index for the third tile is the previous tile+1
+			ld c,$01
+			call @drawExtraInventoryTile
 
-		; get the tile index
-		ldi a,(hl)
-		inc a
-		ld c,a
-		inc hl
-		call @writeTile
+			.ifdef ULTRAWIDE_INVENTORY_SPRITES
+				; draw the fourth tile
+				; index for the fourth tile is the previous tile+2
+				ld a,(hl)
+				and $0f
+				cp $0c
+				jr nz,+
+					ld c,$02
+					call @drawExtraInventoryTile
+			.endif
 	+
+.endif
 
 .ifdef ENABLE_NEW_GAME_PLUS
 	; modify life vial palette to fit tier
@@ -8251,9 +8294,7 @@ drawTreasureDisplayDataToBg:
 	ldd a,(hl)
 	cp <TX_09_LIFE_VIAL
 	jr nz,+
-		ld a,TREASURE_RED_LIFE_VIAL
-		ld hl,wObtainedTreasureFlags
-		call checkFlag
+		isTreasureFlagSet TREASURE_RED_LIFE_VIAL
 		jr z,+
 			; move to the flags and change to red
 			ld h,d
@@ -8286,15 +8327,15 @@ drawTreasureDisplayDataToBg:
 	ldh a,(<hFF8B)
 	ld b,a
 	ld c,$07
-	ldi a,(hl)
+	ld a,(hl)
 
 .ifdef WIDE_INVENTORY_SPRITES
 	push bc
 	push de
 	push af
 	and $0f
-	cp $0f
-	jr z,+
+	cp $0c
+	jr nc,+
 		cp $08
 		jr c,+
 			; this is the seed satchel, slingshot, or shooter, so we need
@@ -8303,8 +8344,7 @@ drawTreasureDisplayDataToBg:
 			; determine the new tile index
 			sub $07
 			ld b,a
-			pop af
-			push af
+			ld a,(hl)
 			swap a
 			and $07 ; get the seed type
 			ld c,a
@@ -8322,28 +8362,89 @@ drawTreasureDisplayDataToBg:
 			add $04
 			ld d,a
 			ld a,c
+			push hl
 			ld hl,@seedPalettes
 			rst_addAToHl
 			ld a,(hl)
+			pop hl
 			ld (de),a
-
 	+
 	pop af
 	pop de
 	pop bc
-	and $0f
 .endif
+	inc hl
 
 	and $0f
-	cp $0f
-	ret z
+	; modes $0c and higher don't have extra tiles
+	cp $0c
+	ret nc
+
+.ifdef ULTRAWIDE_INVENTORY_SPRITES
+	cp $08
+	jr c,+
+		; this is a seed-based item. check if we're
+		; displaying it horizontally or vertically
+
+		inc e
+		ld a,$07 ; display quantity vertically
+		dec hl
+		bit 7,(hl)
+		inc hl
+		jp z,drawTreasureExtraTiles
+
+		ld a,$01 ; display quantity horizontally
+		jp drawTreasureExtraTiles
+	+
+	; don't shift for the rod of seasons
+	cp $02
+	jp z,drawTreasureExtraTiles
+
+	; don't shift if this is only 1-tile wide
+	push af
+	dec hl
+	dec hl
+	dec hl
+	ld a,(hl)
+	or a
+	pop hl
+	ld a,h
+	jp z,drawTreasureExtraTiles
+
+	inc e
+.endif
 	jp drawTreasureExtraTiles
 
 .ifdef WIDE_INVENTORY_SPRITES
 @seedPalettes:
 	.db $04 $05 $03 $03 $02
-.endif
 
+; @param	c	Offset to add to the tile index
+; @param	de	Where to draw to (a tilemap of some sort)
+; @param	hl	Pointer to sixth byte of treasure display data (ie. wTmpcec0+5)
+;			(See the "treasureDisplayData" structures for details on format)
+@drawExtraInventoryTile:
+	; draw the third tile
+	; sprite index for the third tile is the previous tile+2,
+	; and the palette is the upper nibble of the mode minus 8
+	dec hl
+	dec hl
+
+	; get and adjust the tile index
+	ldi a,(hl)
+	add c
+	ld c,a
+	inc hl
+
+	; get the palette
+	ld a,(hl)
+	swap a
+	and $07
+	ld b,a
+
+	; move to the next tile and write it
+	inc e
+.endif
 ;;
 ; @param bc
 @writeTile:
@@ -12060,29 +12161,6 @@ runSaveAndQuitMenu:
 
 
 .include "code/menu_code/secretsListMenu.s"
-
-.ifdef EXTENDED_RING_BOX
-arrowUpSpriteBlue
-	.db $01
-	.db $00 $00 $0e $04
-
-arrowDownSpriteRed
-	.db $01
-	.db $00 $00 $0e $45
-
-getRingBoxContents:
-	ld hl,wRingBoxContents
-	cp $05
-	ret c
-	ld hl,wRingBoxContentsExt
-	ret
-
-getRingBoxClippedIndex:
-	cp $05
-	ret c
-	sub $05
-	ret
-.endif
 
 
 runFakeReset:

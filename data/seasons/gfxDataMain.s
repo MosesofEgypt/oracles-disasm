@@ -32,7 +32,15 @@
 	m_GfxData flg_inventory_screen_2 ; $0a12cf
 	m_GfxData map_inventory_screen_3 ; $0a12de
 	m_GfxData flg_inventory_screen_3 ; $0a1371
-	m_GfxData spr_biggoron_sword_icon ; $0a13bc
+	.ifdef ENABLE_ALT_BIGGORON_SPRITES
+		m_GfxData spr_biggoron_sword_item_alt
+		m_GfxData gfx_biggoron_sword_alt
+		m_GfxData gfx_biggoron_sword_alt_large
+	.elif defined(WIDE_INVENTORY_SPRITES)
+		m_GfxData gfx_biggoron_sword_large
+	.else
+		m_GfxData spr_biggoron_sword_icon
+	.endif
 	m_GfxData map_unappraised_ring_list ; $0a1406
 	m_GfxData flg_unappraised_ring_list ; $0a1425
 	m_GfxData map_appraised_ring_list ; $0a143d
@@ -711,5 +719,15 @@
 	m_GfxData spr_item_icons_wide_slingshot_l2_hud
 	.ifdef ENABLE_NEW_GAME_PLUS
 		m_GfxData spr_item_icons_life_vial
+	.endif
+	.ifdef ULTRAWIDE_INVENTORY_SPRITES
+		m_GfxData gfx_hud_ultrawide
+		m_GfxData spr_hud_ultrawide_brackets
+		m_GfxData flg_hud_biggoron_sword_ultrawide
+		m_GfxData map_hud_biggoron_sword_ultrawide
+		m_GfxData flg_hud_extra_hearts_ultrawide
+		m_GfxData map_hud_extra_hearts_ultrawide
+		m_GfxData flg_hud_normal_ultrawide
+		m_GfxData map_hud_normal_ultrawide
 	.endif
 .endif

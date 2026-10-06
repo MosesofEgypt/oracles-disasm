@@ -22,7 +22,11 @@ itemData:
 	.db $00 $00 $00 ; $09: ITEM_SWITCH_HOOK_HELPER
 	.db $00 $52 $09 ; $0a: ITEM_SWITCH_HOOK
 	.db $00 $16 $09 ; $0b: ITEM_SWITCH_HOOK_CHAIN
+.ifdef ENABLE_ALT_BIGGORON_SPRITES
+	.db $00 $52 $09 ; $0c: ITEM_BIGGORON_SWORD
+.else
 	.db $00 $52 $0b ; $0c: ITEM_BIGGORON_SWORD
+.endif
 	.db $00 $2c $0d ; $0d: ITEM_BOMBCHUS
 	.db $00 $00 $00 ; $0e: ITEM_FLUTE
 	.db $00 $52 $08 ; $0f: ITEM_SHOOTER

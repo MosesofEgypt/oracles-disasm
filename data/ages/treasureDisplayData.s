@@ -65,16 +65,23 @@ treasureDisplayData2:
 ;      $05: display harp song (CROSSITEMS: Used to be $02)
 ;      $06: display level vertically
 ;      $07: display quantity vertically
-;      $08: display satchel quantity vertically
-;      $09: display seed shooter quantity vertically
-;      $0a: display slinghsot quantity vertically
-;      $0b: display hyper slinghsot quantity vertically
-;      $ff: display nothing extra
+;      $*8: display satchel quantity (wide)
+;      $*9: display seed shooter quantity (wide)
+;      $*a: display slinghsot quantity (wide)
+;      $*b: display hyper slinghsot quantity (wide)
+;      $*c: display as 4-tile wide sprite
+;      $0d: unused
+;      $0e: unused
+;      $*f: display nothing extra
 ;      NOTE: if high bit is set, display as a 3-tile wide sprite.
 ;            the sprite index for the third tile is b3+1, and the
-;            palette is the upper nibble of the display mode minus 8
+;            palette is the upper nibble of the display mode minus 8.
+;            if the lower nibble is set to $c, the 4th tile is b3+2
+;            and the palette is the same as the third tile's palette.
 ;      NOTE: modes $08-$0b use the lower 3 bits of the upper nibble to
-;            indicate which seed type to use for the tile replacement
+;            indicate which seed type to use for the tile replacement.
+;            if high bit is set, quantity is displayed horizontally.
+;            otherwise it is displayed vertically.
 ;  b6: Low byte of text index (high byte is $09)
 ;
 ; b1 and b3, the "sprite indices", refer to tiles in the vram layout. See gfx header $08
@@ -92,7 +99,10 @@ treasureDisplayData2:
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_NONE (0x00)
 	.db $00,                         $07, $00, $00, $00, $00, <TX_0900 ; X TREASURE_SHIELD (0x01)
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_PUNCH (0x02)
-.ifdef WIDE_INVENTORY_SPRITES
+.if defined(ULTRAWIDE_INVENTORY_SPRITES)
+	.db TREASURE_BOMBS,              $9a, $04, $9b, $04, $01, <TX_0926 ; TREASURE_BOMBS (0x03)
+	.db $00,                         $9e, $05, $9f, $05, $ff, <TX_093c ; TREASURE_CANE_OF_SOMARIA (0x04)
+.elif defined(WIDE_INVENTORY_SPRITES)
 	.db TREASURE_BOMBS,              $9a, $04, $9b, $04, $07, <TX_0926 ; TREASURE_BOMBS (0x03)
 	.db $00,                         $9e, $05, $9f, $05, $ff, <TX_093c ; TREASURE_CANE_OF_SOMARIA (0x04)
 .else
@@ -110,19 +120,39 @@ treasureDisplayData2:
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_SWITCH_HOOK_HELPER (0x09)
 	.db $00,                         $07, $00, $07, $00, $00, <TX_0900 ; X TREASURE_SWITCH_HOOK (0x0a)
 	.db $00,                         $00, $02, $00, $00, $ff, <TX_0900 ; TREASURE_SWITCH_HOOK_CHAIN (0x0b)
-.ifdef WIDE_INVENTORY_SPRITES
+.if defined(ENABLE_ALT_BIGGORON_SPRITES)
+	.if defined(ULTRAWIDE_INVENTORY_SPRITES)
+		.db $00,                     $94, $04, $95, $01, $9c, <TX_0928 ; TREASURE_BIGGORON_SWORD (0x0c)
+	.else
+		.db $00,                     $94, $01, $95, $04, $cc, <TX_0928 ; TREASURE_BIGGORON_SWORD (0x0c)
+	.endif
+.elif defined(ULTRAWIDE_INVENTORY_SPRITES)
+	.db $00,                         $94, $03, $95, $03, $bc, <TX_0928 ; TREASURE_BIGGORON_SWORD (0x0c)
+.elif defined(WIDE_INVENTORY_SPRITES)
 	.db $00,                         $94, $03, $95, $03, $bf, <TX_0928 ; TREASURE_BIGGORON_SWORD (0x0c)
+.else
+	.db $00,                         $a1, $03, $a2, $03, $ff, <TX_0928 ; TREASURE_BIGGORON_SWORD
+.endif
+.if defined(ULTRAWIDE_INVENTORY_SPRITES)
+	.db TREASURE_BOMBCHUS,           $9c, $01, $9d, $05, $01, <TX_0929 ; TREASURE_BOMBCHUS (0x0d)
+.elif defined(WIDE_INVENTORY_SPRITES)
 	.db TREASURE_BOMBCHUS,           $9c, $01, $9d, $05, $07, <TX_0929 ; TREASURE_BOMBCHUS (0x0d)
 .else
-	.db $00,                         $a1, $03, $a2, $03, $ff, <TX_0928 ; TREASURE_BIGGORON_SWORD (0x0c)
 	.db TREASURE_BOMBCHUS,           $a0, $05, $00, $00, $01, <TX_0929 ; TREASURE_BOMBCHUS (0x0d)
 .endif
 	.db $00,                         $07, $00, $07, $00, $ff, <TX_0900 ; X TREASURE_FLUTE (0x0e)
 	.db $00,                         $88, $00, $00, $00, $ff, <TX_0940 ; X TREASURE_SHOOTER (0x0f)
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_10 (0x10)
 	.db TREASURE_HARP,               $00, $00, $00, $00, $05, <TX_0941 ; X TREASURE_HARP (0x11)
-.ifdef ENABLE_NEW_GAME_PLUS
-.ifdef WIDE_INVENTORY_SPRITES
+.ifndef ENABLE_NEW_GAME_PLUS
+	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_12
+	.db $00,                         $07, $00, $07, $00, $ff, <TX_0900 ; TREASURE_SLINGSHOT (0x13)
+	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_14
+.elif defined(ULTRAWIDE_INVENTORY_SPRITES)
+	.db TREASURE_LIFE_VIAL,          $bb, $04, $bb, $24, $01, <TX_09_LIFE_VIAL ; TREASURE_LIFE_VIAL
+	.db $00,                         $07, $00, $07, $00, $ff, <TX_0900 ; TREASURE_SLINGSHOT (0x13)
+	.db TREASURE_LIFE_VIAL_CHARGE,   $bb, $04, $bb, $24, $ff, <TX_0900 ; TREASURE_LIFE_VIAL
+.elif defined(WIDE_INVENTORY_SPRITES)
 	.db TREASURE_LIFE_VIAL,          $bb, $04, $bb, $24, $07, <TX_09_LIFE_VIAL ; TREASURE_LIFE_VIAL
 	.db $00,                         $07, $00, $07, $00, $ff, <TX_0900 ; TREASURE_SLINGSHOT (0x13)
 	.db TREASURE_LIFE_VIAL_CHARGE,   $bb, $04, $bb, $24, $ff, <TX_0900 ; TREASURE_LIFE_VIAL
@@ -131,12 +161,7 @@ treasureDisplayData2:
 	.db $00,                         $07, $00, $07, $00, $ff, <TX_0900 ; TREASURE_SLINGSHOT (0x13)
 	.db TREASURE_LIFE_VIAL_CHARGE,   $bb, $04, $00, $00, $ff, <TX_0900 ; TREASURE_LIFE_VIAL
 .endif
-.else
-	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_12
-	.db $00,                         $07, $00, $07, $00, $ff, <TX_0900 ; TREASURE_SLINGSHOT (0x13)
-	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_14
-.endif
-.ifdef WIDE_INVENTORY_SPRITES
+.if defined(WIDE_INVENTORY_SPRITES)
 	.db $00,                         $a0, $04, $a1, $03, $ff, <TX_092a ; TREASURE_SHOVEL (0x15)
 .else
 	.db $00,                         $9b, $04, $00, $00, $ff, <TX_092a ; TREASURE_SHOVEL (0x15)
@@ -149,13 +174,12 @@ treasureDisplayData2:
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_1b (0x1b)
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_1c (0x1c)
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_MINECART_COLLISION (0x1d)
-.ifdef WIDE_INVENTORY_SPRITES
-	.db TREASURE_FOOLS_ORE,          $97, $00, $a9, $00, $ff, <TX_093f ; TREASURE_FOOLS_ORE (0x1e)
+.if defined(WIDE_INVENTORY_SPRITES)
+	.db TREASURE_FOOLS_ORE,          $a9, $00, $aa, $00, $ff, <TX_09_FOOLSORE ; TREASURE_FOOLS_ORE (0x1e)
 .else
 	.db TREASURE_FOOLS_ORE,          $9a, $00, $00, $00, $ff, <TX_09_FOOLSORE ; TREASURE_FOOLS_ORE (0x1e)
 .endif
 	.db $00,                         $9a, $00, $9a, $00, $ff, <TX_0900 ; TREASURE_1f (0x1f)
-.ifdef WIDE_INVENTORY_SPRITES
 	.db TREASURE_EMBER_SEEDS,        $80, $00, $83, $00, $ff, <TX_0932 ; TREASURE_EMBER_SEEDS (0x20)
 	.db TREASURE_SCENT_SEEDS,        $80, $00, $84, $00, $ff, <TX_0933 ; TREASURE_SCENT_SEEDS (0x21)
 	.db TREASURE_PEGASUS_SEEDS,      $80, $00, $85, $00, $ff, <TX_0934 ; TREASURE_PEGASUS_SEEDS (0x22)
@@ -164,16 +188,6 @@ treasureDisplayData2:
 	.db $00,                         $3a, $00, $3b, $00, $ff, <TX_0942 ; TREASURE_TUNE_OF_ECHOES (0x25)
 	.db $00,                         $3c, $00, $3d, $00, $ff, <TX_0943 ; TREASURE_TUNE_OF_CURRENTS (0x26)
 	.db $00,                         $3e, $00, $3f, $00, $ff, <TX_0944 ; TREASURE_TUNE_OF_AGES (0x27)
-.else
-	.db TREASURE_EMBER_SEEDS,        $80, $00, $83, $00, $ff, <TX_0932 ; TREASURE_EMBER_SEEDS (0x20)
-	.db TREASURE_SCENT_SEEDS,        $80, $00, $84, $00, $ff, <TX_0933 ; TREASURE_SCENT_SEEDS (0x21)
-	.db TREASURE_PEGASUS_SEEDS,      $80, $00, $85, $00, $ff, <TX_0934 ; TREASURE_PEGASUS_SEEDS (0x22)
-	.db TREASURE_GALE_SEEDS,         $80, $00, $86, $00, $ff, <TX_0935 ; TREASURE_GALE_SEEDS (0x23)
-	.db TREASURE_MYSTERY_SEEDS,      $80, $00, $87, $00, $ff, <TX_0936 ; TREASURE_MYSTERY_SEEDS (0x24)
-	.db $00,                         $3a, $00, $3b, $00, $ff, <TX_0942 ; TREASURE_TUNE_OF_ECHOES (0x25)
-	.db $00,                         $3c, $00, $3d, $00, $ff, <TX_0943 ; TREASURE_TUNE_OF_CURRENTS (0x26)
-	.db $00,                         $3e, $00, $3f, $00, $ff, <TX_0944 ; TREASURE_TUNE_OF_AGES (0x27)
-.endif
 	.db TREASURE_RUPEES,             $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_RUPEES (0x28)
 	.db $00,                         $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_HEART_REFILL (0x29)
 	.db TREASURE_HEART_CONTAINER,    $00, $00, $00, $00, $ff, <TX_0900 ; TREASURE_HEART_CONTAINER (0x2a)
@@ -235,7 +249,13 @@ treasureDisplayData2:
 	; upgrades)
 
 @treasureDisplayData_satchel:
-.ifdef WIDE_INVENTORY_SPRITES
+.if defined(ULTRAWIDE_INVENTORY_SPRITES)
+	.db TREASURE_EMBER_SEEDS,        $88, $03, $89, $02, $88, <TX_092d ; Ember seeds
+	.db TREASURE_SCENT_SEEDS,        $88, $03, $89, $03, $98, <TX_092d ; Scent seeds
+	.db TREASURE_PEGASUS_SEEDS,      $88, $03, $89, $01, $a8, <TX_092d ; Pegasus seeds
+	.db TREASURE_GALE_SEEDS,         $88, $03, $89, $01, $b8, <TX_092d ; Gale seeds
+	.db TREASURE_MYSTERY_SEEDS,      $88, $03, $89, $00, $c8, <TX_092d ; Mystery seeds
+.elif defined(WIDE_INVENTORY_SPRITES)
 	.db TREASURE_EMBER_SEEDS,        $88, $03, $89, $02, $08, <TX_092d ; Ember seeds
 	.db TREASURE_SCENT_SEEDS,        $88, $03, $89, $03, $18, <TX_092d ; Scent seeds
 	.db TREASURE_PEGASUS_SEEDS,      $88, $03, $89, $01, $28, <TX_092d ; Pegasus seeds
@@ -250,7 +270,13 @@ treasureDisplayData2:
 .endif
 
 @treasureDisplayData_shooter:
-.ifdef WIDE_INVENTORY_SPRITES
+.if defined(ULTRAWIDE_INVENTORY_SPRITES)
+	.db TREASURE_EMBER_SEEDS,        $8e, $02, $8f, $02, $89, <TX_0940 ; Ember seeds
+	.db TREASURE_SCENT_SEEDS,        $8e, $02, $8f, $03, $99, <TX_0940 ; Scent seeds
+	.db TREASURE_PEGASUS_SEEDS,      $8e, $02, $8f, $01, $a9, <TX_0940 ; Pegasus seeds
+	.db TREASURE_GALE_SEEDS,         $8e, $02, $8f, $01, $b9, <TX_0940 ; Gale seeds
+	.db TREASURE_MYSTERY_SEEDS,      $8e, $02, $8f, $00, $c9, <TX_0940 ; Mystery seeds
+.elif defined(WIDE_INVENTORY_SPRITES)
 	.db TREASURE_EMBER_SEEDS,        $8e, $02, $8f, $02, $09, <TX_0940 ; Ember seeds
 	.db TREASURE_SCENT_SEEDS,        $8e, $02, $8f, $03, $19, <TX_0940 ; Scent seeds
 	.db TREASURE_PEGASUS_SEEDS,      $8e, $02, $8f, $01, $29, <TX_0940 ; Pegasus seeds
@@ -265,7 +291,14 @@ treasureDisplayData2:
 .endif
 
 @treasureDisplayData_sword:
-.ifdef WIDE_INVENTORY_SPRITES
+.if defined(ULTRAWIDE_INVENTORY_SPRITES)
+	.db TREASURE_SWORD, $80, $00, $81, $00, $00, <TX_0923 ; L1
+	.db TREASURE_SWORD, $80, $05, $81, $02, $00, <TX_0924 ; L2
+	.db TREASURE_SWORD, $80, $04, $81, $01, $00, <TX_0925 ; L3
+	.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
+		.db TREASURE_SWORD, $80, $14, $81, $13, $00, <TX_09_BUTTER_SWORD
+	.endif
+.elif defined(WIDE_INVENTORY_SPRITES)
 	.db TREASURE_SWORD, $80, $00, $81, $00, $06, <TX_0923 ; L1
 	.db TREASURE_SWORD, $80, $05, $81, $02, $06, <TX_0924 ; L2
 	.db TREASURE_SWORD, $80, $04, $81, $01, $06, <TX_0925 ; L3
@@ -282,7 +315,14 @@ treasureDisplayData2:
 .endif
 
 @treasureDisplayData_shield:
-.ifdef WIDE_INVENTORY_SPRITES
+.if defined(ULTRAWIDE_INVENTORY_SPRITES)
+	.db TREASURE_SHIELD, $82, $00, $83, $00, $00, <TX_0920 ; L1
+	.db TREASURE_SHIELD, $82, $05, $83, $05, $00, <TX_0921 ; L2
+	.db TREASURE_SHIELD, $82, $04, $83, $04, $00, <TX_0922 ; L3
+	.if defined(ENABLE_RING_REDUX) || defined(ROM_COMBO)
+		.db TREASURE_SHIELD, $82, $13, $83, $15, $00, <TX_09_BUTTER_SHIELD
+	.endif
+.elif defined(WIDE_INVENTORY_SPRITES)
 	.db TREASURE_SHIELD, $82, $00, $83, $00, $06, <TX_0920 ; L1
 	.db TREASURE_SHIELD, $82, $05, $83, $05, $06, <TX_0921 ; L2
 	.db TREASURE_SHIELD, $82, $04, $83, $04, $06, <TX_0922 ; L3
@@ -299,7 +339,10 @@ treasureDisplayData2:
 .endif
 
 @treasureDisplayData_bracelet:
-.ifdef WIDE_INVENTORY_SPRITES
+.if defined(ULTRAWIDE_INVENTORY_SPRITES)
+	.db TREASURE_BRACELET, $86, $05, $87, $05, $00, <TX_092b ; L1
+	.db TREASURE_BRACELET, $86, $03, $87, $02, $00, <TX_093f ;
+.elif defined(WIDE_INVENTORY_SPRITES)
 	.db TREASURE_BRACELET, $86, $05, $87, $05, $06, <TX_092b ; L1
 	.db TREASURE_BRACELET, $86, $03, $87, $02, $06, <TX_093f ;
 .else
@@ -323,7 +366,7 @@ treasureDisplayData2:
 	.db TREASURE_TRADEITEM, $00, $00, $00, $00, $ff, <TX_0900 ; Nothing (sequence done)
 
 @treasureDisplayData_flute:
-.ifdef WIDE_INVENTORY_SPRITES
+.if defined(WIDE_INVENTORY_SPRITES)
 	.db TREASURE_FLUTE, $a2, $00, $a3, $00, $ff, <TX_092e ; Strange flute
 	.db TREASURE_FLUTE, $a2, $03, $a3, $03, $ff, <TX_092f ; Ricky's flute
 	.db TREASURE_FLUTE, $a2, $02, $a3, $02, $ff, <TX_0930 ; Dimitri's flute
@@ -337,10 +380,10 @@ treasureDisplayData2:
 
 @treasureDisplayData_harp:
 .ifdef WIDE_INVENTORY_SPRITES
-	.db $00, $aa, $02, $ab, $01, $95, <TX_0941 ; No song?
-	.db $00, $aa, $02, $ab, $01, $85, <TX_0941 ; Tune of echoes
-	.db $00, $aa, $02, $ab, $01, $b5, <TX_0941 ; Tune of currents
-	.db $00, $aa, $02, $ab, $01, $95, <TX_0941 ; Tune of ages
+	.db $00, $ab, $02, $ac, $01, $95, <TX_0941 ; No song?
+	.db $00, $ab, $02, $ac, $01, $85, <TX_0941 ; Tune of echoes
+	.db $00, $ab, $02, $ac, $01, $b5, <TX_0941 ; Tune of currents
+	.db $00, $ab, $02, $ac, $01, $95, <TX_0941 ; Tune of ages
 .else
 	.db $00, $02, $04, $02, $00, $05, <TX_0941 ; No song?
 	.db $00, $a3, $00, $a4, $00, $05, <TX_0941 ; Tune of echoes
@@ -354,7 +397,10 @@ treasureDisplayData2:
 	.db TREASURE_TUNI_NUT, $f2, $05, $f2, $25, $ff, <TX_094b ; Fixed
 
 @treasureDisplayData_switchHook:
-.ifdef WIDE_INVENTORY_SPRITES
+.if defined(ULTRAWIDE_INVENTORY_SPRITES)
+	.db TREASURE_SWITCH_HOOK, $90, $05, $91, $04, $00, <TX_093d ; L1
+	.db TREASURE_SWITCH_HOOK, $90, $05, $91, $04, $00, <TX_093e ; L2
+.elif defined(WIDE_INVENTORY_SPRITES)
 	.db TREASURE_SWITCH_HOOK, $90, $05, $91, $04, $06, <TX_093d ; L1
 	.db TREASURE_SWITCH_HOOK, $90, $05, $91, $04, $06, <TX_093e ; L2
 .else
@@ -363,7 +409,10 @@ treasureDisplayData2:
 .endif
 
 @treasureDisplayData_magnetGlove:
-.ifdef WIDE_INVENTORY_SPRITES
+.if defined(ULTRAWIDE_INVENTORY_SPRITES)
+	.db TREASURE_MAGNET_GLOVES,      $98, $04, $99, $04, $ff, <TX_09_MAGNETGLOVES
+	.db TREASURE_MAGNET_GLOVES,      $98, $05, $99, $05, $ff, <TX_09_MAGNETGLOVES
+.elif defined(WIDE_INVENTORY_SPRITES)
 	.db TREASURE_MAGNET_GLOVES,      $98, $04, $99, $04, $ff, <TX_09_MAGNETGLOVES
 	.db TREASURE_MAGNET_GLOVES,      $98, $05, $99, $05, $ff, <TX_09_MAGNETGLOVES
 .else
@@ -372,7 +421,13 @@ treasureDisplayData2:
 .endif
 
 @treasureDisplayData_slingshot:
-.ifdef WIDE_INVENTORY_SPRITES
+.if defined(ULTRAWIDE_INVENTORY_SPRITES)
+	.db TREASURE_EMBER_SEEDS,        $8a, $01, $8b, $02, $8a, <TX_09_SLINGSHOT
+	.db TREASURE_SCENT_SEEDS,        $8a, $01, $8b, $03, $9a, <TX_09_SLINGSHOT
+	.db TREASURE_PEGASUS_SEEDS,      $8a, $01, $8b, $01, $aa, <TX_09_SLINGSHOT
+	.db TREASURE_GALE_SEEDS,         $8a, $01, $8b, $01, $ba, <TX_09_SLINGSHOT
+	.db TREASURE_MYSTERY_SEEDS,      $8a, $01, $8b, $00, $ca, <TX_09_SLINGSHOT
+.elif defined(WIDE_INVENTORY_SPRITES)
 	.db TREASURE_EMBER_SEEDS,        $8a, $01, $8b, $02, $0a, <TX_09_SLINGSHOT
 	.db TREASURE_SCENT_SEEDS,        $8a, $01, $8b, $03, $1a, <TX_09_SLINGSHOT
 	.db TREASURE_PEGASUS_SEEDS,      $8a, $01, $8b, $01, $2a, <TX_09_SLINGSHOT
@@ -387,7 +442,13 @@ treasureDisplayData2:
 .endif
 
 @treasureDisplayData_hyperSlingshot:
-.ifdef WIDE_INVENTORY_SPRITES
+.if defined(ULTRAWIDE_INVENTORY_SPRITES)
+	.db TREASURE_EMBER_SEEDS,        $8c, $00, $8d, $02, $8b, <TX_09_HYPERSLINGSHOT
+	.db TREASURE_SCENT_SEEDS,        $8c, $00, $8d, $03, $9b, <TX_09_HYPERSLINGSHOT
+	.db TREASURE_PEGASUS_SEEDS,      $8c, $00, $8d, $01, $ab, <TX_09_HYPERSLINGSHOT
+	.db TREASURE_GALE_SEEDS,         $8c, $00, $8d, $01, $bb, <TX_09_HYPERSLINGSHOT
+	.db TREASURE_MYSTERY_SEEDS,      $8c, $00, $8d, $00, $cb, <TX_09_HYPERSLINGSHOT
+.elif defined(WIDE_INVENTORY_SPRITES)
 	.db TREASURE_EMBER_SEEDS,        $8c, $00, $8d, $02, $0b, <TX_09_HYPERSLINGSHOT
 	.db TREASURE_SCENT_SEEDS,        $8c, $00, $8d, $03, $1b, <TX_09_HYPERSLINGSHOT
 	.db TREASURE_PEGASUS_SEEDS,      $8c, $00, $8d, $01, $2b, <TX_09_HYPERSLINGSHOT
@@ -402,7 +463,10 @@ treasureDisplayData2:
 .endif
 
 @treasureDisplayData_boomerang:
-.ifdef WIDE_INVENTORY_SPRITES
+.if defined(ULTRAWIDE_INVENTORY_SPRITES)
+	.db TREASURE_BOOMERANG,          $92, $03, $93, $05, $00, <TX_0927
+	.db TREASURE_BOOMERANG,          $92, $04, $93, $04, $00, <TX_09_MAGICBOOMERANG
+.elif defined(WIDE_INVENTORY_SPRITES)
 	.db TREASURE_BOOMERANG,          $92, $03, $93, $05, $06, <TX_0927
 	.db TREASURE_BOOMERANG,          $92, $04, $93, $04, $06, <TX_09_MAGICBOOMERANG
 .else
@@ -411,7 +475,10 @@ treasureDisplayData2:
 .endif
 
 @treasureDisplayData_feather:
-.ifdef WIDE_INVENTORY_SPRITES
+.if defined(ULTRAWIDE_INVENTORY_SPRITES)
+	.db TREASURE_FEATHER, $84, $03, $85, $01, $00, <TX_092c
+	.db TREASURE_FEATHER, $84, $04, $85, $04, $00, <TX_09_ROCSCAPE
+.elif defined(WIDE_INVENTORY_SPRITES)
 	.db TREASURE_FEATHER, $84, $03, $85, $01, $06, <TX_092c
 	.db TREASURE_FEATHER, $84, $04, $85, $04, $06, <TX_09_ROCSCAPE
 .else

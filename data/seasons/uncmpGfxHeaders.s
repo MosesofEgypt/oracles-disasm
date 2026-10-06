@@ -215,7 +215,11 @@ uncmpGfxHeaderTable:
 	m_GfxHeaderEnd
 
 @uncmpGfxHeader1b:
+.ifdef ENABLE_ALT_BIGGORON_SPRITES
+	m_GfxHeader spr_biggoron_sword_item_alt, $8521
+.else
 	m_GfxHeader spr_swords, $8521, $0e, $a0
+.endif
 	m_GfxHeaderEnd
 
 @uncmpGfxHeader1c:
@@ -342,6 +346,13 @@ uncmpGfxHeaderTable:
 	m_GfxHeader spr_item_icons_song_sprites, $81c0, $04
 	m_GfxHeader spr_item_icons_song_sprites, $82c0, $04, $40
 	m_GfxHeader spr_item_icons_song_sprites, $85a0, $04, $80
+.if   defined(ENABLE_ALT_BIGGORON_SPRITES) && defined(ULTRAWIDE_INVENTORY_SPRITES)
+	m_GfxHeader gfx_biggoron_sword_alt_large, $8281, $08, $00
+.elif defined(ENABLE_ALT_BIGGORON_SPRITES)
+	m_GfxHeader gfx_biggoron_sword_alt, $8281, $08, $00
+.elif defined(ULTRAWIDE_INVENTORY_SPRITES)
+	m_GfxHeader gfx_biggoron_sword_large, $8281, $08, $00
+.endif
 	m_GfxHeaderEnd
 
 ; overwrite item icons with their higher level variants
@@ -410,19 +421,19 @@ uncmpGfxHeaderTable:
 	m_GfxHeaderEnd
 
 @uncmpGfxHeader_noTune:
-	m_GfxHeader spr_item_icons_wide, $8561, $04, $560
+	m_GfxHeader spr_item_icons_wide, $8581, $04, $560
 	m_GfxHeaderEnd
 
 @uncmpGfxHeader_tuneOfEchoes:
-	m_GfxHeader spr_item_icons_wide_songs, $8561, $04, $80
+	m_GfxHeader spr_item_icons_wide_songs, $8581, $04, $80
 	m_GfxHeaderEnd
 
 @uncmpGfxHeader_tuneOfCurrents:
-	m_GfxHeader spr_item_icons_wide_songs, $8561, $04, $40
+	m_GfxHeader spr_item_icons_wide_songs, $8581, $04, $40
 	m_GfxHeaderEnd
 
 @uncmpGfxHeader_tuneOfAges:
-	m_GfxHeader spr_item_icons_wide_songs, $8561, $04
+	m_GfxHeader spr_item_icons_wide_songs, $8581, $04
 	m_GfxHeaderEnd
 
 @uncmpGfxHeader_fluteNone:
@@ -440,7 +451,6 @@ uncmpGfxHeaderTable:
 @uncmpGfxHeader_fluteMoosh:
 	m_GfxHeader spr_item_icons_wide_flute_partners, $8461, $02, $40
 	m_GfxHeaderEnd
-
 .else
 
 ; CROSSITEMS: Magical boomerang overwriting L-1 boomerang for inventory gfx

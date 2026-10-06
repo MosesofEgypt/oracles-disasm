@@ -68,8 +68,18 @@
 		.define CONTEXT_SENSITIVE_AUTO_EQUIP
 	.endif
 	.ifndef WIDE_INVENTORY_SPRITES
-		; determines whether the inventory items are 2 or 3 tiles wide
+		; determines whether inventory items are 2 or 3 tiles wide
 		.define WIDE_INVENTORY_SPRITES
+	.endif
+	.ifndef ULTRAWIDE_INVENTORY_SPRITES
+		; determines whether to use extra horizontal space for inventory items.
+		; also enables 4-tile wide items to be drawn in the inventory
+		.define ULTRAWIDE_INVENTORY_SPRITES
+	.endif
+	.ifndef ENABLE_ALT_BIGGORON_SPRITES
+		; determines whether to make the biggoron sword appear
+		; more akin to its Ocarina of Time incarnation
+		.define ENABLE_ALT_BIGGORON_SPRITES
 	.endif
 	.ifndef RESTOCK_SHOP_ON_PURCHASE
 		; when buying an item in the shop, it will be
@@ -215,6 +225,12 @@
 .endif
 .ifndef MORE_MESSAGE_SPEEDS
 	.define MORE_MESSAGE_SPEEDS
+.endif
+.endif
+
+.if defined(ULTRAWIDE_INVENTORY_SPRITES) || defined(ENABLE_ALT_BIGGORON_SPRITES)
+.ifndef WIDE_INVENTORY_SPRITES
+	.define WIDE_INVENTORY_SPRITES
 .endif
 .endif
 
