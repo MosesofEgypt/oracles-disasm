@@ -1057,20 +1057,6 @@ copyMemory:
 
 ;;
 ; @param	bc	# of bytes to copy
-; @param	de	Source
-; @param	hl	Destination
-copyMemoryBcReverse:
-	ld a,(de)
-	ldi (hl),a
-	inc de
-	dec bc
-	ld a,b
-	or c
-	jr nz,copyMemoryBcReverse
-	ret
-
-;;
-; @param	bc	# of bytes to copy
 ; @param	de	Destination
 ; @param	hl	Source
 copyMemoryBc:
@@ -1113,8 +1099,27 @@ clearVram:
 	ld bc,$0200
 	jr clearMemoryBc16ByteBlocks
 
+initializePaletteMap:
+	ld bc,defaultPaletteMap
+loadPaletteMap:
+	push de
+	ld e,$08
+	ld hl,wPaletteMap
+	-
+		ld a,(bc)
+		ldi (hl),a
+		inc bc
+		dec e
+		jr nz,-
+	pop de
+	ret
+
+defaultPaletteMap:
+	.db $00 $01 $02 $03 $04 $05 $06 $07
+
 ;;
 initializeVramMaps:
+	call initializePaletteMap
 	call initializeVramMap1
 ;;
 initializeVramMap0:
@@ -1791,13 +1796,6 @@ readByteSequential:
 	setrombank
 	pop af
 	ret
-
-;;
-; HACK-BASE: This function has been deleted for the expanded tilesets patch.
-;
-; @param	a	Tileset to load (tilesets include collision data and tile indices)
-loadTileset:
-	jp panic
 
 ;;
 dec16_ff8c:
@@ -3456,6 +3454,22 @@ drawAllSpritesUnconditionally:
 	ldh a,(<hFF8F)
 	xor (hl)
 	ld (de),a
+	and $10
+	jr z,+
+		; map the palette to another
+		push hl
+		ld a,(de)
+		and $07
+		ld h,>wPaletteMap
+		add <wPaletteMap
+		ld l,a
+		ld a,(de)
+		and $e8
+		xor (hl)
+		ld (de),a
+
+		pop hl
+	+
 
 	inc hl
 	inc e
@@ -13567,16 +13581,6 @@ lookupExpandedTilesetTable:
 	ret
 
 ;;
-; Loads the address of unique header gfx (a&$7f) into wUniqueGfxHeaderAddress.
-;
-; HACK-BASE: Function removed for expanded tilesets patch.
-;
-; @param	a	Unique gfx header (see constants/common/uniqueGfxHeaders.s).
-;			Bit 7 is ignored.
-loadUniqueGfxHeader:
-	jp panic
-
-;;
 ; Load all graphics based on wTileset variables.
 ;
 ; HACK-BASE: Modified this function for the expanded tilesets patch.
@@ -13613,19 +13617,6 @@ loadTilesetGraphics:
 	pop af
 	rst_setrombank
 	ret
-
-;;
-; Loads one entry from the gfx header if [wTilesetUniqueGfx] != [wLoadedTilesetUniqueGfx].
-;
-; This should be called repeatedly (once per frame, to avoid overloading vblank) until all
-; entries in the header are read.
-;
-; HACK-BASE: This function has been removed for the expanded tilesets patch.
-;
-; @param	wUniqueGfxHeaderAddress	Where to read the header from (will be updated)
-; @param[out]	cflag			Set if there are more entries to load.
-updateTilesetUniqueGfx:
-	jp panic
 
 ;;
 ; Load just the first entry of a unique gfx header?

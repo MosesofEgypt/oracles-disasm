@@ -4248,3 +4248,11 @@ paletteData5960:
 	m_RGB16 $0a $0a $0a
 	m_RGB16 $00 $00 $00
 
+
+.ifdef ENABLE_COLORFUL_GANON
+paletteDataGanonRedux:
+	m_RGB16 $1f $1f $1f
+	m_RGB16 $00 $00 $00
+	m_RGB16 $1f $01 $05
+	m_RGB16 $03 $10 $1f
+.endif

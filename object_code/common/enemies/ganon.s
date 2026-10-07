@@ -73,6 +73,19 @@ m_EnemyCode $04
 	jp showText
 
 @normalStatus:
+.ifdef ENABLE_COLORFUL_GANON
+	ld bc,roomChangePaletteMap
+	ld e,Enemy.invincibilityCounter
+	ld a,(de)
+	or a
+	jr z,+
+	bit 7,a
+	jr nz,+
+		ld bc,hitFlashPaletteMap
+	+
+	call loadPaletteMap
+.endif
+
 	ld e,Enemy.state
 	ld a,(de)
 	rst_jumpTable
@@ -97,6 +110,11 @@ ganon_state_uninitialized:
 	ld h,d
 	ld l,e
 	inc (hl) ; [state] = 1
+
+.ifdef ENABLE_COLORFUL_GANON
+	ld a,ENEMY_GANON
+	ld (wPaletteMappedObject),a
+.endif
 
 	ld l,Enemy.oamTileIndexBase
 	ld (hl),$00
@@ -272,6 +290,19 @@ ganon_state4:
 	ld (hl),OBJ_GFXH_17
 	inc l
 	ld (hl),$01
+
+.ifdef ENABLE_COLORFUL_GANON
+.ifdef ROM_COMBO
+	call wIsSeasons
+	ld a,PALH_SPR_GANON_REDUX_SEASONS
+	jr c,+
+		ld a,PALH_SPR_GANON_REDUX_AGES
+	+
+.else
+	ld a,PALH_SPR_GANON_REDUX
+.endif
+	call loadPaletteHeader
+.endif
 
 	ldh a,(<hActiveObject)
 	ld d,a
@@ -892,7 +923,11 @@ ganon_stateC_substate4:
 	ret nz
 	ld l,Enemy.oamFlagsBackup
 	ld a,(hl)
+.ifdef ENABLE_COLORFUL_GANON
+	xor $15
+.else
 	xor $05
+.endif
 	ldi (hl),a
 	ld (hl),a
 	ret
@@ -1406,3 +1441,11 @@ ganon_setTileReplacementMode:
 	ldh a,(<hActiveObject)
 	ld d,a
 	ret
+
+.ifdef ENABLE_COLORFUL_GANON
+hitFlashPaletteMap:
+	.db $05 $05 $05 $05 $05 $05 $05 $05
+
+roomChangePaletteMap:
+	.db $04 $04 $04 $04 $04 $04 $04 $04
+.endif

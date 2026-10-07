@@ -3813,7 +3813,26 @@ enemyOamData4fa06:
 	.db $10 $14 $5a $26
 
 enemyOamData4fa43:
+	; ganon standing with trident
 	.db $10
+.ifdef ENABLE_COLORFUL_GANON
+	.db $fc $fa $40 $03
+	.db $fc $02 $42 $00
+	.db $fc $0a $44 $06
+	.db $fc $12 $46 $00
+	.db $f4 $1a $48 $02
+	.db $f4 $22 $4a $02
+	.db $0c $f4 $4c $06
+	.db $0c $fc $4e $00
+	.db $0c $04 $50 $00
+	.db $0c $0c $52 $00
+	.db $0c $14 $54 $06
+	.db $1c $f3 $56 $03
+	.db $1c $fb $58 $00
+	.db $1c $03 $5a $03
+	.db $1c $0b $5c $00
+	.db $1c $13 $5e $00
+.else
 	.db $fc $fa $40 $00
 	.db $fc $02 $42 $00
 	.db $fc $0a $44 $00
@@ -3830,9 +3849,29 @@ enemyOamData4fa43:
 	.db $1c $03 $5a $00
 	.db $1c $0b $5c $00
 	.db $1c $13 $5e $00
+.endif
 
 enemyOamData4fa84:
+	; ganon standing with trident (mirrored)
 	.db $10
+.ifdef ENABLE_COLORFUL_GANON
+	.db $fc $0e $40 $23
+	.db $fc $06 $42 $20
+	.db $fc $fe $44 $26
+	.db $fc $f6 $46 $20
+	.db $f4 $ee $48 $22
+	.db $f4 $e6 $4a $22
+	.db $0c $14 $4c $26
+	.db $0c $0c $4e $20
+	.db $0c $04 $50 $20
+	.db $0c $fc $52 $20
+	.db $0c $f4 $54 $26
+	.db $1c $15 $56 $23
+	.db $1c $0d $58 $20
+	.db $1c $05 $5a $23
+	.db $1c $fd $5c $20
+	.db $1c $f5 $5e $20
+.else
 	.db $fc $0e $40 $20
 	.db $fc $06 $42 $20
 	.db $fc $fe $44 $20
@@ -3849,9 +3888,30 @@ enemyOamData4fa84:
 	.db $1c $05 $5a $20
 	.db $1c $fd $5c $20
 	.db $1c $f5 $5e $20
+.endif
 
 enemyOamData4fac5:
+    ; ganon charging punch
 	.db $11
+.ifdef ENABLE_COLORFUL_GANON
+	.db $f4 $11 $2a $00
+	.db $f4 $19 $2c $00
+	.db $f4 $08 $4a $00
+	.db $f4 $10 $4c $06
+	.db $04 $f8 $4e $03
+	.db $04 $00 $50 $00
+	.db $04 $08 $52 $06
+	.db $04 $10 $54 $06
+	.db $14 $f8 $5a $03
+	.db $14 $00 $5c $06
+	.db $14 $08 $5e $06
+	.db $14 $10 $20 $06
+	.db $14 $18 $22 $06
+	.db $14 $20 $24 $03
+	.db $f4 $f8 $26 $03
+	.db $f4 $00 $28 $00
+	.db $04 $18 $2e $00
+.else
 	.db $f4 $11 $2a $00
 	.db $f4 $19 $2c $00
 	.db $f4 $08 $4a $00
@@ -3869,6 +3929,7 @@ enemyOamData4fac5:
 	.db $f4 $f8 $26 $00
 	.db $f4 $00 $28 $00
 	.db $04 $18 $2e $00
+.endif
 
 enemyOamData4fb0a:
 	.db $12
@@ -3892,7 +3953,28 @@ enemyOamData4fb0a:
 	.db $18 $13 $1e $07
 
 enemyOamData4fb53:
+    ; ganon standing idle
 	.db $12
+.ifdef ENABLE_COLORFUL_GANON
+	.db $f8 $f4 $00 $03
+	.db $f8 $fc $02 $00
+	.db $f8 $04 $04 $06
+	.db $f8 $13 $00 $23
+	.db $f8 $0b $02 $20
+	.db $08 $ec $06 $00
+	.db $08 $f4 $08 $00
+	.db $08 $fc $0a $02
+	.db $08 $04 $0c $00
+	.db $08 $0c $0e $02
+	.db $08 $14 $10 $00
+	.db $0a $1c $12 $00
+	.db $18 $ec $14 $03
+	.db $18 $f4 $16 $00
+	.db $18 $fc $18 $00
+	.db $18 $04 $1a $02
+	.db $18 $0c $1c $00
+	.db $18 $14 $1e $00
+.else
 	.db $f8 $f4 $00 $00
 	.db $f8 $fc $02 $00
 	.db $f8 $04 $04 $00
@@ -3911,9 +3993,31 @@ enemyOamData4fb53:
 	.db $18 $04 $1a $00
 	.db $18 $0c $1c $00
 	.db $18 $14 $1e $00
+.endif
 
 enemyOamData4fb9c:
+    ; ganon standing idle (mirrored)
 	.db $12
+.ifdef ENABLE_COLORFUL_GANON
+	.db $f8 $14 $00 $23
+	.db $f8 $0c $02 $20
+	.db $f8 $04 $04 $26
+	.db $f8 $f5 $00 $03
+	.db $f8 $fd $02 $00
+	.db $08 $1c $06 $20
+	.db $08 $14 $08 $20
+	.db $08 $0c $0a $22
+	.db $08 $04 $0c $20
+	.db $08 $fc $0e $22
+	.db $08 $f4 $10 $20
+	.db $0a $ec $12 $20
+	.db $18 $1c $14 $23
+	.db $18 $14 $16 $20
+	.db $18 $0c $18 $20
+	.db $18 $04 $1a $22
+	.db $18 $fc $1c $20
+	.db $18 $f4 $1e $20
+.else
 	.db $f8 $14 $00 $20
 	.db $f8 $0c $02 $20
 	.db $f8 $04 $04 $20
@@ -3932,9 +4036,31 @@ enemyOamData4fb9c:
 	.db $18 $04 $1a $20
 	.db $18 $fc $1c $20
 	.db $18 $f4 $1e $20
+.endif
 
 enemyOamData4fbe5:
+    ; ganon roaring 1
 	.db $12
+.ifdef ENABLE_COLORFUL_GANON
+	.db $f8 $f4 $72 $03
+	.db $f8 $fc $74 $00
+	.db $f8 $04 $76 $06
+	.db $f8 $13 $72 $23
+	.db $f8 $0b $74 $20
+	.db $08 $ec $78 $00
+	.db $08 $f4 $7a $00
+	.db $08 $fc $7c $00
+	.db $08 $04 $7e $00
+	.db $08 $1b $78 $20
+	.db $08 $13 $7a $20
+	.db $08 $0b $7c $20
+	.db $18 $f0 $80 $00
+	.db $18 $f8 $82 $00
+	.db $18 $00 $84 $02
+	.db $18 $17 $80 $20
+	.db $18 $0f $82 $20
+	.db $18 $07 $84 $22
+.else
 	.db $f8 $f4 $72 $00
 	.db $f8 $fc $74 $00
 	.db $f8 $04 $76 $00
@@ -3953,9 +4079,31 @@ enemyOamData4fbe5:
 	.db $18 $17 $80 $20
 	.db $18 $0f $82 $20
 	.db $18 $07 $84 $20
+.endif
 
 enemyOamData4fc2e:
+    ; ganon firing energy ball 1
 	.db $12
+.ifdef ENABLE_COLORFUL_GANON
+	.db $f8 $f0 $40 $00
+	.db $f8 $f8 $42 $00
+	.db $f8 $00 $44 $06
+	.db $f8 $17 $40 $20
+	.db $f8 $0f $42 $20
+	.db $f8 $07 $44 $26
+	.db $08 $f0 $46 $00
+	.db $08 $f8 $48 $00
+	.db $08 $00 $4a $00
+	.db $08 $17 $46 $20
+	.db $08 $0f $48 $20
+	.db $08 $07 $4a $20
+	.db $18 $f0 $4c $03
+	.db $18 $f8 $4e $00
+	.db $18 $00 $50 $02
+	.db $18 $17 $4c $23
+	.db $18 $0f $4e $20
+	.db $18 $07 $50 $22
+.else
 	.db $f8 $f0 $40 $00
 	.db $f8 $f8 $42 $00
 	.db $f8 $00 $44 $00
@@ -3974,6 +4122,7 @@ enemyOamData4fc2e:
 	.db $18 $17 $4c $20
 	.db $18 $0f $4e $20
 	.db $18 $07 $50 $20
+.endif
 
 enemyOamData4fc77:
 	.db $12
@@ -3997,7 +4146,29 @@ enemyOamData4fc77:
 	.db $18 $18 $4a $60
 
 enemyOamData4fcc0:
+    ; ganon downward slash 1
 	.db $13
+.ifdef ENABLE_COLORFUL_GANON
+	.db $e4 $f1 $40 $02
+	.db $e4 $f9 $42 $02
+	.db $e4 $01 $44 $00
+	.db $f4 $f8 $46 $06
+	.db $f4 $00 $48 $06
+	.db $f4 $08 $4a $00
+	.db $f4 $10 $4c $06
+	.db $04 $f8 $4e $03
+	.db $04 $00 $50 $00
+	.db $04 $08 $52 $06
+	.db $04 $10 $54 $06
+	.db $04 $18 $56 $00
+	.db $04 $20 $58 $02
+	.db $14 $f8 $5a $03
+	.db $14 $00 $5c $06
+	.db $14 $08 $5e $06
+	.db $14 $10 $20 $06
+	.db $14 $18 $22 $06
+	.db $14 $20 $24 $03
+.else
 	.db $e4 $f1 $40 $00
 	.db $e4 $f9 $42 $00
 	.db $e4 $01 $44 $00
@@ -4017,9 +4188,32 @@ enemyOamData4fcc0:
 	.db $14 $10 $20 $00
 	.db $14 $18 $22 $00
 	.db $14 $20 $24 $00
+.endif
 
 enemyOamData4fd0d:
+    ; ganon downward slash 2
 	.db $13
+.ifdef ENABLE_COLORFUL_GANON
+	.db $f4 $f0 $40 $02
+	.db $f4 $f8 $42 $03
+	.db $f9 $00 $44 $06
+	.db $f9 $08 $46 $06
+	.db $04 $f0 $48 $00
+	.db $04 $f8 $4a $00
+	.db $09 $00 $4c $00
+	.db $09 $08 $4e $06
+	.db $14 $f0 $50 $00
+	.db $14 $f8 $52 $00
+	.db $19 $00 $54 $00
+	.db $19 $08 $56 $00
+	.db $29 $00 $58 $02
+	.db $29 $08 $5a $02
+	.db $fc $10 $5c $06
+	.db $0c $10 $5e $00
+	.db $1c $10 $38 $00
+	.db $04 $18 $3a $03
+	.db $14 $18 $3c $03
+.else
 	.db $f4 $f0 $40 $00
 	.db $f4 $f8 $42 $00
 	.db $f9 $00 $44 $00
@@ -4039,9 +4233,32 @@ enemyOamData4fd0d:
 	.db $1c $10 $38 $00
 	.db $04 $18 $3a $00
 	.db $14 $18 $3c $00
+.endif
 
 enemyOamData4fd5a:
+    ; ganon downward slash 1 (mirrored)
 	.db $13
+.ifdef ENABLE_COLORFUL_GANON
+	.db $e4 $17 $40 $22
+	.db $e4 $0f $42 $22
+	.db $e4 $07 $44 $20
+	.db $f4 $10 $46 $26
+	.db $f4 $08 $48 $26
+	.db $f4 $00 $4a $20
+	.db $f4 $f8 $4c $26
+	.db $04 $10 $4e $23
+	.db $04 $08 $50 $20
+	.db $04 $00 $52 $26
+	.db $04 $f8 $54 $26
+	.db $04 $f0 $56 $20
+	.db $04 $e8 $58 $22
+	.db $14 $10 $5a $23
+	.db $14 $08 $5c $26
+	.db $14 $00 $5e $26
+	.db $14 $f8 $20 $26
+	.db $14 $f0 $22 $26
+	.db $14 $e8 $24 $23
+.else
 	.db $e4 $17 $40 $20
 	.db $e4 $0f $42 $20
 	.db $e4 $07 $44 $20
@@ -4061,9 +4278,32 @@ enemyOamData4fd5a:
 	.db $14 $f8 $20 $20
 	.db $14 $f0 $22 $20
 	.db $14 $e8 $24 $20
+.endif
 
 enemyOamData4fda7:
+    ; ganon downward slash 2 (mirrored)
 	.db $13
+.ifdef ENABLE_COLORFUL_GANON
+	.db $f4 $18 $40 $22
+	.db $f4 $10 $42 $23
+	.db $f9 $08 $44 $26
+	.db $f9 $00 $46 $26
+	.db $04 $18 $48 $20
+	.db $04 $10 $4a $20
+	.db $09 $08 $4c $20
+	.db $09 $00 $4e $26
+	.db $14 $18 $50 $20
+	.db $14 $10 $52 $20
+	.db $19 $08 $54 $20
+	.db $19 $00 $56 $20
+	.db $29 $08 $58 $22
+	.db $29 $00 $5a $22
+	.db $fc $f8 $5c $26
+	.db $0c $f8 $5e $20
+	.db $1c $f8 $38 $20
+	.db $04 $f0 $3a $23
+	.db $14 $f0 $3c $23
+.else
 	.db $f4 $18 $40 $20
 	.db $f4 $10 $42 $20
 	.db $f9 $08 $44 $20
@@ -4083,9 +4323,33 @@ enemyOamData4fda7:
 	.db $1c $f8 $38 $20
 	.db $04 $f0 $3a $20
 	.db $14 $f0 $3c $20
+.endif
 
 enemyOamData4fdf4:
+	; ganon punching ground
 	.db $14
+.ifdef ENABLE_COLORFUL_GANON
+	.db $f0 $fa $40 $03
+	.db $f8 $02 $42 $06
+	.db $f8 $0a $44 $06
+	.db $f8 $12 $46 $06
+	.db $00 $ea $48 $00
+	.db $00 $f2 $4a $00
+	.db $00 $fa $4c $00
+	.db $08 $02 $4e $06
+	.db $08 $0a $50 $06
+	.db $08 $12 $52 $03
+	.db $03 $1a $54 $03
+	.db $10 $ea $56 $03
+	.db $10 $f2 $58 $06
+	.db $10 $fa $5a $00
+	.db $18 $02 $5c $00
+	.db $18 $0a $5e $00
+	.db $18 $12 $30 $00
+	.db $13 $1a $32 $03
+	.db $20 $f2 $34 $00
+	.db $20 $fa $36 $00
+.else
 	.db $f0 $fa $40 $00
 	.db $f8 $02 $42 $00
 	.db $f8 $0a $44 $00
@@ -4106,9 +4370,34 @@ enemyOamData4fdf4:
 	.db $13 $1a $32 $00
 	.db $20 $f2 $34 $00
 	.db $20 $fa $36 $00
+.endif
 
 enemyOamData4fe45:
+    ; ganon roaring 2
 	.db $15
+.ifdef ENABLE_COLORFUL_GANON
+	.db $f8 $ec $86 $03
+	.db $f8 $f4 $88 $03
+	.db $f8 $fc $8a $06
+	.db $f8 $04 $8c $06
+	.db $f8 $1b $86 $23
+	.db $f8 $13 $88 $23
+	.db $f8 $0b $8a $26
+	.db $08 $ec $8e $06
+	.db $08 $f4 $90 $06
+	.db $08 $fc $92 $03
+	.db $08 $04 $94 $00
+	.db $08 $1b $8e $26
+	.db $08 $13 $90 $26
+	.db $08 $0b $92 $23
+	.db $18 $ec $96 $03
+	.db $18 $f4 $98 $06
+	.db $18 $fc $9a $06
+	.db $18 $04 $9c $03
+	.db $18 $1b $96 $23
+	.db $18 $13 $98 $26
+	.db $18 $0b $9a $26
+.else
 	.db $f8 $ec $86 $00
 	.db $f8 $f4 $88 $00
 	.db $f8 $fc $8a $00
@@ -4130,9 +4419,34 @@ enemyOamData4fe45:
 	.db $18 $1b $96 $20
 	.db $18 $13 $98 $20
 	.db $18 $0b $9a $20
+.endif
 
 enemyOamData4fe9a:
+    ; ganon firing energy ball 2
 	.db $15
+.ifdef ENABLE_COLORFUL_GANON
+	.db $f8 $ec $40 $00
+	.db $f8 $f4 $42 $00
+	.db $f8 $fc $44 $06
+	.db $f8 $04 $46 $06
+	.db $f8 $1b $40 $20
+	.db $f8 $13 $42 $20
+	.db $f8 $0b $44 $26
+	.db $08 $ec $48 $03
+	.db $08 $f4 $4a $00
+	.db $08 $fc $4c $00
+	.db $08 $04 $4e $00
+	.db $08 $1b $48 $23
+	.db $08 $13 $4a $20
+	.db $08 $0b $4c $20
+	.db $18 $ec $50 $03
+	.db $18 $f4 $52 $00
+	.db $18 $fc $54 $00
+	.db $18 $04 $56 $02
+	.db $18 $1b $50 $23
+	.db $18 $13 $52 $20
+	.db $18 $0b $54 $20
+.else
 	.db $f8 $ec $40 $00
 	.db $f8 $f4 $42 $00
 	.db $f8 $fc $44 $00
@@ -4154,4 +4468,5 @@ enemyOamData4fe9a:
 	.db $18 $1b $50 $20
 	.db $18 $13 $52 $20
 	.db $18 $0b $54 $20
+.endif
 

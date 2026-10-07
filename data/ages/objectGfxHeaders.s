@@ -37,6 +37,22 @@ objectGfxHeaderTable:
 	/* $14 */ m_ObjectGfxHeader spr_din_2, 1
 .endif
 	/* $15 */ m_ObjectGfxHeader spr_din_1, 1
+.ifdef ENABLE_COLORFUL_GANON
+	/* $16 */ m_ObjectGfxHeader spr_ganon_1_redux
+	/* $17 */ m_ObjectGfxHeader spr_ganon_2_redux
+	/* $18 */ m_ObjectGfxHeader spr_twinrova_sacrifice_1
+	/* $19 */ m_ObjectGfxHeader spr_twinrova_sacrifice_2
+	/* $1a */ m_ObjectGfxHeader spr_twinrova_sacrifice_3_redux
+	/* $1b */ m_ObjectGfxHeader spr_twinrova_sacrifice_4_redux
+	/* $1c */ m_ObjectGfxHeader spr_ganon_3
+	/* $1d */ m_ObjectGfxHeader spr_ganon_4
+	/* $1e */ m_ObjectGfxHeader spr_ganon_5_redux
+	/* $1f */ m_ObjectGfxHeader spr_ganon_6_redux
+	/* $20 */ m_ObjectGfxHeader spr_ganon_7_redux
+	/* $21 */ m_ObjectGfxHeader spr_ganon_8_redux
+	/* $22 */ m_ObjectGfxHeader spr_ganon_9_redux
+	/* $23 */ m_ObjectGfxHeader spr_ganon_10_redux
+.else
 	/* $16 */ m_ObjectGfxHeader spr_ganon_1
 	/* $17 */ m_ObjectGfxHeader spr_ganon_2
 	/* $18 */ m_ObjectGfxHeader spr_twinrova_sacrifice_1
@@ -51,6 +67,7 @@ objectGfxHeaderTable:
 	/* $21 */ m_ObjectGfxHeader spr_ganon_8
 	/* $22 */ m_ObjectGfxHeader spr_ganon_9
 	/* $23 */ m_ObjectGfxHeader spr_ganon_10
+.endif
 	/* $24 */ m_ObjectGfxHeader spr_ralph_1
 	/* $25 */ m_ObjectGfxHeader spr_ralph_2, 1
 	/* $26 */ m_ObjectGfxHeader spr_nayru_1

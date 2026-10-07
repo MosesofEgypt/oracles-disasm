@@ -227,6 +227,22 @@
 	m_GfxData spr_twinrova_8 ; $0b56d5
 	m_GfxData spr_twinrova_9 ; $0b5899
 	m_GfxData spr_twinrovamerged_2 ; $0b5a21
+.ifdef ENABLE_COLORFUL_GANON
+	m_GfxData spr_ganon_1_redux ; $0b5bc7
+	m_GfxData spr_ganon_2_redux ; $0b5dc7
+	m_GfxData spr_twinrova_sacrifice_1 ; $0b5f45
+	m_GfxData spr_twinrova_sacrifice_2 ; $0b60c4
+	m_GfxData spr_twinrova_sacrifice_3_redux ; $0b61c1
+	m_GfxData spr_twinrova_sacrifice_4_redux ; $0b6318
+	m_GfxData spr_ganon_3 ; $0b64f8
+	m_GfxData spr_ganon_4 ; $0b65d0
+	m_GfxData spr_ganon_5_redux ; $0b66ea
+	m_GfxData spr_ganon_6_redux ; $0b68cb
+	m_GfxData spr_ganon_7_redux ; $0b69dc
+	m_GfxData spr_ganon_8_redux ; $0b6b3a
+	m_GfxData spr_ganon_9_redux ; $0b6d2e
+	m_GfxData spr_ganon_10_redux ; $0b6f2e
+.else
 	m_GfxData spr_ganon_1 ; $0b5bc7
 	m_GfxData spr_ganon_2 ; $0b5dc7
 	m_GfxData spr_twinrova_sacrifice_1 ; $0b5f45
@@ -241,6 +257,7 @@
 	m_GfxData spr_ganon_8 ; $0b6b3a
 	m_GfxData spr_ganon_9 ; $0b6d2e
 	m_GfxData spr_ganon_10 ; $0b6f2e
+.endif
 	m_GfxData gfx_gasha_tree ; $0b7102
 	m_GfxData spr_grass_tuft ; $0b753b
 	m_GfxData gfx_sand ; $0b755d

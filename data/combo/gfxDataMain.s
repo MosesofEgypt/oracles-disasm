@@ -189,16 +189,29 @@ m_GfxData spr_fileselect_decorations
 m_GfxData spr_fireball_cheepcheep
 m_GfxData spr_flame
 m_GfxData spr_floormaster
-m_GfxData spr_ganon_1
-m_GfxData spr_ganon_10
-m_GfxData spr_ganon_2
-m_GfxData spr_ganon_3
-m_GfxData spr_ganon_4
-m_GfxData spr_ganon_5
-m_GfxData spr_ganon_6
-m_GfxData spr_ganon_7
-m_GfxData spr_ganon_8
-m_GfxData spr_ganon_9
+.ifdef ENABLE_COLORFUL_GANON
+	m_GfxData spr_ganon_1_redux
+	m_GfxData spr_ganon_2_redux
+	m_GfxData spr_ganon_3
+	m_GfxData spr_ganon_4
+	m_GfxData spr_ganon_5_redux
+	m_GfxData spr_ganon_6_redux
+	m_GfxData spr_ganon_7_redux
+	m_GfxData spr_ganon_8_redux
+	m_GfxData spr_ganon_9_redux
+	m_GfxData spr_ganon_10_redux
+.else
+	m_GfxData spr_ganon_1
+	m_GfxData spr_ganon_2
+	m_GfxData spr_ganon_3
+	m_GfxData spr_ganon_4
+	m_GfxData spr_ganon_5
+	m_GfxData spr_ganon_6
+	m_GfxData spr_ganon_7
+	m_GfxData spr_ganon_8
+	m_GfxData spr_ganon_9
+	m_GfxData spr_ganon_10
+.endif
 m_GfxData spr_giantcucco
 m_GfxData spr_gibdo_stalfos_rope_whisp_spark_bubble_beetle
 m_GfxData spr_grass_tuft
@@ -248,8 +261,13 @@ m_GfxData spr_twinrova_8
 m_GfxData spr_twinrova_9
 m_GfxData spr_twinrova_sacrifice_1
 m_GfxData spr_twinrova_sacrifice_2
-m_GfxData spr_twinrova_sacrifice_3
-m_GfxData spr_twinrova_sacrifice_4
+.ifdef ENABLE_COLORFUL_GANON
+	m_GfxData spr_twinrova_sacrifice_3_redux
+	m_GfxData spr_twinrova_sacrifice_4_redux
+.else
+	m_GfxData spr_twinrova_sacrifice_3
+	m_GfxData spr_twinrova_sacrifice_4
+.endif
 m_GfxData spr_vire
 m_GfxData spr_wizzrobe
 m_GfxData spr_zelda_1

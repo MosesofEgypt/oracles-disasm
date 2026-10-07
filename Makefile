@@ -227,6 +227,8 @@ endif
 BIN_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux/gfx -name '*.bin')
 UNCMP_GFX_FILES += $(shell find $(GFX_UNCMP_DIR)/redux/gfx -name '*.png' -or -name '*.bin')
 PNG_GFX_FILES   += $(shell find $(GFX_UNCMP_DIR)/redux/gfx -name '*.png')
+CMP_GFX_FILES   += $(shell find $(GFX_CMP_DIR)/redux/gfx -name '*.png' -or -name '*.bin')
+PNG_GFX_FILES   += $(shell find $(GFX_CMP_DIR)/redux/gfx -name '*.png')
 
 # List of all gfx files in their final form, ie. $(BUILD_DIR)/gfx/spr_link.cmp
 GFXFILES := $(foreach file, $(CMP_GFX_FILES) $(UNCMP_GFX_FILES), \

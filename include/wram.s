@@ -160,29 +160,35 @@ wSoundTmp: ; $c085
 ; one function.
 	db
 
-wLoadingSoundBank: ; $c086
+wLoadingSoundBank:	; $c086
 ; Used within the music playing functions
 	db
+
+wPaletteMappedObject:	; $c087
+	db
+
+wPaletteMap:			; $c088
+	dsb $08
 
 .if defined(ROM_COMBO)
 	; these are changed whenever the combo rom toggles between games.
 	; we cache them here so we don't need to spend ~60 cycles every
 	; time we need to retrieve them(loading from here is only 16).
-	wScriptBank:			; $c087
+	wScriptBank:			; $c090
 		db
-	wScriptHelpBank:		; $c088
+	wScriptHelpBank:		; $c091
 		db
-	wSimpleScriptBank:		; $c089
+	wSimpleScriptBank:		; $c092
 		db
-	wObjectOamTableOffset:	; $c08a
+	wObjectOamTableOffset:	; $c093
 		db
-	wHazardCollisionTable:	; $c08b
+	wHazardCollisionTable:	; $c094
 		dw
-	wLinkVulnerableCached:	; $c08d
+	wLinkVulnerableCached:	; $c096
 		; Bit 0: Set if bit 8 calculated
 		; Bit 8: Set to checkLinkVulnerable result
 		db
-	wIsSeasons:					; $c08f
+	wIsSeasons:					; $c097
 		; function to set carry flag if seasons, or clear
 		; it if ages. exists in hram so it can be modified.
 		; will contain a variant of this function:
@@ -192,8 +198,8 @@ wLoadingSoundBank: ; $c086
 		; the cflag will be cleared if ages and set if seasons
 		dsb $03
 
-	wc092:					; $c092
-		dsb	$0e	; padding
+	wc09a:					; $c09a
+		dsb	$05	; padding
 .endif
 
 .ifdef ULTRAWIDE_INVENTORY_SPRITES

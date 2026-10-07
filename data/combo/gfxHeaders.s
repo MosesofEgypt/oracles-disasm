@@ -1184,13 +1184,50 @@ m_GfxHeaderStart $af, GFXH_QUIT_GFX
 	m_GfxHeaderEnd
 
 m_GfxHeaderStart $b0, GFXH_GANON_REVIVAL
+.ifdef ENABLE_COLORFUL_GANON
+	m_GfxHeader spr_ganon_1_redux, $8000
+	m_GfxHeader spr_twinrova_sacrifice_1, $8200
+	m_GfxHeader spr_twinrova_sacrifice_2, $8400
+	m_GfxHeader spr_twinrova_sacrifice_3_redux, $8600
+	m_GfxHeader spr_twinrova_sacrifice_4_redux, $8800
+.else
 	m_GfxHeader spr_ganon_1, $8000
 	m_GfxHeader spr_twinrova_sacrifice_1, $8200
 	m_GfxHeader spr_twinrova_sacrifice_2, $8400
 	m_GfxHeader spr_twinrova_sacrifice_3, $8600
 	m_GfxHeader spr_twinrova_sacrifice_4, $8800
+.endif
 	m_GfxHeaderEnd
 
+.ifdef ENABLE_COLORFUL_GANON
+m_GfxHeaderStart $b1, GFXH_GANON_A
+	m_GfxHeader spr_ganon_2_redux, w2TmpGfxBuffer
+	m_GfxHeaderEnd
+
+m_GfxHeaderStart $b2, GFXH_GANON_B
+	m_GfxHeader spr_ganon_5_redux, w2TmpGfxBuffer
+	m_GfxHeaderEnd
+
+m_GfxHeaderStart $b3, GFXH_GANON_C
+	m_GfxHeader spr_ganon_6_redux, w2TmpGfxBuffer
+	m_GfxHeaderEnd
+
+m_GfxHeaderStart $b4, GFXH_GANON_D
+	m_GfxHeader spr_ganon_7_redux, w2TmpGfxBuffer
+	m_GfxHeaderEnd
+
+m_GfxHeaderStart $b5, GFXH_GANON_E
+	m_GfxHeader spr_ganon_8_redux, w2TmpGfxBuffer
+	m_GfxHeaderEnd
+
+m_GfxHeaderStart $b6, GFXH_GANON_F
+	m_GfxHeader spr_ganon_9_redux, w2TmpGfxBuffer
+	m_GfxHeaderEnd
+
+m_GfxHeaderStart $b7, GFXH_GANON_G
+	m_GfxHeader spr_ganon_10_redux, w2TmpGfxBuffer
+	m_GfxHeaderEnd
+.else
 m_GfxHeaderStart $b1, GFXH_GANON_A
 	m_GfxHeader spr_ganon_2, w2TmpGfxBuffer
 	m_GfxHeaderEnd
@@ -1218,6 +1255,7 @@ m_GfxHeaderStart $b6, GFXH_GANON_F
 m_GfxHeaderStart $b7, GFXH_GANON_G
 	m_GfxHeader spr_ganon_10, w2TmpGfxBuffer
 	m_GfxHeaderEnd
+.endif
 
 m_GfxHeaderStart $b8, GFXH_TWINROVA_LAVA_LAYOUT
 	m_GfxHeader oth_twinrova_lava_layout, $cf00

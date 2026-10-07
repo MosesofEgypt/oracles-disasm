@@ -14,6 +14,9 @@ paletteHeaderTable:
 	.repeat NUM_PALETTE_HEADERS index COUNT
 		.dw paletteHeader{%.2x{COUNT}}
 	.endr
+	.ifdef ENABLE_COLORFUL_GANON
+		.dw paletteHeader{%.2x{PALH_SPR_GANON_REDUX}}
+	.endif
 
 
 m_PaletteHeaderStart $00, PALH_00
@@ -815,4 +818,10 @@ m_PaletteHeaderStart $bc, PALH_SEASONS_bc
 
 m_PaletteHeaderStart $bd, PALH_SEASONS_bd
 	m_PaletteHeaderBg  1, 1, paletteData4880
+	m_PaletteHeaderEnd
+
+m_PaletteHeaderStart $be, PALH_SPR_GANON_REDUX
+.ifdef ENABLE_COLORFUL_GANON
+	m_PaletteHeaderSpr  7, 1, paletteDataGanonRedux
+.endif
 	m_PaletteHeaderEnd

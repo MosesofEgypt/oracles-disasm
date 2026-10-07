@@ -28,11 +28,6 @@
 	.endif
 .endif
 
-.ifndef ENABLE_MULTI_RING
-	; determines whether you can equip multiple rings at once
-;	.define ENABLE_MULTI_RING
-.endif
-
 .ifdef ENABLE_REDUX_EXTRAS
 	; if ENABLE_REDUX_EXTRAS is enabled, the options below will
 	; be enabled(except the commented-out ones starting with ';')
@@ -129,6 +124,10 @@
 		; determines whether or not the ring list gets updated to
 		; use a more aesthetically pleasing and logical arrangement
 		.define REMAP_RING_LIST
+	.endif
+	.ifndef ENABLE_COLORFUL_GANON
+		; determines whether or not ganon uses a much wider color palette
+		.define ENABLE_COLORFUL_GANON
 	.endif
 	.ifndef UNRESTRICTED_TRANSFORMS
 		; normally the transforms swap link with a different SpecialObject

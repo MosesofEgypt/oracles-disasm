@@ -18,6 +18,7 @@ _updateEnemiesIfStateIsZero:
 		or (hl)
 		call z,updateEnemy
 
+		; restore the oam flags each frame
 		ld e,Enemy.oamFlagsBackup
 		ld a,(de)
 		inc e
@@ -76,17 +77,30 @@ updateEnemies:
 	inc l
 	ld a,(hl) ; a = [enemy.invincibilityCounter]
 	or a
-	jr z,@label_00_349
+	jr z,@restoreOamFlags
 
 	rlca
-	jr c,@label_00_348
+	jr c,@tickDowninvincibilityWithoutFlash
 
 	dec (hl)
-	jr z,@label_00_349
+	jr z,@restoreOamFlags
 
 	ld a,(wFrameCounter)
 	bit 2,a
-	jr nz,@label_00_349
+	jr nz,@restoreOamFlags
+
+	ld a,(wPaletteMappedObject)
+	or a
+	jr z,+
+		; object might have its palette remapped. check if it matches
+		ld l,Enemy.id
+		cp (hl)
+		jr nz,+
+			; object matches. remap palette for flashing
+			ld l,Enemy.oamFlags
+			set 4,(hl)
+			jr @next
+	+
 
 	ld b,$05
 	ld l,Enemy.oamFlagsBackup
@@ -102,9 +116,9 @@ updateEnemies:
 	ld (hl),a
 	jr @next
 
-@label_00_348:
+@tickDowninvincibilityWithoutFlash:
 	inc (hl)
-@label_00_349:
+@restoreOamFlags:
 	ld l,Enemy.oamFlagsBackup
 	ldi a,(hl)
 	ld (hl),a

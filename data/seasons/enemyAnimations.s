@@ -1780,7 +1780,9 @@ enemy03OamDataPointers: ; 0x33a2a
 	.dw enemyOamData49978
 	.dw enemyOamData49989
 
+; ganon
 enemy04OamDataPointers: ; 0x33a62
+	; skull-faced fireball
 	.dw enemyOamData4aee2
 	.dw enemyOamData4af0b
 	.dw enemyOamData4af34
@@ -1789,21 +1791,22 @@ enemy04OamDataPointers: ; 0x33a62
 	.dw enemyOamData49813
 	.dw enemyOamData4a3bb
 	.dw enemyOamData4a3dc
-	.dw enemyOamData4b89a
-	.dw enemyOamData4b8e3
-	.dw enemyOamData4b92c
-	.dw enemyOamData4b975
-	.dw enemyOamData4bbd5
-	.dw enemyOamData4b855
-	.dw enemyOamData4b9be
-	.dw enemyOamData4bb84
-	.dw enemyOamData4ba50
-	.dw enemyOamData4b751
-	.dw enemyOamData4ba9d
-	.dw enemyOamData4baea
-	.dw enemyOamData4b792
-	.dw enemyOamData4bb37
-	.dw enemyOamData4bc2a
+
+	.dw enemyOamData4b89a	; dimly lit, in shadowed room
+	.dw enemyOamData4b8e3	; standing idle
+	.dw enemyOamData4b92c	; standing idle (mirrored)
+	.dw enemyOamData4b975	; roaring 1
+	.dw enemyOamData4bbd5	; roaring 2
+	.dw enemyOamData4b855	; charging punch
+	.dw enemyOamData4b9be	; firing energy ball 1
+	.dw enemyOamData4bb84	; punching ground
+	.dw enemyOamData4ba50	; downward slash 1
+	.dw enemyOamData4b751	; standing with trident
+	.dw enemyOamData4ba9d	; downward slash 2
+	.dw enemyOamData4baea	; downward slash 1 (mirrored)
+	.dw enemyOamData4b792	; standing with trident (mirrored)
+	.dw enemyOamData4bb37	; downward slash 2 (mirrored)
+	.dw enemyOamData4bc2a	; firing energy ball 2
 
 enemy05OamDataPointers: ; 0x33a90
 	.dw enemyOamData491da
