@@ -116,7 +116,7 @@ updateTextbox:
 @standardTextState0:
 	ld a,$01
 	ld (de),a
-	call saveTilesUnderTextbox
+	call swapTilesUnderTextbox
 	call initTextboxMapping
 	jp dmaTextboxMap
 
@@ -356,7 +356,7 @@ updateTextbox:
 	ld c,$40
 	call giveTreasure
 +
-	jp saveTilesUnderTextbox
+	jp swapTilesUnderTextbox
 
 ;;
 ; Unsets zero flag if the textbox should be exited from (usually, player has
@@ -859,8 +859,14 @@ initTextboxStuff:
 	ld (hl),$03
 	; w7TextboxPosBank
 	inc l
+	ld a,(wTextboxFlags)
+	and TEXTBOXFLAG_USE_9C_MAP_ADDRESS
 	ld de,w3VramTiles
 	ld (hl),:w3VramTiles
+	jr z,+
+		ld de,w4TileMap
+		ld (hl),:w4TileMap
+	+
 
 	ld a,(wOpenedMenuType)
 	or a
@@ -1425,7 +1431,7 @@ dmaTextGfxBuffer:
 	ret
 
 ;;
-saveTilesUnderTextbox:
+swapTilesUnderTextbox:
 	ld hl,w7TextboxPos
 	ld e,(hl)
 	inc l
@@ -2130,7 +2136,7 @@ func_53dd:
 	ld h,d
 	ld l,<w7d0c1
 	res 1,(hl)
-	call saveTilesUnderTextbox
+	call swapTilesUnderTextbox
 	call initTextboxMapping
 	jp dmaTextboxMap
 

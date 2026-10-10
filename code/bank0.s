@@ -3037,16 +3037,16 @@ timerInterrupt:
 
 	set 0,(hl)
 
-	; Increment hFFB8
+	; Decrement hFFB8
 	inc l
 	dec (hl)
 	jr nz,+
-
-	ld (hl),$07
-	ldh a,(R_TMA)
-	dec a
-	ldh (R_TIMA),a
-+
+		; reset the timer counter every 7 frames
+		ld (hl),$07
+		ldh a,(R_TMA)
+		dec a
+		ldh (R_TIMA),a
+	+
 	ld a,:audio.b39_updateMusicVolume
 	ld ($2222),a
 	ldh a,(<hMusicVolume)

@@ -626,6 +626,10 @@ ringMenu_selectedRingFromList:
 	ld a,SND_SELECTITEM
 	call playSound
 
+.ifdef ENABLE_RING_REDUX
+	call markEquippedRingFlagsDirty
+.endif
+
 	; Put the ring (if it exists) in the box
 	call ringMenu_updateSelectedRingFromList
 	ld c,a
@@ -653,9 +657,6 @@ ringMenu_selectedRingFromList:
 	rst_addAToHl
 	ld (hl),c
 
-.ifdef ENABLE_RING_REDUX
-	call markEquippedRingFlagsDirty
-.endif
 
 	; Fall through
 

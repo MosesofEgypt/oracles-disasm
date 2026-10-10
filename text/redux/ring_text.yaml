@@ -431,7 +431,7 @@ groups:
   - name: TX_3092
     index: 0x92
     text: |-
-      Throw dist. \up\jump(0xc2)
+      Throw dist/dmg \up\jump(0xc2)
 
   - name: TX_3093
     index: 0x93

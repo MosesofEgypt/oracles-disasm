@@ -102,11 +102,6 @@
 	ld (hl),a
 .endm
 
-.macro m_WriteDataToHlPlusA
-	ld e,a
-	m_WriteDataToHlPlusE \1
-.endm
-
 .macro m_WriteChannelData
 	.if NARGS == 2
 		ld a,\2
@@ -123,7 +118,7 @@
 .macro m_ClearChannelData
 	ld a,(wSoundTmp)
 	ld e,a
-	ld a,$00
+	xor a
 	ld d,a
 
 	.rept NARGS
@@ -352,25 +347,26 @@ updateSound:
 	jr z,@nextChannel
 
 	m_ReadChannelDataFlag wChannelWaitCounters
-	jr nz,@continueSound
+	jr nz,+
+		; channel isn't waiting to play. get the next command
+		call doNextChannelCommand
+		jr @nextChannel
+	+
+		; channel is waiting to read the next command.
+		; continue playing whatever we're playing.
+		call continuePlayingSound
 
-	call doNextChannelCommand
-	jr @nextChannel
-
-@continueSound:
-	call continuePlayingSound
 @nextChannel:
 	ld a,(wSoundChannel)
 	inc a
 	cp CHANNEL_COUNT
-	jr nz,@channelLoop
+	jr c,@channelLoop
 
 	ld a,(wMusicMuted)
 	cp $01
 	jr nz,@ret
-
-	ld a,$02
-	ld (wMusicMuted),a
+		ld a,$02
+		ld (wMusicMuted),a
 
 @ret:
 	pop hl
@@ -429,15 +425,8 @@ updateSoundFrequencyAndPlay:
 	add hl,de
 	ld a,(wSoundChannel)
 	sla a
-	;add <hSoundData3
-	;m_WriteHlToFF00PlusA
-	ld b,a
-	ld a,l
-	ld c,<hSoundData3
-	call writeIndexedHighRamAndIncrement
-	ld a,h
-	ld ($ff00+c),a
-	inc c
+	add <hSoundData3
+	m_WriteHlToFF00PlusA
 
 @handleVibrato:
 	m_ReadChannelData wChannelVibratoActive
@@ -527,15 +516,11 @@ updatePlayedFrequency:
 	add b
 	ld b,a
 
-	;add R_SQ1_PERIOD_LOW
-	;ld c,a
-	;ld a,(wSoundFrequencyL)
-	;ld ($ff00+c),a
-	;inc c
-	push bc
+	add R_SQ1_PERIOD_LOW
+	ld c,a
 	ld a,(wSoundFrequencyL)
-	ld c,R_NR13
-	call writeIndexedHighRamAndIncrement
+	ld ($ff00+c),a
+	inc c
 
 	ld a,(wSoundCmdEnvelope)
 	ld e,a
@@ -544,23 +529,12 @@ updatePlayedFrequency:
 	ld ($ff00+c),a
 	inc c
 
-	;ld a,R_SQ1_TIMER_AND_DUTY
-	;add b
-	;ld c,a
-	;m_ReadChannelData wChannelDutyCycles
-	;ld ($ff00+c),a
-	;inc c
-	pop bc
-	push bc
-	ld hl,wChannelDutyCycles
-	ld a,(wSoundChannel)
-	ld e,a
-	ld d,$00
-	add hl,de
-	ld a,(hl)
-	pop bc
-	ld c,R_SQ1_TIMER_AND_DUTY
-	call writeIndexedHighRamAndIncrement
+	ld a,R_SQ1_TIMER_AND_DUTY
+	add b
+	ld c,a
+	m_ReadChannelData wChannelDutyCycles
+	ld ($ff00+c),a
+	inc c
 	ret
 
 @wave:
@@ -619,7 +593,6 @@ getNextChannelByte:
 	add <hSoundChannelBanks
 	ld c,a
 	ld a,($ff00+c)
-	inc c
 
 	call wMusicReadFunction
 	push af
@@ -627,15 +600,8 @@ getNextChannelByte:
 	; move to the next byte in the data
 	ld a,b
 	sla a
-	;add <hSoundChannelAddresses
-	;m_WriteHlToFF00PlusA
-	ld b,a
-	ld a,l
-	ld c,<hSoundChannelAddresses
-	call writeIndexedHighRamAndIncrement
-	ld a,h
-	ld ($ff00+c),a
-	inc c
+	add <hSoundChannelAddresses
+	m_WriteHlToFF00PlusA
 
 	pop af
 	pop hl
@@ -665,28 +631,18 @@ doNextChannelCommand:
 	.dw channelCmdf1
 	.dw channelCmdf2
 	.dw channelCmdf3
-	.dw channelCmdff
-	.dw channelCmdff
+	.dw channelCmdf4
+	.dw channelCmdf5
 	.dw channelCmdf6
-	.dw channelCmdff
+	.dw channelCmdf7
 	.dw channelCmdf8
 	.dw channelCmdf9
-	.dw channelCmdff
-	.dw channelCmdff
-	.dw channelCmdff
+	.dw channelCmdfa
+	.dw channelCmdfb
+	.dw channelCmdfc
 	.dw channelCmdfd
 	.dw channelCmdfe
 	.dw channelCmdff
-
-;;
-channelCmdf1:
-	jp doNextChannelCommand
-;;
-channelCmdf2:
-	jp doNextChannelCommand
-;;
-channelCmdf3:
-	jp doNextChannelCommand
 
 ;;
 ; Vibrato
@@ -694,42 +650,52 @@ channelCmdf3:
 channelCmdf9:
 	ld a,(wSoundChannel)
 	cp MUS_NOISE
-	jr nc,++
+	jr nc,channelCmdSkipByte
 
 	call getNextChannelByte
 	m_WriteChannelData wChannelVibratos
-	jp doNextChannelCommand
+
+; these commands do nothing but skip to the next command
+channelCmdf1:
+channelCmdf2:
+channelCmdf3:
+	jr doNextChannelCommand
 
 ;;
 ; Sets sweep to the argument value, does nothing for noise channels
 channelCmdf8:
 	ld a,(wSoundChannel)
 	cp MUS_NOISE
-	jr nc,++
-
-	call getNextChannelByte
-	m_WriteChannelData wChannelSweep
-	jp doNextChannelCommand
+	jr nc,channelCmdSkipByte
+		call getNextChannelByte
+		m_WriteChannelData wChannelSweep
+		jr doNextChannelCommand
 
 ;;
 ; Sets pitch shift to the argument value, does nothing for noise channels
 channelCmdfd:
 	ld a,(wSoundChannel)
 	cp MUS_NOISE
-	jr nc,++
+	jr nc,channelCmdSkipByte
+		call getNextChannelByte
+		m_WriteChannelData wChannelPitchShift
+		jp doNextChannelCommand
 
-	call getNextChannelByte
-	m_WriteChannelData wChannelPitchShift
-	jp doNextChannelCommand
-++
+channelCmdSkipByte:
 	call getNextChannelByte
 	jp doNextChannelCommand
 
 ;;
 ; Sets the channel envelopes to the lower 3 bits of the command value (note start) and the argument value (note end)
-; Should not be used with wave or noise channels or else wChannelEnvelopes2 and wChannelsEnabled get messed up for square channels
+; Does nothing for wave or noise channels
 cmde0Toef:
 	and $07
+	ld l,a
+	ld a,(wSoundChannel)
+	cp MUS_WAVE
+	ld a,l
+	jr nc,channelCmdSkipByte
+
 	m_WriteChannelData wChannelEnvelopes
 	call getNextChannelByte
 
@@ -767,27 +733,27 @@ channelCmdf0:
 	ld a,(wSoundChannel)
 	cp SFX_NOISE
 	jr z,@sfxNoiseChannel
+		call getNextChannelByte
+		ld l,a
+		and $3f
+		ld a,l
 
-	call getNextChannelByte
-	push af
-	and $3f
-	; Initial length timer value of 0 is treated as wanting to
-	; disable the length timer. Command $fd can be used afterwards 
-	; to set the initial length timer value to 0 without disabling it
-	jr z,@disableLengthTimer
+		; Initial length timer value of 0 is treated as wanting to
+		; disable the length timer. Command $fd can be used afterwards 
+		; to set the initial length timer value to 0 without disabling it
+		jr z,@disableLengthTimer
+			m_WriteChannelData wChannelDutyCycles
 
-	pop af
-	m_WriteChannelData wChannelDutyCycles
-	; Enable both arbitrary frequency mode and length timer
-	m_WriteChannelData wChannelFrequencyModeAndLengthTimerEnabled, $41
-	jp doNextChannelCommand
+			; Enable both arbitrary frequency mode and length timer
+			m_WriteChannelData wChannelFrequencyModeAndLengthTimerEnabled, $41
+			jp doNextChannelCommand
 
-@disableLengthTimer:
-	pop af
-	m_WriteChannelData wChannelDutyCycles
-	; Enable arbitrary frequency mode and disable length timer
-	m_WriteChannelData wChannelFrequencyModeAndLengthTimerEnabled, $01
-	jp doNextChannelCommand
+		@disableLengthTimer:
+			m_WriteChannelData wChannelDutyCycles
+
+			; Enable arbitrary frequency mode and disable length timer
+			m_WriteChannelData wChannelFrequencyModeAndLengthTimerEnabled, $01
+			jp doNextChannelCommand
 
 @sfxNoiseChannel:
 	call getNextChannelByte
@@ -799,20 +765,18 @@ channelCmdf0:
 	jp doNextChannelCommand
 
 ; Command $d0 to $df
-; Sets volume to the lower 3 bits of the command value, does nothing for channel 4 (and is also useless for channel 5)
+; Sets volume to the lower 3 bits of the command value, does nothing for wave channels
 cmdVolume:
-	push af
+	and $0f
+	ld l,a
 	ld a,(wSoundChannel)
 	cp MUS_WAVE
-	jr z,@next
+	jp z,doNextChannelCommand
+	cp SFX_WAVE
+	jp z,doNextChannelCommand
 
-	pop af
-	and $0f
+	ld a,l
 	m_WriteChannelData wChannelVolumes
-	jp doNextChannelCommand
-
-@next:
-	pop af
 	jp doNextChannelCommand
 
 ;;
@@ -861,21 +825,20 @@ standardCmdSfxSquareChannel1:
 standardCmdSfxSquareChannel2:
 	m_ReadChannelDataFlag wChannelFrequencyModeAndLengthTimerEnabled
 	jr z,+
-
-	call getNextChannelByte
-	ld l,a
-	ld a,(wSoundCmd)
-	ld h,a
-	jp @arbitraryFrequency
-+
+		call getNextChannelByte
+		ld l,a
+		ld a,(wSoundCmd)
+		ld h,a
+		jp @arbitraryFrequency
+	+
 	ld a,(wSoundCmd)
 	cp $60
 	jr z,@cmd60
 
 	cp $61
-	jr z,@cmd61
+	jp z,@cmd61
 
-	jp @cmdFrequency
+	jr @cmdFrequency
 
 @cmd60:
 	; If notes are set to end with an envelope, do nothing even if the last note is still audible
@@ -894,8 +857,7 @@ standardCmdSfxSquareChannel2:
 	ld (wSoundCmdEnvelope),a
 	call updateSquareChannelVolume
 	call updateSoundFrequencyAndPlay
-@cmd61:
-	jp setChannelWaitCounter
+	jr @cmd61
 
 @cmdFrequency:
 	ld a,(wSoundCmd)
@@ -914,6 +876,8 @@ standardCmdSfxSquareChannel2:
 	srl a
 	m_WriteChannelData wChannelVibratoCounters
 	call updatePlayedFrequency
+@cmd61:
+
 ;;
 ; Read a byte, set the channel wait counter to the value
 setChannelWaitCounter:
@@ -952,15 +916,8 @@ setSoundFrequency:
 
 	ld a,(wSoundChannel)
 	sla a
-	;add <hSoundData3
-	;m_WriteHlToFF00PlusA
-	ld b,a
-	ld a,l
-	ld c,<hSoundData3
-	call writeIndexedHighRamAndIncrement
-	ld a,h
-	ld ($ff00+c),a
-	inc c
+	add <hSoundData3
+	m_WriteHlToFF00PlusA
 
 setFrequencyToHl:
 	ld a,l
@@ -1283,6 +1240,12 @@ standardCmdSfxNoiseChannel:
 ;;
 ; Disables and silences the current channel
 channelCmdff:
+channelCmdf4:
+channelCmdf5:
+channelCmdf7:
+channelCmdfa:
+channelCmdfb:
+channelCmdfc:
 	m_WriteChannelData wChannelsEnabled, $00
 ;;
 ; Ensures no sound is audible on the current channel by setting the volume to $0 or turning off the wave channel DAC
@@ -1327,16 +1290,16 @@ silencePlayedSound:
 	ret nz
 
 	; Disable DAC
-	ld a,$00
-	ldh (R_WAVE_DAC_ENABLE),a
-	ret
+	jr @disableDac
 
 @sfxWaveChannel:
+	; if wave channel isn't currently in use for music, disable it
 	ld a,(wChannelsEnabled+MUS_WAVE)
 	or a
-	jr z,++
+	jr z,@disableDac
 
-	; Music channel is enabled
+	; Music wave channel is enabled. Since we're disabling the SFX wave
+	; channel, we simply reenable whatever was on the music wave channel
 	ld e,MUS_WAVE
 	m_ReadDataFromHlPlusE wChannelDutyCycles
 	ld (wWaveformIndex),a
@@ -1344,8 +1307,8 @@ silencePlayedSound:
 	ld a,(wWaveChannelVolume+MUS_WAVE)
 	ldh (R_WAVE_OUTPUT_LEVEL),a
 	ret
-++
 
+@disableDac:
 	; Disable DAC
 	ld a,$00
 	ldh (R_WAVE_DAC_ENABLE),a
@@ -1364,10 +1327,13 @@ setWaveform:
 	call isWaveChannelUnavailable
 	ret nz
 
+; Wait for channel 3 to be on
 @waitLoop:
-	; Wait for channel 3 to be on
+	; disable the wave channel's DAC so we can write the waveform
 	ld a,$00
 	ldh (R_WAVE_DAC_ENABLE),a
+
+	; check that the wave channel is on
 	ldh a,(R_SOUND_ENABLE)
 	and $04
 	jr nz,@waitLoop
@@ -1392,8 +1358,9 @@ setWaveform:
 	and $80
 	jr z,-
 
-	; Restart channel 3 (but trashes lower frequency bits?)
-	ld a,$80
+	; Restart channel 3
+	ldh a,(R_WAVE_PERIOD_HIGH_AND_CTRL)
+	or $80
 	ldh (R_WAVE_PERIOD_HIGH_AND_CTRL),a
 	ret
 
@@ -1406,15 +1373,8 @@ channelCmdfe:
 	ld h,a
 	ld a,(wSoundChannel)
 	sla a
-	;add <hSoundChannelAddresses
-	;m_WriteHlToFF00PlusA
-	ld b,a
-	ld a,l
-	ld c,<hSoundChannelAddresses
-	call writeIndexedHighRamAndIncrement
-	ld a,h
-	ld ($ff00+c),a
-	inc c
+	add <hSoundChannelAddresses
+	m_WriteHlToFF00PlusA
 
 	jp doNextChannelCommand
 
@@ -1575,34 +1535,46 @@ playSound:
 
 @nextSoundChannel:
 	ldi a,(hl)
+
+	; stop if we hit the terminator
 	cp $ff
-	jr nz,+
-	jp @setVolumeAndEnd
-+
+	jp z,@setVolumeAndEnd
+
+	; backup the sound priority and channel in wSoundTmp
 	ld (wSoundTmp),a
+
+	; mask out the priority and put in wSoundChannelValue
 	and $f0
 	swap a
 	inc a
 	ld (wSoundChannelValue),a
-	ld a,(wSoundTmp)
-	and $0f
-	ld (wSoundTmp),a
-	push hl
 
+	; properly mask the channel number
+	ld a,(wSoundTmp)
+	and $07
+	ld (wSoundTmp),a
+
+	; check the priority of whatever may be playing on this channel
+	push hl
 	m_ReadDataFromHlPlusA wChannelsEnabled
 	pop hl
+
 	ld c,a
 	ld a,(wSoundChannelValue)
 	cp c
 	jr nc,+
+		; whatever's currently playing on this channel has a
+		; higher priority than this, so skip trying to play.
 		inc hl
 		inc hl
 		jp @nextSoundChannel
 	+
+
 	push hl
 	ld a,(wSoundTmp)
 	ld e,a
 
+	; initialize the channel's priority, volume, and wait counter
 	ld a,(wSoundChannelValue)
 	m_WriteDataToHlPlusE wChannelsEnabled
 
@@ -1613,57 +1585,48 @@ playSound:
 	m_WriteDataToHlPlusE wChannelWaitCounters
 
 	ld a,(wSoundTmp)
-	cp MUS_NOISE
-	jr nc,++	; Noise channels
 
-	rst_jumpTable
-	.dw @squareChannel
-	.dw @squareChannel
-	.dw @squareChannel
-	.dw @squareChannel
-	.dw @waveChannel
-	.dw @waveChannel
+	cp MUS_WAVE
+	jr  z,@waveChannel
+	cp SFX_WAVE
+	jr  z,@waveChannel
 
-@waveChannel:
-	; Clear a bunch of variables
-	m_ClearChannelData wChannelVibratos wChannelSweep wChannelPitchShift \
-	                   wChannelFrequencyModeAndLengthTimerEnabled
-	jr ++
+	jr nc,@noiseChannel
 
 @squareChannel:
-	; Clear a bunch of variables
-	m_ClearChannelData wChannelEnvelopes wChannelEnvelopes2 wChannelDutyCycles \
-	                   wChannelVibratos wChannelSweep wChannelPitchShift \
-					   wChannelFrequencyModeAndLengthTimerEnabled
-	++
+	; Clear channel variables
+	m_ClearChannelData wChannelEnvelopes wChannelEnvelopes2 wChannelDutyCycles
+
+@waveChannel:
+	; Clear channel variables
+	m_ClearChannelData wChannelVibratos wChannelSweep wChannelPitchShift \
+	                   wChannelFrequencyModeAndLengthTimerEnabled
+
+@noiseChannel:
+	; Noise channels dont need to initialize anything else
+
 	; Write the bank for this sound channel into hSoundChannelBanks
 	pop hl
 	ld a,(wSoundTmp)
 	ld b,a
 
-	;add <hSoundChannelBanks
-	;ld c,a
-	;ld a,(wLoadingSoundBank)
-	;ld ($ff00+c),a
+	add <hSoundChannelBanks
+	ld c,a
 	ld a,(wLoadingSoundBank)
-	ld c,<hSoundChannelBanks
-	call writeIndexedHighRamAndIncrement
+	ld ($ff00+c),a
 
 	; Write the address for this sound channel into hSoundChannelAddresses
 	sla b
-	;ld a,b
-	;add <hSoundChannelAddresses
-	;ld c,a
-	ldi a,(hl)
-	ld c,<hSoundChannelAddresses
-	call writeIndexedHighRamAndIncrement
+	ld a,b
+	add <hSoundChannelAddresses
+	ld c,a
 
 	ldi a,(hl)
 	ld ($ff00+c),a
 	inc c
 
-	;ldi a,(hl)
-	;ld ($ff00+c),a
+	ldi a,(hl)
+	ld ($ff00+c),a
 	jp @nextSoundChannel
 
 @setVolumeAndEnd:
@@ -1687,18 +1650,6 @@ readWordFromTable:
 	ld d,(hl)
 	ld h,d
 	ld l,e
-	ret
-
-;;
-; Adds b to c, writes a to ($ff00+c), increments c.
-writeIndexedHighRamAndIncrement:
-	push af
-	ld a,b
-	add c
-	ld c,a
-	pop af
-	ld ($ff00+c),a
-	inc c
 	ret
 
 .include "audio/common/noise.s"

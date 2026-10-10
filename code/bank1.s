@@ -4202,6 +4202,11 @@ updateRingEquipStatuses:
 
 	call clearRingEquipStatuses
 
+	; force redraw of hearts in case rings changed
+	ld a,(wStatusBarNeedsRefresh)
+	set 2,a
+	ld (wStatusBarNeedsRefresh),a
+
 .ifdef ENABLE_NEW_GAME_PLUS
 	ld a,(wRingsDisabledCounter)
 	or a

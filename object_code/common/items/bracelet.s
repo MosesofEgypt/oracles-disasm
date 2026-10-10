@@ -17,6 +17,31 @@ itemCode16:
 @state0:
 	call itemLoadAttributesAndGraphics
 	ld h,d
+.if defined(POWER_GLOVE_THROWN_DAMAGE_BUFF) || defined(ENABLE_RING_REDUX)
+	ld l,Item.damage
+.endif
+
+.ifdef ENABLE_RING_REDUX
+	isRingEquipped TOSS_RING
+	jr nz,+
+		ld a,(hl)
+		sub 2
+		ld (hl),a
+	+
+.endif
+
+.ifdef POWER_GLOVE_THROWN_DAMAGE_BUFF
+.if POWER_GLOVE_THROWN_DAMAGE_BUFF > 0
+	ld a,(wBraceletLevel)
+	cp $02
+	jr c,+
+		ld a,(hl)
+		sub POWER_GLOVE_THROWN_DAMAGE_BUFF
+		ld (hl),a
+	+
+.endif
+.endif
+
 	ld l,Item.enabled
 	set 1,(hl)
 

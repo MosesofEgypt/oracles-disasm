@@ -138,14 +138,19 @@
 		; determines whether to enable this or now
 		.define UNRESTRICTED_TRANSFORMS
 	.endif
+	.ifndef ENABLE_RUMBLE
+		; enables rumble(if the cart supports it)
+		.define ENABLE_RUMBLE
+	.endif
+	.ifndef POWER_GLOVE_THROWN_DAMAGE_BUFF
+		; determines how much to increase the damage of objects
+		; thrown with the power glove
+		.define POWER_GLOVE_THROWN_DAMAGE_BUFF 2
+	.endif
 	.ifndef MAGNET_GLOVES_CAN_PUSH_ENEMIES
 		; normally the magnet gloves are restricted to pulling enemies, but
 		; being able to push them away is a nice feature sometimes.
 		.define MAGNET_GLOVES_CAN_PUSH_ENEMIES
-	.endif
-	.ifndef ENABLE_RUMBLE
-		; enables rumble(if the cart supports it)
-		.define ENABLE_RUMBLE
 	.endif
 	.ifndef ENABLE_EVIL_BULLSHIT_BEAMOS
 		; makes beamos fire homing beams.

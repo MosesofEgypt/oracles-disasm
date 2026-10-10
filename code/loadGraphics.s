@@ -225,12 +225,34 @@ refreshDirtyPalettes:
 	add b
 	add c
 
-	; convert luminance to equivalent DMG color
-	ld hl,@dmgColorTable
 	; reduce fidelity from 32 values to 8 to reduce table size
 	srl a
 	srl a
-	add a
+
+	; NOTE: in order to make the red and blue flash palettes not
+	;       degenerate to exactly the same, we're gonna increase
+	;       the swatches brightness where l >= $6a && l < $6e
+	pop hl
+	push af
+	ld a,l
+	cp $6a
+	jr c,+
+		cp $6e
+		jr nc,+
+			pop af
+			inc a
+			cp $08
+			jr c,++
+				ld a,$07
+				jr ++
+	+
+		pop af
+	++
+	push hl
+
+	; convert luminance to equivalent DMG color
+	add a	; table stride is 2 bytes
+	ld hl,@dmgColorTable
 	rst_addAToHl
 	ldi a,(hl)
 	ld b,a
@@ -260,22 +282,22 @@ refreshDirtyPalettes:
 	; colors are RGB555 LE with high bit ignored, and R in lower bits
 	; NOTE: leaving the full palette in here in case i decide
 	;       it's necessary to go back to 16 instead of 8.
-	.dw (( 1<<10)|( 5<<5)| 2)
-	;.dw (( 1<<10)|( 7<<5)| 2)
-	.dw (( 1<<10)|( 8<<5)| 3)
-	;.dw (( 1<<10)|( 9<<5)| 4)
-	.dw (( 2<<10)|(11<<5)| 5)
-	;.dw (( 3<<10)|(12<<5)| 7)
-	.dw (( 4<<10)|(13<<5)| 9)
-	;.dw (( 5<<10)|(15<<5)|11)
-	.dw (( 6<<10)|(16<<5)|14)
-	;.dw (( 6<<10)|(16<<5)|15)
-	.dw (( 7<<10)|(17<<5)|16)
-	;.dw (( 7<<10)|(18<<5)|17)
-	.dw (( 8<<10)|(19<<5)|18)
-	;.dw (( 8<<10)|(21<<5)|19)
-	.dw (( 9<<10)|(22<<5)|21)
-	;.dw ((10<<10)|(24<<5)|22)
+	m_RGB16 2,   5,  1
+;	m_RGB16 2,   7,  1
+	m_RGB16 3,   8,  1
+;	m_RGB16 4,   9,  1
+	m_RGB16 5,  11,  2
+;	m_RGB16 7,  12,  3
+	m_RGB16 9,  13,  4
+;	m_RGB16 11, 15,  5
+	m_RGB16 14, 16,  6
+;	m_RGB16 15, 16,  6
+	m_RGB16 16, 17,  7
+;	m_RGB16 17, 18,  7
+	m_RGB16 18, 19,  8
+;	m_RGB16 19, 21,  8
+	m_RGB16 21, 22,  9
+;	m_RGB16 22, 24, 10
 
 .endif
 
