@@ -341,7 +341,7 @@ enemyCheckCollisions:
 	cp ITEMCOLLISION_BOMB
 .endif
 	jr nz,++
-		; bomb related
+		; calculate vertical collision radius for bombs
 		ld l,Item.collisionRadiusY
 		ld a,(hl)
 		ld c,a
@@ -381,7 +381,7 @@ enemyCheckCollisions:
 	; (hl points to link object from the call to checkLinkVulnerable)
 
 	; Check if Z positions are within 7 pixels
-	ld l,<w1Link.zh
+	ld hl,w1Link.zh
 	ldh a,(<hFF91)
 	sub (hl)
 	add $07

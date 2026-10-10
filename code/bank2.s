@@ -1019,7 +1019,6 @@ fileSelectMode2:
 	ld b,$06
 	call copyMemory
 .if defined(ROM_COMBO)
-	call initializeFile
 	; change the game to whichever one was selected
 	ld a,(wSelectedTextOption)
 	rrca

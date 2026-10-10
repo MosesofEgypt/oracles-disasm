@@ -46,6 +46,11 @@ setupPassiveShield:
 	bit TILESETFLAG_BIT_SIDESCROLL,a
 	jr nz,+
 
+	; no passive shield if riding companion
+	ld a,(wLinkObjectIndex)
+	cp COMPANION_OBJECT_INDEX
+	jr z,+
+
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 	; no passive shield underwater
 .ifdef ROM_COMBO
