@@ -912,3 +912,111 @@ secretToGlobalFlagMap:
 	.db $80|RUUL_SECRET,		GLOBALFLAG_BEGAN_RUUL_SECRET
 	.db $00
 .endif
+
+.ifdef ENABLE_RUMBLE
+;;
+; @param b Parameter to pass to the rumble operation
+; @param c What rumble operation to do
+rumbleFunction:
+	ld a,c
+	rst_jumpTable
+	.dw applyRumble
+	.dw setRumbleStrength
+	.dw setRumbleDuration
+	.dw setRumbleDurationIndefinite
+	.dw clearRumbleDuration
+	.dw disableRumble
+	.dw enableRumble
+
+applyRumble:
+	ld a,b
+	ld hl,wRumbleSettings
+	bit 7,(hl)
+	jr z,+
+		; check that the rumble timer is not zero
+		ld a,(hl)
+		and $1f
+		jr z,+
+			; rumble strength works by being turned on for 1, 2, 3, or all
+			; frames out of every 4 frame cycle. if the current frame is less
+			; than or equal to the strength, the rumble is enabled this frame.
+			ld a,(hl)
+			swap a
+			srl a
+			and $03
+			inc a
+			ld c,a
+
+			ld a,(wFrameCounter)
+			and $03
+
+			; decrement the timer every 4 frames
+			push af
+			jr nz,+++
+				ld a,(hl)
+				and $1f
+				cp $1f
+				jr z,+++
+					; only decrement if timer isn't $1f
+					dec (hl)
+			+++
+			pop af
+
+			; check if rumble should be on this frame
+			cp c
+			jr nc,+
+				ld a,$08 ; enable rumble
+				jr ++
+	+
+		xor a
+	++
+	; update the rumble flag(and coincidentally the SRAM bank)
+	ld ($4444),a
+	ret
+
+setRumbleStrength:
+	ld a,b
+	and $03
+	swap a
+	sla a
+	ld c,a
+	ld a,(wRumbleSettings)
+	and $9f
+	or c
+	ld (wRumbleSettings),a
+	ret
+
+setRumbleDuration:
+	ld a,b
+	and $1f
+	cp $1f
+	jr nz,+
+		ld a,$1e
+	+
+	ld c,a
+	ld a,(wRumbleSettings)
+	and $e0
+	or c
+	ld (wRumbleSettings),a
+	ret
+
+setRumbleDurationIndefinite:
+	ld a,(wRumbleSettings)
+	or $1f
+	ld (wRumbleSettings),a
+	ret
+
+clearRumbleDuration:
+	xor a
+	jr setRumbleStrength
+
+disableRumble:
+	ld hl,wRumbleSettings
+	res 7,(hl)
+	ret
+
+enableRumble:
+	ld hl,wRumbleSettings
+	set 7,(hl)
+	ret
+.endif

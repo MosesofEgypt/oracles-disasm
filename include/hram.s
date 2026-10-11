@@ -150,7 +150,7 @@
 	hGdmaDelayedCount			db ; $ffc4/$ffc2
 	hGdmaChunksCopiedThisFrame	db ; $ffc5/$ffc3
 	; debug feature for tracking delayed frames
-	hGdmaDelayedCountTotal      dsb 4 ; $ffc6/$ffc4
+	;hGdmaDelayedCountTotal      dsb 4 ; $ffc6/$ffc4
 
 	; instances of BoundingBoxStruct
 	hLinkBoundingBox			dsb $04 ; $ffca/$ffc8

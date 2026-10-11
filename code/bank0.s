@@ -2499,11 +2499,13 @@ vblankDmaFunction:
 		push bc
 		ld a,$06
 		rst_addAToHl
+
 		ld a,(wOpenedMenuType)
-		or a
+		; we can transfer more data depending on the menu type
+		cp $01
 		ld a,$41
-		jr nz,+
-			; if outside a menu, we can transfer more
+		jr z,+
+			; if outside the inventory menu, we can transfer more
 			add $20
 		+
 		ld c,a
@@ -12665,22 +12667,39 @@ mainThreadStart:
 	; logic or anything that might modify gfx buffers
 	jr z,+
 		; my kingdom for a uint32
-		ld hl,hGdmaDelayedCountTotal
-		inc (hl)
-		jr nz,++
-			inc l
-			inc (hl)
-			jr nz,++
-				inc l
-				inc (hl)
-				jr nz,++
-					inc l
-					inc (hl)
-		++
+		;ld hl,hGdmaDelayedCountTotal
+		;inc (hl)
+		;jr nz,++
+		;	inc l
+		;	inc (hl)
+		;	jr nz,++
+		;		inc l
+		;		inc (hl)
+		;		jr nz,++
+		;			inc l
+		;			inc (hl)
+		;++
 
 		; wait for the next frame and retry vblank functions
 		call resumeThreadNextFrame
 		jr @checkForDelayedGdma
+	+
+
+	; decrement double-tap timer
+	ld a,(wFrameCounter)
+	and $01
+	; only do it every other frame
+	jr z,+
+		ld hl,wDoubleTapTimer
+		ld a,(hl)
+		and $0f
+		jr z,+
+			dec a
+			ld b,a
+			ld a,(hl)
+			and $f0
+			or b
+			ld (hl),a
 	+
 
 	callfrombank0 bank1.runGameLogic
@@ -12693,106 +12712,47 @@ mainThreadStart:
 .ifdef ENABLE_RUMBLE
 applyRumble:
 	push bc
-	ld hl,wRumbleSettings
-	bit 7,(hl)
-	jr nz,+
-		; check that the rumble timer is not zero
-		ld a,(hl)
-		and $1f
-		jr z,+
-			; rumble strength works by being turned on for 1, 2, 3, or all
-			; frames out of every 4 frame cycle. if the current frame is less
-			; than or equal to the strength, the rumble is enabled this frame.
-			ld a,(hl)
-			swap a
-			srl a
-			and $03
-			inc a
-			ld c,a
-
-			ld a,(wFrameCounter)
-			and $03
-
-			; decrement the timer every 4 frames
-			push af
-			jr nz,+++
-				ld a,(hl)
-				and $1f
-				cp $1f
-				jr z,+++
-					; only decrement if timer isn't $1f
-					dec (hl)
-			+++
-			pop af
-
-			; check if rumble should be on this frame
-			cp c
-			jr nc,+
-				ld a,$08 ; enable rumble
-				jr ++
-	+
-		xor a
-	++
-	; update the rumble flag(and coincidentally the SRAM bank)
-	ld ($4444),a
-	pop bc
-	ret
+	ld c,$00
+	jr +
 
 setRumbleStrength:
 	push bc
-	and $03
-	swap a
-	sla a
-	ld c,a
-	ld a,(wRumbleSettings)
-	and $9f
-	or c
-	ld (wRumbleSettings),a
-	pop bc
-	ret
+	ld c,$01
+	jr +
 
 setRumbleDuration:
 	push bc
-	and $1f
-	cp $1f
-	jr nz,+
-		ld a,$1e
-	+
-	ld c,a
-	ld a,(wRumbleSettings)
-	and $e0
-	or c
-	ld (wRumbleSettings),a
-	pop bc
-	ret
+	ld c,$02
+	jr +
 
 setRumbleDurationIndefinite:
-	push af
-	ld a,(wRumbleSettings)
-	or $1f
-	ld (wRumbleSettings),a
-	pop af
-	ret
+	push bc
+	ld c,$03
+	jr +
 
 clearRumbleDuration:
-	push af
-	xor a
-	call setRumbleStrength
-	pop af
-	ret
+	push bc
+	ld c,$04
+	jr +
 
 disableRumble:
-	push hl
-	ld hl,wRumbleSettings
-	set 7,(hl)
-	pop hl
-	ret
+	push bc
+	ld c,$05
+	jr +
 
 enableRumble:
+	push bc
+	ld c,$06
++
+	ld b,a
+	ldh a,(<hRomBank)
+	push af
 	push hl
-	ld hl,wRumbleSettings
-	res 7,(hl)
+	callfrombank0 bank0Ext.rumbleFunction
 	pop hl
+	pop af
+	rst_setrombank
+	pop bc
 	ret
 .endif
 

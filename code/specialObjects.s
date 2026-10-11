@@ -128,11 +128,77 @@ updateSpecialObjects:
 	.dw specialObjectCode_companionCutscene
 	.dw specialObjectCode_raft
 
+.ifdef ENABLE_DOUBLETAP_PEGASUS_SEEDS
+quickUsePegasusSeed:
+	; see if we're allowed to use items
+	ld a,(wcc63)
+	bit 7,a
+	ret nz
+
+	ld a,(wDisabledObjects)
+	and $81
+	ret nz
+
+	isTreasureFlagSet TREASURE_PEGASUS_SEEDS
+	ret z
+	isTreasureFlagSet TREASURE_SEED_SATCHEL
+	ret z
+
+	ld a,(wNumPegasusSeeds)
+	or a
+	ret z
+
+	.if defined(ROM_COMBO)
+		jpab itemParentsExt.usePegasusSeed
+	.else
+		jpab itemParents.usePegasusSeed
+	.endif
+.endif
 
 ;;
 ; Updates wGameKeysPressed based on wKeysPressed, and updates wLinkAngle based on
 ; direction buttons pressed.
 updateGameKeysPressed:
+.ifdef ENABLE_DOUBLETAP_PEGASUS_SEEDS
+	ld a,(wKeysJustPressed)
+	and $f0
+	jr z,+++
+		; a direction was just pressed.
+		ld c,a
+		ld a,(wDoubleTapTimer)
+		and $f0
+		cp c
+		jr nz,++
+			; pressed the same button.
+			; if the timer expired(is zero), restart it.
+			; otherwise try to use a pegasus seed if the flag is set
+			ld a,(wDoubleTapTimer)
+			and $0f
+			jr z,++
+				; button pressed twice within timeframe. try to use a seed
+				.ifdef ENABLE_SETTINGS_MENU
+					ld a,(wMiscSettings2)
+					rlca
+					call c,quickUsePegasusSeed
+				.else
+					call quickUsePegasusSeed
+				.endif
+				jr +++
+		++
+		; pressed a different direction, or the timer expired.
+		; restart the timer and update the last direction pressed
+		ld a,(wMiscSettings2)
+		swap a
+		and $03
+		inc a
+		add a
+		add a
+		dec a
+		or c
+		ld (wDoubleTapTimer),a
+	+++
+.endif
+
 	ld a,(wKeysPressed)
 	ld c,a
 
@@ -167,6 +233,11 @@ updateGameKeysPressed:
 
 @updateKeysPressed_a:
 	ld c,a
+.ifdef ENABLE_DOUBLETAP_PEGASUS_SEEDS
+	; reset timer if input was simulated
+	xor a
+	ld (wDoubleTapTimer),a
+.endif
 @updateKeysPressed_c:
 	ld a,(wLinkDeathTrigger)
 	or a

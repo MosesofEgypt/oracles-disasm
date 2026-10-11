@@ -680,6 +680,12 @@ loadAcrossComboGame:
 	ld a,$0a
 	ld ($1111),a
 
+	.ifdef MORE_MESSAGE_SPEEDS
+		ld a,(wMiscSettings2)
+		and $f0
+		push af
+	.endif
+
 	m_LoadSavefileSection_len wChildStatus,               $07
 	m_LoadSavefileSection_len wSavefileString,            $08
 	m_LoadSavefileSection_len wFluteIcon,                 $01
@@ -692,6 +698,14 @@ loadAcrossComboGame:
 	m_LoadSavefileSection_end wGlobalFlags+15,            wSlingshotSelectedSeeds+1
 	m_LoadSavefileSection_end wBiggoronSwordOverflowItem, wSaveFileMainSectionEnd
 	m_LoadSavefileSection_end wGroup0RoomFlags,           wGroupRoomFlagsEnd
+
+	.ifdef MORE_MESSAGE_SPEEDS
+		pop de
+		ld a,(wKilledGoldenEnemies)
+		and $0f
+		or d
+		ld (wMiscSettings2),a
+	.endif
 
 	push hl
 	; mask out shop flags to keep from previous game
@@ -1530,6 +1544,7 @@ initialFileVariablesTable:
 
 ; Initial values for variables in the c6xx block.
 initialFileVariables:
+	.db <wMiscSettings2,		$b0
 .ifdef MORE_MESSAGE_SPEEDS
 	.db <wMiscSettings,			$9d
 	.db <wMiscSettings+1,		$80

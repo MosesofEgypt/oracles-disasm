@@ -1,4 +1,4 @@
-.define SETTINGS_COUNT      12
+.define SETTINGS_COUNT      15
 .define SETTINGS_PER_PAGE   3
 
 updateSettingsMenu:
@@ -53,7 +53,20 @@ updateSettingsMenu:
 			jr z,++
 				dec a
 				dec a
+				; TEMPORARY UNTIL ANOTHER SETTING IS ADDED
+				cp 10
+				jr nz,+++
+					dec a
+				+++
+				jr +++
+				; TEMPORARY UNTIL ANOTHER SETTING IS ADDED
 			++
+				; TEMPORARY UNTIL ANOTHER SETTING IS ADDED
+				cp 10
+				jr nz,+++
+					inc a
+				; TEMPORARY UNTIL ANOTHER SETTING IS ADDED
+			+++
 			inc a
             cp $ff
             jr nz,++
@@ -103,6 +116,13 @@ optionValuesAndOffsets:
 	.dw wMiscSettings+1
 
 	.db $02, 1<<7
+	.dw wMiscSettings2
+	.db $04, $00
+	.dw wMiscSettings2
+	.db $02, 1<<6
+	.dw wMiscSettings2
+
+	.db $02, 1<<7
 	.dw wMiscSettings
 	.db $02, 1<<7
 	.dw wRumbleSettings
@@ -136,12 +156,23 @@ inventorySubmenu3SelectOption:
 			or c
 		jr ++
 	+
-		; no bitmask. message speed selected
+		; no bitmask. message speed/double-tap window selected
 		ld a,b
 		and $07
 		ld b,a
+
+		ld a,l
+		cp <wMiscSettings2
 		ld a,(hl)
-		and $f8
+		jr nz,+
+			; double-tap window
+			swap b
+			and $cf
+			jr +++
+		+
+			; message speed
+			and $f8
+		+++
 		or b
 	++
 
@@ -169,8 +200,15 @@ inventorySubmenu3InitSelection:
 			inc a
 		jr ++
 	+
-		; no bitmask. message speed selected
+		; no bitmask. message speed/double-tap window selected
+		ld a,l
+		cp <wMiscSettings2
 		ld a,(hl)
+		jr nz,+
+			; double-tap window
+			swap a
+			and $03
+		+
 		and $07
 	++
 
@@ -277,6 +315,10 @@ inventorySubmenu3_drawCursors:
 	.dw @drawCursorBraceletPunch
 	.dw @drawCursorDungeonAutosaving
 
+	.dw @drawCursorDoubleTapPegasusSeeds
+	.dw @drawCursorDoubleTapWindow
+	.dw @drawCursorUnusedSetting
+
 	.dw @drawCursorLowHeartWarning
 	.dw @drawCursorCartridgeRumble
 	.dw @drawCursorMessageSpeed
@@ -285,6 +327,7 @@ inventorySubmenu3_drawCursors:
 @drawCursorQuickSwap:
 @drawCursorContextSensitiveItems0:
 @drawCursorPassiveShield:
+@drawCursorDoubleTapPegasusSeeds:
 @drawCursorLowHeartWarning:
 	ld b,$38
 	jr @drawCursor2
@@ -301,6 +344,15 @@ inventorySubmenu3_drawCursors:
 @drawCursorDungeonAutosaving:
 	ld b,$68
 	jr @drawCursor2
+
+@drawCursorUnusedSetting:
+	ld b,$e0
+	jr @drawCursor2
+
+@drawCursorDoubleTapWindow:
+	ld hl,@cursorOffsets4
+	ld b,$51
+	jr @drawCursor
 
 @drawCursorMessageSpeed:
 	ld hl,@cursorOffsets8
@@ -321,6 +373,12 @@ inventorySubmenu3_drawCursors:
 @cursorOffsets2:
 	.db $18
 	.db $58
+
+@cursorOffsets4:
+	.db $20
+	.db $40
+	.db $60
+	.db $80
 
 @cursorOffsets8:
 	.db $18
@@ -422,6 +480,10 @@ itemSubmenu3TextIndices:
 	.db <TX_09_PASSIVE_SHIELD
 	.db <TX_09_BRACELET_PUNCH
 	.db <TX_09_DUNGEON_AUTOSAVE
+
+	.db <TX_09_DOUBLE_TAP_PEGASUS_SEEDS
+	.db <TX_09_DOUBLE_TAP_RATE
+	.db <TX_09_UNUSED_SETTING_7C
 
 	.db <TX_09_LOW_HEART_WARNING
 	.db <TX_09_CARTRIDGE_RUMBLE

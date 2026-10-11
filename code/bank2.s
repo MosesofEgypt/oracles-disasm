@@ -11420,6 +11420,7 @@ dungeonMap_updateScroll:
 	; Missing a "ret" opcode here.
 	; This normally doesn't seem to cause any problems, though perhaps it's related to
 	; the dungeon map crashes on the VBA emulator?
+	ret
 
 ;;
 ; @param	a	Room index

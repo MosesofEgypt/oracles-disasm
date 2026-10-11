@@ -178,7 +178,7 @@ New rings:
         Using the shield just before taking damage will stun the enemy and prevent damage.
 
     Curse Power Ring:
-        Adds 100% more base attack, but your hearts are constantly capped to 4.
+        Adds 100% more base attack, but your hearts are constantly capped to 6.
 
     Curse Armor Ring:
         All damage you received and deal is reduced to 1/4 heart(Sword L-1).

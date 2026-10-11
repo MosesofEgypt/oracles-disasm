@@ -229,26 +229,11 @@ refreshDirtyPalettes:
 	srl a
 	srl a
 
-	; NOTE: in order to make the red and blue flash palettes not
-	;       degenerate to exactly the same, we're gonna increase
-	;       the swatches brightness where l >= $6a && l < $6e
-	pop hl
-	push af
-	ld a,l
-	cp $6a
+	; clamp brightness to table size
+	cp $08
 	jr c,+
-		cp $6e
-		jr nc,+
-			pop af
-			inc a
-			cp $08
-			jr c,++
-				ld a,$07
-				jr ++
+		ld a,$07
 	+
-		pop af
-	++
-	push hl
 
 	; convert luminance to equivalent DMG color
 	add a	; table stride is 2 bytes
@@ -266,20 +251,31 @@ refreshDirtyPalettes:
 	inc l
 	ret
 
+; NOTE: the commented out numbers are the accurate ones, but
+;       we're not using them they since they dont end up with
+;       a good variety in the brightness of across palettes.
+;       they end up causing several colors to degenerate to
+;       the same shade of green, which doesn't work well.
+;       red and blue are really just using each others numbers
 @redConvTable:
-	.db $00 $00 $01 $01 $02 $03 $03 $04
-	.db $04 $05 $06 $06 $07 $07 $08 $09
-
-@greenConvTable:
-	.db $00 $01 $02 $03 $04 $06 $07 $08
-	.db $09 $0a $0c $0d $0e $0f $10 $12
-
-@blueConvTable:
+;	.db $00 $00 $01 $01 $02 $03 $03 $04
+;	.db $04 $05 $06 $06 $07 $07 $08 $09
 	.db $00 $00 $00 $01 $01 $01 $01 $02
 	.db $02 $02 $03 $03 $03 $04 $04 $04
 
+@greenConvTable:
+;	.db $00 $01 $02 $03 $04 $06 $07 $08
+;	.db $09 $0a $0c $0d $0e $0f $10 $12
+	.db $00 $01 $02 $04 $05 $07 $08 $0a
+	.db $0b $0c $0e $10 $11 $12 $14 $16
+
+@blueConvTable:
+;	.db $00 $00 $00 $01 $01 $01 $01 $02
+;	.db $02 $02 $03 $03 $03 $04 $04 $04
+	.db $00 $00 $01 $01 $02 $03 $03 $04
+	.db $04 $05 $06 $06 $07 $07 $08 $09
+
 @dmgColorTable:
-	; colors are RGB555 LE with high bit ignored, and R in lower bits
 	; NOTE: leaving the full palette in here in case i decide
 	;       it's necessary to go back to 16 instead of 8.
 	m_RGB16 2,   5,  1

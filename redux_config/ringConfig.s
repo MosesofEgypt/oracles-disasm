@@ -159,7 +159,7 @@
 	; tier0: high-buff/good-utility
 	.macro TIER0_RINGS_AND_CUTOFFS
 		.db ENERGY_RING			12	; 1
-		.db BUCKLER_RING		51	; 3
+		.db FARMERS_RING		51	; 3
 		.db GREEN_LUCK_RING		76	; 2
 		.db RED_LUCK_RING		102	; 2
 		.db BLUE_LUCK_RING		127	; 2
@@ -219,7 +219,7 @@
 	; tier4: best-buff/best-utility
 	; NOTE: only available if every other tiered ring was obtained
 	.macro TIER4_RINGS_AND_CUTOFFS
-		.ifdef ENABLE_SECRET_GASHA_RINGS
+	.ifdef ENABLE_SECRET_GASHA_RINGS
 		.db GREEN_RING			80	; 5
 		.db GOLD_RING			160	; 5
 		.db AZUCHU_RING			191	; 2
@@ -228,15 +228,15 @@
 		; player was diligent enough to get every tier 1-4 ring
 		; ages secret
 		.db SPIN_RING			207	; 1
-		.db FARMERS_RING		223	; 1
+		.db BUCKLER_RING		223	; 1
 		; seasons secret
 		.db CHARGE_RING			239	; 1
 		.db ZORA_SCALE_RING		255	; 1
-		.else
+	.else
 		.db GREEN_RING			109	; 3
 		.db GOLD_RING			219	; 3
 		.db AZUCHU_RING			255	; 1
-		.endif
+	.endif
 	.endm
 
 .endif

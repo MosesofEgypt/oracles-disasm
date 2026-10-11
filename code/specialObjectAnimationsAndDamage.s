@@ -348,7 +348,15 @@ func_4553:
 	ld b,a
 	ld a,(w1Link.animMode)
 	cp LINK_ANIM_MODE_WALK
+.ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
+	jr z,+
+		ld hl,wAutoEquipSubtypeInfo
+		res 4,(hl)
+		ret
+	+
+.else
 	ret nz
+.endif
 
 	call @getLinkWalkingAnimation
 	add b
@@ -427,10 +435,10 @@ func_4553:
 
 	ld c,$07
 	cp $02
-	jr c,@animationFound
+	jp c,@animationFound
 
 	inc c
-	jr @animationFound
+	jp @animationFound
 +
 	; Don't do push animation while holding a sword, cane, etc.
 	ld a,(wLinkTurningDisabled)
@@ -462,39 +470,45 @@ func_4553:
 	; Pushing against a wall
 @pushingAnimation:
 .ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
-	; don't bother with costly autoequip checks if already autoequipped
-	ld a,(wAutoEquipInvSlot)
-	cp $ff
-	jr nz,+
-
-	call getItemForTileBeingPushedOn
-	or a
+	push hl
+	ld hl,wAutoEquipSubtypeInfo
+	bit 4,(hl)
 	jr z,+
-		cp a ; equip
-		ld c,a
-		call handleAutoEquipItem
-		ld a,c
-
-		; if it wasn't equipped, don't do anything
+		; don't bother with costly autoequip checks if already autoequipped
+		ld a,(wAutoEquipInvSlot)
+		cp $ff
 		jr nz,+
-			cp ITEM_SEED_SATCHEL
-			jr nz,+
-				; it's the seed satchel, so might need to switch to ember seeds
-				ld a,(wSatchelSelectedSeeds)
-				inc a
-				swap a
-				sla a
-				and $e0
+			call getItemForTileBeingPushedOn
+			or a
+			jr z,+
+				cp a ; equip
+				ld c,a
+				call handleAutoEquipItem
+				ld a,c
 
-				push hl
-				ld hl,wAutoEquipSubtypeInfo
-				or (hl)
-				ld (hl),a
-				pop hl
+				; if it wasn't equipped, don't do anything
+				jr nz,+
+					cp ITEM_SEED_SATCHEL
+					jr nz,+
+						; it's the seed satchel, so might need to switch to ember seeds
+						ld a,(wSatchelSelectedSeeds)
+						inc a
+						swap a
+						sla a
+						and $e0
 
-				xor a
-				ld (wSatchelSelectedSeeds),a
+						push hl
+						ld hl,wAutoEquipSubtypeInfo
+						or (hl)
+						ld (hl),a
+						pop hl
+
+						xor a
+						ld (wSatchelSelectedSeeds),a
 	+
+	set 4,(hl)
+	pop hl
+
 .endif
 	ld a,(w1Link.direction)
 	ld (wLinkPushingDirection),a
@@ -507,6 +521,13 @@ func_4553:
 
 	; Standard, just walking or standing animation
 @standingAnimation:
+.ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
+	push hl
+	ld hl,wAutoEquipSubtypeInfo
+	res 4,(hl)
+	pop hl
+.endif
+
 .ifdef ENABLE_PASSIVE_SHIELD
 	ld a,(wUsingShield)
 	or a

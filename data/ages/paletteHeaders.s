@@ -9,14 +9,14 @@
 
 .define NUM_PALETTE_HEADERS $cb
 
+.ifdef ENABLE_COLORFUL_GANON
+.redefine NUM_PALETTE_HEADERS NUM_PALETTE_HEADERS+1
+.endif
+
 paletteHeaderTable:
 	.repeat NUM_PALETTE_HEADERS index COUNT
 		.dw paletteHeader{%.2x{COUNT}}
 	.endr
-	.ifdef ENABLE_COLORFUL_GANON
-		.dw paletteHeader{%.2x{PALH_SPR_GANON_REDUX}}
-	.endif
-
 
 m_PaletteHeaderStart $00, PALH_00
 	m_PaletteHeaderBg  0, 1, paletteData4000

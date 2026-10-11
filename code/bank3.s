@@ -62,11 +62,11 @@ init:
 	ldh (R_STAT),a
 
 	xor a
-	ld hl,hGdmaDelayedCountTotal
-	ldi (hl),a
-	ldi (hl),a
-	ldi (hl),a
-	ld  (hl),a
+	;ld hl,hGdmaDelayedCountTotal
+	;ldi (hl),a
+	;ldi (hl),a
+	;ldi (hl),a
+	;ld  (hl),a
 	ldh (<hGdmaChunksCopiedThisFrame),a
 	ldh (<hGdmaDelayedCount),a
 	ldh (R_IF),a

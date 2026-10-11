@@ -105,3 +105,23 @@ groups:
       when taking damage.
       Requires the cartridge
       have rumble support.
+
+  - name: TX_09_DOUBLE_TAP_PEGASUS_SEEDS
+    index: 0x7a
+    text: |-
+      Quickuse Pegasus
+      Tap a direction twice
+      within the period to
+      use a pegasus seed.
+
+  - name: TX_09_DOUBLE_TAP_RATE
+    index: 0x7b
+    text: |-
+      Doubletap Rate
+      Determines the max
+      amount of time between
+      taps in a double-tap.
+
+  - name: TX_09_UNUSED_SETTING_7C
+    index: 0x7c
+    text: ""

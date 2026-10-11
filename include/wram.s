@@ -170,25 +170,30 @@ wPaletteMappedObject:	; $c087
 wPaletteMap:			; $c088
 	dsb $08
 
+wDoubleTapTimer:		; $c090
+	; Bits 0-3: Frames remaining since a direction was last pressed
+	; Bits 4-7: The direction buttons that were last pressed
+	db
+
 .if defined(ROM_COMBO)
 	; these are changed whenever the combo rom toggles between games.
 	; we cache them here so we don't need to spend ~60 cycles every
 	; time we need to retrieve them(loading from here is only 16).
-	wScriptBank:			; $c090
+	wScriptBank:			; $c091
 		db
-	wScriptHelpBank:		; $c091
+	wScriptHelpBank:		; $c092
 		db
-	wSimpleScriptBank:		; $c092
+	wSimpleScriptBank:		; $c093
 		db
-	wObjectOamTableOffset:	; $c093
+	wObjectOamTableOffset:	; $c094
 		db
-	wHazardCollisionTable:	; $c094
+	wHazardCollisionTable:	; $c095
 		dw
-	wLinkVulnerableCached:	; $c096
+	wLinkVulnerableCached:	; $c097
 		; Bit 0: Set if bit 8 calculated
 		; Bit 8: Set to checkLinkVulnerable result
 		db
-	wIsSeasons:					; $c097
+	wIsSeasons:					; $c098
 		; function to set carry flag if seasons, or clear
 		; it if ages. exists in hram so it can be modified.
 		; will contain a variant of this function:
@@ -198,8 +203,8 @@ wPaletteMap:			; $c088
 		; the cflag will be cleared if ages and set if seasons
 		dsb $03
 
-	wc09a:					; $c09a
-		dsb	$05	; padding
+	wc09b:					; $c09b
+		dsb	$04	; padding
 .endif
 
 .ifdef ULTRAWIDE_INVENTORY_SPRITES
@@ -419,7 +424,7 @@ wRumbleSettings: ; $c4bc
 ; Bits 0-4: Rumble timer in ticks(1 tick == 4 frames or 133ms)
 ;           If timer == 31($1f) then rumble lasts indefinitely
 ; Bits 5-6: Rumble intensity(25%/50%/75%/100%)
-; Bit 7:    Set if rumble disabled
+; Bit 7:    Set if rumble enabled
 	db
 .endif
 
@@ -541,7 +546,8 @@ wAutoEquipInvSlot:
 
 wAutoEquipSubtypeInfo:
 	; Bits 0-1: Previously equipped song (0 == unset)
-	; Bits 2-4: Unused
+	; Bits 2-3: Unused
+	; Bit    4: Set if pushing animation currently being performed
 	; Bits 5-7: Previously equipped satchel seeds +1 (0 == unset)
 	db
 .endif
@@ -989,6 +995,14 @@ wNumUnappraisedRingsBcd: ; $c6cd
 wNumRingsAppraised: ; $c6ce
 ; Once this reaches 100, Vasu gives you the 100th ring.
 	db
+
+wMiscSettings2:
+	; upper nibble of wKilledGoldenEnemies will be used for
+	; additional settings that wont fit in wMiscSettings
+	; Bits 4-5: Frame window for double-tap pegasus seed activation
+	; Bit    6: Unused
+	; Bit    7: Set if double-tap pegasus seeds are enabled
+	.db
 wKilledGoldenEnemies: ; $c6cf/$c6c9
 ; Bit 0: killed golden octorok
 ; Bit 1: killed golden moblin
@@ -2292,7 +2306,7 @@ wBraceletGrabbingNothing: ; $cc64
 ; grabbing anything. Used for the rollers in Seasons.
 	db
 
-wLinkPushingDirection: ; $cc65/..../$cc88
+wLinkPushingDirection: ; $cc65/$cc88/$cc8a
 ; This is equal to w1Link.direction when he's pushing something.
 ; When he's not pushing something, this equals $ff.
 	db
@@ -2355,7 +2369,7 @@ wShieldBoundingBox: ; $cc70/$cc8a
 	instanceof BoundingBoxStruct
 
 .if !defined(ROM_COMBO)
-wGrabbableObjectBuffer: ; $cc74
+wGrabbableObjectBuffer:
 ; $10 bytes (8 objects)
 ; List of pick-upable items. Used by shops, cane of somaria block.
 ; Each 2 bytes is a little-endian pointer to an object.
@@ -2367,7 +2381,7 @@ wGrabbableObjectBuffer: ; $cc74
 ;
 ; substate is set to 2 when the object is thrown / released?
 	dsb $10
-wGrabbableObjectBufferEnd: ; $cc84
+wGrabbableObjectBufferEnd:
 	.db
 .endif
 

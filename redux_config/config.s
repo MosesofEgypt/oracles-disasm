@@ -98,6 +98,11 @@
 		; only occuring if the Haste Ring is equipped
 		.define ENABLE_QUICK_ITEM_DROP
 	.endif
+	.ifndef ENABLE_DOUBLETAP_PEGASUS_SEEDS
+		; determines whether you can use pegasus seeds simply by
+		; tapping the same direction twice in quick succession.
+		.define ENABLE_DOUBLETAP_PEGASUS_SEEDS
+	.endif
 	.ifndef ENABLE_PORTAL_RING_BOX
 		; determines whether to allow entering the ring list from
 		; the inventory by clicking the ring box. if the ring redux
@@ -212,8 +217,11 @@
 .ifndef ENABLE_QUICK_SWAP
 	.define ENABLE_QUICK_SWAP
 .endif
-.ifndef ENABLE_QUICK_DROP
-	.define ENABLE_QUICK_DROP
+.ifndef ENABLE_QUICK_ITEM_DROP
+	.define ENABLE_QUICK_ITEM_DROP
+.endif
+.ifndef ENABLE_DOUBLETAP_PEGASUS_SEEDS
+	.define ENABLE_DOUBLETAP_PEGASUS_SEEDS
 .endif
 .ifndef CONTEXT_SENSITIVE_AUTO_EQUIP
 	.define CONTEXT_SENSITIVE_AUTO_EQUIP

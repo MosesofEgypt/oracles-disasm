@@ -19,13 +19,12 @@ m_InteractionCode $59
 			dec a
 		+
 		.if defined(ROM_COMBO)
-			and $03
+			cp $03
 		.else
-			and $01
+			cp $02
 		.endif
 		jp nc,interactionDelete
-		dec a
-		ld e,$42
+		ld e,Interaction.subid
 		ld (de),a
 	++
 	call interactionInitGraphics

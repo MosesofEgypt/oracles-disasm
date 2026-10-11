@@ -352,10 +352,14 @@ parentItemCode_satchel:
 	jp decNumActiveSeeds
 
 @pegasusSeeds:
+	call usePegasusSeed
+	jp clearParentItem
+
+usePegasusSeed:
 	ld hl,wPegasusSeedCounter
 	ldi a,(hl)
 	or (hl)
-	jr nz,@clear
+	ret nz
 
 .if defined(ENABLE_RING_REDUX)
 	isRingEquipped MYSTIC_SEED_RING
@@ -377,7 +381,7 @@ parentItemCode_satchel:
 	ld (hl),$c0
 .endif
 
-	ld a,b
+	ld a,ITEM_PEGASUS_SEED
 	call decNumActiveSeeds
 
 	; Create pegasus seed "puffs"?
@@ -385,8 +389,7 @@ parentItemCode_satchel:
 	ld a,$03
 	ldi (hl),a
 	ld (hl),ITEM_DUST
-@clear:
-	jp clearParentItem
+	ret
 
 ;;
 ; Gets the number of seeds available, or returns from caller if none are available.
