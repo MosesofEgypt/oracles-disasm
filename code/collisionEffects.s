@@ -90,6 +90,7 @@ checkEnemyAndPartCollisions:
 	ldi (hl),a
 
 	ld a,(w1Link.yh)
+	add $10 ; offset downward by 16 pixels to handle enemies being above screen edge
 	add e
 	sub c
 	ldi (hl),a
@@ -1790,21 +1791,41 @@ initializeObject1BoundingBoxVars:
 	add Object.xh - Object.collisionRadiusY
 	ld l,a
 	ldd a,(hl)
-	sub d
-	cp $f0
-	jr c,+
-		; position wrapped around to below 0. set to 0
-		xor a
+	cp $80
+	jr nc,+
+		; x-center is left of screen center, so clamp x-min to $00
+		sub d
+		cp $80
+		ld (bc),a
+		jr c,++
+			; clamp min to $00
+			ld (hTempVal3),a
+			xor a
+			ld (bc),a
+			ld a,(hTempVal3)
+		++
+		inc bc
+		add d
+		add d
+		jr ++
 	+
-	ld (bc),a
-	inc bc
-	add d
-	add d
+		; x-center is right of screen center, so clamp x-max to $ff
+		sub d
+		ld (bc),a
+		inc bc
+		add d
+		add d
+		cp $80
+		jr nc,++
+			; clamp max to $ff
+			ld a,$ff
+	++
 	ld (bc),a
 	inc bc
 
 	dec l
 	ld a,(hl)
+	add $10 ; offset downward by 16 pixels to handle enemies being above screen edge
 	sub e
 	cp $f0
 	jr c,+
@@ -1831,22 +1852,43 @@ initializeObject2BoundingBoxVars:
 	add Object.xh - Object.collisionRadiusY
 	ld l,a
 	ldd a,(hl)
-	add d
-	ld (bc),a
-	inc bc
-	sub d
-	sub d
-	dec a	; offset by 1 to capture (hl) == a
-	cp $f0
-	jr c,+
-		; position wrapped around to below 0. set to 0
-		xor a
+	cp $80
+	jr nc,+
+		; x-center is left of screen center, so clamp x-min to $00
+		add d
+		ld (bc),a
+		inc bc
+		sub d
+		sub d
+		dec a	; offset by 1 to capture (hl) == a
+		cp $80
+		jr c,++
+			; clamp min to $00
+			xor a
+		jr ++
 	+
+		; x-center is right of screen center, so clamp x-max to $ff
+		add d
+		cp $80
+		ld (bc),a
+		jr nc,+
+			; clamp max to $ff
+			ld (hTempVal3),a
+			ld a,$ff
+			ld (bc),a
+			ld a,(hTempVal3)
+		+
+		inc bc
+		sub d
+		sub d
+		dec a	; offset by 1 to capture (hl) == a
+	++
 	ld (bc),a
 	inc bc
 
 	dec l
 	ld a,(hl)
+	add $10 ; offset downward by 16 pixels to handle enemies being above screen edge
 	add e
 	ld (bc),a
 	inc bc
