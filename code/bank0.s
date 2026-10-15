@@ -2282,11 +2282,17 @@ vblankInterrupt:
 
 	ldh a,(<hVBlankFunctionQueueTail)
 	or a
-	call nz,runVBlankFunctions
-.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
-	xor a
-	ld ($3333),a
-.endif
+	jr z,+
+		ldh a,(<hRomBank)
+		push af
+		call runVBlankFunctions
+		pop af
+		setrombank
+		.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
+			xor a
+			ld ($3333),a
+		.endif
+	+
 
 	call updateDirtyPalettes
 
@@ -2314,12 +2320,6 @@ vblankInterrupt:
 ++
 	ld hl,hFFB7
 	res 7,(hl)
-	ldh a,(<hRomBank)
-	bit 0,(hl)
-	jr z,+
-	ld a,:audio.b39_initSound
-+
-	ld ($2222),a
 	pop hl
 	pop af
 	reti
@@ -3036,7 +3036,6 @@ timerInterrupt:
 	jr nz,@interruptEnd
 	bit 0,(hl)
 	jr nz,@interruptEnd
-
 	set 0,(hl)
 
 	; Decrement hFFB8
@@ -3049,39 +3048,41 @@ timerInterrupt:
 		dec a
 		ldh (R_TIMA),a
 	+
+
+	ldh a,(<hRomBank)
+	push af
 	ld a,:audio.b39_updateMusicVolume
-	ld ($2222),a
+	setrombank
+
 	ldh a,(<hMusicVolume)
 	bit 7,a
 	jr z,+
+		and $03
+		ldh (<hMusicVolume),a
+		call audio.b39_updateMusicVolume
+	+
 
-	and $03
-	ldh (<hMusicVolume),a
-	call audio.b39_updateMusicVolume
-+
 	ldh a,(<hMusicQueueTail)
 	ld b,a
 	ldh a,(<hMusicQueueHead)
 	cp b
-	jr z,++
-
-	ld h,>wMusicQueue
--
-	ld l,a
-	ldi a,(hl)
-	call audio.b39_playSound
-	ld a,l
-	and $af
-	cp b
-	jr nz,-
-
-	ldh (<hMusicQueueHead),a
-++
+	jr z,+
+		ld h,>wMusicQueue
+		-
+			ld l,a
+			ldi a,(hl)
+			call audio.b39_playSound
+			ld a,l
+			and $af
+			cp b
+			jr nz,-
+		ldh (<hMusicQueueHead),a
+	+
 	call audio.b39_updateSound
 	ld hl,hFFB7
 	res 0,(hl)
-	ldh a,(<hRomBank)
-	ld ($2222),a
+	pop af
+	setrombank
 
 @interruptEnd:
 	; reenable the timer interrupt

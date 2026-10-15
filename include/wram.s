@@ -8,27 +8,8 @@
 
 .RAMSECTION Wram0_c000
 
-; ####################################################
-; NOTE: Due to how fragile the audio engine is, i've
-;       opted to not move most of these variables, so
-;       instead we've got a kinda messy padding setup
-; ####################################################
-
-; Function copied to RAM to read a byte from another bank.
-; NOTE: THIS CODE SHOULD ONLY EVER BE CALLED BY
-;       CODE IN THE AUDIO BANK, OR CODE IN BANK 0
-.if defined(I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND)
-	; NOTE: these function allocations are EXACT size, so
-	;       don't mess with them without updating audio.s
-	wMusicReadFunction: ; $c000
-		dsb $16
-.else
-	wMusicReadFunction: ; $c000
-		dsb $0c
-
-	wc00c:	; $c00c
-		dsb	$0a	; padding
-.endif
+wc000:	; $c000
+	dsb	$16	; padding
 
 wSoundFadeCounter: ; $c016
 ; When [wSoundFadeCounter]&[wSoundFadeSpeed] == 0, volume is incremented or decremented.

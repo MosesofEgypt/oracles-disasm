@@ -141,6 +141,30 @@
 	.undefine DISABLE_FUNC
 .endm
 
+.BANK 0 SLOT 0
+
+m_section_free Music_Reading
+
+; NOTE: THIS CODE SHOULD ONLY EVER BE CALLED
+;       BY CODE WITHIN THE AUDIO CODE BANK.
+musicReadFunction:
+	setrombank
+.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND
+	ld a,$01
+	ld ($3333),a
+.endif
+	ldi a,(hl)
+	ld c,a
+	ld a,:audio.initSound
+	setrombank
+.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND
+	ld a,$00
+	ld ($3333),a
+.endif
+	ld a,c
+	ret
+.ends
+
 ; HACK-BASE: Bank of sound engine (and of data in "audio/{game}/soundChannelData.s") changed to
 ; allocate more space to the compressed data section (text, graphics, room layouts).
 .BANK 1 SLOT 1
@@ -190,40 +214,7 @@ initSound:
 	ldh (R_SOUND_ENABLE),a
 	ld a,$ff
 	ldh (R_SOUND_PANNING),a
-	ld c,@readFunctionEnd-@readFunction
-	ld hl,@readFunction
-	ld de,wMusicReadFunction
--
-	ldi a,(hl)
-	ld (de),a
-	inc de
-	dec c
-	jr nz,-
 	ret
-
-; This function is copied to wMusicReadFunction and executed there.
-; NOTE: THIS CODE SHOULD ONLY EVER BE CALLED BY
-;       CODE IN THIS BANK, OR CODE IN BANK 0
-@readFunction:
-	; NOTE: this function's size cannot be increased without
-	;       doing something about the WRAM allocated to it.
-	ld ($2222),a
-.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND
-	ld a,$01
-	ld ($3333),a
-.endif
-	ldi a,(hl)
-	ld c,a
-	ld a,:initSound
-	ld ($2222),a
-.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND
-	ld a,$00
-	ld ($3333),a
-.endif
-	ld a,c
-	ret
-@readFunctionEnd:
-
 
 ;;
 ; Updates wMusicVolume and wMusicMuted and silences channels 0 and 1
@@ -594,7 +585,7 @@ getNextChannelByte:
 	ld c,a
 	ld a,($ff00+c)
 
-	call wMusicReadFunction
+	call musicReadFunction
 	push af
 
 	; move to the next byte in the data
@@ -832,13 +823,11 @@ standardCmdSfxSquareChannel2:
 		jp @arbitraryFrequency
 	+
 	ld a,(wSoundCmd)
-	cp $60
-	jr z,@cmd60
-
 	cp $61
 	jp z,@cmd61
 
-	jr @cmdFrequency
+	cp $60
+	jr nz,@cmdFrequency
 
 @cmd60:
 	; If notes are set to end with an envelope, do nothing even if the last note is still audible
@@ -1359,8 +1348,7 @@ setWaveform:
 	jr z,-
 
 	; Restart channel 3
-	ldh a,(R_WAVE_PERIOD_HIGH_AND_CTRL)
-	or $80
+	ld a,$80
 	ldh (R_WAVE_PERIOD_HIGH_AND_CTRL),a
 	ret
 

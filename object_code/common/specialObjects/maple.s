@@ -1194,7 +1194,6 @@ mapleDeleteSelf:
 	ld a,(wActiveMusic2)
 	ld (wActiveMusic),a
 	call playSound
-	pop af
 	xor a
 	ld (wIsMaplePresent),a
 	jp itemDelete
