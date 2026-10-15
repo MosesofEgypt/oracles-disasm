@@ -392,6 +392,10 @@ magicBoomerangTryToBreakTile:
 		jr z,+
 			ld a,BREAKABLETILESOURCE_SHOVEL
 			call itemTryToBreakTile
+
+			ld a,BREAKABLETILESOURCE_07
+			call nc,itemTryToBreakTile
+			ret
 	+
 .endif
 

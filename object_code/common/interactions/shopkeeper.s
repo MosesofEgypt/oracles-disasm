@@ -1,22 +1,3 @@
-;;
-; Reloads the tiles for "price" on the item selection area when necessary.
-checkReloadShopItemTiles:
-	ld a,(wScrollMode)
-	cp $02
-	ret z
-
-	ld hl,wInShop
-	bit 2,(hl)
-	ret z
-
-	res 2,(hl)
-	push de
-	ld a,UNCMP_GFXH_11
-	call loadUncompressedGfxHeader
-	pop de
-	ret
-
-
 ; ==================================================================================================
 ; INTERAC_SHOPKEEPER
 ;
@@ -651,29 +632,6 @@ shopkeeperCheckLinkHasItemAlready:
 	ld e,Interaction.var38
 	ret nc
 	jr @cantSell
-
-;;
-; @param[out]	hl	Script to run if no shop items exist
-; @param[out]	zflag	Set if at least one shop item exists
-shopkeeperCheckAllItemsBought:
-	ldhl FIRST_DYNAMIC_INTERACTION_INDEX, Interaction.enabled
----
-	ld l,Interaction.enabled
-	ldi a,(hl)
-	or a
-	jr z,@next
-	ld a,(hl)
-	cp INTERAC_SHOP_ITEM
-	ret z
-@next:
-	inc h
-	ld a,h
-	cp LAST_INTERACTION_INDEX+1
-	jr c,---
-
-	ld hl,{SCRIPTS_1}.shopkeeperScript_boughtEverything
-	or d
-	ret
 
 shopkeeperTurnToFaceLink:
 	call objectGetAngleTowardLink

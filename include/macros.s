@@ -126,6 +126,12 @@
 	inc h
 .ENDM
 
+.MACRO readWordFromTable
+	add a
+	addAToHl
+	derefHl
+.ENDM
+
 ; Call from bank 0
 .MACRO callfrombank0
 	.IF NARGS == 1

@@ -1385,33 +1385,45 @@ _queueDmaTransfer:
 	ret
 
 ;;
+; @param	hl	Pointer to the uncompressed gfx header data
+; @trashes{bc,de,hl}
+loadUncompressedGfxData:
+	scf
+	ccf
+	jr +
+
+;;
 ; @param	a	Uncompressed gfx header index to load
 ; @trashes{bc,de,hl}
 loadUncompressedGfxHeader:
+	scf
 	ld e,a
+	+
 	ldh a,(R_SVBK)
 	ld c,a
 	ldh a,(<hRomBank)
 	ld b,a
 	push bc
-.if defined(ROM_COMBO)
-	ld a,:bank1Moveable.uncmpGfxHeaderTable_seasons
-	ld hl,bank1Moveable.uncmpGfxHeaderTable_seasons
-	call wIsSeasons
-	jr c,+
-		ld a,:bank1Moveable.uncmpGfxHeaderTable_ages
-		ld hl,bank1Moveable.uncmpGfxHeaderTable_ages
-	+
-	rst_setrombank
-	ld a,e
-.else
-	ld a,:bank1Moveable.uncmpGfxHeaderTable
-	rst_setrombank
-	ld a,e
-	ld hl,bank1Moveable.uncmpGfxHeaderTable
-.endif
-	rst_addDoubleIndex
-	rst_derefHl
+	jr nc,++
+		.if defined(ROM_COMBO)
+			ld a,:bank1Moveable.uncmpGfxHeaderTable_seasons
+			ld hl,bank1Moveable.uncmpGfxHeaderTable_seasons
+			call wIsSeasons
+			jr c,+
+				ld a,:bank1Moveable.uncmpGfxHeaderTable_ages
+				ld hl,bank1Moveable.uncmpGfxHeaderTable_ages
+			+
+			rst_setrombank
+			ld a,e
+		.else
+			ld a,:bank1Moveable.uncmpGfxHeaderTable
+			rst_setrombank
+			ld a,e
+			ld hl,bank1Moveable.uncmpGfxHeaderTable
+		.endif
+		rst_addDoubleIndex
+		rst_derefHl
+	++
 --
 	ldi a,(hl)
 	ld c,a
@@ -2503,11 +2515,20 @@ vblankDmaFunction:
 		ld a,(wOpenedMenuType)
 		; we can transfer more data depending on the menu type
 		cp $01
-		ld a,$41
+		ld c,$41
+		ld a,$00
 		jr z,+
-			; if outside the inventory menu, we can transfer more
-			add $20
+			; if outside the inventory menu, we can transfer a bit more
+
+			; check if a gasha tree is disappearing.
+			ld a,(wOptimizationFlags)
+			bit 4,a
+			ld a,$10
+			jr z,+
+				; need to allow a good bit more transfering for gasha anim
+				add a
 		+
+		add c
 		ld c,a
 		ldh a,(<hGdmaChunksCopiedThisFrame)
 		add (hl)
@@ -12685,6 +12706,10 @@ mainThreadStart:
 		call resumeThreadNextFrame
 		jr @checkForDelayedGdma
 	+
+
+	; reset gasha tree disappearing flag
+	ld hl,wOptimizationFlags
+	res 4,(hl)
 
 	; decrement double-tap timer
 	ld a,(wFrameCounter)

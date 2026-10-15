@@ -9,19 +9,10 @@
 ; ==================================================================================================
 .ifdef ROM_AGES
 m_InteractionCode $5f
-	.if defined(ROM_COMBO)
-		callab interactionCodeAges8.checkReloadShopItemTiles
-	.else
-		callab interactionCode2.checkReloadShopItemTiles
-	.endif
 .else
 m_InteractionCode $43
-	.if defined(ROM_COMBO)
-		callab interactionCodeSeasons8.checkReloadShopItemTiles
-	.else
-		call interactionCode2.checkReloadShopItemTiles
-	.endif
 .endif
+	call checkReloadShopItemTiles
 	call @runState
 	jp interactionAnimateAsNpc
 
@@ -101,13 +92,7 @@ m_InteractionCode $43
 
 	; Check if Link has the rupees for it
 	ld a,b
-.if !defined(ROM_COMBO)
-	ld hl,interactionCode2.shopItemPrices
-.elif defined(ROM_AGES)
-	ld hl,interactionCodeAges8.shopItemPrices
-.else
-	ld hl,interactionCodeSeasons8.shopItemPrices
-.endif
+	ld hl,shopItemPrices
 	rst_addAToHl
 	ld a,(hl)
 	call cpRupeeValue
@@ -164,13 +149,7 @@ m_InteractionCode $43
 	jr @setScriptAndGotoState2
 
 @talkToSyrupWithoutItem:
-.if !defined(ROM_COMBO)
-	call interactionCode2.shopkeeperCheckAllItemsBought
-.elif defined(ROM_AGES)
-	call interactionCodeAges8.shopkeeperCheckAllItemsBought
-.else
-	call interactionCodeSeasons8.shopkeeperCheckAllItemsBought
-.endif
+	call shopkeeperCheckAllItemsBought
 	jr z,@showWelcomeText
 
 	ld hl,{SCRIPTS_1}.syrupScript_showClosedText

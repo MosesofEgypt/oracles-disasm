@@ -2929,6 +2929,8 @@ wOptimizationFlags: ; $cd2e
 	; Bit 1: Unset if DMG Palette needs to be reapplied
 	; Bit 2: Unset if bit 3 needs to be calculated
 	; Bit 3: Set if the room contains terrain-effect tiles
+	; Bit 4: Set if a gasha tree is currently disappearing
+	;        Indicates that more GDMA are needed right now
 	db
 
 ; $cd2f unused?

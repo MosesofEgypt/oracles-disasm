@@ -1148,8 +1148,8 @@ getRandomRingOfGivenTier_body:
 	; store the original tier in 'd' for resetting to it when calculating
 	ld d,c
 
-	; NOTE: the bulk of the code has been moved into bank2 to
-	; keep bank0 as free as possible for other use cases
+	; NOTE: the bulk of the code has been moved to keep
+	;       bank0 as free as possible for other use cases
 
 	; increment 'd' to the secret tier if all tiers are filled out
 	call @canSelectRingTier4

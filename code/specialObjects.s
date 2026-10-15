@@ -139,6 +139,17 @@ quickUsePegasusSeed:
 	and $81
 	ret nz
 
+.if defined(ROM_COMBO) || defined(ROM_SEASONS)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+.endif
+	ld a,(wInBoxingMatch)
+	or a
+	ret nz
+	+
+.endif
+
 	isTreasureFlagSet TREASURE_PEGASUS_SEEDS
 	ret z
 	isTreasureFlagSet TREASURE_SEED_SATCHEL

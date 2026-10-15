@@ -448,7 +448,7 @@ updateSoundFrequencyAndPlay:
 @determineFrequencyOffset:
 	; Get next raw offset (-2, -1, 0, 1 or 2)
 	ld hl,vibratoOffsetTable
-	call readWordFromTable
+	readWordFromTable
 
 	; Increment index
 	push hl
@@ -832,7 +832,7 @@ standardCmdSfxSquareChannel2:
 @cmd60:
 	; If notes are set to end with an envelope, do nothing even if the last note is still audible
 	m_ReadChannelDataFlag wChannelEnvelopes2
-	jr nz,@cmd61
+	jp nz,@cmd61
 
 	; Apply envelope to make the volume quickly decrease to 0
 	m_WriteChannelData wChannelEnvelopeStates, $02
@@ -852,7 +852,7 @@ standardCmdSfxSquareChannel2:
 	ld a,(wSoundCmd)
 	sub $0c
 	ld hl,soundFrequencyTable
-	call readWordFromTable
+	readWordFromTable
 @arbitraryFrequency:
 	call setSoundFrequency
 	m_WriteChannelData wChannelEnvelopeStates, $00
@@ -1114,7 +1114,7 @@ standardCmdSfxWaveChannel:
 	m_WriteChannelData wChannelIsPlayingRest,$00
 	ld a,(wSoundCmd)
 	ld hl,soundFrequencyTable
-	call readWordFromTable
+	readWordFromTable
 @arbitraryFrequency:
 	call setSoundFrequency
 	m_WriteChannelData wChannelVibratoActive,$00
@@ -1330,7 +1330,7 @@ setWaveform:
 	; Copy waveform to $ff30
 	ld a,(wWaveformIndex)
 	ld hl,waveformTable
-	call readWordFromTable
+	readWordFromTable
 	ld c,$10
 	ld de,$ff30
 -
@@ -1368,7 +1368,7 @@ channelCmdfe:
 
 ;;
 multiplyHlByA:
-	cp $00
+	or a
 	jr nz,+
 	ld hl,$0000
 	ret
@@ -1383,10 +1383,6 @@ multiplyHlByA:
 	jp --
 +
 	ret
-
-.include "audio/common/frequency.s"
-.include "audio/common/envelope.s"
-.include "audio/common/vibrato.s"
 
 ;;
 ; @param a The sound to play.
@@ -1626,20 +1622,9 @@ playSound:
 	pop bc
 	ret
 
-;;
-; Reads a word at hl+a*2 into de and hl. Index can't be higher than $7f.
-readWordFromTable:
-	sla a
-	ld d,$00
-	ld e,a
-	add hl,de
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	ld h,d
-	ld l,e
-	ret
-
+.include "audio/common/frequency.s"
+.include "audio/common/envelope.s"
+.include "audio/common/vibrato.s"
 .include "audio/common/noise.s"
 .include "audio/common/waveforms.s"
 .include {"audio/{GAME}/soundChannelPointers.s"}

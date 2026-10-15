@@ -272,6 +272,8 @@ m_InteractionObjectCodeSection
 m_EndObjectCodeSection
 
 m_InteractionObjectCodeSection
+	.include "object_code/common/interactions/commonInteractionCode.s"
+
 	.include "object_code/common/interactions/shopkeeper.s"
 	.include "object_code/common/interactions/shopItem.s"
 	.include "object_code/common/interactions/introSprites1.s"
@@ -364,6 +366,8 @@ m_InteractionObjectCodeSection "Ages"
 m_EndObjectCodeSection
 
 m_InteractionObjectCodeSection "Ages"
+	.include "object_code/common/interactions/commonInteractionCode.s"
+
 	.include "object_code/ages/interactions/ghostVeran.s"
 	.include "object_code/ages/interactions/boy2.s"
 	.include "object_code/ages/interactions/soldier.s"

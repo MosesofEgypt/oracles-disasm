@@ -174,6 +174,8 @@ m_EndObjectCodeSection
 
 m_InteractionObjectCodeSection "Ages"
 	; interactionCodeAges2
+	.include "object_code/common/interactions/commonInteractionCode.s"
+
 	.include "object_code/ages/interactions/ghostVeran.s"
 	.include "object_code/ages/interactions/boy2.s"
 	.include "object_code/ages/interactions/soldier.s"
@@ -347,6 +349,8 @@ m_EndObjectCodeSection
 
 m_InteractionObjectCodeSection "Ages"
 	; interactionCodeAges8
+	.include "object_code/common/interactions/commonInteractionCode.s"
+
 	.include "object_code/common/interactions/shopkeeper.s"
 	.include "object_code/common/interactions/shopItem.s"
 	.include "object_code/common/interactions/introSprites1.s"
@@ -410,6 +414,8 @@ m_EndObjectCodeSection
 
 m_InteractionObjectCodeSection "Seasons"
 	; interactionCodeSeasons1
+	.include "object_code/common/interactions/commonInteractionCode.s"
+
 	.include "object_code/seasons/interactions/usedRodOfSeasons.s"
 	.include "object_code/seasons/interactions/specialWarp.s"
 	.include "object_code/seasons/interactions/dungeonScript.s"
@@ -599,6 +605,8 @@ m_EndObjectCodeSection
 
 m_InteractionObjectCodeSection "Seasons"
 	; interactionCodeSeasons8
+	.include "object_code/common/interactions/commonInteractionCode.s"
+
 	.include "object_code/common/interactions/shopkeeper.s"
 	.include "object_code/common/interactions/shopItem.s"
 	.include "object_code/common/interactions/introSprites1.s"

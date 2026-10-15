@@ -4498,6 +4498,17 @@ updateAzuchu:
 
 .ifdef ENABLE_QUICK_SWAP
 updateQuickSwapItems:
+.if defined(ROM_COMBO) || defined(ROM_SEASONS)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr nc,+
+.endif
+	ld a,(wInBoxingMatch)
+	or a
+	ret nz
+	+
+.endif
+
 	ld a,(wOpenedMenuType)
 	or a
 	jr nz,++
@@ -5697,14 +5708,16 @@ updateSeedTreeRefillData:
 	ldh (R_SVBK),a
 .if defined(ROM_COMBO)
 	ld hl,seedTreeRefillLocations_seasons
+	ld b,NUM_SEED_TREES_SEASONS
 	call wIsSeasons
 	jr c,+
 		ld hl,seedTreeRefillLocations_ages
+		ld b,NUM_SEED_TREES_AGES
 	+
 .else
 	ld hl,seedTreeRefillLocations
-.endif
 	ld b,NUM_SEED_TREES
+.endif
 --
 	push bc
 	ldi a,(hl)

@@ -274,6 +274,8 @@ m_InteractionObjectCodeSection
 m_EndObjectCodeSection
 
 m_InteractionObjectCodeSection
+	.include "object_code/common/interactions/commonInteractionCode.s"
+
 	.include "object_code/common/interactions/shopkeeper.s"
 	.include "object_code/common/interactions/shopItem.s"
 	.include "object_code/common/interactions/introSprites1.s"
@@ -330,6 +332,8 @@ m_InteractionObjectCodeSection
 m_EndObjectCodeSection
 
 m_InteractionObjectCodeSection "Seasons"
+	.include "object_code/common/interactions/commonInteractionCode.s"
+
 	.include "object_code/seasons/interactions/usedRodOfSeasons.s"
 	.include "object_code/seasons/interactions/specialWarp.s"
 	.include "object_code/seasons/interactions/dungeonScript.s"

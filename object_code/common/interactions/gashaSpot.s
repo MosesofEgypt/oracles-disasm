@@ -399,8 +399,6 @@ m_InteractionCode $b6
 	ld (de),a
 .ifdef ENABLE_GASHA_REBALANCE
 	cp GASHATREASURE_HEART_PIECE
-	ld a,TREASURE_HEART_PIECE
-	ld c,$01 ; 1 piece of heart
 	jr z,+
 		; convert ring tier from GASHATREASURE into RING_TIER
 		dec a
@@ -419,7 +417,11 @@ m_InteractionCode $b6
 		or a,b
 		ld c,a
 		call getRandomRingOfGivenTier
+		jr ++
 	+
+		ld a,TREASURE_HEART_PIECE
+		ld c,$01 ; 1 piece of heart
+	++
 .else
 	ld hl,@gashaTreasures
 	rst_addDoubleIndex
@@ -589,9 +591,12 @@ m_InteractionCode $b6
 	call interactionIncState
 	ld l,Interaction.counter1
 	ld (hl),$08
+	ret
 
 ; Shrinking the tree (cycling through each frame of the animation)
 @state7:
+	ld hl,wOptimizationFlags
+	set 4,(hl)
 	ld h,d
 	ld l,Interaction.counter1
 	ld a,(hl)
@@ -601,6 +606,7 @@ m_InteractionCode $b6
 	dec a
 	ld (hl),a
 	ret nz
+	jp reloadTileMap
 
 @counter1Done:
 	ld a,$08
@@ -609,7 +615,7 @@ m_InteractionCode $b6
 	inc a
 	ld (hl),a
 	cp $0a
-	jr nc,@counter2Done
+	jp nc,@counter2Done
 
 	ld hl,@treeDisappearanceFrames-1
 	rst_addAToHl
@@ -664,10 +670,63 @@ m_InteractionCode $b6
 	add UNCMP_GFXH_20 - 1
 	call loadUncompressedGfxHeader
 
-	call reloadTileMap
+	call @reloadTreeTilemapRows
 	ldh a,(<hActiveObject)
 	ld d,a
 	ret
+
+@reloadTreeTilemapRows:
+	; to prevent gfx glitches in the combo rom, we
+	; reload only the tree tiles in the tilemap.
+
+	ld de,wTmpcec0+$04
+	ld hl,@treeRefreshGfxHeader
+	ld b,(@treeRefreshGfxHeaderEnd-@treeRefreshGfxHeader)
+	call copyMemory
+
+	; determine how many tiles into the tilemap the tree is
+	ldh a,(<hActiveObject)
+	ld h,a
+	ld l,Interaction.var3b
+	ldd a,(hl)
+	sub >w3VramTiles
+	ld l,(hl)
+	ld h,a
+
+	ld b,h
+	ld c,l
+
+	; adjust the src/dst offsets based on the tree's tile position
+	ld d,$04
+	ld hl,wTmpcec0+$04
+	-
+		bit 0,d
+		jr nz,+
+			inc hl
+			inc hl
+			inc hl
+		+
+		ld a,(hl)
+		add c
+		ldd (hl),a
+		ld a,(hl)
+		adc b
+		ldi (hl),a
+
+		inc hl
+		inc hl
+
+		dec d
+		jr nz,-
+
+	ld hl,wTmpcec0+$04
+	jp loadUncompressedGfxData
+
+@treeRefreshGfxHeader:
+	m_GfxHeaderRam w3TileMappingIndices, $9801, $08
+	m_GfxHeaderRam w3VramTiles, $9800, $08
+	m_GfxHeaderEnd
+@treeRefreshGfxHeaderEnd:
 
 @counter2Done:
 	xor a

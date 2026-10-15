@@ -7,9 +7,13 @@
 /build_combo_*/
 /doc/
 /LynnaLab/Logs/
+/LynnaLab/annotations.json
 /linkfile
 /tests/*
 .idea/
+todo.txt
+ngp_ideas.txt
+*.lnk
 *.sav
 *.ss1
 *.ss2

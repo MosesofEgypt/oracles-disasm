@@ -103,11 +103,13 @@
 .define INVENTORY_CAPACITY	$10
 
 
+.define NUM_SEED_TREES_AGES		$10
+.define NUM_SEED_TREES_SEASONS	$08
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 	; Should be multiple of 8. Used for seed tree refill stuff
-	.define NUM_SEED_TREES $10
+	.define NUM_SEED_TREES NUM_SEED_TREES_AGES
 .else
-	.define NUM_SEED_TREES $08
+	.define NUM_SEED_TREES NUM_SEED_TREES_SEASONS
 .endif
 
 
