@@ -393,6 +393,27 @@ giveTreasure_body:
 ; Add c to [de] as a bcd value.
 ; Mode 4 is also called by mode d, mode f.
 @mode4:
+.ifdef ENABLE_RING_REDUX
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld a,e
+	cp <wLifeVialCharges
+	jr z,+
+	cp <wLifeVialMaxCharges
+	jr z,+
+.endif
+
+	isRingEquipped GOLD_JOY_RING
+	jr nz,+
+		isRingEquipped GREEN_JOY_RING
+		jr nz,+
+			; add 50% more of the item value, for a 300% total
+			ld a,c
+			sra a
+			add c
+			daa
+			ld c,a
+	+
+.endif
 .ifdef ENABLE_NEW_GAME_PLUS
 	ldh a,(<hFF8B)
 	cp TREASURE_LIFE_VIAL
@@ -482,7 +503,7 @@ giveTreasure_body:
 			ld de,(wLifeVialCharges)
 			call @mode4
 			inc de
-			jr @mode4
+			jp @mode4
 		.endif
 		+
 	+
@@ -549,14 +570,7 @@ giveTreasure_body:
 .ifdef ENABLE_RING_REDUX
 	isRingEquipped GOLD_JOY_RING
 	jr nz,+
-		ld a,e
-		cp <wNumRupees
-		jr z,++
-			isRingEquipped GREEN_JOY_RING
-			jr +++
-		++
-			isRingEquipped RED_JOY_RING
-		+++
+		isRingEquipped RED_JOY_RING
 		jr nz,+
 			; double the item value
 			ld a,c

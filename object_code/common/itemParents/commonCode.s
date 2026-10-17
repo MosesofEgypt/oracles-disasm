@@ -776,6 +776,10 @@ updateGrabbedObjectPosition:
 	.db $fe $f7 $09 $f7; Frame 1 (on ground, closeby)
 	.db $ff $f1 $0f $f1; Frame 2 (hit target)
 
+alchemyRingRestockCostInD:
+	ld a,d
+	jr ++
+
 alchemyRingRestock:
 	; return if link has at least 1 of the item
 	or a
@@ -812,6 +816,8 @@ alchemyRingRestock:
 
 	; if we don't have enough rupees, clear the parent and return
 	jr nz,@clearAndReturn
+
+	++
 
 	; if we have that many rupees, remove them and do alchemy
 	call removeRupeeValue

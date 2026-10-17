@@ -100,7 +100,6 @@ m_PartCode $10
 	ld c,(hl)
 	ld b,>TX_0000
 	call showText
-	ld c,$06
 	jr @giveSeed
 
 @textIndices:
@@ -114,14 +113,34 @@ m_PartCode $10
 	.db <TX_002c
 	.db <TX_002a
 
+@getSeedCount:
+	ld c,$06
+.ifdef ENABLE_RING_REDUX
+	ld e,c
+	isRingEquipped GREEN_JOY_RING
+	ld a,c
+	jr nz,+
+		add e
+		daa
+		ld c,a
+	+
+	isRingEquipped GOLD_JOY_RING
+	ret nz
+	ld a,c
+	add e
+	daa
+	ld c,a
+.endif
+	ret
+
 @giveSeed:
+	call @getSeedCount
 	ld e,Part.subid
 	ld a,(de)
 	add TREASURE_EMBER_SEEDS
 	jp giveTreasure
 
 @giveSeedAndSomething:
-	ld c,$06
 	call @giveSeed
 
 @relatedObj2Something:

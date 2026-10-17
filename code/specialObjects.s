@@ -157,6 +157,34 @@ quickUsePegasusSeed:
 
 	ld a,(wNumPegasusSeeds)
 	or a
+.ifdef ENABLE_RING_REDUX
+	jr nz,++
+		isRingEquipped ALCHEMY_RING
+		ret nz
+
+		push hl
+		push bc
+		ld a,ALCHEMY_SEED_COST
+		call cpRupeeValue
+		xor $01
+		jr z,+
+			push de
+			ld d,ALCHEMY_SEED_COST
+			.if defined(ROM_COMBO)
+				callabaf itemParentsExt.alchemyRingRestockCostInD
+			.else
+				callabaf itemParents.alchemyRingRestockCostInD
+			.endif
+
+			ld (wNumPegasusSeeds),a
+			ld hl,wStatusBarNeedsRefresh
+			set 1,(hl)
+			pop de
+		+
+		pop bc
+		pop hl
+	++
+.endif
 	ret z
 
 	.if defined(ROM_COMBO)

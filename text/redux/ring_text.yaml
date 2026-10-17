@@ -523,22 +523,22 @@ groups:
   - name: TX_30a4
     index: 0xa4
     text: |-
-      Find x2 Rupees\jump(0xc3)
+      Get x2 Currency\jump(0xc3)
 
   - name: TX_30a5
     index: 0xa5
     text: |-
-      Find x2 Hearts\jump(0xc3)
+      Get x2 Hearts\jump(0xc3)
 
   - name: TX_30a6
     index: 0xa6
     text: |-
-      Find x2 Items\jump(0xc3)
+      Get x2 Pickups\jump(0xc3)
 
   - name: TX_30a7
     index: 0xa7
     text: |-
-      Find x2 Ore\jump(0xc3)
+      Get x2 Items\jump(0xc3)
 
   - name: TX_30a8
     index: 0xa8

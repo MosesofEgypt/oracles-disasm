@@ -260,12 +260,21 @@ m_PartCode $15
 	.db TREASURE_RING,          $ff            $01 $01
 	.db TREASURE_RING,          $ff            $02 $02
 	.db TREASURE_POTION,        $ff            $01 $01
+.ifdef ENABLE_RING_REDUX
+	.db TREASURE_EMBER_SEEDS,   GREEN_JOY_RING $05 $0a
+	.db TREASURE_SCENT_SEEDS,   GREEN_JOY_RING $05 $0a
+	.db TREASURE_PEGASUS_SEEDS, GREEN_JOY_RING $05 $0a
+	.db TREASURE_GALE_SEEDS,    GREEN_JOY_RING $05 $0a
+	.db TREASURE_MYSTERY_SEEDS, GREEN_JOY_RING $05 $0a
+	.db TREASURE_BOMBS,         GREEN_JOY_RING $04 $08
+.else
 	.db TREASURE_EMBER_SEEDS,   $ff            $05 $0a
 	.db TREASURE_SCENT_SEEDS,   $ff            $05 $0a
 	.db TREASURE_PEGASUS_SEEDS, $ff            $05 $0a
 	.db TREASURE_GALE_SEEDS,    $ff            $05 $0a
 	.db TREASURE_MYSTERY_SEEDS, $ff            $05 $0a
 	.db TREASURE_BOMBS,         $ff            $04 $08
+.endif
 	.db TREASURE_HEART_REFILL,  BLUE_JOY_RING, $04 $08
 	.db TREASURE_RUPEES,        RED_JOY_RING,  RUPEEVAL_005 RUPEEVAL_010
 	.db TREASURE_RUPEES,        RED_JOY_RING,  RUPEEVAL_001 RUPEEVAL_002

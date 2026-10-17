@@ -531,7 +531,11 @@ m_InteractionCode $60
 	isRingEquipped GOLD_JOY_RING
 	jr z,+
 
+.ifdef ENABLE_RING_REDUX
+	isRingEquipped RED_JOY_RING
+.else
 	isRingEquipped GREEN_JOY_RING
+.endif
 	jr nz,++
 +
 	inc c

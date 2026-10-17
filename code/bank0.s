@@ -309,11 +309,11 @@ interBankCallReturnAf:
 	ld ($2222),a
 	call jpHl
 	pop hl
-	push af
+	ld l,a
 	ld a,h
 	ld (hRomBank),a
 	ld ($2222),a
-	pop af
+	ld a,l
 	ret
 
 ;;
