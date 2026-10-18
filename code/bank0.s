@@ -9321,11 +9321,6 @@ setRingComboFlag:
 	pop hl
 	ret
 
-judoMasterComboActive:
-	ld a,(wRingComboCacheFlags)
-	and $02
-	ret
-
 .endif
 
 

@@ -4266,26 +4266,33 @@ updateRingEquipStatuses:
 	push de
 
 	ldbc DISCOVERY_RING,BLAST_RING
-	ld d,$00
+	ld d,RING_COMBO_BIT_MINING_BOMB
 	call @cacheComboActive
 
 	ldbc EXPERTS_RING,TOSS_RING
-	ld d,$01
+	ld d,RING_COMBO_BIT_JUDO_MASTER
 	call @cacheComboActive
+
+	isRingComboActive RING_COMBO_BIT_JUDO_MASTER
+	jr nz,+
+		ldbc FIST_RING,TOSS_RING
+		ld d,RING_COMBO_BIT_JUDO_MASTER
+		call @cacheComboActive
+	+
 
 	; cache the transform rings
 	ld hl,@transformRings
 	-
 		ldi a,(hl)
 		call cpActiveRing
-		ld a,$02
+		ld a,RING_COMBO_BIT_TRANSFORM
 		call z,setRingComboFlag
 		ld a,(hl)
 		or a
 		jr nz,-
 
 	ldbc STEADFAST_RING,HASTE_RING
-	ld d,$03
+	ld d,RING_COMBO_BIT_SMASHING_BOARD
 	call @cacheComboActive
 
 	pop de

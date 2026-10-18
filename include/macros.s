@@ -83,6 +83,12 @@
 	.endif
 .ENDM
 
+.MACRO isRingComboActive
+	.assert NARGS == 1
+	ld a,(wRingComboCacheFlags)
+	and 1<<(\1&$07)
+.ENDM
+
 .MACRO isTreasureFlagSet
 	.assert NARGS == 1
 	ld a,(wObtainedTreasureFlags+(\1>>3))

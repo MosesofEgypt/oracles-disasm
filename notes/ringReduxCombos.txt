@@ -107,4 +107,5 @@ Combo Requirements:
     15: Energy Ring + Charge Ring
     16: Energy Ring + Light Ring L-1 or L-2
     17: Haste Ring + Steadfast Ring
-    18: Toss Ring  + Expert's Ring
+    18: Toss Ring  + Expert's Ring  or
+        Toss Ring  + Fist Ring

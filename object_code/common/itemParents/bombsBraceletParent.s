@@ -465,7 +465,7 @@ parentItemCode_bracelet:
 		and c
 		ret z
 
-		call judoMasterComboActive
+		isRingComboActive RING_COMBO_BIT_JUDO_MASTER
 		jr z,+++
 			ld h,d
 			ld l,Item.state

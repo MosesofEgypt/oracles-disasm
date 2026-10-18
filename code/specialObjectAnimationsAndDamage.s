@@ -707,7 +707,7 @@ getTransformedLinkID:
 .ifdef UNRESTRICTED_TRANSFORMS
 remapTransformedSpecialObjectGfx:
 .ifdef ENABLE_RING_REDUX
-	call transformRingActive
+	isRingComboActive RING_COMBO_BIT_TRANSFORM
 	ld a,e
 	ret z
 .endif
@@ -1330,11 +1330,4 @@ linkApplyDamage:
 	ld (de),a
 ++
 	ret
-
-.ifdef ENABLE_RING_REDUX
-transformRingActive:
-	ld a,(wRingComboCacheFlags)
-	and $04
-	ret
-.endif
 .endif

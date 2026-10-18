@@ -540,7 +540,7 @@ explosionTryToBreakNextTile:
 		ld (hl),$ff
 	+
 
-	call miningBombComboActive
+	isRingComboActive RING_COMBO_BIT_MINING_BOMB
 
 	ret z
 	ld a,BREAKABLETILESOURCE_SHOVEL
@@ -603,11 +603,4 @@ instantBombComboActive:
 	.db $f4 $00 $0c
 	.db $f4 $f3 $00
 	.db $f2 $00 $00
-.endif
-
-.ifdef ENABLE_RING_REDUX
-miningBombComboActive:
-	ld a,(wRingComboCacheFlags)
-	and $01
-	ret
 .endif

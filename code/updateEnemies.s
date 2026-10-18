@@ -146,7 +146,7 @@ updateEnemy:
 	call enemyStandardUpdate
 
 .ifdef ENABLE_RING_REDUX
-	call judoMasterComboActive
+	isRingComboActive RING_COMBO_BIT_JUDO_MASTER
 	jr z,+
 		; NOTE: since we're doing some overriding of the ENEMYSTATUS, we
 		;       want to make sure to only do it on enemies we can throw.

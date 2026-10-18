@@ -1943,8 +1943,7 @@ smashingBoardActive:
 	and $80
 	xor $80
 	ret z
-	ld a,(wRingComboCacheFlags)
-	and $08
+	isRingComboActive RING_COMBO_BIT_SMASHING_BOARD
 	ret
 
 enemyPogoComboActive:
