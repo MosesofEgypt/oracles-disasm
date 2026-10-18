@@ -2931,6 +2931,7 @@ wOptimizationFlags: ; $cd2e
 	; Bit 3: Set if the room contains terrain-effect tiles
 	; Bit 4: Set if a gasha tree is currently disappearing
 	;        Indicates that more GDMA are needed right now
+	; Bit 5: Set if steadfast sword dash is currently being done
 	db
 
 ; $cd2f unused?

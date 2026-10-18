@@ -130,6 +130,23 @@ updateSpecialObjects:
 
 .ifdef ENABLE_DOUBLETAP_PEGASUS_SEEDS
 quickUsePegasusSeed:
+	; can't do quickuse if swimming
+	ld a,(wLinkSwimmingState)
+	or a
+	ret nz
+
+	; also not if underwater
+.if defined(ROM_COMBO) || defined(ROM_AGES)
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jr c,+
+.endif
+	ld a,(wTilesetFlags)
+	and TILESETFLAG_UNDERWATER
+	ret nz
++
+.endif
+
 	; see if we're allowed to use items
 	ld a,(wcc63)
 	bit 7,a

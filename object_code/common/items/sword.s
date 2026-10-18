@@ -150,7 +150,18 @@ itemCode05:
 	ld a,(de)
 	ld e,Item.var3a
 	ld (de),a
+
+.ifdef ENABLE_RING_REDUX
+@trySteadfastDashBreakTile:
+	ld a,(wOptimizationFlags)
+	bit 5,a
+	ret z
+	ld a,(w1Link.direction)
+	add a
+	jp tryBreakTileWithSword_calculateLevel
+.else
 	ret
+.endif
 
 
 ; State 3: sword fully charged, flashing
@@ -165,7 +176,11 @@ itemCode05:
 	ld a,$0d
 +
 	ld (hl),a
+.ifdef ENABLE_RING_REDUX
+	jr @trySteadfastDashBreakTile
+.else
 	ret
+.endif
 
 
 ; State 5: end of swordspin

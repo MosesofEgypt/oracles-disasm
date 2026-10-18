@@ -24,6 +24,32 @@ swordShmupComboActive:
 ; ITEM_SWORD ($05)
 parentItemCode_sword:
 	call clearParentItemIfCantUseSword
+.ifdef ENABLE_RING_REDUX
+	; moving fast enough with steadfast ring and
+	; sword out is considered a steadfast dash.
+	; link also has to be moving in the direction he's facing
+	ld hl,wOptimizationFlags
+	res 5,(hl)
+	isRingEquipped STEADFAST_RING
+	jr nz,+
+		ld a,(w1Link.speed)
+		cp SPEED_140
+		jr c,+
+			; the code is a bit complex, but it just allows for diagonal movement
+			ld a,(w1Link.direction)
+			rlca
+			ld e,a
+			ld a,(w1Link.angle)
+			rrca
+			rrca
+			inc a
+			sub e
+			and $07
+			cp $03
+			jr nc,+
+				set 5,(hl)
+	+
+.endif
 	ld e,Item.state
 	ld a,(de)
 	rst_jumpTable
@@ -225,6 +251,8 @@ parentItemCode_sword:
 	; reset this
 	xor a
 	ld (wSwordDamageCached),a
+.else
+	ret nz
 .endif
 
 @doSpinAttack:
@@ -409,18 +437,36 @@ parentItemCode_sword:
 	ld e,Item.subid
 	ld (de),a
 
+.ifdef ENABLE_RING_REDUX
+	; don't trigger sword poke termination if steadfast dashing
+	ld a,(wOptimizationFlags)
+	bit 5,a
+	jr z,+
+		; reset "sword collided with enemy" status
+		; and set the "object collidable" bit
+		xor a
+		ld (w1WeaponItem.var2a),a
+		ld a,(w1WeaponItem.collisionType)
+		or $80
+		ld (w1WeaponItem.collisionType),a
+		ret
+	+
+.endif
+
 	ld a,(w1WeaponItem.var2a)
 	cp $04
 	jr z,+
-	or a
-	jr nz,++
-	call checkLinkPushingAgainstWall
-	ret nc
-+
-	ld e,Item.subid
-	ld a,$01
-	ld (de),a
-++
+		or a
+		jr nz,++
+			call checkLinkPushingAgainstWall
+			ret nc
+	+
+		; set flag to indicate that tryBreakTileWithSword
+		; should create a clink effect when it's called.
+		ld e,Item.subid
+		ld a,$01
+		ld (de),a
+	++
 	; Return from caller
 	pop hl
 

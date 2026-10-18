@@ -4682,7 +4682,7 @@ updateLinkSpeed_standard:
 
 ;;
 ; @param	c	Bit 7 set if speed shouldn't be updated directly (only speedTmp, the target speed?)
-;			Lower bits are: $00 for normal terrain, $08 for ice, $10 for mermaid suit movement.
+;			Lower bits are: $00 for normal terrain, $08 for ice, $18 for mermaid suit movement.
 updateLinkSpeed_withParam:
 	ld e,<w1Link.var36
 	ld a,(de)
@@ -4761,13 +4761,11 @@ updateLinkSpeed_withParam:
 			+
 
 			isRingEquipped HASTE_RING
-			jr nz,++
-				ld a,e
-				add b
-				ld hl,@hasteSpeedUpgradeTable
-				addAToHl
-				ld a,(hl)
-				jr +
+			or c
+			jr nz,+
+				; use haste speed table
+				ld c,$10
+			+
 	++
 		ld a,e
 		add b
@@ -4797,19 +4795,11 @@ updateLinkSpeed_withParam:
 	; Slippery
 	.db SPEED_000, $06, SPEED_100, SPEED_100, SPEED_100, SPEED_180, SPEED_180, SPEED_180,
 
-	; Unused?
-	.db SPEED_080, $03, SPEED_0c0, SPEED_080, SPEED_100, SPEED_120, SPEED_0c0, SPEED_180
+	; repurposed for redux, where it's used when the haste ring is equipped
+	.db SPEED_100, $03, SPEED_100, SPEED_0c0, SPEED_140, SPEED_160, SPEED_140, SPEED_180
 
 	; Mermaid suit movement
 	.db SPEED_000, $05, SPEED_120, SPEED_120, SPEED_120, SPEED_120, SPEED_120, SPEED_120
-
-.ifdef ENABLE_RING_REDUX
-@hasteSpeedUpgradeTable:
-	.db $00 	$01			; not sure????
-	; 	grass 	stairs 	normal
-	.db $04 	$02 	$05	; walking speeds
-	.db $07 	$05 	$07	; pegasus speeds
-.endif
 
 ;;
 ; Updates Link's speed and updates his position if he's experiencing knockback.
