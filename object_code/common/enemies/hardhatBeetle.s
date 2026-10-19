@@ -48,6 +48,12 @@ m_EnemyCode $5f
 	ret
 
 @state8:
+.ifdef ENABLE_RING_REDUX
+	; don't track link if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	jp z,enemyAnimate
+.endif
 	call ecom_updateAngleTowardTarget
 	call ecom_applyVelocityForSideviewEnemyNoHoles
 	jp enemyAnimate

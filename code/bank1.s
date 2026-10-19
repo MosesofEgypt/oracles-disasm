@@ -3741,7 +3741,6 @@ standardGameState:
 .ifdef ENABLE_RING_REDUX
 	call processDmgPaletteUpdate
 	call updateAzuchu
-	call updateParryTimers
 .endif
 .if defined(ROM_COMBO)
 	; recalculate this each frame
@@ -4202,6 +4201,10 @@ updateRingEquipStatuses:
 
 	call clearRingEquipStatuses
 
+	; set the flag to indicate monsters shouldn't be pacified
+	ld hl,wBefuddlingRingFlags
+	set 7,(hl)
+
 	; force redraw of hearts in case rings changed
 	ld a,(wStatusBarNeedsRefresh)
 	set 2,a
@@ -4257,6 +4260,13 @@ updateRingEquipStatuses:
 	ld c,a
 	call @unsetFlags
 .endif
+
+	; unset the flag to if monsters should be pacified
+	isRingEquipped BEFUDDLING_RING
+	jr nz,+
+		ld hl,wBefuddlingRingFlags
+		res 7,(hl)
+	+
 
 	call updateColorRingPalettes
 
@@ -4398,36 +4408,6 @@ updateColorRingPalettes:
 .endif
 
 .ifdef ENABLE_RING_REDUX
-updateParryTimers:
-	; decrement parry timers
-	ld hl,wShieldParryTimers
-	ld a,(hl)
-	or a
-	ret z
-
-	push bc
-	swap a
-	and $0e
-	or a
-	jr z,++
-		dec a
-		dec a
-		swap a
-	++
-
-	ld b,a
-	ld a,(hl)
-	and $1f
-	or a
-	jr z,++
-		dec a
-	++
-	or b
-	ld (hl),a
-
-	pop bc
-	ret
-
 updateAzuchu:
 	; determine if wearing ring
 	isRingEquipped AZUCHU_RING

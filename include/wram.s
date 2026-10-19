@@ -185,7 +185,12 @@ wDoubleTapTimer:		; $c090
 		dsb $03
 
 	wc09b:					; $c09b
-		dsb	$04	; padding
+		dsb	$03	; padding
+.endif
+
+.ifdef ENABLE_RING_REDUX
+wBefuddlingFlickerCounter:
+	db
 .endif
 
 .ifdef ULTRAWIDE_INVENTORY_SPRITES
@@ -488,9 +493,11 @@ wDmgRingEquippedPreviousFrame:
 wSwordDamageCached:
 	db
 
-wShieldParryTimers:
-	; Bits 0-4: Cooldown frames before parry can be reattempted
-	; Bits 5-7: Number of frames remaining for a parry to count
+wBefuddlingRingFlags:
+	; Bit 0:    Set if befuddling is disabled
+	;           Occurs link attacks an enemy and doesn't kill it.
+	; Bits 1-6: Unused
+	; Bit 7:    Unset if monsters should be pacified
 	db
 .endif
 

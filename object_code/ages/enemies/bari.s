@@ -267,6 +267,12 @@ bari_subid1:
 @state8:
 	call ecom_decCounter1
 	jp nz,bari_applySpeed
+.ifdef ENABLE_RING_REDUX
+	; don't track link if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	jp z,bari_applySpeed
+.endif
 
 	; Randomly choose counter1 value
 	call getRandomNumber

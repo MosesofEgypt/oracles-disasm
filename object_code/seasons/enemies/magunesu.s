@@ -165,6 +165,12 @@ magunesuFunc_0d_6ca9:
 magunesuFunc_0d_6cb7:
 	call ecom_decCounter1
 	ret z
+.ifdef ENABLE_RING_REDUX
+	; don't shoot if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 	ld a,(hl)
 	cp $0f
 	ret nz

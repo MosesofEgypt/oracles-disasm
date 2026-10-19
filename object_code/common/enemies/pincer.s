@@ -118,6 +118,12 @@ pincer_head_state8:
 
 ; Waiting for Link to approach
 pincer_head_state9:
+.ifdef ENABLE_RING_REDUX
+	; don't emerge if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 	ld c,$28
 	call objectCheckLinkWithinDistance
 	ret nc

@@ -18,6 +18,13 @@ m_PartCode $25
 +
 	call partCommon_decCounter1IfNonzero
 	ret nz
+
+.ifdef ENABLE_RING_REDUX
+	; don't shoot if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 	ld e,$c2
 	ld a,(de)
 	bit 0,a

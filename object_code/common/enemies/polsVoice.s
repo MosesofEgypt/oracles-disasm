@@ -164,6 +164,12 @@ polsVoice_state8:
 	cp SPEED_80
 	jr z,++
 
+.ifdef ENABLE_RING_REDUX
+	; don't jump towards link if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	jr z,++
+.endif
 	; For high speed jump, target Link directly instead of using a random angle
 	call objectGetAngleTowardEnemyTarget
 	add $02

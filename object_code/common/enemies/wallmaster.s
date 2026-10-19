@@ -101,6 +101,13 @@ wallmaster_state_uninitialized:
 ; Subid 0 (wallmaster spawner) stays in this state indefinitely; spawns a wallmaster every
 ; 2 seconds.
 wallmaster_state1:
+.ifdef ENABLE_RING_REDUX
+	; don't spawn anything if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
+
 	; "yh" acts as the number of wallmasters remaining to spawn, for the spawner.
 	ld e,Enemy.yh
 	ld a,(de)

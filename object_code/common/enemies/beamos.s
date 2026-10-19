@@ -124,6 +124,12 @@ m_EnemyCode $16
 
 ;;
 @checkFireBeam:
+.ifdef ENABLE_RING_REDUX
+	; don't shoot if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 	call objectGetAngleTowardEnemyTarget
 	ld h,d
 	ld l,Enemy.angle

@@ -134,9 +134,16 @@ m_EnemyCode $14
 
 ; Wandering around until Link comes into range
 @state8:
+.ifdef ENABLE_RING_REDUX
+	; don't track link if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	jr z,+
+.endif
 	ld b,$08
 	call objectCheckCenteredWithLink
 	jp c,@chargeLink
++
 
 	call ecom_decCounter1
 	jp z,@setRandomAngleAndCounter1

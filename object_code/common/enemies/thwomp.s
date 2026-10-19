@@ -53,6 +53,12 @@ thwomp_state_stub:
 
 ; Waiting for Link to approach
 thwomp_state8:
+.ifdef ENABLE_RING_REDUX
+	; don't track link if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 	ld h,d
 	ld l,Enemy.xh
 	ld a,(w1Link.xh)

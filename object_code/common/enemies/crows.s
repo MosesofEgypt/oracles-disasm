@@ -70,6 +70,12 @@ crow_subid0:
 crow_subid0_state8:
 	call ecom_updateAngleTowardTarget
 	call crow_setAnimationFromAngle
+.ifdef ENABLE_RING_REDUX
+	; don't move if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 
 	; Check if Link has approached
 	ld h,d

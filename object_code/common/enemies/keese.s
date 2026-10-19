@@ -153,6 +153,12 @@ keese_subid01:
 
 ; Waiting for Link to approach
 keese_subid01_state8:
+.ifdef ENABLE_RING_REDUX
+	; don't move if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 	ld c,$31
 	call objectCheckLinkWithinDistance
 	ret nc

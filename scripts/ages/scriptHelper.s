@@ -2964,7 +2964,7 @@ mamamuYanScript:
 	wait 30
 
 .ifdef ENABLE_RING_REDUX
-	asm15 giveRingAToLink, BUCKLER_RING
+	asm15 giveRingAToLink, BEFUDDLING_RING
 .else
 	asm15 giveRingAToLink, SNOWSHOE_RING
 .endif

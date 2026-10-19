@@ -115,7 +115,7 @@ Removed rings:
         Upgraded into Farmer's Ring.
 
     Maple's Ring:
-        Converted into Fencer's Ring.
+        Converted into Befuddling Ring.
 
     Swimmer's Ring:
         Upgraded into Zora Scale Ring
@@ -175,8 +175,9 @@ New rings:
         Enables use of items in slot B while underwater(does not prevent you from surfacing).
         Dive underwater forever.
 
-    Fencer's Ring:
-        Using the shield just before taking damage will stun the enemy and prevent damage.
+    Befuddling Ring:
+        Prevents most enemies from interacting with link(tracking, charging, firing at, etc).
+        Disabled once an enemy is hit without being stunned or dying.
 
     Curse Power Ring:
         Adds 100% more base attack, but your hearts are constantly capped to 6.
@@ -210,7 +211,6 @@ New rings:
 
     Game Boy Ring:
         Changes color palettes to resemble playing on an original Game Boy
-
 
 Modified rings:
     Unless stated otherwise, assume any unmentioned effects from the base game are still present.

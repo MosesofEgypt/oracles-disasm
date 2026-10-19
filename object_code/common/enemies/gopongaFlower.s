@@ -82,6 +82,12 @@ m_EnemyCode $25
 	call nz,getRandomNumber_noPreserveVars
 	and $03
 	ret nz
+.ifdef ENABLE_RING_REDUX
+	; don't shoot if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 	ld b,PART_GOPONGA_PROJECTILE
 	jp ecom_spawnProjectile
 

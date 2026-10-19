@@ -136,6 +136,14 @@ m_EnemyCode $0d
 	ld a,(de)
 	ld b,a
 	ld c,$30
+.ifdef ENABLE_RING_REDUX
+	; don't shoot if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ld h,d
+	ld l,Enemy.state
+	jr z,@changeDirection
+.endif
 	call ecom_randomBitwiseAndBCE
 	or b
 	ld h,d
@@ -200,6 +208,13 @@ m_EnemyCode $0d
 ; The lynel turns, and if Link is in its sights, it charges.
 @updateAngleAndSpeed:
 	call @chooseNewAngle
+.ifdef ENABLE_RING_REDUX
+	; don't charge if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ld h,d
+	jr z,++
+.endif
 	ld b,$0e
 	call objectCheckCenteredWithLink
 	jr nc,++

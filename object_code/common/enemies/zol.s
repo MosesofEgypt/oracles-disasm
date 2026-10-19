@@ -98,6 +98,12 @@ zol_subid00:
 
 ; Hiding in ground, waiting for Link to approach
 zol_subid00_state8:
+.ifdef ENABLE_RING_REDUX
+	; don't pop out if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 	ld c,$28
 	call objectCheckLinkWithinDistance
 	ret nc
@@ -252,6 +258,12 @@ zol_subid01:
 zol_subid01_state8:
 	call ecom_decCounter1
 	jr nz,zol_animate2
+.ifdef ENABLE_RING_REDUX
+	; don't track link if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	jp z,zol_animate2
+.endif
 
 	; 1 in 8 chance of hopping toward Link
 	call getRandomNumber_noPreserveVars

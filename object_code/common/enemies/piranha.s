@@ -99,6 +99,12 @@ fish_subid00:
 	jp fish_checkReverseAngle
 
 @leapOutOfWater:
+.ifdef ENABLE_RING_REDUX
+	; don't jump if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 	ld l,e
 	inc (hl)
 	ld l,Enemy.enemyCollisionMode

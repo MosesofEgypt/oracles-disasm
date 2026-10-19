@@ -2514,22 +2514,23 @@ vblankDmaFunction:
 
 		ld a,(wOpenedMenuType)
 		; we can transfer more data depending on the menu type
-		cp $01
 		ld c,$41
-		ld a,$00
+		dec a	; set a to 0 and also check if the menu type is inventory
 		jr z,+
+			dec a	; check if map menu
+			jr z,++
+
 			; if outside the inventory menu, we can transfer a bit more
+			ld c,$51
 
 			; check if a gasha tree is disappearing.
 			ld a,(wOptimizationFlags)
 			bit 4,a
-			ld a,$10
 			jr z,+
+				++
 				; need to allow a good bit more transfering for gasha anim
-				add a
+				ld c,$61
 		+
-		add c
-		ld c,a
 		ldh a,(<hGdmaChunksCopiedThisFrame)
 		add (hl)
 		inc a
@@ -3205,6 +3206,14 @@ drawAllSpritesUnconditionally:
 +
 .endif
 
+.ifdef ENABLE_RING_REDUX
+	; while befuddling ring is active, draw link every 2 out of 3 frames
+	ld a,(wBefuddlingFlickerCounter)
+	ld e,a
+	ld a,(wBefuddlingRingFlags)
+	or e
+	jr z,++
+.endif
 	ld de,w1Link
 
 	ld b,<w1Link.yh
@@ -8742,13 +8751,10 @@ getRingBoxClippedIndex:
 .endif
 
 .ifdef ENABLE_MULTI_RING
-remoteBombComboActive:
-	isRingEquipped PEACE_RING
-	ret nz
-	isRingEquipped BOMBERS_RING
-	ret
-
 clearRingEquipStatuses:
+	ld a,(wBefuddlingRingFlags)
+	set 7,a
+	ld (wBefuddlingRingFlags),a
 	xor a
 	ld (wRingComboCacheFlags),a
 	dec a
@@ -12006,6 +12012,11 @@ initializeRoom:
 	ld (wNgpEnemiesUpgradedThisRoom),a
 	ld (wNgpUncappedUpgradesThisRoom),a
 .endif
+.ifdef ENABLE_RING_REDUX
+	; reset the befuddling-disabled flag
+	ld hl,wBefuddlingRingFlags
+	res 0,(hl)
+.endif
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 .if defined(ROM_COMBO)
@@ -12657,10 +12668,23 @@ paletteFadeThreadStart:
 mainThreadStart:
 	call restartSound
 	call stopTextThread
+.ifdef ENABLE_RING_REDUX
+	ld hl,wBefuddlingFlickerCounter
+	ld (hl),$00
+.endif
 
 @mainThread:
 .ifdef ENABLE_RUMBLE
 	call applyRumble
+.endif
+.ifdef ENABLE_RING_REDUX
+	ld hl,wBefuddlingFlickerCounter
+	inc (hl)
+	ld a,(hl)
+	cp $03
+	jr c,+
+		ld (hl),$00
+	+
 .endif
 	; Increment wPlaytimeCounter, the 4-byte counter
 	ld hl,wPlaytimeCounter

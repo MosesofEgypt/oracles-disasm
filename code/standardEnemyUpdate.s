@@ -61,6 +61,31 @@ enemyStandardUpdate:
 
 @retJustHitStatus:
 	ld c,ENEMYSTATUS_JUST_HIT
+.ifdef ENABLE_RING_REDUX
+	; disable befuddling if enemy alive, unstunned, and
+	; damage was dealt(indicated by positive, nonzero invincibilityCounter)
+.ifdef RETAIN_BEFUDDLING_ON_INSTAKILL
+	ld l,Enemy.health
+	ld a,(hl)
+	or a
+	ret z
+.endif
+
+	ld l,Enemy.stunCounter
+	ld a,(hl)
+	or a
+	ret nz
+
+	ld l,Enemy.invincibilityCounter
+	or (hl)
+	ret z
+	bit 7,a
+	ret nz
+
+	ld a,(wBefuddlingRingFlags)
+	or $01
+	ld (wBefuddlingRingFlags),a
+.endif
 	ret
 
 @knockback:

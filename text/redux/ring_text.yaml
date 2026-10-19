@@ -81,7 +81,7 @@ groups:
   - name: TX_304f
     index: 0x4f
     text: |-
-      Fencer's Ring
+      Befuddling Ring
 
   - name: TX_3050
     index: 0x50
@@ -414,8 +414,8 @@ groups:
   - name: TX_308f
     index: 0x8f
     text: |-
-      Shield when hit
-      lands to parry.
+      Enemies pacified
+      until attacked
 
   - name: TX_3090
     index: 0x90

@@ -87,6 +87,12 @@ arrowDarknut_fireArrowEveryOtherTime:
 	inc (hl)
 	bit 0,(hl)
 	ret z
+.ifdef ENABLE_RING_REDUX
+	; don't shoot if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 	call objectGetAngleTowardEnemyTarget
 	add $04
 	and $18

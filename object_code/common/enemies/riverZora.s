@@ -140,7 +140,14 @@ m_EnemyCode $08
 	; Make projectile
 	ld (hl),$00
 	ld b,PART_ZORA_FIRE
+.ifdef ENABLE_RING_REDUX
+	; don't fire if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	call nz,ecom_spawnProjectile
+.else
 	call ecom_spawnProjectile
+.endif
 	jr nz,@animate
 	ld l,Part.subid
 	inc (hl)

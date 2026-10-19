@@ -604,3 +604,10 @@ instantBombComboActive:
 	.db $f4 $f3 $00
 	.db $f2 $00 $00
 .endif
+.ifdef ENABLE_MULTI_RING
+remoteBombComboActive:
+	isRingEquipped PEACE_RING
+	ret nz
+	isRingEquipped BOMBERS_RING
+	ret
+.endif

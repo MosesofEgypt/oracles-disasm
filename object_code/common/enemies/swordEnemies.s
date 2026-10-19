@@ -239,7 +239,14 @@ swordEnemy_state_stub:
 
 ; Moving slowly in cardinal directions until Link get close.
 swordEnemy_state8:
+.ifdef ENABLE_RING_REDUX
+	; don't track link if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	call nz,swordEnemy_checkLinkIsClose
+.else
 	call swordEnemy_checkLinkIsClose
+.endif
 	jp c,swordEnemy_beginChasingLink
 
 	call ecom_decCounter1
@@ -370,7 +377,14 @@ swordDarknut_state_uninitialized:
 ; Moving slowly in cardinal directions until Link get close.
 ; Identical to swordEnemy_state8.
 swordDarknut_state8:
+.ifdef ENABLE_RING_REDUX
+	; don't track link if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	call nz,swordDarknut_checkLinkIsClose
+.else
 	call swordDarknut_checkLinkIsClose
+.endif
 	jr c,swordEnemy_beginChasingLink
 
 	call ecom_decCounter1

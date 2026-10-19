@@ -187,6 +187,12 @@ wizzrobe_subid0_state9:
 wizzrobe_subid0_stateA:
 	call ecom_decCounter1
 	jr z,@phaseOut
+.ifdef ENABLE_RING_REDUX
+	; don't shoot if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 
 	; Fire a projectile when [counter1] == 52
 	ld a,(hl)
@@ -274,6 +280,12 @@ wizzrobe_subid1_state9:
 wizzrobe_subid1_stateA:
 	call ecom_decCounter1
 	jr z,@phaseOut
+.ifdef ENABLE_RING_REDUX
+	; don't shoot if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 
 	; Fire a projectile when [counter1] == 52
 	ld a,(hl)
@@ -524,6 +536,12 @@ wizzrobe_chooseSpawnPosition:
 
 ;;
 wizzrobe_fireEvery32Frames:
+.ifdef ENABLE_RING_REDUX
+	; don't shoot if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 	ld e,Enemy.counter1
 	ld a,(de)
 	and $1f

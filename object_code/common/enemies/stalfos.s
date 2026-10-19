@@ -64,6 +64,12 @@ stalfos_state_stub:
 
 ; Choosing what to do next (move in a random direction, or shoot a bone an Link)
 stalfos_state08:
+.ifdef ENABLE_RING_REDUX
+	; don't jump or shoot if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	jp z,stalfos_moveInRandomAngle
+.endif
 	call stalfos_checkSubid3StompsLink
 	; Above function call may pop its return address, ignoring everything below this
 
@@ -275,6 +281,13 @@ stalfos_checkJumpAwayFromLink:
 	ld a,(de)
 	or a
 	ret z
+
+.ifdef ENABLE_RING_REDUX
+	; don't dodge if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 
 	; Check specifically for w1WeaponItem being used?
 	ld a,(wLinkUsingItem1)

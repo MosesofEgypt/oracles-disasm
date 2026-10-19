@@ -594,6 +594,12 @@ fireKeese_subid1_setSpeedAndAnimateBasedOnCounter1:
 ;;
 ; @param[out]	cflag	c if Link is within 32 pixels of keese in each direction
 fireKeese_checkCloseToLink:
+.ifdef ENABLE_RING_REDUX
+	; don't shoot if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a ; NOTE: clears carry flag
+	ret z
+.endif
 	ld h,d
 	ld l,Enemy.yh
 	ldh a,(<hEnemyTargetY)

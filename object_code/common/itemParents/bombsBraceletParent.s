@@ -1,3 +1,10 @@
+.ifdef ENABLE_MULTI_RING
+remoteBombComboActive:
+	isRingEquipped PEACE_RING
+	ret nz
+	isRingEquipped BOMBERS_RING
+	ret
+.endif
 ;;
 ; ITEM_BOMBCHUS ($0d)
 parentItemCode_bombchu:

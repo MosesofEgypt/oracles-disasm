@@ -111,6 +111,12 @@ floormaster_state_uninitialized:
 
 ; State 1: only for subid 0 (spawner).
 floormaster_state1:
+.ifdef ENABLE_RING_REDUX
+	; don't spawn anything if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 	; Delete self if all floormasters were killed
 	ld h,d
 	ld l,Enemy.var33

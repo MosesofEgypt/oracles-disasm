@@ -108,6 +108,12 @@ m_EnemyCode $2d
 	call getRandomNumber_noPreserveVars
 	cp $b4
 	jr nc,@animate
+.ifdef ENABLE_RING_REDUX
+	; don't shoot if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	jr z,@animate
+.endif
 
 	ld b,PART_GOPONGA_PROJECTILE
 	call ecom_spawnProjectile

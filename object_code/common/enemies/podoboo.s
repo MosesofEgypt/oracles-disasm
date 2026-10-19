@@ -57,6 +57,12 @@ podoboo_state_stub:
 
 ; Subid 0: Waiting for Link to approach horizontally
 podoboo_state8:
+.ifdef ENABLE_RING_REDUX
+	; don't move if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 	ld h,d
 	ld l,Enemy.xh
 	ldh a,(<hEnemyTargetX)

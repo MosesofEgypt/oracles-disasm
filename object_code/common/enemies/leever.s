@@ -108,6 +108,12 @@ m_EnemyCode $0b
 
 ; Underground until counter1 reaches 0.
 @state8:
+.ifdef ENABLE_RING_REDUX
+	; don't emerge if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 	call ecom_decCounter1
 	ret nz
 	inc (hl)

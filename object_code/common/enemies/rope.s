@@ -219,6 +219,12 @@ rope_subid00:
 
 ; Moving around, checking whether to charge Link
 rope_state_moveAround:
+.ifdef ENABLE_RING_REDUX
+	; don't charge if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	jr z,++
+.endif
 	ld b,$0a
 	call objectCheckCenteredWithLink
 	jr nc,++

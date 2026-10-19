@@ -59,6 +59,12 @@ m_EnemyCode $2e
 
 ; Waiting for Link to approach
 @state9:
+.ifdef ENABLE_RING_REDUX
+	; don't track link if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 	ld h,d
 	ld l,Enemy.xh
 	ldh a,(<hEnemyTargetX)

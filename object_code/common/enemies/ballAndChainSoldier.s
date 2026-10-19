@@ -117,6 +117,12 @@ ballAndChain_stateHeld:
 
 ; Waiting for Link to be close enough to attack
 ballAndChain_state8:
+.ifdef ENABLE_RING_REDUX
+	; don't react to link if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	jp z,enemyAnimate
+.endif
 	ld c,$38
 	call objectCheckLinkWithinDistance
 	jr nc,@moveTowardLink

@@ -328,6 +328,12 @@ octorok_state_0b:
 	ld (hl),$20 ; [counter1] = $20 (wait this many frames after shooting)
 	ld l,e
 	ld (hl),$09 ; [state] = $09
+.ifdef ENABLE_RING_REDUX
+	; don't shoot if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 
 	ld b,PART_OCTOROK_PROJECTILE
 	call ecom_spawnProjectile

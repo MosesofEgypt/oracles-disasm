@@ -82,8 +82,14 @@ m_EnemyCode $30
 
 ; Standing in place for [counter1] frames
 @state8:
+.ifdef ENABLE_RING_REDUX
+	; don't move if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	jp z,enemyAnimate
+.endif
 	call ecom_decCounter1
-	jr nz,@animate
+	jp nz,enemyAnimate
 
 	; Set [counter1] to how long the crouch will last
 	call getRandomNumber_noPreserveVars
@@ -96,8 +102,6 @@ m_EnemyCode $30
 	ld (hl),$18
 	ld a,$01
 	jp enemySetAnimation
-@animate:
-	jp enemyAnimate
 
 
 ; Crouching before a leap

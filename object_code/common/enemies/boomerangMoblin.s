@@ -108,6 +108,12 @@ m_EnemyCode $0a
 ; Shoot a boomerang if Link is in that general direction; otherwise go back to state 8.
 @state_9:
 	call @gotoState8WithRandomAngleAndCounter
+.ifdef ENABLE_RING_REDUX
+	; don't shoot if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 	call objectGetAngleTowardEnemyTarget
 	add $04
 	and $18

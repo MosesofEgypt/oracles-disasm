@@ -119,6 +119,12 @@ fireballShooter_state9:
 	call fireballShooter_checkAllEnemiesKilled
 	; BUG: This does NOT return if it's just deleted itself! This could cause counter1
 	; to be dirty the next time an enemy is spawned in its former slot.
+.ifdef ENABLE_RING_REDUX
+	; don't shoot if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 
 	; Wait for Link to be far enough away
 	ld c,$24

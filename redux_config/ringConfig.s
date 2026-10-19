@@ -118,6 +118,13 @@
 	; takes precedence over SPIN_SWING_COUNTER
 ;	.define INDEFINITE_HURRICANE_SPIN
 
+	; determines whether to make link not collide with
+	; most enemies that are susceptable to befuddling.
+;	.define BEFUDDLING_INTANGIBILITY
+
+	; befuddling ring effect stays on if an enemy is killed in 1 hit
+	.define RETAIN_BEFUDDLING_ON_INSTAKILL
+
 	; determines how many sword beams will be allowed on
 	; screen when the ring combo to increase them is active.
 	.define SWORD_BEAM_LIMIT			2			; number of beams onscreen at once
@@ -159,7 +166,7 @@
 	; tier0: high-buff/good-utility
 	.macro TIER0_RINGS_AND_CUTOFFS
 		.db ENERGY_RING			12	; 1
-		.db FARMERS_RING		51	; 3
+		.db HASTE_RING			51	; 3
 		.db GREEN_LUCK_RING		76	; 2
 		.db RED_LUCK_RING		102	; 2
 		.db BLUE_LUCK_RING		127	; 2
@@ -182,7 +189,7 @@
 		.db RED_HOLY_RING		163	; 2
 		.db FAIRYS_RING			204	; 4	; yes this is in the tiers twice
 		.db HEART_RING_L1		214	; 1
-		.db HASTE_RING			245	; 3
+		.db ROCS_RING			245	; 3
 		.db LIGHT_RING_L1		255	; 1
 	.endm
 
@@ -194,7 +201,7 @@
 		.db CURSED_BLUE_RING	136	; 5
 		.db BOMBERS_RING		144	; 1
 		.db BOMBPROOF_RING		153	; 1
-		.db ROCS_RING			178	; 3
+		.db GREEN_JOY_RING		178	; 3
 		.db HIKERS_RING			187	; 1
 		.db FAIRYS_RING			221	; 4	; yes this is in the tiers twice
 		.db RED_JOY_RING		229	; 1
@@ -213,7 +220,7 @@
 		.db FIST_RING			209	; 5
 		.db TOSS_RING			242	; 5
 		.db STEADFAST_RING		248	; 1
-		.db GREEN_JOY_RING		255	; 1
+		.db FARMERS_RING		255	; 1
 	.endm
 
 	; tier4: best-buff/best-utility
@@ -228,7 +235,7 @@
 		; player was diligent enough to get every tier 1-4 ring
 		; ages secret
 		.db SPIN_RING			207	; 1
-		.db BUCKLER_RING		223	; 1
+		.db BEFUDDLING_RING		223	; 1
 		; seasons secret
 		.db CHARGE_RING			239	; 1
 		.db ZORA_SCALE_RING		255	; 1
@@ -270,10 +277,10 @@
 	m_RingListRow	HEART_RING_L2		RANG_RING_L2		EXPERTS_RING		LIGHT_RING_L2
 	m_RingListRow	BLAST_RING			PEACE_RING			BOMBPROOF_RING		BOMBERS_RING
 
-	m_RingListRow	HASTE_RING			HIKERS_RING			ZORA_SCALE_RING		BUCKLER_RING
+	m_RingListRow	HASTE_RING			HIKERS_RING			ZORA_SCALE_RING		ROCS_RING
 	m_RingListRow	GREEN_JOY_RING		RED_JOY_RING		BLUE_JOY_RING		GOLD_JOY_RING
-	m_RingListRow	STEADFAST_RING		MYSTIC_SEED_RING	TOSS_RING			ROCS_RING
-	m_RingListRow	FARMERS_RING		ALCHEMY_RING		DISCOVERY_RING		AZUCHU_RING
+	m_RingListRow	STEADFAST_RING		MYSTIC_SEED_RING	TOSS_RING			DISCOVERY_RING
+	m_RingListRow	FARMERS_RING		ALCHEMY_RING		BEFUDDLING_RING		AZUCHU_RING
 
 	m_RingListRow	GREEN_COLOR_RING	RED_COLOR_RING		BLUE_COLOR_RING		GOLD_COLOR_RING
 	m_RingListRow	DMG_COLOR_RING		GBA_NATURE_RING		CURSED_RED_RING		FAIRYS_RING

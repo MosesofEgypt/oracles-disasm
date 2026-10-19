@@ -92,9 +92,16 @@ dekuScrub_state_stub:
 
 ; Waiting for Link to be a certain distance away
 dekuScrub_state8:
+.ifdef ENABLE_RING_REDUX
+	; don't hide if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	jr z,+
+.endif
 	ld c,$2c
 	call objectCheckLinkWithinDistance
 	ret c
++
 	call ecom_decCounter1
 	ret nz
 
@@ -113,6 +120,25 @@ dekuScrub_state8:
 
 ; Link is at a good distance, wait a bit longer before emerging from bush
 dekuScrub_state9:
+.ifdef ENABLE_RING_REDUX
+	; don't hide if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	jr nz,+
+		ld h,d
+		ld l,Enemy.counter1
+		ld a,(hl)
+		or a
+		call nz,ecom_decCounter1
+		jr nz,++
+			ld l,Enemy.collisionType
+			set 7,(hl)
+			ld l,Enemy.var03
+			ld (hl),$02
+		++
+		jp dekuScrub_animate
+	+
+.endif
 	ld c,$2c
 	call objectCheckLinkWithinDistance
 	jp c,dekuScrub_hideInBush

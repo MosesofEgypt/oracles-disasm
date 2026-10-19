@@ -378,8 +378,16 @@ enemyCheckCollisions:
 	call checkLinkVulnerable
 	ret nc
 
+.ifdef BEFUDDLING_INTANGIBILITY
+	; if the enemy is being befuddled, don't collide with link or shield
+	ld a,(wBefuddlingRingFlags)
+	or a
+	jr nz,+
+		call isValidTargetForBefuddling
+		ret nz
+	+
+.endif
 	; Check for collision with link
-	; (hl points to link object from the call to checkLinkVulnerable)
 
 	; Check if Z positions are within 7 pixels
 	ld hl,w1Link.zh
@@ -415,23 +423,6 @@ enemyCheckCollisions:
 .ifdef ENABLE_RING_REDUX
 	; check link if the object didn't hit the shield
 	jr nc,@checkHitLink
-
-	; check if this is a parry
-	ld a,(wShieldParryTimers)
-	and $e0
-	jr z,+
-		; successful parry. stun enemy
-		ld a,ITEMCOLLISION_PEGASUS_SEED|$80
-		ldh (<hFF90),a
-		ld a,(w1Link.damage)	; backup
-		push af
-		xor a
-		ld (w1Link.damage),a
-		call @handleCollision
-		pop af
-		ld (w1Link.damage),a	; restore
-		ret
-	+
 
 	; Don't interact with if invincible
 	ldh a,(<hActiveObjectType)
@@ -2078,4 +2069,59 @@ isValidTargetForPogo:
 	dbrev %00100100 %10000000 ; 0x30-0x3f
 	dbrev %00000001 %00000001 ; 0x40-0x4f
 	dbrev %10000000 %00000000 ; 0x50-0x5f
+.endif
+
+.ifdef BEFUDDLING_INTANGIBILITY
+; @param	d	Object to check
+; @param[out]	zflag set if the enemy CANNOT be befuddled
+isValidTargetForBefuddling:
+	push de
+	push af
+	; only do it for enemies, not parts
+	ldh a,(<hActiveObjectType)
+	cp $80
+	jr z,+
+		xor a
+		ret
+	+
+
+	ld e,Enemy.id
+	ld a,(de)
+	ld hl,@befuddlingTargets
+	call checkFlagOptimized
+
+	pop de
+	ld a,d
+	pop de
+	ret
+
+@befuddlingTargets:
+	; 0x00-0x07:
+	; 0x08-0x0f: ENEMY_RIVER_ZORA, ENEMY_OCTOROK, ENEMY_BOOMERANG_MOBLIN,
+	;            ENEMY_LEEVER, ENEMY_ARROW_MOBLIN, ENEMY_LYNEL
+	; 0x10-0x17: ENEMY_ROPE, ENEMY_GIBDO, ENEMY_BEAMOS, ENEMY_GHINI
+	; 0x18-0x1f: ENEMY_BUZZBLOB, ENEMY_SAND_CRAB, ENEMY_SPINY_BEETLE,
+	;            ENEMY_IRON_MASK, ENEMY_ARMOS, ENEMY_PIRANHA
+	; 0x20-0x27: ENEMY_MASKED_MOBLIN, ENEMY_ARROW_DARKNUT,
+	;            ENEMY_ARROW_SHROUDED_STALFOS, ENEMY_POLS_VOICE,
+	;            ENEMY_LIKE_LIKE, ENEMY_GOPONGA_FLOWER, ENEMY_DEKU_SCRUB
+	; 0x28-0x2f: ENEMY_WALLMASTER, ENEMY_CHEEP_CHEEP
+	; 0x30-0x37: ENEMY_TEKTITE, ENEMY_STALFOS, ENEMY_KEESE, ENEMY_ZOL
+	;            ENEMY_FLOORMASTER, ENEMY_BUTTERFLY
+	; 0x38-0x3f: ENEMY_FIRE_KEESE, ENEMY_WATER_TEKTITE, ENEMY_SWORD_MOBLIN,
+	;            ENEMY_PEAHAT, ENEMY_MAGUNESU(seasons), ENEMY_BARI(ages)
+	; 0x40-0x47: ENEMY_WIZZROBE, ENEMY_CROW, ENEMY_GEL, ENEMY_PINCER
+	; 0x48-0x4f: ENEMY_SWORD_DARKNUT, ENEMY_SWORD_SHROUDED_STALFOS,
+	;            ENEMY_SWORD_MASKED_MOBLIN, ENEMY_BALL_AND_CHAIN_SOLDIER,
+	;            ENEMY_BLUE_CROW, ENEMY_HARDHAT_BEETLE, ENEMY_MOLDORM
+	; 0x50-0x57: ENEMY_FIREBALL_SHOOTER, ENEMY_BEETLE
+	; 0x58-0x5f: ENEMY_BUSH_OR_ROCK
+	dbrev %00000000 %11111100 ; 0x00-0x0f
+	dbrev %10100011 %10111110 ; 0x10-0x1f
+	dbrev %11111101 %10001000 ; 0x20-0x2f
+	dbrev %11101101 %01101110 ; 0x30-0x3f
+	dbrev %11010100 %11111101 ; 0x40-0x4f
+	dbrev %11000000 %10000000 ; 0x50-0x5f
+	dbrev %00000000 %00000000 ; 0x60-0x6f
+	dbrev %00000000 %00000000 ; 0x70-0x7f
 .endif

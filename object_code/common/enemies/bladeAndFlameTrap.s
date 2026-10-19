@@ -515,6 +515,12 @@ bladeTrap_checkObstructionsToTarget:
 ;			attack) before the trap can attack
 ; @param[out]	cflag	c if Link is in range
 bladeTrap_checkLinkAligned:
+.ifdef ENABLE_RING_REDUX
+	; don't move if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
 	ld c,b
 	sla c
 	inc c

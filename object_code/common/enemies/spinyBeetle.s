@@ -123,6 +123,13 @@ m_EnemyCode $1b
 	call ecom_decCounter2
 	ret nz
 
+.ifdef ENABLE_RING_REDUX
+	; don't move if befuddled
+	ld a,(wBefuddlingRingFlags)
+	or a
+	ret z
+.endif
+
 	ld b,$0c
 	call objectCheckCenteredWithLink
 	ret nc
