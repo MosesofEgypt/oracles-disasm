@@ -2240,10 +2240,13 @@ wLinkGrabState2: ; $cc5b/$cc76
 ; cc5c-cce9 treated as a block: cleared when loading a room through "whiteout" transition
 
 
-wLinkInAir: ; $cc5c/$cc77/$cc7f
-; Bit 7: lock link's movement direction, prevent jumping. (Jumping down a cliff, using
+wLinkInAir: ; $cc5c/$cc77/$cc81
+; Bit 7: lock link's movement direction, prevents jumping, and allows
+;        moving through solid tiles. (Jumping down a cliff, using a
 ;        gale seed, jumping into bed in Nayru's house, etc...)
+; Bit 6: Setting this seems to trigger link's flip animation
 ; Bit 5: If set, Link's gravity is reduced
+; Bit 4: If set, prevents rocs cape usage
 ; Bit 1: set when link is jumping
 ; Bit 0: set when jumping down a cliff
 ; If nonzero, Link's knockback durations are halved.
@@ -2274,16 +2277,21 @@ wLinkTurningDisabled: ; $cc60/$cc7b
 	db
 
 wLinkImmobilized: ; $cc61/$cc7c
-; Set when link is using an item which immobilizes him. Each bit corresponds to
-; a different item.
-; Bit 4: Set when Link is falling down a hole
-; Bit 5: Set every other frame while Link is latched by a gel
+	; Set when something is immobilizing link.
+	; Upper bits are cleared every frame, while lower bits persist.
+	; Each lower bit corresponds to a different item.
+	; Bit 5: Set every other frame while Link is latched by an enemy(i.e. gel)
+	; Bit 4: Set when Link is falling down a hole
+	; Bit 3: Set when immobilized by w1ParentItem5
+	; Bit 2: Set when immobilized by w1ParentItem4
+	; Bit 1: Set when immobilized by w1ParentItem3
+	; Bit 0: Set when immobilized by w1ParentItem2
 	db
 
 wcc62: ; $cc62
 	db
 
-wcc63: ; $cc63/$cc7e
+wcc63: ; $cc63/$cc7e/$cc88
 ; $cc63: set when link is holding a sword out?
 ; When bit 7 is set, item usage is disabled; when it equals $ff, Link is forced to do
 ; a sword spin. Maybe used when getting the sword in Seasons?

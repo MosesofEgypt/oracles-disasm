@@ -526,7 +526,7 @@ rickyState8:
 	rlca
 	jr c,@startTornadoCharge
 
-	ld a,SND_UNKNOWN5
+	ld a,SND_SWISH
 	jp playSound
 
 @startTornadoCharge:

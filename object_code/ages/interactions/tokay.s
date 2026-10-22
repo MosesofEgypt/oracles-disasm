@@ -584,7 +584,7 @@ tokayThief_countdownToStealNextItem:
 	ld a,TREASURE_MYSTERY_SEEDS
 +
 	call loseTreasure
-	ld a,SND_UNKNOWN5
+	ld a,SND_SWISH
 	jp playSound
 
 

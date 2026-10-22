@@ -98,7 +98,7 @@ parentItemCode_feather:
 
 @state1:
 	ld a,(wLinkInAir)
-	bit 5,a
+	and $30
 	jr nz,@deleteParent
 
 	call parentItemCheckButtonPressed

@@ -126,6 +126,9 @@ Removed rings:
     Energy Ring:
         Converted into Plunging Ring
 
+    Spin Ring:
+        Upgraded into Hurricane Ring
+
 
 New rings:
     Gold Ring:
@@ -217,6 +220,10 @@ New rings:
 
     Plunging Ring:
         Enables doing a downstab by using the sword while in the air.
+
+    Hurricane Ring:
+        Spin-attack 15 times while being able to move, but get dizzy once it ends.
+
 
 Modified rings:
     Unless stated otherwise, assume any unmentioned effects from the base game are still present.

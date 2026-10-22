@@ -64,7 +64,7 @@ m_InteractionCode $0c
 	.db SND_KILLENEMY	$00	; 0x08
 	.db SND_NONE		$03	; 0x09
 	.db SND_NONE		$03	; 0x0a
-	.db SND_UNKNOWN5	$02	; 0x0b
+	.db SND_SWISH	$02	; 0x0b
 	.db SND_BREAK_ROCK	$00	; 0x0c
 
 @state1:

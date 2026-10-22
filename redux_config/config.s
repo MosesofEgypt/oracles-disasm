@@ -162,11 +162,6 @@
 		; corner of link when slashing to the right
 ;		.define SWORD_SLASH_FULL_COVERAGE
 	.endif
-	.ifndef INDEFINITE_DOWNSTAB
-		; determines if link should return to a neutral pose
-		; upon hitting an enemy with a downstab
-;		.define INDEFINITE_DOWNSTAB
-	.endif
 	.ifndef ENABLE_EVIL_BULLSHIT_BEAMOS
 		; makes beamos fire homing beams.
 		; trust me, just don't. it's bullshit

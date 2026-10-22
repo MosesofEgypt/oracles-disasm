@@ -60,20 +60,17 @@ Combo Effects:
         Has the same heart requirements as shooting a sword beam.
         NOTE: Must have acquired the Slingshot or Seed Shooter.
 
-    14: Hurricane Spin:
-        Spin-attack 15 times while being able to move, but get dizzy once it ends.
-
-    15: Enter the SHMUP:
+    14: Enter the SHMUP:
         Hold charged sword to continually fire sword beams.
 
-    16: Become the Beamos:
+    15: Become the Beamos:
         Up to 2 sword beams on screen at once.
 
-    17: Smashing Board:
+    16: Smashing Board:
         Shield can be used as a weapon to tackle enemies.
         Damage dealt increases with shield level and your speed.
 
-    18: Judo Master:
+    17: Judo Master:
         Held items can be used to bonk enemies.
         Most enemies can be picked up and thrown.
         Press the button that the item was not picked up with to bonk.
@@ -103,9 +100,8 @@ Combo Requirements:
     11: Acrobat Combo + Expert's Ring
     12: Expert's Ring + Fist Ring
     13: Expert's Ring + Light Ring L-1 or L-2
-    14: Charge Ring + Spin Ring
-    15: Charge Ring + Light Ring L-1 or L-2
-    16: Light Ring L-1 + Light Ring L-2
-    17: Haste Ring + Steadfast Ring
-    18: Toss Ring  + Expert's Ring  or
+    14: Charge Ring + Light Ring L-1 or L-2
+    15: Light Ring L-1 + Light Ring L-2
+    16: Haste Ring + Steadfast Ring
+    17: Toss Ring  + Expert's Ring  or
         Toss Ring  + Fist Ring

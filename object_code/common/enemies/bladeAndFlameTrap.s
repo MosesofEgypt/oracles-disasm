@@ -193,7 +193,7 @@ bladeTrap_subid02:
 	ld l,Enemy.speed
 	ld a,(de)
 	ld (hl),a
-	ld a,SND_UNKNOWN5
+	ld a,SND_SWISH
 	jp playSound
 
 
@@ -323,7 +323,7 @@ bladeTrap_subid05:
 
 	ld l,Enemy.state
 	inc (hl)
-	ld a,SND_UNKNOWN5
+	ld a,SND_SWISH
 	jp playSound
 
 

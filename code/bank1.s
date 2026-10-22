@@ -4197,8 +4197,6 @@ updateRingEquipStatuses:
 	ld hl,wOptimizationFlags
 	bit 0,(hl)
 	ret nz
-	set 0,(hl)
-	res 1,(hl) ; indicate that the DMG palette needs to be refreshed
 
 	call clearRingEquipStatuses
 
@@ -4211,11 +4209,19 @@ updateRingEquipStatuses:
 	set 2,a
 	ld (wStatusBarNeedsRefresh),a
 
-.ifdef ENABLE_NEW_GAME_PLUS
+	; return if rings are disabled via the timer
 	ld a,(wRingsDisabledCounter)
 	or a
-	jr nz,++
-.endif
+	ret nz
+
+	; mark the sword damage as needing to be recalculated
+	ld (wSwordDamageCached),a
+
+	; mark the ring flags as having been recalculated
+	ld hl,wOptimizationFlags
+	set 0,(hl)
+	res 1,(hl) ; indicate that the DMG palette needs to be refreshed
+
 	; if the player can open the menu, then rings shouldn't be force-disabled.
 	ld a,(wMenuDisabled)
 	or a
@@ -4224,7 +4230,6 @@ updateRingEquipStatuses:
 	jr z,+
 		; if all rings are counted as disabled, don't unset any flags
 		bit 6,(hl)
-		++
 		ret nz
 	+
 

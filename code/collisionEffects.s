@@ -1978,18 +1978,27 @@ collisionLinkBounce:
 	; convert collisions that would damage link into an extra jump
 	push hl
 	push bc
-	ldbc $fd, $90
+	ld bc,$fd90
 	ld a,(wActiveGroup)
 	cp FIRST_SIDESCROLL_GROUP
 	jr c,+
 		; Jump higher in sidescrolling rooms
-		ldbc $fd, $00
+		ld bc,$fd00
 	+
 	ld hl,w1Link.speedZ
 	ld (hl),c
 	inc l
 	ld (hl),b
 	pop bc
+
+	; remove reduced gravity and trigger flip
+	ld a,(wFeatherLevel)
+	cp $02
+	ld a,$40
+	jr c,+
+		ld a,$41
+	+
+	ld (wLinkInAir),a
 
 	ld h,d
 	ld a,e

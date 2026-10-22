@@ -520,7 +520,7 @@ linkCutscene3_ages:
 	ld (hl),SPEED_180
 	ld l,SpecialObject.counter1
 	ld (hl),$16
-	ld a,SND_UNKNOWN5
+	ld a,SND_SWISH
 	call playSound
 	ld a,$03
 	jp specialObjectSetAnimation
@@ -550,7 +550,7 @@ linkCutscene3_ages:
 @substate7:
 	call linkCutscene_animateAndDecCounter1
 	jp nz,objectApplySpeed
-	ld a,SND_UNKNOWN5
+	ld a,SND_SWISH
 	call playSound
 	jp itemIncSubstate
 

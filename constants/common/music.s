@@ -259,7 +259,7 @@
 	SND_LIGHTTORCH          db ; $72
 	SND_KILLENEMY           db ; $73
 	SND_SWORDSLASH          db ; $74
-	SND_UNKNOWN5            db ; $75 ; A type of sword slash, blade trap, ricky punch
+	SND_SWISH               db ; $75 ; A type of sword slash, blade trap, ricky punch
 	SND_SHIELD              db ; $76 ; Also played when using shield
 	SND_DROPESSENCE         db ; $77
 	SND_BOOMERANG           db ; $78

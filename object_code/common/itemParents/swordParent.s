@@ -1,10 +1,4 @@
 .ifdef ENABLE_RING_REDUX
-hurricaneSpinComboActive:
-	isRingEquipped SPIN_RING
-	ret nz
-	isRingEquipped CHARGE_RING
-	ret
-
 beamosComboActive:
 	isRingEquipped LIGHT_RING_L1
 	ret nz
@@ -119,12 +113,12 @@ parentItemCode_sword:
 		ret nz
 		++
 	.endif
-	jp @setAsPlungingAttack
+	jp @doPlungingAttack
 .else
 	jp itemCreateChild
 .endif
 
-@setAsPlungingAttack:
+@doPlungingAttack:
 	ld e,Item.state
 	ld a,$07
 	ld (de),a
@@ -140,10 +134,10 @@ parentItemCode_sword:
 	; draw sword in-front of link if he's facing any direction but up
 	ld a,(w1Link.direction)
 	cpa DIR_UP
-	ld a,$80
+	ld a,$81
 	jr nz,+
 		; draw behind
-		or $02
+		inc a
 	+
 	ld (w1WeaponItem.visible),a
 	ret
@@ -156,12 +150,35 @@ parentItemCode_sword:
 	ld (de),a
 
 	; Set child item to state 4 (swordspinning and downstabbing)
-	ld a,$07
-	ld (w1WeaponItem.state),a
+	ld hl,w1WeaponItem.state
+	ld (hl),$07
+
+	; multiply base damage by 1.6666x
+	ld l,Item.var3a
+	ld a,(hl)
+	sra a
+	add (hl)
+	ld (hl),a
+
+	; make link start to fall
+	ld hl,w1Link.speedZ
+	ld bc,$0180
+	ld (hl),c
+	inc l
+	ld (hl),b
+
+	; disable item use until attack finishes
+	ld a,$80
+	ld (wcc63),a
 
 ; holding plunging attack stance
 @state8:
 	call specialObjectAnimate_optimized
+
+	; remove reduced gravity and prevent further jumping
+	ld hl,wLinkInAir
+	res 5,(hl)
+	set 4,(hl)
 
 	; check if link hit ground
 	ld a,(w1Link.zh)
@@ -173,7 +190,7 @@ parentItemCode_sword:
 		ld (de),a
 
 		; setup a recoil counter
-		ld a,$10
+		ld a,$1e
 		ld e,Item.counter1
 		ld (de),a
 
@@ -197,40 +214,43 @@ parentItemCode_sword:
 		xor a
 		ld (wScreenShakeMagnitude),a
 
+		; reenable jumping
+		xor a
+		ld (wLinkInAir),a
+
 		ld a,SND_DOORCLOSE
 		jp playSound
 	+
 
-	; if the sword dealt damage, make link bounce
+	; if the sword hit something, make link bounce
 	ld hl,w1WeaponItem.var2a
 	bit 0,(hl)
-	jr z,++
-		res 0,(hl)
+	ret z
+	res 0,(hl)
 
-		ld hl,w1Link.speedZ+1
-		bit 7,(hl)
-		jr nz,++
-			dec l
-			ldbc $fd, $90
-			ld a,(wActiveGroup)
-			cp FIRST_SIDESCROLL_GROUP
-			jr c,+
-				; Jump higher in sidescrolling rooms
-				ld bc,$fd00
-			+
-			ld (hl),c
-			inc l
-			ld (hl),b
+	; don't bounce unless currently moving downward
+	ld hl,w1Link.speedZ+1
+	bit 7,(hl)
+	ret nz
 
-			.ifndef INDEFINITE_DOWNSTAB
-				; stop downstabbing now that a hit has connected
-				call @deleteSelf
+	dec l
+	ld bc,$fd90
+	ld a,(wActiveGroup)
+	cp FIRST_SIDESCROLL_GROUP
+	jr c,+
+		; Jump higher in sidescrolling rooms
+		ld bc,$fd00
+	+
+	ld (hl),c
+	inc l
+	ld (hl),b
 
-				ld a,LINK_ANIM_MODE_JUMP
-				jp specialObjectSetAnimationWithLinkData
-			.endif
-	++
-	ret
+	; trigger the flip animation and reenable jumping
+	ld hl,wLinkInAir
+	ld (hl),$40
+
+	; stop downstabbing now that a hit has connected
+	jp @deleteSelf
 
 ; landed during plunging attack(several frames of downtime)
 @state9:
@@ -406,11 +426,15 @@ parentItemCode_sword:
 	ld (wcc63),a
 	ld l,Item.state
 	ld (hl),$04
+.ifdef ENABLE_RING_REDUX
+	ld a,$05
+.else
 	isRingEquipped SPIN_RING
 	ld a,$05
 	jr nz,+
 	ld a,$09
 +
+.endif
 	ld l,Item.counter1
 	ld (hl),a
 	ld l,Item.var3f
@@ -437,6 +461,8 @@ parentItemCode_sword:
 
 	ld hl,w1WeaponItem.state
 	ld (hl),$04
+
+	; double base damage for spin attack
 	ld l,Item.var3a
 	sla (hl)
 
@@ -445,7 +471,7 @@ parentItemCode_sword:
 	ld a,(hl)
 	or (hl)
 	jr nz,+
-		call hurricaneSpinComboActive
+		isRingEquipped HURRICANE_RING
 		ld h,d
 		ld l,Item.var2f
 		ld (hl),$00

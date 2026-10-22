@@ -1056,9 +1056,9 @@ ralphSubid00Script:
 	checkmemoryeq wTmpcfc0.genericCutscene.cfd0, $11
 
 	setspeed SPEED_180
-	playsound SND_UNKNOWN5
+	playsound SND_SWISH
 	movedown $16
-	playsound SND_UNKNOWN5
+	playsound SND_SWISH
 
 @faceVeranGhost:
 	wait 1

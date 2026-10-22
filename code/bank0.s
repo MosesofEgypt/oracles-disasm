@@ -2518,7 +2518,7 @@ vblankDmaFunction:
 		dec a	; set a to 0 and also check if the menu type is inventory
 		jr z,+
 			dec a	; check if map menu
-			jr z,++
+			jr z,+++
 
 			; if outside the inventory menu, we can transfer a bit more
 			ld c,$51
@@ -2527,7 +2527,7 @@ vblankDmaFunction:
 			ld a,(wOptimizationFlags)
 			bit 4,a
 			jr z,+
-				++
+				+++
 				; need to allow a good bit more transfering for gasha anim
 				ld c,$61
 		+
@@ -9364,29 +9364,33 @@ getRingBoxLevel:
 
 ;;
 disableActiveRing:
-	push hl
-.ifdef ENABLE_MULTI_RING
-	ld hl,wRingReduxFlags
-.else
-	ld hl,wActiveRing
-.endif
-	set 6,(hl)
-	pop hl
-	ret
+	scf
+	ccf
+	jr +
 
 ;;
 enableActiveRing:
+	scf
+	+
 	push hl
 .ifdef ENABLE_MULTI_RING
+	; mark the ring flags as needing to be recalculated
+	ld hl,wOptimizationFlags
+	res 0,(hl)
 	ld hl,wRingReduxFlags
+	set 6,(hl)
+	jr nc,+
+		res 6,(hl)
 .else
 	ld hl,wActiveRing
-	ld a,(hl)
-	cp $ff
-	jr z,+
+	set 6,(hl)
+	jr nc,+
+		ld a,$ff
+		cp (hl)
+		jr z,+
+			res 6,(hl)
 .endif
-	res 6,(hl)
-+
+	+
 	pop hl
 	ret
 

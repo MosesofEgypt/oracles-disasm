@@ -241,7 +241,7 @@ groups:
   - name: TX_306f
     index: 0x6f
     text: |-
-      Spin Ring
+      Hurricane Ring
 
   - name: TX_3070
     index: 0x70
@@ -583,7 +583,8 @@ groups:
   - name: TX_30af
     index: 0xaf
     text: |-
-      Dbl. Spin Attack\jump(0xc2)
+      Spin attack till
+      you become dizzy
 
   - name: TX_30b0
     index: 0xb0

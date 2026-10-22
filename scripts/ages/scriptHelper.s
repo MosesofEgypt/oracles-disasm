@@ -8455,7 +8455,11 @@ plenSubid0Script:
 	setglobalflag GLOBALFLAG_BEGAN_PLEN_SECRET
 	showtext TX_3702
 	wait 30
+.ifdef ENABLE_RING_REDUX
+	asm15 giveRingAToLink, HURRICANE_RING
+.else
 	asm15 giveRingAToLink, SPIN_RING
+.endif
 	setglobalflag GLOBALFLAG_DONE_PLEN_SECRET
 	wait 30
 	showtext TX_3704
