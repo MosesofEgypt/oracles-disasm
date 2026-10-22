@@ -251,7 +251,7 @@ groups:
   - name: TX_3071
     index: 0x71
     text: |-
-      Energy Ring
+      Plunging Ring
 
   - name: TX_3072
     index: 0x72
@@ -593,7 +593,8 @@ groups:
   - name: TX_30b1
     index: 0xb1
     text: |-
-      Charge fire beam\jump(0xc2)
+      Use sword in air
+      to do a downstab
 
   - name: TX_30b2
     index: 0xb2

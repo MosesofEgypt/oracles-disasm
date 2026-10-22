@@ -102,10 +102,10 @@ Combo Requirements:
     10: Roc's Ring + Steadfast Ring
     11: Acrobat Combo + Expert's Ring
     12: Expert's Ring + Fist Ring
-    13: Expert's Ring + Energy Ring
-    14: Spin Ring   + Charge Ring
-    15: Energy Ring + Charge Ring
-    16: Energy Ring + Light Ring L-1 or L-2
+    13: Expert's Ring + Light Ring L-1 or L-2
+    14: Charge Ring + Spin Ring
+    15: Charge Ring + Light Ring L-1 or L-2
+    16: Light Ring L-1 + Light Ring L-2
     17: Haste Ring + Steadfast Ring
     18: Toss Ring  + Expert's Ring  or
         Toss Ring  + Fist Ring

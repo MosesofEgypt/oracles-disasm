@@ -2,7 +2,9 @@
 hadoukenComboActive:
 	isRingEquipped EXPERTS_RING
 	ret nz
-	isRingEquipped ENERGY_RING
+	isRingEquipped LIGHT_RING_L2
+	ret z
+	isRingEquipped LIGHT_RING_L2
 	ret
 .endif
 

@@ -122,6 +122,12 @@ item27Animations:
 	.dw itemAnimation1e7bc
 	.dw itemAnimation1e7bf
 	.dw itemAnimation1e7c2
+	; animations for downstabbing
+	.dw itemAnimationDownstab0
+	.dw itemAnimationDownstab1
+	.dw itemAnimationDownstab2
+	.dw itemAnimationDownstab3
+
 item06Animations:
 	.dw itemAnimation1e7c5
 item0dAnimations:
@@ -235,6 +241,16 @@ itemAnimation1e7c5:
 	.db $02 $04 $00
 	.db $02 $06 $01
 	m_AnimationLoop itemAnimation1e7c5
+
+; animations for downstabbing
+itemAnimationDownstab0:
+	.db $7f $10 $00
+itemAnimationDownstab1:
+	.db $7f $12 $00
+itemAnimationDownstab2:
+	.db $7f $14 $00
+itemAnimationDownstab3:
+	.db $7f $16 $00
 
 itemAnimation1e7d3:
 	.db $06 $00 $00
@@ -379,6 +395,11 @@ item07OamDataPointers: ; 0x1e8ca
 	.dw itemOamData4d005
 	.dw itemOamData4cfab
 	.dw itemOamData4cff3
+	; animations for downstabbing
+	.dw itemOamDataDownstab0
+	.dw itemOamDataDownstab1
+	.dw itemOamDataDownstab2
+	.dw itemOamDataDownstab3
 
 item06OamDataPointers: ; 0x1e8da
 	.dw itemOamData4cf99

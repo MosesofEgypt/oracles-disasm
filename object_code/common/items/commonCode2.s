@@ -120,6 +120,7 @@ tryBreakTileWithExpertsRing:
 tryBreakTileWithSword_calculateLevel:
 	; Use BREAKABLETILESOURCE_SWORD_L1 or L2 depending on sword's level
 	ld c,a
+tryBreakTileWithSwordDirInC_calculateLevel:
 	ld a,(wSwordLevel)
 
 .ifdef ENABLE_RING_REDUX

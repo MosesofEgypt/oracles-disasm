@@ -571,6 +571,7 @@ updateScreenShake:
 	.db $fe $ff $01 $02 ; [wScreenShakeMagnitude] == 0
 	.db $ff $ff $01 $01 ; 1
 	.db $fd $fd $03 $03 ; 2
+	.db $fc $fc $04 $04 ; 3
 
 ;;
 ; Sets wGfxRegs2.SCY and SCX based on wScreenOffsetY/X and hCameraY/X.

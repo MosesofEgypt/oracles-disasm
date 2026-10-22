@@ -7090,7 +7090,7 @@ templeGreatFairyScript_beginningSecret:
 	showtextlowindex <TX_4103
 	wait 30
 .ifdef ENABLE_GASHA_REBALANCE
-	asm15 {SCRIPTS_HELP}.linkedScript_giveRing, CHARGE_RING
+	asm15 {SCRIPTS_HELP}.linkedScript_giveRing, PLUNGING_RING
 .else
 	asm15 {SCRIPTS_HELP}.linkedScript_giveRing, HEART_RING_L1
 .endif

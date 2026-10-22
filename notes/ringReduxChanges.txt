@@ -123,6 +123,9 @@ Removed rings:
     Zora Ring:
         Converted into Azuchu's Ring
 
+    Energy Ring:
+        Converted into Plunging Ring
+
 
 New rings:
     Gold Ring:
@@ -211,6 +214,9 @@ New rings:
 
     Game Boy Ring:
         Changes color palettes to resemble playing on an original Game Boy
+
+    Plunging Ring:
+        Enables doing a downstab by using the sword while in the air.
 
 Modified rings:
     Unless stated otherwise, assume any unmentioned effects from the base game are still present.

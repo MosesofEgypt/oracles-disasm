@@ -157,6 +157,16 @@
 		; being able to push them away is a nice feature sometimes.
 		.define MAGNET_GLOVES_CAN_PUSH_ENEMIES
 	.endif
+	.ifndef SWORD_SLASH_FULL_COVERAGE
+		; determines if sword slashes cover the bottom-right
+		; corner of link when slashing to the right
+;		.define SWORD_SLASH_FULL_COVERAGE
+	.endif
+	.ifndef INDEFINITE_DOWNSTAB
+		; determines if link should return to a neutral pose
+		; upon hitting an enemy with a downstab
+;		.define INDEFINITE_DOWNSTAB
+	.endif
 	.ifndef ENABLE_EVIL_BULLSHIT_BEAMOS
 		; makes beamos fire homing beams.
 		; trust me, just don't. it's bullshit

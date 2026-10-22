@@ -6,17 +6,17 @@ hurricaneSpinComboActive:
 	ret
 
 beamosComboActive:
-	isRingEquipped ENERGY_RING
+	isRingEquipped LIGHT_RING_L1
 	ret nz
-	isRingEquipped LIGHT_RING_L2
-	ret z
 	isRingEquipped LIGHT_RING_L2
 	ret
 
 swordShmupComboActive:
-	isRingEquipped ENERGY_RING
-	ret nz
 	isRingEquipped CHARGE_RING
+	ret nz
+	isRingEquipped LIGHT_RING_L1
+	ret z
+	isRingEquipped LIGHT_RING_L2
 	ret
 .endif
 
@@ -61,10 +61,16 @@ parentItemCode_sword:
 	.dw @state4
 	.dw @state5
 	.dw @state6
+	.dw @state7
+	.dw @state8
+	.dw @state9
 
 
 ; Initialization
 @state0:
+	xor a
+	ld e,Item.var2f
+	ld (de),a
 	ld hl,wcc63
 	bit 7,(hl)
 	jr nz,++
@@ -82,8 +88,8 @@ parentItemCode_sword:
 	ld e,Item.var3a
 	ld a,$f8
 	ld (de),a
-++
 .endif
+++
 	; Initialize child item
 	ld hl,w1WeaponItem.enabled
 	ld a,(hl)
@@ -94,7 +100,145 @@ parentItemCode_sword:
 	ld l,Item.enabled
 	set 7,(hl)
 	call parentItemLoadAnimationAndIncState
+.ifdef ENABLE_RING_REDUX
+	call itemCreateChild
+	ret c ; failed to create child
+
+	isRingEquipped PLUNGING_RING
+	ret nz
+	ld a,(wLinkInAir)
+	or a
+	ret z
+	.if defined(ROM_COMBO) || defined(ROM_AGES)
+		.if defined(ROM_COMBO)
+			call wIsSeasons
+			jr c,++
+		.endif
+		ld a,(wTilesetFlags)
+		and TILESETFLAG_UNDERWATER
+		ret nz
+		++
+	.endif
+	jp @setAsPlungingAttack
+.else
 	jp itemCreateChild
+.endif
+
+@setAsPlungingAttack:
+	ld e,Item.state
+	ld a,$07
+	ld (de),a
+
+	; mark this as a plunging attack
+	ld a,$02
+	ld e,Item.var2f
+	ld (de),a
+
+	ld a,LINK_ANIM_MODE_DOWNSTAB
+	call specialObjectSetAnimationWithLinkData
+
+	; draw sword in-front of link if he's facing any direction but up
+	ld a,(w1Link.direction)
+	cpa DIR_UP
+	ld a,$80
+	jr nz,+
+		; draw behind
+		or $02
+	+
+	ld (w1WeaponItem.visible),a
+	ret
+
+; starting plunging attack
+@state7:
+	; move to holding stance
+	ld a,$08
+	ld e,Item.state
+	ld (de),a
+
+	; Set child item to state 4 (swordspinning and downstabbing)
+	ld a,$07
+	ld (w1WeaponItem.state),a
+
+; holding plunging attack stance
+@state8:
+	call specialObjectAnimate_optimized
+
+	; check if link hit ground
+	ld a,(w1Link.zh)
+	bit 7,a
+	jr nz,+
+		; move to landing stance
+		ld a,$09
+		ld e,Item.state
+		ld (de),a
+
+		; setup a recoil counter
+		ld a,$10
+		ld e,Item.counter1
+		ld (de),a
+
+		ld c,$09
+		-
+			dec c
+			push bc
+			callab itemCode.tryBreakTileWithSwordDirInC_calculateLevel
+			pop bc
+			ld a,c
+			or a
+			jr nz,-
+
+		; move the sword item into the shockwave state
+		ld a,$08
+		ld (w1WeaponItem.state),a
+
+		; make a nice impact sound and visual effect
+		ld a,$04
+		call setScreenShakeCounter
+		xor a
+		ld (wScreenShakeMagnitude),a
+
+		ld a,SND_DOORCLOSE
+		jp playSound
+	+
+
+	; if the sword dealt damage, make link bounce
+	ld hl,w1WeaponItem.var2a
+	bit 0,(hl)
+	jr z,++
+		res 0,(hl)
+
+		ld hl,w1Link.speedZ+1
+		bit 7,(hl)
+		jr nz,++
+			dec l
+			ldbc $fd, $90
+			ld a,(wActiveGroup)
+			cp FIRST_SIDESCROLL_GROUP
+			jr c,+
+				; Jump higher in sidescrolling rooms
+				ld bc,$fd00
+			+
+			ld (hl),c
+			inc l
+			ld (hl),b
+
+			.ifndef INDEFINITE_DOWNSTAB
+				; stop downstabbing now that a hit has connected
+				call @deleteSelf
+
+				ld a,LINK_ANIM_MODE_JUMP
+				jp specialObjectSetAnimationWithLinkData
+			.endif
+	++
+	ret
+
+; landed during plunging attack(several frames of downtime)
+@state9:
+	call itemDecCounter1
+	ret nz
+
+	; done recoiling
+	jp @deleteSelf
 
 
 ; Sword being swung
@@ -217,19 +361,20 @@ parentItemCode_sword:
 	ld (hl),a
 	ret nc
 
-	isRingEquipped ENERGY_RING
-	jr nz,+
-
-	call @createSwordBeam
 .ifdef ENABLE_RING_REDUX
 	call swordShmupComboActive
-	jp nz,@triggerSwordPoke
+	jr nz,+
+		call @createSwordBeam
+
 		ld h,d
 		ld l,Item.counter1
 		ld (hl),SUPER_BEAM_DELAY
 		ret
 .else
-	jp @triggerSwordPoke
+	isRingEquipped ENERGY_RING
+	jr nz,+
+		call @createSwordBeam
+		jp @triggerSwordPoke
 .endif
 +
 	ld l,Item.state

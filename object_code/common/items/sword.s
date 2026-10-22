@@ -13,6 +13,8 @@ itemCode05:
 	.dw @state4
 	.dw @state5
 	.dw @state6
+	.dw @state7
+	.dw @state8
 
 @swordSounds:
 	.db SND_SWORDSLASH
@@ -104,6 +106,11 @@ itemCode05:
 	ld a,$01
 	ld (de),a
 
+	; don't change rendering mode if this as a plunging attack
+	ld a,(w1ParentItem2.var2f)
+	bit 1,a
+	ret nz
+
 	jp objectSetVisible82
 
 ; b0: collisionType
@@ -128,10 +135,24 @@ itemCode05:
 .endif
 
 
+; State 8: downstabbing shockwave
+@state8:
+	; prevent link from being knocked back
+	xor a
+	ld (w1Link.knockbackCounter),a
+
+	; change the swords damage type to a weak shield bump to
+	; act as a shockwave for knocking away nearby enemies
+	ld a,$80 | ITEMCOLLISION_L1_SHIELD
+	jr +
+
+; State 7: downstabbing
+@state7:
 ; State 4: swordspinning
 @state4:
-	ld e,Item.collisionType
 	ld a, $80 | ITEMCOLLISION_SWORDSPIN
+	+
+	ld e,Item.collisionType
 	ld (de),a
 
 

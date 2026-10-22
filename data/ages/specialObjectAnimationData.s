@@ -268,62 +268,63 @@ specialObject08GfxPointers:
 
 specialObject00AnimationDataPointers:
 specialObject09AnimationDataPointers:
-	.dw animationData19e72
-	.dw animationData19e7b
-	.dw animationData19e75
-	.dw animationData19e8f
-	.dw animationData19ea9
-	.dw animationData19eb4
-	.dw animationData19eba
-	.dw animationData19ec5
-	.dw animationData19ed0
-	.dw animationData19ed5
-	.dw animationData19eda
-	.dw animationData19ee3
-	.dw animationData19eeb
-	.dw animationData19ef3
-	.dw animationData19eff
-	.dw animationData19f05
-	.dw animationData19f0b
-	.dw animationData19f34
-	.dw animationData19f5e
-	.dw animationData19f3c
-	.dw animationData19f47
-	.dw animationData19f5b
-	.dw animationData19f6a
-	.dw animationData19f70
-	.dw animationData19f78
-	.dw animationDataRocsCape
-	.dw animationData19f84
-	.dw animationData19f90
-	.dw animationData19fa5
-	.dw animationData19faa
-	.dw animationData19faa
-	.dw animationData19fdd
-	.dw animationData19fe6
-	.dw animationData19fe9
-	.dw animationData19fef
-	.dw animationData19ffe
-	.dw animationData1a010
-	.dw animationData1a013
-	.dw animationData1a019
-	.dw animationData1a025
-	.dw animationData1a037
-	.dw animationData1a03d
-	.dw animationData1a043
-	.dw animationData1a049
-	.dw animationData1a051
-	.dw animationData1a05a
-	.dw animationData1a063
-	.dw animationData1a06f
-	.dw animationData1a08d
-	.dw animationData1a093
-	.dw animationData1a099
-	.dw animationData1a09f
-	.dw animationData19ff2
-	.dw animationData1a01c
-	.dw animationData1a05d
-	.dw animationData1a069
+	.dw animationData19e72 ; $00
+	.dw animationData19e7b ; $01
+	.dw animationData19e75 ; $02
+	.dw animationData19e8f ; $03
+	.dw animationData19ea9 ; $04
+	.dw animationData19eb4 ; $05
+	.dw animationData19eba ; $06
+	.dw animationData19ec5 ; $07
+	.dw animationData19ed0 ; $08
+	.dw animationData19ed5 ; $09
+	.dw animationData19eda ; $0a
+	.dw animationData19ee3 ; $0b
+	.dw animationData19eeb ; $0c
+	.dw animationData19ef3 ; $0d
+	.dw animationData19eff ; $0e
+	.dw animationData19f05 ; $0f
+	.dw animationData19f0b ; $10
+	.dw animationData19f34 ; $11
+	.dw animationData19f5e ; $12
+	.dw animationData19f3c ; $13
+	.dw animationData19f47 ; $14
+	.dw animationData19f5b ; $15
+	.dw animationData19f6a ; $16
+	.dw animationData19f70 ; $17
+	.dw animationData19f78 ; $18
+	.dw animationDataRocsCape ; $19
+	.dw animationData19f84 ; $1a
+	.dw animationData19f90 ; $1b
+	.dw animationData19fa5 ; $1c
+	.dw animationData19faa ; $1d
+	.dw animationData19faa ; $1e
+	.dw animationData19fdd ; $1f
+	.dw animationData19fe6 ; $20
+	.dw animationData19fe9 ; $21
+	.dw animationData19fef ; $22
+	.dw animationData19ffe ; $23
+	.dw animationData1a010 ; $24
+	.dw animationData1a013 ; $25
+	.dw animationData1a019 ; $26
+	.dw animationData1a025 ; $27
+	.dw animationData1a037 ; $28
+	.dw animationData1a03d ; $29
+	.dw animationData1a043 ; $2a
+	.dw animationData1a049 ; $2b
+	.dw animationData1a051 ; $2c
+	.dw animationData1a05a ; $2d
+	.dw animationData1a063 ; $2e
+	.dw animationData1a06f ; $2f
+	.dw animationData1a08d ; $30
+	.dw animationData1a093 ; $31
+	.dw animationData1a099 ; $32
+	.dw animationData1a09f ; $33
+	.dw animationData19ff2 ; $34
+	.dw animationData1a01c ; $35
+	.dw animationData1a05d ; $36
+	.dw animationData1a069 ; $37
+	.dw animationDataDownstabbing ; $38
 
 specialObject01AnimationDataPointers:
 	.dw animationData19e56
@@ -660,13 +661,25 @@ animationData19f78:
 	.db $09 $e4 $00
 	.db $09 $e8 $00
 	.db $06 $ec $00
+animationData19f78Loop:
 	.db $7f $80 $ff
+	m_AnimationLoop animationData19f78Loop
 
 ; CROSSITEMS: Added roc's cape animation
 animationDataRocsCape:
 	.db $06 $00 $00
 	.db $28 $00 $00
+animationDataRocsCapeLoop:
 	.db $7f $80 $ff
+	m_AnimationLoop animationDataRocsCapeLoop
+
+animationDataDownstabbing:
+	.db $02 $b0 $00
+	.db $02 $b0 $02
+	.db $02 $f8 $04
+animationDataDownstabbingLoop:
+	.db $7f $f8 $06
+	m_AnimationLoop animationDataDownstabbingLoop
 
 animationData19f84:
 	.db $04 $f8 $00

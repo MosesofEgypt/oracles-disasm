@@ -155,9 +155,9 @@
 	.define RING_TIER_1_MIN_KILLS		50
 	.define RING_TIER_0_MIN_KILLS		55
 
-	; The following are the rings that drop per tier, followed by
-	; cutoffs for the chance to drop. the comment after the cutoff
-	; is the weight that the above cutoffs were derived from.
+	; The following are the rings that drop per tier, followed
+	; by cutoffs for the chance to drop. the comment after the
+	; cutoff is the weight that the cutoff was derived from.
 
 	;-------------------------------------------------------------------------
 	; NOTE: IF YOU CHANGE THE RINGS LISTED, YOU MUST UPDATE @ringTierMaskTable
@@ -165,7 +165,7 @@
 
 	; tier0: high-buff/good-utility
 	.macro TIER0_RINGS_AND_CUTOFFS
-		.db ENERGY_RING			12	; 1
+		.db CHARGE_RING			12	; 1
 		.db HASTE_RING			51	; 3
 		.db GREEN_LUCK_RING		76	; 2
 		.db RED_LUCK_RING		102	; 2
@@ -237,7 +237,7 @@
 		.db SPIN_RING			207	; 1
 		.db BEFUDDLING_RING		223	; 1
 		; seasons secret
-		.db CHARGE_RING			239	; 1
+		.db PLUNGING_RING		239	; 1
 		.db ZORA_SCALE_RING		255	; 1
 	.else
 		.db GREEN_RING			109	; 3
@@ -273,7 +273,7 @@
 	m_RingListRow	GOLD_RING			GREEN_LUCK_RING		RED_LUCK_RING		BLUE_LUCK_RING
 
 	m_RingListRow	HEART_RING_L1		RANG_RING_L1		FIST_RING			LIGHT_RING_L1
-	m_RingListRow	ENERGY_RING			SPIN_RING			CHARGE_RING			VICTORY_RING
+	m_RingListRow	PLUNGING_RING		SPIN_RING			CHARGE_RING			VICTORY_RING
 	m_RingListRow	HEART_RING_L2		RANG_RING_L2		EXPERTS_RING		LIGHT_RING_L2
 	m_RingListRow	BLAST_RING			PEACE_RING			BOMBPROOF_RING		BOMBERS_RING
 

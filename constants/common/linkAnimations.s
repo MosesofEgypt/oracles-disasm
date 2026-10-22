@@ -58,5 +58,6 @@ LINK_ANIM_MODE_34		db ; $34
 LINK_ANIM_MODE_35		db ; $35: Swinging sword on minecart
 LINK_ANIM_MODE_36		db ; $36: Swinging sword with mermaid suit
 LINK_ANIM_MODE_37		db ; $37: Swinging sword with mermaid suit
+LINK_ANIM_MODE_DOWNSTAB db ; $38: downstabbing
 
 .ende

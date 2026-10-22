@@ -8,14 +8,17 @@ if len(sys.argv) < 3:
 
 outputFile  = sys.argv[1]
 dataFiles   = sys.argv[2:]
+'''
+git_dir     = "F:/My Files/Applications/My Repos/orcles-disasm/"
+outputFile  = git_dir + "/build_combo_h/specialObjectAnimationData.s"
+dataFiles   = [
+    git_dir + "/data/ages/specialObjectAnimationData.s",
+    git_dir + "/data/seasons/specialObjectAnimationData.s"
+    ]
+'''
 
 fname_lower = os.path.basename(outputFile).split(".")[0].lower()
 is_oamdata  = fname_lower.endswith("oamdata")
-
-#git_dir         = "F:/My Files/Applications/My Repos/orcles-disasm/"
-#outputFile      = git_dir + "/build_combo_h/interactionOamData.s"
-#agesDataFile    = git_dir + "/data/ages/interactionOamData.s"
-#seasonsDataFile = git_dir + "/data/seasons/interactionOamData.s"
 
 def remove_duplicates(entries, entry_order):
     entries_by_data = {v: k for k, v in entries.items()}
@@ -56,6 +59,7 @@ def read_and_combine_data(filepath):
                   "enemyAnimation"       in line or
                   "partAnimation"        in line or
                   "specialObject"        in line or
+                  "m_AnimationLoop"      in line or
                   "animationGroup"       in line or
                   "animationData"        in line or
                   "animationLoop"        in line):

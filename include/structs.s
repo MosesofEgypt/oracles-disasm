@@ -31,6 +31,7 @@
 	yMin	db
 	yMax	db
 .ENDST
+.define BoundingBoxStruct.size 4
 
 .STRUCT FileDisplayStruct
 	fileLoadResult		db ; Bit 7 set if the file is blank
@@ -45,6 +46,16 @@
 .ENDST
 .define FileDisplayStruct.size 8
 
+.STRUCT AnimationFrameStruct
+	; NOTE: if animCounter is set to $ff, this is instead
+	;       a dwbe pointer relative to the current offset
+	;       that points to an animation frame to jump to.
+	;       This is used for creating animation loops.
+	animCounter		db ; number of ticks to hold this frame
+	oamDataIndex	db ; the index of the OAM data, multiplied by 2
+	animParameter	db ; various ad-hoc purposes
+.ENDST
+.define AnimationFrameStruct.size 3
 
 .struct EnemyPlacementStruct ; Variables used when placing enemies on the screen
 

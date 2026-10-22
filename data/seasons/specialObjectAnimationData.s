@@ -253,62 +253,63 @@ specialObject08GfxPointers:
 
 specialObject00AnimationDataPointers:
 specialObject09AnimationDataPointers:
-	.dw animationData19be2
-	.dw animationData19beb
-	.dw animationData19be5
-	.dw animationData19bff
-	.dw animationData19c19
-	.dw animationData19c24
-	.dw animationData19c2a
-	.dw animationData19c35
-	.dw animationData19c40
-	.dw animationData19c40
-	.dw animationData19c40
-	.dw animationData19c49
-	.dw animationData19c51
-	.dw animationData19c59
-	.dw animationData19c65
-	.dw animationData19c6b
-	.dw animationData19c71
-	.dw animationDataMermaid
-	.dw animationData19cbc
-	.dw animationData19c9a
-	.dw animationData19ca5
-	.dw animationData19cb9
-	.dw animationData19cc8
-	.dw animationData19cce
-	.dw animationData19cd6
-	.dw animationData19ce2
-	.dw animationData19ceb
-	.dw animationData19cf7
-	.dw animationData19d0c
-	.dw animationData19d0c
-	.dw animationDataHarp
-	.dw animationData19d0c
-	.dw animationData19d15
-	.dw animationData19d18
-	.dw animationData19d1e
-	.dw animationData19d2d
-	.dw animationData19d3f
-	.dw animationData19d42
-	.dw animationData19d48
-	.dw animationData19d54
-	.dw animationData19d66
-	.dw animationData19d6c
-	.dw animationData19d72
-	.dw animationData19d78
-	.dw animationData19d80
-	.dw animationData19d80
-	.dw animationData19d80
-	.dw animationData19d80
-	.dw animationData19d9e
-	.dw animationData19d9e
-	.dw animationData19d9e
-	.dw animationData19d9e
-	.dw animationData19d21
-	.dw animationData19d4b
-	.dw animationData19d80
-	.dw animationData19d80
+	.dw animationData19be2 ; $00
+	.dw animationData19beb ; $01
+	.dw animationData19be5 ; $02
+	.dw animationData19bff ; $03
+	.dw animationData19c19 ; $04
+	.dw animationData19c24 ; $05
+	.dw animationData19c2a ; $06
+	.dw animationData19c35 ; $07
+	.dw animationData19c40 ; $08
+	.dw animationData19c40 ; $09
+	.dw animationData19c40 ; $0a
+	.dw animationData19c49 ; $0b
+	.dw animationData19c51 ; $0c
+	.dw animationData19c59 ; $0d
+	.dw animationData19c65 ; $0e
+	.dw animationData19c6b ; $0f
+	.dw animationData19c71 ; $10
+	.dw animationDataMermaid ; $11
+	.dw animationData19cbc ; $12
+	.dw animationData19c9a ; $13
+	.dw animationData19ca5 ; $14
+	.dw animationData19cb9 ; $15
+	.dw animationData19cc8 ; $16
+	.dw animationData19cce ; $17
+	.dw animationData19cd6 ; $18
+	.dw animationData19ce2 ; $19
+	.dw animationData19ceb ; $1a
+	.dw animationData19cf7 ; $1b
+	.dw animationData19d0c ; $1c
+	.dw animationData19d0c ; $1d
+	.dw animationDataHarp ; $1e
+	.dw animationData19d0c ; $1f
+	.dw animationData19d15 ; $20
+	.dw animationData19d18 ; $21
+	.dw animationData19d1e ; $22
+	.dw animationData19d2d ; $23
+	.dw animationData19d3f ; $24
+	.dw animationData19d42 ; $25
+	.dw animationData19d48 ; $26
+	.dw animationData19d54 ; $27
+	.dw animationData19d66 ; $28
+	.dw animationData19d6c ; $29
+	.dw animationData19d72 ; $2a
+	.dw animationData19d78 ; $2b
+	.dw animationData19d80 ; $2c
+	.dw animationData19d80 ; $2d
+	.dw animationData19d80 ; $2e
+	.dw animationData19d80 ; $2f
+	.dw animationData19d9e ; $30
+	.dw animationData19d9e ; $31
+	.dw animationData19d9e ; $32
+	.dw animationData19d9e ; $33
+	.dw animationData19d21 ; $34
+	.dw animationData19d4b ; $35
+	.dw animationData19d80 ; $36
+	.dw animationData19d80 ; $37
+	.dw animationDataDownstabbing ; $38
 
 specialObject01AnimationDataPointers:
 	.dw animationData19bc6
@@ -637,12 +638,24 @@ animationData19cd6:
 	.db $09 $d8 $00
 	.db $09 $dc $00
 	.db $06 $e0 $00
+animationData19cd6Loop:
 	.db $7f $80 $ff
+	m_AnimationLoop animationData19cd6Loop
 
 animationData19ce2:
 	.db $06 $e4 $00
 	.db $28 $e4 $00
+animationData19ce2Loop:
 	.db $7f $80 $ff
+	m_AnimationLoop animationData19ce2Loop
+
+animationDataDownstabbing:
+	.db $02 $b0 $00
+	.db $02 $b0 $02
+	.db $02 $f0 $04
+animationDataDownstabbingLoop:
+	.db $7f $f0 $06
+	m_AnimationLoop animationDataDownstabbingLoop
 
 animationData19ceb:
 	.db $04 $f0 $00

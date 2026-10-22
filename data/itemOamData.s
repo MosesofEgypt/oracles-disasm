@@ -122,6 +122,22 @@ itemOamData4cff3:
 	.db $08 $00 $06 $00
 	.db $08 $08 $08 $00
 
+itemOamDataDownstab0:
+	.db $01
+	.db $0a $01 $04 $40
+
+itemOamDataDownstab1:
+	.db $01
+	.db $0b $05 $04 $40
+
+itemOamDataDownstab2:
+	.db $01
+	.db $08 $07 $04 $40
+
+itemOamDataDownstab3:
+	.db $01
+	.db $0b $02 $04 $40
+
 itemOamData4cffc:
 	.db $02
 	.db $08 $00 $08 $20
