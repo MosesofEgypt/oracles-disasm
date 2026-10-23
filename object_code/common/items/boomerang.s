@@ -76,6 +76,8 @@ itemCode06:
 	.dw @state4
 
 @state0:
+	xor a
+	ld (wBoomerangItemsCaught),a
 	call itemLoadAttributesAndGraphics
 	ld e,Item.subid
 	ld a,(de)

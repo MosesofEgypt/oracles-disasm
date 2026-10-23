@@ -231,6 +231,16 @@ m_PartCode $01
 	ld a,(hl)
 	ld e,Part.var30
 	ld (de),a
+	; disable collisions to reduce lag
+	ld e,Part.collisionType
+	ld a,(de)
+	and $7f
+	ld (de),a
+	ld hl,wBoomerangItemsCaught
+	inc (hl)
+	ld a,(hl)
+	cp $03
+	jp nc,objectSetInvisible
 	jp objectSetVisible80
 
 
@@ -248,6 +258,9 @@ m_PartCode $01
 	ld a,(wLinkDeathTrigger)
 	or a
 	jr nz,@deleteSelf
+
+	xor a
+	ld (wBoomerangItemsCaught),a
 
 	ld e,Part.subid
 	ld a,(de)

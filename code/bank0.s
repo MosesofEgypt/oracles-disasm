@@ -3574,7 +3574,7 @@ _getObjectPositionOnScreen:
 	rlca
 	ret nc
 
-.ifdef ENABLE_TERRAIN_EFFECT_OPTIMIZATIONS
+.ifdef ENABLE_TILE_CHECK_OPTIMIZATIONS
 	; don't draw terrain effects if the object is on
 	; the ground and the room doesn't contain any
 	bit 7,e
@@ -3753,7 +3753,7 @@ _getObjectPositionOnScreen_duringScreenTransition:
 	rlca
 	ret nc
 
-.ifdef ENABLE_TERRAIN_EFFECT_OPTIMIZATIONS
+.ifdef ENABLE_TILE_CHECK_OPTIMIZATIONS
 	; don't draw terrain effects if the object is on
 	; the ground and the room doesn't contain any
 	bit 7,e
@@ -4497,14 +4497,15 @@ setTileWithoutGfxReload:
 ; @param	b	New index for tile
 ; @param	c	Position to change
 setTileInRoomLayoutBuffer:
-.ifdef ENABLE_TERRAIN_EFFECT_OPTIMIZATIONS
+.ifdef ENABLE_TILE_CHECK_OPTIMIZATIONS
 	push hl
 	push de
+	push bc
 	callabaf terrainEffects.getIsTerrainEffectTile
+	pop bc
+	ld hl,wOptimizationFlags
 	jr z,+
-		ld a,(wOptimizationFlags)
-		set 3,a
-		ld (wOptimizationFlags),a
+		set 3,(hl)
 	+
 	pop de
 	pop hl
@@ -8775,15 +8776,15 @@ markEquippedRingFlagsDirty:
 	res 0,(hl)
 	pop hl
 	ret
+.endif
 
-.ifdef ENABLE_TERRAIN_EFFECT_OPTIMIZATIONS
+.ifdef ENABLE_TILE_CHECK_OPTIMIZATIONS
 markTerrainEffectFlagsDirty:
 	push hl
 	ld hl,wOptimizationFlags
 	res 2,(hl)
 	pop hl
 	ret
-.endif
 .endif
 
 ;;
@@ -9201,41 +9202,6 @@ getLinkMaxHealth:
 	ret c
 	ld a,CURSE_RING_HEART_CAP
 	ret
-
-; @param	a	Enemy id to check
-; @param[out]	zflag set if the enemy CANNOT be picked up/thrown
-isValidTargetForJudo:
-	push hl
-	ld hl,@judoTargets
-
-@isValidTarget:
-	push bc
-	ld (hTempVal2),a
-	call checkFlagOptimized
-	ld a,(hTempVal2)
-	pop bc
-	pop hl
-	ret
-
-; these are bitmasks for which enemies can be picked up with a ring combo
-@judoTargets:
-	; 0x00-0x07: OCTOROK, BOOMERANG_MOBLIN, ARROW_MOBLIN
-	; 0x08-0x0f:
-	; 0x10-0x17: ROPE, GIBDO
-	; 0x18-0x1f: BUZZBLOB, SAND_CRAB, SPINY_BEETLE, IRON_MASK, ARMOS, PIRANHA
-	; 0x20-0x27: MASKED_MOBLIN, ARROW_DARKNUT, ARROW_SHROUDED_STALFOS, POLS_VOICE, LIKE_LIKE, GOPONGA_FLOWER
-	; 0x28-0x2f: WALLMASTER
-	; 0x30-0x37: TEKTITE, STALFOS, KEESE, ZOL, FLOORMASTER, BUTTERFLY
-	; 0x38-0x3f: FIRE_KEESE, WATER_TEKTITE, PEAHAT, SWORD_MOBLIN
-	; 0x40-0x47: WIZZROBE, CROW, GEL
-	; 0x48-0x4f: SWORD_DARKNUT, SWORD_SHROUDED_STALFOS, SWORD_MASKED_MOBLIN, BALL_AND_CHAIN_SOLDIER, BLUE_CROW, HARDHAT_BEETLE, ARM_MIMIC
-	; 0x50-0x57: BEETLE, FLYING_TILE
-	dbrev %00000000 %01101000 ; 0x00-0x0f
-	dbrev %10100000 %10111110 ; 0x10-0x1f
-	dbrev %11111100 %10000000 ; 0x20-0x2f
-	dbrev %11101101 %01100110 ; 0x30-0x3f
-	dbrev %11010000 %11111110 ; 0x40-0x4f
-	dbrev %01100000 %00000000 ; 0x50-0x5f
 
 victoryRingIncLevel:
 	push de
@@ -13859,7 +13825,7 @@ loadRoomLayout:
 	ld hl,wRoomLayout
 	ld b,(LARGE_ROOM_HEIGHT+1)*16
 	call clearMemory
-.ifdef ENABLE_TERRAIN_EFFECT_OPTIMIZATIONS
+.ifdef ENABLE_TILE_CHECK_OPTIMIZATIONS
 	call markTerrainEffectFlagsDirty
 .endif
 .if defined(ROM_COMBO)

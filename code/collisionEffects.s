@@ -2038,7 +2038,7 @@ isValidTargetForPogo:
 	jr nz,+
 		; this is an enemy. check if judo works
 		ld a,(hl)
-		call isValidTargetForJudo
+		callabaf objectUpdating.isValidTargetForJudo
 		jr ++
 	+
 

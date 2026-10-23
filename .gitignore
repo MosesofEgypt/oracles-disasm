@@ -13,6 +13,7 @@
 .idea/
 todo.txt
 ngp_ideas.txt
+*.code-workspace
 *.lnk
 *.sav
 *.ss1

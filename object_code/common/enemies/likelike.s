@@ -264,7 +264,7 @@ likelike_state9:
 	ld a,$38
 	add c
 	ld (de),a
-	jr likelike_animate
+	jp enemyAnimate
 
 
 ; Moving in some direction for [counter1] frames
@@ -276,13 +276,11 @@ likelike_stateA:
 	ld h,d
 	ld l,Enemy.state
 	dec (hl)
-	jr likelike_animate
+	jp enemyAnimate
 
 @move:
 	call ecom_applyVelocityForSideviewEnemyNoHoles
 	jr z,@newDirection
-
-likelike_animate:
 	jp enemyAnimate
 
 
@@ -294,10 +292,10 @@ likelike_stateB:
 	; Mashing 19 buttons before being released prevents like-like from eating shield
 	ld a,(wGameKeysJustPressed)
 	or a
-	jr z,likelike_animate
+	jp z,enemyAnimate
 	dec l
 	inc (hl) ; [counter1]++
-	jr likelike_animate
+	jp enemyAnimate
 
 @releaseLink:
 	ld (hl),60
@@ -390,13 +388,13 @@ likelike_stateC:
 .ifdef ENABLE_NEW_GAME_PLUS
 -
 .endif
-	jr likelike_animate
+	jp enemyAnimate
 ++
 	call ecom_applyVelocityForSideviewEnemyNoHoles
 .ifdef ENABLE_NEW_GAME_PLUS
 	jr nz,-
 .else
-	jr nz,likelike_animate
+	jp nz,enemyAnimate
 .endif
 
 	; Ran into wall
@@ -407,7 +405,7 @@ likelike_stateC:
 .ifdef ENABLE_NEW_GAME_PLUS
 	jr -
 .else
-	jr likelike_animate
+	jp enemyAnimate
 .endif
 
 .ifdef ENABLE_NEW_GAME_PLUS
@@ -599,14 +597,12 @@ likelike_subid02:
 	call ecom_decCounter1
 	jr z,++
 	call objectApplySpeed
-	jr likelike_animate2
+	jp enemyAnimate
 ++
 	ld l,e
 	inc (hl)
 	ld l,Enemy.collisionType
 	set 7,(hl)
-
-likelike_animate2:
 	jp enemyAnimate
 
 
@@ -640,13 +636,13 @@ likelike_subid03:
 @state9:
 	ld c,$08
 	call objectUpdateSpeedZ_paramC
-	jr nz,likelike_animate2
+	jp nz,enemyAnimate
 
 	; Hit the ground.
 	ld l,Enemy.state
 	inc (hl)
 	call objectSetVisiblec2
-	jr likelike_animate2
+	jp enemyAnimate
 
 
 ; Eating Link. Since this falls from the sky, this has extra height-related code.

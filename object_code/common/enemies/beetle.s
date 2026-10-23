@@ -201,7 +201,7 @@ beetle_subid1:
 	call playSound
 
 	call beetle_chooseRandomAngleAndCounter1
-	jr beetle_animate
+	jp enemyAnimate
 
 
 ; Common beetle state
@@ -209,8 +209,6 @@ beetle_stateA:
 	call ecom_decCounter1
 	call z,beetle_chooseRandomAngleAndCounter1
 	call ecom_applyVelocityForSideviewEnemyNoHoles
-
-beetle_animate:
 	jp enemyAnimate
 
 
@@ -255,7 +253,7 @@ beetle_subid2:
 	set 7,(hl)
 ++
 	call ecom_applyVelocityForSideviewEnemy
-	jr beetle_animate
+	jp enemyAnimate
 
 
 ; "Bounces in" when it spawns (dug up from the ground)

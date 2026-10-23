@@ -2949,6 +2949,11 @@ wOptimizationFlags: ; $cd2e
 	; Bit 5: Set if steadfast sword dash is currently being done
 	db
 
+wBoomerangItemsCaught:
+	; keeps track of how many items the boomerang is currently
+	; carrying to reduce the sprites drawn when it goes over 2
+	db
+
 ; $cd2f unused?
 
 .ENDS

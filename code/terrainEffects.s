@@ -119,7 +119,7 @@ _drawObjectTerrainEffects:
 	ret
 
 @onGround:
-.ifdef ENABLE_TERRAIN_EFFECT_OPTIMIZATIONS
+.ifdef ENABLE_TILE_CHECK_OPTIMIZATIONS
 	ld a,(wOptimizationFlags)
 	bit 2,a
 	call z,calculateRoomHasTerrainEffectTiles
@@ -242,7 +242,7 @@ _drawObjectTerrainEffects:
 	pop hl
 	ret
 
-.ifdef ENABLE_TERRAIN_EFFECT_OPTIMIZATIONS
+.ifdef ENABLE_TILE_CHECK_OPTIMIZATIONS
 getIsTerrainEffectTile:
 	push hl
 	ld hl,calculateRoomHasTerrainEffectTiles@terrainEffectTiles
