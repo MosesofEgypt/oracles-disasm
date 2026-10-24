@@ -794,7 +794,10 @@ m_section_superfree Terrain_Effects NAMESPACE terrainEffects
 	.include "data/seasons/endgameCutsceneOamData.s"
 
 	.include "code/staticObjects.s"
-	.include {"{GAME_DATA_DIR}/chestData.s"}
+	m_section_free chestData NAMESPACE chestData
+		.include {"{GAME_DATA_DIR}/chestData.s"}
+		.include "code/chestData.s"
+	.ends
 	.include {"{GAME_DATA_DIR}/partAnimations.s"}
 
 

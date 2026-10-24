@@ -89,7 +89,10 @@ m_EndScriptSection
 
 .include "code/roomInitialization.s"
 .include "code/staticObjects.s"
-.include {"{GAME_DATA_DIR}/chestData.s"}
+m_section_free chestData NAMESPACE chestData
+	.include {"{GAME_DATA_DIR}/chestData.s"}
+	.include "code/chestData.s"
+.ends
 
 m_section_superfree Bank_5 NAMESPACE bank5
 	.define SKIP_COMPANION_COMMON_CODE

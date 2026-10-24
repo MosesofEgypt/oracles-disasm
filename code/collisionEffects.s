@@ -2009,7 +2009,7 @@ collisionLinkBounce:
 	pop hl
 
 	; only judo stun if enemy
-	jr nz,+
+	jr z,+
 		; change collision type
 		isRingEquipped EXPERTS_RING
 
