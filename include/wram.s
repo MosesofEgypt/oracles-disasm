@@ -2947,6 +2947,7 @@ wOptimizationFlags: ; $cd2e
 	; Bit 4: Set if a gasha tree is currently disappearing
 	;        Indicates that more GDMA are needed right now
 	; Bit 5: Set if steadfast sword dash is currently being done
+	; Bit 6: Set if sprite flickering was automatically enabled
 	db
 
 wBoomerangItemsCaught:

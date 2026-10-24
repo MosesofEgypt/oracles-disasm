@@ -3214,14 +3214,14 @@ drawAllSpritesUnconditionally:
 	or e
 	jr z,++
 .endif
-	ld de,w1Link
+	ld de,w1Link.visible
 
-	ld b,<w1Link.yh
+	ld b,<w1Link.start
 	ld a,(wTextboxFlags)
 	and TEXTBOXFLAG_ALTPALETTE1
 	jr z,@loop
 
-	; Draw link object
+	; Draw ONLY link object
 	call objectQueueDraw
 	jr ++
 
@@ -3345,11 +3345,18 @@ drawAllSpritesUnconditionally:
 	; Clear all unused OAM entries
 	ldh a,(<hOamTail)
 	cp $a0
+.ifdef AUTO_SPRITE_FLICKERING
+	; determine whether we need sprite flickering or not
+	ld hl,wOptimizationFlags
+	set 6,(hl)
 	jr nc,++
-
-	ld h,>wOam
-	ld b,$e0
--
+		res 6,(hl)
+.else
+	jr nc,++
+.endif
+		ld h,>wOam
+		ld b,$e0
+	-
 	ld l,a
 	ld (hl),b
 	add $04
@@ -3825,6 +3832,7 @@ data_1058:
 ; Call objectQueueDraw on everything, except $d0-$d5 objects at $00-$3f (Link, Companion,
 ; and "ParentItems").
 queueDrawEverything:
+	; clear the hObjectPriorityXCounters
 	ld hl,hTerrainEffectsBufferUsedSize
 	xor a
 	ldi (hl),a
@@ -3833,44 +3841,99 @@ queueDrawEverything:
 	ldi (hl),a
 	ldi (hl),a
 
-	ldde FIRST_ITEM_INDEX,Item.start
-	ld b,Item.yh
+	.ifdef ENABLE_SPRITE_FLICKERING
+		.ifdef AUTO_SPRITE_FLICKERING
+			ld hl,wOptimizationFlags
+			bit 6,(hl)
+			call nz,getRandomNumber_noPreserveVars
+		.else
+			call getRandomNumber_noPreserveVars
+		.endif
+		and $0f
+		ldh (<hFlickerStartObjectOffset),a
+	.endif
+
+	ldde FIRST_ITEM_INDEX,Item.visible
+	ldbc Item.start,LAST_ITEM_INDEX+1-FIRST_ITEM_INDEX
 	call @func
 
-	ldde FIRST_ENEMY_INDEX,Enemy.start
-	ld b,Enemy.yh
+	ldde FIRST_ENEMY_INDEX,Enemy.visible
+	ldbc Enemy.start,LAST_ENEMY_INDEX+1-FIRST_ENEMY_INDEX
 	call @func
 
-	ldde FIRST_PART_INDEX,Part.start
-	ld b,Part.yh
+	ldde FIRST_PART_INDEX,Part.visible
+	ldbc Part.start,LAST_PART_INDEX+1-FIRST_PART_INDEX
 	call @func
 
-	ldde FIRST_INTERACTION_INDEX,Interaction.start
-	ld b,Interaction.yh
+	ldde FIRST_INTERACTION_INDEX,Interaction.visible
+	ldbc Interaction.start,LAST_INTERACTION_INDEX+1-FIRST_INTERACTION_INDEX
 @func:
-	call objectQueueDraw
-	inc d
-	ld a,d
-	cp OBJECT_END_INDEX
-	jr c,@func
-	ret
+	.ifdef ENABLE_SPRITE_FLICKERING
+		ld a,d
+		ldh (<hFlickerFirstObjectIndex),a
+		ld l,a
+		add c
+		ld h,a
+		ldh (<hFlickerLastObjectIndex),a
+
+		ldh a,(<hFlickerStartObjectOffset)
+		add l
+		cp h
+		jr c,+
+			sub h
+			add l
+		+
+		ld d,a
+		ld a,c
+		ldh (<hFlickerNumObjects),a
+	.endif
+
+	-
+		ld a,(de)
+		and $80
+		jr z,+
+			ld h,d
+			ld l,b
+			ld a,(hl)
+			or a
+			call nz,objectQueueDraw_noEnabledOrVisibleCheck
+		+
+		inc d
+		.ifdef ENABLE_SPRITE_FLICKERING
+			ldh a,(<hFlickerNumObjects)
+			dec a
+			ldh (<hFlickerNumObjects),a
+			ret z
+
+			ldh a,(<hFlickerLastObjectIndex)
+			cp d
+			jr nz,-
+
+			ldh a,(<hFlickerFirstObjectIndex)
+			ld d,a
+		.else
+			ld a,d
+			cp OBJECT_END_INDEX
+			ret nc
+		.endif
+		jr -
 
 ;;
-; @param	b	Low byte of the address of the Object.yh variable
-; @param	de	Start address of object to draw
+; @param	b	Low byte of the address of the Object.start variable
+; @param	de	Start address of object.visible to draw
 objectQueueDraw:
 	ld a,(de)
-	or a
-	ret z
-
-	ld a,e
-	or Object.visible
-	ld l,a
-	ld h,d
-	ld a,(hl)
 	bit 7,a
 	ret z
 
+	ld h,d
+	ld l,b
+	ld a,(hl)
+	or a
+	ret z
+
+objectQueueDraw_noEnabledOrVisibleCheck:
+	ld a,(de)
 	and $03
 	ld h,a
 	add <hObjectPriority0Counter
@@ -3890,86 +3953,9 @@ objectQueueDraw:
 	ld l,a
 	ld h,>wObjectsToDraw
 	ld a,b
+	add Object.yh-Object.start
 	ldi (hl),a
 	ld (hl),d
-	ret
-
-;;
-; Gets the data for a chest in the current room.
-; Defaults to position $00, contents TREASURE_OBJECT_RUPEES_00 if a chest is not found.
-;
-; @param[out]	bc	Chest contents
-; @param[out]	e	Chest position
-getChestData:
-	ldh a,(<hRomBank)
-	push af
-.if defined(ROM_COMBO)
-	ld a,:chestData.chestDataGroupTable_seasons
-	ld hl,chestData.chestDataGroupTable_seasons
-	call wIsSeasons
-	jr c,+
-		ld a,:chestData.chestDataGroupTable_ages
-		ld hl,chestData.chestDataGroupTable_ages
-	+
-	rst_setrombank
-	ld a,(wActiveGroup)
-.else
-	ld a,:chestData.chestDataGroupTable
-	rst_setrombank
-	ld a,(wActiveGroup)
-	ld hl,chestData.chestDataGroupTable
-.endif
-	rst_addDoubleIndex
-	rst_derefHl
-	ld a,(wActiveRoom)
-	ld b,a
--
-	ldi a,(hl)
-	ld e,a
-	inc a
-	jr z,@chestNotFound
-
-	ldi a,(hl)
-	cp b
-	jr z,+
-
-	inc hl
-	inc hl
-	jr -
-+
-	ld b,(hl)
-	inc hl
-	ld c,(hl)
-	; if this is the red or blue ore in seasons, replace
-	; it with a gold ore chunk if they've been obtained
-.if defined(ROM_AGES) || !defined(ENABLE_NEW_GAME_PLUS)
-	jr @end
-.else
-	.if defined(ROM_COMBO)
-		call wIsSeasons
-		jr nc,@end
-	.endif
-
-	ld a,b
-	cp TREASURE_RED_ORE
-	jr z,+
-		cp TREASURE_BLUE_ORE
-		jr nz,@end
-	+
-	ld a,GLOBALFLAG_GOT_RED_AND_BLUE_ORE
-	call checkGlobalFlag
-	jr z,@end
-	; already have both, so replace
-	ld bc,TREASURE_OBJECT_ORE_CHUNKS_01
-	jr @end
-.endif
-
-@chestNotFound:
-	ld bc,TREASURE_OBJECT_RUPEES_00
-
-@end:
-	pop af
-	rst_setrombank
 	ret
 
 ;;

@@ -1,6 +1,3 @@
-.if !defined(ROM_COMBO)
-m_section_free chestData NAMESPACE chestData
-.endif
 ; m_ChestData macro takes 3 parameters:
 ;   1: Y/X position of chest (byte); an opened chest tile will be placed here when the room is
 ;      loaded, if ROOMFLAG_ITEM has been set in that room.
@@ -148,7 +145,3 @@ chestDataGroupTable:
 
 @chestGroup7Data:
 	.db $ff
-
-.if !defined(ROM_COMBO)
-.ends
-.endif

@@ -143,7 +143,7 @@ replaceOpenedChest:
 	bit ROOMFLAG_BIT_ITEM,a
 	ret z
 
-	call getChestData
+	callab chestData.getChestData
 	ld d,>wRoomLayout
 	ld a,TILEINDEX_CHEST_OPENED
 	ld (de),a

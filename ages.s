@@ -837,7 +837,10 @@ m_section_superfree Terrain_Effects NAMESPACE terrainEffects
 
 
 	.include "code/staticObjects.s"
-	.include {"{GAME_DATA_DIR}/chestData.s"}
+	m_section_free chestData NAMESPACE chestData
+		.include {"{GAME_DATA_DIR}/chestData.s"}
+		.include "code/chestData.s"
+	.ends
 
 m_section_free Bank16_2 NAMESPACE bank16
 	.include "code/ages/d6FloorUpdateCode.s"

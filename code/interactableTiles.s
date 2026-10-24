@@ -123,7 +123,7 @@ nextToChestTile:
 	ld c,a
 	jr ++
 +
-	call getChestData
+	callab chestData.getChestData
 ++
 	ld a,b
 	or a

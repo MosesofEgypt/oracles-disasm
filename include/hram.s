@@ -1,12 +1,18 @@
 .enum $ff80 export
 	hOamFunc			dsb 6	; $ff80
 
+	hFlickerStartObjectOffset	db	; $ff86
+
 	; More general-purpose variables added by
 	; reducing complexity of the OAM function
-	hFF86				db	; $ff86
-	hFF87				db	; $ff87
-	hFF88				db	; $ff88
-	hFF89				db	; $ff89
+	hFlickerFirstObjectIndex	.db	; $ff87
+	hFF87						db	; $ff87
+
+	hFlickerLastObjectIndex		.db	; $ff88
+	hFF88						db	; $ff88
+
+	hFlickerNumObjects			.db	; $ff89
+	hFF89						db	; $ff89
 
 	; General-purpose variables
 	hFF8A				db	; $ff8a

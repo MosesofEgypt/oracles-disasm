@@ -167,6 +167,17 @@
 		; trust me, just don't. it's bullshit
 ;		.define ENABLE_EVIL_BULLSHIT_BEAMOS
 	.endif
+	.ifndef ENABLE_SPRITE_FLICKERING
+		; determines whether sprite flickering is enabled.
+		; only has an effect when more than 40 sprites are onscreen
+		; or when more than 10 sprites are on a single scanline
+		.define ENABLE_SPRITE_FLICKERING
+	.endif
+	.ifndef AUTO_SPRITE_FLICKERING
+		; determines whether sprite flickering is automatically
+		; enabled when more than 40 sprites are onscreen
+		.define AUTO_SPRITE_FLICKERING
+	.endif
 .endif
 
 ; NOTE: if you change these, you MUST update the text that
@@ -248,6 +259,12 @@
 .if defined(ULTRAWIDE_INVENTORY_SPRITES) || defined(ENABLE_ALT_BIGGORON_SPRITES)
 .ifndef WIDE_INVENTORY_SPRITES
 	.define WIDE_INVENTORY_SPRITES
+.endif
+.endif
+
+.ifdef AUTO_SPRITE_FLICKERING
+.ifndef ENABLE_SPRITE_FLICKERING
+	.define ENABLE_SPRITE_FLICKERING
 .endif
 .endif
 
