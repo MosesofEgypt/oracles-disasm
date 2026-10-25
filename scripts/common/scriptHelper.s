@@ -620,9 +620,10 @@ gameCompleteDialog_markGameAsComplete:
 	ld a,<TX_058c
 	ld (wMakuMapTextPast),a
 .endif
-.if defined(ROM_COMBO)
-	ld a,GLOBALFLAG_FINISHEDGAME_AGES
-.else
 	ld a,GLOBALFLAG_FINISHEDGAME
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	jp c,setGlobalFlag
+	ld a,GLOBALFLAG_FINISHEDGAME_AGES
 .endif
 	jp setGlobalFlag

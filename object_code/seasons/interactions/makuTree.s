@@ -4,7 +4,7 @@
 ; Variables:
 ;   ws_cc39: Maku tree stage
 ;   wMakuTreeRoomProgression: ???
-;   ws_c6e0: ???
+;   wGnarledKeyDropPosX: ???
 ; ==================================================================================================
 m_InteractionCode $87
 	ld e,Interaction.state
@@ -177,7 +177,7 @@ makuTree_spawnGnarledKey:
 	ld l,Interaction.yh
 	ld a,$58
 	ldi (hl),a
-	ld a,(ws_c6e0)
+	ld a,(wGnarledKeyDropPosX)
 	ld l,Interaction.xh
 	ld (hl),a
 	ret

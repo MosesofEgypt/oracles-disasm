@@ -140,13 +140,13 @@ m_UniqueGfxHeaderStart $1d, UNIQUE_GFXH_MAKU_TREE_BOTTOM
 	m_GfxHeader gfx_tileset_maku_tree_1, $8c41
 	m_GfxHeader gfx_tileset_maku_tree_2, $9001
 	m_GfxHeader gfx_tileset_maku_tree_3, $9401
-	m_GfxHeaderEnd PALH_SPR_MAKU_TREE
+	m_GfxHeaderEnd
 
 m_UniqueGfxHeaderStart $1e, UNIQUE_GFXH_MAKU_TREE_TOP
 	m_GfxHeader gfx_tileset_maku_tree_top_1, $8f01
 	m_GfxHeader gfx_tileset_maku_tree_top_2, $9001
 	m_GfxHeader gfx_tileset_maku_tree_top_3, $9401
-	m_GfxHeaderEnd PALH_SPR_MAKU_TREE
+	m_GfxHeaderEnd
 
 m_UniqueGfxHeaderStart $1f, UNIQUE_GFXH_BIGGORON
 .ifdef ROM_COMBO

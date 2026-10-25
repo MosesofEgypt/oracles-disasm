@@ -2,10 +2,6 @@
 ; ENEMY_ENABLE_SIDESCROLL_DOWN_TRANSITION
 ; ==================================================================================================
 m_EnemyCode $2b
-.if defined(ROM_COMBO)
-	call wIsSeasons
-	jp c,enemyCode1.enemyCode0e
-.endif
 	ld e,Enemy.state
 	ld a,(de)
 	or a

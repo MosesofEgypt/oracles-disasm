@@ -175,23 +175,36 @@ parentItemCode_sword:
 @state8:
 	call specialObjectAnimate_optimized
 
-	; remove reduced gravity and prevent further jumping
 	ld hl,wLinkInAir
+
+	; check if link hit ground
+	ld a,(wTilesetFlags)
+	bit TILESETFLAG_BIT_SIDESCROLL,a
+	jr nz,+
+		ld a,(w1Link.zh)
+		bit 7,a
+		jr ++
+	+
+		ld a,(hl)
+		or a
+	++
+
+	; remove reduced gravity and prevent further jumping
 	res 5,(hl)
 	set 4,(hl)
 
-	; check if link hit ground
-	ld a,(w1Link.zh)
-	bit 7,a
 	jr nz,+
 		; move to landing stance
 		ld a,$09
 		ld e,Item.state
 		ld (de),a
 
-		; setup a recoil counter
+		; setup a shockwave and recoil counter
 		ld a,$1e
 		ld e,Item.counter1
+		ld (de),a
+		ld a,$05
+		inc e
 		ld (de),a
 
 		ld c,$09
@@ -233,7 +246,6 @@ parentItemCode_sword:
 	bit 7,(hl)
 	ret nz
 
-	dec l
 	ld bc,$fd90
 	ld a,(wActiveGroup)
 	cp FIRST_SIDESCROLL_GROUP
@@ -241,19 +253,25 @@ parentItemCode_sword:
 		; Jump higher in sidescrolling rooms
 		ld bc,$fd00
 	+
-	ld (hl),c
-	inc l
 	ld (hl),b
+	dec l
+	ld (hl),c
 
 	; trigger the flip animation and reenable jumping
 	ld hl,wLinkInAir
-	ld (hl),$40
+	ld (hl),$42
 
 	; stop downstabbing now that a hit has connected
 	jp @deleteSelf
 
 ; landed during plunging attack(several frames of downtime)
 @state9:
+	call itemDecCounter2
+	jr nz,+
+		ld hl,w1WeaponItem.state
+		inc (hl)
+	+
+
 	call itemDecCounter1
 	ret nz
 

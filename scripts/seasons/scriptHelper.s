@@ -2441,7 +2441,7 @@ makuTree_dropGnarledKey:
 	ld l,Interaction.xh
 	ld (hl),b
 	ld a,b
-	ld (ws_c6e0),a
+	ld (wGnarledKeyDropPosX),a
 	ret
 
 makuTree_spawnBubble:

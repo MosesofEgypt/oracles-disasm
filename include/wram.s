@@ -1110,7 +1110,7 @@ wFeatherLevel:
 		dsb 4
 	wPirateBellState:
 		db
-	ws_c6e0:
+	wGnarledKeyDropPosX:
 		db
 	wInsertedJewels:
 		; Bitset of jewels inserted into tarm ruins entrance.

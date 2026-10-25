@@ -621,7 +621,6 @@ comboLoadOtherGame:
 	push de
 	push bc
 	call toggleIsSeasons
-	call getComboStarted
 	
 	; preserve global flags for vasu
 	ld de,wGlobalFlags
@@ -633,6 +632,8 @@ comboLoadOtherGame:
 	and $03
 	ld c,a
 	push bc
+
+	call getComboStarted
 
 	jr nz,+
 		call initializeComboGame
@@ -919,6 +920,10 @@ initializeComboGame:
 		call nz,initializeFileVariables
 	.endif
 
+	; reduce the satchel level since picking it up increments it
+	ld hl,wSeedSatchelLevel
+	dec (hl)
+
 	; refill link's health
 	ld hl,wLinkMaxHealth
 	ldd a,(hl)
@@ -965,11 +970,20 @@ initializeComboGame:
 	ld a,TREASURE_GALE_SEEDS
 	call giveTreasure
 
+	.if defined(ROM_COMBO)
+		callab interactionCodeAges11.initializeChildOnGameStart
+	.else
+		callab interactionCode5.initializeChildOnGameStart
+	.endif
+
 	; remove the temporary items
 	xor a
 	ld hl,wInventoryB
 	ldi (hl),a
 	ld  (hl),a
+
+	; ensure this defaults to blank
+	ld (wObtainedSeasons),a
 
 	; save the new file
 	jp saveFile

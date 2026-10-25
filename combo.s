@@ -682,7 +682,6 @@ m_EnemyCodeSection
 	.include "object_code/common/enemies/moblinsAndShroudedStalfos.s"
 	.include "object_code/common/enemies/arrowDarknut.s"
 	.include "object_code/common/enemies/lynel.s"
-	.include "object_code/common/enemies/bladeAndFlameTrap.s"
 	.include "object_code/common/enemies/rope.s"
 	.include "object_code/common/enemies/gibdo.s"
 	.include "object_code/common/enemies/spark.s"
@@ -767,6 +766,7 @@ m_EndObjectCodeSection
 m_EnemyCodeSection Ages
 	.include "object_code/common/enemies/commonCode.s"
 
+	.include "object_code/common/enemies/bladeAndFlameTrap.s"
 	.include "object_code/ages/enemies/eyesoarChild.s"
 	.include "object_code/ages/enemies/veranChildBee.s"
 	.include "object_code/ages/enemies/enableSidescrollDownTransition.s"
@@ -820,6 +820,7 @@ m_EndObjectCodeSection
 m_EnemyCodeSection Seasons
 	.include "object_code/common/enemies/commonCode.s"
 
+	.include "object_code/common/enemies/bladeAndFlameTrap.s"
 	.include "object_code/seasons/enemies/magunesu.s"
 	.include "object_code/seasons/enemies/unusedTemplate.s"
 	.include "object_code/seasons/enemies/gohmaGel.s"

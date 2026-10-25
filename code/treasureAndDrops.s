@@ -1152,7 +1152,7 @@ getRandomRingOfGivenTier_body:
 
 	; put the ring tier into c as a value in the range 0x00 - 0x04
 	ld a,c
-	and a,$07
+	and $07
 	cp $04
 	jr c,+
 		ld a,$04
@@ -1201,15 +1201,17 @@ getRandomRingOfGivenTier_body:
 
 	jr nz,+
 		; c is the current tier we're checking +1
-		ld c,$03
+		ld c,$04
 		-
+			dec c
 			call @isTierCleared
 			jr nz,+	; tier not completed
-			dec c
-			jr nz,-	; more tiers to check
-				; increment to the secret ring tier
-				ld d,4
-	+
+				ld a,c
+				or a
+				jr nz,-	; more tiers to check
+					; increment to the secret ring tier
+					ld d,4
+		+
 		ld a,d
 		pop bc
 		ld c,d
@@ -1364,8 +1366,6 @@ getRandomRingOfGivenTier_body:
 	push bc
 	push de
 	push af
-	; c is the current tier we're checking +1
-	inc c
 	; get the pointer to the end of the ring tier masks in hl
 	ld e,$00
 	call getRingTierMasks
@@ -1425,19 +1425,19 @@ getRingTierMasks:
 @ringTierMaskTable:
 	; tier0
 	dbrev %00000000
-	dbrev %00010001
-	dbrev %01001000
+	dbrev %00010000
+	dbrev %01001010
 	dbrev %10111100
-	dbrev %00000010
+	dbrev %01000010
 	dbrev %00000000
-	dbrev %01000000
+	dbrev %00000000
 	dbrev %00000000
 	; tier1
 	dbrev %00100100
 	dbrev %00001000
 	dbrev %00010001
 	dbrev %00000011
-	dbrev %11000000
+	dbrev %10100000
 	dbrev %01000000
 	dbrev %00000000
 	dbrev %00000001
@@ -1445,8 +1445,8 @@ getRingTierMasks:
 	dbrev %00001000
 	dbrev %00100100
 	dbrev %00000000
-	dbrev %01100000
-	dbrev %00011100
+	dbrev %01000000
+	dbrev %00011101
 	dbrev %00000000
 	dbrev %10100000
 	dbrev %00000001
@@ -1455,10 +1455,10 @@ getRingTierMasks:
 	dbrev %00000000
 	dbrev %10100000
 	dbrev %00000000
-	dbrev %00000001
+	dbrev %00000000
 	dbrev %00111110
 	dbrev %00000000
-	dbrev %01010100
+	dbrev %01110100
 .endif
 
 ; Rings are divided into "tiers" (called "classes" in TourianTourist's ring guide). These

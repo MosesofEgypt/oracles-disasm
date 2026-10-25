@@ -15,6 +15,7 @@ itemCode05:
 	.dw @state6
 	.dw @state7
 	.dw @state8
+	.dw @state9
 
 @swordSounds:
 	.db SND_SWORDSLASH
@@ -135,7 +136,7 @@ itemCode05:
 .endif
 
 
-; State 8: downstabbing shockwave
+; State 8: downstabbing shockwave(first few frames)
 @state8:
 	; prevent link from being knocked back
 	xor a
@@ -145,6 +146,13 @@ itemCode05:
 	; act as a shockwave for knocking away nearby enemies
 	ld a,$80 | ITEMCOLLISION_L1_SHIELD
 	jr +
+
+; State 9: downstabbing shockwave
+@state9:
+	; prevent link from being knocked back
+	xor a
+	ld (w1Link.knockbackCounter),a
+	jr @state1
 
 ; State 7: downstabbing
 @state7:

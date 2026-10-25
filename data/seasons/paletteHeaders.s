@@ -357,18 +357,17 @@ m_PaletteHeaderStart $4f, PALH_TILESET_SWORD_AND_SHIELD_MAZE_FIRE_MINIBOSS
 
 m_PaletteHeaderStart $50, PALH_TILESET_MAKU_TREE
 	m_PaletteHeaderBg  2, 6, paletteData5c10
+	m_PaletteHeaderSpr 6, 1, paletteData5c70
 	m_PaletteHeaderEnd
 
 m_PaletteHeaderStart $51, PALH_TILESET_MAKU_TREE_SMALL
 	m_PaletteHeaderBg  2, 6, paletteData5c40
 	m_PaletteHeaderEnd
 
-m_PaletteHeaderStart $52, PALH_SPR_MAKU_TREE
-	m_PaletteHeaderSpr 6, 1, paletteData5c70
+m_PaletteHeaderStart $52, PALH_52
 	m_PaletteHeaderEnd
 
 m_PaletteHeaderStart $53, PALH_53
-
 m_PaletteHeaderStart $54, PALH_TILESET_BIGGORON
 	m_PaletteHeaderBg  2, 6, paletteData4d70
 	m_PaletteHeaderSpr 6, 1, paletteData5c88

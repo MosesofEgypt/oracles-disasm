@@ -1264,7 +1264,7 @@ linkApplyDamage:
 		jr nz,@noPotion
 
 		push bc
-		ld b,a
+		ld b,FAIRYS_RING
 		callab bank0Ext.removeRing
 		pop bc
 		scf
