@@ -7,7 +7,7 @@ cutscene13:
 .else
 	callab bank3Cutscenes.func_03_6103
 .endif
-	call func_1613
+	call maybeRefreshObjectGfx
 	jp updateAllObjects
 
 ;;
@@ -18,6 +18,6 @@ cutscene14:
 .else
 	callab bank3Cutscenes.func_03_6275
 .endif
-	call func_1613
+	call maybeRefreshObjectGfx
 	call updateAllObjects
 	jp updateStatusBar

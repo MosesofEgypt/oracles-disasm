@@ -2632,7 +2632,7 @@ cutscene19:
 	ld c,$01
 ++
 	callab bank3Cutscenes.twinrovaCutsceneCaller
-	call func_1613
+	call maybeRefreshObjectGfx
 	jp updateAllObjects
 
 .ENDS
@@ -3905,7 +3905,7 @@ cutscene02:
 cutscene00:
 	call updateStatusBar
 	call updateAllObjects
-	call func_1613
+	call maybeRefreshObjectGfx
 	ld a,(wScrollMode)
 	cp $01
 	ret nz
@@ -3950,7 +3950,7 @@ cutscene00:
 ; Cutscene 1 = not in a cutscene; game running normally
 ;
 cutscene01:
-	call func_1613
+	call maybeRefreshObjectGfx
 .ifdef EXTENDED_RING_BOX
 	call clearExtendedRingBox
 .endif
@@ -4885,7 +4885,7 @@ func_5cfe:
 ;;
 ; Seasons-only
 func_5d31:
-	call func_1613
+	call maybeRefreshObjectGfx
 	ld a,(wWarpTransition2)
 	or a
 	jp nz,applyWarpTransition2
@@ -4896,7 +4896,7 @@ func_5d31:
 
 ;;
 func_5d41:
-	call func_1613
+	call maybeRefreshObjectGfx
 	ld a,(wWarpTransition2)
 	or a
 	jp nz,applyWarpTransition2

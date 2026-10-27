@@ -5003,7 +5003,7 @@ interactionInitGraphics:
 	jp interactionSetAnimation
 
 ;;
-func_1613:
+maybeRefreshObjectGfx:
 	ld a,(wLoadedTreeGfxIndex)
 	or a
 	ret z
@@ -6039,20 +6039,10 @@ getGlobalFlagForSisterSecret:
 
 ; set the sister flag for any secret flags being set
 setGlobalFlagForSisterSecret:
-	cp GLOBALFLAG_FIRST_AGES_BEGAN_SECRET
-	ret c
-	cp GLOBALFLAG_78
-	ret nc
-
-	cp GLOBALFLAG_FIRST_SEASONS_BEGAN_SECRET
-	jr nc,+
-		add 20
-		jr ++
-	+
-		sub 20
-	++
-	ld hl,wGlobalFlags
-	jp setFlag
+	push de
+	callabaf bank0Ext.setGlobalFlagForSisterSecret_body
+	pop de
+	ret
 .endif
 
 ;;
@@ -10367,8 +10357,8 @@ interactionLoadExtraGraphics:
 	ld a,(de)
 	ld (wInteractionIDToLoadExtraGfx),a
 
-	; Why... what does this accomplish, other than possibly trashing tree graphics?
-	;ld (wLoadedTreeGfxIndex),a
+	; Force reloading interaction gfx by setting this to non-zero
+	ld (wLoadedTreeGfxIndex),a
 
 	ret
 
@@ -12244,7 +12234,10 @@ checkGlobalFlag:
 setGlobalFlag:
 .if defined(ROM_COMBO)
 	push af
+	push bc
+	ld b,a
 	call setGlobalFlagForSisterSecret
+	pop bc
 	pop af
 .endif
 	ld hl,wGlobalFlags

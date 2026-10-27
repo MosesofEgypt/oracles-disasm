@@ -57,6 +57,7 @@ setupPassiveShield:
 	call wIsSeasons
 	jr c,++
 .endif
+	ld a,(wTilesetFlags)
 	and TILESETFLAG_UNDERWATER
 	jr nz,+
 	++

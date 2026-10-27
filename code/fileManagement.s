@@ -885,15 +885,18 @@ initializeComboGame:
 	or $08
 	ld (hl),a
 
+	xor a
 	.if defined(ENABLE_MULTI_RING) || defined(EXTENDED_RING_BOX)
-		xor a
 		ld (wRingReduxFlagsExt),a
 	.endif
 
 	; clear all game tracker variables and such
+	ld (wEssencesObtained),a
+	ld (wFluteIcon),a
+	ld (wTradeItem),a
 	m_ClearSavefileSection_end wDeathRespawnBuffer,        wBoughtShopItems1
 	m_ClearSavefileSection_end wCompanionStates,           wObtainedTreasureFlags
-	m_ClearSavefileSection_end wFluteIcon,                 wRingBoxLevel
+	m_ClearSavefileSection_end wRingBoxContents,           wRingBoxLevel
 	m_ClearSavefileSection_end wGlobalFlags,               wGlobalFlags+10
 	; NOTE: avoiding clearing secret flags to carry them across games
 	m_ClearSavefileSection_end wGlobalFlags+15,            wSlingshotSelectedSeeds+1

@@ -2,7 +2,7 @@
 .ifdef ROM_COMBO
 ;;
 func_5d41:
-	call func_1613
+	call maybeRefreshObjectGfx
 	ld a,(wWarpTransition2)
 	or a
 	jp nz,applyWarpTransition2
@@ -12,7 +12,7 @@ func_5d41:
 ;;
 ; CUTSCENE_NAYRU_SINGING
 cutscene06:
-	call func_1613
+	call maybeRefreshObjectGfx
 	ld c,$00
 .ifdef ROM_COMBO
 	jpab bank3Cutscenes_3.miscCutsceneHandler
@@ -43,14 +43,14 @@ cutscene08:
 ;;
 ; CUTSCENE_NAYRU_WARP_TO_MAKU_TREE
 cutscene0c:
-	call func_1613
+	call maybeRefreshObjectGfx
 	ld c,$03
 	jr func_5d5d
 
 ;;
 ; CUTSCENE_BLACK_TOWER_ESCAPE
 cutscene09:
-	call func_1613
+	call maybeRefreshObjectGfx
 	ld a,(wCutsceneTrigger)
 	or a
 	jp nz,setCutsceneIndexIfCutsceneTriggerSet
@@ -66,7 +66,7 @@ cutscene09:
 ;;
 ; CUTSCENE_ROOM_OF_RITES_COLLAPSE
 cutscene0f:
-	call func_1613
+	call maybeRefreshObjectGfx
 	ld e,$02
 	jp endgameCutsceneHandler
 
@@ -79,14 +79,14 @@ cutscene0a:
 ;;
 ; CUTSCENE_FLAME_OF_DESPAIR
 cutscene20:
-	call func_1613
+	call maybeRefreshObjectGfx
 	ld e,$03
 	jr ---
 
 ;;
 ; CUTSCENE_PREGAME_INTRO
 cutscene0d:
-	call func_1613
+	call maybeRefreshObjectGfx
 	ld c,$06
 .ifdef ROM_COMBO
 	jpab bank3Cutscenes_3.miscCutsceneHandler
@@ -97,7 +97,7 @@ cutscene0d:
 ;;
 ; CUTSCENE_TWINROVA_REVEAL
 cutscene0e:
-	call func_1613
+	call maybeRefreshObjectGfx
 	ld a,(wWarpTransition2)
 	or a
 	jr nz,applyWarpTransition2

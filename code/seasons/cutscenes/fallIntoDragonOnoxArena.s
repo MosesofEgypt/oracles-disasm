@@ -41,7 +41,7 @@ cutscene13:
 	ld (wCutsceneState),a
 
 @state2:
-	call func_1613
+	call maybeRefreshObjectGfx
 	call updateMenus
 	ret nz
 	ld a,(wWarpTransition2)

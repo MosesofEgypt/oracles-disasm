@@ -86,6 +86,11 @@ dog_subid01:
 	ld l,Interaction.direction
 	ld (hl),$ff
 
+.ifdef ENABLE_BUGFIXES
+	ld l,Interaction.var03
+	ld a,(hl)
+.endif
+
 	; a==0 here, which is important. It was set to 0 by the call to
 	; "interactionSetScript", and wasn't changed after that...
 	; It's probably supposed to equal "var03" here. Bug?

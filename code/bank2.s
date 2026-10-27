@@ -7829,7 +7829,12 @@ inventorySubscreen1_drawTreasures:
 	ldh a,(<hFF8C)
 	call loadTreasureDisplayData
 	inc hl
+	push hl
 	call drawTreasureDisplayDataToBg
+	pop hl
+	ld a,l
+	add $05
+	ld l,a
 
 	; Set text index
 	ld c,(hl)

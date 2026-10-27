@@ -849,7 +849,6 @@ removeRing:
 
 .if defined(ROM_COMBO)
 getGlobalFlagForSisterSecret_body:
-	push de
 	; check the sister secret
 	ld e,b
 	set 7,e
@@ -859,12 +858,28 @@ getGlobalFlagForSisterSecret_body:
 	ld e,a
 	ld hl,secretToGlobalFlagMap
 	call c,lookupKey
-	pop de
 	ret c
 
 	; couldn't find the flag
 	xor a
 	ret
+
+setGlobalFlagForSisterSecret_body:
+	ld a,b
+	cp GLOBALFLAG_FIRST_AGES_BEGAN_SECRET
+	ret c
+	cp GLOBALFLAG_DONE_SYMMETRY_SECRET+1
+	ret nc
+
+	cp GLOBALFLAG_FIRST_SEASONS_BEGAN_SECRET
+	jr nc,+
+		add 20
+		jr ++
+	+
+		sub 20
+	++
+	ld hl,wGlobalFlags
+	jp setFlag
 
 sisterSecretMap:
 	.db $80|KING_ZORA_SECRET,	$80|CLOCK_SHOP_SECRET
