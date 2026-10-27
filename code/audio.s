@@ -1353,11 +1353,40 @@ setWaveform:
 	ret
 
 ;;
-; Jump to word from argument
+; Jump to word from argument(conditional or not)
 channelCmdfe:
 	call getNextChannelByte
 	ld l,a
 	call getNextChannelByte
+	ld h,a
+	and $c0
+	or a
+	jr z,+
+		; conditional jump. see which kind
+		rlca
+		jr c,++
+			; jump if the variable is equal to the value
+			call compareJumpVariable
+			jp nz,doNextChannelCommand
+			jr +
+		++
+		; less than or greater than check. determine which
+		rlca
+
+		jr c,++
+			; jump if the variable is less than the value
+			call compareJumpVariable
+			jp nc,doNextChannelCommand
+			jr +
+		++
+			; jump if the variable is greater than the value
+			call compareJumpVariable
+			jp c,doNextChannelCommand
+			jp z,doNextChannelCommand
+	+
+	ld a,h
+	and $7f
+	or $40
 	ld h,a
 	ld a,(wSoundChannel)
 	sla a
@@ -1365,6 +1394,18 @@ channelCmdfe:
 	m_WriteHlToFF00PlusA
 
 	jp doNextChannelCommand
+
+compareJumpVariable:
+	push hl
+	call getNextChannelByte
+	ld l,a
+	call getNextChannelByte
+	ld h,a
+	call getNextChannelByte
+	cp (hl)
+	pop hl
+	ret
+
 
 ;;
 multiplyHlByA:

@@ -307,9 +307,57 @@
 .endm
 
 ; fe: jump to the given address
+;     NOTE: Jump address CANNOT be in bank0
 .macro goto
+	.assert NARGS == 1
+	goto_helper \1 0 0 0
+.endm
+
+; fe: jump to the first address if the byte at
+;     the second address equals the given value
+;     NOTE: Jump address CANNOT be in bank0
+.macro goto_if_eq
+	goto_helper \1 \2 \3 1
+.endm
+
+; fe: jump to the first address if the byte at the
+;     second address is less than the given value
+;     NOTE: Jump address CANNOT be in bank0
+.macro goto_if_lt
+	goto_helper \1 \2 \3 2
+.endm
+
+; fe: jump to the first address if the byte at the
+;     second address is greater than the given value
+;     NOTE: Jump address CANNOT be in bank0
+.macro goto_if_gt
+	goto_helper \1 \2 \3 3
+.endm
+
+.macro goto_helper
+	.assert NARGS == 4
+	.assert (\4 >= 0) && (\4 < 4)
+
 	.db $fe
-	.dw \1
+	.db (\1&$ff)
+	.if   \4 == 3
+		; jump if greater than
+		.db ((\1>>8)&$3f)|$c0
+	.elif \4 == 2
+		; jump if less than
+		.db ((\1>>8)&$3f)|$80
+	.elif \4 == 1
+		; jump if equal
+		.db ((\1>>8)&$3f)|$40
+	.else
+		; regular jump
+		.db ((\1>>8)&$3f)
+	.endif
+
+	.if \4 > 0
+		.dw \2
+		.db \3
+	.endif
 .endm
 
 ; ff: disables the channel
