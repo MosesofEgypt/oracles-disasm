@@ -7304,7 +7304,16 @@ patch_upstairsRepairSwordScript_body:
 	initcollisions
 @npcLoop:
 	checkabutton
-	showtextnonexitable TX_5810
+
+	jumpifmemoryset wPastRoomFlags+(<ROOM_AGES_1be), $06, +
+		; First meeting
+		ormemory wPastRoomFlags+(<ROOM_AGES_1be), $06
+		showtextnonexitable TX_5800
+		scriptjump ++
+	+
+		; not first meeting
+		showtextnonexitable TX_5810
+	++
 	jumpiftextoptioneq $00, @saidYes1
 	showtext TX_5802
 	scriptjump @npcLoop

@@ -385,13 +385,13 @@ treasureDisplayData2:
 
 @treasureDisplayData_bracelet:
 .if defined(ULTRAWIDE_INVENTORY_SPRITES)
-	.db TREASURE_BRACELET,           $86, $05, $87, $05, $00, <TX_092b ; L1
+	.db TREASURE_BRACELET,           $86, $05, $87, $05, LEVELED_ITEM_DISPLAY_MODE, <TX_092b ; L1
 	.db TREASURE_BRACELET,           $86, $03, $87, $02, $00, <TX_09_POWERGLOVE ;
 .elif defined(WIDE_INVENTORY_SPRITES)
-	.db TREASURE_BRACELET,           $86, $05, $87, $05, $06, <TX_092b ; L1
+	.db TREASURE_BRACELET,           $86, $05, $87, $05, LEVELED_ITEM_DISPLAY_MODE, <TX_092b ; L1
 	.db TREASURE_BRACELET,           $86, $03, $87, $02, $06, <TX_09_POWERGLOVE ;
 .else
-	.db TREASURE_BRACELET,           $99, $05, $00, $00, $00, <TX_092b, ; L1
+	.db TREASURE_BRACELET,           $99, $05, $00, $00, LEVELED_ITEM_DISPLAY_MODE, <TX_092b, ; L1
 	.db TREASURE_BRACELET,           $af, $05, $00, $00, $00, <TX_09_POWERGLOVE, ; L2
 .endif
 

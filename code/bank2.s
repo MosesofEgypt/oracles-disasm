@@ -6032,22 +6032,23 @@ showItemText2:
 	ld b,>TX_0900
 	bit 7,c
 	jr z,+
-
-	ld b,>TX_3000
-	ld c,$c0
-	and $3f
-	ld l,a
-	add <TX_3040
-	bit 6,c ; Bit 6 is always set?
-	ld c,a
-	jr z,+
-
-	ld (wTextSubstitutions+2),a
-	ld a,l
-	add <TX_3080
-	ld (wTextSubstitutions+3),a
-	ld c,<TX_30c1
-+
+		ld a,(wOpenedMenuType)
+		ld l,a
+		ld a,(wInventorySubmenu)
+		swap a
+		or l
+		cp $11
+		ld a,c
+		jr nz,+
+			; this is ring text on the second inventory page
+			and $3f
+			add <TX_3040
+			ld c,a
+			ld (wTextSubstitutions+2),a
+			add <TX_3080 - <TX_3040
+			ld (wTextSubstitutions+3),a
+			ld bc,TX_30c1
+	+
 	jp showTextOnInventoryMenu
 
 ;;

@@ -203,7 +203,7 @@ parentItemCode_sword:
 		ld a,$1e
 		ld e,Item.counter1
 		ld (de),a
-		ld a,$05
+		ld a,$03
 		inc e
 		ld (de),a
 
@@ -258,8 +258,13 @@ parentItemCode_sword:
 	ld (hl),c
 
 	; trigger the flip animation and reenable jumping
-	ld hl,wLinkInAir
-	ld (hl),$42
+	ld a,(wFeatherLevel)
+	cp $02
+	ld a,$40
+	jr c,+
+		ld a,$41
+	+
+	ld (wLinkInAir),a
 
 	; stop downstabbing now that a hit has connected
 	jp @deleteSelf

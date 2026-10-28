@@ -57,10 +57,13 @@ patch_subid00:
 	ld (hl),SPEED_100
 
 	call objectSetVisiblec2
-	ld a,GLOBALFLAG_PATCH_REPAIRED_EVERYTHING
-	call checkGlobalFlag
-	ld hl,{SCRIPTS_1}.patch_upstairsRepairedEverythingScript
-	jr nz,@setScript
+	isTreasureFlagSet TREASURE_TUNI_NUT
+	jr nz,+
+		ld a,GLOBALFLAG_PATCH_REPAIRED_EVERYTHING
+		call checkGlobalFlag
+		ld hl,{SCRIPTS_1}.patch_upstairsRepairedEverythingScript
+		jr nz,@setScript
+	+
 
 	ld a,<TX_5813
 	ld (wTmpcfc0.patchMinigame.itemNameText),a

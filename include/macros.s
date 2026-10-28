@@ -526,6 +526,31 @@
 	.undefine ID
 .endm
 
+.MACRO mulABy16
+	sla a
+	mulABy8
+.ENDM
+
+.MACRO mulABy8
+	sla a
+	mulABy4
+.ENDM
+
+.MACRO mulABy4
+	sla a
+	sla a
+.ENDM
+
+.MACRO divABy8
+	srl a
+	divABy4
+.ENDM
+
+.MACRO divABy4
+	srl a
+	srl a
+.ENDM
+
 ; Pointers
 .MACRO 3BytePointer
 	.assert NARGS == 1

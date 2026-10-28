@@ -136,7 +136,7 @@ itemCode05:
 .endif
 
 
-; State 8: downstabbing shockwave(first few frames)
+; State 8: downstabbing shockwave
 @state8:
 	; prevent link from being knocked back
 	xor a
@@ -144,21 +144,21 @@ itemCode05:
 
 	; change the swords damage type to a weak shield bump to
 	; act as a shockwave for knocking away nearby enemies
-	ld a,$80 | ITEMCOLLISION_L1_SHIELD
+	ld a,$80|ITEMCOLLISION_L1_SHIELD
 	jr +
 
-; State 9: downstabbing shockwave
+; State 9: downstabbing recoil
 @state9:
 	; prevent link from being knocked back
 	xor a
 	ld (w1Link.knockbackCounter),a
-	jr @state1
+	jr +
 
 ; State 7: downstabbing
 @state7:
 ; State 4: swordspinning
 @state4:
-	ld a, $80 | ITEMCOLLISION_SWORDSPIN
+	ld a,$80|ITEMCOLLISION_SWORDSPIN
 	+
 	ld e,Item.collisionType
 	ld (de),a

@@ -9,75 +9,74 @@
 .RAMSECTION Wram0_c000
 
 wc000:	; $c000
-	dsb	$16	; padding
+	dsb	$20	; padding
 
-wSoundFadeCounter: ; $c016
+wSoundFadeCounter: ; $c020
 ; When [wSoundFadeCounter]&[wSoundFadeSpeed] == 0, volume is incremented or decremented.
 	db
 
-wSoundFadeDirection: ; $c017
+wSoundFadeDirection: ; $c021
 ; $01 for fadeout (volume down), $0a for fadein
 	db
 
-wSoundFadeSpeed: ; $c018
+wSoundFadeSpeed: ; $c022
 	db
 
-wSoundChannelValue: ; $c019
+wSoundChannelValue: ; $c023
 ; This holds the priority of a channel being read, but only in one function.
 	db
 
-wSoundChannel: ; $c01a
+wSoundChannel: ; $c024
 ; The sound channel being "operated on" for various functions.
 	db
 
-wSoundDisabled: ; $c01b
+wSoundDisabled: ; $c025
 ; All sound processing is disabled when this is nonzero
 	db
 
-wTriggerSfxNoiseChannelOnNextSound: ; $c01c
+wTriggerSfxNoiseChannelOnNextSound: ; $c026
 	; Audio command $f0 sets this to $80, which is then written to NR44 on the next standard command
 	db
 
-wSoundCmd: ; $c01d
+wSoundCmd: ; $c027
 	db
 
-wSoundCmdEnvelope: ; $c01e
+wSoundCmdEnvelope: ; $c028
 	; This value goes straight to NR12/NR22 in updateSquareChannelVolume
 	; When that function returns, this value is updated with bits 6 and 7 that can go to NR14/NR24
 	db
 
-wSoundFrequencyL: ; $c01f
+wSoundFrequencyL: ; $c029
 	db
-wSoundFrequencyH: ; $c020
+wSoundFrequencyH: ; $c02a
 	db
-wWaveformIndex: ; $c021
+wWaveformIndex: ; $c02b
 	db
 
-wMusicVolume: ; $c022
+wMusicVolume: ; $c02c
 ; Basically the same as hMusicVolume, except this is only used in the music routines.
 	db
 
-wMusicMuted: ; $c023
+wMusicMuted: ; $c02d
 	; When 2, prevents channel 4 from updating related hardware registers
 	; 0: Music is not muted (equivalent to wMusicVolume != 0)
 	; 1: Music has just been muted (updateSound function has not completed since then)
 	; 2: Music has been muted for some time (muted for the entire duration of the most recent updateSound call)
 	db
 
-wSoundVolume: ; $c024
+wSoundVolume: ; $c02e
 	; This value goes straight to NR50.
 	; Bits 0-2: left speaker, 4-6: right speaker (unless I mixed them up)
 	db
 
-
-wWaveChannelVolume: ; $c025
+wWaveChannelVolume: ; $c02f
 	; This value goes straight to NR32 if the corresponding channel is active
 	; Only used for channels 4 and 5
-	dsb 8
+	dsb 2
 
-wChannelIsPlayingRest: ; $c02d
+wWaveChannelIsPlayingRest: ; $c031
 	; Only used for channels 4 and 5
-	dsb 6
+	dsb 2
 
 wChannelPitchShift: ; $c033
 ; An offset for wSoundFrequencyL,H
@@ -1783,11 +1782,11 @@ wDisplayedMoneyAddress: ; $cbe5
 wDisplayedRupees: ; $cbe5/$cbe6
 	dw
 
-wDontUpdateStatusBar: ; $cbe7
+wDontUpdateStatusBar: ; $cbe7/$cbe8
 ; if nonzero, status bar doesn't get updated
 	db
 
-wcbe8: ; $cbe8
+wcbe8: ; $cbe8/$cbe9
 ; Bit 7: whether status bar is reorganized for biggoron's sword maybe?
 ; Bit 0 set if status bar needs to be reorganized slightly for last row of hearts
 	db

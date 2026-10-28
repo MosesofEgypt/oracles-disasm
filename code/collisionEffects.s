@@ -1945,10 +1945,22 @@ enemyPogoComboActive:
 
 collisionLinkBounce:
 	; only bounce if link is in the air, the collision effect
-	; is specifically COLLISIONEFFECT_DAMAGE_LINK, and link is
-	; wearing the rings. we don't want to consider other damage
-	; types, as they're rare and the situations they're use
-	; in don't warrant link being able to bounce off safely
+	; is specifically a COLLISIONEFFECT_DAMAGE_LINK type, and
+	; link is wearing the rings. we don't want to consider other
+	; damage types, as they're rare and the situations they're
+	; use in don't warrant link being able to bounce off safely
+	cp COLLISIONEFFECT_DAMAGE_LINK
+	jr z,+
+	cp COLLISIONEFFECT_DAMAGE_LINK_NO_KNOCKBACK
+	jr z,+
+	cp COLLISIONEFFECT_DAMAGE_LINK_LOW_KNOCKBACK
+	jr z,+
+	cp COLLISIONEFFECT_DAMAGE_LINK_HIGH_KNOCKBACK
+	jr z,+
+	cp COLLISIONEFFECT_DAMAGE_LINK_WITH_RING_MODIFIER
+	ret nz
+	+
+
 	push bc
 	push af
 	; make sure this is link
@@ -1972,7 +1984,9 @@ collisionLinkBounce:
 	ret nz
 
 	; ensure this is something link can pogo safely on
+	ld h,a
 	call isValidTargetForPogo
+	ld a,h
 	ret z
 
 	; convert collisions that would damage link into an extra jump
@@ -2032,9 +2046,9 @@ isValidTargetForPogo:
 	ld a,e
 	and $c0
 	ld l,a
+	inc l ; move to the id
 
 	cp $80
-	set 0,l ; move to the id
 	jr nz,+
 		; this is an enemy. check if judo works
 		ld a,(hl)
@@ -2047,10 +2061,12 @@ isValidTargetForPogo:
 		; this is a part
 		ld a,(hl)
 		ld hl,@pogoTargets
+		push bc
 		call checkFlagOptimized
+		pop bc
 		jr ++
 	+
-	xor a
+		xor a
 	++
 	pop hl
 	ld a,h

@@ -1,29 +1,25 @@
-showItemText2:
+showRingText:
 	ld hl,wInventory.activeText
 	cp (hl)
 	ret z
 
 	ld (hl),a
-	ld c,a
-	ld b,>TX_0900
-	bit 7,c
-	jr z,+
-
-	ld b,>TX_3000
-	ld c,$c0
-	and $3f
-	ld l,a
-	add <TX_3040
-	bit 6,c ; Bit 6 is always set?
-	ld c,a
-	jr z,+
-
-	ld (wTextSubstitutions+2),a
-	ld a,l
-	add <TX_3080
+	cp $80
+	jr nc,+
+		; blank name and description
+		ld a,$c0
+		ld (wTextSubstitutions+2),a
+		jr ++
+	+
+		; combine name and description using TX_30c1
+		and $3f
+		add <TX_3040
+		ld c,a
+		ld (wTextSubstitutions+2),a
+		add <TX_3080 - <TX_3040
+	++
 	ld (wTextSubstitutions+3),a
-	ld c,<TX_30c1
-+
+	ld bc,TX_30c1
 	jp showTextOnInventoryMenu
 
 getDirectionButtonOffsetFromHl:
@@ -173,7 +169,7 @@ ringMenu_copyTilemapToVram:
 ; Clears the textbox, and decides whether to draw ring list or unappraised rings.
 ringMenu_redrawRingListOrUnappraisedRings:
 	xor a
-	call showItemText2
+	call showRingText
 	ld hl,ringMenu_copyTilemapToVram
 	push hl
 
@@ -583,7 +579,7 @@ ringMenu_updateRingText:
 	ld hl,wRingMenu.ringNameTextIndex
 	cp (hl)
 	jr z,+
-	call showItemText2
+	call showRingText
 	ld a,$01
 	ld (wRingMenu.textDelayCounter),a
 	ret

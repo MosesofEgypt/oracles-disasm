@@ -9319,7 +9319,7 @@ quickSwapHeldItems:
 	callfrombank0 bank0Ext.quickSwapHeldItems_body
 
 	; run updateStatusBar_body
-	ld a,$01
+	ld a,$03
 	ld (wStatusBarNeedsRefresh),a
 	ld hl,$0100
 	callfrombank0 bank2.runBank2Function

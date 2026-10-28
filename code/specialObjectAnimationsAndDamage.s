@@ -350,9 +350,29 @@ func_4553:
 	cp LINK_ANIM_MODE_WALK
 .ifdef CONTEXT_SENSITIVE_AUTO_EQUIP
 	jr z,+
+		ld a,(wLinkInAir)
+		or a
+		ret z
+
 		ld hl,wAutoEquipSubtypeInfo
+		bit 4,(hl)
+		ret z
 		res 4,(hl)
-		ret
+
+		; unequip whatever is auto-equipped if we're in the air
+		ld a,(wMiscSettings)
+		bit 5,a
+		ld hl,wInventoryA
+		jr nz,++
+			dec l
+		++
+		ld l,(hl)
+
+		ld a,(wAutoEquipInvSlot)
+		cp $ff
+		ret z
+		ld a,l
+		jp handleAutoEquipItem
 	+
 .else
 	ret nz

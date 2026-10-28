@@ -466,11 +466,12 @@ initializeFile:
 	.else
 		callab interactionCode5.initializeChildOnGameStart
 	.endif
-.ifdef ROM_COMBO
-	call wIsSeasons
-	jr c,saveFile
-.endif
+
 .if defined(ROM_AGES) || defined(ROM_COMBO)
+	.ifdef ROM_COMBO
+		call wIsSeasons
+		jr c,saveFile
+	.endif
 	callab roomTileChanges.initializeVinePositions
 .endif
 
@@ -979,13 +980,23 @@ initializeComboGame:
 		callab interactionCode5.initializeChildOnGameStart
 	.endif
 
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+	.ifdef ROM_COMBO
+		call wIsSeasons
+		jr c,+
+	.endif
+	callab roomTileChanges.initializeVinePositions
++
+.endif
+
 	; remove the temporary items
 	xor a
 	ld hl,wInventoryB
 	ldi (hl),a
 	ld  (hl),a
 
-	; ensure this defaults to blank
+	; ensure this defaults to being full
+	ld a,$0f
 	ld (wObtainedSeasons),a
 
 	; save the new file

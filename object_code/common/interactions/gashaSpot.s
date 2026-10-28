@@ -180,6 +180,12 @@ m_InteractionCode $b6
 	cp $ff
 	ret nz
 
+	push de
+	ld hl,wOptimizationFlags
+	set 4,(hl)
+	call reloadTileMap
+	pop de
+
 	ld a,DISABLE_ALL_BUT_INTERACTIONS
 	ld (wDisabledObjects),a
 	ld (wMenuDisabled),a
@@ -599,14 +605,8 @@ m_InteractionCode $b6
 	set 4,(hl)
 	ld h,d
 	ld l,Interaction.counter1
-	ld a,(hl)
-	or a
-	jr z,@counter1Done
-
-	dec a
-	ld (hl),a
+	dec (hl)
 	ret nz
-	jp reloadTileMap
 
 @counter1Done:
 	ld a,$08

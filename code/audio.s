@@ -141,6 +141,18 @@
 	.undefine DISABLE_FUNC
 .endm
 
+;;
+; Sets a channel parameter to the argument value.
+; Does nothing for noise channels
+.macro m_ChannelCmdSetSquareOrWaveValue
+	ld a,(wSoundChannel)
+	cp MUS_NOISE
+	jp nc,channelCmdSkipByte
+		call getNextChannelByte
+		m_WriteChannelData \1
+		jp doNextChannelCommand
+.endm
+
 .BANK 0 SLOT 0
 
 m_section_free Music_Reading
@@ -502,8 +514,7 @@ updatePlayedFrequency:
 	ld a,(wSoundChannel)
 	and $01
 	ld b,a
-	sla a
-	sla a
+	mulABy4
 	add b
 	ld b,a
 
@@ -636,44 +647,27 @@ doNextChannelCommand:
 	.dw channelCmdff
 
 ;;
-; Vibrato
 ; Sets vibrato to the argument value, does nothing for noise channels
 channelCmdf9:
-	ld a,(wSoundChannel)
-	cp MUS_NOISE
-	jr nc,channelCmdSkipByte
+	m_ChannelCmdSetSquareOrWaveValue wChannelVibratos
 
+;;
+; Sets sweep to the argument value, does nothing for noise channels
+channelCmdf8:
+	m_ChannelCmdSetSquareOrWaveValue wChannelSweep
+
+;;
+; Sets pitch shift to the argument value, does nothing for noise channels
+channelCmdfd:
+	m_ChannelCmdSetSquareOrWaveValue wChannelPitchShift
+
+channelCmdSkipByte:
 	call getNextChannelByte
-	m_WriteChannelData wChannelVibratos
 
 ; these commands do nothing but skip to the next command
 channelCmdf1:
 channelCmdf2:
 channelCmdf3:
-	jr doNextChannelCommand
-
-;;
-; Sets sweep to the argument value, does nothing for noise channels
-channelCmdf8:
-	ld a,(wSoundChannel)
-	cp MUS_NOISE
-	jr nc,channelCmdSkipByte
-		call getNextChannelByte
-		m_WriteChannelData wChannelSweep
-		jr doNextChannelCommand
-
-;;
-; Sets pitch shift to the argument value, does nothing for noise channels
-channelCmdfd:
-	ld a,(wSoundChannel)
-	cp MUS_NOISE
-	jr nc,channelCmdSkipByte
-		call getNextChannelByte
-		m_WriteChannelData wChannelPitchShift
-		jp doNextChannelCommand
-
-channelCmdSkipByte:
-	call getNextChannelByte
 	jp doNextChannelCommand
 
 ;;
@@ -718,10 +712,12 @@ cmde0Toef:
 ;
 ; Sfx noise channel:
 ;   Sets volume and envelope (argument gets written straight to NR42).
-;   Should not be used with channel 6 or else wChannelSweep
-;   and wChannelEnvelopeStates get messed up for channel 0
+;   Does nothing for music noise channel(channel 6).
 channelCmdf0:
 	ld a,(wSoundChannel)
+	cp MUS_NOISE
+	jp z,channelCmdSkipByte
+
 	cp SFX_NOISE
 	jr z,@sfxNoiseChannel
 		call getNextChannelByte
@@ -761,9 +757,8 @@ cmdVolume:
 	and $0f
 	ld l,a
 	ld a,(wSoundChannel)
+	and $fe
 	cp MUS_WAVE
-	jp z,doNextChannelCommand
-	cp SFX_WAVE
 	jp z,doNextChannelCommand
 
 	ld a,l
@@ -775,18 +770,16 @@ cmdVolume:
 ; For wave channels, sets wChannelDutyCycles to the argument value and updates the waveform based on that index
 ; Should not be used with noise channels or else wChannelEnvelopeStates gets messed up for channel 0 or 1
 channelCmdf6:
+	; jump for both wave channels
 	ld a,(wSoundChannel)
+	and $fe
 	cp MUS_WAVE
-	jr z,@wave
-
-	cp SFX_WAVE
 	jr z,@wave
 
 	call getNextChannelByte
 	and $03
 	swap a
-	sla a
-	sla a
+	mulABy4
 	m_WriteChannelData wChannelDutyCycles
 	jp doNextChannelCommand
 
@@ -837,10 +830,7 @@ standardCmdSfxSquareChannel2:
 	; Apply envelope to make the volume quickly decrease to 0
 	m_WriteChannelData wChannelEnvelopeStates, $02
 	call getChannelVolume
-	sla a
-	sla a
-	sla a
-	sla a
+	mulABy16
 	ld c,$01
 	or c
 	ld (wSoundCmdEnvelope),a
@@ -860,9 +850,7 @@ standardCmdSfxSquareChannel2:
 	m_WriteChannelData wChannelVibratoActive, $00
 	m_ReadChannelData wChannelVibratos
 	and $f0
-	srl a
-	srl a
-	srl a
+	divABy8
 	m_WriteChannelData wChannelVibratoCounters
 	call updatePlayedFrequency
 @cmd61:
@@ -881,9 +869,7 @@ setChannelWaitCounter:
 ; @param[out]	a	Number of ticks to wait for the envelope
 getWaitTimeForEnvelope:
 	ld a,b
-	sla a
-	sla a
-	sla a
+	mulABy8
 	add c
 	m_ReadDataFromHlPlusA envelopeWaitTable
 	ret
@@ -968,10 +954,7 @@ handleEnvelopes:
 	+
 	m_WriteChannelData wChannelEnvelopeStates
 	call getChannelVolume
-	sla a
-	sla a
-	sla a
-	sla a
+	mulABy16
 	ld (wSoundCmdEnvelope),a
 	m_ReadChannelData wChannelEnvelopes2
 	ld c,a
@@ -1008,8 +991,7 @@ updateSquareChannelVolume:
 	ld a,(wSoundChannel)
 	and $01
 	ld b,a
-	sla a
-	sla a
+	mulABy4
 	add b
 	ld b,a
 	add R_SQ1_VOLUME_AND_ENVELOPE
@@ -1032,16 +1014,16 @@ updateSquareChannelVolume:
 updateWaveChannelVolume:
 	call getWaveChannelVolume
 	ld b,a
-	ld a,(wWaveChannelVolume+MUS_WAVE)
+	ld a,(wWaveChannelVolume)
 	cp b
 	ret z
 
 	ld a,b
-	ld (wWaveChannelVolume+MUS_WAVE),a
+	ld (wWaveChannelVolume),a
 	call isWaveChannelUnavailable
 	ret nz
 
-	ld a,(wWaveChannelVolume+MUS_WAVE)
+	ld a,(wWaveChannelVolume)
 	ldh (R_WAVE_OUTPUT_LEVEL),a
 	ret
 
@@ -1076,8 +1058,7 @@ getChannelVolume:
 
 @quarterVolume:
 	pop af
-	srl a
-	srl a
+	divABy4
 	ret
 
 @mute:
@@ -1100,10 +1081,10 @@ standardCmdSfxWaveChannel:
 	cp $60
 	jr nz,@freqCommand
 @cmd60:
-	m_WriteChannelData wChannelIsPlayingRest,$01
+	m_WriteChannelData wWaveChannelIsPlayingRest-MUS_WAVE,$01
 
 	ld a,$00 ; volume guaranteed to be 0 because we just set rest to 1
-	m_WriteChannelData wWaveChannelVolume
+	m_WriteChannelData wWaveChannelVolume-MUS_WAVE
 	call isWaveChannelUnavailable
 	jr nz,+
 		ldh (R_WAVE_OUTPUT_LEVEL),a
@@ -1111,7 +1092,7 @@ standardCmdSfxWaveChannel:
 
 	jp setChannelWaitCounter
 @freqCommand:
-	m_WriteChannelData wChannelIsPlayingRest,$00
+	m_WriteChannelData wWaveChannelIsPlayingRest-MUS_WAVE,$00
 	ld a,(wSoundCmd)
 	ld hl,soundFrequencyTable
 	readWordFromTable
@@ -1120,16 +1101,14 @@ standardCmdSfxWaveChannel:
 	m_WriteChannelData wChannelVibratoActive,$00
 	m_ReadChannelData wChannelVibratos
 	and $f0
-	srl a
-	srl a
-	srl a
+	divABy8
 	m_WriteChannelData wChannelVibratoCounters
 	call getWaveChannelVolume
-	m_WriteChannelData wWaveChannelVolume
+	m_WriteChannelData wWaveChannelVolume-MUS_WAVE
 	call isWaveChannelUnavailable
 	jr nz,+
 
-	m_ReadChannelData wWaveChannelVolume
+	m_ReadChannelData wWaveChannelVolume-MUS_WAVE
 	ldh (R_WAVE_OUTPUT_LEVEL),a
 	ld a,(wSoundFrequencyL)
 	ldh (R_WAVE_PERIOD_LOW),a
@@ -1141,32 +1120,27 @@ standardCmdSfxWaveChannel:
 ;;
 ; @param[out]	a	Volume of channel wSoundChannel dependent of wMusicVolume, in a form that can be written to NR32
 getWaveChannelVolume:
-	m_ReadChannelDataFlag wChannelIsPlayingRest
-	jr nz,@mute
+	m_ReadChannelDataFlag wWaveChannelIsPlayingRest-MUS_WAVE
+	ld a,(@volumes + MUS_VOLUME_MUTE)
+	ret nz
+
+	; sfx wave channel always plays at 100% volume
 	ld a,(wSoundChannel)
 	cp SFX_WAVE
-	jr nc,@fullVolume
+	ld a,MUS_VOLUME_MAX
+	jr z,+
+		ld a,(wMusicVolume)
+		and $03
+	+
 
-	ld a,(wMusicVolume)
-	and $03
-	jr z,@mute
-	dec a
-	jr z,@quarterVolume
-	dec a
-	jr z,@halfVolume
+	ld hl,@volumes
+	addAToHl
+	ld a,(hl)
+	ret
 
-@fullVolume:
-	ld a,$20
-	ret
-@halfVolume:
-	ld a,$40
-	ret
-@quarterVolume:
-	ld a,$60
-	ret
-@mute:
-	ld a,$00
-	ret
+@volumes:
+	;  mute, 25%, 50%, 100%
+	.db $00, $60, $40, $20
 
 ;;
 standardCmdMusicNoiseChannel:
@@ -1198,10 +1172,7 @@ standardCmdMusicNoiseChannel:
 	push hl
 	call getChannelVolume
 	pop hl
-	sla a
-	sla a
-	sla a
-	sla a
+	mulABy16
 	or l
 	ldh (R_NOISE_VOLUME_AND_ENVELOPE),a
 	ld a,h
@@ -1293,7 +1264,7 @@ silencePlayedSound:
 	m_ReadDataFromHlPlusE wChannelDutyCycles
 	ld (wWaveformIndex),a
 	call setWaveform
-	ld a,(wWaveChannelVolume+MUS_WAVE)
+	ld a,(wWaveChannelVolume)
 	ldh (R_WAVE_OUTPUT_LEVEL),a
 	ret
 

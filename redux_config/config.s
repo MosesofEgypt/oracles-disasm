@@ -178,6 +178,11 @@
 		; enabled when more than 40 sprites are onscreen
 		.define AUTO_SPRITE_FLICKERING
 	.endif
+	.ifndef USE_VANILLA_ITEM_LEVEL_CAPS
+		; determines whether items with no additional levels in a game
+		; will be displayed without a level in that game specifically
+		.define USE_VANILLA_ITEM_LEVEL_CAPS
+	.endif
 .endif
 
 ; NOTE: if you change these, you MUST update the text that
@@ -291,4 +296,15 @@
 	.define I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND
 	; WLA refuses to work with me on banks 256 and higher
 	;.define I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
+.endif
+
+.ifdef USE_VANILLA_ITEM_LEVEL_CAPS
+	; display no level
+	.define LEVELED_ITEM_DISPLAY_MODE	$ff
+.elif defined(WIDE_INVENTORY_SPRITES)
+	; display vertical level
+	.define LEVELED_ITEM_DISPLAY_MODE	$06
+.else
+	; display horizontal level
+	.define LEVELED_ITEM_DISPLAY_MODE	$00
 .endif
