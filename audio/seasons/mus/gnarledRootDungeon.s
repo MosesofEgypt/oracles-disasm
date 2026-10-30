@@ -3,7 +3,6 @@ musGnarledRootDungeonStart:
 musGnarledRootDungeonChannel1:
 	vibrato $f1
 	env $0 $00
-	cmdf2
 	duty $02
 musicf06be:
 	vol $4
@@ -156,7 +155,6 @@ musicf06be:
 	cmdff
 
 musGnarledRootDungeonChannel0:
-	cmdf2
 	vibrato $f1
 	env $0 $00
 	duty $02

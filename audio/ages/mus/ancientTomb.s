@@ -3,7 +3,6 @@ musAncientTombStart:
 musAncientTombChannel1:
 	vibrato $00
 	env $0 $00
-	cmdf2
 	duty $02
 musicf7b58:
 	vol $0
@@ -187,7 +186,6 @@ musicf7b58:
 musAncientTombChannel0:
 	vibrato $00
 	env $0 $00
-	cmdf2
 	duty $01
 musicf7c85:
 	vol $6
@@ -442,7 +440,6 @@ musicf7c85:
 	cmdff
 
 musAncientTombChannel4:
-	cmdf2
 musicf7e2a:
 	duty $0e
 	note d2  $24

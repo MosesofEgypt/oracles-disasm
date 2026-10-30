@@ -3,7 +3,6 @@ musExplorersCryptStart:
 musExplorersCryptChannel1:
 	vibrato $f1
 	env $0 $00
-	cmdf2
 	duty $02
 musicf0db2:
 	vol $0
@@ -237,7 +236,6 @@ musicf0db2:
 musExplorersCryptChannel0:
 	vibrato $f1
 	env $0 $00
-	cmdf2
 	duty $02
 musicf0f4a:
 	vol $0
@@ -456,7 +454,6 @@ musicf0f4a:
 	cmdff
 
 musExplorersCryptChannel4:
-	cmdf2
 musicf10cc:
 	duty $0e
 	note d2  $0a
@@ -713,7 +710,6 @@ musicf10cc:
 	cmdff
 
 musExplorersCryptChannel6:
-	cmdf2
 musicf12c5:
 	vol $4
 	note $2a $14

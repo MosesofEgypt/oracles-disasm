@@ -1,7 +1,6 @@
 musWingDungeonStart:
 
 musWingDungeonChannel1:
-	cmdf2
 	vibrato $00
 	env $0 $00
 	duty $02
@@ -221,7 +220,6 @@ musicf306e:
 	cmdff
 
 musWingDungeonChannel0:
-	cmdf2
 	vibrato $00
 	env $0 $00
 	duty $02

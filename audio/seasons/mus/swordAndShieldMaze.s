@@ -4,7 +4,6 @@ musSwordAndShieldMazeChannel1:
 musicf02f4:
 	vibrato $e1
 	env $0 $00
-	cmdf2
 	duty $02
 	vol $6
 	note c4  $24
@@ -171,7 +170,6 @@ musicf02f4:
 musSwordAndShieldMazeChannel0:
 	vibrato $e1
 	env $0 $00
-	cmdf2
 	duty $02
 musicf041c:
 	vol $6
@@ -336,7 +334,6 @@ musicf041c:
 	cmdff
 
 musSwordAndShieldMazeChannel4:
-	cmdf2
 musicf0536:
 	duty $07
 	note cs3 $12
@@ -410,7 +407,6 @@ musicf0536:
 	cmdff
 
 musSwordAndShieldMazeChannel6:
-	cmdf2
 musicf05c3:
 	vol $6
 	note $22 $02

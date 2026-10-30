@@ -3,7 +3,6 @@ musHerosCaveStart:
 musHerosCaveChannel1:
 	vibrato $00
 	env $0 $03
-	cmdf2
 	duty $02
 musicf0c91:
 	vol $6
@@ -82,7 +81,6 @@ musicf0c91:
 musHerosCaveChannel0:
 	vibrato $00
 	env $0 $03
-	cmdf2
 	duty $02
 musicf0d21:
 	vol $6
@@ -115,7 +113,6 @@ musicf0d21:
 	goto musicf0d21
 	cmdff
 musHerosCaveChannel4:
-	cmdf2
 musicf0d5b:
 	duty $17
 	note ds4 $07

@@ -3,7 +3,6 @@ musSubrosianDanceStart:
 musSubrosianDanceChannel1:
 	vibrato $00
 	env $0 $04
-	cmdf2
 	duty $02
 musicf2e89:
 	vol $6
@@ -267,7 +266,6 @@ musicf2e89:
 musSubrosianDanceChannel0:
 	vibrato $00
 	env $0 $03
-	cmdf2
 	duty $02
 musicf304c:
 	vol $0
@@ -456,7 +454,6 @@ musicf304c:
 	cmdff
 
 musSubrosianDanceChannel4:
-	cmdf2
 musicf3194:
 	duty $0e
 	note e2  $1c
@@ -682,7 +679,6 @@ musicf3194:
 	cmdff
 
 musSubrosianDanceChannel6:
-	cmdf2
 musicf3351:
 	vol $3
 	note $23 $1c

@@ -3,7 +3,6 @@ musUnicornsCaveStart:
 musUnicornsCaveChannel1:
 	vibrato $e1
 	env $0 $00
-	cmdf2
 	duty $02
 	vol $6
 	note fs3 $07
@@ -415,7 +414,6 @@ musUnicornsCaveChannel0:
 	note gs3 $1c
 	vibrato $00
 	env $0 $00
-	cmdf2
 	duty $02
 musicf16a7:
 	rest $1c
@@ -828,7 +826,6 @@ musicf16a7:
 
 musUnicornsCaveChannel4:
 	rest $1c
-	cmdf2
 musicf1941:
 	duty $0e
 	note fs2 $0e
@@ -1227,7 +1224,6 @@ musicf1941:
 
 musUnicornsCaveChannel6:
 	rest $1c
-	cmdf2
 musicf1c58:
 	vol $5
 	note $26 $1c

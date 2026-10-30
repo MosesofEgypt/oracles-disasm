@@ -10,7 +10,6 @@ musMakuTreeChannel1:
 musicf0001:
 	vibrato $e1
 	env $0 $00
-	cmdf2
 	duty $02
 	vol $6
 	note e3  $1c
@@ -207,7 +206,6 @@ musMakuTreeChannel0:
 musicf0156:
 	vibrato $e1
 	env $0 $00
-	cmdf2
 	duty $02
 	vol $6
 	note a2  $1c

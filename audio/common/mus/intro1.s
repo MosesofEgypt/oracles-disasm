@@ -3,7 +3,6 @@ musIntro1Start:
 musIntro1Channel1:
 	vibrato $e1
 	env $0 $00
-	cmdf2
 	duty $01
 	vol $5
 	note d4  $2a
@@ -911,7 +910,6 @@ musIntro1Channel0:
 	note gs3 $62
 	vibrato $e1
 	env $0 $00
-	cmdf2
 	duty $02
 	vol $5
 	note d5  $07
@@ -1261,7 +1259,6 @@ musicf74a6:
 	cmdff
 
 musIntro1Channel4:
-	cmdf2
 	duty $0e
 	note g3  $07
 	rest $07
@@ -1674,7 +1671,6 @@ musicf77c0:
 	cmdff
 
 musIntro1Channel6:
-	cmdf2
 	vol $2
 	note $2e $70
 	note $2e $69

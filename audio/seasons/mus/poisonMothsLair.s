@@ -3,7 +3,6 @@ musPoisonMothsLairStart:
 musPoisonMothsLairChannel1:
 	vibrato $f1
 	env $0 $00
-	cmdf2
 	duty $02
 musicf1dc1:
 	vol $7
@@ -337,7 +336,6 @@ musicf1dc1:
 musPoisonMothsLairChannel0:
 	vibrato $00
 	env $0 $00
-	cmdf2
 	duty $02
 musicf1ffc:
 	vol $7

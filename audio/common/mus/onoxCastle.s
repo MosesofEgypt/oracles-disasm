@@ -3,7 +3,6 @@ musOnoxCastleStart:
 musOnoxCastleChannel1:
 	vibrato $c1
 	env $0 $00
-	cmdf2
 	duty $01
 musicf0453:
 	vol $0
@@ -191,7 +190,6 @@ musicf0453:
 musOnoxCastleChannel0:
 	vibrato $c1
 	env $0 $00
-	cmdf2
 	duty $01
 musicf059e:
 	vol $0

@@ -1,7 +1,6 @@
 musMermaidsCaveStart:
 
 musMermaidsCaveChannel1:
-	cmdf2
 	vibrato $00
 	env $0 $00
 	duty $01
@@ -148,7 +147,6 @@ musicf1539:
 	cmdff
 
 musMermaidsCaveChannel0:
-	cmdf2
 	vibrato $00
 	env $0 $00
 	duty $02

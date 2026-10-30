@@ -175,6 +175,32 @@ musicReadFunction:
 .endif
 	ld a,c
 	ret
+
+readLoopBankAndAddress:
+	ld a,(hRomBank)
+	ld b,a
+	ld a,(wSoundChannel)
+	add <hSoundChannelBanks
+	ld c,a
+	ld a,($ff00+c)
+	rst_setrombank
+.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND
+	ld a,$01
+	ld ($3333),a
+.endif
+
+	ldi a,(hl)
+	ld d,a	; bank number upper byte + 1
+	ldi a,(hl)
+	ld e,a	; bank number
+	rst_derefHl
+.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND
+	xor a
+	ld ($3333),a
+.endif
+	ld a,b
+	rst_setrombank
+	ret
 .ends
 
 ; HACK-BASE: Bank of sound engine (and of data in "audio/{game}/soundChannelData.s") changed to
@@ -183,6 +209,111 @@ musicReadFunction:
 .ORG 0
 
 m_section_superfree AudioCode NAMESPACE audio
+
+;;
+; Returns the index that this channel occupies in the audio looping arrays.
+; Returns zflag set if channel DOES NOT support looping.
+getCallIndexForChannel:
+	ld a,(wSoundChannel)
+	push hl
+	ld hl,@loopIndexOffsets
+	rst_addAToHl
+	ld a,(hl)
+	pop hl
+	cp $ff
+	ret
+
+; Dicatates which loop array indices that each channel occupies.
+; A value of $ff means the channel doesn't support looping
+@loopIndexOffsets:
+	.db $00	; MUS_SQUARE_1
+	.db $01	; MUS_SQUARE_2
+	.db $ff	; SFX_SQUARE_1
+	.db $ff	; SFX_SQUARE_2
+	.db $02	; MUS_WAVE
+	.db $ff	; SFX_WAVE
+	.db $03	; MUS_NOISE
+	.db $ff	; SFX_NOISE
+
+getReturnPointer:
+	ld hl,$0000
+	call getCallIndexForChannel
+	ret z
+	ld h,>wMusicCallPointers
+	add a
+	add <wMusicCallPointers
+	ld l,a
+	ret
+
+getLoopPointer:
+	ld hl,$0000
+	call getCallIndexForChannel
+	ret z
+	ld h,>wMusicLoopPointers
+	add a
+	add <wMusicLoopPointers
+	ld l,a
+	ret
+
+setLoopsRemaining:
+	call getCallIndexForChannel
+	ret z
+	ld h,>wMusicLoopCounters
+	add a
+	add <wMusicLoopCounters
+	ld l,a
+	bit 7,b
+	jr z,+
+		; call function to get initial loop count
+		push hl
+		call jpBc
+		pop hl
+		ld c,a
+		ld b,$00
+	+
+	ld a,c
+	ldi (hl),a
+	ld (hl),b
+	ret
+
+getLoopsRemaining:
+	call getCallIndexForChannel
+	ret z
+	ld h,>wMusicLoopCounters
+	add a
+	add <wMusicLoopCounters+1
+	ld l,a
+	ldd a,(hl)
+	or a
+
+	; if the upper byte is zero, this is a literal loop count
+	jr z,+
+		; otherwise this is either a variable to read from or
+		; a function to call to determine if we're looping
+		ld l,(hl)
+		ld h,a
+		bit 7,h
+		jr nz,+
+			; this is a function to call
+			jp hl
+	+
+	ld a,(hl)
+	or a
+	ret
+
+getAndDecrementLoopsRemaining:
+	ld hl,$0000
+	call getLoopsRemaining
+	ret z
+
+	bit 7,h
+	jr z,+
+		; high bit is set, so this is a RAM address we can decrement
+		dec (hl)
+		ld a,(hl)
+	+
+	or a
+	ret
 
 ;;
 b39_initSound:
@@ -647,6 +778,187 @@ doNextChannelCommand:
 	.dw channelCmdff
 
 ;;
+; Runs custom assembly
+channelCmdf1:
+	; get function pointer
+	call getNextChannelByte
+	ld l,a
+	call getNextChannelByte
+	ld h,a
+
+	; get function bank
+	call getNextChannelByte
+	ld e,a
+
+	; get function args
+	call getNextChannelByte
+	ld c,a
+	call getNextChannelByte
+	ld b,a
+
+	ld a,:b39_initSound
+	cp e
+	jr z,+
+		; different bank, so need to switch it
+		call interBankCall
+		jr doNextChannelCommand
+	+
+
+	; same bank, so can call as-is
+	call jpHl
+	jr doNextChannelCommand
+
+;;
+; Plays a music snippit(essentially "calling" a reusable piece of music)
+channelCmdf2:
+	call getNextChannelByte
+	or a
+	jr nz,+
+		; return from call
+		call getReturnPointer
+
+		; get the return pointer and null the upper byte
+		inc hl
+		ld a,(hl)
+		ld (hl),$00
+		dec hl
+		ld l,(hl)
+		ld h,a
+		or a
+
+		; if the upper byte is zero, the pointer is invalid.
+		; instead of fucking stuff up, we end the channel playback
+		jp z,channelCmdff
+
+		; otherwise update to the return address
+		jr @writeJumpAddress
+	+
+	; call a music snippit
+	ld h,a
+	call getNextChannelByte
+	ld l,a
+
+	; get the return address
+	ld a,(wSoundChannel)
+	add a
+	add <hSoundChannelAddresses
+	ld c,a
+	ld a,($ff00+c)
+	inc c
+	ld e,a
+	ld a,($ff00+c)
+	ld d,a
+
+	push hl
+	call getReturnPointer
+	jr z,+
+		; backup the return address to wMusicCallPointers
+		ld (hl),e
+		inc hl
+		ld (hl),d
+		pop hl
+
+@writeJumpAddress:
+		; write the channel jump address
+		ld a,(wSoundChannel)
+		add a
+		add <hSoundChannelAddresses
+		m_WriteHlToFF00PlusA
+		jp doNextChannelCommand
+	+
+	pop hl
+	jp doNextChannelCommand
+
+;;
+; Performs some form of loop operation
+channelCmdf3:
+	; the first byte is either the high byte of the bank
+	; number, or 0(indicating this is the loop end)
+	call getNextChannelByte
+	or a
+	jr nz,+
+		; loop end. evaluate the loop condition and
+		; return to the loop start if it passes.
+		call getLoopPointer
+		jp z,doNextChannelCommand
+
+		; there's a function to call, so deref the pointer and call it
+		rst_derefHl ; deref the channel address from wMusicLoopPointers[i]
+
+		push hl
+		call readLoopBankAndAddress
+		.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND
+			dec d
+			jr z,++
+				call interBankCallUpper4MBReturnAf
+				jr +++
+			++
+				call interBankCallReturnAf
+			+++
+		.else
+			call interBankCallReturnAf
+		.endif
+		pop hl
+
+		; if the call set the zflag, don't loop back to the start
+		jp z,doNextChannelCommand
+
+		; jump back to the start of the loop
+		ld a,(wSoundChannel)
+		add a
+		add <hSoundChannelAddresses
+		ld c,a
+
+		; move to the command directly after the loop
+		inc hl
+		inc hl
+		inc hl
+		inc hl
+
+		ld a,l
+		ld ($ff00+c),a
+		inc c
+		ld a,h
+		ld ($ff00+c),a
+		jp doNextChannelCommand
+	+
+
+	; starting a loop. store the current sound channel address
+	; minus 1(to jump back to the bank number) to wMusicLoopPointers
+	ld a,(wSoundChannel)
+	add a
+	add <hSoundChannelAddresses+1
+	ld c,a
+	ld a,($ff00+c)
+	dec c
+	ld d,a
+	ld a,($ff00+c)
+	ld e,a
+	dec de
+
+	call getLoopPointer
+	jr z,+
+		; update the loop pointer
+		ld (hl),e
+		inc hl
+		ld (hl),d
+	+
+
+	; move the channel address past the bank and pointer
+	; and continue to the next channel command
+	inc de
+	inc de
+	inc de
+	inc de
+	ld a,e
+	ld ($ff00+c),a
+	inc c
+	ld a,d
+	ld ($ff00+c),a
+
+	jp doNextChannelCommand
+
+;;
 ; Sets vibrato to the argument value, does nothing for noise channels
 channelCmdf9:
 	m_ChannelCmdSetSquareOrWaveValue wChannelVibratos
@@ -663,11 +975,6 @@ channelCmdfd:
 
 channelCmdSkipByte:
 	call getNextChannelByte
-
-; these commands do nothing but skip to the next command
-channelCmdf1:
-channelCmdf2:
-channelCmdf3:
 	jp doNextChannelCommand
 
 ;;
@@ -1601,6 +1908,20 @@ playSound:
 @noiseChannel:
 	; Noise channels dont need to initialize anything else
 
+	call getLoopPointer
+	jr z,+
+		xor a
+		ldi (hl),a
+		ldd (hl),a
+		ld bc,(wMusicCallPointers-wMusicLoopCounters)
+		add hl,bc
+		ldi (hl),a
+		ld  (hl),a
+
+		ld bc,$0000
+		call setLoopsRemaining
+	+
+
 	; Write the bank for this sound channel into hSoundChannelBanks
 	pop hl
 	ld a,(wSoundTmp)
@@ -1646,3 +1967,11 @@ playSound:
 
 
 .include {"audio/{GAME}/soundChannelData.s"}
+
+.ifdef IN_AUDIO_LOOP
+	.fail "ERROR: Unclosed music loop detected."
+.endif
+
+.ifdef IN_AUDIO_FUNC
+	.fail "ERROR: Unclosed music snippit detected."
+.endif

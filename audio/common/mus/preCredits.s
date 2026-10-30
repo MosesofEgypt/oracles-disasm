@@ -5,7 +5,6 @@ musPrecreditsChannel1:
 	note gs3 $07
 	vibrato $e1
 	env $0 $00
-	cmdf2
 	duty $02
 musicea200:
 	vol $6
@@ -331,7 +330,6 @@ musPrecreditsChannel0:
 	note gs3 $07
 	vibrato $e1
 	env $0 $00
-	cmdf2
 	duty $02
 musicea42f:
 	rest $1c
@@ -666,7 +664,6 @@ musicea42f:
 
 musPrecreditsChannel4:
 	rest $07
-	cmdf2
 musicea678:
 	duty $0e
 	note g2  $07
@@ -941,7 +938,6 @@ musicea678:
 	cmdff
 
 musPrecreditsChannel6:
-	cmdf2
 	vol $3
 	note $26 $02
 	vol $2

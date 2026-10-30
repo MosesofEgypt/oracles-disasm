@@ -6,7 +6,6 @@ musSongOfStormsChannel1:
 	note gs3 $c0
 	vibrato $e1
 	env $0 $00
-	cmdf2
 	duty $02
 musicf84c2:
 ; Measure 5-6
@@ -126,7 +125,6 @@ musSongOfStormsChannel0:
 	note gs3 $10
 	vibrato $00
 	env $0 $00
-	cmdf2
 	duty $02
 .rept 2
 	vol $6
@@ -333,7 +331,6 @@ musicf85ca:
 	cmdff
 
 musSongOfStormsChannel4:
-	cmdf2
 ; Measure 1
 	duty $17
 	note d2  $10
@@ -446,8 +443,6 @@ musicf8741:
 musSongOfStormsChannel6:
 ; Measure 1
 	rest $10
-	cmdf2
-	cmdf2
 	vol $3
 .rept 2
 	note $2a $10

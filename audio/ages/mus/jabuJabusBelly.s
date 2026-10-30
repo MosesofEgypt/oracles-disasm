@@ -3,7 +3,6 @@ musJabuJabusBellyStart:
 musJabuJabusBellyChannel1:
 	vibrato $e1
 	env $0 $00
-	cmdf2
 	duty $01
 musicf3770:
 	vol $7
@@ -74,7 +73,6 @@ musicf3770:
 musJabuJabusBellyChannel0:
 	vibrato $00
 	env $0 $00
-	cmdf2
 	duty $02
 musicf37ec:
 	vol $5
@@ -333,7 +331,6 @@ musicf37ec:
 	cmdff
 
 musJabuJabusBellyChannel4:
-	cmdf2
 musicf396d:
 	duty $0e
 	note a2  $0b

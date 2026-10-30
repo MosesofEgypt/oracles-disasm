@@ -4,7 +4,6 @@ musGoronCaveChannel1:
 	vibrato $00
 	env $0 $00
 .if defined(ROM_SEASONS) && !defined(ROM_COMBO)
-	cmdf2
 .endif
 	duty $02
 musicf83e8:
@@ -590,7 +589,6 @@ musGoronCaveChannel0:
 	vibrato $00
 	env $0 $00
 .if defined(ROM_SEASONS) && !defined(ROM_COMBO)
-	cmdf2
 .endif
 	duty $02
 musicf87b3:
@@ -1051,7 +1049,6 @@ musicf87b3:
 
 musGoronCaveChannel4:
 .if defined(ROM_SEASONS) && !defined(ROM_COMBO)
-	cmdf2
 .endif
 musicf8b3e:
 	duty $17
@@ -1230,7 +1227,6 @@ musicf8b3e:
 
 musGoronCaveChannel6:
 .if defined(ROM_SEASONS) && !defined(ROM_COMBO)
-	cmdf2
 .endif
 musicf8c98:
 	vol $6

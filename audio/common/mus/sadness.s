@@ -3,7 +3,6 @@ musSadnessStart:
 musSadnessChannel1:
 	vibrato $e1
 	env $0 $00
-	cmdf2
 	duty $01
 musicf08e7:
 	vol $0
@@ -160,7 +159,6 @@ musicf08e7:
 musSadnessChannel0:
 	vibrato $e1
 	env $0 $00
-	cmdf2
 	duty $01
 musicf09ee:
 	vol $6
@@ -254,7 +252,6 @@ musicf09ee:
 	cmdff
 
 musSadnessChannel4:
-	cmdf2
 	duty $08
 musicf0a95:
 	rest $31

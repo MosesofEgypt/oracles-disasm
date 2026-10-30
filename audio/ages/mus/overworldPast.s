@@ -3,7 +3,6 @@ musOverworldPastStart:
 musOverworldPastChannel1:
 	vibrato $e1
 	env $0 $00
-	cmdf2
 	duty $01
 musicee3c8:
 ; Measure 1
@@ -302,7 +301,6 @@ musicee3c8:
 musOverworldPastChannel0:
 	vibrato $e1
 	env $0 $00
-	cmdf2
 	duty $01
 musicee57d:
 	vol $5

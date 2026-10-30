@@ -3,7 +3,6 @@ musMakuPathStart:
 musMakuPathChannel1:
 	vibrato $00
 	env $0 $00
-	cmdf2
 	duty $02
 musicef646:
 	vol $6
@@ -208,7 +207,6 @@ musicef646:
 musMakuPathChannel0:
 	vibrato $00
 	env $0 $00
-	cmdf2
 	duty $02
 musicef79b:
 	vol $0
@@ -368,7 +366,6 @@ musicef79b:
 	cmdff
 
 musMakuPathChannel4:
-	cmdf2
 musicef89e:
 	rest $20
 	duty $0e

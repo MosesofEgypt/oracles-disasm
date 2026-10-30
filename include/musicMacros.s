@@ -260,15 +260,123 @@
 	.db $f0 \1
 .endm
 
-; f1-f3: does nothing
-.macro cmdf1
+; Run custom assembly
+.macro asm_call
+	.assert (NARGS > 0) && (NARGS < 4)
 	.db $f1
+	.dw \1
+	.if NARGS == 3
+		.db \2
+		.dw \3
+	.elif NARGS == 2
+		.db :\1
+		.dw \2
+	.else
+		.db :\1
+		.dw $0000
+	.endif
 .endm
-.macro cmdf2
+
+; f2: Play a music snippit
+.macro mus_call
+	.ifdef IN_AUDIO_FUNC
+		.fail "ERROR: Nested music snippits are not supported.\n"
+	.endif
+
 	.db $f2
+	dwbe \1_start
 .endm
-.macro cmdf3
+
+; f2: Defines the start of a music snippit(i.e. a reusable piece of music)
+.macro mus_func
+	.assert NARGS == 1
+	.ifdef IN_AUDIO_FUNC
+		.fail "ERROR: Nested music snippits are not supported.\n"
+	.endif
+	.define IN_AUDIO_FUNC
+	\1_start:
+.endm
+
+; f2: Defines the end of a music snippit
+.macro mus_ret
+	.assert NARGS == 0
+	.ifdef IN_AUDIO_FUNC
+		.undefine IN_AUDIO_FUNC
+	.else
+		.fail "ERROR: Music snippit return detected without call.\n"
+	.endif
+
+	.db $f2, $00 ; indicates end of call
+.endm
+
+;;
+; Loops X times between this location and the first loop_end encountered.
+; If X is >= $8000, its treated as a RAM pointer to the counter variable.
+; If X is >= $100 and X < $8000, its treated as a function pointer to
+; call to determine the initial loop count.
+; Otherwise its treated as a literal number of times to loop.
+; NOTES: Always loops at least once
+;        Does nothing for SFX channels
+.macro loop_count
+	.assert NARGS == 1
+	asm_call audio.setLoopsRemaining, \1
+	loop_helper audio.getAndDecrementLoopsRemaining
+.endm
+
+;;
+; Loops endlessly between this location and the first loop_end encountered.
+.macro loop_forever
+	loop_while 1
+.endm
+
+;;
+; Loops between this location and the first loop_end encountered.
+; If the specified address is in RAM, its treated as a variable pointer.
+; If the specified address is in ROM, its treated as a function pointer.
+; Stops looping if the variable is zero, or the function returns the zflag set.
+; NOTES: Always loops at least once
+;        Does nothing for SFX channels
+.macro loop_while
+	.assert NARGS == 1
+	.if (\1 > $8000) || (\1 < $100)
+		; this is a variable or a literal value, so wrap it in a call.
+		; NOTE: if a literal non-zero value below $100 is provided,
+		;       this will effectively create an infinite loop.
+		asm_call audio.setLoopsRemaining, \1
+		loop_helper audio.getLoopsRemaining
+	.else
+		loop_helper \1
+	.endif
+.endm
+
+.macro loop_helper
+	.assert NARGS == 1
+
+	.ifdef IN_AUDIO_LOOP
+		.fail "ERROR: Nested music loops are not supported.\n"
+	.endif
+	.define IN_AUDIO_LOOP
+
 	.db $f3
+	; the bank numbers upper byte is also used to indicate
+	; the start of the loop. we ensure it's non-zero as
+	; zero is reserved for indicating the end of the loop.
+	.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_SND
+		.db 1+(((:\1)>>8) & $01)
+	.else
+		.db $01
+	.endif
+	.db (:\1)&$ff
+	.dw \1
+.endm
+
+.macro loop_end
+	.ifdef IN_AUDIO_LOOP
+		.undefine IN_AUDIO_LOOP
+	.else
+		.fail "ERROR: Music loop end detected without beginning.\n"
+	.endif
+	.db $f3, $00 ; indicates end of loop
 .endm
 
 ; f4-f5: duplicates of ff

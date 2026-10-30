@@ -3,7 +3,6 @@ musGanonStart:
 musGanonChannel1:
 	vibrato $00
 	env $0 $00
-	cmdf2
 	duty $01
 musiced6c3:
 	vol $6
@@ -185,7 +184,6 @@ musiced6c3:
 musGanonChannel0:
 	vibrato $00
 	env $0 $00
-	cmdf2
 	duty $02
 musiced7fa:
 	vol $6
@@ -395,7 +393,6 @@ musiced7fa:
 	cmdff
 
 musGanonChannel4:
-	cmdf2
 musiced957:
 	duty $12
 	note c3  $04
@@ -1321,7 +1318,6 @@ musiced957:
 	cmdff
 
 musGanonChannel6:
-	cmdf2
 musicee08c:
 	vol $6
 	note $24 $12

@@ -3,7 +3,6 @@ musTwinrovaStart:
 musTwinrovaChannel1:
 	vibrato $e1
 	env $0 $00
-	cmdf2
 	duty $02
 musiceacd8:
 	vol $6
@@ -260,7 +259,6 @@ musiceacd8:
 musTwinrovaChannel0:
 	vibrato $e1
 	env $0 $00
-	cmdf2
 	duty $02
 musiceae93:
 	vol $6
@@ -515,7 +513,6 @@ musiceae93:
 	cmdff
 
 musTwinrovaChannel4:
-	cmdf2
 musiceb047:
 	duty $12
 	note fs2 $04
@@ -956,7 +953,6 @@ musiceb047:
 	cmdff
 
 musTwinrovaChannel6:
-	cmdf2
 musiceb3b2:
 	vol $5
 	vol $7

@@ -4,7 +4,6 @@ musLadxSideviewChannel1:
 	vibrato $00
 	env $0 $00
 .if defined(ROM_SEASONS) && !defined(ROM_COMBO)
-	cmdf2
 .endif
 	duty $02
 musicf8204:

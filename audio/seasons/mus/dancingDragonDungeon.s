@@ -3,7 +3,6 @@ musDancingDragonDungeonStart:
 musDancingDragonDungeonChannel1:
 	vibrato $f1
 	env $0 $00
-	cmdf2
 	duty $02
 	vol $6
 	note a3  $09
@@ -420,7 +419,6 @@ musDancingDragonDungeonChannel0:
 	note gs3 $3f
 	vibrato $00
 	env $0 $00
-	cmdf2
 	duty $02
 musicf2441:
 	rest $12
@@ -656,7 +654,6 @@ musicf2441:
 
 musDancingDragonDungeonChannel4:
 	rest $3f
-	cmdf2
 musicf25dc:
 	duty $0e
 	note a2  $04
@@ -1018,7 +1015,6 @@ musicf25dc:
 
 musDancingDragonDungeonChannel6:
 	rest $3f
-	cmdf2
 musicf28a9:
 	vol $3
 	note $26 $09

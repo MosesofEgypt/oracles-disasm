@@ -1,7 +1,6 @@
 musLynnaVillageStart:
 
 musLynnaVillageChannel1:
-	cmdf2
 	vibrato $e1
 	env $0 $00
 	duty $01
@@ -147,7 +146,6 @@ musicef3c3:
 	cmdff
 
 musLynnaVillageChannel0:
-	cmdf2
 	vibrato $00
 	env $0 $00
 	duty $01
@@ -322,7 +320,6 @@ musicef4b7:
 	cmdff
 
 musLynnaVillageChannel4:
-	cmdf2
 musicef5c9:
 	duty $0e
 	note c4  $21

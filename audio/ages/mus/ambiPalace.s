@@ -1,7 +1,6 @@
 musAmbiPalaceStart:
 
 musAmbiPalaceChannel1:
-	cmdf2
 	vibrato $e1
 	env $0 $00
 	duty $01
@@ -157,7 +156,6 @@ musicf0f36:
 musAmbiPalaceChannel0:
 	vol $0
 	note gs3 $18
-	cmdf2
 	vibrato $e1
 	env $0 $00
 	duty $02

@@ -3,7 +3,6 @@ musAncientRuinsStart:
 musAncientRuinsChannel1:
 	vibrato $f1
 	env $0 $00
-	cmdf2
 	duty $02
 	vol $6
 	note fs3 $0e
@@ -218,7 +217,6 @@ musAncientRuinsChannel0:
 	note gs3 $1c
 	vibrato $f1
 	env $0 $00
-	cmdf2
 	duty $02
 musicf3598:
 	rest $1c
@@ -472,7 +470,6 @@ musicf3598:
 
 musAncientRuinsChannel4:
 	rest $1c
-	cmdf2
 musicf3753:
 	duty $0e
 	note fs2 $1c

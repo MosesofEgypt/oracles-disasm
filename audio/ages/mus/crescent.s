@@ -3,7 +3,6 @@ musCrescentStart:
 musCrescentChannel1:
 	vibrato $e1
 	env $0 $00
-	cmdf2
 	duty $02
 musiceeb82:
 	vol $6
@@ -223,7 +222,6 @@ musiceeb82:
 musCrescentChannel0:
 	vibrato $e1
 	env $0 $00
-	cmdf2
 	duty $02
 musiceece7:
 	vol $6

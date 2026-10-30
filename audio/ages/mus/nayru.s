@@ -2,7 +2,6 @@ musNayruStart:
 musNayruChannel1:
 	vibrato $e1
 	env $0 $00
-	cmdf2
 musicee9ec:
 	vol $6
 	note d6  $24

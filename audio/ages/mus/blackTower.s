@@ -1,7 +1,6 @@
 musBlackTowerStart:
 
 musBlackTowerChannel1:
-	cmdf2
 	vibrato $e1
 	env $0 $00
 	duty $02
@@ -99,7 +98,6 @@ musicf1ece:
 	cmdff
 
 musBlackTowerChannel0:
-	cmdf2
 	vibrato $e1
 	env $0 $00
 	duty $02

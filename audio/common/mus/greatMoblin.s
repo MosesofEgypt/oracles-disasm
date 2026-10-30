@@ -4,7 +4,6 @@ musGreatMoblinChannel1:
 	vibrato $00
 	env $0 $00
 .if defined(ROM_SEASONS) && !defined(ROM_COMBO)
-	cmdf2
 .endif
 	duty $00
 musicf800f:
@@ -126,7 +125,6 @@ musicf800f:
 
 musGreatMoblinChannel0:
 .if defined(ROM_SEASONS) && !defined(ROM_COMBO)
-	cmdf2
 .endif
 	env $0 $02
 	vol $9
@@ -220,7 +218,6 @@ musicf80d6:
 
 musGreatMoblinChannel4:
 .if defined(ROM_SEASONS) && !defined(ROM_COMBO)
-	cmdf2
 .endif
 musicf8182:
 	duty $17

@@ -3,7 +3,6 @@ musSnakesRemainsStart:
 musSnakesRemainsChannel1:
 	vibrato $00
 	env $0 $00
-	cmdf2
 	duty $02
 musicf09bb:
 	vol $6
@@ -157,7 +156,6 @@ musicf09bb:
 musSnakesRemainsChannel0:
 	vibrato $00
 	env $0 $00
-	cmdf2
 	duty $02
 musicf0adb:
 	vol $0
@@ -319,7 +317,6 @@ musicf0adb:
 	cmdff
 
 musSnakesRemainsChannel4:
-	cmdf2
 musicf0c00:
 	duty $0e
 	note d2  $10

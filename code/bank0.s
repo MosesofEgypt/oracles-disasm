@@ -296,6 +296,16 @@ resetGame:
 	ld sp,wMainStackTop
 	jpfrombank0 bank3.init
 
+.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE
+interBankCallUpper4MBReturnAf:
+	ld a,$01
+	ld ($3333),a
+	call interBankCallReturnAf
+	xor a
+	ld ($3333),a
+	ret
+.endif
+
 ;;
 ; Call a function in any bank, from any bank.
 ; Returns the "af" register the called function
@@ -11645,9 +11655,40 @@ linkState07:
 	jp bank5.linkSetState
 
 ;;
+clearLinkObject:
+	ld hl,w1Link
+	jr +
+
+;;
+clearReservedInteraction0:
+	ld hl,w1ReservedInteraction0
+	jr +
+
+;;
 itemDelete:
 	ld h,d
 	ld l,Item.start
+	jr +
+
+;;
+partDelete:
+	ld h,d
+	ld l,Part.start
+	jr +
+
+;;
+interactionDelete:
+	ld h,d
+	ld l,Interaction.start
+	jr +
+
+;;
+enemyDelete:
+	ld e,Enemy.enabled
+	call objectRemoveFromAButtonSensitiveObjectList
+	ld l,e
+	ld h,d
+	+
 	ld b,$04
 	jp clearMemory16ByteBlocks
 
@@ -11915,15 +11956,6 @@ getFreeEnemySlot:
 	ld (wNumEnemies),a
 	xor a
 	ret
-
-;;
-enemyDelete:
-	ld e,Enemy.enabled
-	call objectRemoveFromAButtonSensitiveObjectList
-	ld l,e
-	ld h,d
-	ld b,$04
-	jp clearMemory16ByteBlocks
 
 ;;
 ; Deletes the enemy (clears its memory), then replaces its ID with the new value.
@@ -13179,18 +13211,6 @@ clearScreenVariables:
 	ret
 
 ;;
-clearLinkObject:
-	ld hl,w1Link
-	ld b,$04
-	jp clearMemory16ByteBlocks
-
-;;
-clearReservedInteraction0:
-	ld hl,w1ReservedInteraction0
-	ld b,$04
-	jp clearMemory16ByteBlocks
-
-;;
 ; Clear all interactions except wReservedInteraction0 and wReservedInteraction1.
 ;
 clearDynamicInteractions:
@@ -14440,14 +14460,8 @@ getFreePartSlot:
 ;;
 interactionDeleteAndUnmarkSolidPosition:
 	call objectUnmarkSolidPosition
+	jp interactionDelete
 .endif
-
-;;
-interactionDelete:
-	ld h,d
-	ld l,Interaction.start
-	ld b,$04
-	jp clearMemory16ByteBlocks
 
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
@@ -14894,13 +14908,6 @@ getLinkedHerosCaveSideEntranceRoom:
 	ret
 
 .endif
-
-;;
-partDelete:
-	ld h,d
-	ld l,Part.start
-	ld b,$04
-	jp clearMemory16ByteBlocks
 
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)

@@ -3,7 +3,6 @@ musSymmetryPresentStart:
 musSymmetryPresentChannel1:
 	vibrato $00
 	env $0 $00
-	cmdf2
 musicef9db:
 	vol $0
 	note gs3 $ff
@@ -211,7 +210,6 @@ musicef9db:
 musSymmetryPresentChannel0:
 	vibrato $00
 	env $0 $00
-	cmdf2
 	duty $02
 musicefb34:
 	vol $0
@@ -497,7 +495,6 @@ musicefb34:
 	cmdff
 
 musSymmetryPresentChannel4:
-	cmdf2
 musicefd1a:
 	duty $0e
 	note f3  $09

@@ -4,7 +4,6 @@ musBossChannel1:
 	vibrato $00
 	env $0 $00
 .if defined(ROM_SEASONS) && !defined(ROM_COMBO)
-	cmdf2
 .endif
 	duty $02
 musicf9f6b:
@@ -173,7 +172,6 @@ musBossChannel0:
 	vibrato $00
 	env $0 $00
 .if defined(ROM_SEASONS) && !defined(ROM_COMBO)
-	cmdf2
 .endif
 	duty $02
 musicfa087:
@@ -323,7 +321,6 @@ musicfa087:
 
 musBossChannel4:
 .if defined(ROM_SEASONS) && !defined(ROM_COMBO)
-	cmdf2
 .endif
 musicfa18c:
 	duty $12
@@ -1070,7 +1067,6 @@ musicfa18c:
 
 musBossChannel6:
 .if defined(ROM_SEASONS) && !defined(ROM_COMBO)
-	cmdf2
 .endif
 musicfa756:
 	vol $5

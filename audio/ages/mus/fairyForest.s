@@ -1,7 +1,6 @@
 musFairyForestStart:
 
 musFairyForestChannel1:
-	cmdf2
 	vibrato $e1
 	env $0 $00
 	duty $02
@@ -111,7 +110,6 @@ musicf23a1:
 	cmdff
 
 musFairyForestChannel0:
-	cmdf2
 	vibrato $e1
 	env $0 $00
 	duty $02

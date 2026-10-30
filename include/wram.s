@@ -9,7 +9,16 @@
 .RAMSECTION Wram0_c000
 
 wc000:	; $c000
-	dsb	$20	; padding
+	dsb	$08	; padding
+
+wMusicLoopPointers:
+	dsb $08
+
+wMusicLoopCounters:
+	dsb $08
+
+wMusicCallPointers:
+	dsb $08
 
 wSoundFadeCounter: ; $c020
 ; When [wSoundFadeCounter]&[wSoundFadeSpeed] == 0, volume is incremented or decremented.

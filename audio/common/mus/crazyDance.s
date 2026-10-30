@@ -3,7 +3,6 @@ musCrazyDanceStart:
 musCrazyDanceChannel1:
 	vibrato $00
 	env $0 $02
-	cmdf2
 	duty $02
 	vol $6
 	note b6  $02
@@ -141,7 +140,6 @@ musicf79ae:
 musCrazyDanceChannel0:
 	vibrato $00
 	env $0 $02
-	cmdf2
 	duty $02
 	vol $6
 	note f6  $07

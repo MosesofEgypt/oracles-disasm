@@ -378,7 +378,6 @@ musicf1383:
 	cmdff
 
 musTokayHouseChannel4:
-	cmdf2
 musicf14ba:
 	duty $0e
 	note d3  $09

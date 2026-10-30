@@ -1,7 +1,6 @@
 musMoonlitGrottoStart:
 
 musMoonlitGrottoChannel1:
-	cmdf2
 	vibrato $e1
 	env $0 $00
 	duty $01
@@ -200,7 +199,6 @@ musicf0008:
 	cmdff
 
 musMoonlitGrottoChannel0:
-	cmdf2
 	vibrato $e1
 	env $0 $00
 	duty $01
@@ -430,7 +428,6 @@ musicf0144:
 	cmdff
 
 musMoonlitGrottoChannel4:
-	cmdf2
 musicf02b1:
 	duty $0e
 	note f1  $12
@@ -570,7 +567,6 @@ musicf02b1:
 	cmdff
 
 musMoonlitGrottoChannel6:
-	cmdf2
 musicf03c2:
 	vol $6
 	note $24 $04

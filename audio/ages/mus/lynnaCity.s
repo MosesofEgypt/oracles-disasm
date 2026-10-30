@@ -3,7 +3,6 @@ musLynnaCityStart:
 musLynnaCityChannel1:
 	vibrato $e1
 	env $0 $00
-	cmdf2
 	duty $02
 musicef079:
 	vol $6
@@ -149,7 +148,6 @@ musicef079:
 musLynnaCityChannel0:
 	vibrato $00
 	env $0 $00
-	cmdf2
 	duty $02
 musicef173:
 	vol $6
@@ -345,7 +343,6 @@ musicef173:
 	cmdff
 
 musLynnaCityChannel4:
-	cmdf2
 musicef2b0:
 	rest $0d
 	duty $2b
