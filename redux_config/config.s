@@ -8,6 +8,7 @@
 ; prints information about each dynamically created object
 ; code section and the object code references within it
 ;.define DEBUG_SECTION_PRINTOUT
+;.define I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE
 
 .ifdef ENABLE_FULL_REDUX
 	; if ENABLE_FULL_REDUX is enabled, the options below will

@@ -978,3 +978,7 @@ m_section_superfree Object_Updating_Enemies NAMESPACE objectUpdating
 	.include "code/updateEnemies.s"
 	.include "data/enemyCodeTable.s"
 .ends
+
+m_section_superfree Panic_Handling NAMESPACE panicHandling
+	.include "code/panicHandling.s"
+.ends

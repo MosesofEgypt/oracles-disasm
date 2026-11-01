@@ -248,9 +248,16 @@
 	.ENDIF
 .ENDM
 
+.MACRO ldHlSp
+	.db $f8, $00
+.ENDM
+
 ; RSTs
-.MACRO rst_jumpTable
+.MACRO panic
 	rst $00
+.ENDM
+.MACRO rst_setrombank
+	rst $08
 .ENDM
 .MACRO rst_addAToHl
 	rst $10
@@ -261,7 +268,7 @@
 .MACRO rst_derefHl
 	rst $20
 .ENDM
-.MACRO rst_setrombank
+.MACRO rst_jumpTable
 	rst $28
 .ENDM
 

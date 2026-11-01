@@ -684,7 +684,7 @@ checkBrightenRoom:
 ;
 ; HACK-BASE: Deleted for expanded tilesets patch.
 screenTransitionState4:
-	jp panic
+	panic
 
 ;;
 ; State 5: Scrolling between 2 screens
@@ -1110,7 +1110,7 @@ screenTransitionState5Substate2:
 ;;
 ; HACK-BASE: State 4 deleted for expanded tilesets patch.
 @state4:
-	jp panic
+	panic
 ;;
 @state5:
 	call checkBrightenRoom
@@ -1205,6 +1205,41 @@ addFunctionsToVBlankQueue:
 	ldh (<hVBlankFunctionQueueTail),a
 	ret
 
+; Table of functions in bank $04?
+data_0bfd:
+	.dw bank4.b4VBlankFunction0
+	.dw bank4.b4VBlankFunction1
+	.dw bank4.b4VBlankFunction2
+	.dw bank4.b4VBlankFunction3
+	.dw bank4.b4VBlankFunction4
+	.dw bank4.b4VBlankFunction5
+	.dw bank4.b4VBlankFunction6
+	.dw bank4.b4VBlankFunction7
+	.dw bank4.b4VBlankFunction8
+	.dw bank4.b4VBlankFunction9
+	.dw bank4.b4VBlankFunction10
+	.dw bank4.b4VBlankFunction11
+	.dw bank4.b4VBlankFunction12
+	.dw bank4.b4VBlankFunction13
+	.dw bank4.b4VBlankFunction14
+	.dw bank4.b4VBlankFunction15
+	.dw bank4.b4VBlankFunction16
+	.dw bank4.b4VBlankFunction17
+	.dw bank4.b4VBlankFunction18
+	.dw bank4.b4VBlankFunction19
+	.dw bank4.b4VBlankFunction20
+	.dw bank4.b4VBlankFunction21
+	.dw bank4.b4VBlankFunction22
+	.dw bank4.b4VBlankFunction23
+	.dw bank4.b4VBlankFunction24
+	.dw bank4.b4VBlankFunction25
+	.dw bank4.b4VBlankFunction26
+	.dw bank4.b4VBlankFunction27
+	.dw bank4.b4VBlankFunction28
+	.dw bank4.b4VBlankFunction29
+	.dw bank4.b4VBlankFunction30
+	.dw bank4.b4VBlankFunction31
+
 ;;
 ; State 5 substate 1: vertical scrolling transition. Practically a copy of the horizontal
 ; transition code above.
@@ -1298,7 +1333,7 @@ screenTransitionState5Substate1:
 ;;
 ; HACK-BASE: State 4 deleted for expanded tilesets patch.
 @state4:
-	jp panic
+	panic
 ;;
 @state5:
 	call checkBrightenRoom

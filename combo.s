@@ -1367,3 +1367,7 @@ m_section_superfree Item_Code namespace itemCode
 m_section_superfree bank_0_Ext NAMESPACE bank0Ext
 	.include "code/bank0Ext.s"
 .ends
+
+m_section_superfree Panic_Handling NAMESPACE panicHandling
+	.include "code/panicHandling.s"
+.ends

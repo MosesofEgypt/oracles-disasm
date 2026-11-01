@@ -1,10 +1,12 @@
 .ORGA $0000
-; rst_jumpTable
-	add a
-	pop hl
-	addAToHl
-	derefHl
-	jp hl
+; panic
+	; oh boy, we shidd the bed. time to make it
+	jp handlePanic
+
+.ORGA $0008
+; rst_setrombank
+	setrombank
+	ret
 
 .ORGA $0010
 ; rst_addAToHl
@@ -25,9 +27,12 @@
 	ret
 
 .ORGA $0028
-; rst_setrombank
-	setrombank
-	ret
+; rst_jumpTable
+	add a
+	pop hl
+	addAToHl
+	derefHl
+	jp hl
 
 .ORGA $0038
 ; Not used as rst $38
@@ -1999,6 +2004,42 @@ quickstartSpawn:
 	.db $ff
 .endif
 
+;;
+handlePanic:
+	di
+	push hl
+	push de
+	push bc
+	push af
+	ld hl,hPanicRegisterAf
+
+	; NOTE: this is 1 higher than the push count, as we want to pop the
+	;       instruction pointer the panic was called at for recording
+	ld b,$05
+	-
+		; continually pop into de for loading into hram
+		pop de
+		ld (hl),e
+		inc l
+		ld (hl),d
+		inc l
+		dec b
+		jr nz,-
+
+	ldh a,(<hRomBank)
+	ldi (hl),a
+	ldHlSp
+	ld a,l
+	ldh (<hPanicStackPointerLow),a
+
+	ld a,1<<5	; enable panic mode
+	ldh (<hPanicState),a
+
+	; reset the stack pointer
+	ld sp,wMainStackTop
+@mainLoop:
+	jr _mainLoop
+
 
 ;;
 ; Called just after basic initialization
@@ -2041,6 +2082,15 @@ startGame:
 ;;
 _mainLoop:
 	call pollInput
+
+	; NOTE: intentionally not using setrombank here to avoid
+	;       changing the value of hRomBank so it can be recorded
+	ldh a,(<hPanicState)
+	or a
+	ld a,:panicHandling.panicHandler
+	ld ($2222),a
+	jp nz,panicHandling.panicHandler
+
 	ldh a,(<hIntroInputsEnabled)
 	add a
 	jr z,+
@@ -2839,41 +2889,6 @@ lcdInterrupt_0bea:
 	ldi a,(hl)
 	ldh (R_SCX),a
 	jr lcdInterrupt_clearLYC
-
-; Table of functions in bank $04?
-data_0bfd:
-	.dw bank4.b4VBlankFunction0
-	.dw bank4.b4VBlankFunction1
-	.dw bank4.b4VBlankFunction2
-	.dw bank4.b4VBlankFunction3
-	.dw bank4.b4VBlankFunction4
-	.dw bank4.b4VBlankFunction5
-	.dw bank4.b4VBlankFunction6
-	.dw bank4.b4VBlankFunction7
-	.dw bank4.b4VBlankFunction8
-	.dw bank4.b4VBlankFunction9
-	.dw bank4.b4VBlankFunction10
-	.dw bank4.b4VBlankFunction11
-	.dw bank4.b4VBlankFunction12
-	.dw bank4.b4VBlankFunction13
-	.dw bank4.b4VBlankFunction14
-	.dw bank4.b4VBlankFunction15
-	.dw bank4.b4VBlankFunction16
-	.dw bank4.b4VBlankFunction17
-	.dw bank4.b4VBlankFunction18
-	.dw bank4.b4VBlankFunction19
-	.dw bank4.b4VBlankFunction20
-	.dw bank4.b4VBlankFunction21
-	.dw bank4.b4VBlankFunction22
-	.dw bank4.b4VBlankFunction23
-	.dw bank4.b4VBlankFunction24
-	.dw bank4.b4VBlankFunction25
-	.dw bank4.b4VBlankFunction26
-	.dw bank4.b4VBlankFunction27
-	.dw bank4.b4VBlankFunction28
-	.dw bank4.b4VBlankFunction29
-	.dw bank4.b4VBlankFunction30
-	.dw bank4.b4VBlankFunction31
 
 
 ;;
@@ -12732,20 +12747,6 @@ mainThreadStart:
 	; if there's delayed GDMA to do, dont process game
 	; logic or anything that might modify gfx buffers
 	jr z,+
-		; my kingdom for a uint32
-		;ld hl,hGdmaDelayedCountTotal
-		;inc (hl)
-		;jr nz,++
-		;	inc l
-		;	inc (hl)
-		;	jr nz,++
-		;		inc l
-		;		inc (hl)
-		;		jr nz,++
-		;			inc l
-		;			inc (hl)
-		;++
-
 		; wait for the next frame and retry vblank functions
 		call resumeThreadNextFrame
 		jr @checkForDelayedGdma
@@ -12913,7 +12914,7 @@ loadScreenMusic:
 .else
 	ld hl,bank4Data1.roomPackData
 .endif
-	rst $10
+	rst_addAToHl
 	ldi a,(hl)
 	ld (wLoadingRoomPack),a
 ++
@@ -14911,22 +14912,6 @@ getLinkedHerosCaveSideEntranceRoom:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 
-;;
-; @param[out]	cflag
-checkLinkCanSurface:
-	ld a,(wTilesetFlags)
-	and TILESETFLAG_UNDERWATER
-	ret z
-	callab underwaterSurfacing.checkLinkCanSurface_isUnderwater
-	srl c
-	ret
-.endif
-
-.if defined(ROM_COMBO)
-toggleIsSeasons:
-	call wIsSeasons
-	ccf
-
 .MACRO m_ComboInitializeBanksAndTables
 	.assert NARGS >= 4
 	ld (hl),\1
@@ -14943,6 +14928,22 @@ toggleIsSeasons:
 	.shift
 	.shift
 .ENDM
+
+;;
+; @param[out]	cflag
+checkLinkCanSurface:
+	ld a,(wTilesetFlags)
+	and TILESETFLAG_UNDERWATER
+	ret z
+	callab underwaterSurfacing.checkLinkCanSurface_isUnderwater
+	srl c
+	ret
+.endif
+
+.if defined(ROM_COMBO)
+toggleIsSeasons:
+	call wIsSeasons
+	ccf
 
 ;;
 ; @param	cflag	If set, game will be set to seasons
@@ -15040,8 +15041,5 @@ getSomariaBlockIndex:
 	ld b,$f9
 	ret
 .endif
-
-
-.include "code/debug.s"
 
 .ENDS
