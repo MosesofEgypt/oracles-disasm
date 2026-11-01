@@ -73,11 +73,11 @@
 ; NOTE: we're intentionally preserving the ore flags between games and NG+ cycles
 ngpAndComboTreasureFlagMask:
 	.db $10	; count
-	.db $02 ; TREASURE_SHIELD
+	.db $82 ; TREASURE_SHIELD, TREASURE_ROD_OF_SEASONS
 	.db $30	; TREASURE_BIGGORON_SWORD, TREASURE_BOMBCHUS
-	.db $04 ; TREASURE_LIFE_VIAL
+	.db $06 ; TREASURE_HARP, TREASURE_LIFE_VIAL
 	.db $00
-	.db $00
+	.db $e0	; TREASURE_TUNE_OF_ECHOES, TREASURE_TUNE_OF_CURRENTS, TREASURE_TUNE_OF_AGES
 	.db $90	; TREASURE_RING_BOX, TREASURE_POTION
 	.db $00
 	.db $00
@@ -205,6 +205,13 @@ initializeNgpFile:
 	ld hl,ngpAndComboTreasureFlagMask
 	ld de,wObtainedTreasureFlags
 	call applyFlagMask
+
+	; remove these progression items
+	unsetTreasureFlag TREASURE_ROD_OF_SEASONS
+	unsetTreasureFlag TREASURE_HARP
+	unsetTreasureFlag TREASURE_TUNE_OF_ECHOES
+	unsetTreasureFlag TREASURE_TUNE_OF_CURRENTS
+	unsetTreasureFlag TREASURE_TUNE_OF_AGES
 
 	; clear all the room flags
 	ld hl,wGroup0RoomFlags
@@ -807,6 +814,13 @@ loadAcrossComboGame:
 	xor a
 	ld ($1111),a
 
+	; back this up since adding the items will reset them
+	ld a,(wSelectedHarpSong)
+	ld h,a
+	ld a,(wObtainedSeasons)
+	ld l,a
+	push hl
+
 	; give the player the bonus items
 	ld hl,@bonusInventoryItems
 	ld a,(hl)
@@ -830,13 +844,16 @@ loadAcrossComboGame:
 		ld a,(hl)
 		or a
 		jr nz,-
+	
+	pop hl
+	ld a,h
+	ld (wSelectedHarpSong),a
+	ld a,l
+	ld (wObtainedSeasons),a
 
 	; set the bit indicating that warping to other game is allowed
 	ld hl,wFileIsCompleted
-	ld a,$f7
-	and (hl)
-	or $08
-	ld (hl),a
+	set 3,(hl)
 
 	; NOTE: this bit will make its way into the file select to cause
 	;       the triforce to be drawn. instead of indicating this as a
@@ -854,6 +871,15 @@ loadAcrossComboGame:
 	.db TREASURE_RING_BOX,          TREASURE_PUNCH, $01
 	.db TREASURE_SHIELD,            TREASURE_PUNCH, $01
 	.db TREASURE_LIFE_VIAL,         TREASURE_PUNCH, $00
+.if defined(WIDE_INVENTORY_SPRITES) || !defined(ENABLE_DOUBLE_HEART_CAP)
+	; NOTE: these can only be allowed with wide inventory sprites due to
+	;       there not being any tiles remaining for part of the top left
+	;       part of the harp in seasons, or the spring tile in ages.
+	;       this only applies with a doubled heart cap, as the tile in
+	;       question is being overwritten by an overlapped heart tile.
+	.db TREASURE_ROD_OF_SEASONS,    TREASURE_PUNCH, $00
+	.db TREASURE_HARP,              TREASURE_PUNCH, $00
+.endif
 	.db $00
 
 ;;
@@ -980,24 +1006,24 @@ initializeComboGame:
 		callab interactionCode5.initializeChildOnGameStart
 	.endif
 
-.if defined(ROM_AGES) || defined(ROM_COMBO)
-	.ifdef ROM_COMBO
-		call wIsSeasons
-		jr c,+
-	.endif
-	callab roomTileChanges.initializeVinePositions
-+
-.endif
+	call wIsSeasons
+	jr c,+
+		callab roomTileChanges.initializeVinePositions
+
+		; ensure this defaults to being full in ages
+		ld a,$0f
+		ld (wObtainedSeasons),a
+		jr ++
+	+
+		ld a,$01
+		ld (wSelectedHarpSong),a
+	++
 
 	; remove the temporary items
 	xor a
 	ld hl,wInventoryB
 	ldi (hl),a
 	ld  (hl),a
-
-	; ensure this defaults to being full
-	ld a,$0f
-	ld (wObtainedSeasons),a
 
 	; save the new file
 	jp saveFile

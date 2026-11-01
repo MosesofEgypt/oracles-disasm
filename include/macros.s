@@ -95,6 +95,20 @@
 	and 1<<(\1&$07)
 .ENDM
 
+.MACRO setTreasureFlag
+	.assert NARGS == 1
+	ld a,(wObtainedTreasureFlags+(\1>>3))
+	set (\1&$07),a
+	ld (wObtainedTreasureFlags+(\1>>3)),a
+.ENDM
+
+.MACRO unsetTreasureFlag
+	.assert NARGS == 1
+	ld a,(wObtainedTreasureFlags+(\1>>3))
+	res (\1&$07),a
+	ld (wObtainedTreasureFlags+(\1>>3)),a
+.ENDM
+
 .MACRO ldbc
 	ld bc, (((\1)&$ff)<<8) | ((\2)&$ff)
 .endm
@@ -132,11 +146,81 @@
 	inc h
 .ENDM
 
-.MACRO readWordFromTable
+.MACRO m_readDwFromHlPlusA
 	add a
+	jr nc,$01
+	inc h
 	addAToHl
 	derefHl
 .ENDM
+
+.MACRO m_LoadDwPointerPlusAIntoHl
+	.assert NARGS == 1
+	ld h,$00
+	ld l,a
+	add hl,hl
+	ld a,<\1
+	add l
+	ld l,a
+	ld a,>\1
+	adc h
+	ld h,a
+.ENDM
+
+.MACRO m_LoadDbPointerPlusAIntoHl
+	.assert NARGS == 1
+	ld hl,\1
+	addAToHl
+.ENDM
+
+.macro m_ReadDataFromHlPlusE
+	ld d,$00
+	ld hl,\1
+	add hl,de
+	ld a,(hl)
+.endm
+
+.macro m_ReadDataFromHlPlusA
+	ld e,a
+	m_ReadDataFromHlPlusE \1
+.endm
+
+.macro m_WriteDataToHlPlusE
+	ld d,$00
+	ld hl,\1
+	add hl,de
+	ld (hl),a
+.endm
+
+.macro m_WriteIntoFF00PlusAFromHl
+	ld c,a
+	ld a,l
+	ld ($ff00+c),a
+	inc c
+	ld a,h
+	ld ($ff00+c),a
+	inc c
+.endm
+
+.macro m_ReadFromFF00PlusAIntoHl
+	ld c,a
+	ld a,($ff00+c)
+	ld l,a
+	inc c
+	ld a,($ff00+c)
+	ld h,a
+	inc c
+.endm
+
+.macro m_ReadFromFF00PlusAIntoDe
+	ld c,a
+	ld a,($ff00+c)
+	ld e,a
+	inc c
+	ld a,($ff00+c)
+	ld d,a
+	inc c
+.endm
 
 ; Call from bank 0
 .MACRO callfrombank0

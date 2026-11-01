@@ -278,6 +278,7 @@
 .endm
 
 ; f2: Play a music snippit
+;     NOTE: Music snippit cannot exist in HRAM($ff00 and higher)
 .macro mus_call
 	.ifdef IN_AUDIO_FUNC
 		.fail "ERROR: Nested music snippits are not supported.\n"
@@ -285,6 +286,23 @@
 
 	.db $f2
 	dwbe \1_start
+.endm
+
+; f2: Play one of the specified music snippits.
+;     The returned "a" value of the last asm_call is used as
+;     the table index, limiting this to a table size of 256.
+.macro mus_call_table
+	.ifdef IN_AUDIO_FUNC
+		.fail "ERROR: Nested music snippits are not supported.\n"
+	.endif
+
+	.db $f2
+	.db $ff ; indicates call table
+	.db NARGS
+	.repeat NARGS
+		dwbe \1_start
+		.shift
+	.endr
 .endm
 
 ; f2: Defines the start of a music snippit(i.e. a reusable piece of music)

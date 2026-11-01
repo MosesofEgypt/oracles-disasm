@@ -11676,6 +11676,13 @@ partDelete:
 	ld l,Part.start
 	jr +
 
+
+.if defined(ROM_AGES) || defined(ROM_COMBO)
+;;
+interactionDeleteAndUnmarkSolidPosition:
+	call objectUnmarkSolidPosition
+.endif
+
 ;;
 interactionDelete:
 	ld h,d
@@ -14454,14 +14461,6 @@ getFreePartSlot:
 	xor a
 	ret
 
-
-
-.if defined(ROM_AGES) || defined(ROM_COMBO)
-;;
-interactionDeleteAndUnmarkSolidPosition:
-	call objectUnmarkSolidPosition
-	jp interactionDelete
-.endif
 
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)

@@ -12,7 +12,7 @@
 	hFF88						db	; $ff88
 
 	hFlickerNumObjects			.db	; $ff89
-	hFF89						db	; $ff89
+	hLastMusicAsmResult			db	; $ff89
 
 	; General-purpose variables
 	hFF8A				db	; $ff8a
@@ -143,6 +143,8 @@
 	; This keeps track of the "state" corresponding to the above link mode.
 	hSerialLinkState		db	; $ffbf/$ffbd
 
+	; NOTE: Avoid using these during interrupts, as that could
+	;       be in use by a main thread that's currently paused
 	hActiveCollisionsTable	.dw ; $ffc0/$ffbe
 	hTempVal0				db ; $ffc0/$ffbe
 

@@ -52,18 +52,6 @@
 .define SND_VOLUME_MAX	$77
 .define SND_VOLUME_STEP	$11
 
-.macro m_ReadDataFromHlPlusE
-	ld d,$00
-	ld hl,\1
-	add hl,de
-	ld a,(hl)
-.endm
-
-.macro m_ReadDataFromHlPlusA
-	ld e,a
-	m_ReadDataFromHlPlusE \1
-.endm
-
 .macro m_ReadChannelData
 	.if NARGS == 2
 		ld a,\2
@@ -83,23 +71,6 @@
 		m_ReadChannelData \1
 	.endif
 	or a
-.endm
-
-.macro m_WriteHlToFF00PlusA
-	ld c,a
-	ld a,l
-	ld ($ff00+c),a
-	inc c
-	ld a,h
-	ld ($ff00+c),a
-	inc c
-.endm
-
-.macro m_WriteDataToHlPlusE
-	ld d,$00
-	ld hl,\1
-	add hl,de
-	ld (hl),a
 .endm
 
 .macro m_WriteChannelData
@@ -127,6 +98,12 @@
 		ld (hl),a
 		.shift
 	.endr
+.endm
+
+.macro m_GetHSoundChannelAddress
+	ld a,(wSoundChannel)
+	add a
+	add <hSoundChannelAddresses
 .endm
 
 .macro m_DisableChannels
@@ -214,10 +191,9 @@ m_section_superfree AudioCode NAMESPACE audio
 ; Returns the index that this channel occupies in the audio looping arrays.
 ; Returns zflag set if channel DOES NOT support looping.
 getCallIndexForChannel:
-	ld a,(wSoundChannel)
 	push hl
-	ld hl,@loopIndexOffsets
-	rst_addAToHl
+	ld a,(wSoundChannel)
+	m_LoadDbPointerPlusAIntoHl @loopIndexOffsets
 	ld a,(hl)
 	pop hl
 	cp $ff
@@ -239,29 +215,20 @@ getReturnPointer:
 	ld hl,$0000
 	call getCallIndexForChannel
 	ret z
-	ld h,>wMusicCallPointers
-	add a
-	add <wMusicCallPointers
-	ld l,a
+	m_LoadDwPointerPlusAIntoHl wMusicCallPointers
 	ret
 
 getLoopPointer:
 	ld hl,$0000
 	call getCallIndexForChannel
 	ret z
-	ld h,>wMusicLoopPointers
-	add a
-	add <wMusicLoopPointers
-	ld l,a
+	m_LoadDwPointerPlusAIntoHl wMusicLoopPointers
 	ret
 
 setLoopsRemaining:
 	call getCallIndexForChannel
 	ret z
-	ld h,>wMusicLoopCounters
-	add a
-	add <wMusicLoopCounters
-	ld l,a
+	m_LoadDwPointerPlusAIntoHl wMusicLoopCounters
 	bit 7,b
 	jr z,+
 		; call function to get initial loop count
@@ -279,10 +246,7 @@ setLoopsRemaining:
 getLoopsRemaining:
 	call getCallIndexForChannel
 	ret z
-	ld h,>wMusicLoopCounters
-	add a
-	add <wMusicLoopCounters+1
-	ld l,a
+	m_LoadDwPointerPlusAIntoHl wMusicLoopCounters+1
 	ldd a,(hl)
 	or a
 
@@ -549,18 +513,12 @@ updateSoundFrequencyAndPlay:
 	ld a,(wSoundChannel)
 	sla a
 	add <hSoundData3
-	ld c,a
-	ld a,($ff00+c)
-	inc c
-	ld l,a
-	ld a,($ff00+c)
-	inc c
-	ld h,a
+	m_ReadFromFF00PlusAIntoHl
 	add hl,de
 	ld a,(wSoundChannel)
 	sla a
 	add <hSoundData3
-	m_WriteHlToFF00PlusA
+	m_WriteIntoFF00PlusAFromHl
 
 @handleVibrato:
 	m_ReadChannelData wChannelVibratoActive
@@ -591,7 +549,7 @@ updateSoundFrequencyAndPlay:
 @determineFrequencyOffset:
 	; Get next raw offset (-2, -1, 0, 1 or 2)
 	ld hl,vibratoOffsetTable
-	readWordFromTable
+	m_readDwFromHlPlusA
 
 	; Increment index
 	push hl
@@ -613,13 +571,7 @@ updateSoundFrequencyAndPlay:
 	ld b,a
 	ld a,b
 	add <hSoundData3
-	ld c,a
-	ld a,($ff00+c)
-	inc c
-	ld e,a
-	ld a,($ff00+c)
-	inc c
-	ld d,a
+	m_ReadFromFF00PlusAIntoDe
 	add hl,de
 
 	call setFrequencyToHl
@@ -710,19 +662,11 @@ getNextChannelByte:
 	push bc
 	push de
 	push hl
+
+	m_GetHSoundChannelAddress
+	m_ReadFromFF00PlusAIntoHl
+
 	ld a,(wSoundChannel)
-	ld b,a
-
-	sla a
-	add <hSoundChannelAddresses
-	ld c,a
-	ld a,($ff00+c)
-	inc c
-	ld l,a
-	ld a,($ff00+c)
-	ld h,a
-
-	ld a,b
 	add <hSoundChannelBanks
 	ld c,a
 	ld a,($ff00+c)
@@ -731,10 +675,8 @@ getNextChannelByte:
 	push af
 
 	; move to the next byte in the data
-	ld a,b
-	sla a
-	add <hSoundChannelAddresses
-	m_WriteHlToFF00PlusA
+	m_GetHSoundChannelAddress
+	m_WriteIntoFF00PlusAFromHl
 
 	pop af
 	pop hl
@@ -800,12 +742,13 @@ channelCmdf1:
 	cp e
 	jr z,+
 		; different bank, so need to switch it
-		call interBankCall
-		jr doNextChannelCommand
+		call interBankCallReturnAf
+		jr ++
 	+
-
-	; same bank, so can call as-is
-	call jpHl
+		; same bank, so can call as-is
+		call jpHl
+	++
+	ld (hLastMusicAsmResult),a
 	jr doNextChannelCommand
 
 ;;
@@ -833,21 +776,44 @@ channelCmdf2:
 		; otherwise update to the return address
 		jr @writeJumpAddress
 	+
-	; call a music snippit
+	; calling a music snippit either directly, or from a table
 	ld h,a
 	call getNextChannelByte
 	ld l,a
 
-	; get the return address
-	ld a,(wSoundChannel)
-	add a
-	add <hSoundChannelAddresses
-	ld c,a
-	ld a,($ff00+c)
-	inc c
-	ld e,a
-	ld a,($ff00+c)
-	ld d,a
+	; get the return address in de
+	m_GetHSoundChannelAddress
+	m_ReadFromFF00PlusAIntoDe
+
+	ld a,h
+	cp $ff
+	jr nz,+
+		; call a music snippit via a jump table
+		ld b,$00
+		ld c,l ; backup the table size for checking that the index is valid
+
+		; adjust the return address to be directly after the table
+		ld h,$00
+		add hl,hl
+		add hl,de
+
+		; set the jump address ONLY if the index is within the table bounds
+		ld a,(hLastMusicAsmResult)
+		cp c
+		jr c,+
+			; index is outside the table.
+			; skip the call and go to the next command
+			ld h,d
+			ld l,e
+			jr @writeJumpAddress
+		+
+
+		; calculate the jump address
+		ld h,$00
+		ld l,a
+		add hl,hl
+		add hl,de
+	++
 
 	push hl
 	call getReturnPointer
@@ -860,10 +826,8 @@ channelCmdf2:
 
 @writeJumpAddress:
 		; write the channel jump address
-		ld a,(wSoundChannel)
-		add a
-		add <hSoundChannelAddresses
-		m_WriteHlToFF00PlusA
+		m_GetHSoundChannelAddress
+		m_WriteIntoFF00PlusAFromHl
 		jp doNextChannelCommand
 	+
 	pop hl
@@ -903,38 +867,24 @@ channelCmdf3:
 		; if the call set the zflag, don't loop back to the start
 		jp z,doNextChannelCommand
 
-		; jump back to the start of the loop
-		ld a,(wSoundChannel)
-		add a
-		add <hSoundChannelAddresses
-		ld c,a
-
 		; move to the command directly after the loop
 		inc hl
 		inc hl
 		inc hl
 		inc hl
 
-		ld a,l
-		ld ($ff00+c),a
-		inc c
-		ld a,h
-		ld ($ff00+c),a
+		; jump back to the start of the loop
+		m_GetHSoundChannelAddress
+		m_WriteIntoFF00PlusAFromHl
+
 		jp doNextChannelCommand
 	+
 
 	; starting a loop. store the current sound channel address
 	; minus 1(to jump back to the bank number) to wMusicLoopPointers
-	ld a,(wSoundChannel)
-	add a
-	add <hSoundChannelAddresses+1
-	ld c,a
-	ld a,($ff00+c)
-	dec c
-	ld d,a
-	ld a,($ff00+c)
-	ld e,a
-	dec de
+	m_GetHSoundChannelAddress
+	push af
+	m_ReadFromFF00PlusAIntoDe
 
 	call getLoopPointer
 	jr z,+
@@ -946,15 +896,11 @@ channelCmdf3:
 
 	; move the channel address past the bank and pointer
 	; and continue to the next channel command
-	inc de
-	inc de
-	inc de
-	inc de
-	ld a,e
-	ld ($ff00+c),a
-	inc c
-	ld a,d
-	ld ($ff00+c),a
+	ld hl,$0004
+	add hl,de
+
+	pop af
+	m_WriteIntoFF00PlusAFromHl
 
 	jp doNextChannelCommand
 
@@ -1149,7 +1095,7 @@ standardCmdSfxSquareChannel2:
 	ld a,(wSoundCmd)
 	sub $0c
 	ld hl,soundFrequencyTable
-	readWordFromTable
+	m_readDwFromHlPlusA
 @arbitraryFrequency:
 	call setSoundFrequency
 	m_WriteChannelData wChannelEnvelopeStates, $00
@@ -1199,7 +1145,7 @@ setSoundFrequency:
 	ld a,(wSoundChannel)
 	sla a
 	add <hSoundData3
-	m_WriteHlToFF00PlusA
+	m_WriteIntoFF00PlusAFromHl
 
 setFrequencyToHl:
 	ld a,l
@@ -1402,7 +1348,7 @@ standardCmdSfxWaveChannel:
 	m_WriteChannelData wWaveChannelIsPlayingRest-MUS_WAVE,$00
 	ld a,(wSoundCmd)
 	ld hl,soundFrequencyTable
-	readWordFromTable
+	m_readDwFromHlPlusA
 @arbitraryFrequency:
 	call setSoundFrequency
 	m_WriteChannelData wChannelVibratoActive,$00
@@ -1608,7 +1554,7 @@ setWaveform:
 	; Copy waveform to $ff30
 	ld a,(wWaveformIndex)
 	ld hl,waveformTable
-	readWordFromTable
+	m_readDwFromHlPlusA
 	ld c,$10
 	ld de,$ff30
 -
@@ -1666,10 +1612,8 @@ channelCmdfe:
 	and $7f
 	or $40
 	ld h,a
-	ld a,(wSoundChannel)
-	sla a
-	add <hSoundChannelAddresses
-	m_WriteHlToFF00PlusA
+	m_GetHSoundChannelAddress
+	m_WriteIntoFF00PlusAFromHl
 
 	jp doNextChannelCommand
 
@@ -1933,8 +1877,8 @@ playSound:
 	ld ($ff00+c),a
 
 	; Write the address for this sound channel into hSoundChannelAddresses
-	sla b
 	ld a,b
+	add a
 	add <hSoundChannelAddresses
 	ld c,a
 
