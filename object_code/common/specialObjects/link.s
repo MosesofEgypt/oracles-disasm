@@ -4237,10 +4237,11 @@ linkUpdateMovement:
 ; Only for top-down sections. (See also linkUpdateInAir_sidescroll.)
 linkUpdateInAir:
 	ld a,(wLinkInAir)
-	and $0f
+	and $03
 	rst_jumpTable
 	.dw @notInAir
 	.dw @startedJump
+	.dw @inAir
 	.dw @inAir
 
 @notInAir:
@@ -4373,10 +4374,11 @@ linkUpdateInAir:
 ; @param[out]	zflag	If set, linkState01_sidescroll will return prematurely.
 linkUpdateInAir_sidescroll:
 	ld a,(wLinkInAir)
-	and $0f
+	and $03
 	rst_jumpTable
 	.dw @notInAir
 	.dw @jumping
+	.dw @inAir
 	.dw @inAir
 
 @notInAir:

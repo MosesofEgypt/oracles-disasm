@@ -1,6 +1,19 @@
 ; ==================================================================================================
 ; Code macros
 ; ==================================================================================================
+.MACRO m_SetPanicState
+	.assert NARGS == 1
+	.assert (\1 >= -1) && (\1 < 8)
+	.if \1 == -1
+		xor a
+	.else
+		ldh a,(<hPanicState)
+		and $1f
+		or \1<<5
+	.endif
+	ldh (<hPanicState),a
+.ENDM
+
 
 ; Call Across Bank
 .MACRO callab
@@ -253,6 +266,12 @@
 .ENDM
 
 ; RSTs
+.MACRO panicForXBytes
+	.assert NARGS == 1
+	.rept \1
+		rst $00
+	.endr
+.ENDM
 .MACRO panic
 	rst $00
 .ENDM

@@ -2816,6 +2816,17 @@ popFromTextStack:
 	pop de
 	ret
 
+readByteFromW7ActiveBank:
+	push de
+	ld a,(w7ActiveBank)
+	ld e,a
+	ld d,$00
+	push hl
+	call readByteFromHlAcrossBanks
+	pop hl
+	pop de
+	ret
+
 ;;
 readByteFromW7ActiveBankAndIncHl:
 	call readByteFromW7ActiveBank

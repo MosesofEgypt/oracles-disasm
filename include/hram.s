@@ -105,29 +105,24 @@
 	; 0-3; when bit 7 is set, volume needs updating.
 	hMusicVolume			db	; $ffb6
 
-	; ffb7: if bit 7 is set, the game is currently doing vBlank gfx updates
-	;       if bit 3 is set, playSound doesn't do anything.
-	;       if bit 0 is set, the audio update thread is locked(running or not)
-	hFFB7				db	; $ffb7
-
-	; Used in timer interrupt
-	hFFB8				db	; $ffb8
-
-	; This is 0 until the capcom screen is over
-	hIntroInputsEnabled		db	; $ffb9
+	; Bit 7:    If set, the game is currently doing vBlank gfx updates
+	; Bit 6:    If set, playSound doesn't do anything.
+	; Bit 5:    If set, the audio update thread is locked(running or not)
+	; Bits 0-2: Holds a timer that resets every 7 frames
+	hAudioAndTimerControl				db	; $ffb7
 
 	; If this is nonzero then this gameboy uses an external clock (is the "slave").
 	; In JP region, this is $d0 or $d1; in the US region, it's $e0 or $e1.
-	hSerialInterruptBehaviour	db	; $ffba
+	hSerialInterruptBehaviour	db	; $ffb8
 
 	; Serial interrupt sets this to 1 if a byte has been read
-	hReceivedSerialByte		db	; $ffbb
+	hReceivedSerialByte		db	; $ffb9
 
 	; Value of byte from R_SB
-	hSerialByte			db	; $ffbc
+	hSerialByte			db	; $ffba
 
 	; 0 if no errors occurred
-	hSerialTransferErrorCode				db	; $ffbd
+	hSerialTransferErrorCode				db	; $ffbb
 
 	; This variable is the link "mode" (what it's doing right now).
 	; $01: serving as the host that receives the fortune
@@ -135,37 +130,41 @@
 	; $03: serving as the host that receives a file transfer request
 	;      (this is seen on the titlescreen or "can't run on DMG" screen)
 	; $04: serving as the client that initiates a file transfer request
-	hSerialLinkMode				db	; $ffbe
+	hSerialLinkMode				db	; $ffbc
 
 	; This keeps track of the "state" corresponding to the above link mode.
-	hSerialLinkState		db	; $ffbf
+	hSerialLinkState		db	; $ffbd
+
+	hGdmaDelayedCount			db ; $ffbe
+	hGdmaChunksCopiedThisFrame	db ; $ffbf
+
+	hPanicRegisterAf			dw ; $ffc0
+	hPanicRegisterBc			dw ; $ffc2
+	hPanicRegisterDe			dw ; $ffc4
+	hPanicRegisterHl			dw ; $ffc6
+	hPanicInstructionPointer	dw ; $ffc8
+	hPanicWramBank				db ; $ffca
+	hPanicVramBank				db ; $ffcb
+	; NOTE: this obviously doesn't handle the 9th bit for 8MB roms.
+	;       in situations like that I guess you're just fucked.
+	hPanicRomBank				db ; $ffcc
+	hPanicStackPointerOffset	db ; $ffcd
 
 	; NOTE: Avoid using these during interrupts, as that could
 	;       be in use by a main thread that's currently paused
-	hActiveCollisionsTable	.dw ; $ffc0
-	hTempVal0				db ; $ffc0
+	hActiveCollisionsTable	.dw ; $ffce
+	hTempVal0				db ; $ffce
 
-	hGfxCompressionMode		.db	; $ffc1
-	hTempVal1				db ; $ffc1
+	hGfxCompressionMode		.db	; $ffcf
+	hTempVal1				db ; $ffcf
 
-	hItemCollisionBomb		.db ; $ffc2
-	hTempVal2				db ; $ffc2
-	hTempVal3			 	db ; $ffc3
-
-	hGdmaDelayedCount			db ; $ffc4
-	hGdmaChunksCopiedThisFrame	db ; $ffc5
+	hItemCollisionBomb		.db ; $ffd0
+	hTempVal2				db ; $ffd0
+	hTempVal3			 	db ; $ffd1
 
 	; instances of BoundingBoxStruct
-	hLinkBoundingBox			dsb $04 ; $ffc6
-	hEnemyBoundingBox			dsb $04 ; $ffca
-
-	hPanicRegisterAf			dw ; $ffce
-	hPanicRegisterBc			dw ; $ffd0
-	hPanicRegisterDe			dw ; $ffd2
-	hPanicRegisterHl			dw ; $ffd4
-	hPanicInstructionPointer	dw ; $ffd6
-	hPanicRomBank				db ; $ffd8
-	hPanicStackPointerLow		db ; $ffd9
+	hLinkBoundingBox			dsb $04 ; $ffd2
+	hEnemyBoundingBox			dsb $04 ; $ffd6
 
 	; Marker for end of "normal" hram (memory gets cleared up to here upon game initialization)
 	hramEnd			 			.db	; $ffda
@@ -189,8 +188,12 @@
 	; Bits 5-7: Panic display state
 	; $00 == no panic; nothing recorded
 	; $0* == need to start a panic
-	; $2* == panic data recorded, but not displayed
-	; $4* == panic info displayed
-	; $6* == waiting to close panic display
+	; $2* == panic data recorded, ready to enter idle loop
+	; $4* == panic idle loop
+	; $6* == exiting panic loop
+	; $8* == opening panic display
+	; $A* == panic display loop
+	; $C* == unused
+	; $E* == unused
 	hPanicState				db ; $fffe
 .ende

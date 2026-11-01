@@ -1,3 +1,9 @@
+getEntryFromObjectTable2:
+	ld d,b
+	ld e,:objectData.objectTable2
+	ld hl,objectData.objectTable2
+	jp readWordFromHlAcrossBanks
+
 ;;
 ; CUTSCENE_FAIRIES_HIDE
 func_03_6103:

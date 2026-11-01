@@ -1970,7 +1970,7 @@ collisionLinkBounce:
 		ld a,c
 		cp <w1Link
 		jr nz,+
-			; @check that Link is in the air and falling
+			; @check that Link is in the air
 			ld a,(wLinkInAir)
 			and $0f
 			cp $02
@@ -2008,9 +2008,9 @@ collisionLinkBounce:
 	; remove reduced gravity and trigger flip
 	ld a,(wFeatherLevel)
 	cp $02
-	ld a,$40
+	ld a,$52
 	jr c,+
-		ld a,$41
+		ld a,$43
 	+
 	ld (wLinkInAir),a
 

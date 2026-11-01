@@ -375,10 +375,6 @@ runIntro:
 	jr z,intro_runStage
 
 @nextStage:
-	ldh a,(<hIntroInputsEnabled)
-	add a
-	jr z,intro_runStage
-
 	ld a,(wIntroStage)
 	cp $03
 	jr nz,intro_gotoTitlescreen
@@ -420,7 +416,6 @@ intro_restart:
 
 ;;
 intro_gotoNextStage:
-	call enableIntroInputs
 	call clearDynamicInteractions
 	ld hl,wIntroStage
 	inc (hl)
@@ -539,12 +534,7 @@ intro_capcomScreen:
 	inc l
 	ld (hl),a ; [wIntroVar] = 0
 	ld (wIntro.cinematicState),a
-
-.ifdef REGION_JP
 	ret
-.else
-	jp enableIntroInputs
-.endif
 
 .ifdef ENABLE_DX_TITLE_SCREEN
 titlescreenDXSprite:

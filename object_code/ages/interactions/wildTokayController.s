@@ -332,3 +332,17 @@ m_InteractionCode $70
 	.db $00 $01 $01 $02 $02 $03 $03 $04 $04 $04 $05 $05 $06 $06 $06 $07
 	.db $01 $02 $03 $03 $04 $04 $04 $05 $05 $05 $05 $00 $00 $06 $07 $07
 	.db $03 $04 $04 $04 $05 $05 $05 $05 $05 $02 $01 $00 $06 $07 $07 $07
+
+;;
+; Gets object data for tokays in the wild tokay game.
+;
+; @param	b	Index (0/1: Tokay on left; 2: tokay on right; 3: both sides)
+; @param[out]	hl	Address of object data
+getWildTokayObjectDataIndex:
+	push de
+	ld d,b
+	ld e,:objectData.wildTokayObjectTable
+	ld hl,objectData.wildTokayObjectTable
+	call readWordFromHlAcrossBanks
+	pop de
+	ret

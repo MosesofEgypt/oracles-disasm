@@ -98,7 +98,32 @@ m_InteractionCode $af
 	jp z,interactionDelete
 	inc l
 	ld c,(hl) ; [xh]
-	jp interactionFunc_3e6d
+
+	push de
+	ld l,Interaction.var03
+	ld e,(hl)
+
+.if defined(ROM_COMBO)
+	call wIsSeasons
+	ld d,e
+	ld e,:creditsTextOamData_seasons
+	ld hl,creditsTextOamData_seasons
+	jr c,+
+		ld hl,creditsTextOamData_ages
+	+
+.elif defined(ROM_AGES)
+	ld d,e
+	ld e,:bank16.creditsTextOamData
+	ld hl,bank16.creditsTextOamData
+.else
+	ld d,e
+	ld e,:creditsTextOamData
+	ld hl,creditsTextOamData
+.endif
+	call readWordFromHlAcrossBanks
+	call addSpritesFromBankToOam_withOffset
+	pop de
+	ret
 
 @data_66bc:
 .ifdef ROM_AGES

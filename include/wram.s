@@ -226,8 +226,10 @@ wThread1Stack: 		dsb $a0		; main thread
 wThread1StackTop: 	.db	; $c220
 wThread2Stack: 		dsb $50		; text thread
 wThread2StackTop: 	.db	; $c270
-wThread3Stack: 		dsb $50		; palette thread
-wThread3StackTop: 	.db	; $c2c0
+wThread3Stack: 		dsb $40		; palette thread
+wThread3StackTop: 	.db	; $c2b0
+wPanicStack: 		dsb $10		; panic handling thread
+wPanicStackTop: 	.db	; $c2c0
 
 .if defined(ROM_COMBO)
 	wc2c0:

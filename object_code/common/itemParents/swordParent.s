@@ -260,9 +260,9 @@ parentItemCode_sword:
 	; trigger the flip animation and reenable jumping
 	ld a,(wFeatherLevel)
 	cp $02
-	ld a,$40
+	ld a,$52
 	jr c,+
-		ld a,$41
+		ld a,$43
 	+
 	ld (wLinkInAir),a
 

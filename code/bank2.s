@@ -297,11 +297,9 @@ fileSelectMode1:
 		ld a,SND_SELECTITEM
 		jp playSound
 	+
+	; press B to go back to intro
 	bit BTN_BIT_B,a
 	jp z,+
-		; press B to go back to intro
-		xor a
-		ldh (<hIntroInputsEnabled),a
 		.if defined(ROM_COMBO)
 			callabaf fileManagement.toggleComboLastIntroSeen
 			call setIsSeasons

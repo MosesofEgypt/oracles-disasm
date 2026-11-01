@@ -1,5 +1,12 @@
 .ORGA $0000
 ; panic
+	; NOTE: we're adding nops to ensure this can
+	;       catch more accidental low-address jumps
+	nop
+	nop
+	nop
+	nop
+	nop
 	; oh boy, we shidd the bed. time to make it
 	jp handlePanic
 
@@ -8,6 +15,9 @@
 	setrombank
 	ret
 
+	; catch accidental jumps
+	panicForXBytes 2
+
 .ORGA $0010
 ; rst_addAToHl
 	add l
@@ -15,6 +25,9 @@
 	ret nc
 	inc h
 	ret
+
+	; catch accidental jumps
+	panicForXBytes 3
 
 .ORGA $0018
 ; rst_addDoubleIndex
@@ -26,6 +39,9 @@
 	derefHl
 	ret
 
+	; catch accidental jumps
+	panicForXBytes 4
+
 .ORGA $0028
 ; rst_jumpTable
 	add a
@@ -33,6 +49,9 @@
 	addAToHl
 	derefHl
 	jp hl
+
+	; catch accidental jumps
+	panicForXBytes 3
 
 .ORGA $0038
 ; Not used as rst $38
@@ -51,11 +70,17 @@
 	push hl
 	jp vblankInterrupt
 
+	; catch accidental jumps
+	panicForXBytes 3
+
 .ORGA $0048
 ; LCD interrupt
 	push af
 	push hl
 	jp lcdInterrupt
+
+	; catch accidental jumps
+	panicForXBytes 3
 
 .ORGA $0050
 ; Timer interrupt
@@ -71,19 +96,15 @@
 	push af
 	jp serialInterrupt
 
+	; catch accidental jumps
+	panicForXBytes 4
+
 .ORGA $0060
 ; Joypad interrupt
 	reti
 
-; Put the nops here explicitly so the next section can't start until $0068
-
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
+	; catch accidental jumps
+	panicForXBytes 7
 
 
 .ORGA $0068
@@ -241,37 +262,47 @@ bitTable:
 	nop
 	jp begin
 
+; NOTE: The nintendo logo goes in this space from $104-$133
 
-; ROM title / manufacturer code
+; ROM title
 .ORGA $134
-
 .if defined(ROM_COMBO)
 	.asc "ZELDA OOA&S"
-
-	.ifdef REGION_JP
-		.ASC "AZ9J"
-	.else
-		.asc "AZ9E"
-	.endif
-
 .elif defined(ROM_SEASONS)
 	.asc "ZELDA DIN" 0 0
-
-	.ifdef REGION_JP
-		.ASC "AZ7J"
-	.else
-		.asc "AZ7E"
-	.endif
 .else ; ROM_AGES
 	.asc "ZELDA NAYRU"
-
-	.ifdef REGION_JP
-		.ASC "AZ8J"
-	.else
-		.asc "AZ8E"
-	.endif
 .endif
 
+.ORGA $13f
+; Manufacturer code
+.ASC "AZ"
+.if defined(ROM_COMBO)
+	.ASC "9"
+.elif defined(ROM_AGES)
+	.ASC "8"
+.else ; ROM_SEASONS
+	.ASC "7"
+.endif
+.ifdef REGION_JP
+	.ASC "J"
+.else
+	.ASC "E"
+.endif
+
+; NOTES:
+; Bytes between here and $150 are for the header.
+;	     $143: flag to treat this as a color gameboy game
+;	$144-$145: new licensee code
+;	     $146: SGB compatability flag
+;	     $147: cartridge type
+;	     $148: ROM size
+;	     $149: SRAM size
+;	     $14a: destination code(JP or other)
+;	     $14b: old licensee code
+;	     $14c: ROM version number
+;	     $14d: header checksum
+;	$14e-$14f: global checksum
 
 .ORGA $150
 
@@ -1833,15 +1864,6 @@ dec16_ff8c:
 	ret
 
 ;;
-enableIntroInputs:
-	ldh a,(<hIntroInputsEnabled)
-	bit 7,a
-	ret nz
-	ld a,$01
-	ldh (<hIntroInputsEnabled),a
-	ret
-
-;;
 threadFunc_088b:
 	push hl
 	ld l,a
@@ -1986,7 +2008,7 @@ _nextThread:
 	ld h,>wThreadStateBuffer
 	ld a,$01
 	ldh (R_SVBK),a
-	jr _mainLoop_nextThread
+	jp _mainLoop_nextThread
 
 
 ; DEBUG: Data for quickstart spawn location
@@ -2026,20 +2048,59 @@ handlePanic:
 		dec b
 		jr nz,-
 
+	ldh a,(R_SVBK)
+	and $07
+	ldi (hl),a
+	ldh a,(R_VBK)
+	and $01
+	ldi (hl),a
 	ldh a,(<hRomBank)
 	ldi (hl),a
+
+	; record the offset we were at in the 256 byte stack section
 	ldHlSp
+	; NOTE: we're offsetting this by 2 since we popped the return address off earlier
+	ld de,(0xfffe-wMainStack)
+	add hl,de
+	rrc h
 	ld a,l
-	ldh (<hPanicStackPointerLow),a
+	rra
+	ldh (<hPanicStackPointerOffset),a
 
-	ld a,1<<5	; enable panic mode
-	ldh (<hPanicState),a
+	; enable panic mode
+	m_SetPanicState 1
 
-	; reset the stack pointer
-	ld sp,wMainStackTop
+	; move to using the panic stack
+	ld sp,wPanicStackTop
 @mainLoop:
 	jr _mainLoop
 
+restoreToPanicCallsite:
+	; restore the registers and stack pointer
+	ld a,(hPanicWramBank)
+	ldh (R_SVBK),a
+	ld a,(hPanicVramBank)
+	ldh (R_VBK),a
+	ld a,(hPanicRomBank)
+	setrombank
+	pop de
+	pop bc
+	pop af
+
+	; restoring the stack, hl, and af all together is a bit tricky,
+	; so we have to handle this with care(tower of hanoi problem).
+	ld sp,hl
+
+	; restore hl
+	ldh a,(<hPanicRegisterHl)
+	ld l,a
+	ldh a,(<hPanicRegisterHl+1)
+	ld h,a
+
+	; we popped af to setup the flags, but we need to restore the
+	; "a" register again since we needed to use it for moving data
+	ldh a,(<hPanicRegisterAf)
+	reti
 
 ;;
 ; Called just after basic initialization
@@ -2086,19 +2147,23 @@ _mainLoop:
 	; NOTE: intentionally not using setrombank here to avoid
 	;       changing the value of hRomBank so it can be recorded
 	ldh a,(<hPanicState)
-	or a
-	ld a,:panicHandling.panicHandler
-	ld ($2222),a
-	jp nz,panicHandling.panicHandler
-
-	ldh a,(<hIntroInputsEnabled)
-	add a
-	jr z,+
+	and $e0
+	jr nz,+
+		; not in a panic state. see if we need to enter one
+		ldh a,(<hPanicState)
+		and $1f
+		call nz,handlePanic
+		jr ++
+	+
+		ld a,:panicHandling.panicHandler
+		ld ($2222),a
+		jp nz,panicHandling.panicHandler
+	++
 
 	ld a,(wKeysPressed)
 	sub (BTN_A | BTN_B | BTN_START | BTN_SELECT)
 	jp z,resetGame
-+
+
 	ld a,(wEquippedItemOamTail)
 	ldh (<hOamTail),a
 	ld h,>wThreadStateBuffer
@@ -2301,7 +2366,7 @@ vblankInterrupt:
 	ldh (<hLcdInterruptBehaviour),a
 	xor a
 	ldh (<hLcdInterruptCounter),a
-	ld hl,hFFB7
+	ld hl,hAudioAndTimerControl
 	set 7,(hl)
 
 	; Copy wram variables to real equivalents
@@ -2390,7 +2455,7 @@ vblankInterrupt:
 	ldi a,(hl)
 	ld (wGfxRegs7.SCX),a
 ++
-	ld hl,hFFB7
+	ld hl,hAudioAndTimerControl
 	res 7,(hl)
 	pop hl
 	pop af
@@ -2994,8 +3059,8 @@ playSound:
 	ret z
 
 	ld h,a
-	ldh a,(<hFFB7)
-	bit 3,a
+	ldh a,(<hAudioAndTimerControl)
+	bit 6,a
 	ret nz
 
 	ldh a,(<hMusicQueueTail)
@@ -3048,8 +3113,8 @@ jpBc:
 
 ;;
 disableTimer:
-	ld hl,hFFB7
-	set 0,(hl)
+	ld hl,hAudioAndTimerControl
+	set 5,(hl)
 	xor a
 	ldh (R_TAC),a
 	ret
@@ -3073,8 +3138,8 @@ enableTimer:
 	xor a
 	ld (hl),a
 	set 2,(hl)
-	ld hl,hFFB7
-	res 0,(hl)
+	ld hl,hAudioAndTimerControl
+	res 5,(hl)
 	ret
 
 ;;
@@ -3084,23 +3149,29 @@ timerInterrupt:
 	and INT_TIMER ~ $FF
 	ldh (R_IE),a
 
-	ld hl,hFFB7
+	ld hl,hAudioAndTimerControl
 	bit 7,(hl)
 	jr nz,@interruptEnd
-	bit 0,(hl)
+	bit 5,(hl)
 	jr nz,@interruptEnd
-	set 0,(hl)
+	set 5,(hl)
 
-	; Decrement hFFB8
-	inc l
-	dec (hl)
+	; Decrement audio timer
+	ld a,(hl)
+	dec a
+	and $07
+	ld b,a
 	jr nz,+
 		; reset the timer counter every 7 frames
-		ld (hl),$07
+		ld b,$07
 		ldh a,(R_TMA)
 		dec a
 		ldh (R_TIMA),a
 	+
+	ld a,(hl)
+	and $f8
+	or b
+	ld (hl),a
 
 	ldh a,(<hRomBank)
 	push af
@@ -3132,8 +3203,8 @@ timerInterrupt:
 		ldh (<hMusicQueueHead),a
 	+
 	call audio.b39_updateSound
-	ld hl,hFFB7
-	res 0,(hl)
+	ld hl,hAudioAndTimerControl
+	res 5,(hl)
 	pop af
 	setrombank
 
@@ -5812,25 +5883,6 @@ retrieveTextCharacter:
 	inc bc
 	dec e
 	jr nz,@color2
-	ret
-
-;;
-; Can only be called from bank $3f. Also assumes RAM bank 7 is loaded.
-readByteFromW7ActiveBank:
-	push bc
-	ld a,(w7ActiveBank)
-	setrombank
-	ld b,(hl)
-
-.if defined(ROM_COMBO)
-	ld a,:bank19.readByteFromW7ActiveBankAndIncHl
-.else
-	ld a,:dataLoading.readByteFromW7ActiveBankAndIncHl
-.endif
-	setrombank
-
-	ld a,b
-	pop bc
 	ret
 
 ;;
@@ -13272,23 +13324,6 @@ setEnemyTargetToLinkPosition:
 	ldh (<hFFB3),a
 	ret
 
-.if defined(ROM_AGES) || defined(ROM_COMBO)
-
-;;
-getEntryFromObjectTable2:
-	ldh a,(<hRomBank)
-	push af
-	ld a, :objectData.objectTable2
-	setrombank
-	ld a,b
-	ld hl, objectData.objectTable2
-	rst_addDoubleIndex
-	rst_derefHl
-	pop af
-	setrombank
-	ret
-
-.endif
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
@@ -14730,26 +14765,33 @@ interactionRunSimpleScript:
 
 .endif
 
-
-.if defined(ROM_AGES) || defined(ROM_COMBO)
-
-;;
-; Gets object data for tokays in the wild tokay game.
-;
-; @param	b	Index (0/1: Tokay on left; 2: tokay on right; 3: both sides)
-; @param[out]	hl	Address of object data
-getWildTokayObjectDataIndex:
+readWordFromHlAcrossBanks:
 	ldh a,(<hRomBank)
 	push af
-	ld a,:objectData.wildTokayObjectTable
+	ld a,e
 	rst_setrombank
-	ld a,b
-	ld hl,objectData.wildTokayObjectTable
+	ld a,d
 	rst_addDoubleIndex
 	rst_derefHl
 	pop af
 	rst_setrombank
 	ret
+
+readByteFromHlAcrossBanks:
+	ldh a,(<hRomBank)
+	push af
+	ld a,e
+	rst_setrombank
+	ld a,d
+	rst_addAToHl
+	ld l,(hl)
+	pop af
+	rst_setrombank
+	ld a,l
+	ret
+
+
+.if defined(ROM_AGES) || defined(ROM_COMBO)
 
 ;;
 ; Create a sparkle at the current object's position.
@@ -14841,49 +14883,6 @@ setUpCharactersAfterMoblinKeepDestroyed:
 	ret
 
 .endif ; ROM_SEASONS
-
-
-;;
-; Used during the end credits. Seems to load the credit text into OAM.
-interactionFunc_3e6d:
-	push de
-	ld l,Interaction.var03
-	ld e,(hl)
-
-	ldh a,(<hRomBank)
-	push af
-.if defined(ROM_COMBO)
-	call wIsSeasons
-	ld a,:creditsTextOamData_seasons
-	ld hl,creditsTextOamData_seasons
-	jr c,+
-		ld hl,creditsTextOamData_ages
-	+
-	rst_setrombank
-	ld a,e
-.else
-
-.if defined(ROM_AGES)
-	ld a,:bank16.creditsTextOamData
-.else
-	ld a,:creditsTextOamData
-.endif
-	rst_setrombank
-
-	ld a,e
-.if defined(ROM_AGES)
-	ld hl,bank16.creditsTextOamData
-.else
-	ld hl,creditsTextOamData
-.endif
-.endif
-	rst_addDoubleIndex
-	rst_derefHl
-	call addSpritesToOam_withOffset
-	pop af
-	rst_setrombank
-	pop de
-	ret
 
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
