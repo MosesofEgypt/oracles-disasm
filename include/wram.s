@@ -2636,8 +2636,8 @@ wccb1: ; $ccb1
 
 .if defined(ROM_COMBO)
 .union
-    wInBoxingMatch:
-        db
+	wInBoxingMatch:
+		db
 .nextu
 	wDisableWarps:
 		db
@@ -3084,28 +3084,28 @@ wIsMaplePresent: ; $cdda/$cc3a
 .if defined(ROM_COMBO)
 .union
 	; seasons variables
-    ws_cc39:
-        db
+	ws_cc39:
+		db
 .nextu
 	; ages variables
-    wcddb:
-        db
-    wLinkTimeWarpTile:
-        db
-    wcddd:
-        db
-    wSentBackByStrangeForce:
-        db
-    wcddf:
-        db
-    wcde0:
-        db
-    wPirateShipChangedTile:
-        db
-    wMamamuDogLocation:
-        db
-    wcde3:
-        dw
+	wcddb:
+		db
+	wLinkTimeWarpTile:
+		db
+	wcddd:
+		db
+	wSentBackByStrangeForce:
+		db
+	wcddf:
+		db
+	wcde0:
+		db
+	wPirateShipChangedTile:
+		db
+	wMamamuDogLocation:
+		db
+	wcde3:
+		dw
 .endu
 .elif defined(ROM_AGES)
 

@@ -1,5 +1,5 @@
 .macro m_TilesetGfxPointer
-    m_ReadGfxDataHashedFilename \1
+	m_ReadGfxDataHashedFilename \1
 	dwbe {filename}
 	.db (:{filename})&$ff
 .endm
@@ -10,22 +10,22 @@
 .endm
 
 .macro m_TilesetMappingPointer
-    dwbe \1
-    .db :\1
+	dwbe \1
+	.db :\1
 .endm
 
 
 .macro m_TilesetMappingSection
 .ifdef ROM_AGES
-    .section expanded_tileset_mappings_\1_ages SUPERFREE
-    ages_tilesetMappings\1:
-        .incbin "tileset_layouts_expanded/ages/tilesetMappings\1.bin"
-        .incbin "tileset_layouts_expanded/ages/tilesetCollisions\1.bin"
+	.section expanded_tileset_mappings_\1_ages SUPERFREE
+	ages_tilesetMappings\1:
+		.incbin "tileset_layouts_expanded/ages/tilesetMappings\1.bin"
+		.incbin "tileset_layouts_expanded/ages/tilesetCollisions\1.bin"
 .else
 .section expanded_tileset_mappings_\1_seasons SUPERFREE
-    seasons_tilesetMappings\1:
-        .incbin "tileset_layouts_expanded/seasons/tilesetMappings\1.bin"
-        .incbin "tileset_layouts_expanded/seasons/tilesetCollisions\1.bin"
+	seasons_tilesetMappings\1:
+		.incbin "tileset_layouts_expanded/seasons/tilesetMappings\1.bin"
+		.incbin "tileset_layouts_expanded/seasons/tilesetCollisions\1.bin"
 .endif
 .ends
 .endm
@@ -35,54 +35,54 @@
 .define ROM_AGES
 .section ExpandedTilesetPointers_ages SUPERFREE
 
-    expandedTilesetGfxTable_ages:
-    .REPT $80 index tmpi
-        m_TilesetGfxPointer ages_gfx_tileset{%.2x{tmpi}}
-    .ENDR
+	expandedTilesetGfxTable_ages:
+	.REPT $80 index tmpi
+		m_TilesetGfxPointer ages_gfx_tileset{%.2x{tmpi}}
+	.ENDR
 
 
-    expandedTilesetMappingsTable_ages:
-    .REPT $80 index tmpi
-        m_TilesetMappingPointer ages_tilesetMappings{%.2x{tmpi}}
-    .ENDR
+	expandedTilesetMappingsTable_ages:
+	.REPT $80 index tmpi
+		m_TilesetMappingPointer ages_tilesetMappings{%.2x{tmpi}}
+	.ENDR
 .ends
 
 
 .undefine ROM_AGES
 .section ExpandedTilesetPointers_seasons SUPERFREE
 
-    expandedTilesetGfxTable_seasons:
-    .REPT $1b index tmpi
-        m_SeasonalTilesetGfxPointer gfx_tileset{%.2x{tmpi}}
-    .ENDR
+	expandedTilesetGfxTable_seasons:
+	.REPT $1b index tmpi
+		m_SeasonalTilesetGfxPointer gfx_tileset{%.2x{tmpi}}
+	.ENDR
 
-    .REPT $80-$1b index tmpi
-        m_TilesetGfxPointer seasons_gfx_tileset{%.2x{tmpi+$1b}}
-    .ENDR
+	.REPT $80-$1b index tmpi
+		m_TilesetGfxPointer seasons_gfx_tileset{%.2x{tmpi+$1b}}
+	.ENDR
 
-    .REPT $1b index tmpi
-    gfx_tileset{%.2x{tmpi}}_season_table:
-        m_TilesetGfxPointer seasons_gfx_tileset{%.2x{tmpi}}_spring
-        m_TilesetGfxPointer seasons_gfx_tileset{%.2x{tmpi}}_summer
-        m_TilesetGfxPointer seasons_gfx_tileset{%.2x{tmpi}}_autumn
-        m_TilesetGfxPointer seasons_gfx_tileset{%.2x{tmpi}}_winter
-    .ENDR
+	.REPT $1b index tmpi
+	gfx_tileset{%.2x{tmpi}}_season_table:
+		m_TilesetGfxPointer seasons_gfx_tileset{%.2x{tmpi}}_spring
+		m_TilesetGfxPointer seasons_gfx_tileset{%.2x{tmpi}}_summer
+		m_TilesetGfxPointer seasons_gfx_tileset{%.2x{tmpi}}_autumn
+		m_TilesetGfxPointer seasons_gfx_tileset{%.2x{tmpi}}_winter
+	.ENDR
 
-    expandedTilesetMappingsTable_seasons:
-    .REPT $1b index tmpi
-        m_SeasonalTilesetGfxPointer tilesetMappings{%.2x{tmpi}}
-    .ENDR
-    .REPT $80-$1b index tmpi
-        m_TilesetMappingPointer seasons_tilesetMappings{%.2x{tmpi+$1b}}
-    .ENDR
+	expandedTilesetMappingsTable_seasons:
+	.REPT $1b index tmpi
+		m_SeasonalTilesetGfxPointer tilesetMappings{%.2x{tmpi}}
+	.ENDR
+	.REPT $80-$1b index tmpi
+		m_TilesetMappingPointer seasons_tilesetMappings{%.2x{tmpi+$1b}}
+	.ENDR
 
-    .REPT $1b index tmpi
-    tilesetMappings{%.2x{tmpi}}_season_table:
-        m_TilesetMappingPointer tilesetMappings{%.2x{tmpi}}_spring
-        m_TilesetMappingPointer tilesetMappings{%.2x{tmpi}}_summer
-        m_TilesetMappingPointer tilesetMappings{%.2x{tmpi}}_autumn
-        m_TilesetMappingPointer tilesetMappings{%.2x{tmpi}}_winter
-    .ENDR
+	.REPT $1b index tmpi
+	tilesetMappings{%.2x{tmpi}}_season_table:
+		m_TilesetMappingPointer tilesetMappings{%.2x{tmpi}}_spring
+		m_TilesetMappingPointer tilesetMappings{%.2x{tmpi}}_summer
+		m_TilesetMappingPointer tilesetMappings{%.2x{tmpi}}_autumn
+		m_TilesetMappingPointer tilesetMappings{%.2x{tmpi}}_winter
+	.ENDR
 .ends
 
 
@@ -110,6 +110,6 @@ tilesetMappings{%.2x{tmpi}}_winter:
 
 .define ROM_AGES
 .REPT $80 index tmpi
-    m_TilesetMappingSection {"{%.2x{tmpi}}"}
+	m_TilesetMappingSection {"{%.2x{tmpi}}"}
 .ENDR
 .undefine ROM_AGES

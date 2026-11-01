@@ -6056,7 +6056,7 @@ linkState12:
 ;
 ; @param[out]	cflag	Set if Link just pressed A next to an object
 linkInteractWithAButtonSensitiveObjects:
-    ld c,$00
+	ld c,$00
 	ld a,(wGameKeysJustPressed)
 	and BTN_A
 	ret z
@@ -6124,7 +6124,7 @@ linkInteractWithAButtonSensitiveObjects:
 
 	; No object found
 	pop de
-    scf
+	scf
 	ccf
 	ret
 
@@ -6172,7 +6172,7 @@ linkInteractWithAButtonSensitiveObjects:
 	set 7,(hl)
 
 	pop de
-    scf
+	scf
 	ret
 
 @positionOffsets:

@@ -117,7 +117,7 @@ parentItemCode_bomb:
 			; set the bit that indicates to explode
 			set 4,(hl)
 			jp clearParentItem
-    +
+	+
 	pop af
 .endif
 	jp z,clearParentItem

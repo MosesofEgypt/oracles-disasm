@@ -64,7 +64,7 @@ parentItemCode_feather:
 	ld hl,w1Link.speedZ
 .ifdef ENABLE_RING_REDUX
 	isRingEquipped ROCS_RING
-    ; Jump higher in sidescrolling rooms with rocs ring
+	; Jump higher in sidescrolling rooms with rocs ring
 	jr nz,+
 		ld bc,$fd90
 		ld a,(wActiveGroup)

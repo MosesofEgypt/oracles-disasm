@@ -25,10 +25,10 @@ getChestData:
 	ld e,a
 	inc a
 	jr nz,+
-        ; chest not found
-    	ld bc,TREASURE_OBJECT_RUPEES_00
-        ret
-    +
+		; chest not found
+		ld bc,TREASURE_OBJECT_RUPEES_00
+		ret
+	+
 
 	ldi a,(hl)
 	cp b

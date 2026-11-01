@@ -28,20 +28,20 @@ updateSettingsMenu:
 		bit 7,a
 		ret nz
 
-        push af
-        call getSelectedSettingIndex
+		push af
+		call getSelectedSettingIndex
 		add a
 		add a
-        ld hl,optionValuesAndOffsets
-        rst_addAToHl
-        pop af
+		ld hl,optionValuesAndOffsets
+		rst_addAToHl
+		pop af
 
-        ; went above max. do nothing
-        cp (hl)
-        ret nc
+		; went above max. do nothing
+		cp (hl)
+		ret nc
 
-        ld (wInventory.itemSubmenuIndex),a
-        jr +++++
+		ld (wInventory.itemSubmenuIndex),a
+		jr +++++
 	+
 		ld a,(wKeysJustPressed)
 		and BTN_UP|BTN_DOWN
@@ -68,10 +68,10 @@ updateSettingsMenu:
 				; TEMPORARY UNTIL ANOTHER SETTING IS ADDED
 			+++
 			inc a
-            cp $ff
-            jr nz,++
-                ld a,SETTINGS_COUNT-1
-            ++
+			cp $ff
+			jr nz,++
+				ld a,SETTINGS_COUNT-1
+			++
 			and $7f
 			cp SETTINGS_COUNT
 			jr c,++
@@ -234,11 +234,11 @@ inventorySubmenu3_drawCursors:
 	+
 
 	call getSelectedSettingIndex
-    add SETTINGS_PER_PAGE
-    -
-        sub SETTINGS_PER_PAGE
-        cp SETTINGS_PER_PAGE
-        jr nc,-
+	add SETTINGS_PER_PAGE
+	-
+		sub SETTINGS_PER_PAGE
+		cp SETTINGS_PER_PAGE
+		jr nc,-
 
 	ld hl,@bracketOffsets
 	rst_addAToHl
@@ -268,12 +268,12 @@ inventorySubmenu3_drawCursors:
 		push af
 		ld a,c
 		ld (wInventory.itemSubmenuIndex),a
-        push hl
+		push hl
 		jr z,+
 			call inventorySubmenu3InitSelection
 		+
 		call @drawSettingCursor
-        pop hl
+		pop hl
 		pop af
 
 		inc a
@@ -281,7 +281,7 @@ inventorySubmenu3_drawCursors:
 		jr z,+
 			cp SETTINGS_COUNT
 			jr c,-
-	    +
+		+
 	; restore
 	pop bc
 	ld a,b
@@ -412,7 +412,7 @@ inventorySubscreen3_draw:
 
 	call inventorySubmenu3InitSelection
 
-    call getCurrentPage
+	call getCurrentPage
 	jr inventorySubscreen3_forceReloadGfx
 
 inventorySubscreen3_fixupTiles:
@@ -461,7 +461,7 @@ getPageForSetting:
 	ret
 
 getSelectedSettingIndex:
-    ld a,(wInventorySubmenu3CursorPos)
+	ld a,(wInventorySubmenu3CursorPos)
 	and $7f
 	cp SETTINGS_COUNT
 	ret c

@@ -88,8 +88,8 @@ moblinKeepScene_spawnKingMoblin:
 
 @kingMoblinSpawnData:
 	; subid - yh - xh - unused
-        .db $03 $60 $24 $00
-        .db $04 $50 $48 $00
+	.db $03 $60 $24 $00
+	.db $04 $50 $48 $00
 
 moblinKeepScene_spawn2MoblinsAfterKeepDestroyed:
 	ld bc,@moblinSpawnData

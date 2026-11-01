@@ -7,10 +7,10 @@
 ; "${BUILD_DIR}/textData.s" will determine where this data starts.
 .if defined(ROM_COMBO)
 ; NOTE: These includes define their own .bank and .orga
-    .include {"{BUILD_DIR}/ages_textData.s"}
-    .include {"{BUILD_DIR}/seasons_textData.s"}
+	.include {"{BUILD_DIR}/ages_textData.s"}
+	.include {"{BUILD_DIR}/seasons_textData.s"}
 .else
-    .include {"{BUILD_DIR}/textData.s"}
+	.include {"{BUILD_DIR}/textData.s"}
 .endif
 
 .REDEFINE DATA_ADDR TEXT_END_ADDR

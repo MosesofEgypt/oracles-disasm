@@ -3724,7 +3724,7 @@ enemyOamData4b814:
 	.db $10 $1c $96 $00
 
 enemyOamData4b855:
-    ; ganon charging punch
+	; ganon charging punch
 	.db $11
 .ifdef ENABLE_COLORFUL_GANON
 	.db $f4 $11 $2a $00
@@ -3786,7 +3786,7 @@ enemyOamData4b89a:
 	.db $18 $13 $1e $07
 
 enemyOamData4b8e3:
-    ; ganon standing idle
+	; ganon standing idle
 	.db $12
 .ifdef ENABLE_COLORFUL_GANON
 	.db $f8 $f4 $00 $03
@@ -3829,7 +3829,7 @@ enemyOamData4b8e3:
 .endif
 
 enemyOamData4b92c:
-    ; ganon standing idle (mirrored)
+	; ganon standing idle (mirrored)
 	.db $12
 .ifdef ENABLE_COLORFUL_GANON
 	.db $f8 $14 $00 $23
@@ -3872,7 +3872,7 @@ enemyOamData4b92c:
 .endif
 
 enemyOamData4b975:
-    ; ganon roaring 1
+	; ganon roaring 1
 	.db $12
 .ifdef ENABLE_COLORFUL_GANON
 	.db $f8 $f4 $72 $03
@@ -3915,7 +3915,7 @@ enemyOamData4b975:
 .endif
 
 enemyOamData4b9be:
-    ; ganon firing energy ball 1
+	; ganon firing energy ball 1
 	.db $12
 .ifdef ENABLE_COLORFUL_GANON
 	.db $f8 $f0 $40 $00
@@ -3979,7 +3979,7 @@ enemyOamData4ba07:
 	.db $11 $11 $68 $00
 
 enemyOamData4ba50:
-    ; ganon downward slash 1
+	; ganon downward slash 1
 	.db $13
 .ifdef ENABLE_COLORFUL_GANON
 	.db $e4 $f1 $40 $02
@@ -4024,7 +4024,7 @@ enemyOamData4ba50:
 .endif
 
 enemyOamData4ba9d:
-    ; ganon downward slash 2
+	; ganon downward slash 2
 	.db $13
 .ifdef ENABLE_COLORFUL_GANON
 	.db $f4 $f0 $40 $02
@@ -4069,7 +4069,7 @@ enemyOamData4ba9d:
 .endif
 
 enemyOamData4baea:
-    ; ganon downward slash 1 (mirrored)
+	; ganon downward slash 1 (mirrored)
 	.db $13
 .ifdef ENABLE_COLORFUL_GANON
 	.db $e4 $17 $40 $22
@@ -4114,7 +4114,7 @@ enemyOamData4baea:
 .endif
 
 enemyOamData4bb37:
-    ; ganon downward slash 2 (mirrored)
+	; ganon downward slash 2 (mirrored)
 	.db $13
 .ifdef ENABLE_COLORFUL_GANON
 	.db $f4 $18 $40 $22
@@ -4206,7 +4206,7 @@ enemyOamData4bb84:
 .endif
 
 enemyOamData4bbd5:
-    ; ganon roaring 2
+	; ganon roaring 2
 	.db $15
 .ifdef ENABLE_COLORFUL_GANON
 	.db $f8 $ec $86 $03
@@ -4255,7 +4255,7 @@ enemyOamData4bbd5:
 .endif
 
 enemyOamData4bc2a:
-    ; ganon firing energy ball 2
+	; ganon firing energy ball 2
 	.db $15
 .ifdef ENABLE_COLORFUL_GANON
 	.db $f8 $ec $40 $00

@@ -122,29 +122,29 @@ fixupWideItemGfx:
 	jp fixupWideItemGfx_harpOfAges
 
 itemGfxIconFixupInfo:
-    .db <wBoomerangLevel
-    .dw @itemGfxHeadersBySubid_boomerang
+	.db <wBoomerangLevel
+	.dw @itemGfxHeadersBySubid_boomerang
 
-    .db <wBraceletLevel
-    .dw @itemGfxHeadersBySubid_bracelet
+	.db <wBraceletLevel
+	.dw @itemGfxHeadersBySubid_bracelet
 
-    .db <wFeatherLevel
-    .dw @itemGfxHeadersBySubid_feather
+	.db <wFeatherLevel
+	.dw @itemGfxHeadersBySubid_feather
 
-    .db <wMagnetGlovePolarity
-    .dw @itemGfxHeadersBySubid_magnetGlove
+	.db <wMagnetGlovePolarity
+	.dw @itemGfxHeadersBySubid_magnetGlove
 
-    .db <wSwitchHookLevel
-    .dw @itemGfxHeadersBySubid_switchHook
+	.db <wSwitchHookLevel
+	.dw @itemGfxHeadersBySubid_switchHook
 
-    .db <wSwordLevel
-    .dw @itemGfxHeadersBySubid_sword
+	.db <wSwordLevel
+	.dw @itemGfxHeadersBySubid_sword
 
-    .db <wShieldLevel
-    .dw @itemGfxHeadersBySubid_shield
+	.db <wShieldLevel
+	.dw @itemGfxHeadersBySubid_shield
 
-    .db <wFluteIcon
-    .dw @itemGfxHeadersBySubid_flutePartners
+	.db <wFluteIcon
+	.dw @itemGfxHeadersBySubid_flutePartners
 
 	.db $00; terminator
 
@@ -215,9 +215,9 @@ itemGfxIconFixupInfo:
 
 fixupWideItemGfx_harpOfAges:
 	push hl
-    ld a,(wSelectedHarpSong)
+	ld a,(wSelectedHarpSong)
 	and $03
-    ld hl,@itemGfxHeadersBySubid_harpTunes
+	ld hl,@itemGfxHeadersBySubid_harpTunes
 	rst_addAToHl
 	ld a,(hl)
 	call loadUncompressedGfxHeader

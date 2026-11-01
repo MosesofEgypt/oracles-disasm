@@ -380,7 +380,7 @@ itemCode06:
 	call superBoomerangComboActive
 	ret nz
 
-    ; intentional stack manipulation to jump out of parent call
+	; intentional stack manipulation to jump out of parent call
 	pop af
 	jp @updateSpeedAndAnimation
 .endif

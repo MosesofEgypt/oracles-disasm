@@ -194,7 +194,6 @@ musiceca67:
 ; Measure 15            repeat of M7
 	env $0 $05
 	note g5  $30
-    
 	env $0 $04
 	rest $10
 	note g5  $08
@@ -292,7 +291,6 @@ musiceca67:
 	rest $0b
 	note f5  $05
 	rest $03
-    
 	vibrato $f1
 	note c5  $18
 	rest $0c
@@ -861,7 +859,6 @@ musicecd1c:
 	rest $04
 	note c5  $04
 	rest $04
-    
 	env $0 $04
 	note d5  $0c
 	env $0 $02

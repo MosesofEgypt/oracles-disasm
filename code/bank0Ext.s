@@ -4,7 +4,7 @@
 ; @param	zflag	Equip item if set. Otherwise unequip.
 ; @param[out]	zflag	Set if swap occurred.
 handleAutoEquipItem_body:
-    ld a,b
+	ld a,b
 	push hl
 	push af
 	ld hl,wMiscSettings+1

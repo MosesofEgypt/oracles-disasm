@@ -28,7 +28,7 @@ parentItemCode_slingshot:
 .ifdef ENABLE_RING_REDUX
 	isRingEquipped MYSTIC_SEED_RING
 
-    ; reduce how many slots we request based on how many seeds are onscreen
+	; reduce how many slots we request based on how many seeds are onscreen
 	jr nz,+
 		; with ring on, want 5 slots
 		ld c,$05
@@ -165,7 +165,7 @@ parentItemCode_shooter:
 		pop bc
 		ret z
 		jp clearParentItem
-    +
+	+
 	ld l,Item.subid
 	inc (hl)
 .else
@@ -289,7 +289,7 @@ parentItemCode_shooter:
 	isRingEquipped MYSTIC_SEED_RING
 	ld a,(wIsSeedShooterInUse)
 
-    ; if the ring is on, we can fire 5 seeds at once
+	; if the ring is on, we can fire 5 seeds at once
 	jr nz,+
 		sub $05
 		jr ++

@@ -416,7 +416,7 @@ enemyCheckCollisions:
 
 	; Check if current object is within the shield's hitbox
 	ld bc,hEnemyBoundingBox
-    ld hl,wShieldBoundingBox
+	ld hl,wShieldBoundingBox
 	call checkObjectsCollidedOptimized
 	ld hl,w1Link
 
@@ -504,7 +504,7 @@ enemyCheckCollisions:
 
 	; If link and the current object collide, damage link
 	ld bc,hEnemyBoundingBox
-    ld hl,hLinkBoundingBox
+	ld hl,hLinkBoundingBox
 	call checkObjectsCollidedOptimized
 	ret nc
 
