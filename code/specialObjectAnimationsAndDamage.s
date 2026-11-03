@@ -165,10 +165,10 @@ loadLinkAndCompanionAnimationFrame_body:
 	ld e,SpecialObject.id
 	ld a,(de)
 	cp SPECIALOBJECT_MINECART
-	ld de,$8701
+	ld de,VRAM_1_TILEDATA_0+$700
 	jr c,+
-	ld d,$86
-+
+		ld de,VRAM_1_TILEDATA_0+$600
+	+
 	jp queueDmaTransferFromRom
 
 ; These are animation frame indices; frame indices under the given value don't have link's direction

@@ -1791,13 +1791,13 @@ func_6e9a:
 	ldh (<hFF8B),a
 	ld a,$01
 	ldh (R_VBK),a
-	ld hl,$9800
+	ld hl,VRAM_TILEMAP_0
 	ld bc,$0040
 	ldh a,(<hFF8B)
 	call fillMemoryBc16ByteBlocks
 	xor a
 	ldh (R_VBK),a
-	ld hl,$9800
+	ld hl,VRAM_TILEMAP_0
 	ld bc,$0400
 	jp clearMemoryBc
 
@@ -2409,19 +2409,19 @@ func_03_7244:
 	.dw @@cbb3_04
 	.dw @@cbb3_05
 @@cbb3_00:
-	ld hl,w5NameEntryCharacterGfx
+	ld hl,w5TimewarpFrame0
 --
 	call func_7431
 	call func_745c
 	jr timewarpCutscene_incCBB3
 @@cbb3_01:
-	ld hl,w5NameEntryCharacterGfx+$400
+	ld hl,w5TimewarpFrame1
 	jr --
 @@cbb3_02:
-	ld hl,w5NameEntryCharacterGfx+$800
+	ld hl,w5TimewarpFrame2
 	jr --
 @@cbb3_03:
-	ld hl,w5NameEntryCharacterGfx+$c00
+	ld hl,w5TimewarpFrame3
 	jr --
 @@cbb3_04:
 	ld hl,w3TileMappingData

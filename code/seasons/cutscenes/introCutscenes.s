@@ -1050,13 +1050,13 @@ fillTmpGfxBufferWithHFF8B:
 	ldh (<hFF8B),a
 	ld a,$01
 	ldh (R_VBK),a
-	ld hl,$9800
+	ld hl,VRAM_TILEMAP_0
 	ld bc,$0040
 	ldh a,(<hFF8B)
 	call fillMemoryBc16ByteBlocks
 	xor a
 	ldh (R_VBK),a
-	ld hl,$9800
+	ld hl,VRAM_TILEMAP_0
 	ld b,$40
 	jp clearMemory16ByteBlocks
 

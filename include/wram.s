@@ -1908,7 +1908,7 @@ wcc07: ; $cc07/$cc06
 wLoadedObjectGfx: ; $cc08/$cc07
 ; This is a data structure related to used sprites. Each entry is 2 bytes, and
 ; corresponds to an object gfx header loaded into vram at its corresponding position.
-; Eg. Entry $cc08/09 is loaded at $8000, $cc0a/0b is loaded at $8200.
+; Eg. Entry $cc08/09 is loaded at VRAM_TILEDATA_0, $cc0a/0b is loaded at VRAM_TILEDATA_0+$200.
 ; Byte 0 is the index of the object gfx header (see objectGfxHeaders.s).
 ; Byte 1 is whether these graphics are currently in use?
 	dsb $10
@@ -3774,7 +3774,13 @@ wxSeedTreeRefillData:		dsb NUM_SEED_TREES*8 ; 2:d900/3:dfc0
 ; set, this will prevent Link from time-warping onto the corresponding tile.
 w2SolidObjectPositions:			dsb $010 ; $d980
 
-w2Filler6:			dsb $70
+w2PirateShipUnknownTileRow0:	dsb $010 ; $d990
+w2PirateShipUnknownTileRow1:	dsb $010 ; $d9a0
+w2PirateShipUnknownTileRow2:	dsb $010 ; $d9b0
+w2PirateShipUnknownTileRow3:	dsb $010 ; $d9c0
+w2PirateShipUnknownTileRow4:	dsb $010 ; $d9d0
+w2PirateShipUnknownTileRow5:	dsb $010 ; $d9e0
+w2PirateShipUnknownTileRow6:	dsb $010 ; $d9f0
 
 ; Used as the "source" palette when fading between two sets of palettes
 w2ColorComponentBuffer1:	dsb $090 ; $da00
@@ -3795,7 +3801,7 @@ w2Filler4:			dsb $50
 ; Each $40 bytes is one floor
 w2DungeonLayout:	dsb $100	; $dc00
 
-w2Filler2: dsb $100
+w2UnknownTileMappingIndices: dsb $100
 
 w2GbaModePaletteData:	dsb $80		; $de00
 
@@ -3838,9 +3844,10 @@ w3VramAttributes:	.db		; $dc00
 ; tilesets.
 w3TileMappingIndices:	dsb $200	; $dc00
 
-
 ; Most likely unused
-w3Filler2:		dsb $100
+w3Filler2:		dsb $80
+
+w3D6WallClosingTileAttributes:		dsb $80
 
 w3RoomLayoutBuffer:	dsb $c0	; $df00
 
@@ -3861,6 +3868,7 @@ wxSeedTreeRefillData:		dsb NUM_SEED_TREES*8 ; 2:d900/3:dfc0
 
 .union
 	w4RandomBuffer:		dsb $100	; $d000-$d0ff
+	w4Filler2:			dsb $140	; $d100-$d23f
 .nextu
 	w4TileMap:		dsb $240	; $d000-$d23f
 .endu
@@ -3963,7 +3971,27 @@ w4GfxBuf2:			dsb $200	; $de00
 .RAMSECTION Ram_5 BANK 5 SLOT 3
 
 ; Also used for seasons intro scene
-w5NameEntryCharacterGfx:	dsb $800 ; $d000
+.union
+	w5NameEntryCharacterGfx:
+		dsb $400 ; $d000
+	w5Filler0:
+		dsb $c00 ; $d400
+.nextu
+	w5IntroImageFrameGfx:
+		dsb $400 ; $d000
+.nextu
+	w5Panic:
+		dsb $400 ; $d000
+.nextu
+	w5TimewarpFrame0:
+		dsb $400 ; $d000
+	w5TimewarpFrame1:
+		dsb $400 ; $d400
+	w5TimewarpFrame2:
+		dsb $400 ; $d800
+	w5TimewarpFrame3:
+		dsb $400 ; $dc00
+.endu
 
 .ENDS
 
@@ -3982,9 +4010,9 @@ w6DragonOnoxTileAttr1:          dsb $200 ; $d400
 
 w6SpecialObjectGfxBuffer:       dsb $100 ; $d600
 
-w6Filler3:                      dsb $c0
+w6Filler3:                      dsb $0c0 ; $d700
 
-w6d7c0:                         dsb $40 ; $d7c0
+w6d7c0:                         dsb $040 ; $d7c0
 
 w6DragonOnoxTileMap2:           dsb $300 ; $d800
 w6DragonOnoxTileAttr2:          dsb $100 ; $db00

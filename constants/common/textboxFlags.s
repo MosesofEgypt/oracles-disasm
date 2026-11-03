@@ -15,7 +15,7 @@
 ; This changes the palette the textbox uses.
 .define TEXTBOXFLAG_ALTPALETTE2			$10
 
-; Makes the textbox map render to the $9c00 address range instead of $9800
+; Makes the textbox map render to the VRAM_TILEMAP_1 address range instead of VRAM_TILEMAP_0
 .define TEXTBOXFLAG_USE_9C_MAP_ADDRESS	$20
 
 

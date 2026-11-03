@@ -160,7 +160,7 @@ seasonsFunc_03_681a:
 	ld l,a
 	ld h,FIRST_INTERACTION_INDEX
 	push hl
-	ld de,$9c00
+	ld de,VRAM_0_TILEMAP_1
 	ld bc,$0f02
 	call queueDmaTransfer
 	pop hl
@@ -184,20 +184,20 @@ seasonsFunc_03_684c:
 	and $07
 	ld hl,w2WaveScrollValues
 	rst_addDoubleIndex
-	ld de,w2Filler6+$50
+	ld de,w2PirateShipUnknownTileRow5
 	ld b,$10
 	call copyMemory
 	ld a,(wGenericCutscene.cbb8)
 	and $07
 	ld hl,w2WaveScrollValues+$20
 	rst_addDoubleIndex
-	ld de,w2Filler6+$60
+	ld de,w2PirateShipUnknownTileRow6
 	ld b,$10
 	call copyMemory
 	ld a,$00
 	ldh (R_SVBK),a
-	ld hl,$d9e0
-	ld de,$94e1
+	ld hl,w2PirateShipUnknownTileRow5
+	ld de,VRAM_1_TILEDATA_2+$4e0
 	ld bc,$0102
 	jp queueDmaTransfer
 
@@ -501,12 +501,12 @@ seasonsFunc_03_6a9d:
 	ld a,(wGenericCutscene.cbb8)
 	and $07
 	rst_addDoubleIndex
-	ld de,w2Filler6+$50
+	ld de,w2PirateShipUnknownTileRow5
 	call seasonsFunc_03_6b22
 	ld a,$00
 	ldh (R_SVBK),a
-	ld hl,$d9e0
-	ld de,$8ce0
+	ld hl,w2PirateShipUnknownTileRow5
+	ld de,VRAM_0_TILEDATA_1+$4e0
 	ld bc,$0102
 	jp queueDmaTransfer
 
@@ -521,23 +521,23 @@ seasonsFunc_03_6aca:
 	ld hl,seasonsTable_03_6b1a
 	rst_addDoubleIndex
 	rst_derefHl
-	ld de,w2Filler6+$30
+	ld de,w2PirateShipUnknownTileRow3
 	push hl
 	call seasonsFunc_03_6b22
 	pop hl
 	ld a,(wGenericCutscene.cbb8)
 	and $07
 	rst_addDoubleIndex
-	ld de,w2Filler6+$50
+	ld de,w2PirateShipUnknownTileRow5
 	call seasonsFunc_03_6b22
 	ld a,$00
 	ldh (R_SVBK),a
-	ld hl,$d9c0
-	ld de,$88e1
+	ld hl,w2PirateShipUnknownTileRow3
+	ld de,VRAM_1_TILEDATA_1+$e0
 	ld bc,$0102
 	call queueDmaTransfer
-	ld hl,$d9e0
-	ld de,$8ce0
+	ld hl,w2PirateShipUnknownTileRow5
+	ld de,VRAM_0_TILEDATA_1+$4e0
 	ld bc,$0102
 	call queueDmaTransfer
 	ld a,(wGenericCutscene.cbbe)
@@ -547,10 +547,10 @@ seasonsFunc_03_6aca:
 	ret
 
 seasonsTable_03_6b1a:
-	.db $40 $d8
-	.db $80 $d8
-	.db $c0 $d8
-	.db $00 $d9
+	.dw w2PirateShipBgTiles+$40
+	.dw w2PirateShipBgTiles+$80
+	.dw w2PirateShipBgTiles+$c0
+	.dw w2PirateShipBgTiles+$100
 
 seasonsFunc_03_6b22:
 	ld b,$10
@@ -571,7 +571,7 @@ seasonsFunc_03_6b30:
 label_03_196:
 	ld l,a
 	push hl
-	ld de,$9c00
+	ld de,VRAM_0_TILEMAP_1
 	ld bc,$2102
 	call queueDmaTransfer
 	pop hl
@@ -585,15 +585,15 @@ label_03_196:
 	ret
 
 seasonsTable_03_6b59:
-	.db $20 $d0
-	.db $40 $d0
-	.db $60 $d0
-	.db $80 $d0
-	.db $a0 $d0
-	.db $c0 $d0
-	.db $e0 $d0
-	.db $00 $d1
-	.db $20 $d1
+	.dw w2TmpGfxBuffer+$20
+	.dw w2TmpGfxBuffer+$40
+	.dw w2TmpGfxBuffer+$60
+	.dw w2TmpGfxBuffer+$80
+	.dw w2TmpGfxBuffer+$a0
+	.dw w2TmpGfxBuffer+$c0
+	.dw w2TmpGfxBuffer+$e0
+	.dw w2TmpGfxBuffer+$100
+	.dw w2TmpGfxBuffer+$120
 	.db $ff
 
 seasonsFunc_03_6b6c:

@@ -50,7 +50,7 @@ secretListMenu_state0:
 ; @param	a	Vram bank to fill with $ff
 @clearVramBank:
 	ldh (R_VBK),a
-	ld hl,$8000
+	ld hl,VRAM_TILEDATA_0
 	ld bc,$0100
 	ld a,$ff
 	jp fillMemoryBc16ByteBlocks
@@ -221,12 +221,12 @@ secretListMenu_printSecret:
 	jp secretFunctionCaller
 
 ;;
-; Loads gfx for all secret names directly to vram starting at $8a00.
+; Loads gfx for all secret names directly to vram starting at VRAM_0_TILEDATA_0+$200.
 secretListMenu_loadAllSecretNames:
 	xor a
 	ldh (R_VBK),a
 
-	ld de,$8a00
+	ld de,VRAM_0_TILEDATA_1+$200
 	ld b,$00
 @nextSecret:
 	ld a,b

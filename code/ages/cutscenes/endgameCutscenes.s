@@ -6,13 +6,13 @@ func_6e9a:
 	ldh (<hFF8B),a
 	ld a,$01
 	ldh (R_VBK),a
-	ld hl,$9800
+	ld hl,VRAM_TILEMAP_0
 	ld bc,$0040
 	ldh a,(<hFF8B)
 	call fillMemoryBc16ByteBlocks
 	xor a
 	ldh (R_VBK),a
-	ld hl,$9800
+	ld hl,VRAM_TILEMAP_0
 	ld bc,$0400
 	jp clearMemoryBc
 
@@ -631,19 +631,19 @@ endgameCutsceneHandler_09_stage1_ages:
 	call clearOam
 	xor a
 	ldh (R_VBK),a
-	ld hl,$8000
+	ld hl,VRAM_TILEDATA_0
 	ld bc,$2000
 	call clearMemoryBc
 
 	xor a
 	ldh (R_VBK),a
-	ld hl,$9c00
+	ld hl,VRAM_TILEMAP_1
 	ld bc,$0400
 	call clearMemoryBc
 
 	ld a,$01
 	ldh (R_VBK),a
-	ld hl,$9c00
+	ld hl,VRAM_TILEMAP_1
 	ld bc,$0400
 	call clearMemoryBc
 

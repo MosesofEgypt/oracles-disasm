@@ -255,29 +255,29 @@ func_52d9:
 	pop de
 	ret
 table_5326:
-	.db $01 $98 $00 $98
-	.db $01 $98 $00 $98
-	.db $21 $98 $20 $98
-	.db $41 $98 $40 $98
-	.db $61 $98 $60 $98
-	.db $81 $98 $80 $98
-	.db $a1 $98 $a0 $98
-	.db $c1 $98 $c0 $98
-	.db $e1 $98 $e0 $98
-	.db $01 $99 $00 $99
-	.db $21 $99 $20 $99
+	.dw VRAM_1_TILEMAP_0        VRAM_0_TILEMAP_0
+	.dw VRAM_1_TILEMAP_0        VRAM_0_TILEMAP_0
+	.dw VRAM_1_TILEMAP_0+$20    VRAM_0_TILEMAP_0+$20
+	.dw VRAM_1_TILEMAP_0+$40    VRAM_0_TILEMAP_0+$40
+	.dw VRAM_1_TILEMAP_0+$60    VRAM_0_TILEMAP_0+$60
+	.dw VRAM_1_TILEMAP_0+$80    VRAM_0_TILEMAP_0+$80
+	.dw VRAM_1_TILEMAP_0+$a0    VRAM_0_TILEMAP_0+$a0
+	.dw VRAM_1_TILEMAP_0+$c0    VRAM_0_TILEMAP_0+$c0
+	.dw VRAM_1_TILEMAP_0+$e0    VRAM_0_TILEMAP_0+$e0
+	.dw VRAM_1_TILEMAP_0+$100   VRAM_0_TILEMAP_0+$100
+	.dw VRAM_1_TILEMAP_0+$120   VRAM_0_TILEMAP_0+$120
 table_5352:
-	.db $61 $9a $60 $9a
-	.db $61 $9a $60 $9a
-	.db $41 $9a $40 $9a
-	.db $21 $9a $20 $9a
-	.db $01 $9a $00 $9a
-	.db $e1 $99 $e0 $99
-	.db $c1 $99 $c0 $99
-	.db $a1 $99 $a0 $99
-	.db $81 $99 $80 $99
-	.db $61 $99 $60 $99
-	.db $41 $99 $40 $99
+	.dw VRAM_1_TILEMAP_0+$260   VRAM_0_TILEMAP_0+$260
+	.dw VRAM_1_TILEMAP_0+$260   VRAM_0_TILEMAP_0+$260
+	.dw VRAM_1_TILEMAP_0+$240   VRAM_0_TILEMAP_0+$240
+	.dw VRAM_1_TILEMAP_0+$220   VRAM_0_TILEMAP_0+$220
+	.dw VRAM_1_TILEMAP_0+$200   VRAM_0_TILEMAP_0+$200
+	.dw VRAM_1_TILEMAP_0+$1e0   VRAM_0_TILEMAP_0+$1e0
+	.dw VRAM_1_TILEMAP_0+$1c0   VRAM_0_TILEMAP_0+$1c0
+	.dw VRAM_1_TILEMAP_0+$1a0   VRAM_0_TILEMAP_0+$1a0
+	.dw VRAM_1_TILEMAP_0+$180   VRAM_0_TILEMAP_0+$180
+	.dw VRAM_1_TILEMAP_0+$160   VRAM_0_TILEMAP_0+$160
+	.dw VRAM_1_TILEMAP_0+$140   VRAM_0_TILEMAP_0+$140
 func_537e:
 	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	or a
@@ -377,10 +377,10 @@ roomTileChangesAfterLoad02_body:
 	ld hl,w3VramTiles+$2a0
 	ld de,w3TileMappingData+$120
 	call func_5440
-	ld hl,w3Filler2+$80
+	ld hl,w3D6WallClosingTileAttributes
 	ld de,w3TileMappingData+$500
 	call func_5440
-	ld hl,w3Filler2+$a0
+	ld hl,w3D6WallClosingTileAttributes+$20
 	ld de,w3TileMappingData+$520
 	call func_5440
 	jr func_545a
@@ -523,24 +523,24 @@ func_553a:
 	ldh (R_SVBK),a
 	ret
 table_5544:
-	.db $00 $d8
-	.db $20 $d8
-	.db $40 $d8
-	.db $60 $d8
-	.db $80 $d8
-	.db $a0 $d8
-	.db $c0 $d8
-	.db $e0 $d8
-	.db $00 $d9
-	.db $20 $d9
+	.dw w2TmpGfxBuffer+$00
+	.dw w2TmpGfxBuffer+$20
+	.dw w2TmpGfxBuffer+$40
+	.dw w2TmpGfxBuffer+$60
+	.dw w2TmpGfxBuffer+$80
+	.dw w2TmpGfxBuffer+$a0
+	.dw w2TmpGfxBuffer+$c0
+	.dw w2TmpGfxBuffer+$e0
+	.dw w2TmpGfxBuffer+$100
+	.dw w2TmpGfxBuffer+$120
 table_5558:
-	.db $80 $da
-	.db $60 $da
-	.db $40 $da
-	.db $20 $da
-	.db $00 $da
-	.db $e0 $d9
-	.db $c0 $d9
-	.db $a0 $d9
-	.db $80 $d9
-	.db $60 $d9
+	.dw w2TmpGfxBuffer+$280
+	.dw w2TmpGfxBuffer+$260
+	.dw w2TmpGfxBuffer+$240
+	.dw w2TmpGfxBuffer+$220
+	.dw w2TmpGfxBuffer+$200
+	.dw w2TmpGfxBuffer+$1e0
+	.dw w2TmpGfxBuffer+$1c0
+	.dw w2TmpGfxBuffer+$1a0
+	.dw w2TmpGfxBuffer+$180
+	.dw w2TmpGfxBuffer+$160

@@ -12,7 +12,7 @@
 
 .enum 0
 
-	; $00-$09 occupy vram at $8600
+	; $00-$09 occupy vram at VRAM_TILEDATA_0+$600
 	SPECIALOBJECT_LINK			db ; $00
 	SPECIALOBJECT_01			db ; $01
 	SPECIALOBJECT_LINK_AS_BABY		db ; $02
@@ -37,7 +37,7 @@
 
 	SPECIALOBJECT_LINK_RIDING_ANIMAL	db ; $09
 
-	; $0a-$13 occupy vram at $8700
+	; $0a-$13 occupy vram at VRAM_TILEDATA_0+$700
 	SPECIALOBJECT_MINECART			db ; $0a
 	SPECIALOBJECT_RICKY			db ; $0b
 	SPECIALOBJECT_DIMITRI			db ; $0c

@@ -14,7 +14,7 @@ checkDisplayDmgModeScreen:
 	call loadGfxHeader
 
 .ifdef REGION_JP
-	ld de,$8800
+	ld de,VRAM_TILEDATA_1
 	xor a
 	call copyTextCharactersFromSecretTextTable
 .endif
@@ -3345,7 +3345,7 @@ saveGraphicsOnEnterMenu_body:
 	call copyMemory
 	ld a,$01
 	ldh (R_VBK),a
-	ld hl,$8600
+	ld hl,VRAM_0_TILEDATA_0+$600
 	ld bc,$0180
 	ld de,w4SavedVramTiles
 	call copyMemoryBc
@@ -3391,7 +3391,7 @@ reloadGraphicsOnExitMenu_body:
 .endif
 	ld a,:w4SavedOam
 	ldh (R_SVBK),a
-	ld de,$8601
+	ld de,VRAM_1_TILEDATA_0+$600
 	ldbc $17, :w4SavedVramTiles
 	ld hl,w4SavedVramTiles
 	call queueDmaTransfer
@@ -3540,7 +3540,7 @@ loadCommonGraphics_body:
 	jr z,+
 	m_ReadGfxDataHashedFilename gfx_key
 	ld hl,{filename}
-	ld de,$9040
+	ld de,VRAM_0_TILEDATA_2+$40
 	ldbc $00, :{filename}
 
 	call queueDmaTransferFromRom
@@ -3594,7 +3594,7 @@ loadCommonGraphics_body:
 	m_ReadGfxDataHashedFilename gfx_key_orechunk
 	ld hl,{filename}
 	rst_addAToHl
-	ld de,$9040
+	ld de,VRAM_0_TILEDATA_2+$40
 	ldbc $00, :{filename}
 
 	call queueDmaTransferFromRom
@@ -5085,7 +5085,7 @@ drawHeartDisplay:
 
 	; setup the offset for the heart tile replacement
 	ldh a,(<hFF8B)
-	ld e,$90
+	ld de,VRAM_0_TILEDATA_2+$90
 	bit 0,a
 	jr z,+
 		inc e
@@ -5094,7 +5094,6 @@ drawHeartDisplay:
 	; load the empty and full heart tiles
 	push bc
 	ldbc $01, :{filename}
-	ld d,$90
 	call queueDmaTransferFromRom
 
 	; insert the non-overlapped empty heart tile
@@ -5103,16 +5102,16 @@ drawHeartDisplay:
 	bit 0,e
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 	; overwrite one of the rods season tiles
-	ld de,$91c0
+	ld de,VRAM_0_TILEDATA_2+$1c0
 .if defined(ROM_COMBO)
 	call wIsSeasons
 	jr nc,++
-		ld de,$90c0
+		ld de,VRAM_0_TILEDATA_2+$c0
 	++
 .endif
 .else
 	; overwrite part of the harp of ages tile
-	ld de,$90c0
+	ld de,VRAM_0_TILEDATA_2+$c0
 .endif
 	jr z,+
 		; use vram bank 1
@@ -5276,7 +5275,7 @@ drawHeartDisplay:
 		ldbc $00, :{filename}
 	+
 .endif
-	ld de,$90b0
+	ld de,VRAM_0_TILEDATA_2+$b0
 
 	; On file select screen, the heart graphics are loaded in both bank 0 and bank 1, but only
 	; the bank 1 version seems to matter. (Partial hearts are only seen when erasing a file?)
@@ -5287,8 +5286,8 @@ drawHeartDisplay:
 	or a
 .endif
 	jr z,+
-	ld e,$b1 ; vram bank 1
-+
+		inc e ; vram bank 1
+	+
 	call queueDmaTransferFromRom
 
 	pop hl

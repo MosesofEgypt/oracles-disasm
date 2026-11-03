@@ -159,18 +159,18 @@ seasonsFunc_0f_704d:
 
 	xor a
 	ldh (R_VBK),a
-	ld hl,$9800
+	ld hl,VRAM_TILEMAP_0
 	ld bc,$0400
 	call clearMemoryBc
 
 	ld a,$01
 	ldh (R_VBK),a
-	ld hl,$9800
+	ld hl,VRAM_TILEMAP_0
 	ld bc,$0040
 	ld a,$0d
 	call fillMemoryBc16ByteBlocks
 
-	ld hl,$9f60
+	ld hl,VRAM_TILEMAP_1+$360
 	ld b,$40
 -
 	ld a,(hl)
@@ -186,22 +186,22 @@ seasonsFunc_0f_70b4_swapGraphics:
 	call loadPaletteHeader
 	xor a
 	ldh (R_VBK),a
-	ld hl,$9800
+	ld hl,VRAM_TILEMAP_0
 	ld bc,$0400
 	call clearMemoryBc
 
-	ld hl,$9f20
+	ld hl,VRAM_TILEMAP_1+$320
 	ld b,$a0
 	call clearMemory
 
 	ld a,$01
 	ldh (R_VBK),a
-	ld hl,$9800
+	ld hl,VRAM_TILEMAP_0
 	ld bc,$0040
 	ld a,$0d
 	call fillMemoryBc16ByteBlocks
 
-	ld hl,$9f20
+	ld hl,VRAM_TILEMAP_1+$320
 	ld b,$a0
 	ld a,$0d
 	call fillMemory
@@ -250,7 +250,7 @@ seasonsFunc_0f_70b4_swapGraphics:
 seasons_func_0f_712a:
 	ld a,(hl)
 	cp $06
-	jp c,seasonsFunc_0f_71cf_copyw6Filler1IntoWramBank3
+	jp c,seasonsFunc_0f_71cf_copyw6DataIntoWramBank3
 	jp seasons_func_0f_71fb
 
 @state5:
@@ -354,13 +354,13 @@ table_71cb:
 
 ;;
 ; @param	a	$cfca value 0 to 5
-seasonsFunc_0f_71cf_copyw6Filler1IntoWramBank3:
+seasonsFunc_0f_71cf_copyw6DataIntoWramBank3:
 	call load5aIntoBc
 	push bc
 	ld hl,w6DragonOnoxTileMap1
 	add hl,bc
 	ld b,$50
-	call seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer
+	call seasonsFunc_0f_7297_copyw6DataIntowTmpVramBuffer
 	ld hl,w6DragonOnoxTileMap2+$02
 	ld c,$00
 	call seasonsFunc_0f_72a5_copyFromwTmpVramBufferIntoBank3
@@ -369,7 +369,7 @@ seasonsFunc_0f_71cf_copyw6Filler1IntoWramBank3:
 	ld hl,w6DragonOnoxTileAttr1
 	add hl,bc
 	ld b,$50
-	call seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer
+	call seasonsFunc_0f_7297_copyw6DataIntowTmpVramBuffer
 	ld hl,w6TileBuffer+$02
 	ld c,$20
 	call seasonsFunc_0f_72a5_copyFromwTmpVramBufferIntoBank3
@@ -389,14 +389,14 @@ seasons_func_0f_71fb:
 	ld hl,w6DragonOnoxTileMap1+$1e0
 	add hl,bc
 	ld b,$a0
-	call seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer
+	call seasonsFunc_0f_7297_copyw6DataIntowTmpVramBuffer
 	ld hl,w6DragonOnoxTileMap2+$02
 	call seasons_func_0f_72d1
 	pop bc
 	ld hl,w6DragonOnoxTileAttr1+$1e0
 	add hl,bc
 	ld b,$a0
-	call seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer
+	call seasonsFunc_0f_7297_copyw6DataIntowTmpVramBuffer
 	ld hl,w6TileBuffer+$02
 	call seasons_func_0f_72dc
 	ld a,UNCMP_GFXH_2e
@@ -432,10 +432,10 @@ seasons_func_0f_722f:
 	rst_addAToHl
 	ld a,(hl)
 	ldh (<hFF8B),a
-	ld hl,w3VramTiles
+	ld hl,w6DragonOnoxTileMap2
 	add hl,bc
 	ld b,$40
-	call seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer
+	call seasonsFunc_0f_7297_copyw6DataIntowTmpVramBuffer
 	ldh a,(<hFF8B)
 	add $40
 	ld l,a
@@ -445,7 +445,7 @@ seasons_func_0f_722f:
 	ld hl,w6DragonOnoxTileAttr2
 	add hl,bc
 	ld b,$40
-	call seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer
+	call seasonsFunc_0f_7297_copyw6DataIntowTmpVramBuffer
 	ldh a,(<hFF8B)
 	add $40
 	ld l,a
@@ -459,7 +459,7 @@ table_7291:
 ;;
 ; @param	b	number of bytes to copy
 ; @param	hl	a few values between w6DragonOnoxTileMap1-$db00 in bank 6 (w6Filler1, etc)
-seasonsFunc_0f_7297_copyw6Filler1IntowTmpVramBuffer:
+seasonsFunc_0f_7297_copyw6DataIntowTmpVramBuffer:
 	ld a,$06
 	ldh (R_SVBK),a
 	ld de,wTmpVramBuffer

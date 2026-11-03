@@ -1136,12 +1136,12 @@ clearVram:
 	call clearOam
 	ld a,$01
 	ldh (R_VBK),a
-	ld hl,$8000
+	ld hl,VRAM_TILEDATA_0
 	ld bc,$0200
 	call clearMemoryBc16ByteBlocks
 	xor a
 	ldh (R_VBK),a
-	ld hl,$8000
+	ld hl,VRAM_TILEDATA_0
 	ld bc,$0200
 	jr clearMemoryBc16ByteBlocks
 
@@ -1172,13 +1172,13 @@ initializeVramMap0:
 	call disableLcd
 	ld a,$01
 	ldh (R_VBK),a
-	ld hl,$9800
+	ld hl,VRAM_TILEMAP_0
 	ld bc,$0040
 	ld a,$80
 	call fillMemoryBc16ByteBlocks
 	xor a
 	ldh (R_VBK),a
-	ld hl,$9800
+	ld hl,VRAM_TILEMAP_0
 	ld bc,$0040
 	jp clearMemoryBc16ByteBlocks
 
@@ -1187,13 +1187,13 @@ initializeVramMap1:
 	call disableLcd
 	ld a,$01
 	ldh (R_VBK),a
-	ld hl,$9c00
+	ld hl,VRAM_TILEMAP_1
 	ld bc,$0040
 	ld a,$80
 	call fillMemoryBc16ByteBlocks
 	xor a
 	ldh (R_VBK),a
-	ld hl,$9c00
+	ld hl,VRAM_TILEMAP_1
 	ld bc,$0040
 	jp clearMemoryBc16ByteBlocks
 
@@ -5698,9 +5698,9 @@ _label_00_204:
 	; wTextMapAddress
 	ld a,(wTextboxFlags)
 	and TEXTBOXFLAG_USE_9C_MAP_ADDRESS
-	ld (hl),$98
+	ld (hl),>VRAM_TILEMAP_0
 	jr z,+
-		ld (hl),$9c
+		ld (hl),>VRAM_TILEMAP_1
 	+
 
 	ld a,$01
@@ -13526,10 +13526,22 @@ getBlackTowerProgress:
 ; A table of addresses in vram. The index is a row (of 16 pixels), and the corresponding
 ; value is the address of the start of that row.
 vramBgMapTable:
-	.dw $9800 $9840 $9880 $98c0
-	.dw $9900 $9940 $9980 $99c0
-	.dw $9a00 $9a40 $9a80 $9ac0
-	.dw $9b00 $9b40 $9b80 $9bc0
+	.dw VRAM_TILEMAP_0+$000
+	.dw VRAM_TILEMAP_0+$040
+	.dw VRAM_TILEMAP_0+$080
+	.dw VRAM_TILEMAP_0+$0c0
+	.dw VRAM_TILEMAP_0+$100
+	.dw VRAM_TILEMAP_0+$140
+	.dw VRAM_TILEMAP_0+$180
+	.dw VRAM_TILEMAP_0+$1c0
+	.dw VRAM_TILEMAP_0+$200
+	.dw VRAM_TILEMAP_0+$240
+	.dw VRAM_TILEMAP_0+$280
+	.dw VRAM_TILEMAP_0+$2c0
+	.dw VRAM_TILEMAP_0+$300
+	.dw VRAM_TILEMAP_0+$340
+	.dw VRAM_TILEMAP_0+$380
+	.dw VRAM_TILEMAP_0+$3c0
 
 ;;
 ; Force-load a room? This isn't the typical mechanism used to load a room, it's only used in
@@ -13738,7 +13750,7 @@ loadTilesetGfx:
 	; so we do it in 3 instead.
 
 	push hl
-	ld de,$8801
+	ld de,VRAM_1_TILEDATA_1
 	ld b,$5f
 	call queueDmaTransferFromRom
 

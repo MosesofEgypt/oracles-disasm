@@ -345,7 +345,7 @@ func_04_6f07:
 	ld bc,$0200
 	call @locFunc
 	ld hl,w3TileMappingIndices
-	ld de,w3Filler2
+	ld de,w2UnknownTileMappingIndices
 	ld bc,$0200
 @locFunc:
 	ld a,$03

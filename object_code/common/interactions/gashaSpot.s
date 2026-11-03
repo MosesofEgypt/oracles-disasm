@@ -723,8 +723,8 @@ m_InteractionCode $b6
 	jp loadUncompressedGfxData
 
 @treeRefreshGfxHeader:
-	m_GfxHeaderRam w3TileMappingIndices, $9801, $08
-	m_GfxHeaderRam w3VramTiles, $9800, $08
+	m_GfxHeaderRam w3TileMappingIndices, VRAM_1_TILEMAP_0, $08
+	m_GfxHeaderRam w3VramTiles, VRAM_0_TILEMAP_0, $08
 	m_GfxHeaderEnd
 @treeRefreshGfxHeaderEnd:
 

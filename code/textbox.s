@@ -1420,7 +1420,7 @@ setLineTextBuffers:
 ;;
 ; @param a Relative offset for where to write to. Should be $00 or $02.
 dmaTextGfxBuffer:
-	add $94
+	add >(VRAM_0_TILEDATA_2+$400)
 	ld d,a
 	ld e,$00
 	ld hl,w7TextGfxBuffer
@@ -2248,7 +2248,7 @@ func_53eb:
 	m_ReadGfxDataHashedFilename gfx_font_heartpiece
 
 	ld hl,{filename}
-	ld de,$95d0
+	ld de,VRAM_0_TILEDATA_2+$5d0
 	ldbc $00, :{filename}
 	call queueDmaTransferFromRom
 
@@ -2257,7 +2257,7 @@ func_53eb:
 	call queueDmaTransferFromRom
 
 	ld hl,{filename}+$20
-	ld de,$97c0
+	ld de,VRAM_0_TILEDATA_2+$7c0
 	call queueDmaTransferFromRom
 
 	ld hl,{filename}+$30
@@ -2554,7 +2554,7 @@ dmaTextCharacter:
 	pop bc
 	ld a,c
 	call multiplyABy16
-	ld a,$90
+	ld a,>VRAM_TILEDATA_2
 	add b
 	ld d,a
 	ld e,c
