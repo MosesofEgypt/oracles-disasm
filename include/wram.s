@@ -3974,13 +3974,15 @@ w4GfxBuf2:			dsb $200	; $de00
 .union
 	w5NameEntryCharacterGfx:
 		dsb $400 ; $d000
-	w5Filler0:
-		dsb $c00 ; $d400
+.nextu
+	w5PanicVram0Tiledata0Backup:
+		dsb $800 ; $d000
+	w5PanicVram0Tilemap0Backup:
+		dsb $400 ; $d400
+	w5PanicVram1Tilemap0Backup:
+		dsb $400 ; $dc00
 .nextu
 	w5IntroImageFrameGfx:
-		dsb $400 ; $d000
-.nextu
-	w5Panic:
 		dsb $400 ; $d000
 .nextu
 	w5TimewarpFrame0:

@@ -669,6 +669,11 @@
 	m_GfxData spr_item_icons_2
 	m_GfxData spr_item_icons_3
 
+	m_GfxData gfx_panic_shared
+	m_GfxData gfx_panic_registers
+	m_GfxData flg_panic_registers
+	m_GfxData map_panic_registers
+
 .ifdef ENABLE_DOUBLE_HEART_CAP
 	m_GfxData gfx_overlap_hearts
 .endif

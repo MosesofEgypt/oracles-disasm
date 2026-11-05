@@ -42,14 +42,12 @@ itemUsageParameterTable:
 	.db $05, <wGameKeysJustPressed  ; ITEM_FLUTE
 	.db $43, <wGameKeysJustPressed  ; ITEM_SHOOTER
 .ifdef ENABLE_RING_REDUX
-	.db $02, <wGameKeysJustPressed   ; ITEM_AZUCHU
-.else
-	.db $00, <wGameKeysJustPressed   ; ITEM_10
-.endif
+	.db $02, <wGameKeysJustPressed  ; ITEM_AZUCHU
 	.db $05, <wGameKeysJustPressed  ; ITEM_HARP
-.ifdef ENABLE_RING_REDUX
-	.db $04, <wGameKeysPressed  ; ITEM_LIFE_VIAL
+	.db $04, <wGameKeysPressed      ; ITEM_LIFE_VIAL
 .else
+	.db $00, <wGameKeysJustPressed  ; ITEM_10
+	.db $05, <wGameKeysJustPressed  ; ITEM_HARP
 	.db $00, <wGameKeysJustPressed  ; ITEM_12
 .endif
 	.db $43, <wGameKeysJustPressed  ; ITEM_SLINGSHOT
@@ -94,13 +92,11 @@ linkItemAnimationTable:
 	.db $c6, LINK_ANIM_MODE_21      ; ITEM_SHOOTER
 .ifdef ENABLE_RING_REDUX
 	.db $30, LINK_ANIM_MODE_21      ; ITEM_AZUCHU
+	.db $70, LINK_ANIM_MODE_HARP_2  ; ITEM_HARP
+	.db $f6, LINK_ANIM_MODE_23      ; ITEM_LIFE_VIAL
 .else
 	.db $80, LINK_ANIM_MODE_NONE    ; ITEM_10
-.endif
 	.db $70, LINK_ANIM_MODE_HARP_2  ; ITEM_HARP
-.ifdef ENABLE_RING_REDUX
-	.db $f6, LINK_ANIM_MODE_23    ; ITEM_LIFE_VIAL
-.else
 	.db $80, LINK_ANIM_MODE_NONE    ; ITEM_12
 .endif
 	.db $c6, LINK_ANIM_MODE_21      ; ITEM_SLINGSHOT

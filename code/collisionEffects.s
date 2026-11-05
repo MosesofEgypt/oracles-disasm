@@ -437,11 +437,6 @@ enemyCheckCollisions:
 	jp z,@handleCollision
 
 	; reference for link's speeds
-	; 20: walking up stairs
-	; 30: walking in grass(stairs w/ haste)
-	; 40: walking normally(grass w/ haste)
-	; 45: walking normally(w/ haste)
-	; 60: pegasus seed max speed
 	ld a,(w1Link.speed)
 	ld b,$00
 	-

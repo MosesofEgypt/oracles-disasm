@@ -41,6 +41,26 @@ setupPassiveShield:
 	bit 3,a
 	jr z,+
 .endif
+	; no passive shield if using an item or sword slashing/spinning/plunging
+	ld a,(w1ParentItem5.enabled)
+	or a
+	jr nz,+
+	ld a,(w1ParentItem3.enabled)
+	or a
+	jr nz,+
+	ld a,(w1ParentItem2.enabled)
+	or a
+	jr z,++
+		ld a,(w1ParentItem2.id)
+		cp ITEM_SWORD
+		jr nz,+
+			ld a,(w1ParentItem2.state)
+			cp $02
+			jr z,++
+			cp $03
+			jr nz,+
+	++
+
 	; no passive shield if sidescrolling
 	ld a,(wTilesetFlags)
 	bit TILESETFLAG_BIT_SIDESCROLL,a

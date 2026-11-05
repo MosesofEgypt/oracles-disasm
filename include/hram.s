@@ -143,12 +143,15 @@
 	hPanicRegisterDe			dw ; $ffc4
 	hPanicRegisterHl			dw ; $ffc6
 	hPanicInstructionPointer	dw ; $ffc8
-	hPanicWramBank				db ; $ffca
-	hPanicVramBank				db ; $ffcb
+	; Bits 0-2: Wram bank
+	; Bit 3:    Vram bank
+	; Bits 4-7: Unused
+	hPanicWramVramBanks		db ; $ffca
 	; NOTE: this obviously doesn't handle the 9th bit for 8MB roms.
 	;       in situations like that I guess you're just fucked.
-	hPanicRomBank				db ; $ffcc
-	hPanicStackPointerOffset	db ; $ffcd
+	hPanicRomBank				db ; $ffcb
+	hPanicStackPointerOffset	db ; $ffcc
+	hPanicLcdc					db ; $ffcd
 
 	; NOTE: Avoid using these during interrupts, as that could
 	;       be in use by a main thread that's currently paused
@@ -168,9 +171,7 @@
 
 	; Marker for end of "normal" hram (memory gets cleared up to here upon game initialization)
 	hramEnd			 			.db	; $ffda
-.ende
 
-.enum $ffda export
 	; =====================================================================
 	; Music stuff
 	; =====================================================================

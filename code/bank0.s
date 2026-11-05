@@ -1173,14 +1173,14 @@ initializeVramMap0:
 	ld a,$01
 	ldh (R_VBK),a
 	ld hl,VRAM_TILEMAP_0
-	ld bc,$0040
+	ld b,$40
 	ld a,$80
-	call fillMemoryBc16ByteBlocks
+	call fillMemory16ByteBlocks
 	xor a
 	ldh (R_VBK),a
 	ld hl,VRAM_TILEMAP_0
-	ld bc,$0040
-	jp clearMemoryBc16ByteBlocks
+	ld b,$40
+	jp clearMemory16ByteBlocks
 
 ;;
 initializeVramMap1:
@@ -1188,14 +1188,14 @@ initializeVramMap1:
 	ld a,$01
 	ldh (R_VBK),a
 	ld hl,VRAM_TILEMAP_1
-	ld bc,$0040
+	ld b,$40
 	ld a,$80
-	call fillMemoryBc16ByteBlocks
+	call fillMemory16ByteBlocks
 	xor a
 	ldh (R_VBK),a
 	ld hl,VRAM_TILEMAP_1
-	ld bc,$0040
-	jp clearMemoryBc16ByteBlocks
+	ld b,$40
+	jp clearMemory16ByteBlocks
 
 ;;
 ; @param	a	Palette header to load (see data/[ages|seasons]/paletteHeaders.s)
@@ -1448,8 +1448,8 @@ loadUncompressedGfxHeader:
 	ldh a,(R_SVBK)
 	ld c,a
 	ldh a,(<hRomBank)
-	ld b,a
 	push bc
+	push af
 	jr nc,++
 		.if defined(ROM_COMBO)
 			ld a,:bank1Moveable.uncmpGfxHeaderTable_seasons
@@ -1493,14 +1493,19 @@ loadUncompressedGfxHeader:
 	pop hl
 	call queueDmaTransferFromRom
 .if defined(ROM_COMBO)
-	ld a,:bank1Moveable.uncmpGfxHeaderTable_seasons
+	ld l,:bank1Moveable.uncmpGfxHeaderTable_seasons
 	call wIsSeasons
 	jr c,+
-		ld a,:bank1Moveable.uncmpGfxHeaderTable_ages
+		ld l,:bank1Moveable.uncmpGfxHeaderTable_ages
 	+
 .else
-	ld a,:bank1Moveable.uncmpGfxHeaderTable
+	ld l,:bank1Moveable.uncmpGfxHeaderTable
 .endif
+	pop af
+	push af
+	jr nc,+
+		ld a,l
+	+
 	rst_setrombank
 	ldh a,(<hFF90)
 	ld l,a
@@ -1510,9 +1515,9 @@ loadUncompressedGfxHeader:
 	add a
 	jr c,--
 
-	pop bc
-	ld a,b
+	pop af
 	rst_setrombank
+	pop bc
 	ld a,c
 	ldh (R_SVBK),a
 	ret
@@ -1563,20 +1568,32 @@ loadUniqueGfxHeaderEntry:
 	ret
 
 ;;
+; @param	hl	Pointer to the compressed gfx header data
+; @trashes{bc,de,hl}
+loadCompressedGfxData:
+	scf
+	ccf
+	jr +
+
+;;
 ; @param	a	The index of the gfx header to load
 loadGfxHeader:
+	scf
 	ld e,a
+	+
 	ldh a,(R_SVBK)
 	ld c,a
 	ldh a,(<hRomBank)
-	ld b,a
 	push bc
-	ld a,:bank1Moveable.gfxHeaderTable
-	rst_setrombank
-	ld a,e
-	ld hl,bank1Moveable.gfxHeaderTable
-	rst_addDoubleIndex
-	rst_derefHl
+	push af
+	jr nc,++
+		ld a,:bank1Moveable.gfxHeaderTable
+		rst_setrombank
+		ld a,e
+		ld hl,bank1Moveable.gfxHeaderTable
+		rst_addDoubleIndex
+		rst_derefHl
+	++
 --
 	ldi a,(hl)
 	ld c,a
@@ -1600,7 +1617,11 @@ loadGfxHeader:
 	ldh (<hFF91),a
 	pop hl
 	call decompressGraphics
-	ld a,:bank1Moveable.gfxHeaderTable
+	pop af
+	push af
+	jr nc,+
+		ld a,:bank1Moveable.gfxHeaderTable
+	+
 	rst_setrombank
 	ldh a,(<hFF90)
 	ld l,a
@@ -1610,9 +1631,9 @@ loadGfxHeader:
 	add a
 	jr c,--
 
-	pop bc
-	ld a,b
+	pop af
 	rst_setrombank
+	pop bc
 	ld a,c
 	ldh (R_SVBK),a
 	ret
@@ -2050,9 +2071,12 @@ handlePanic:
 
 	ldh a,(R_SVBK)
 	and $07
-	ldi (hl),a
+	ld (hl),a
 	ldh a,(R_VBK)
 	and $01
+	swap a
+	rra
+	or (hl)
 	ldi (hl),a
 	ldh a,(<hRomBank)
 	ldi (hl),a
@@ -2067,6 +2091,18 @@ handlePanic:
 	rra
 	ldh (<hPanicStackPointerOffset),a
 
+	ldh a,(R_LCDC)
+	ldh (<hPanicLcdc),a
+	rlca
+	jr nc,+
+	-
+		ldh a,(R_LY)
+		cp 145	; scanline 145 and higher is hblank
+		jr c,-
+	+
+	xor a
+	ldh (R_LCDC),a
+
 	; enable panic mode
 	m_SetPanicState 1
 
@@ -2077,12 +2113,15 @@ handlePanic:
 
 restoreToPanicCallsite:
 	; restore the registers and stack pointer
-	ld a,(hPanicWramBank)
+	ld a,(hPanicWramVramBanks)
 	ldh (R_SVBK),a
-	ld a,(hPanicVramBank)
+	rla
+	swap a
 	ldh (R_VBK),a
 	ld a,(hPanicRomBank)
 	setrombank
+	ldh a,(<hPanicLcdc)
+	ldh (R_LCDC),a
 	pop de
 	pop bc
 	pop af
@@ -2156,7 +2195,7 @@ _mainLoop:
 		jr ++
 	+
 		ld a,:panicHandling.panicHandler
-		ld ($2222),a
+		setrombank
 		jp nz,panicHandling.panicHandler
 	++
 
@@ -13526,22 +13565,9 @@ getBlackTowerProgress:
 ; A table of addresses in vram. The index is a row (of 16 pixels), and the corresponding
 ; value is the address of the start of that row.
 vramBgMapTable:
-	.dw VRAM_TILEMAP_0+$000
-	.dw VRAM_TILEMAP_0+$040
-	.dw VRAM_TILEMAP_0+$080
-	.dw VRAM_TILEMAP_0+$0c0
-	.dw VRAM_TILEMAP_0+$100
-	.dw VRAM_TILEMAP_0+$140
-	.dw VRAM_TILEMAP_0+$180
-	.dw VRAM_TILEMAP_0+$1c0
-	.dw VRAM_TILEMAP_0+$200
-	.dw VRAM_TILEMAP_0+$240
-	.dw VRAM_TILEMAP_0+$280
-	.dw VRAM_TILEMAP_0+$2c0
-	.dw VRAM_TILEMAP_0+$300
-	.dw VRAM_TILEMAP_0+$340
-	.dw VRAM_TILEMAP_0+$380
-	.dw VRAM_TILEMAP_0+$3c0
+.rept $10 index tmpi
+	.dw VRAM_TILEMAP_0+(tmpi*$40)
+.endr
 
 ;;
 ; Force-load a room? This isn't the typical mechanism used to load a room, it's only used in

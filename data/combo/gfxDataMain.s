@@ -890,6 +890,11 @@ m_GfxData flg_titlescreen_combo
 m_GfxData gfx_titlescreen_combo
 m_GfxData map_titlescreen_combo
 
+m_GfxData gfx_panic_shared
+m_GfxData gfx_panic_registers
+m_GfxData flg_panic_registers
+m_GfxData map_panic_registers
+
 .ifdef ENABLE_NEW_GAME_PLUS
 	m_GfxData map_pick_a_file_menu_middle
 	m_GfxData flg_pick_a_file_menu_middle
