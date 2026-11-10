@@ -201,7 +201,7 @@ itemCode16:
 	ld a,(de)
 	ld c,a
 	call itemUpdateThrowingVertically
-	jr nc,@@noCollision
+	jr nc,@@updateChildPosition
 
 	; If it's breakable, destroy it; if not, let it bounce
 	call braceletCheckBreakable
@@ -219,6 +219,7 @@ itemCode16:
 .endif
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
+	call @@updateChildPosition
 	jr nz,@@preDestroyWithAnimation
 	jr nc,+
 	call objectReplaceWithAnimationIfOnHazard
@@ -229,7 +230,7 @@ itemCode16:
 	call itemBounce
 	jr c,@@release
 
-@@noCollision:
+@@updateChildPosition:
 	; If this is not a breakable tile, copy this object's position to relatedObj2.
 	ld e,Item.subid
 	ld a,(de)

@@ -74,14 +74,6 @@ m_InteractionCode $68
 	ld a,(de)
 	or a
 	jr z,@func_5833
-	; also check if the "thrown object" parent is deleted.
-	; if it is, move back to state 1
-	ld a,(w1ReservedItemC.enabled)
-	or a
-	ret nz
-	ld e,Interaction.state
-	ld a,$01
-	ld (de),a
 	ret
 @@substate3:
 	ld h,d
