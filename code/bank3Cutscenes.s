@@ -611,7 +611,7 @@ intro_titlescreen_state0:
 	call restartSound
 
 	; Stop any irrelevant threads.
-	ld a,THREAD_1
+	ld a,<wMainThreadState
 	call threadStop
 	call stopTextThread
 
@@ -677,7 +677,7 @@ intro_titlescreen_state3:
 	ret nz
 
 	; Initialize file select thread, stop this thread
-	ld a,THREAD_1
+	ld a,<wFileSelectThreadState
 	ld bc,fileSelectThreadStart
 	call threadRestart
 	jp stubThreadStart

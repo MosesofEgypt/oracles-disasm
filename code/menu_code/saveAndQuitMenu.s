@@ -43,7 +43,7 @@ saveQuitMenu_state0:
 
 @gameOver:
 	call restartSound
-	ld a,THREAD_1
+	ld a,<wFileSelectThreadState
 	call threadStop
 
 	ld hl,wDeathCounter
@@ -214,7 +214,7 @@ saveQuitMenu_state2:
 		call initSound
 		ld a,$01
 		ld (wSaveQuitMenu.delayCounter),a
-		ld a,THREAD_0
+		ld a,<wIntroThreadState
 		ld bc,thread_runSaveAndQuit
 		call threadRestart
 		jr ++
@@ -231,7 +231,7 @@ saveQuitMenu_state2:
 	++
 .endif
 	; Reset game
-	ld a,THREAD_1
+	ld a,<wMainThreadState
 	ld bc,mainThreadStart
 	call threadRestart
 	jp stubThreadStart

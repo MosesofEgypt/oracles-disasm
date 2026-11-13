@@ -612,9 +612,27 @@
 	m_GfxData gfx_past_sign
 
 	m_GfxData gfx_panic_shared
-	m_GfxData gfx_panic_registers
-	m_GfxData flg_panic_registers
-	m_GfxData map_panic_registers
+	m_GfxData gfx_panic_cpu
+	m_GfxData gfx_panic_wram
+	m_GfxData gfx_panic_hram
+	m_GfxData gfx_panic_vram
+	m_GfxData gfx_panic_sram
+	m_GfxData gfx_panic_rom
+	m_GfxData gfx_panic_oam
+	m_GfxData map_panic_cpu
+	m_GfxData map_panic_wram
+	m_GfxData map_panic_hram
+	m_GfxData map_panic_vram
+	m_GfxData map_panic_sram
+	m_GfxData map_panic_rom
+	m_GfxData map_panic_oam
+	m_GfxData flg_panic_cpu
+	m_GfxData flg_panic_wram
+	m_GfxData flg_panic_hram
+	m_GfxData flg_panic_vram
+	m_GfxData flg_panic_sram
+	m_GfxData flg_panic_rom
+	m_GfxData flg_panic_oam
 
 .ifdef ENABLE_NEW_GAME_PLUS
 	m_GfxData map_pick_a_file_menu_middle ; ????

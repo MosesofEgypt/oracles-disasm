@@ -1473,47 +1473,50 @@ loadUncompressedGfxHeader:
 --
 	ldi a,(hl)
 	ld c,a
-	inc hl ; no compression, so pad
 	ldi a,(hl)
-	ld d,a
-	ldi a,(hl)
-	ld e,a
-	push de
-	ldi a,(hl)
-	ld d,a
-	ldi a,(hl)
-	ld e,a
-	ld a,(hl)
-	and $7f
-	ld b,a
-	ld a,l
-	ldh (<hFF90),a
-	ld a,h
-	ldh (<hFF91),a
-	pop hl
-	call queueDmaTransferFromRom
-.if defined(ROM_COMBO)
-	ld l,:bank1Moveable.uncmpGfxHeaderTable_seasons
-	call wIsSeasons
-	jr c,+
-		ld l,:bank1Moveable.uncmpGfxHeaderTable_ages
-	+
-.else
-	ld l,:bank1Moveable.uncmpGfxHeaderTable
-.endif
-	pop af
-	push af
-	jr nc,+
+	cp GFX_HEADER_MODE_STUB
+	jr z,++
+		ldi a,(hl)
+		ld d,a
+		ldi a,(hl)
+		ld e,a
+		push de
+		ldi a,(hl)
+		ld d,a
+		ldi a,(hl)
+		ld e,a
+		ld a,(hl)
+		and $7f
+		ld b,a
 		ld a,l
-	+
-	rst_setrombank
-	ldh a,(<hFF90)
-	ld l,a
-	ldh a,(<hFF91)
-	ld h,a
-	ldi a,(hl)
-	add a
-	jr c,--
+		ldh (<hFF90),a
+		ld a,h
+		ldh (<hFF91),a
+		pop hl
+		call queueDmaTransferFromRom
+	.if defined(ROM_COMBO)
+		ld l,:bank1Moveable.uncmpGfxHeaderTable_seasons
+		call wIsSeasons
+		jr c,+
+			ld l,:bank1Moveable.uncmpGfxHeaderTable_ages
+		+
+	.else
+		ld l,:bank1Moveable.uncmpGfxHeaderTable
+	.endif
+		pop af
+		push af
+		jr nc,+
+			ld a,l
+		+
+		rst_setrombank
+		ldh a,(<hFF90)
+		ld l,a
+		ldh a,(<hFF91)
+		ld h,a
+		ldi a,(hl)
+		add a
+		jr c,--
+	++
 
 	pop af
 	rst_setrombank
@@ -1532,34 +1535,37 @@ loadUniqueGfxHeaderEntry:
 	ld c,a
 	ldh (<hFF8C),a
 	ldi a,(hl)
-	ldh (<hGfxCompressionMode),a
-	ldi a,(hl)
-	ld b,a
-	ldi a,(hl)
-	ld c,a
-	ldi a,(hl)
-	ld d,a
-	ldi a,(hl)
-	ld e,a
-	ld a,(hl)
-	and $7f
-	ldh (<hFF8D),a
-	push hl
-	push de
-	ld l,c
-	ld h,b
-	ld b,a
-	ldh a,(<hFF8C)
-	ld c,a
-	ld de, w7d800 | :w7d800
-	call decompressGraphics
-	pop de
-	ld hl,w7d800
-	ld c,:w7d800
-	ldh a,(<hFF8D)
-	ld b,a
-	call queueDmaTransferFromRom
-	pop hl
+	cp GFX_HEADER_MODE_STUB
+	jr z,++
+		ldh (<hGfxCompressionMode),a
+		ldi a,(hl)
+		ld b,a
+		ldi a,(hl)
+		ld c,a
+		ldi a,(hl)
+		ld d,a
+		ldi a,(hl)
+		ld e,a
+		ld a,(hl)
+		and $7f
+		ldh (<hFF8D),a
+		push hl
+		push de
+		ld l,c
+		ld h,b
+		ld b,a
+		ldh a,(<hFF8C)
+		ld c,a
+		ld de, w7d800 | :w7d800
+		call decompressGraphics
+		pop de
+		ld hl,w7d800
+		ld c,:w7d800
+		ldh a,(<hFF8D)
+		ld b,a
+		call queueDmaTransferFromRom
+		pop hl
+	++
 	ld a,$00
 	ldh (R_SVBK),a
 	ld a,:animationAndUniqueGfxData.uniqueGfxHeaderTable
@@ -1598,39 +1604,41 @@ loadGfxHeader:
 	ldi a,(hl)
 	ld c,a
 	ldi a,(hl)
-	ldh (<hGfxCompressionMode),a
-	ldi a,(hl)
-	ld d,a
-	ldi a,(hl)
-	ld e,a
-	push de
-	ldi a,(hl)
-	ld d,a
-	ldi a,(hl)
-	ld e,a
-	ld a,(hl)
-	and $7f
-	ld b,a
-	ld a,l
-	ldh (<hFF90),a
-	ld a,h
-	ldh (<hFF91),a
-	pop hl
-	call decompressGraphics
-	pop af
-	push af
-	jr nc,+
-		ld a,:bank1Moveable.gfxHeaderTable
-	+
-	rst_setrombank
-	ldh a,(<hFF90)
-	ld l,a
-	ldh a,(<hFF91)
-	ld h,a
-	ldi a,(hl)
-	add a
-	jr c,--
-
+	cp GFX_HEADER_MODE_STUB
+	jr z,++
+		ldh (<hGfxCompressionMode),a
+		ldi a,(hl)
+		ld d,a
+		ldi a,(hl)
+		ld e,a
+		push de
+		ldi a,(hl)
+		ld d,a
+		ldi a,(hl)
+		ld e,a
+		ld a,(hl)
+		and $7f
+		ld b,a
+		ld a,l
+		ldh (<hFF90),a
+		ld a,h
+		ldh (<hFF91),a
+		pop hl
+		call decompressGraphics
+		pop af
+		push af
+		jr nc,+
+			ld a,:bank1Moveable.gfxHeaderTable
+		+
+		rst_setrombank
+		ldh a,(<hFF90)
+		ld l,a
+		ldh a,(<hFF91)
+		ld h,a
+		ldi a,(hl)
+		add a
+		jr c,--
+	++
 	pop af
 	rst_setrombank
 	pop bc
@@ -1877,38 +1885,12 @@ readByteSequential:
 	ret
 
 ;;
-dec16_ff8c:
-	push hl
-	ld hl,hFF8C
-	call decHlRef16WithCap
-	pop hl
-	ret
-
-;;
-threadFunc_088b:
-	push hl
-	ld l,a
-	ld h,>wThreadStateBuffer
-	set 7,(hl)
-	pop hl
-	ret
-
-;;
-threadFunc_0893:
-	push hl
-	ld l,a
-	ld h,>wThreadStateBuffer
-	res 7,(hl)
-	pop hl
-	ret
-
-;;
 ; @param	a	Low byte of thread address
 threadStop:
 	push hl
 	ld l,a
-	ld h,>wThreadStateBuffer
-	ld (hl),$00
+	ld h,>wThreadStatesStart
+	ld (hl),THREAD_STATE_STOPPED
 	pop hl
 	ret
 
@@ -1920,12 +1902,12 @@ threadRestart:
 	push de
 	push bc
 	ld e,a
-	add $04
+	add ThreadStateStruct.entrypoint
 	ld c,a
 	ld d,$00
-	ld hl,_initialThreadStates-(<wThreadStateBuffer)
+	ld hl,_initialThreadStates-(<wThreadStatesStart)
 	add hl,de
-	ld d,>wThreadStateBuffer
+	ld d,>wThreadStatesStart
 	ld b,$08
 -
 	ldi a,(hl)
@@ -1953,9 +1935,9 @@ restartThisThread:
 	add $04
 	ld c,a
 	ld d,$00
-	ld hl,_initialThreadStates-(<wThreadStateBuffer)
+	ld hl,_initialThreadStates-(<wThreadStatesStart)
 	add hl,de
-	ld d,>wThreadStateBuffer
+	ld d,>wThreadStatesStart
 	ld b,$08
 -
 	ldi a,(hl)
@@ -1976,8 +1958,8 @@ restartThisThread:
 stubThreadStart:
 	ldh a,(<hActiveThread)
 	ld l,a
-	ld h,>wThreadStateBuffer
-	ld (hl),$00
+	ld h,>wThreadStatesStart
+	ld (hl),THREAD_STATE_STOPPED
 	jr _nextThread
 
 ;;
@@ -2007,10 +1989,10 @@ resumeThreadInAFrames:
 	ld b,a
 	ldh a,(<hActiveThread)
 	ld l,a
-	ld h,>wThreadStateBuffer
+	ld h,>wThreadStatesStart
 
-	; Value $01 says to resume in X frames
-	ld a,$01
+	; resume in X frames
+	ld a,THREAD_STATE_ASLEEP
 	ldi (hl),a
 
 	; Number of frames to wait
@@ -2026,7 +2008,7 @@ resumeThreadInAFrames:
 ;;
 _nextThread:
 	ld sp,wMainStackTop
-	ld h,>wThreadStateBuffer
+	ld h,>wThreadStatesStart
 	ld a,$01
 	ldh (R_SVBK),a
 	jp _mainLoop_nextThread
@@ -2089,7 +2071,7 @@ handlePanic:
 	rrc h
 	ld a,l
 	rra
-	ldh (<hPanicStackPointerOffset),a
+	ldh (<hPanicStackPointerLow),a
 
 	ldh a,(R_LCDC)
 	ldh (<hPanicLcdc),a
@@ -2147,7 +2129,7 @@ startGame:
 	; Initialize thread states
 	ld sp,wMainStackTop
 	ld hl,_initialThreadStates
-	ld de,wThreadStateBuffer
+	ld de,wThreadStatesStart
 	ld b,NUM_THREADS*8
 -
 	ldi a,(hl)
@@ -2205,28 +2187,30 @@ _mainLoop:
 
 	ld a,(wEquippedItemOamTail)
 	ldh (<hOamTail),a
-	ld h,>wThreadStateBuffer
-	ld a,<wThreadStateBuffer
+	ld h,>wThreadStatesStart
+	ld a,<wThreadStatesStart
 	ldh (<hActiveThread),a
 
 --
 	ld l,a
 	ld a,(hl)
 
-	; (hl) == 1?
+	; state == THREAD_STATE_ASLEEP
 	dec a
 	jr z,_countdownToRunThread
 
-	; (hl) == 2?
+	; state == THREAD_STATE_INIT
 	dec a
 	jr z,_initializeThread
+
+	; state == THREAD_STATE_AWAKE or THREAD_STATE_STOPPED
 
 ;;
 _mainLoop_nextThread:
 	ldh a,(<hActiveThread)
 	add $08
 	ldh (<hActiveThread),a
-	cp <(wThreadStateBuffer+NUM_THREADS*8)
+	cp <wThreadStatesEnd
 	jr nz,--
 
 	; No threads remaining this frame
@@ -2302,14 +2286,14 @@ _initializeThread:
 _initialThreadStates:
 
 .ifdef QUICKSTART_ENABLE
-	m_ThreadState $02 $00 wThread0StackTop stubThreadStart
-	m_ThreadState $02 $00 wThread1StackTop mainThreadStart
+	m_ThreadState THREAD_STATE_INIT $00 wThread0StackTop stubThreadStart
+	m_ThreadState THREAD_STATE_INIT $00 wThread1StackTop mainThreadStart
 .else
-	m_ThreadState $02 $00 wThread0StackTop introThreadStart
-	m_ThreadState $02 $00 wThread1StackTop stubThreadStart
+	m_ThreadState THREAD_STATE_INIT $00 wThread0StackTop introThreadStart
+	m_ThreadState THREAD_STATE_INIT $00 wThread1StackTop stubThreadStart
 .endif
-	m_ThreadState $02 $00 wThread2StackTop stubThreadStart
-	m_ThreadState $02 $00 wThread3StackTop paletteFadeThreadStart
+	m_ThreadState THREAD_STATE_INIT $00 wThread2StackTop stubThreadStart
+	m_ThreadState THREAD_STATE_INIT $00 wThread3StackTop paletteFadeThreadStart
 
 
 ; Upper bytes of addresses of flags for each group
@@ -2456,20 +2440,7 @@ vblankInterrupt:
 	ld c,a
 	push bc
 
-	ldh a,(<hVBlankFunctionQueueTail)
-	or a
-	jr z,+
-		ldh a,(<hRomBank)
-		push af
-		call runVBlankFunctions
-		pop af
-		setrombank
-		.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
-			xor a
-			ld ($3333),a
-		.endif
-	+
-
+	call runVBlankFunctions
 	call updateDirtyPalettes
 
 	di
@@ -2500,13 +2471,27 @@ vblankInterrupt:
 	pop af
 	reti
 
-;;
 runVBlankFunctions:
+	ldh a,(<hVBlankFunctionQueueTail)
+	or a
+	ret z
+	ldh a,(<hRomBank)
+	push af
 	xor a
 	ldh (<hGdmaChunksCopiedThisFrame),a
 	ldh (<hGdmaDelayedCount),a
 	ld hl,wVBlankFunctionQueue
---
+	call runVBlankFunctionsHelper
+	pop af
+	setrombank
+	.ifdef I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE_GFX
+		xor a
+		ld ($3333),a
+	.endif
+	ret
+
+;;
+runVBlankFunctionsHelper:
 	ldi a,(hl)
 	push hl
 	ld c,a
@@ -2520,7 +2505,7 @@ vblankFunctionRet:
 	xor a
 	ldh a,(<hVBlankFunctionQueueTail)
 	cp l
-	jr nz,--
+	jr nz,runVBlankFunctionsHelper
 
 	ldh a,(<hGdmaDelayedCount)
 	add a
@@ -5675,7 +5660,7 @@ stopTextThread:
 	xor a
 	ld (wTextIsActive),a
 	ld (wTextboxFlags),a
-	ld a,THREAD_2
+	ld a,<wTextThreadState
 	jp threadStop
 
 ;;
@@ -5746,7 +5731,7 @@ _label_00_204:
 	ld (wTextIsActive),a
 
 	ld bc,textThreadStart
-	ld a,THREAD_2
+	ld a,<wTextThreadState
 	jp threadRestart
 
 ;;

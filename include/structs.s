@@ -25,6 +25,42 @@
 .ENDST
 .define DeathRespawnStruct.size $0c
 
+.ENUM $00
+	THREAD_STATE_STOPPED	db ; $00
+	THREAD_STATE_ASLEEP		db ; $01
+	THREAD_STATE_INIT		db ; $02 (i.e. waking up)
+	THREAD_STATE_AWAKE		db ; $03
+.ENDE
+
+.STRUCT ThreadStateStruct
+	; see enum above
+	state		db
+
+	; number of frames this thread will remain asleep
+	sleepFrames	db
+
+	stackTop	dw
+
+	; the instruction to jump to when continuing this thread
+	entrypoint	dw
+
+	; Usage differs depending on thread
+	;   intro thread   = introStage
+	;   main thread    = gameState
+	;   text thread    = unused
+	;   palette thread = unused
+	param0		db
+
+	; Usage differs depending on thread
+	;   intro thread   = introVar
+	;   main thread    = cutsceneIndex
+	;   text thread    = unused
+	;   palette thread = fadeOffset
+	param1			db
+.ENDST
+.define ThreadStateStruct.size $08
+
+
 .STRUCT BoundingBoxStruct
 	xMin	db
 	xMax	db

@@ -150,7 +150,7 @@
 	; NOTE: this obviously doesn't handle the 9th bit for 8MB roms.
 	;       in situations like that I guess you're just fucked.
 	hPanicRomBank				db ; $ffcb
-	hPanicStackPointerOffset	db ; $ffcc
+	hPanicStackPointerLow		db ; $ffcc
 	hPanicLcdc					db ; $ffcd
 
 	; NOTE: Avoid using these during interrupts, as that could

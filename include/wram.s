@@ -217,73 +217,81 @@ wBefuddlingFlickerCounter:
 wMusicQueue: ; $c0a0
 	dsb $10
 
-; Stacks grow down on the gameboy. So the main stack is from $c0b0-$c10f?
-wMainStack:		dsb $60
-wMainStackTop:		.db	; $c110
-wThread0Stack: 		dsb $70		; intro thread
-wThread0StackTop: 	.db	; $c180
-wThread1Stack: 		dsb $a0		; main thread
-wThread1StackTop: 	.db	; $c220
-wThread2Stack: 		dsb $50		; text thread
-wThread2StackTop: 	.db	; $c270
-wThread3Stack: 		dsb $40		; palette thread
-wThread3StackTop: 	.db	; $c2b0
-wPanicStack: 		dsb $10		; panic handling thread
-wPanicStackTop: 	.db	; $c2c0
-
 .if defined(ROM_COMBO)
-	wc2c0:
+	c0b0:						; $c0b0
 		dsb $10
-	wGrabbableObjectBuffer:		; $c2d0
+	wGrabbableObjectBuffer:		; $c0c0
 		dsb $10
-	wGrabbableObjectBufferEnd:	; $c2e0
+	wGrabbableObjectBufferEnd:	; $c0d0
 		.db
 .else
-	wc2c0:
+	c0b0:						; $c0b0
 		dsb $20
 .endif
 
-wThreadStateBuffer: ; $c2e0
+wThreadStatesStart: ; $c0d0
 ; $20 byte buffer (with a few 2-byte gaps)
-	dsb $20
+	.db
 
+; Used for the intro
+wIntroThreadState:		; $c0d0
+	instanceof ThreadStateStruct
+
+; Used for main game, file select, and game over screen
+wMainThreadState:		; $c0d8
+	instanceof ThreadStateStruct
+
+; Used for displaying text
+wTextThreadState:		; $c0e0
+	instanceof ThreadStateStruct
+
+; Used for handling palette fadeouts (basically always on?)
+wPaletteThreadState:	; $c0e8
+	instanceof ThreadStateStruct
+
+wThreadStatesEnd:		; $c0f0
+	.db
+
+; NOTE: this has been rearranged to make pointer math easier to
+;       work with when looking around the stack for debugging
+wPanicStack: 		dsb $10		; panic handling thread
+wPanicStackTop: 	.db	; $c100
+
+; Stacks grow down on the gameboy. So the main stack is from $c0b0-$c10f?
+wMainStack:			dsb $60		; non-thread stack
+wMainStackTop:		.db	; $c160
+wThread0Stack: 		dsb $70		; intro thread
+wThread0StackTop: 	.db	; $c1d0
+wThread1Stack: 		dsb $a0		; main thread
+wThread1StackTop: 	.db	; $c270
+wThread2Stack: 		dsb $50		; text thread
+wThread2StackTop: 	.db	; $c2c0
+wThread3Stack: 		dsb $40		; palette thread
+wThread3StackTop: 	.db	; $c300
 .ENDE
 
 
 .define NUM_THREADS	4
 
-; Used for the intro
-.define THREAD_0	<wThreadStateBuffer + 0*8
+.define wFileSelectThreadState	wMainThreadState
 
-; Used for main game, file select screen
-.define THREAD_1	<wThreadStateBuffer + 1*8
-
-; Used for displaying text
-.define THREAD_2	<wThreadStateBuffer + 2*8
-
-; Used for handling palette fadeouts (basically always on?)
-.define THREAD_3	<wThreadStateBuffer + 3*8
-
-
-; Some of the 2-byte gaps in the wThreadStateBuffer are used for other purposes
-
-.define wIntroStage	 wThreadStateBuffer + $6 ; $c2e6
-.define wIntroVar	 wThreadStateBuffer + $7 ; $c2e7
+.define wIntroStage	 wIntroThreadState.param0 ; $c0d6
+.define wIntroVar	 wIntroThreadState.param1 ; $c0d7
 
 ; Game state.
 ; 0: Loading a room?
 ; 1: ?
 ; 2: Standard (the game is usually in this state)
 ; 3: Link is falling from the top of the screen (for the start of the game)
-.define wGameState	 wThreadStateBuffer + $e ; $c2ee
+.define wGameState	 wMainThreadState.param0 ; $c0de
 
 ; Writing a value here triggers a cutscene.
 ; (See constants/common/cutsceneIndices.s)
-.define wCutsceneIndex		wThreadStateBuffer + $f ; $c2ef
+.define wCutsceneIndex		wMainThreadState.param1 ; $c0df
 
 ; This is the amount to add to each color component to produce the "faded" palettes.
 ; Increase this enough and they'll be fully white.
-.define wPaletteThread_fadeOffset	wThreadStateBuffer + $1f ; $c2ff
+.define wPaletteThread_fadeOffset	wPaletteThreadState.param1 ; $c0ef
 
 
 .RAMSECTION Wram0_c300
@@ -3978,9 +3986,105 @@ w4GfxBuf2:			dsb $200	; $de00
 	w5PanicVram0Tiledata0Backup:
 		dsb $800 ; $d000
 	w5PanicVram0Tilemap0Backup:
-		dsb $400 ; $d400
+		dsb $240 ; $d800
 	w5PanicVram1Tilemap0Backup:
-		dsb $400 ; $dc00
+		dsb $240 ; $da40
+	w5PanicPaletteBackup:
+		dsb $010 ; $dc80
+	w5PanicOamBackup:
+		dsb $0a0 ; $dc90
+	w5PanicVram0Tilemap:
+		dsb $240 ; $dd30
+
+	w5PanicTemp:
+		dsb $060 ; $df70
+
+	w5PanicPanel: ; $dfd0
+		db
+	w5PanicHoldTimer: ; $dfd1
+		; Bits 0-6: number of frames held
+		; Bit 7:    set if right held, unset if left
+		db
+	w5PanicPad: ; $dfd2
+		dsb 2
+	w5PanicSelectionMode: ; $dfd4
+		; Bits 0-2: Selection mode
+		;   0 == selecting panel
+		;   1 == selecting subpanel
+		;   2 == selecting page
+		;   3 == selecting field
+		;   4 == modifying field
+		; Bit 3: Selection level was changed
+		; Bit 4: Field was changed
+		; Bit 5: Page was changed
+		; Bit 6: Subpanel was changed
+		; Bit 7: Panel was changed
+		db
+
+	w5PanicSelectedWramBank: ; $dfd5
+		db
+	w5PanicSelectedWramPage: ; $dfd6
+		db
+	w5PanicSelectedWramChar: ; $dfd7
+		db
+
+	w5PanicSelectedHramPage: ; $dfd8
+		db
+	w5PanicSelectedHramChar: ; $dfd9
+		db
+
+	w5PanicSelectedSramBank: ; $dfda
+		db
+	w5PanicSelectedSramPage: ; $dfdb
+		db
+	w5PanicSelectedSramChar: ; $dfdc
+		db
+
+	w5PanicSelectedVramBank: ; $dfdd
+		db
+	w5PanicSelectedVramPage: ; $dfde
+		db
+	w5PanicSelectedVramChar: ; $dfdf
+		db
+
+	w5PanicSelectedRomBank: ; $dfe0
+		db
+	w5PanicSelectedRomPage: ; $dfe1
+		db
+
+	w5PanicSelectedOamRow: ; $dfe2
+		db
+	w5PanicSelectedCpuField: ; $dfe3
+		db
+
+	w5PanicSelectedBankAddress: ; $dfe4
+		dw
+	w5PanicSelectedPageAddress: ; $dfe6
+		dw
+	w5PanicSelectedCharAddress: ; $dfe8
+		dw
+	w5PanicSelectedValue: ; $dfea
+		db
+
+	w5PanicHighlightPrev: ; $dfeb
+		; Bits 0-4:  tile x-coord
+		; Bits 5-7:  width - 1
+		; Bits 8-12: tile y-coord
+		; Bit 13:    unused
+		; Bit 14:    unused
+		; Bit 15:    enabled
+		dw
+	w5PanicHighlightCurr: ; $dfed
+		; Bits 0-4:  tile x-coord
+		; Bits 5-7:  width - 1
+		; Bits 8-12: tile y-coord
+		; Bit 13:    unused
+		; Bit 14:    unused
+		; Bit 15:    enabled
+		dw
+
+	w5PanicEnd: ; $dfef
+		.db
 .nextu
 	w5IntroImageFrameGfx:
 		dsb $400 ; $d000

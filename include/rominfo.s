@@ -12,6 +12,8 @@
 .banksize $4000
 .ramsize $02 ; 1 RAM bank
 
+.define SRAM_BANKS 1
+
 ; HACK-BASE: Ages is expanded to 2MB, Seasons to 4MB to accommodate expanded tilesets.
 ; Seasons takes more space due to the extra deduplication from each of the season tilesets.
 .if defined(ROM_COMBO)

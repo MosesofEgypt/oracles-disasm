@@ -205,10 +205,16 @@
 	.endif
 .endm
 
+.macro m_GfxHeaderStub
+	.assert NARGS == 0
+	.db $00, GFX_HEADER_MODE_STUB
+.endm
+
 .enum 0
-	GFX_HEADER_MODE_NORMAL:	 db
+	GFX_HEADER_MODE_NORMAL: db
 	GFX_HEADER_MODE_ANIM:	db
 	GFX_HEADER_MODE_FORCE:	db
+	GFX_HEADER_MODE_STUB:	db
 .ende
 
 ; Helper macro used for defining other macros with slightly varying parameters. See the other macros
@@ -235,7 +241,7 @@
 		.db (:{filename})
 	.endif
 
-	; Byte 2: Source bank number & compression mode
+	; Byte 2: Compression mode
 	.if m_GfxHeaderMode == GFX_HEADER_MODE_FORCE
 		.db ((\4)<<6)
 	.else

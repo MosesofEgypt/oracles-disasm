@@ -3796,7 +3796,7 @@ standardGameState:
 	or a
 	jr z,+
 
-	ld a,THREAD_0
+	ld a,<wIntroThreadState
 	ld bc,thread_1b10
 	call threadRestart
 	jp stubThreadStart
