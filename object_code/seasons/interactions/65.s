@@ -183,14 +183,14 @@ func_5293:
 	add hl,bc
 	jr func_52c6
 table_52a6:
-	.dw w2TmpGfxBuffer+$20 w2TmpGfxBuffer+$c0
-	.dw w2TmpGfxBuffer+$40 w2TmpGfxBuffer+$e0
-	.dw w2TmpGfxBuffer+$60 w2TmpGfxBuffer+$100
-	.dw w2TmpGfxBuffer+$80 w2TmpGfxBuffer+$120
-	.dw w2TmpAttrBuffer+$20 w2TmpAttrBuffer+$c0
-	.dw w2TmpAttrBuffer+$40 w2TmpAttrBuffer+$e0
-	.dw w2TmpAttrBuffer+$60 w2TmpAttrBuffer+$100
-	.dw w2TmpAttrBuffer+$80 w2TmpAttrBuffer+$120
+	.dw w2TmpGfxBuffer+$20, w2TmpGfxBuffer+$c0
+	.dw w2TmpGfxBuffer+$40, w2TmpGfxBuffer+$e0
+	.dw w2TmpGfxBuffer+$60, w2TmpGfxBuffer+$100
+	.dw w2TmpGfxBuffer+$80, w2TmpGfxBuffer+$120
+	.dw w2TmpAttrBuffer+$20, w2TmpAttrBuffer+$c0
+	.dw w2TmpAttrBuffer+$40, w2TmpAttrBuffer+$e0
+	.dw w2TmpAttrBuffer+$60, w2TmpAttrBuffer+$100
+	.dw w2TmpAttrBuffer+$80, w2TmpAttrBuffer+$120
 func_52c6:
 	ld b,$20
 --
@@ -255,29 +255,29 @@ func_52d9:
 	pop de
 	ret
 table_5326:
-	.dw VRAM_1_TILEMAP_0        VRAM_0_TILEMAP_0
-	.dw VRAM_1_TILEMAP_0        VRAM_0_TILEMAP_0
-	.dw VRAM_1_TILEMAP_0+$20    VRAM_0_TILEMAP_0+$20
-	.dw VRAM_1_TILEMAP_0+$40    VRAM_0_TILEMAP_0+$40
-	.dw VRAM_1_TILEMAP_0+$60    VRAM_0_TILEMAP_0+$60
-	.dw VRAM_1_TILEMAP_0+$80    VRAM_0_TILEMAP_0+$80
-	.dw VRAM_1_TILEMAP_0+$a0    VRAM_0_TILEMAP_0+$a0
-	.dw VRAM_1_TILEMAP_0+$c0    VRAM_0_TILEMAP_0+$c0
-	.dw VRAM_1_TILEMAP_0+$e0    VRAM_0_TILEMAP_0+$e0
-	.dw VRAM_1_TILEMAP_0+$100   VRAM_0_TILEMAP_0+$100
-	.dw VRAM_1_TILEMAP_0+$120   VRAM_0_TILEMAP_0+$120
+	.dw VRAM_1_TILEMAP_0,        VRAM_0_TILEMAP_0
+	.dw VRAM_1_TILEMAP_0,        VRAM_0_TILEMAP_0
+	.dw VRAM_1_TILEMAP_0+$20,    VRAM_0_TILEMAP_0+$20
+	.dw VRAM_1_TILEMAP_0+$40,    VRAM_0_TILEMAP_0+$40
+	.dw VRAM_1_TILEMAP_0+$60,    VRAM_0_TILEMAP_0+$60
+	.dw VRAM_1_TILEMAP_0+$80,    VRAM_0_TILEMAP_0+$80
+	.dw VRAM_1_TILEMAP_0+$a0,    VRAM_0_TILEMAP_0+$a0
+	.dw VRAM_1_TILEMAP_0+$c0,    VRAM_0_TILEMAP_0+$c0
+	.dw VRAM_1_TILEMAP_0+$e0,    VRAM_0_TILEMAP_0+$e0
+	.dw VRAM_1_TILEMAP_0+$100,   VRAM_0_TILEMAP_0+$100
+	.dw VRAM_1_TILEMAP_0+$120,   VRAM_0_TILEMAP_0+$120
 table_5352:
-	.dw VRAM_1_TILEMAP_0+$260   VRAM_0_TILEMAP_0+$260
-	.dw VRAM_1_TILEMAP_0+$260   VRAM_0_TILEMAP_0+$260
-	.dw VRAM_1_TILEMAP_0+$240   VRAM_0_TILEMAP_0+$240
-	.dw VRAM_1_TILEMAP_0+$220   VRAM_0_TILEMAP_0+$220
-	.dw VRAM_1_TILEMAP_0+$200   VRAM_0_TILEMAP_0+$200
-	.dw VRAM_1_TILEMAP_0+$1e0   VRAM_0_TILEMAP_0+$1e0
-	.dw VRAM_1_TILEMAP_0+$1c0   VRAM_0_TILEMAP_0+$1c0
-	.dw VRAM_1_TILEMAP_0+$1a0   VRAM_0_TILEMAP_0+$1a0
-	.dw VRAM_1_TILEMAP_0+$180   VRAM_0_TILEMAP_0+$180
-	.dw VRAM_1_TILEMAP_0+$160   VRAM_0_TILEMAP_0+$160
-	.dw VRAM_1_TILEMAP_0+$140   VRAM_0_TILEMAP_0+$140
+	.dw VRAM_1_TILEMAP_0+$260,   VRAM_0_TILEMAP_0+$260
+	.dw VRAM_1_TILEMAP_0+$260,   VRAM_0_TILEMAP_0+$260
+	.dw VRAM_1_TILEMAP_0+$240,   VRAM_0_TILEMAP_0+$240
+	.dw VRAM_1_TILEMAP_0+$220,   VRAM_0_TILEMAP_0+$220
+	.dw VRAM_1_TILEMAP_0+$200,   VRAM_0_TILEMAP_0+$200
+	.dw VRAM_1_TILEMAP_0+$1e0,   VRAM_0_TILEMAP_0+$1e0
+	.dw VRAM_1_TILEMAP_0+$1c0,   VRAM_0_TILEMAP_0+$1c0
+	.dw VRAM_1_TILEMAP_0+$1a0,   VRAM_0_TILEMAP_0+$1a0
+	.dw VRAM_1_TILEMAP_0+$180,   VRAM_0_TILEMAP_0+$180
+	.dw VRAM_1_TILEMAP_0+$160,   VRAM_0_TILEMAP_0+$160
+	.dw VRAM_1_TILEMAP_0+$140,   VRAM_0_TILEMAP_0+$140
 func_537e:
 	ld a,(wTmpcfc0.genericCutscene.cfd0)
 	or a
@@ -362,24 +362,31 @@ roomTileChangesAfterLoad02_body:
 	ld hl,w3VramTiles
 	ld de,w3TileMappingData+$c0
 	call func_5440
+
 	ld hl,w3VramTiles+$20
 	ld de,w3TileMappingData+$e0
 	call func_5440
-	ld hl,w3VramAttributes
+
+	ld hl,w3TileMappingIndices
 	ld de,w3TileMappingData+$4c0
 	call func_5440
-	ld hl,w3VramAttributes+$20
+
+	ld hl,w3TileMappingIndices+$20
 	ld de,w3TileMappingData+$4e0
 	call func_5440
+
 	ld hl,w3VramTiles+$280
 	ld de,w3TileMappingData+$100
 	call func_5440
+
 	ld hl,w3VramTiles+$2a0
 	ld de,w3TileMappingData+$120
 	call func_5440
+
 	ld hl,w3D6WallClosingTileAttributes
 	ld de,w3TileMappingData+$500
 	call func_5440
+
 	ld hl,w3D6WallClosingTileAttributes+$20
 	ld de,w3TileMappingData+$520
 	call func_5440
@@ -473,7 +480,7 @@ func_545a:
 	ld hl,w3VramTiles
 	ld a,$80
 	call func_552a
-	ld hl,w3VramAttributes
+	ld hl,w3TileMappingIndices
 	ld a,$0b
 	call func_552a
 	ld a,(wTmpcfc0.genericCutscene.cfd0)
@@ -523,24 +530,24 @@ func_553a:
 	ldh (R_SVBK),a
 	ret
 table_5544:
-	.dw w2TmpGfxBuffer+$00
-	.dw w2TmpGfxBuffer+$20
-	.dw w2TmpGfxBuffer+$40
-	.dw w2TmpGfxBuffer+$60
-	.dw w2TmpGfxBuffer+$80
-	.dw w2TmpGfxBuffer+$a0
-	.dw w2TmpGfxBuffer+$c0
-	.dw w2TmpGfxBuffer+$e0
-	.dw w2TmpGfxBuffer+$100
-	.dw w2TmpGfxBuffer+$120
+	.dw w2WallClosingBgTiles+$00
+	.dw w2WallClosingBgTiles+$20
+	.dw w2WallClosingBgTiles+$40
+	.dw w2WallClosingBgTiles+$60
+	.dw w2WallClosingBgTiles+$80
+	.dw w2WallClosingBgTiles+$a0
+	.dw w2WallClosingBgTiles+$c0
+	.dw w2WallClosingBgTiles+$e0
+	.dw w2WallClosingBgTiles+$100
+	.dw w2WallClosingBgTiles+$120
 table_5558:
-	.dw w2TmpGfxBuffer+$280
-	.dw w2TmpGfxBuffer+$260
-	.dw w2TmpGfxBuffer+$240
-	.dw w2TmpGfxBuffer+$220
-	.dw w2TmpGfxBuffer+$200
-	.dw w2TmpGfxBuffer+$1e0
-	.dw w2TmpGfxBuffer+$1c0
-	.dw w2TmpGfxBuffer+$1a0
-	.dw w2TmpGfxBuffer+$180
-	.dw w2TmpGfxBuffer+$160
+	.dw w2WallClosingBgTiles+$280
+	.dw w2WallClosingBgTiles+$260
+	.dw w2WallClosingBgTiles+$240
+	.dw w2WallClosingBgTiles+$220
+	.dw w2WallClosingBgTiles+$200
+	.dw w2WallClosingBgTiles+$1e0
+	.dw w2WallClosingBgTiles+$1c0
+	.dw w2WallClosingBgTiles+$1a0
+	.dw w2WallClosingBgTiles+$180
+	.dw w2WallClosingBgTiles+$160

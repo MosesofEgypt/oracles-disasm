@@ -3744,7 +3744,7 @@ w2TmpAttrBuffer:		dsb $0400
 ; memory for the pirate ship escape cutscene. With that not being present in Ages,
 ; "wxSeedTreeRefillData" was moved to the space it was occupying in Ages.
 .if defined(ROM_COMBO)
-	.union
+.union
 	w2WaveScrollValues:			dsb $80		; $d800/$d800
 	w2Filler7:					dsb $80
 	; NOTE: this is technically going to cause a bug, as the refill data
@@ -3752,17 +3752,21 @@ w2TmpAttrBuffer:		dsb $0400
 	;       it shouldnt cause any problems other than throwing off when
 	;       refills happen though, so we're do this to simplify the reorg
 	wxSeedTreeRefillData:		dsb NUM_SEED_TREES*8 ; 2:d900/3:dfc0
-	.nextu
+.nextu
 	w2PirateShipBgTiles:		dsb $180	; -/$d800
-	.endu
+.nextu
+	w2WallClosingBgTiles:	dsb $180	; -/$d800
+.endu
 
 .elif defined(ROM_SEASONS)
 
-	.union
+.union
 	w2WaveScrollValues:	dsb $80		; $d800/$d800
-	.nextu
+.nextu
 	w2PirateShipBgTiles:	dsb $180	; -/$d800
-	.endu
+.nextu
+	w2WallClosingBgTiles:	dsb $180	; -/$d800
+.endu
 
 .else ;ROM_AGES
 
@@ -3853,11 +3857,11 @@ w3VramAttributes:	.db		; $dc00
 w3TileMappingIndices:	dsb $200	; $dc00
 
 ; Most likely unused
-w3Filler2:		dsb $80
+w3Filler2:		dsb $80					; $de00
 
-w3D6WallClosingTileAttributes:		dsb $80
+w3D6WallClosingTileAttributes:	dsb $80	; $de80
 
-w3RoomLayoutBuffer:	dsb $c0	; $df00
+w3RoomLayoutBuffer:	dsb $c0				; $df00
 
 .ifdef ROM_SEASONS
 ; Located elsewhere in ages
