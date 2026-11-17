@@ -1,6 +1,7 @@
 .include "include/constants.s"
 .include "include/macros.s"
 .include "include/rominfo.s"
+.include "include/emptyfill.s"
 .include "include/musicMacros.s"
 
 .enum 0 export

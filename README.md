@@ -78,26 +78,14 @@ branch (without needing to use fancy git-fu).
 * [WLA-DX](https://github.com/vhelin/wla-dx) v10.6
 * On windows: Must use MSYS2 or some other linux-y environment.
 
-Note: WLA will not produce an exact matching Seasons ROM due to quirks with how
-empty space is handled; however, this has no effect on how the game functions.
-If you need to work around this for some reason, [This
-branch](https://github.com/Drenn1/wla-dx/tree/emptyfill-banknumber) of WLA can
-be used instead (but it needs to be updated!)
-
 
 ## Build instructions
 
-Once the dependencies are installed, running `make` will build both games. To build
-a specific game, run `make ages` or `make seasons`.
+Once the dependencies are installed, running `make` will build both games, but not the combo.
+To build a specific game, run `make ages`, `make seasons`, or `make combo`.
 
-By default, the rom is built with precompressed assets, so that an exact copy of the
-original game is produced. In order to edit text, graphics, and other things,
-switch to the "hack-base" branch. Alternatively, run the "./swapbuild.sh" script
-in the root of the repository. This will switch the build mode to "modifiable"
-instead of "precompressed".
-
-There are 4 build directories in total (for ages and seasons, vanilla or
-editable), selected by the makefile at build time. See Makefile for details.
+There are 3 build directories in total (for ages, seasons, or
+combo), selected by the makefile at build time. See Makefile for details.
 
 [See the wiki](https://wiki.zeldahacking.net/oracle/Setting_up_oracles-disasm) for detailed
 setup instructions.

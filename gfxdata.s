@@ -1,5 +1,6 @@
 .include "include/constants.s"
 .include "include/rominfo.s"
+.include "include/emptyfill.s"
 .include "include/structs.s"
 .include "include/macros.s"
 .include "include/gfxDataMacros.s"
