@@ -1876,11 +1876,6 @@ mapleSetTargetDirectionToRelatedObj2:
 ; Checks if Link can drop an item in Maple's minigame, and removes the item amount from
 ; his inventory if he can.
 ;
-; This function is bugged. The programmers mixed up the "treasure indices" with maple's
-; item indices. As a result, the incorrect treasures are checked to be obtained; for
-; example, pegasus seeds check that Link has obtained the rod of seasons. This means
-; pegasus seeds will never drop in Ages. Similarly, gale seeds check the magnet gloves.
-;
 ; @param	b	The item to drop
 ; @param[out]	hFF8B	The "maple item index" of the item to be dropped
 ; @param[out]	zflag	nz if Link can drop it
@@ -1896,24 +1891,32 @@ mapleCheckLinkCanDropItem:
 	.dw @seed
 	.dw @bombs
 	.dw @heart
-	.dw @heart ; This should be 5 rupees, but Link never drops that.
+	.dw @fiveRupees
 	.dw @oneRupee
+
+@fiveRupees:
+	ld hl,wNumRupees
+	ldi a,(hl)
+	or (hl)
+	cp $05
+	ret c
+	ld a,RUPEEVAL_005
+	call removeRupeeValue
+	ld a,$0c
+	jr @setMapleItemIndex
 
 @oneRupee:
 	ld hl,wNumRupees
 	ldi a,(hl)
 	or (hl)
 	ret z
-	ld a,$01
+	ld a,RUPEEVAL_001
 	call removeRupeeValue
-	ld a,$0c
+	ld a,$0d
 	jr @setMapleItemIndex
 
 @bombs:
-	; $0a corresponds to bombs in maple's treasure indices, but for the purpose of the
-	; "checkTreasureObtained" call, it actually corresponds to "TREASURE_SWITCH_HOOK"!
-	ld a,$0a
-	ldh (<hFF8B),a
+	ld a,TREASURE_BOMBS
 	call checkTreasureObtained
 	jr nc,@cannotDrop
 
@@ -1924,20 +1927,12 @@ mapleCheckLinkCanDropItem:
 	daa
 	ld (hl),a
 	call setStatusBarNeedsRefreshBit1
-	or d
-	ret
+	ld a,$0a
+	jr @setMapleItemIndex
 
 @seed:
-	; BUG: For the purpose of "checkTreasureObtained", the treasure index will be very
-	; wrong.
-	;   Ember seed:   TREASURE_SWORD
-	;   Scent seed:   TREASURE_BOOMERANG
-	;   Pegasus seed: TREASURE_ROD_OF_SEASONS
-	;   Gale seed:    TREASURE_MAGNET_GLOVES
-	;   Mystery seed: TREASURE_SWITCH_HOOK_HELPER
 	ld a,b
-	add $05
-	ldh (<hFF8B),a
+	add TREASURE_EMBER_SEEDS
 	call checkTreasureObtained
 	jr nc,@cannotDrop
 
@@ -1952,8 +1947,9 @@ mapleCheckLinkCanDropItem:
 	ld (hl),a
 
 	call setStatusBarNeedsRefreshBit1
-	or d
-	ret
+	ld a,b
+	add $05
+	jr @setMapleItemIndex
 
 @cannotDrop:
 	xor a

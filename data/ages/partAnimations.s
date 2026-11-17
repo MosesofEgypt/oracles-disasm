@@ -225,6 +225,11 @@ part46Animations:
 	.dw partAnimation5b8c0
 	.dw partAnimation5b8ca
 	.dw partAnimation5b8cf
+.ifdef MORE_RUPEE_TYPES
+	.dw partAnimation5b8ca
+	.dw partAnimation5b8ca
+	.dw partAnimation5b8ca
+.endif
 part02Animations:
 	.dw partAnimation5b8d4
 	.dw partAnimation5b8ec

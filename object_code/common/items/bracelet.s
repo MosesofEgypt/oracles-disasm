@@ -219,7 +219,9 @@ itemCode16:
 .endif
 
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
+	push af
 	call @@updateChildPosition
+	pop af
 	jr nz,@@preDestroyWithAnimation
 	jr nc,+
 	call objectReplaceWithAnimationIfOnHazard

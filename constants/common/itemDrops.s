@@ -23,4 +23,13 @@
 	ITEM_DROP_10_ORE_CHUNKS           db ; $0d
 	ITEM_DROP_50_ORE_CHUNKS           db ; $0e
 	ITEM_DROP_100_RUPEES_OR_ENEMY     db ; $0f
+
+; NOTE: numbers above $0f aren't supported for
+;       use in drop tables due to their structure
+.ifdef MORE_RUPEE_TYPES
+	ITEM_DROP_UNUSED_10               db ; $10
+	ITEM_DROP_200_RUPEES              db ; $11
+	ITEM_DROP_500_RUPEES              db ; $12
+	ITEM_DROP_1000_RUPEES             db ; $13
+.endif
 .ende

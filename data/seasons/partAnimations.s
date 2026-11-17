@@ -211,6 +211,11 @@ part30Animations:
 	.dw partAnimation573c7
 	.dw partAnimation573d1
 	.dw partAnimation573d6
+.ifdef MORE_RUPEE_TYPES
+	.dw partAnimation573d1
+	.dw partAnimation573d1
+	.dw partAnimation573d1
+.endif
 part02Animations:
 	.dw partAnimation573db
 	.dw partAnimation573f3

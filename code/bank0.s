@@ -2663,13 +2663,13 @@ vblankDmaFunction:
 
 		ld a,(wOpenedMenuType)
 		; we can transfer more data depending on the menu type
-		ld c,$41
+		ld c,$39
 		dec a	; set a to 0 and also check if the menu type is inventory
 		jr z,+
 			dec a	; check if map menu
 			jr z,+++
 
-			; if outside the inventory menu, we can transfer a bit more
+			; outside the inventory menu, so we can transfer a bit more
 			ld c,$51
 
 			.if defined(ROM_SEASONS) || defined(ROM_COMBO)
@@ -5506,6 +5506,9 @@ getRupeeValue:
 	.dw $0900 ; $12
 	.dw $0080 ; $13
 	.dw $0999 ; $14
+	.dw $1000 ; $15
+	.dw $2000 ; $16
+	.dw $4000 ; $17
 
 ;;
 ; @param	a	Seed type to decrement

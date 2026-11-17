@@ -296,8 +296,6 @@ decideItemDropForBrokenTile:
 		call getIsNewGamePlus
 		jr z,+
 			; replace health drops from tile breaks with an enemy
-			; ONLY do this for grass though since it makes more
-			; sense for the enemies we'll be spawning to hide in it
 			ldh a,(<hFF8F)
 			cp BREAKABLETILESOURCE_SHOVEL
 			jr z,+
@@ -332,8 +330,37 @@ decideItemDropForBrokenTile:
 .endif
 	cp ITEM_DROP_100_RUPEES_OR_ENEMY
 	jr nz,+
-	ld (hl),$02 ; [var03]
-+
+		ld (hl),$02 ; [var03]
+	.ifdef MORE_RUPEE_TYPES
+		; 1 in 16 chance of being a 200 rupee drop
+		; 1 in 32 chance of being a 500 rupee drop
+		; 1 in 64 chance of being a 1000 rupee drop
+		dec l ; [subid]
+		call getRandomNumber
+		cp $10
+		jr nc,++
+			inc (hl)
+		++
+		cp $08
+		jr nc,++
+			inc (hl)
+		++
+		cp $04
+		jr nc,++
+			inc (hl)
+		++
+
+		; do NOT change var03, as we don't want such a
+		; valuable rupee possibly getting flung into a pit
+		ld a,ITEM_DROP_100_RUPEES_OR_ENEMY
+		cp (hl)
+		jr z,++
+			inc (hl) ; skip past the unused drop
+			jr @done
+		++
+		inc l ; [var03]
+	.endif
+	+
 	; Change value of var03 for shovel digs
 	ldh a,(<hFF8F)
 	cp BREAKABLETILESOURCE_SHOVEL

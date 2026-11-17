@@ -20,6 +20,36 @@ m_PartCode $01
 
 @normalStatus:
 	call @checkCollidedWithLink
+.ifdef MORE_RUPEE_TYPES
+	ld e,Part.subid
+	ld a,(de)
+	cp ITEM_DROP_500_RUPEES
+	jr c,++
+		ld e,Part.oamFlags
+		ld a,(de)
+		jr nz,+
+			; make 500 rupee appear purple by blending blue and red
+			xor $03
+			jr +++
+		+
+			; make 1000 rupee appear rainbow by blending all 4 colors slowly
+			ld a,(wFrameCounter)
+			rrca
+			rrca
+		+++
+		and $03
+		ld h,a
+		ld a,(wFrameCounter)
+		ld l,a
+		add a
+		add l
+		rlca
+		rlca
+		and $40
+		or h
+		ld (de),a
+	++
+.endif
 	ld e,Part.state
 	ld a,(de)
 	rst_jumpTable
@@ -58,15 +88,13 @@ m_PartCode $01
 		jp z,partDelete
 		jp itemDrop_spawnEnemy
 	+
+	; remove high bit so we can use it to indicate this is a NG+ enemy spawn
+	and $7f
 .endif
 	cp ITEM_DROP_100_RUPEES_OR_ENEMY
 	jr nz,@normalItem
 
 	call getRandomNumber_noPreserveVars
-.ifdef ENABLE_NEW_GAME_PLUS
-	; remove high bit so we can use it to indicate this is a NG+ enemy spawn
-	and $7f
-.endif
 	cp $e0
 	jp c,itemDrop_spawnEnemy
 
@@ -340,7 +368,12 @@ m_PartCode $01
 	.db TREASURE_ORE_CHUNKS,    GREEN_JOY_RING, RUPEEVAL_50,  RUPEEVAL_100 ; ITEM_DROP_50_ORE_CHUNKS
 .endif
 	.db TREASURE_RUPEES,        RED_JOY_RING,   RUPEEVAL_100, RUPEEVAL_200 ; ITEM_DROP_100_RUPEES_OR_ENEMY
-
+.ifdef MORE_RUPEE_TYPES
+	.db $00,                    $00,            $00,           $00           ; ITEM_DROP_UNUSED_10
+	.db TREASURE_RUPEES,        RED_JOY_RING,   RUPEEVAL_200,  RUPEEVAL_400  ; ITEM_DROP_200_RUPEES
+	.db TREASURE_RUPEES,        RED_JOY_RING,   RUPEEVAL_500,  RUPEEVAL_1000 ; ITEM_DROP_500_RUPEES
+	.db TREASURE_RUPEES,        RED_JOY_RING,   RUPEEVAL_1000, RUPEEVAL_2000 ; ITEM_DROP_1000_RUPEES
+.endif
 
 ;;
 itemDrop_initGfx:
@@ -386,6 +419,12 @@ itemDrop_initGfx:
 	.db $0c $02 ; ITEM_DROP_10_ORE_CHUNKS
 	.db $0c $03 ; ITEM_DROP_50_ORE_CHUNKS
 	.db $08 $04 ; ITEM_DROP_100_RUPEES_OR_ENEMY
+.ifdef MORE_RUPEE_TYPES
+	.db $00 $00 ; ITEM_DROP_UNUSED_10
+	.db $08 $05 ; ITEM_DROP_200_RUPEES
+	.db $1c $01 ; ITEM_DROP_500_RUPEES
+	.db $1c $03 ; ITEM_DROP_1000_RUPEES
+.endif
 
 
 ;;
@@ -408,8 +447,20 @@ itemDrop_countdownToDisappear:
 	ld l,Part.collisionType
 	set 7,(hl)
 ++
-	call partCommon_decCounter1IfNonzero
-	jr z,@disappear
+	ld l,Part.subid
+	ld a,(hl)
+	cp ITEM_DROP_100_RUPEES_OR_ENEMY
+	jr c,+
+		; for high-value rupees, make them last much longer(8x)
+		ld a,(wFrameCounter)
+		rrca
+		and $07
+		ld l,Part.counter1
+		jr nz,++
+	+
+		call partCommon_decCounter1IfNonzero
+		jr z,@disappear
+	++
 
 	; Flickering
 	ld a,(hl)
@@ -473,15 +524,19 @@ itemDrop_spawnEnemy:
 	++
 .endif
 
-	ld a,c
-	and $07
 	ld hl,@enemiesToSpawn
 .ifdef ENABLE_NEW_GAME_PLUS
-	bit 7,c
+	call getIsNewGamePlus
 	jr z,++
-		ld hl,@enemiesToSpawnFromGrass
+		ld e,Part.var03
+		ld a,(de)
+		bit 0,a
+		jr z,++
+			ld hl,@enemiesToSpawnFromGrass
 	++
 .endif
+	ld a,c
+	and $07
 	rst_addAToHl
 	ld b,(hl)
 +
@@ -491,6 +546,18 @@ itemDrop_spawnEnemy:
 	ld (hl),b
 	call objectCopyPosition
 	ld e,Part.var03
+.ifdef ENABLE_NEW_GAME_PLUS
+	ld a,b
+	cp ENEMY_ARROW_DARKNUT
+	jr z,++
+	cp ENEMY_SWORD_DARKNUT
+	jr nz,+
+		++
+		; no subid for darknuts
+		xor a
+		ld (de),a
+	+
+.endif
 	ld a,(de)
 	ld l,Enemy.subid
 	ld (hl),a
@@ -499,7 +566,7 @@ itemDrop_spawnEnemy:
 
 .ifdef ENABLE_NEW_GAME_PLUS
 @enemiesToSpawnFromGrass:
-	.db ENEMY_SWORD_DARKNUT
+	.db ENEMY_SWORD_DARKNUT, ENEMY_ARROW_DARKNUT
 .endif
 @enemiesToSpawn:
 	.db ENEMY_ROPE,   ENEMY_ROPE,   ENEMY_ROPE,   ENEMY_BEETLE
