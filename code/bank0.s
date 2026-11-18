@@ -2165,8 +2165,6 @@ startGame:
 _mainLoop:
 	call pollInput
 
-	; NOTE: intentionally not using setrombank here to avoid
-	;       changing the value of hRomBank so it can be recorded
 	ldh a,(<hPanicState)
 	and $e0
 	jr nz,+
@@ -2180,6 +2178,31 @@ _mainLoop:
 		setrombank
 		jp nz,panicHandling.panicHandler
 	++
+
+	ld hl,wFpsFrameCounter
+	dec (hl)
+	jr nz,+
+		ld (hl),FPS_INTERVAL ; reset framerate counter
+		; subtract the expected frame count from the total
+		; to get the number of extra frames rendered
+		ld hl,wFpsInterruptCounter
+		derefHl
+		ld bc,-FPS_INTERVAL
+		add hl,bc
+
+		ld bc,wFpsLagFrameCount
+		ld a,l
+		ld (bc),a
+		inc bc
+		ld a,h
+		ld (bc),a
+		xor a
+		ld hl,wFpsInterruptCounter
+		ldi (hl),a
+		ld  (hl),a
+		ld hl,wStatusBarNeedsRefresh
+		set 3,(hl)
+	+
 
 	ld a,(wKeysPressed)
 	sub (BTN_A | BTN_B | BTN_START | BTN_SELECT)
@@ -2242,7 +2265,7 @@ _mainLoop_nextThread:
 	nop
 	bit 7,(hl)
 	jr nz,-
-	jr _mainLoop
+	jp _mainLoop
 
 ;;
 _countdownToRunThread:
@@ -2787,7 +2810,7 @@ updateDirtyPalettes:
 	jr nc,++
 
 	ld a,l
-	or $80
+	or $80 ; enable auto-increment
 	ld ($ff00+c),a
 	inc c
 	ldi a,(hl)
@@ -2833,10 +2856,11 @@ lcdInterrupt:
 +
 	ldh (R_SCY),a
 ++
-	push hl
-	ld hl,wOptimizeScreenWaveEffect
-	bit 0,(hl)
-	pop hl
+	ld h,a
+	ld a,(wOptimizeScreenWaveEffect)
+	or a
+	ld a,h
+	ld h,>wBigBuffer
 	jr z,++
 	-
 		; interrupt on the next line that has a different value
@@ -3172,6 +3196,13 @@ timerInterrupt:
 	ldh a,(R_IE)
 	and INT_TIMER ~ $FF
 	ldh (R_IE),a
+
+	ld hl,wFpsInterruptCounter
+	inc (hl)
+	inc hl
+	jr nc,+
+		inc (hl)
+	+
 
 	ld hl,hAudioAndTimerControl
 	bit 7,(hl)
@@ -5475,40 +5506,16 @@ getRupeeValue:
 	jr c,+
 	ld a,RUPEEVAL_COUNT-1
 +
-	ld hl,@rupeeValues
-	rst_addDoubleIndex
-	ldi a,(hl)
-	ld b,(hl)
-	ld c,a
+	push de
+	ld hl,bank0Ext.rupeeValues
+	ld e,:bank0Ext.rupeeValues
+	ld d,a
+	call readWordFromHlAcrossBanks
+	pop de
+	ld b,h
+	ld c,l
 	pop hl
 	ret
-
-; Each number here corresponds to a value in constants/common/rupeeValues.s.
-@rupeeValues:
-	.dw $0000 ; $00
-	.dw $0001 ; $01
-	.dw $0002 ; $02
-	.dw $0005 ; $03
-	.dw $0010 ; $04
-	.dw $0020 ; $05
-	.dw $0040 ; $06
-	.dw $0030 ; $07
-	.dw $0060 ; $08
-	.dw $0070 ; $09
-	.dw $0025 ; $0a
-	.dw $0050 ; $0b
-	.dw $0100 ; $0c
-	.dw $0200 ; $0d
-	.dw $0400 ; $0e
-	.dw $0150 ; $0f
-	.dw $0300 ; $10
-	.dw $0500 ; $11
-	.dw $0900 ; $12
-	.dw $0080 ; $13
-	.dw $0999 ; $14
-	.dw $1000 ; $15
-	.dw $2000 ; $16
-	.dw $4000 ; $17
 
 ;;
 ; @param	a	Seed type to decrement

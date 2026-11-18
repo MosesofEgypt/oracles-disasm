@@ -588,6 +588,47 @@ loadFileDisplayVariables:
 	inc (hl)
 	ret
 
+; Each number here corresponds to a value in constants/common/rupeeValues.s.
+rupeeValues:
+	.dw $0000 ; $00
+	.dw $0001 ; $01
+	.dw $0002 ; $02
+	.dw $0005 ; $03
+	.dw $0010 ; $04
+	.dw $0020 ; $05
+	.dw $0040 ; $06
+	.dw $0030 ; $07
+	.dw $0060 ; $08
+	.dw $0070 ; $09
+	.dw $0025 ; $0a
+	.dw $0050 ; $0b
+	.dw $0100 ; $0c
+	.dw $0200 ; $0d
+	.dw $0400 ; $0e
+	.dw $0150 ; $0f
+	.dw $0300 ; $10
+	.dw $0500 ; $11
+	.dw $0900 ; $12
+	.dw $0080 ; $13
+	.dw $0999 ; $14
+	.dw $1000 ; $15
+	.dw $2000 ; $16
+	.dw $4000 ; $17
+
+.ifdef DEBUG_FPS_DISPLAY
+fpsConversionTable:
+	.db $00 ; 100%
+.rept 255 index tmpi
+	.define val 100*FPS_INTERVAL/(FPS_INTERVAL+tmpi+1)
+	.define ones val#10
+	.define tens (val-ones)/10
+	.db (tens*16)|ones
+	.undefine val
+	.undefine ones
+	.undefine tens
+.endr
+.endif
+
 ;;
 ; Set Link's death respawn point based on the current room / position variables.
 setDeathRespawnPoint:

@@ -8,8 +8,20 @@
 
 .RAMSECTION Wram0_c000
 
-wc000:	; $c000
-	dsb	$08	; padding
+wFpsInterruptCounter:
+	dw
+
+wFpsFrameCounter:
+	db
+
+wc003:
+	db	; padding
+
+wFpsLagFrameCount:
+	dw
+
+wc006:
+	dsb	$02	; padding
 
 wMusicLoopPointers:
 	dsb $08
