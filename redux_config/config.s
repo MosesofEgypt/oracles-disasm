@@ -10,6 +10,15 @@
 ;.define DEBUG_SECTION_PRINTOUT
 ;.define I_LIKE_BIG_ROMS_AND_I_CANNOT_LIE
 
+; displays fps in rupee counter
+;.define DEBUG_FPS_DISPLAY
+
+; displays fps as a 0-100 percentage, rather than frame count
+;.define DEBUG_FPS_AS_PERCENTAGE
+
+; number of frames to clock the FPS at
+.define FPS_INTERVAL 30
+
 .ifdef ENABLE_FULL_REDUX
 	; if ENABLE_FULL_REDUX is enabled, the options below will
 	; be enabled. This is the easiest way to enable everything.

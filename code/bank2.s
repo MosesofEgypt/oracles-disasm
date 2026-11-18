@@ -3665,10 +3665,33 @@ updateStatusBar_body:
 	ldi a,(hl)
 	ld b,(hl)
 	ld c,a
+.ifdef DEBUG_FPS_DISPLAY
+	ld a,(wFpsLagFrameCount)
+	ld hl,bank0Ext.fpsConversionTable
+	push de
+	ld e,:bank0Ext.fpsConversionTable
+	ld d,a
+	call readByteFromHlAcrossBanks
+	pop de
+
+	ld (wDisplayedRupees),a
+	.ifdef DEBUG_FPS_AS_PERCENTAGE
+		or a
+		ld a,$00
+		jr nz,++
+			inc a
+		++
+	.else
+		xor a
+	.endif
+	ld (wDisplayedRupees+1),a
+	jr @updateRupeeDisplay
+.else
 	ld hl,wDisplayedRupees
 	rst_derefHl
 	call compareHlToBc
 	jr z,@updateRupeeDisplay
+.endif
 
 	ld hl,wStatusBarNeedsRefresh
 	set 3,(hl)
