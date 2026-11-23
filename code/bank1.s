@@ -3762,21 +3762,28 @@ processDmgPaletteUpdate:
 	ret
 .endif
 
+runDeferredOperations:
+	.ifdef ENABLE_MULTI_RING
+		call updateRingEquipStatuses
+	.endif
+	.ifdef ENABLE_NEW_GAME_PLUS
+		call updateRingsDisabled
+		call processPoisonTicks
+	.endif
+	.ifdef ENABLE_SETTINGS_MENU
+		call processAutosaveUpdate
+	.endif
+	.ifdef ENABLE_RING_REDUX
+		call updateAzuchu
+	.endif
+	ret
+
 ;;
 standardGameState:
-.ifdef ENABLE_MULTI_RING
-	call updateRingEquipStatuses
-.endif
-.ifdef ENABLE_NEW_GAME_PLUS
-	call updateRingsDisabled
-	call processPoisonTicks
-.endif
-.ifdef ENABLE_SETTINGS_MENU
-	call processAutosaveUpdate
-.endif
+	ld hl,wDeferredOperationsToRun
+	set 1,(hl)
 .ifdef ENABLE_RING_REDUX
 	call processDmgPaletteUpdate
-	call updateAzuchu
 .endif
 .if defined(ROM_COMBO)
 	; recalculate this each frame
@@ -4043,7 +4050,11 @@ cutscene01:
 .endif
 
 	call getNextActiveRoom
-	jp nc,checkEnemyAndPartCollisionsIfTextInactive
+	jr c,+
+		ld hl,wDeferredOperationsToRun
+		set 0,(hl)
+		ret
+	+
 
 .if defined(ROM_COMBO)
 	call wIsSeasons

@@ -27,13 +27,12 @@ checkDisplayDmgModeScreen:
 	ld b,GfxRegsStruct.size
 	call copyMemory
 
+	ld hl,wVBlankChecker
 @vblankLoop:
-	ld a,$ff
-	ld (wVBlankChecker),a
+	set 7,(hl)
 	halt
 	nop
-	ld a,(wVBlankChecker)
-	bit 7,a
+	bit 7,(hl)
 	jr nz,@vblankLoop
 
 	ldh a,(<hSerialInterruptBehaviour)

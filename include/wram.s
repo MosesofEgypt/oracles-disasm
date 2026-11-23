@@ -17,8 +17,19 @@ wFpsFrameCounter:
 wFpsLagFrameCount:
 	db
 
-wc004:
-	dsb	$04	; padding
+wCpuIdleCycles:
+	dw
+
+wDeferredOperationsToRun:
+	; Each bit indicates whether certain particularly
+	; intenisive operations need to be run for this frame.
+	; If a bit is set, the operation needs to be run.
+	; Bit 0: checkEnemyAndPartCollisionsIfTextInactive
+	; Bit 1: bank1.runDeferredOperations
+	db
+
+wc007:
+	db ; padding
 
 wMusicLoopPointers:
 	dsb $08

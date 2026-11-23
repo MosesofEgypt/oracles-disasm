@@ -16,6 +16,10 @@
 ; displays fps as a 0-100 percentage, rather than frame count
 ;.define DEBUG_FPS_AS_PERCENTAGE
 
+; determines whether we record the number of cycles
+; the CPU waited for the vblank of each frame
+;.define COUNT_CPU_IDLE_CYCLES
+
 ; number of frames to clock the FPS at
 .define FPS_INTERVAL 30
 

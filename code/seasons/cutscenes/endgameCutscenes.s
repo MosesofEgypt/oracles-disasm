@@ -67,7 +67,9 @@ endgameCutsceneHandler_09_stage0_seasons:
 	call updateStatusBar
 	call endgameCutsceneHandler_09_stage0_body_seasons
 	call updateAllObjects
-	jp checkEnemyAndPartCollisionsIfTextInactive
+	ld hl,wDeferredOperationsToRun
+	set 0,(hl)
+	ret
 
 endgameCutsceneHandler_09_stage0_body_seasons:
 	ld de,wGenericCutscene.endingCutsceneSubstate
@@ -1354,7 +1356,7 @@ endgameCutsceneHandler_0a_seasons:
 endgameCutsceneHandler_0a:
 .endif
 	call endgameCutsceneHandler_0a_body
-	jp func_3539
+	jp creditsUpdateAllObjects
 
 endgameCutsceneHandler_0a_body:
 	ld de,wGenericCutscene.endingCutsceneState

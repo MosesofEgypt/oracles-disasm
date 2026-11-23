@@ -1458,7 +1458,7 @@ endgameCutsceneHandler_0a_ages:
 endgameCutsceneHandler_0a:
 .endif
 	call @runStates
-	jp func_3539
+	jp creditsUpdateAllObjects
 
 @runStates:
 	ld de,wMapMenu.drawWarpDestinations

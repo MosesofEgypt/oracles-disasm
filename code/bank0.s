@@ -2163,6 +2163,13 @@ startGame:
 
 ;;
 _mainLoop:
+	ld a,(wDeferredOperationsToRun)
+	or a
+	call nz,runDeferredOperations
+
+	; reset bit 0 to indicate a vblank hasn't been started yet
+	res 0,(hl)
+
 	call pollInput
 
 	ldh a,(<hPanicState)
@@ -2253,15 +2260,77 @@ _mainLoop_nextThread:
 	dec b
 	jr nz,-
 
-	; Wait for vblank
+	; set bit 7 to indicate we're waiting on vblank operations
 	ld hl,wVBlankChecker
-	ld (hl),$ff
+	set 7,(hl)
+
+	; to avoid screwing up gfx tricks done in menus, we'll only
+	; consider jumping to the main loop if we're outside the menu.
+	; we know we're outside menus if collision needs to be checked,
+	; which means wDeferredOperationsToRun bit 0 will be set
+	ld a,(wDeferredOperationsToRun)
+	bit 0,a
+	jr z,+
+		; if the vblank has already been started, we just return
+		; instead of waiting for the next one.
+		bit 0,(hl)
+		jp nz,_mainLoop
+	+
+	call runDeferredOperations
+
+	.ifdef COUNT_CPU_IDLE_CYCLES
+		; record how many cycles are spent waiting on vblank
+		ld bc,wCpuIdleCycles
+		xor a
+		ld (bc),a
+		inc bc
+		ld (bc),a
+		dec bc
+	.endif
+
+	; Wait for vblank functions to finish running
 -
-	halt
-	nop
+	.ifdef COUNT_CPU_IDLE_CYCLES
+		; NOTE: the CPU cost of this loop is exactly 100 Mcycles
+		ld a,(bc)
+		add $01
+		ld (bc),a
+		inc bc
+
+		ld a,(bc)
+		adc $00
+		ld (bc),a
+		dec bc
+	.else
+		halt
+		nop
+	.endif
+
 	bit 7,(hl)
-	jr nz,-
-	jp _mainLoop
+	jp z,_mainLoop
+
+	jr -
+
+; Runs CPU intensive operations related to the previously rendered frame
+runDeferredOperations:
+	push hl
+	ld hl,wDeferredOperationsToRun
+
+	push hl
+	bit 0,(hl)
+	call nz,checkEnemyAndPartCollisionsIfTextInactive
+	pop hl
+
+	bit 1,(hl)
+	jr z,+
+		push hl
+		callab bank1.runDeferredOperations
+		pop hl
+	+
+
+	ld (hl),$00
+	pop hl
+	ret
 
 ;;
 _countdownToRunThread:
@@ -2426,9 +2495,12 @@ vblankInterrupt:
 	ldi a,(hl)
 	ldh (R_LYC),a
 
-	; increment wVBlankChecker
-	inc (hl)
-	jr nz,++
+	; set bit 0 to indicate the vblank has been hit
+	set 0,(hl)
+	bit 7,(hl)
+	; unset bit 7 of wVBlankChecker to indicate vblank operations are being run
+	res 7,(hl)
+	jr z,++
 
 ; The following code will only run when the main loop is explicitly waiting for vblank.
 	push bc
@@ -7580,11 +7652,11 @@ objectApplyGivenSpeed:
 	ret
 
 ;;
-; Same args and output as getPositionOffsetForVelocityOrig.
+; Same args and output as _getPositionOffsetForVelocity.
 ; This is merely a wrapper that allows double the normal speed values
 getPositionOffsetForVelocity:
 	bit 7,b
-	jr z,getPositionOffsetForVelocityOrig
+	jr z,_getPositionOffsetForVelocity
 
 	; allow more speed values by detecting high bit and adjusting
 	push de
@@ -7594,7 +7666,7 @@ getPositionOffsetForVelocity:
 	inc b
 	inc b
 
-	call getPositionOffsetForVelocityOrig
+	call _getPositionOffsetForVelocity
 
 	; load the deltas onto the stack for adding later
 	ld hl,wTmpcec0+3
@@ -7612,7 +7684,7 @@ getPositionOffsetForVelocity:
 	; get the base deltas to add to
 	ld b,SPEED_320
 	ld c,d
-	call getPositionOffsetForVelocityOrig
+	call _getPositionOffsetForVelocity
 
 	ld hl,wTmpcec0
 	; y pos delta
@@ -7647,7 +7719,7 @@ getPositionOffsetForVelocity:
 ; @param[out]	hl	Pointer to 4 bytes of data to be added to Y and X positions.
 ;			It always points to wTmpcec0.
 ; @param[out]	zflag	Set if the speed / angle was invalid (or speed is zero)
-getPositionOffsetForVelocityOrig:
+_getPositionOffsetForVelocity:
 	bit 7,c
 	jr nz,@invalid
 
@@ -9873,7 +9945,7 @@ _scriptFunc_setupAsmCall:
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
 
-; Looks like the management of script addresses differs between games?
+; Management of script addresses differs between games
 
 ;;
 ; Same as scriptFunc_jump but sets the carry flag.
@@ -9881,10 +9953,6 @@ _scriptFunc_setupAsmCall:
 ; @param	hl	Current address of script, whose contents point to the address to
 ;			jump to
 scriptFunc_jump_scf:
-	.if defined(ROM_COMBO)
-		call wIsSeasons
-		jr c,scriptFunc_jump_scf_seasons
-	.endif
 	call scriptFunc_jump
 	scf
 	ret
@@ -9897,10 +9965,6 @@ scriptFunc_jump_scf:
 ; @param	hl	Current address of script, whose contents point to the address to
 ;			jump to
 scriptFunc_jump:
-	.if defined(ROM_COMBO)
-		call wIsSeasons
-		jr c,scriptFunc_jump_seasons
-	.endif
 	ld a,h
 	cp $80
 	jr c,++
@@ -9928,23 +9992,17 @@ scriptFunc_jump:
 	ret
 .endif
 
-.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.if defined(ROM_SEASONS)
+; NOTE: we're not using this in the combo rom, as the ages
+;       code supports these jumps, as well as relative ones.
 
 ;;
-.if defined(ROM_COMBO)
-scriptFunc_jump_scf_seasons:
-.else
 scriptFunc_jump_scf:
-.endif
 	scf
 	jr ++
 
 ;;
-.if defined(ROM_COMBO)
-scriptFunc_jump_seasons:
-.else
 scriptFunc_jump:
-.endif
 	xor a
 ++
 	rst_derefHl
@@ -13166,32 +13224,28 @@ updateInteractionsAndDrawAllSprites:
 
 ;;
 ; Similar to updateAllObjects but calls a bit less
-func_3539:
+creditsUpdateAllObjects:
 	ldh a,(<hRomBank)
 	push af
-	callfrombank0 bank5.updateSpecialObjects
-.if defined(ROM_AGES) || defined(ROM_COMBO)
+
 .if defined(ROM_COMBO)
 	call wIsSeasons
 	jr c,+
-.endif
-	callfrombank0 itemCode.updateItems
-	callfrombank0 objectUpdating.updateEnemies
-	callfrombank0 objectUpdating.updateParts
-
-	callfrombank0 objectUpdating.updateInteractions
+		call _updateObjects
+		callfrombank0 itemCode.updateItemsPost
+		jr ++
+	+
+		callfrombank0 bank5.updateSpecialObjects
+		callfrombank0 objectUpdating.updateEnemies
+		callfrombank0 objectUpdating.updateInteractions
+	++
+.elif defined(ROM_AGES)
+	call _updateObjects
 	callfrombank0 itemCode.updateItemsPost
-
-.if defined(ROM_COMBO)
-	jr ++
-+
-.endif
-.endif
-
-.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+.else
+	callfrombank0 bank5.updateSpecialObjects
 	callfrombank0 objectUpdating.updateEnemies
 	callfrombank0 objectUpdating.updateInteractions
-++
 .endif
 	call loadLinkAndCompanionAnimationFrame
 	callfrombank0 animationAndUniqueGfxData.updateAnimations
@@ -13201,17 +13255,21 @@ func_3539:
 	setrombank
 	ret
 
+_updateObjects:
+	callfrombank0 bank5.updateSpecialObjects
+	callfrombank0 itemCode.updateItems
+	callfrombank0 objectUpdating.updateEnemies
+	callfrombank0 objectUpdating.updateParts
+	callfrombank0 objectUpdating.updateInteractions
+	ret
+
 .if defined(ROM_SEASONS) || defined(ROM_COMBO)
 
 ;;
 seasonsFunc_34a0:
 	ldh a,(<hRomBank)
 	push af
-	callfrombank0 bank5.updateSpecialObjects
-	callfrombank0 itemCode.updateItems
-	callfrombank0 objectUpdating.updateEnemies
-	callfrombank0 objectUpdating.updateParts
-	callfrombank0 objectUpdating.updateInteractions
+	call _updateObjects
 .if defined(ROM_COMBO)
 	callfrombank0 bank3Cutscenes_seasons.seasonsFunc_0f_7159
 .else

@@ -57,5 +57,9 @@ cutscene13:
 	call updateStatusBar
 	ld a,(wCutsceneTrigger)
 	or a
-	jp z,checkEnemyAndPartCollisionsIfTextInactive
+	jr nz,+
+		ld hl,wDeferredOperationsToRun
+		set 0,(hl)
+		ret
+	+
 	jp setCutsceneIndexIfCutsceneTriggerSet
