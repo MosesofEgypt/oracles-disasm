@@ -103,7 +103,8 @@ cutscene0e:
 	jr nz,applyWarpTransition2
 
 .ifdef REGION_JP
-	callab animationAndUniqueGfxData.updateAnimations
+	ld hl,wDeferredOperationsToRun
+	set 2,(hl)
 .endif
 
 	ld c,$05

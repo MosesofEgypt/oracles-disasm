@@ -2272,7 +2272,7 @@ _mainLoop_nextThread:
 	bit 0,a
 	jr z,+
 		; if the vblank has already been started, we just return
-		; instead of waiting for the next one.
+		; to the main loop instead of waiting for the next one.
 		bit 0,(hl)
 		jp nz,_mainLoop
 	+
@@ -2311,27 +2311,6 @@ _mainLoop_nextThread:
 
 	jr -
 
-; Runs CPU intensive operations related to the previously rendered frame
-runDeferredOperations:
-	push hl
-	ld hl,wDeferredOperationsToRun
-
-	push hl
-	bit 0,(hl)
-	call nz,checkEnemyAndPartCollisionsIfTextInactive
-	pop hl
-
-	bit 1,(hl)
-	jr z,+
-		push hl
-		callab bank1.runDeferredOperations
-		pop hl
-	+
-
-	ld (hl),$00
-	pop hl
-	ret
-
 ;;
 _countdownToRunThread:
 	inc l
@@ -2369,6 +2348,34 @@ _initializeThread:
 	; Jump to bc with new stack
 	ld sp,hl
 	push bc
+	ret
+
+; Runs CPU intensive operations related to the previously rendered frame
+runDeferredOperations:
+	push hl
+	ld hl,wDeferredOperationsToRun
+
+	push hl
+	bit 0,(hl)
+	call nz,checkEnemyAndPartCollisionsIfTextInactive
+	pop hl
+
+	bit 1,(hl)
+	jr z,+
+		push hl
+		callab bank1.runDeferredOperations
+		pop hl
+	+
+
+	bit 2,(hl)
+	jr z,+
+		push hl
+		callab animationAndUniqueGfxData.updateAnimations
+		pop hl
+	+
+
+	ld (hl),$00
+	pop hl
 	ret
 
 _initialThreadStates:
@@ -7127,66 +7134,43 @@ findByteInCollisionTable_paramE:
 
 ;;
 objectSetVisiblec0:
-	ldh a,(<hActiveObjectType)
-	add Object.visible
-	ld e,a
 	ld a,$c0
-	ld (de),a
-	ret
+	jr objectSetVisiblity
 ;;
 objectSetVisiblec1:
-	ldh a,(<hActiveObjectType)
-	add Object.visible
-	ld e,a
 	ld a,$c1
-	ld (de),a
-	ret
+	jr objectSetVisiblity
 ;;
 objectSetVisiblec2:
-	ldh a,(<hActiveObjectType)
-	add Object.visible
-	ld e,a
 	ld a,$c2
-	ld (de),a
-	ret
+	jr objectSetVisiblity
 ;;
 objectSetVisiblec3:
-	ldh a,(<hActiveObjectType)
-	add Object.visible
-	ld e,a
 	ld a,$c3
-	ld (de),a
-	ret
+	jr objectSetVisiblity
 ;;
 objectSetVisible80:
-	ldh a,(<hActiveObjectType)
-	add Object.visible
-	ld e,a
 	ld a,$80
-	ld (de),a
-	ret
+	jr objectSetVisiblity
 ;;
 objectSetVisible81:
-	ldh a,(<hActiveObjectType)
-	add Object.visible
-	ld e,a
 	ld a,$81
-	ld (de),a
-	ret
+	jr objectSetVisiblity
 ;;
 objectSetVisible82:
-	ldh a,(<hActiveObjectType)
-	add Object.visible
-	ld e,a
 	ld a,$82
-	ld (de),a
-	ret
+	jr objectSetVisiblity
 ;;
 objectSetVisible83:
+	ld a,$83
+;;
+; @param	a	The visibility flags for the object
+objectSetVisiblity:
+	push af
 	ldh a,(<hActiveObjectType)
 	add Object.visible
 	ld e,a
-	ld a,$83
+	pop af
 	ld (de),a
 	ret
 
@@ -8222,15 +8206,8 @@ objectDelete_de:
 	ld e,a
 	ld l,a
 	ld h,d
-	ld b,$10
-	xor a
---
-	ldi (hl),a
-	ldi (hl),a
-	ldi (hl),a
-	ldi (hl),a
-	dec b
-	jr nz,--
+	ld b,$04
+	call clearMemory16ByteBlocks
 	jp objectRemoveFromAButtonSensitiveObjectList
 
 ;;
@@ -11869,7 +11846,9 @@ intro_cinematic:
 	callfrombank0 bank3Cutscenes.runIntroCinematic
 	callfrombank0 bank5.updateSpecialObjects
 	call          loadLinkAndCompanionAnimationFrame
-	callfrombank0 animationAndUniqueGfxData.updateAnimations
+
+	ld hl,wDeferredOperationsToRun
+	set 2,(hl)
 	call          updateInteractionsAndDrawAllSprites
 
 	pop af
@@ -12940,7 +12919,8 @@ enableRumble:
 updateAnimationsAfterCutscene:
 	ldh a,(<hRomBank)
 	push af
-	callfrombank0 animationAndUniqueGfxData.updateAnimations
+	ld hl,wDeferredOperationsToRun
+	set 2,(hl)
 	pop af
 	rst_setrombank
 	ret
@@ -13189,7 +13169,8 @@ updateAllObjects:
 	callfrombank0 bank1.checkUpdateFollowingLinkObject
 	call          updateCamera
 	callfrombank0 tilesets.updateChangedTileQueue
-	callfrombank0 animationAndUniqueGfxData.updateAnimations
+	ld hl,wDeferredOperationsToRun
+	set 2,(hl)
 
 	xor a
 	ld (wc4b6),a
@@ -13248,7 +13229,8 @@ creditsUpdateAllObjects:
 	callfrombank0 objectUpdating.updateInteractions
 .endif
 	call loadLinkAndCompanionAnimationFrame
-	callfrombank0 animationAndUniqueGfxData.updateAnimations
+	ld hl,wDeferredOperationsToRun
+	set 2,(hl)
 	xor a
 	ld (wc4b6),a
 	pop af

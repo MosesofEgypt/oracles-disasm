@@ -57,19 +57,23 @@ m_PartCode $27
 	ld a,(de)
 	or a
 	ret z
-.if defined(ROM_AGES) || defined(ROM_COMBO)
-	ld a,$ff
-.endif
 
-.if defined(ROM_SEASONS) || defined(ROM_COMBO)
+	; update genericCutscene.cfd2 to indicate which tiles
+	; the lightning strike just hit so they can be erased
 .if defined(ROM_COMBO)
 	call wIsSeasons
-	jr nc,+
-.endif
+	jr c,+
+		ld a,$ff
+	+
 	ld b,a
 	ld a,(wTmpcfc0.genericCutscene.cfd2)
 	or b
-	+
+.elif defined(ROM_SEASONS)
+	ld b,a
+	ld a,(wTmpcfc0.genericCutscene.cfd2)
+	or b
+.else
+	ld a,$ff
 .endif
 	ld (wTmpcfc0.genericCutscene.cfd2),a
 	ret

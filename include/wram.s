@@ -26,6 +26,7 @@ wDeferredOperationsToRun:
 	; If a bit is set, the operation needs to be run.
 	; Bit 0: checkEnemyAndPartCollisionsIfTextInactive
 	; Bit 1: bank1.runDeferredOperations
+	; Bit 2: animationAndUniqueGfxData.updateAnimations
 	db
 
 wc007:

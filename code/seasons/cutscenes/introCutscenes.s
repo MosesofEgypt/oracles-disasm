@@ -174,7 +174,7 @@ cutscene06Func4:
 	ld hl,wGenericCutscene.cbb4
 	xor a
 	ld (hl),a
-	call seasonsFunc_03_74aa
+	call cutsceneDinDancing_createNextLightningStrike
 	ld hl,$de90
 .if defined(ROM_COMBO)
 	ld bc,paletteData44e8_seasons
@@ -186,18 +186,18 @@ cutscene06Func4:
 	call playSound
 	jp incCutsceneState2
 
-seasonsFunc_03_74a3:
+cutsceneDinDancing_createNextLightningStrikeOnTimer:
 	call decCutsceneTimer
 	ret nz
 	inc l
 	inc (hl)
 	ld a,(hl)
 	
-seasonsFunc_03_74aa:
+cutsceneDinDancing_createNextLightningStrike:
 	ld d,h
 	ld e,l
 	add a
-	ld hl,seasonsTable_03_74d1
+	ld hl,cutsceneDinDancing_lightningStrikeData
 	rst_addDoubleIndex
 	dec e
 	ldi a,(hl)
@@ -205,7 +205,7 @@ seasonsFunc_03_74aa:
 	inc a
 	ret z
 
-seasonsFunc_03_74b6:
+cutsceneDinDancing_createLightningStrike:
 	ld d,h
 	ld e,l
 	call getFreePartSlot
@@ -228,7 +228,11 @@ seasonsFunc_03_74b6:
 	or $01
 	ret
 
-seasonsTable_03_74d1:
+cutsceneDinDancing_lightningStrikeData:
+	; byte 0: frames till the next strike
+	; byte 1: subid
+	; byte 2: y-coord
+	; byte 3: x-coord
 	.db $3c $00 $50 $20
 	.db $3c $01 $70 $58
 	.db $28 $00 $40 $80
@@ -241,23 +245,26 @@ seasonsTable_03_74d1:
 	.db $14 $00 $40 $40
 	.db $ff
 
-seasonsTable_03_74fa:
+cutsceneDinDancing_firstLightningStrikeData:
+	; byte 0: subid
+	; byte 1: y-coord
+	; byte 2: x-coord
 	.db $10 $70 $18
-	
+
 cutscene06Func5:
 	ld a,(wPaletteThread_mode)
 	or a
 	ret nz
 	ld hl,wTmpcfc0.genericCutscene.cfd0
 	ld (hl),$03
-	call seasonsFunc_03_7516
-	call seasonsFunc_03_74a3
+	call cutsceneDinDancing_replaceLightningStrikenTiles
+	call cutsceneDinDancing_createNextLightningStrikeOnTimer
 	ret nz
 	ld hl,wGenericCutscene.cutsceneTimer
 	ld (hl),$3c
 	jp incCutsceneState2
 
-seasonsFunc_03_7516:
+cutsceneDinDancing_replaceLightningStrikenTiles:
 	ld de,wTmpcfc0.genericCutscene.cfd2
 	ld b,$03
 -
@@ -333,8 +340,8 @@ cutscene06Func6:
 cutscene06Func7:
 	call retIfTextIsActive
 	call incCutsceneState2
-	ld hl,seasonsTable_03_74fa
-	jp seasonsFunc_03_74b6
+	ld hl,cutsceneDinDancing_firstLightningStrikeData
+	jp cutsceneDinDancing_createLightningStrike
 	
 cutscene06Func8:
 	ld hl,wTmpcfc0.genericCutscene.cfd2
