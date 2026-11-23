@@ -2238,11 +2238,7 @@ _mainLoop_nextThread:
 
 	; No threads remaining this frame
 
-.if defined(ROM_COMBO)
-	callfrombank0 gfxLoading.refreshDirtyPalettes
-.else
 	callfrombank0 dataLoading.refreshDirtyPalettes
-.endif
 	xor a
 	ldh (R_SVBK),a
 	ld hl,wc49e
@@ -5142,11 +5138,7 @@ getTileIndexFromRoomLayoutBuffer_paramC:
 interactionInitGraphics:
 	ldh a,(<hRomBank)
 	push af
-.if defined(ROM_COMBO)
-	callfrombank0 gfxLoading.interactionLoadGraphics
-.else
 	callfrombank0 dataLoading.interactionLoadGraphics
-.endif
 	ld c,a
 	pop af
 	rst_setrombank
@@ -5162,11 +5154,7 @@ maybeRefreshObjectGfx:
 refreshObjectGfx:
 	ldh a,(<hRomBank)
 	push af
-.if defined(ROM_COMBO)
-	callfrombank0 gfxLoading.refreshObjectGfx_body
-.else
 	callfrombank0 dataLoading.refreshObjectGfx_body
-.endif
 	xor a
 	ld (wLoadedTreeGfxIndex),a
 	pop af
@@ -5177,11 +5165,7 @@ refreshObjectGfx:
 reloadObjectGfx:
 	ldh a,(<hRomBank)
 	push af
-.if defined(ROM_COMBO)
-	callfrombank0 gfxLoading.reloadObjectGfx
-.else
 	callfrombank0 dataLoading.reloadObjectGfx
-.endif
 	pop af
 	rst_setrombank
 	ret
@@ -5195,11 +5179,7 @@ reloadObjectGfx:
 loadObjectGfxHeaderToSlot4:
 	ldh a,(<hRomBank)
 	push af
-.if defined(ROM_COMBO)
-	callfrombank0 gfxLoading.loadObjectGfxHeaderToSlot4_body
-.else
 	callfrombank0 dataLoading.loadObjectGfxHeaderToSlot4_body
-.endif
 	pop af
 	rst_setrombank
 	ret
@@ -5210,11 +5190,7 @@ loadTreeGfx:
 	ld e,a
 	ldh a,(<hRomBank)
 	push af
-.if defined(ROM_COMBO)
-	callfrombank0 gfxLoading.loadTreeGfx_body
-.else
 	callfrombank0 dataLoading.loadTreeGfx_body
-.endif
 	pop af
 	rst_setrombank
 	ret
@@ -5225,11 +5201,7 @@ loadWeaponGfx:
 	ld e,a
 	ldh a,(<hRomBank)
 	push af
-.if defined(ROM_COMBO)
-	callfrombank0 gfxLoading.loadWeaponGfx
-.else
 	callfrombank0 dataLoading.loadWeaponGfx
-.endif
 	pop af
 	setrombank
 	ret
@@ -5285,11 +5257,7 @@ loadObjectGfx2:
 	ld c,:w4GfxBuf1
 	ld a,$01
 	ldh (R_SVBK),a
-.if defined(ROM_COMBO)
-	ld a,:gfxLoading.insertIndexIntoLoadedObjectGfx
-.else
 	ld a,:dataLoading.insertIndexIntoLoadedObjectGfx
-.endif
 	setrombank
 	ld b,$1f
 	jp queueDmaTransferFromRom
@@ -5307,11 +5275,7 @@ loadObjectGfx2:
 	call decompressGraphics
 	ld a,$01
 	ldh (R_SVBK),a
-.if defined(ROM_COMBO)
-	ld a,:gfxLoading.insertIndexIntoLoadedObjectGfx
-.else
 	ld a,:dataLoading.insertIndexIntoLoadedObjectGfx
-.endif
 	rst_setrombank
 	ret
 .endif
@@ -11864,7 +11828,7 @@ func_2d48:
 	push af
 
 .if defined(ROM_COMBO)
-	ld a,:gfxLoading.data_5951
+	ld a,:dataLoading.data_5951
 .elif defined(ROM_AGES)
 	ld a,:dataLoading.data_5951
 .else
@@ -11873,7 +11837,7 @@ func_2d48:
 	rst_setrombank
 	ld a,b
 .if defined(ROM_COMBO)
-	ld hl,gfxLoading.data_5951
+	ld hl,dataLoading.data_5951
 .elif defined(ROM_AGES)
 	ld hl,dataLoading.data_5951
 .else

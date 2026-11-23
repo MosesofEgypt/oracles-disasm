@@ -46,11 +46,7 @@ enemyStandardUpdate:
 	ret
 
 @uninitialized:
-.if defined(ROM_COMBO)
-	callab gfxLoading.enemyLoadGraphicsAndProperties
-.else
 	callab dataLoading.enemyLoadGraphicsAndProperties
-.endif
 	call getRandomNumber_noPreserveVars
 	ld e,Enemy.var3d
 	ld (de),a

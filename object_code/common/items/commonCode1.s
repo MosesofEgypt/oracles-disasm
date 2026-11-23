@@ -54,11 +54,7 @@ itemLoadAttributesAndGraphics:
 	ld (de),a
 
 	call itemSetVar3cToFF
-.if defined(ROM_COMBO)
-	jpab gfxLoading.itemLoadGraphics
-.else
 	jpab dataLoading.itemLoadGraphics
-.endif
 
 ;;
 itemSetVar3cToFF:

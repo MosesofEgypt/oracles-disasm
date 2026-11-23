@@ -1117,7 +1117,7 @@ m_section_superfree Bank_3_Cutscenes_seasons NAMESPACE bank3Cutscenes_seasons
 	.include "code/seasons/cutscenes/transitionToDragonOnox.s"
 .ends
 
-m_section_superfree Gfx_Loading_Bank NAMESPACE gfxLoading
+m_section_superfree Gfx_Loading_Bank NAMESPACE dataLoading
 	.include "code/loadGraphics.s"
 
 	.include "data/gfxDataIntro/triforceMovementData.s"

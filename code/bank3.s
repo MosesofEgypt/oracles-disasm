@@ -69,11 +69,7 @@ init:
 	ld a,$0f
 	ldh (R_IE),a
 
-.ifdef ROM_COMBO
-	callab gfxLoading.initGbaModePaletteData
-.else
 	callab dataLoading.initGbaModePaletteData
-.endif
 	ei
 	callab bank2.checkDisplayDmgModeScreen
 

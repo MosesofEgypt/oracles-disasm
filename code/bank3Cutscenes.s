@@ -564,25 +564,15 @@ intro_titlescreen:
 .endif
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
-.ifdef ROM_COMBO
-	ld hl,gfxLoading.titlescreenMakuSeedSprite
-	ld e,:gfxLoading.titlescreenMakuSeedSprite
-.else
 	ld hl,dataLoading.titlescreenMakuSeedSprite
 	ld e,:dataLoading.titlescreenMakuSeedSprite
-.endif
 	call addSpritesFromBankToOam
 
 	ld a,(wTmpcbb3)
 	and $20
 	ret nz
-.ifdef ROM_COMBO
-	ld hl,gfxLoading.titlescreenPressStartSprites
-	ld e,:gfxLoading.titlescreenPressStartSprites
-.else
 	ld hl,dataLoading.titlescreenPressStartSprites
 	ld e,:dataLoading.titlescreenPressStartSprites
-.endif
 	jp addSpritesFromBankToOam
 
 .else; ROM_SEASONS
@@ -928,13 +918,8 @@ introCinematic_ridingHorse_state4:
 
 ;;
 @drawLinkOnHorseAndScrollScreen:
-.ifdef ROM_COMBO
-	ld hl,gfxLoading.linkOnHorseFacingCameraSprite
-	ld e,:gfxLoading.linkOnHorseFacingCameraSprite
-.else
 	ld hl,dataLoading.linkOnHorseFacingCameraSprite
 	ld e,:dataLoading.linkOnHorseFacingCameraSprite
-.endif
 	call addSpritesFromBankToOam
 
 	; Scroll the top, cloudy layer right every 32 frames
@@ -1163,8 +1148,8 @@ introCinematic_ridingHorse_drawLinkOnHorseCloseupSprites_1:
 	xor a
 	ldh (<hOamTail),a
 .if defined(ROM_COMBO)
-	ld hl,gfxLoading.linkOnHorseCloseupSprites_1
-	ld e,:gfxLoading.linkOnHorseCloseupSprites_1
+	ld hl,dataLoading.linkOnHorseCloseupSprites_1
+	ld e,:dataLoading.linkOnHorseCloseupSprites_1
 	jp addSpritesFromBankToOam_withOffset
 .else; ROM_SEASONS
 	ld hl,linkOnHorseCloseupSprites_1
@@ -1198,13 +1183,8 @@ introCinematic_ridingHorse_drawLinkOnHorseCloseupSprites_2:
 	ld c,a
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
-.ifdef ROM_COMBO
-	ld hl,gfxLoading.linkOnHorseCloseupSprites_2
-	ld e,:gfxLoading.linkOnHorseCloseupSprites_2
-.else
 	ld hl,dataLoading.linkOnHorseCloseupSprites_2
 	ld e,:dataLoading.linkOnHorseCloseupSprites_2
-.endif
 	jp addSpritesFromBankToOam_withOffset
 
 .else; ROM_SEASONS
@@ -1310,13 +1290,8 @@ introCinematic_ridingHorse_drawTempleSprites:
 	ld c,a
 
 .if defined(ROM_AGES) || defined(ROM_COMBO)
-.ifdef ROM_COMBO
-	ld hl,gfxLoading.introTempleSprites
-	ld e,:gfxLoading.introTempleSprites
-.else
 	ld hl,dataLoading.introTempleSprites
 	ld e,:dataLoading.introTempleSprites
-.endif
 	jp addSpritesFromBankToOam_withOffset
 
 .else; ROM_SEASONS
