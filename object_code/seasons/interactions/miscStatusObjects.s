@@ -90,6 +90,9 @@ m_InteractionCode $4c
 +
 	call interactionAnimate
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	rrca
 	jp c,objectSetInvisible
 	jp objectSetVisible

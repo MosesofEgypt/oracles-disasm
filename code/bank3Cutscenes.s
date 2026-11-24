@@ -1538,8 +1538,6 @@ introCinematic_inTemple_state3:
 
 ;;
 introCinematic_inTemple_updateWave:
-	ld hl,wFrameCounter
-	inc (hl)
 	ld a,$02
 	jp loadBigBufferScrollValues
 

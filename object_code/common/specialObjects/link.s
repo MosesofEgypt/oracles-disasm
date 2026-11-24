@@ -41,6 +41,9 @@ specialObjectCode_link:
 	; determine which palette to use this frame
 	ld hl,wRingColorPaletteA
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	and $01
 	addAToHl
 	ld a,(hl)
@@ -2793,6 +2796,9 @@ linkState11:
 
 	; Invisible every other frame
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	rrca
 	jp c,objectSetInvisible
 

@@ -621,7 +621,7 @@ fpsConversionTable:
 	.ifdef DEBUG_FPS_AS_PERCENTAGE
 		.define val 100*FPS_INTERVAL/(FPS_INTERVAL+tmpi)
 	.else
-		.define val 60*FPS_INTERVAL/(FPS_INTERVAL+tmpi)
+		.define val TARGET_FPS*FPS_INTERVAL/(FPS_INTERVAL+tmpi)
 	.endif
 	.define ones val#10
 	.define tens ((val#100)-ones)/10

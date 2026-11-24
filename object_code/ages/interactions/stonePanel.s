@@ -121,6 +121,9 @@ m_InteractionCode $7b
 
 @substate1: ; Currently opening
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	rrca
 	ret nc
 	call objectApplySpeed

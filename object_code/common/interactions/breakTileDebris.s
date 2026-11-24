@@ -78,6 +78,9 @@ m_InteractionCode $0c
 	jr z,++
 
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	xor d
 	rrca
 	ld l,Interaction.visible

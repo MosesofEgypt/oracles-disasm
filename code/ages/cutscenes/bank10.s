@@ -200,6 +200,9 @@ agesFunc_10_70f6:
 	inc a
 	ld b,a
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	and $01
 	jr nz,+
 	ld c,a

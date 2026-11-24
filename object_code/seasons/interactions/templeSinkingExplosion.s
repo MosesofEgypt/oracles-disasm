@@ -54,6 +54,9 @@ m_InteractionCode $86
 	and $01
 	ld b,a
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	and $01
 	xor b
 	jp z,objectSetInvisible

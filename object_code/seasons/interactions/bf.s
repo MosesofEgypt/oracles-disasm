@@ -24,6 +24,9 @@ m_InteractionCode $bf
 	call interactionDecCounter1
 	jr z,+
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	rrca
 	jp nc,objectSetInvisible
 	jp objectSetVisible

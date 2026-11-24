@@ -74,14 +74,6 @@ m_InteractionCode $c1
 	ret
 
 ;;
-; Unused
-@func_7224:
-	ld a,(wFrameCounter)
-	and $01
-	jp z,objectSetInvisible
-	jp objectSetVisible
-
-;;
 @updateSparkles:
 	ld h,d
 	ld l,Interaction.var36

@@ -23,6 +23,8 @@
 ; number of frames to clock the FPS at
 .define FPS_INTERVAL 30
 
+;.define SPRITES_30_FPS
+
 .ifdef ENABLE_FULL_REDUX
 	; if ENABLE_FULL_REDUX is enabled, the options below will
 	; be enabled. This is the easiest way to enable everything.
@@ -321,4 +323,10 @@
 .else
 	; display horizontal level
 	.define LEVELED_ITEM_DISPLAY_MODE	$00
+.endif
+
+.define TARGET_FPS 60
+.ifdef SPRITES_30_FPS
+	.redefine FPS_INTERVAL FPS_INTERVAL/2
+	.redefine TARGET_FPS TARGET_FPS/2
 .endif

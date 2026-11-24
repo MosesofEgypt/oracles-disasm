@@ -100,6 +100,9 @@ m_InteractionCode $8c
 	jp interactionDelete
 +
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	and $01
 	jp z,objectSetInvisible
 	jp objectSetPriorityRelativeToLink

@@ -69,6 +69,9 @@ common_kingMoblinBomb_state1:
 	or a
 	jr z,++
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	rrca
 	ret c
 ++

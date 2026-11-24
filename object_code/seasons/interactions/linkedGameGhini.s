@@ -167,6 +167,9 @@ m_InteractionCode $cb
 	jr z,+
 	dec (hl)
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	rrca
 	jp nc,objectSetInvisible
 +

@@ -1418,6 +1418,9 @@ ganon_updateSeizurePalette:
 	or a
 	ret nz
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	rrca
 	ret c
 	ld h,d

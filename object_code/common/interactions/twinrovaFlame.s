@@ -115,6 +115,9 @@ m_InteractionCode $b0
 @state2:
 	call interactionAnimate
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	rrca
 	jp c,objectSetVisible
 	jp objectSetInvisible

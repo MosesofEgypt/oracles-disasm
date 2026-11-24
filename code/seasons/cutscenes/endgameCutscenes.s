@@ -1825,6 +1825,9 @@ endgameCutsceneHandler_0a_stage2_seasons:
 	inc a
 	ld b,a
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	and $01
 	jr nz,+
 	ld c,a

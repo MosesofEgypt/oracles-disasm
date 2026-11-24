@@ -683,6 +683,9 @@ updateGrabbedObjectPosition:
 	; we want the enemy in the center for every other
 	; frame to make the movement feel smoother
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	rrca
 	ret nc
 
@@ -709,6 +712,9 @@ updateGrabbedObjectPosition:
 	or a
 	jr z,++
 		ld a,(wFrameCounter)
+		.ifdef SPRITES_30_FPS
+			rrca
+		.endif
 		and $02
 		jr z,+
 			xor a

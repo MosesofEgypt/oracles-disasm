@@ -432,6 +432,9 @@ itemDrop_initGfx:
 ; @param[out]	cflag	c if time to disappear
 itemDrop_countdownToDisappear:
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	xor d
 	rrca
 	ret nc
@@ -454,6 +457,9 @@ itemDrop_countdownToDisappear:
 	jr c,+
 		; for high-value rupees, make them last much longer(8x)
 		ld a,(wFrameCounter)
+		.ifdef SPRITES_30_FPS
+			rrca
+		.endif
 		rrca
 		and $07
 		ld l,Part.counter1
@@ -463,6 +469,11 @@ itemDrop_countdownToDisappear:
 		jr z,@disappear
 	++
 
+	ld a,(wFrameCounter)
+	.ifdef SPRITES_30_FPS
+		rrca
+		ret nc
+	.endif
 	; Flickering
 	ld a,(hl)
 	cp 60

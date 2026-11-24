@@ -103,6 +103,9 @@ m_InteractionCode $50
 
 	call @updateAnimation
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	rrca
 	jp nc,objectSetInvisible
 	jp objectSetVisible

@@ -94,6 +94,9 @@ _drawObjectTerrainEffects:
 @inAir:
 	; Return every other frame (creates flickering effect)
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	xor h
 	rrca
 	ret nc

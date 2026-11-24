@@ -80,6 +80,9 @@ m_InteractionCode $84
 	call interactionAnimate
 	ld a,(wFrameCounter)
 @flicker4:
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	rrca
 	jp c,objectSetInvisible
 	jp objectSetVisible

@@ -114,6 +114,9 @@ piratian_state5:
 	call interactionRunScript
 	jp c,interactionDelete
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	rrca
 	jp c,objectSetInvisible
 	jp objectSetVisible

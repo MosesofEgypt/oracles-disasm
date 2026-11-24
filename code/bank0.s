@@ -342,6 +342,11 @@ interBankCallUpper4MBReturnAf:
 	ret
 .endif
 
+get30FpsFrameCounter:
+	ld a,(wFrameCounter)
+	rrca
+	ret
+
 ;;
 ; Call a function in any bank, from any bank.
 ; Returns the "af" register the called function
@@ -2185,7 +2190,12 @@ _mainLoop:
 
 	; reset bit 0 to indicate a vblank hasn't been started yet
 	ld hl,wVBlankChecker
+	bit 0,(hl)
 	res 0,(hl)
+	jr z,+
+		ld hl,wFrameCounter
+		inc (hl)
+	+
 
 	ld hl,wFpsFrameCounter
 	dec (hl)
@@ -2253,13 +2263,26 @@ _mainLoop_nextThread:
 	inc (hl)
 	ld hl,wGfxRegs1
 	ld de,wGfxRegsFinal
+.ifdef SPRITES_30_FPS
+	ldi a,(hl)
+	ld (de),a
+	inc e
+	ld a,(wGfxRegs1.LYC)
+	ld (wGfxRegsFinal.LYC),a
+
+	call get30FpsFrameCounter
+	jr nc,+
+		ld b,GfxRegsStruct.size-2
+.else
 	ld b,GfxRegsStruct.size
+.endif
 -
 	ldi a,(hl)
 	ld (de),a
 	inc e
 	dec b
 	jr nz,-
++
 
 	; set bit 7 to indicate we're waiting on vblank operations
 	ld hl,wVBlankChecker
@@ -2517,6 +2540,18 @@ vblankInterrupt:
 	ld a,(de)
 	ldi (hl),a
 	inc e
+.ifdef SPRITES_30_FPS
+	call get30FpsFrameCounter
+	jr nc,+
+		ld a,l
+		add $04
+		ld l,a
+		ld a,e
+		add $04
+		ld e,a
+		jr +++
+	+
+.endif
 	ld a,(de)
 	ldi (hl),a
 	inc e
@@ -2529,6 +2564,7 @@ vblankInterrupt:
 	ld a,(de)
 	ldi (hl),a
 	inc e
++++
 	ld a,(de)
 	ldi (hl),a
 
@@ -2542,10 +2578,15 @@ vblankInterrupt:
 	call updateDirtyPalettes
 
 	di
+.ifdef SPRITES_30_FPS
+	call get30FpsFrameCounter
+	jr c,+
+.endif
 	ld a,>wOam
 	ld b,40		; delay for a total of 4x40 = 160 M-cycles
 	ld c,R_DMA
 	call hOamFunc
+	+
 
 	pop bc
 	ld a,c
@@ -3422,6 +3463,10 @@ drawAllSprites:
 
 ;;
 drawAllSpritesUnconditionally:
+.ifdef SPRITES_30_FPS
+	call get30FpsFrameCounter
+	ret nc
+.endif
 	ldh a,(<hRomBank)
 	push af
 	call queueDrawEverything
@@ -9686,7 +9731,11 @@ objectCreateFallingDownHoleInteraction:
 ;
 ; @param	b	Value to AND with [wFrameCounter].
 objectFlickerVisibility:
+.ifdef SPRITES_30_FPS
+	call get30FpsFrameCounter
+.else
 	ld a,(wFrameCounter)
+.endif
 	and b
 	jp z,objectSetInvisible
 	jp objectSetVisible

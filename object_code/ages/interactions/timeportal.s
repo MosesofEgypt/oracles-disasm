@@ -105,6 +105,9 @@ interactionBeginTimewarp:
 ;;
 timeportal_updatePalette:
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	and $01
 	jr nz,@animate
 	ld e,Interaction.oamFlags

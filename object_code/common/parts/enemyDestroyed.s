@@ -8,6 +8,9 @@ m_PartCode $02
 	call z,@initialize
 	call partAnimate
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	rrca
 	jr c,++
 	ld e,Part.oamFlags

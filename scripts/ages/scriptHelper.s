@@ -3457,6 +3457,9 @@ poe_decCounterAndFlickerVisibility:
 
 	dec (hl)
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	rrca
 	rrca
 	jp nc,objectSetInvisible

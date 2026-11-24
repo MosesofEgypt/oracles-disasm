@@ -116,6 +116,9 @@ m_InteractionCode $84
 @animateAndFlicker:
 	call interactionAnimate
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 @flicker:
 	rrca
 	jp c,objectSetInvisible

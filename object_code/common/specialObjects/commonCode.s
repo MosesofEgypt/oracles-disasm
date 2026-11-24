@@ -154,6 +154,9 @@ updateLinkInvincibilityCounter:
 @func_4244:
 
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	bit 2,a
 	jr nz,@normalFlags
 
@@ -1704,6 +1707,9 @@ companionSetAnimationToVar3f:
 companionFlashFromChargingAnimation:
 	ld hl,w1Link.oamFlagsBackup
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	bit 2,a
 	jr nz,++
 	ldi a,(hl)

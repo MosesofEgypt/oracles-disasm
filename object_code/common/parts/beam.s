@@ -112,6 +112,9 @@ func_5758:
 	ld a,(de)
 	ld b,a
 	ld a,(wFrameCounter)
+.ifdef SPRITES_30_FPS
+	rrca
+.endif
 	and b
 	jp z,objectSetVisible81
 	jp objectSetInvisible
