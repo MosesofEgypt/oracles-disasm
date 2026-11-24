@@ -130,8 +130,8 @@ initPanicLoop:
 		ldi (hl),a
 		ld a,157
 		ldi (hl),a
-		res 7,(hl)
 		inc hl
+		res 7,(hl)
 		inc hl
 		dec b
 		jr nz,-
@@ -308,11 +308,62 @@ exitPanicLoop:
 	ld a,$01
 	ldh (R_SVBK),a
 
+	; setup the expected interrupt-enable flags
+	ld a,$0f
+	ldh (R_IE),a
+
+	; reset the state data for each thread
+	ld hl,@threadRebootData
+	ld b,>wThreadStatesStart
+	-
+		ldi a,(hl)
+		ld c,a
+
+		ldi a,(hl)
+		ld (bc),a
+
+		ld a,(hl)
+		cp $ff
+		jr nz,-
+
+	.if defined(ROM_COMBO)
+		; reload the cached data the combo relies on
+		call wIsSeasons
+		call setIsSeasons
+	.endif
+
 	; move back to using the main stack
 	ld sp,wMainStackTop
 	ld hl,handlePanic@mainLoop
 	push hl
 	reti
+
+@threadRebootData:
+	.db <wIntroThreadState.state,			THREAD_STATE_INIT
+	.db <wMainThreadState.state,			THREAD_STATE_INIT
+	.db <wTextThreadState.state,			THREAD_STATE_INIT
+	.db <wPaletteThreadState.state,			THREAD_STATE_INIT
+
+	.db <wIntroThreadState.stackTop,		<wThread0StackTop
+	.db <wMainThreadState.stackTop,			<wThread1StackTop
+	.db <wTextThreadState.stackTop,			<wThread2StackTop
+	.db <wPaletteThreadState.stackTop,		<wThread3StackTop
+
+	.db <wIntroThreadState.stackTop+1,		>wThread0StackTop
+	.db <wMainThreadState.stackTop+1,		>wThread1StackTop
+	.db <wTextThreadState.stackTop+1,		>wThread2StackTop
+	.db <wPaletteThreadState.stackTop+1,	>wThread3StackTop
+
+	.db <wIntroThreadState.entrypoint,		<stubThreadStart
+	.db <wMainThreadState.entrypoint,		<mainThreadStart
+	.db <wTextThreadState.entrypoint,		<stubThreadStart
+	.db <wPaletteThreadState.entrypoint,	<paletteFadeThreadStart
+
+	.db <wIntroThreadState.entrypoint+1,	>stubThreadStart
+	.db <wMainThreadState.entrypoint+1,		>mainThreadStart
+	.db <wTextThreadState.entrypoint+1,		>stubThreadStart
+	.db <wPaletteThreadState.entrypoint+1,	>paletteFadeThreadStart
+	.db $ff
 
 returnToPanicSite:
 	; reset these so we don't end up in a loop

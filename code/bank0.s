@@ -2163,13 +2163,6 @@ startGame:
 
 ;;
 _mainLoop:
-	ld a,(wDeferredOperationsToRun)
-	or a
-	call nz,runDeferredOperations
-
-	; reset bit 0 to indicate a vblank hasn't been started yet
-	res 0,(hl)
-
 	call pollInput
 
 	ldh a,(<hPanicState)
@@ -2185,6 +2178,14 @@ _mainLoop:
 		setrombank
 		jp nz,panicHandling.panicHandler
 	++
+
+	ld a,(wDeferredOperationsToRun)
+	or a
+	call nz,runDeferredOperations
+
+	; reset bit 0 to indicate a vblank hasn't been started yet
+	ld hl,wVBlankChecker
+	res 0,(hl)
 
 	ld hl,wFpsFrameCounter
 	dec (hl)
@@ -2278,6 +2279,7 @@ _mainLoop_nextThread:
 	+
 	call runDeferredOperations
 
+	ld hl,wVBlankChecker
 	.ifdef COUNT_CPU_IDLE_CYCLES
 		; record how many cycles are spent waiting on vblank
 		ld bc,wCpuIdleCycles
@@ -2291,7 +2293,7 @@ _mainLoop_nextThread:
 	; Wait for vblank functions to finish running
 -
 	.ifdef COUNT_CPU_IDLE_CYCLES
-		; NOTE: the CPU cost of this loop is exactly 100 Mcycles
+		; NOTE: the CPU cost of this loop is exactly 100 M-cycles
 		ld a,(bc)
 		add $01
 		ld (bc),a
@@ -2352,7 +2354,6 @@ _initializeThread:
 
 ; Runs CPU intensive operations related to the previously rendered frame
 runDeferredOperations:
-	push hl
 	ld hl,wDeferredOperationsToRun
 
 	push hl
@@ -2375,7 +2376,6 @@ runDeferredOperations:
 	+
 
 	ld (hl),$00
-	pop hl
 	ret
 
 _initialThreadStates:
@@ -14611,17 +14611,6 @@ checkNpcShouldExistAtGameStage:
 	ld a,c
 	or a
 	ret
-
-tokayIslandStolenItems:
-	.db TREASURE_SWORD
-	.db TREASURE_SHOVEL
-	.db TREASURE_HARP
-	.db TREASURE_FLIPPERS
-	.db TREASURE_SEED_SATCHEL
-	.db TREASURE_SHIELD
-	.db TREASURE_BOMBS
-	.db TREASURE_BRACELET
-	.db TREASURE_FEATHER
 
 .endif
 

@@ -667,7 +667,7 @@ fileSelectMode8:
 		jr nz,+
 			; just for the fuck of it, you'll be able
 			; to enter new game plus if you're persistent
-			ld hl,wcc07 ; using this as a temp counter
+			ld hl,hTempVal3 ; using this as a temp counter
 			ld a,(hl)
 			cp 10
 			jr nc,++

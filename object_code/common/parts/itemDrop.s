@@ -90,6 +90,7 @@ m_PartCode $01
 	+
 	; remove high bit so we can use it to indicate this is a NG+ enemy spawn
 	and $7f
+	ld (de),a
 .endif
 	cp ITEM_DROP_100_RUPEES_OR_ENEMY
 	jr nz,@normalItem

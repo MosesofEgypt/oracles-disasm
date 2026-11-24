@@ -556,6 +556,17 @@ tokayItemGraphics:
 	.db $10 $1b $68 $31 $20
 
 
+tokayIslandStolenItems:
+	.db TREASURE_SWORD
+	.db TREASURE_SHOVEL
+	.db TREASURE_HARP
+	.db TREASURE_FLIPPERS
+	.db TREASURE_SEED_SATCHEL
+	.db TREASURE_SHIELD
+	.db TREASURE_BOMBS
+	.db TREASURE_BRACELET
+	.db TREASURE_FEATHER
+
 ;;
 ; This function counts down a timer in var38, and removes the next item from Link's
 ; inventory once it hits zero. The next item index to steal is var3a.

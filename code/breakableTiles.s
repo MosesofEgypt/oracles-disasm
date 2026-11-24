@@ -325,9 +325,6 @@ decideItemDropForBrokenTile:
 
 	ld l,Part.var03
 	ld a,c
-.ifdef ENABLE_NEW_GAME_PLUS
-	and $7f
-.endif
 	cp ITEM_DROP_100_RUPEES_OR_ENEMY
 	jr nz,+
 		ld (hl),$02 ; [var03]
