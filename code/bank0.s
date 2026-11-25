@@ -209,16 +209,13 @@ secretSymbols: ; TODO
 	.db $00 ; Null terminator
 .endif
 
+; NOTE: 4 bytes of padding here
+
+defaultPaletteMap:
+	.db $00 $01 $02 $03 $04 $05 $06 $07
+
 .ENDS
 
-
-; ???
-.ifdef REGION_JP
-	.ORGA $e1
-.else
-	.ORGA $e7
-.endif
-	.db $ff
 
 .ORGA $ee
 ; putting this here so we can simplify table offset calculation
@@ -1159,9 +1156,6 @@ loadPaletteMap:
 		jr nz,-
 	pop de
 	ret
-
-defaultPaletteMap:
-	.db $00 $01 $02 $03 $04 $05 $06 $07
 
 ;;
 initializeVramMaps:
@@ -9358,71 +9352,6 @@ victoryRingIncLevel:
 	inc a
 	ret
 
-applyCurseArmorDamageCap:
-	; if wearing blue curse, all damage becomes 1/4 heart
-	push af
-	isRingEquipped CURSED_BLUE_RING
-	jr nz,+
-		pop af
-		; do reduced damage of 1/4 heart
-		ld a,$fe
-		ret
-	+
-	pop af
-	ret
-
-calculateArmorRingModifier:
-	push de
-	ld de,calculatePowerRingModifier@armorRingModifiers+5
-	jr calculatePowerRingModifier@calculateRingModifier
-
-calculatePowerRingModifier:
-	push de
-	ld de,@powerRingModifiers+5
-
-@calculateRingModifier:
-	push af
-
-	; for each power and armor ring, check if it's equipped and
-	; increase or reduce the damage by the associated amount.
-	ldbc $06,$00
-
-	-
-		ld a,b
-		call cpActiveRing
-		jr nz,+
-			ld a,(de)
-			add c
-			ld c,a
-		+
-
-		; move to next ring
-		dec de
-		dec b
-		jr nz,-
-
-	pop af
-	; return the modifier plus the base damage in a
-	add c
-	pop de
-	ret
-
-@armorRingModifiers
-	.db POWER_RING_L1_DEF_MOD
-	.db POWER_RING_L2_DEF_MOD
-	.db POWER_RING_L3_DEF_MOD
-	.db ARMOR_RING_L1_DEF_MOD
-	.db ARMOR_RING_L2_DEF_MOD
-	.db ARMOR_RING_L3_DEF_MOD
-
-@powerRingModifiers
-	.db POWER_RING_L1_ATK_MOD
-	.db POWER_RING_L2_ATK_MOD
-	.db POWER_RING_L3_ATK_MOD
-	.db ARMOR_RING_L1_ATK_MOD
-	.db ARMOR_RING_L2_ATK_MOD
-	.db ARMOR_RING_L3_ATK_MOD
-
 setRingComboFlag:
 	push hl
 	ld hl,wRingComboCacheFlags
@@ -11706,53 +11635,6 @@ clearVariousLinkVariables:
 	dec a
 	ld (w1Link.angle),a
 	ret
-
-;;
-; LINK_STATE_SPINNING_FROM_GALE
-;
-; Not sure why this is in bank 0 instead of bank 5.
-;
-linkState07:
-	ld e,SpecialObject.substate
-	ld a,(de)
-	rst_jumpTable
-	.dw @substate0
-	.dw specialObjectAnimate
-	.dw @substate2
-
-
-; Initialization (just touched a gale seed)
-@substate0:
-	; Cancel item usage
-	call bank5.linkCancelAllItemUsageAndClearAdjacentWallsBitset
-
-	call itemIncSubstate
-
-	xor a
-	ld l,SpecialObject.collisionType
-	ld (hl),a
-
-	call clearVariousLinkVariables
-
-	ld a,$80
-	ld (wLinkInAir),a
-	ld a,LINK_ANIM_MODE_GALE
-	jp specialObjectSetAnimation
-
-; Falling down after cancelling from the gale seed menu
-@substate2:
-	xor a
-	ld (wLinkInAir),a
-	ld a,TRANSITION_DEST_FALL
-	ld (wWarpTransition),a
-
-	ld e,SpecialObject.yh
-	ld a,(de)
-	add $04
-	ld (de),a
-
-	ld a,LINK_STATE_WARPING
-	jp bank5.linkSetState
 
 ;;
 clearLinkObject:

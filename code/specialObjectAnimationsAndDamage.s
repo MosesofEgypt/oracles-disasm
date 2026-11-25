@@ -931,7 +931,8 @@ linkUpdateDamageToApplyForRings:
 .ifdef ENABLE_RING_REDUX
 	; for each power and armor ring, check if it's equipped and
 	; increase or reduce the damage by the associated amount.
-	call calculateArmorRingModifier
+	ld b,a
+	callabaf bank0Ext.calculateArmorRingModifier
 	bit 7,a
 	jr nz,+
 		; over/underflow. set to min damage
@@ -1025,10 +1026,9 @@ linkUpdateDamageToApplyForRings:
 		callab bank0Ext.calculateGoldRingDefenseBuff
 		pop hl
 	+
-	ld a,b
 
 	; if wearing blue cursed, all damage becomes 1/4 heart
-	call applyCurseArmorDamageCap
+	callabaf bank0Ext.applyCurseArmorDamageCap
 
 	; calculate and apply dodge chance
 	; for each luck ring, give a 25% chance to reduce damage taken to 1/4 heart

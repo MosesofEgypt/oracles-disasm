@@ -293,14 +293,13 @@ itemCalculateSwordDamage:
 		; result is over -128, so set to -128
 		ld a,$80
 	+
-	call calculatePowerRingModifier
+	ld b,a
+	callabaf bank0Ext.calculatePowerRingModifier
 
 	ld b,a
 	isRingEquipped GOLD_RING
 	jr nz,+
-		push hl
 		callab bank0Ext.calculateGoldRingAttackBuff
-		pop hl
 	+
 
 	ld a,(w1ParentItem2.var3a)
@@ -310,7 +309,8 @@ itemCalculateSwordDamage:
 	jr nz,+
 		ld a,$ff
 	+
-	call applyCurseArmorDamageCap
+	ld b,a
+	callabaf bank0Ext.applyCurseArmorDamageCap
 .ifdef ENABLE_NEW_GAME_PLUS
 	push af
 	ld a,(wLinkPoisonCounter)

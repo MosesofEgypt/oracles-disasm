@@ -1160,6 +1160,49 @@ warpTransition6:
 .endif
 
 ;;
+; LINK_STATE_SPINNING_FROM_GALE
+;
+linkState07:
+	ld e,SpecialObject.substate
+	ld a,(de)
+	rst_jumpTable
+	.dw @substate0
+	.dw specialObjectAnimate
+	.dw @substate2
+
+; Initialization (just touched a gale seed)
+@substate0:
+	; Cancel item usage
+	call linkCancelAllItemUsageAndClearAdjacentWallsBitset
+	call itemIncSubstate
+
+	xor a
+	ld l,SpecialObject.collisionType
+	ld (hl),a
+
+	call clearVariousLinkVariables
+
+	ld a,$80
+	ld (wLinkInAir),a
+	ld a,LINK_ANIM_MODE_GALE
+	jp specialObjectSetAnimation
+
+; Falling down after cancelling from the gale seed menu
+@substate2:
+	xor a
+	ld (wLinkInAir),a
+	ld a,TRANSITION_DEST_FALL
+	ld (wWarpTransition),a
+
+	ld e,SpecialObject.yh
+	ld a,(de)
+	add $04
+	ld (de),a
+
+	ld a,LINK_STATE_WARPING
+	jp linkSetState
+
+;;
 ; LINK_STATE_08
 linkState08:
 	ld e,SpecialObject.substate

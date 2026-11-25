@@ -235,6 +235,69 @@ restoreHarpSeedIndex:
 .endif
 
 .ifdef ENABLE_RING_REDUX
+applyCurseArmorDamageCap:
+	; if wearing blue curse, all damage becomes 1/4 heart
+	isRingEquipped CURSED_BLUE_RING
+	jr nz,+
+		; do reduced damage of 1/4 heart
+		ld a,$fe
+		ret
+	+
+	ld a,b
+	ret
+
+calculateArmorRingModifier:
+	push de
+	ld de,calculatePowerRingModifier@armorRingModifiers+5
+	jr calculatePowerRingModifier@calculateRingModifier
+
+calculatePowerRingModifier:
+	push de
+	ld de,@powerRingModifiers+5
+
+@calculateRingModifier:
+	push bc
+
+	; for each power and armor ring, check if it's equipped and
+	; increase or reduce the damage by the associated amount.
+	ldbc $06,$00
+
+	-
+		ld a,b
+		call cpActiveRing
+		jr nz,+
+			ld a,(de)
+			add c
+			ld c,a
+		+
+
+		; move to next ring
+		dec de
+		dec b
+		jr nz,-
+
+	pop af
+	; return the modifier plus the base damage in a
+	add c
+	pop de
+	ret
+
+@armorRingModifiers
+	.db POWER_RING_L1_DEF_MOD
+	.db POWER_RING_L2_DEF_MOD
+	.db POWER_RING_L3_DEF_MOD
+	.db ARMOR_RING_L1_DEF_MOD
+	.db ARMOR_RING_L2_DEF_MOD
+	.db ARMOR_RING_L3_DEF_MOD
+
+@powerRingModifiers
+	.db POWER_RING_L1_ATK_MOD
+	.db POWER_RING_L2_ATK_MOD
+	.db POWER_RING_L3_ATK_MOD
+	.db ARMOR_RING_L1_ATK_MOD
+	.db ARMOR_RING_L2_ATK_MOD
+	.db ARMOR_RING_L3_ATK_MOD
+
 calculateGoldRingDefenseBuff:
 	ld e,b
 	; we compare the health after it would take this damage
